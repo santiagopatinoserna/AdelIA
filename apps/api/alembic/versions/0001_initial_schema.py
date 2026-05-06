@@ -27,7 +27,6 @@ def upgrade() -> None:
         sa.Column("id", postgresql.UUID(as_uuid=True), primary_key=True),
         sa.Column("email", sa.String(), nullable=False),
         sa.Column("created_at", sa.DateTime(timezone=True), server_default=sa.func.now()),
-        sa.UniqueConstraint("email", name="uq_users_email"),
     )
     op.create_index("ix_users_email", "users", ["email"], unique=True)
 
@@ -121,13 +120,13 @@ def upgrade() -> None:
         sa.Column("access_count", sa.Integer(), server_default=sa.text("0")),
         sa.Column("last_accessed_at", sa.DateTime(timezone=True)),
         sa.Column("created_at", sa.DateTime(timezone=True), server_default=sa.func.now()),
-        sa.UniqueConstraint("token", name="uq_share_links_token"),
     )
     op.create_index("ix_share_links_token", "share_links", ["token"], unique=True)
 
     op.create_table(
         "user_settings",
-        sa.Column("user_id", postgresql.UUID(as_uuid=True), primary_key=True),
+        sa.Column("user_id", postgresql.UUID(as_uuid=True),
+                  sa.ForeignKey("users.id", ondelete="CASCADE"), primary_key=True),
         sa.Column("llm_provider", sa.String()),
         sa.Column("api_key_encrypted", postgresql.BYTEA()),
         sa.Column("default_share_ttl_seconds", sa.Integer(), server_default=sa.text("86400")),

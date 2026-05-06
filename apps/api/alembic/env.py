@@ -45,4 +45,23 @@ def run_migrations_online() -> None:
     asyncio.run(run_async_migrations())
 
 
-run_migrations_online()
+def run_migrations_offline() -> None:
+    """Run migrations in 'offline' mode (--sql).
+
+    Configures the context with just a URL and no engine — output is SQL.
+    """
+    sync_url = settings.database_url.replace("+asyncpg", "")
+    context.configure(
+        url=sync_url,
+        target_metadata=target_metadata,
+        literal_binds=True,
+        dialect_opts={"paramstyle": "named"},
+    )
+    with context.begin_transaction():
+        context.run_migrations()
+
+
+if context.is_offline_mode():
+    run_migrations_offline()
+else:
+    run_migrations_online()

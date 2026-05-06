@@ -3,13 +3,14 @@ from contextlib import asynccontextmanager
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
+from adelia.db import engine
 from adelia.routers import health
 
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     yield
-    # T4 will add: await engine.dispose()
+    await engine.dispose()
 
 
 app = FastAPI(title="AdelIA API", version="0.1.0", lifespan=lifespan)

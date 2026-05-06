@@ -1,10 +1,9 @@
 # apps/api/adelia/models.py
 import uuid
-from datetime import datetime, date
 
 from sqlalchemy import (
     Column, String, Text, DateTime, Date, Integer, Float, Boolean,
-    ForeignKey, CheckConstraint, JSON, LargeBinary, Index
+    ForeignKey, CheckConstraint, LargeBinary, Index, text
 )
 from sqlalchemy.dialects.postgresql import UUID, JSONB
 from sqlalchemy.sql import func
@@ -65,7 +64,7 @@ class Entity(Base):
     confidence = Column(Float)
     raw_quote = Column(Text)
     page = Column(Integer)
-    needs_review = Column(Boolean, default=False)
+    needs_review = Column(Boolean, server_default=text("false"))
     created_at = Column(DateTime(timezone=True), server_default=func.now())
     deleted_at = Column(DateTime(timezone=True))
 
@@ -100,16 +99,16 @@ class ShareLink(Base):
     user_id = Column(UUID(as_uuid=True), nullable=False)
     token = Column(String, unique=True, nullable=False, index=True)
     expires_at = Column(DateTime(timezone=True), nullable=False)
-    revoked = Column(Boolean, default=False)
-    access_count = Column(Integer, default=0)
+    revoked = Column(Boolean, server_default=text("false"))
+    access_count = Column(Integer, server_default=text("0"))
     last_accessed_at = Column(DateTime(timezone=True))
     created_at = Column(DateTime(timezone=True), server_default=func.now())
 
 
 class UserSettings(Base):
     __tablename__ = "user_settings"
-    user_id = Column(UUID(as_uuid=True), primary_key=True)
+    user_id = Column(UUID(as_uuid=True), ForeignKey("users.id", ondelete="CASCADE"), primary_key=True)
     llm_provider = Column(String)
     api_key_encrypted = Column(LargeBinary)
-    default_share_ttl_seconds = Column(Integer, default=86400)
-    preferred_locale = Column(String, default="es")
+    default_share_ttl_seconds = Column(Integer, server_default=text("86400"))
+    preferred_locale = Column(String, server_default=text("'es'"))
