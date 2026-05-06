@@ -12,3 +12,6 @@ dist/
 *.log
 postgres-data/
 minio-data/
+.pytest_cache/
+coverage/
+htmlcov/
