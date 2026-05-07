@@ -1,10 +1,14 @@
+import asyncio
 import io
+import logging
+import pathlib
+import re
 import uuid
 from datetime import datetime, timezone
 from typing import Annotated
 
 import httpx
-from botocore.exceptions import ClientError
+from botocore.exceptions import ClientError, EndpointConnectionError
 from fastapi import APIRouter, BackgroundTasks, Depends, File, HTTPException, UploadFile, status
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
@@ -16,11 +20,13 @@ from adelia.schemas import DocumentOut, derive_status
 from adelia.storage import S3Storage
 from adelia.workers.ocr import extract_text_from_pdf
 
+logger = logging.getLogger(__name__)
 
 router = APIRouter(prefix="/documents", tags=["documents"])
 storage = S3Storage()
 
 ALLOWED_MIME = {"application/pdf", "image/png", "image/jpeg", "audio/mpeg", "audio/wav"}
+MAX_UPLOAD_BYTES = 50 * 1024 * 1024  # 50 MB — Mistral OCR limit
 
 
 def _doc_to_out(doc: Document) -> DocumentOut:
@@ -51,13 +57,14 @@ async def process_document(document_id: uuid.UUID, mime_type: str) -> None:
             return
         try:
             body_stream = await storage.get_object(doc.s3_key)
-            body = body_stream.read()
+            body = await asyncio.to_thread(body_stream.read)
             if mime_type == "application/pdf" or mime_type.startswith("image/"):
                 text = await extract_text_from_pdf(body, mime_type)
             else:
                 text = ""  # audio handled in M2 (Whisper)
             doc.raw_text = text
-        except (RuntimeError, httpx.HTTPStatusError, ClientError):
+        except (RuntimeError, httpx.HTTPStatusError, ClientError, EndpointConnectionError):
+            logger.exception("process_document failed for document_id=%s", document_id)
             doc.raw_text = None
         finally:
             doc.processed_at = datetime.now(timezone.utc)
@@ -75,7 +82,10 @@ async def upload_document(
         raise HTTPException(status_code=415, detail=f"Unsupported mime: {file.content_type}")
 
     body = await file.read()
-    s3_key = f"users/{user_id}/{uuid.uuid4()}-{file.filename}"
+    if len(body) > MAX_UPLOAD_BYTES:
+        raise HTTPException(status_code=413, detail="File exceeds 50 MB limit")
+    safe_name = re.sub(r"[^\w.\-]", "_", pathlib.Path(file.filename or "upload").name)
+    s3_key = f"users/{user_id}/{uuid.uuid4()}-{safe_name}"
     await storage.put_object(s3_key, io.BytesIO(body), content_type=file.content_type)
 
     doc = Document(
