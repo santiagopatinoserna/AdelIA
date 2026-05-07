@@ -4,7 +4,7 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
 from adelia.db import engine
-from adelia.routers import health
+from adelia.routers import documents, health
 
 
 @asynccontextmanager
@@ -24,3 +24,4 @@ app.add_middleware(
 )
 
 app.include_router(health.router)
+app.include_router(documents.router)
