@@ -19,14 +19,14 @@ export default function SignInPage() {
           name="email"
           type="email"
           required
-          placeholder="tu@email.com"
+          placeholder={t("signin.emailPlaceholder")}
           className="w-full rounded-md border border-slate-300 px-3 py-2"
         />
         <button
           type="submit"
           className="w-full rounded-md bg-slate-900 px-3 py-2 text-white hover:bg-slate-800"
         >
-          Send magic link
+          {t("signin.sendMagicLink")}
         </button>
       </form>
     </main>

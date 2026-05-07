@@ -25,5 +25,9 @@
     "browse": "Elige un archivo",
     "uploading": "Subiendo…",
     "success": "Subido. Procesando OCR…"
+  },
+  "signin": {
+    "emailPlaceholder": "tu@email.com",
+    "sendMagicLink": "Enviar magic link"
   }
 }
