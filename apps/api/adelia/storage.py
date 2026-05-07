@@ -3,6 +3,7 @@ from typing import BinaryIO
 
 import boto3
 from botocore.client import Config
+from botocore.response import StreamingBody
 
 from adelia.config import settings
 
@@ -28,7 +29,7 @@ class S3Storage:
             ContentType=content_type,
         )
 
-    async def get_object(self, key: str) -> BinaryIO:
+    async def get_object(self, key: str) -> StreamingBody:
         response = await asyncio.to_thread(
             self._client.get_object, Bucket=self._bucket, Key=key
         )
