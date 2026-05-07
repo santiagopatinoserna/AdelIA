@@ -1,0 +1,29 @@
+{
+  "common": {
+    "appName": "AdelIA",
+    "tagline": "Tu vault médico personal con IA"
+  },
+  "home": {
+    "hero": "Tu historia clínica, tuya. Análisis IA en 2 modos.",
+    "subhero": "Self-analysis libre + briefing portable para cualquier especialista.",
+    "cta": "Empezar"
+  },
+  "dashboard": {
+    "title": "Mis documentos",
+    "uploadCta": "Subir archivo",
+    "empty": "Aún no has subido nada",
+    "status": {
+      "processing": "Procesando…",
+      "ready": "Listo",
+      "failed": "Error"
+    }
+  },
+  "upload": {
+    "title": "Subir documento",
+    "drop": "Arrastra un PDF, imagen o audio aquí",
+    "or": "o",
+    "browse": "Elige un archivo",
+    "uploading": "Subiendo…",
+    "success": "Subido. Procesando OCR…"
+  }
+}
