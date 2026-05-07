@@ -9,7 +9,25 @@ MISTRAL_OCR_URL = "https://api.mistral.ai/v1/ocr"
 
 
 async def extract_text_from_pdf(body: bytes, mime_type: str) -> str:
-    """Send the file to Mistral OCR API and return concatenated text from all pages."""
+    """Send the file to Mistral OCR API and return concatenated markdown text.
+
+    Args:
+        body: raw bytes of the file (PDF/PNG/JPEG).
+        mime_type: one of 'application/pdf', 'image/png', 'image/jpeg'.
+            Other values fall through to a 'bin' extension which Mistral
+            will likely reject — caller should validate before calling.
+
+    Returns:
+        Concatenated markdown from all pages, separated by '\\n\\n'.
+        Empty string if the API returns no pages or empty markdown.
+
+    Raises:
+        RuntimeError: if MISTRAL_API_KEY is not configured. Configuration
+            error — do NOT retry; alert.
+        httpx.HTTPStatusError: if the Mistral API returns a non-2xx
+            response. May be transient (5xx, rate limits) — caller should
+            consider retry with backoff or mark document with error state.
+    """
     if not settings.mistral_api_key:
         raise RuntimeError("MISTRAL_API_KEY not set")
 
