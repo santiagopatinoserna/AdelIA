@@ -29,8 +29,8 @@ export function UploadZone({
         headers: { Authorization: `Bearer ${jwt}` },
       });
       if (!res.ok) throw new Error(`status ${res.status}`);
+      // No router.refresh() — dashboard fetches with cache: "no-store"
       router.push(`/${locale}/dashboard`);
-      router.refresh();
     } catch (e) {
       setError(String(e));
     } finally {
