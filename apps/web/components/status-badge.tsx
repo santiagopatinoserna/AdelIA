@@ -16,7 +16,7 @@ export function StatusBadge({ status }: { status: DocumentStatus }) {
   // until v0.1.1 schema cleanup removes the dead enum value.
   const label = status === "uploaded" ? "processing" : status;
   return (
-    <span className={`inline-flex rounded-full px-2 py-0.5 text-xs ${styles[status]}`}>
+    <span className={`inline-flex rounded-full px-2 py-0.5 text-xs ${styles[label]}`}>
       {t(label)}
     </span>
   );
