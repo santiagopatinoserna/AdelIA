@@ -25,7 +25,7 @@ In scope:
 
 Out of scope (not vulnerabilities):
 
-- Self-host operator configuring weak secrets — this is the operator's responsibility, documented in `CONTRIBUTING.md`
+- Self-host operator configuring weak secrets — this is the operator's responsibility, see Hardening notes below
 - Denial of service from a single account exceeding rate limits — design choice for v0.1
 - Social engineering against operators or end users
 
