@@ -1,4 +1,4 @@
-from typing import Annotated
+from typing import Annotated, Any
 from uuid import UUID
 
 from fastapi import Depends, HTTPException, status
@@ -11,7 +11,7 @@ from adelia.config import settings
 bearer_scheme = HTTPBearer()
 
 
-def decode_session_token(token: str) -> dict:
+def decode_session_token(token: str) -> dict[str, Any]:
     return jwt.decode(token, settings.auth_secret, algorithms=["HS256"])
 
 
@@ -29,4 +29,7 @@ async def get_current_user_id(
     sub = payload.get("sub")
     if not sub:
         raise HTTPException(status_code=401, detail="Token missing sub")
-    return UUID(sub)
+    try:
+        return UUID(sub)
+    except ValueError:
+        raise HTTPException(status_code=401, detail="Token sub is not a valid UUID")

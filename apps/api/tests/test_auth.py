@@ -1,7 +1,9 @@
 from datetime import datetime, timedelta, timezone
 
 import pytest
-from jose import jwt
+from fastapi import Depends, FastAPI
+from fastapi.testclient import TestClient
+from jose import JWTError, jwt
 
 from adelia.auth import decode_session_token, get_current_user_id
 from adelia.config import settings
@@ -26,5 +28,71 @@ def test_decode_valid_token():
 def test_decode_expired_token_raises():
     settings.auth_secret = "test-secret"
     token = make_token("u1", exp_in_seconds=-10)
-    with pytest.raises(Exception):
+    with pytest.raises(JWTError):
         decode_session_token(token)
+
+
+def _make_test_app() -> FastAPI:
+    app = FastAPI()
+
+    @app.get("/whoami")
+    async def whoami(user_id=Depends(get_current_user_id)):
+        return {"user_id": str(user_id)}
+
+    return app
+
+
+def test_get_current_user_id_valid_token_returns_uuid(monkeypatch):
+    monkeypatch.setattr(settings, "auth_secret", "test-secret")
+    user_uuid = "11111111-1111-1111-1111-111111111111"
+    token = make_token(user_uuid)
+    client = TestClient(_make_test_app())
+
+    response = client.get("/whoami", headers={"Authorization": f"Bearer {token}"})
+
+    assert response.status_code == 200
+    assert response.json() == {"user_id": user_uuid}
+
+
+def test_get_current_user_id_malformed_uuid_returns_401(monkeypatch):
+    monkeypatch.setattr(settings, "auth_secret", "test-secret")
+    token = make_token("not-a-uuid")
+    client = TestClient(_make_test_app())
+
+    response = client.get("/whoami", headers={"Authorization": f"Bearer {token}"})
+
+    assert response.status_code == 401
+    assert "not a valid UUID" in response.json()["detail"]
+
+
+def test_get_current_user_id_invalid_signature_returns_401(monkeypatch):
+    monkeypatch.setattr(settings, "auth_secret", "test-secret")
+    # token signed with a different secret
+    user_uuid = "11111111-1111-1111-1111-111111111111"
+    payload = {
+        "sub": user_uuid,
+        "email": "x@example.com",
+        "exp": datetime.now(timezone.utc) + timedelta(seconds=3600),
+    }
+    bad_token = jwt.encode(payload, "wrong-secret", algorithm="HS256")
+    client = TestClient(_make_test_app())
+
+    response = client.get("/whoami", headers={"Authorization": f"Bearer {bad_token}"})
+
+    assert response.status_code == 401
+    assert response.json()["detail"] == "Invalid token"
+
+
+def test_get_current_user_id_missing_sub_returns_401(monkeypatch):
+    monkeypatch.setattr(settings, "auth_secret", "test-secret")
+    payload = {
+        "email": "x@example.com",
+        "exp": datetime.now(timezone.utc) + timedelta(seconds=3600),
+    }
+    token_no_sub = jwt.encode(payload, "test-secret", algorithm="HS256")
+    client = TestClient(_make_test_app())
+
+    response = client.get("/whoami", headers={"Authorization": f"Bearer {token_no_sub}"})
+
+    assert response.status_code == 401
+    assert response.json()["detail"] == "Token missing sub"
