@@ -1,4 +1,5 @@
 import json
+import logging
 import re
 
 from mistralai.client.sdk import Mistral
@@ -6,6 +7,8 @@ from pydantic import ValidationError
 
 from adelia.config import settings
 from adelia.schemas import ExtractedEntity
+
+logger = logging.getLogger(__name__)
 
 
 SYSTEM_PROMPT = """You are a medical information extraction assistant.
@@ -85,9 +88,14 @@ async def extract_entities(text: str) -> list[ExtractedEntity]:
     for raw in raw_entities:
         try:
             entity = ExtractedEntity(**raw)
-        except ValidationError:
+        except ValidationError as exc:
+            logger.warning("entity validation failed, dropping: %s", exc)
             continue
         # Anti-hallucination: raw_quote MUST appear verbatim in the input text.
         if entity.raw_quote and entity.raw_quote in text:
             validated.append(entity)
+        else:
+            logger.warning(
+                "hallucinated raw_quote dropped: %.60r", entity.raw_quote
+            )
     return validated

@@ -1,8 +1,8 @@
-from datetime import datetime
+from datetime import date as date_type, datetime
 from typing import Literal
 from uuid import UUID
 
-from pydantic import BaseModel, ConfigDict
+from pydantic import BaseModel, ConfigDict, Field
 
 
 class DocumentOut(BaseModel):
@@ -24,9 +24,6 @@ def derive_status(raw_text: str | None, processed_at: datetime | None) -> Litera
     if processed_at and raw_text is None:
         return "failed"
     return "processing"
-
-
-from datetime import date as date_type
 
 
 class ExtractedEntity(BaseModel):
@@ -56,4 +53,9 @@ class ExtractedEntity(BaseModel):
     code: str | None = None
     raw_quote: str
     page: int | None = None
-    confidence: float
+    confidence: float = Field(ge=0.0, le=1.0)
+    provenance: Literal[
+        "patient_stated",
+        "extracted_from_clinician_doc",
+        "clinician_verified",
+    ] = "extracted_from_clinician_doc"
