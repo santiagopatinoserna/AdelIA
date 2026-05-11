@@ -1,0 +1,29 @@
+PATIENT VISIT SUMMARY
+
+Patient: Test User, age 45, M
+Date: 2024-03-15
+
+CHIEF COMPLAINT: Routine annual check-up.
+
+ACTIVE PROBLEMS:
+- Type 2 Diabetes Mellitus (since 2019, controlled)
+- Essential Hypertension (since 2020)
+
+CURRENT MEDICATIONS:
+- Metformin 500 mg PO BID
+- Lisinopril 10 mg PO daily
+
+ALLERGIES:
+- Penicillin (rash, moderate)
+
+LAB RESULTS:
+- HbA1c: 6.8 % (2024-03-10)
+- Fasting glucose: 138 mg/dL (2024-03-10)
+- LDL cholesterol: 110 mg/dL (2024-03-10)
+
+VITALS:
+- BP: 132/85 mmHg
+- HR: 72 bpm
+- Weight: 82 kg
+
+ASSESSMENT: Stable. Continue current management.
