@@ -7,6 +7,7 @@ import uuid
 from datetime import datetime, timezone
 from typing import Annotated
 
+import sqlalchemy as sa
 import httpx
 from botocore.exceptions import ClientError, EndpointConnectionError
 from fastapi import APIRouter, BackgroundTasks, Depends, File, HTTPException, UploadFile, status
@@ -217,4 +218,25 @@ async def get_document(
     doc = await db.get(Document, doc_id)
     if doc is None or doc.user_id != user_id or doc.deleted_at is not None:
         raise HTTPException(status_code=404)
-    return _doc_to_out(doc)
+
+    entity_count = await db.scalar(
+        sa.select(sa.func.count()).select_from(Entity).where(
+            Entity.document_id == doc.id, Entity.deleted_at.is_(None)
+        )
+    )
+    chunk_count = await db.scalar(
+        sa.select(sa.func.count()).select_from(Chunk).where(Chunk.document_id == doc.id)
+    )
+
+    return DocumentOut(
+        id=doc.id,
+        source=doc.source,
+        mime_type=doc.mime_type,
+        s3_key=doc.s3_key,
+        raw_text=doc.raw_text,
+        created_at=doc.created_at,
+        processed_at=doc.processed_at,
+        status=derive_status(doc.raw_text, doc.processed_at),
+        entity_count=entity_count or 0,
+        chunk_count=chunk_count or 0,
+    )

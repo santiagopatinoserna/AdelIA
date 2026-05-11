@@ -14,6 +14,8 @@ class DocumentOut(BaseModel):
     created_at: datetime
     processed_at: datetime | None
     status: Literal["uploaded", "processing", "ready", "failed"]
+    entity_count: int = 0
+    chunk_count: int = 0
 
     model_config = ConfigDict(from_attributes=True)
 

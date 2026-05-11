@@ -13,6 +13,8 @@ export type DocumentDTO = {
   created_at: string;
   processed_at: string | null;
   status: DocumentStatus;
+  entity_count: number;
+  chunk_count: number;
 };
 
 async function authedFetch(path: string, init?: RequestInit) {
