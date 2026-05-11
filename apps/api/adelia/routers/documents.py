@@ -10,15 +10,20 @@ from typing import Annotated
 import httpx
 from botocore.exceptions import ClientError, EndpointConnectionError
 from fastapi import APIRouter, BackgroundTasks, Depends, File, HTTPException, UploadFile, status
+from openai import APIError as OpenAIAPIError
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from adelia.auth import get_current_user_id
 from adelia.db import AsyncSessionLocal, get_db
-from adelia.models import Document
-from adelia.schemas import DocumentOut, derive_status
+from adelia.models import Chunk, Document, Entity
+from adelia.schemas import DocumentOut, ExtractedEntity, derive_status
 from adelia.storage import S3Storage
+from adelia.workers.chunker import ChunkConfig, chunk_hierarchical
+from adelia.workers.embed import embed_texts
+from adelia.workers.extract import extract_entities
 from adelia.workers.ocr import extract_text_from_pdf
+from adelia.workers.transcribe import transcribe_audio
 
 logger = logging.getLogger(__name__)
 
@@ -27,6 +32,12 @@ storage = S3Storage()
 
 ALLOWED_MIME = {"application/pdf", "image/png", "image/jpeg", "audio/mpeg", "audio/wav"}
 MAX_UPLOAD_BYTES = 50 * 1024 * 1024  # 50 MB — Mistral OCR limit
+
+AUDIO_MIME_PREFIXES = ("audio/",)
+
+
+def _is_audio(mime_type: str) -> bool:
+    return any(mime_type.startswith(prefix) for prefix in AUDIO_MIME_PREFIXES)
 
 
 def _doc_to_out(doc: Document) -> DocumentOut:
@@ -43,14 +54,8 @@ def _doc_to_out(doc: Document) -> DocumentOut:
 
 
 async def process_document(document_id: uuid.UUID, mime_type: str) -> None:
-    """BackgroundTask: download from S3, OCR, persist raw_text, mark processed_at.
-
-    Catches expected error contracts from ocr.extract_text_from_pdf:
-    - RuntimeError: MISTRAL_API_KEY not set (config error — leave raw_text None, mark processed)
-    - httpx.HTTPStatusError: API failure (transient — same handling for v0.1; future: retry)
-
-    Always sets processed_at to ensure document doesn't stay in 'processing' forever.
-    """
+    """BackgroundTask: download from S3, transcribe/OCR, extract entities,
+    chunk + embed. Persist all stages atomically per document."""
     async with AsyncSessionLocal() as session:
         doc = await session.get(Document, document_id)
         if doc is None:
@@ -58,14 +63,94 @@ async def process_document(document_id: uuid.UUID, mime_type: str) -> None:
         try:
             body_stream = await storage.get_object(doc.s3_key)
             body = await asyncio.to_thread(body_stream.read)
-            if mime_type == "application/pdf" or mime_type.startswith("image/"):
-                text = await extract_text_from_pdf(body, mime_type)
+
+            # Stage 1: Get raw text via transcribe (audio) or OCR (pdf/image)
+            if _is_audio(mime_type):
+                raw_text = await transcribe_audio(body, mime_type)
+            elif mime_type == "application/pdf" or mime_type.startswith("image/"):
+                raw_text = await extract_text_from_pdf(body, mime_type)
             else:
-                text = ""  # audio handled in M2 (Whisper)
-            doc.raw_text = text
-        except (RuntimeError, httpx.HTTPStatusError, ClientError, EndpointConnectionError):
-            logger.exception("process_document failed for document_id=%s", document_id)
-            doc.raw_text = None
+                raw_text = ""
+
+            doc.raw_text = raw_text
+            await session.flush()  # ensure doc.id usable for FKs below
+
+            # Stage 2: Entity extraction → persist entities table
+            entity_records: list[Entity] = []
+            entity_ranges: dict[str, tuple[int, int]] = {}
+            if raw_text:
+                extracted: list[ExtractedEntity] = await extract_entities(raw_text)
+                for ex in extracted:
+                    entity = Entity(
+                        user_id=doc.user_id,
+                        document_id=doc.id,
+                        entity_type=ex.entity_type,
+                        coding_system=ex.coding_system,
+                        code=ex.code,
+                        name=ex.name,
+                        value=ex.value,
+                        event_date=ex.event_date,
+                        status=ex.status,
+                        provenance=ex.provenance,
+                        confidence=ex.confidence,
+                        raw_quote=ex.raw_quote,
+                        page=ex.page,
+                        needs_review=ex.confidence < 0.7,
+                    )
+                    session.add(entity)
+                    entity_records.append(entity)
+                await session.flush()  # populate entity.id for FK use
+                for ent in entity_records:
+                    if ent.raw_quote and ent.raw_quote in raw_text:
+                        s = raw_text.find(ent.raw_quote)
+                        entity_ranges[str(ent.id)] = (s, s + len(ent.raw_quote))
+
+            # Stage 3: Hierarchical chunking
+            chunk_records: list[Chunk] = []
+            chunk_texts: list[str] = []
+            if raw_text:
+                chunk_output = chunk_hierarchical(
+                    raw_text,
+                    ChunkConfig(small_size=350, parent_size=1500, overlap=50),
+                    entity_ranges=entity_ranges,
+                )
+                for sc in chunk_output.small_chunks:
+                    chunk_record = Chunk(
+                        document_id=doc.id,
+                        user_id=doc.user_id,
+                        content=sc.content,
+                        chunk_index=sc.chunk_index,
+                        chunk_metadata={
+                            "parent_index": sc.parent_index,
+                            "token_count": sc.token_count,
+                            "start_char": sc.start_char,
+                            "end_char": sc.end_char,
+                            "entity_ids": sc.entity_ids,
+                        },
+                    )
+                    chunk_records.append(chunk_record)
+                    chunk_texts.append(sc.content)
+
+            # Stage 4: Embed chunks → set Chunk.embedding
+            if chunk_texts:
+                vectors = await embed_texts(chunk_texts)
+                for chunk_record, vec in zip(chunk_records, vectors, strict=True):
+                    chunk_record.embedding = vec
+                    session.add(chunk_record)
+        except (RuntimeError, httpx.HTTPStatusError, ClientError, EndpointConnectionError, OpenAIAPIError) as exc:
+            logger.exception(
+                "process_document failed for document_id=%s: %s",
+                document_id,
+                exc,
+            )
+            doc.raw_text = doc.raw_text or None
+        except Exception as exc:  # noqa: BLE001 — final fallback to set processed_at
+            logger.exception(
+                "process_document unexpected failure for document_id=%s: %s",
+                document_id,
+                exc,
+            )
+            doc.raw_text = doc.raw_text or None
         finally:
             doc.processed_at = datetime.now(timezone.utc)
             await session.commit()
