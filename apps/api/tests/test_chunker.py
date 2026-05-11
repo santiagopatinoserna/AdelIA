@@ -42,7 +42,7 @@ def test_chunk_hierarchical_respects_small_size_limit():
     config = ChunkConfig(small_size=100, parent_size=500, overlap=10)
     result = chunk_hierarchical(text, config)
     for sc in result.small_chunks:
-        assert count_tokens(sc.content) <= config.small_size + config.overlap
+        assert count_tokens(sc.content) <= config.small_size
 
 
 def test_chunk_hierarchical_overlap_creates_continuity():
@@ -85,3 +85,45 @@ def test_chunk_hierarchical_entity_aware_metadata():
         all_entity_ids.update(sc.entity_ids)
     assert "ent-metformin" in all_entity_ids
     assert "ent-lisinopril" in all_entity_ids
+
+
+def test_chunk_offsets_are_correct_on_repeating_text():
+    """Regression: char offsets must work for documents with repeated phrases.
+
+    Bug: text.find() returned first occurrence, so chunks past the first
+    repetition got wrong start_char/end_char. Fixed by precomputed offset map.
+    """
+    phrase = "The patient was treated with Metformin 500mg. "
+    text = phrase * 40
+    config = ChunkConfig(small_size=50, parent_size=300, overlap=10)
+    result = chunk_hierarchical(text, config)
+    assert len(result.small_chunks) > 5  # enough chunks to trigger the bug
+    for sc in result.small_chunks:
+        assert text[sc.start_char:sc.end_char] == sc.content, (
+            f"Chunk {sc.chunk_index}: start_char={sc.start_char} "
+            f"end_char={sc.end_char} content slice mismatch"
+        )
+
+
+def test_chunk_entity_tagging_with_repeated_terms():
+    """Regression: entities at the Nth occurrence of a repeated term should
+    map to the correct chunk, not silently drop because find() returned
+    occurrence 0."""
+    phrase = "Metformin 500mg. "
+    text = phrase * 20
+    config = ChunkConfig(small_size=30, parent_size=200, overlap=5)
+    # Place an entity at occurrence 10 (well past where find() would return)
+    occurrence_10_pos = len(phrase) * 9
+    entity_ranges = {
+        "ent-occ0": (0, 9),                                  # 1st "Metformin"
+        "ent-occ10": (occurrence_10_pos, occurrence_10_pos + 9),  # 10th
+    }
+    result = chunk_hierarchical(text, config, entity_ranges=entity_ranges)
+    all_entity_ids: set[str] = set()
+    for sc in result.small_chunks:
+        all_entity_ids.update(sc.entity_ids)
+    assert "ent-occ0" in all_entity_ids
+    assert "ent-occ10" in all_entity_ids, (
+        f"Entity at occurrence 10 silently dropped. "
+        f"All tagged ids: {all_entity_ids}"
+    )

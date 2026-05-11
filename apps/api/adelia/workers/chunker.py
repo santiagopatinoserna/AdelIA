@@ -50,9 +50,9 @@ class ChunkOutput:
 def _split_by_token_window(text: str, target_tokens: int, overlap_tokens: int) -> list[tuple[str, int, int]]:
     """Split text into windows of ~target_tokens tokens with overlap_tokens overlap.
 
-    Returns list of (chunk_text, start_char, end_char). Walks character-by-character
-    to find token boundaries; not the fastest implementation, but predictable
-    and correct for chunk sizes typical of medical documents (<10k tokens).
+    Returns list of (chunk_text, start_char, end_char). Uses a precomputed
+    token-to-char offset map built by incrementally decoding each token's
+    prefix — robust against repeating substrings and unicode drift.
     """
     if not text:
         return []
@@ -60,21 +60,24 @@ def _split_by_token_window(text: str, target_tokens: int, overlap_tokens: int) -
     if len(tokens) <= target_tokens:
         return [(text, 0, len(text))]
 
+    # Build char-offset map: char_offsets[i] = char position where token i starts.
+    # char_offsets[len(tokens)] = end of text (sentinel).
+    # Runs once per call, O(n_tokens). Robust against repeating substrings.
+    char_offsets: list[int] = []
+    running = 0
+    for i in range(len(tokens)):
+        char_offsets.append(running)
+        running += len(_ENCODING.decode([tokens[i]]))
+    char_offsets.append(running)
+
     chunks: list[tuple[str, int, int]] = []
     step = max(1, target_tokens - overlap_tokens)
     for start_tok in range(0, len(tokens), step):
         end_tok = min(start_tok + target_tokens, len(tokens))
         window_tokens = tokens[start_tok:end_tok]
         window_text = _ENCODING.decode(window_tokens)
-        # Find this window in the original text. tiktoken roundtrip is lossy
-        # at the byte level (especially for unicode); fall back to best-effort
-        # char approximation if needed.
-        start_char = text.find(window_text)
-        if start_char < 0:
-            # Approximate: char position scales linearly with token position.
-            # Acceptable for ASCII-heavy medical English.
-            start_char = int(len(text) * start_tok / len(tokens))
-        end_char = start_char + len(window_text)
+        start_char = char_offsets[start_tok]
+        end_char = char_offsets[end_tok]
         chunks.append((window_text, start_char, end_char))
         if end_tok == len(tokens):
             break
