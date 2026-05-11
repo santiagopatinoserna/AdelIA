@@ -18,6 +18,7 @@ class Settings(BaseSettings):
 
     auth_secret: str = ""
     mistral_api_key: str = ""
+    openai_api_key: str = ""
 
     @property
     def database_url(self) -> str:
