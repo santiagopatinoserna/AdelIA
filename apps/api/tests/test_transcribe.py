@@ -17,3 +17,9 @@ async def test_transcribe_returns_string():
     assert isinstance(text, str)
     # 440Hz tone has no speech, so transcript may be empty or short noise.
     # Just verify the call completed without raising.
+
+
+async def test_transcribe_raises_without_api_key(monkeypatch):
+    monkeypatch.setattr(settings, "openai_api_key", "")
+    with pytest.raises(RuntimeError, match="OPENAI_API_KEY not set"):
+        await transcribe_audio(b"", mime_type="audio/wav")
