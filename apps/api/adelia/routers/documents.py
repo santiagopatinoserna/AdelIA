@@ -10,6 +10,7 @@ from typing import Annotated
 import httpx
 from botocore.exceptions import ClientError, EndpointConnectionError
 from fastapi import APIRouter, BackgroundTasks, Depends, File, HTTPException, UploadFile, status
+from mistralai.client.errors import MistralError
 from openai import APIError as OpenAIAPIError
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
@@ -32,6 +33,11 @@ storage = S3Storage()
 
 ALLOWED_MIME = {"application/pdf", "image/png", "image/jpeg", "audio/mpeg", "audio/wav"}
 MAX_UPLOAD_BYTES = 50 * 1024 * 1024  # 50 MB — Mistral OCR limit
+
+# Confidence threshold below which an extracted entity is flagged for human review.
+# Per spec section 6.1: low-confidence entities should not auto-populate briefings
+# without verification.
+NEEDS_REVIEW_CONFIDENCE_THRESHOLD = 0.7
 
 AUDIO_MIME_PREFIXES = ("audio/",)
 
@@ -95,7 +101,7 @@ async def process_document(document_id: uuid.UUID, mime_type: str) -> None:
                         confidence=ex.confidence,
                         raw_quote=ex.raw_quote,
                         page=ex.page,
-                        needs_review=ex.confidence < 0.7,
+                        needs_review=ex.confidence < NEEDS_REVIEW_CONFIDENCE_THRESHOLD,
                     )
                     session.add(entity)
                     entity_records.append(entity)
@@ -137,7 +143,7 @@ async def process_document(document_id: uuid.UUID, mime_type: str) -> None:
                 for chunk_record, vec in zip(chunk_records, vectors, strict=True):
                     chunk_record.embedding = vec
                     session.add(chunk_record)
-        except (RuntimeError, httpx.HTTPStatusError, ClientError, EndpointConnectionError, OpenAIAPIError) as exc:
+        except (RuntimeError, httpx.HTTPStatusError, MistralError, ClientError, EndpointConnectionError, OpenAIAPIError) as exc:
             logger.exception(
                 "process_document failed for document_id=%s: %s",
                 document_id,
