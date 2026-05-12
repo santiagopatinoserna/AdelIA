@@ -55,6 +55,10 @@ async def query_observations_by_name_and_date_range(
             stmt = stmt.where(Entity.event_date >= from_date)
         if to_date is not None:
             stmt = stmt.where(Entity.event_date <= to_date)
+        # Cap at 50 rows to fit LLM context budget. T6 orchestrator
+        # formats each row as a numbered context line; 50 entries comfortably
+        # fits Mistral's context window with headroom for system prompt + reply.
+        stmt = stmt.limit(50)
         result = await session.execute(stmt)
         return [
             {
