@@ -79,6 +79,11 @@ async def post_chat(
     async def event_publisher():
         assistant_content_parts: list[str] = []
         final_citations: list[Citation] = []
+        # session_id sent once at start; subsequent token events carry only content
+        yield {
+            "event": "start",
+            "data": json.dumps({"session_id": str(session_id)}),
+        }
         try:
             async for event in answer_question_streaming(
                 user_id=user_id, question=payload.question
@@ -87,9 +92,7 @@ async def post_chat(
                     assistant_content_parts.append(event.content)
                     yield {
                         "event": "token",
-                        "data": json.dumps(
-                            {"content": event.content, "session_id": str(session_id)}
-                        ),
+                        "data": json.dumps({"content": event.content}),
                     }
                 elif event.type == "final":
                     final_citations = event.citations
