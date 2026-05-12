@@ -21,7 +21,8 @@ def test_detect_evolution_pattern():
     intent = detect_temporal_intent("muéstrame la evolución de mi presión arterial")
     assert intent is not None
     assert intent.entity_name == "presión arterial"
-    assert intent.from_date is None or intent.to_date is None or True
+    assert intent.from_date is None
+    assert intent.to_date is None
 
 
 def test_non_temporal_query_returns_none():
@@ -45,3 +46,9 @@ def test_temporal_with_meses():
     intent = detect_temporal_intent("evolución de mi azúcar los últimos 6 meses")
     assert intent is not None
     assert intent.from_date >= date.today() - timedelta(days=6 * 31)
+
+
+def test_temporal_handles_del_contraction():
+    intent = detect_temporal_intent("curva del colesterol últimos 3 años")
+    assert intent is not None
+    assert intent.entity_name == "colesterol"

@@ -27,7 +27,7 @@ _TEMPORAL_KEYWORDS = (
 # date-window keyword or punctuation. Lowercase comparison.
 _ENTITY_PATTERN = re.compile(
     r"(?:curva|tendencia|evolución|evolucion|histórico|historico|serie)"
-    r"\s+(?:de\s+(?:mi\s+|mis\s+)?)?"
+    r"\s+(?:del\s+|de\s+(?:mi\s+|mis\s+)?)?"
     r"([a-záéíóúñ ]+?)"
     r"(?=\s+(?:de\s+los\s+últimos|los\s+últimos|en\s+los\s+últimos|desde|últim[oa]s|en\s+los)|\s*\?|$)",
     re.IGNORECASE,
@@ -62,6 +62,8 @@ def detect_temporal_intent(question: str) -> TemporalIntent | None:
     if not entity_match:
         return None
     entity_name = entity_match.group(1).strip().lower()
+    # Trim leading "del" / "de" that may sneak in (contraction edge case)
+    entity_name = re.sub(r"^del?\s+", "", entity_name).strip()
     # Trim trailing "mi" / "mis" / "de" that may sneak in
     entity_name = re.sub(r"\s+(de|mi|mis)$", "", entity_name).strip()
     if not entity_name:
