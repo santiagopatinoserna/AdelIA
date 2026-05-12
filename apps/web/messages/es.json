@@ -30,5 +30,16 @@
   "signin": {
     "emailPlaceholder": "tu@email.com",
     "sendMagicLink": "Enviar magic link"
+  },
+  "chat": {
+    "title": "Chat con tu historia clínica",
+    "newSession": "Nueva conversación",
+    "emptyHistory": "Sin conversaciones todavía",
+    "placeholder": "Pregunta a tu historial médico…",
+    "send": "Enviar",
+    "thinking": "Pensando…",
+    "noContext": "No tengo información suficiente.",
+    "citationLabel": "Ver fuente",
+    "deleteSession": "Eliminar"
   }
 }
