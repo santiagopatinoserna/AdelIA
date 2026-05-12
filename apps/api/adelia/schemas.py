@@ -61,3 +61,37 @@ class ExtractedEntity(BaseModel):
         "extracted_from_clinician_doc",
         "clinician_verified",
     ] = "extracted_from_clinician_doc"
+
+
+class Citation(BaseModel):
+    chunk_id: UUID
+    document_id: UUID
+    raw_quote: str
+    page: int | None = None
+
+
+class ChatMessageOut(BaseModel):
+    id: UUID
+    session_id: UUID
+    role: Literal["user", "assistant"]
+    content: str
+    citations: list[Citation] = Field(default_factory=list)
+    created_at: datetime
+    model_config = ConfigDict(from_attributes=True)
+
+
+class ChatSessionOut(BaseModel):
+    id: UUID
+    title: str
+    created_at: datetime
+    updated_at: datetime
+    model_config = ConfigDict(from_attributes=True)
+
+
+class ChatSessionDetailOut(ChatSessionOut):
+    messages: list[ChatMessageOut] = Field(default_factory=list)
+
+
+class ChatRequest(BaseModel):
+    session_id: UUID | None = None  # if None → create new session
+    question: str = Field(min_length=1, max_length=4000)
