@@ -1,4 +1,5 @@
 from datetime import datetime, timezone
+from typing import Literal
 from uuid import UUID
 
 import sqlalchemy as sa
@@ -70,7 +71,7 @@ async def persist_message(
     *,
     session_id: UUID,
     user_id: UUID,
-    role: str,
+    role: Literal["user", "assistant"],
     content: str,
     citations: list[Citation] | None,
 ) -> ChatMessageOut:
