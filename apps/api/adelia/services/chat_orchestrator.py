@@ -126,9 +126,13 @@ async def answer_question_streaming(
         else:
             # Standard RAG path
             query_embeds = await embed_texts([question])
+            if not query_embeds:
+                raise RuntimeError(
+                    "embed_texts returned empty — cannot retrieve chunks"
+                )
             chunks = await retrieve_relevant_chunks(
                 user_id=user_id,
-                query_embedding=query_embeds[0] if query_embeds else [0.0] * 1024,
+                query_embedding=query_embeds[0],
                 top_k=8,
             )
             context = _format_rag_context(chunks)
