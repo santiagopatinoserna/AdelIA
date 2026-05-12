@@ -52,7 +52,11 @@ export async function getChatSession(id: string): Promise<ChatSessionDetail> {
 
 export async function deleteChatSession(id: string): Promise<void> {
   const headers = await authedHeaders();
-  const res = await fetch(`${API_URL}/chat/sessions/${id}`, { method: "DELETE", headers });
+  const res = await fetch(`${API_URL}/chat/sessions/${id}`, {
+    method: "DELETE",
+    headers,
+    cache: "no-store",
+  });
   if (!res.ok && res.status !== 204) throw new Error(`deleteChatSession: ${res.status}`);
 }
 
@@ -88,43 +92,61 @@ export async function* streamChat(
     const { done, value } = await reader.read();
     if (done) break;
     buffer += decoder.decode(value, { stream: true });
+    yield* parseBufferBlocks(() => buffer, (rest) => { buffer = rest; });
+  }
+  // Flush trailing partial block — if the server's final SSE message
+  // doesn't end with \n\n (some proxies strip it), we'd otherwise drop
+  // the 'final' event and its citations silently.
+  if (buffer.trim()) {
+    yield* parseBufferBlocks(() => buffer + "\n\n", (rest) => { buffer = rest; });
+  }
+}
 
-    // SSE messages are separated by \n\n. Each message has lines like
-    // "event: token" and "data: {...}".
-    let blockEnd: number;
-    while ((blockEnd = buffer.indexOf("\n\n")) !== -1) {
-      const rawBlock = buffer.slice(0, blockEnd);
-      buffer = buffer.slice(blockEnd + 2);
-      const block = rawBlock.trim();
-      if (!block) continue;
 
-      let eventType = "message";
-      const dataLines: string[] = [];
-      for (const line of block.split("\n")) {
-        if (line.startsWith("event:")) eventType = line.slice(6).trim();
-        else if (line.startsWith("data:")) dataLines.push(line.slice(5).trim());
-      }
-      if (dataLines.length === 0) continue;
-      let payload: Record<string, unknown>;
-      try {
-        payload = JSON.parse(dataLines.join("\n"));
-      } catch {
-        continue;
-      }
+function* parseBufferBlocks(
+  read: () => string,
+  write: (rest: string) => void,
+): Generator<StreamEvent> {
+  let buffer = read();
+  let blockEnd: number;
+  while ((blockEnd = buffer.indexOf("\n\n")) !== -1) {
+    const rawBlock = buffer.slice(0, blockEnd);
+    buffer = buffer.slice(blockEnd + 2);
+    const block = rawBlock.trim();
+    if (!block) continue;
 
-      if (eventType === "start") {
-        yield { type: "start", session_id: String(payload.session_id ?? "") };
-      } else if (eventType === "token") {
-        yield { type: "token", content: String(payload.content ?? "") };
-      } else if (eventType === "final") {
-        yield {
-          type: "final",
-          session_id: String(payload.session_id ?? ""),
-          citations: (payload.citations as Citation[]) ?? [],
-        };
-      } else if (eventType === "error") {
-        yield { type: "error", content: String(payload.content ?? "unknown error") };
+    let eventType = "message";
+    const dataLines: string[] = [];
+    for (const line of block.split("\n")) {
+      if (line.startsWith("event:")) eventType = line.slice(6).trim();
+      else if (line.startsWith("data:")) dataLines.push(line.slice(5).trim());
+    }
+    if (dataLines.length === 0) continue;
+    let payload: Record<string, unknown>;
+    try {
+      payload = JSON.parse(dataLines.join("\n"));
+    } catch (e) {
+      // SSE protocol issue or partial JSON — log + skip rather than
+      // silently dropping diagnostic info.
+      if (typeof console !== "undefined") {
+        console.warn("[chat-client] SSE parse error", rawBlock, e);
       }
+      continue;
+    }
+
+    if (eventType === "start") {
+      yield { type: "start", session_id: String(payload.session_id ?? "") };
+    } else if (eventType === "token") {
+      yield { type: "token", content: String(payload.content ?? "") };
+    } else if (eventType === "final") {
+      yield {
+        type: "final",
+        session_id: String(payload.session_id ?? ""),
+        citations: (payload.citations as Citation[]) ?? [],
+      };
+    } else if (eventType === "error") {
+      yield { type: "error", content: String(payload.content ?? "unknown error") };
     }
   }
+  write(buffer);
 }
