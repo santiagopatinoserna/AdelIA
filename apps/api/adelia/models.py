@@ -1,11 +1,14 @@
 # apps/api/adelia/models.py
 import uuid
+from datetime import datetime
+from uuid import UUID as PyUUID
 
 from sqlalchemy import (
-    Column, String, Text, DateTime, Date, Integer, Float, Boolean,
-    ForeignKey, CheckConstraint, LargeBinary, Index, text
+    Boolean, Column, CheckConstraint, Date, DateTime, Float, ForeignKey,
+    Index, Integer, LargeBinary, String, Text, text
 )
-from sqlalchemy.dialects.postgresql import UUID, JSONB
+from sqlalchemy.dialects.postgresql import UUID, UUID as PG_UUID, JSONB
+from sqlalchemy.orm import Mapped, mapped_column, relationship
 from sqlalchemy.sql import func
 from pgvector.sqlalchemy import Vector
 
@@ -84,12 +87,59 @@ class Entity(Base):
 
 class Briefing(Base):
     __tablename__ = "briefings"
-    id = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
-    user_id = Column(UUID(as_uuid=True), nullable=False)
-    target_specialty = Column(String, nullable=False)
-    reason_for_consult = Column(Text)
-    payload = Column(JSONB, nullable=False)
-    generated_at = Column(DateTime(timezone=True), server_default=func.now())
+
+    id: Mapped[PyUUID] = mapped_column(
+        PG_UUID(as_uuid=True), primary_key=True, server_default=text("gen_random_uuid()")
+    )
+    user_id: Mapped[PyUUID] = mapped_column(
+        PG_UUID(as_uuid=True), ForeignKey("users.id", ondelete="CASCADE"), nullable=False
+    )
+    target_specialty: Mapped[str] = mapped_column(String(64), nullable=False)
+    payload: Mapped[dict | None] = mapped_column(JSONB, nullable=True)
+    status: Mapped[str] = mapped_column(String(20), nullable=False, server_default="processing")
+    is_stale: Mapped[bool] = mapped_column(Boolean, nullable=False, server_default=text("false"))
+    error_message: Mapped[str | None] = mapped_column(Text, nullable=True)
+    html_render: Mapped[str | None] = mapped_column(Text, nullable=True)
+    completed_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True), nullable=True)
+    created_at: Mapped[datetime] = mapped_column(
+        DateTime(timezone=True), server_default=text("now()"), nullable=False
+    )
+    deleted_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True), nullable=True)
+
+    citations: Mapped[list["BriefingCitation"]] = relationship(
+        "BriefingCitation", back_populates="briefing", cascade="all, delete-orphan"
+    )
+
+
+class BriefingCitation(Base):
+    __tablename__ = "briefing_citations"
+
+    id: Mapped[PyUUID] = mapped_column(
+        PG_UUID(as_uuid=True), primary_key=True, server_default=text("gen_random_uuid()")
+    )
+    briefing_id: Mapped[PyUUID] = mapped_column(
+        PG_UUID(as_uuid=True),
+        ForeignKey("briefings.id", ondelete="CASCADE"),
+        nullable=False,
+    )
+    entity_id: Mapped[PyUUID | None] = mapped_column(
+        PG_UUID(as_uuid=True),
+        ForeignKey("entities.id", ondelete="SET NULL"),
+        nullable=True,
+    )
+    document_id: Mapped[PyUUID | None] = mapped_column(
+        PG_UUID(as_uuid=True),
+        ForeignKey("documents.id", ondelete="SET NULL"),
+        nullable=True,
+    )
+    section: Mapped[str] = mapped_column(String(64), nullable=False)
+    position: Mapped[int] = mapped_column(Integer, nullable=False)
+    raw_quote: Mapped[str] = mapped_column(Text, nullable=False)
+    created_at: Mapped[datetime] = mapped_column(
+        DateTime(timezone=True), server_default=text("now()"), nullable=False
+    )
+
+    briefing: Mapped["Briefing"] = relationship("Briefing", back_populates="citations")
 
 
 class ShareLink(Base):

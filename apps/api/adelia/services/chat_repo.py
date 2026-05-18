@@ -6,7 +6,7 @@ import sqlalchemy as sa
 
 from adelia.db import AsyncSessionLocal
 from adelia.models import ChatMessage, ChatSession
-from adelia.schemas import ChatMessageOut, ChatSessionDetailOut, ChatSessionOut, Citation
+from adelia.schemas import ChatCitation, ChatMessageOut, ChatSessionDetailOut, ChatSessionOut
 
 
 async def create_session(*, user_id: UUID, title: str | None = None) -> ChatSessionOut:
@@ -53,7 +53,7 @@ async def get_session_with_messages(
                 session_id=m.session_id,
                 role=m.role,
                 content=m.content,
-                citations=[Citation(**c) for c in (m.citations or [])],
+                citations=[ChatCitation(**c) for c in (m.citations or [])],
                 created_at=m.created_at,
             )
             for m in msgs
@@ -73,7 +73,7 @@ async def persist_message(
     user_id: UUID,
     role: Literal["user", "assistant"],
     content: str,
-    citations: list[Citation] | None,
+    citations: list[ChatCitation] | None,
 ) -> ChatMessageOut:
     async with AsyncSessionLocal() as session:
         msg = ChatMessage(
@@ -95,7 +95,7 @@ async def persist_message(
             session_id=msg.session_id,
             role=msg.role,
             content=msg.content,
-            citations=[Citation(**c) for c in (msg.citations or [])],
+            citations=[ChatCitation(**c) for c in (msg.citations or [])],
             created_at=msg.created_at,
         )
 

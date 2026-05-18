@@ -9,7 +9,7 @@ from uuid import UUID
 from mistralai.client.sdk import Mistral
 
 from adelia.config import settings
-from adelia.schemas import Citation
+from adelia.schemas import ChatCitation
 from adelia.services.retrieval import retrieve_relevant_chunks
 from adelia.services.structured_query import query_observations_by_name_and_date_range
 from adelia.services.temporal import detect_temporal_intent
@@ -23,7 +23,7 @@ logger = logging.getLogger(__name__)
 class ChatEvent:
     type: Literal["token", "final", "error"]
     content: str = ""
-    citations: list[Citation] = field(default_factory=list)
+    citations: list[ChatCitation] = field(default_factory=list)
 
 
 _SYSTEM_PROMPT = """Eres un asistente médico que responde EXCLUSIVAMENTE basándote en
@@ -98,7 +98,7 @@ async def answer_question_streaming(
     single ChatEvent(type='final', citations=[...]) at the end. On error,
     yields ChatEvent(type='error', content=<message>).
     """
-    citations: list[Citation] = []
+    citations: list[ChatCitation] = []
     try:
         temporal = detect_temporal_intent(question)
         if temporal is not None:
@@ -116,7 +116,7 @@ async def answer_question_streaming(
             # Map each row to a Citation surrogate (chunk_id ← entity id)
             for r in rows:
                 citations.append(
-                    Citation(
+                    ChatCitation(
                         chunk_id=r["id"],
                         document_id=r["document_id"],
                         raw_quote=r["raw_quote"] or "",
@@ -142,7 +142,7 @@ async def answer_question_streaming(
             )
             for c in chunks:
                 citations.append(
-                    Citation(
+                    ChatCitation(
                         chunk_id=c.chunk_id,
                         document_id=c.document_id,
                         raw_quote=c.content,
