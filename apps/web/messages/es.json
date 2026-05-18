@@ -41,5 +41,38 @@
     "noContext": "No tengo información suficiente.",
     "citationLabel": "Ver fuente",
     "deleteSession": "Eliminar"
+  },
+  "briefing": {
+    "title": "Briefings",
+    "newButton": "Crear nuevo briefing",
+    "listEmpty": "Aún no has generado ningún briefing. Crea el primero.",
+    "specialty": {
+      "label": "Especialidad target",
+      "placeholder": "Selecciona la especialidad del médico",
+      "pediatrics": "Pediatría",
+      "endocrinology": "Endocrinología",
+      "cardiology": "Cardiología",
+      "gynecology": "Ginecología",
+      "gastroenterology": "Gastroenterología",
+      "dermatology": "Dermatología",
+      "general_medicine": "Medicina general",
+      "default": "Otra / No listada"
+    },
+    "status": {
+      "processing": "Generando…",
+      "ready": "Listo",
+      "failed": "Falló"
+    },
+    "createButton": "Generar briefing",
+    "regenerate": "Regenerar",
+    "delete": "Borrar",
+    "deleteConfirm": "¿Borrar este briefing? Esta acción es reversible (soft-delete).",
+    "staleBanner": "Has subido data nueva desde que generaste este briefing. ¿Regenerar?",
+    "errorBanner": "La generación falló. Detalle:",
+    "polling": "Actualizando cada 2 segundos…",
+    "createdAt": "Creado: ",
+    "completedAt": "Completado: ",
+    "downloadPdf": "Descargar PDF (v0.1.1)",
+    "sharedLink": "Crear link compartible (v0.1.1)"
   }
 }
