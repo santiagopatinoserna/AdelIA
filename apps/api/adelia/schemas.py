@@ -234,6 +234,8 @@ class BriefingCreate(BaseModel):
 
 
 class BriefingOut(BaseModel):
+    model_config = ConfigDict(from_attributes=True)
+
     id: UUID
     target_specialty: Specialty
     status: BriefingStatus

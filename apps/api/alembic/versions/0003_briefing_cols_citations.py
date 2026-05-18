@@ -19,6 +19,14 @@ depends_on: Union[str, Sequence[str], None] = None
 
 
 def upgrade() -> None:
+    # CRITICAL: allow payload=None so orchestrator can INSERT a 'processing' row before the LLM runs
+    op.alter_column(
+        "briefings",
+        "payload",
+        existing_type=postgresql.JSONB(astext_type=sa.Text()),
+        nullable=True,
+    )
+
     op.add_column(
         "briefings",
         sa.Column("status", sa.String(length=20), nullable=False, server_default="processing"),
@@ -35,6 +43,10 @@ def upgrade() -> None:
     op.add_column("briefings", sa.Column("error_message", sa.Text(), nullable=True))
     op.add_column("briefings", sa.Column("completed_at", sa.DateTime(timezone=True), nullable=True))
     op.add_column("briefings", sa.Column("html_render", sa.Text(), nullable=True))
+
+    # CRITICAL: drop columns now carried by payload JSONB — sync ORM with DB schema
+    op.drop_column("briefings", "reason_for_consult")
+    op.drop_column("briefings", "generated_at")
 
     op.create_index(
         "idx_briefings_user_created",
@@ -94,3 +106,24 @@ def downgrade() -> None:
     op.drop_column("briefings", "is_stale")
     op.drop_constraint("ck_briefings_status", "briefings", type_="check")
     op.drop_column("briefings", "status")
+    # restore columns dropped in upgrade (were part of 0001_initial schema)
+    op.add_column(
+        "briefings",
+        sa.Column("reason_for_consult", sa.Text(), nullable=True),
+    )
+    op.add_column(
+        "briefings",
+        sa.Column(
+            "generated_at",
+            sa.DateTime(timezone=True),
+            server_default=sa.text("now()"),
+            nullable=False,
+        ),
+    )
+    # restore NOT NULL constraint on payload
+    op.alter_column(
+        "briefings",
+        "payload",
+        existing_type=postgresql.JSONB(astext_type=sa.Text()),
+        nullable=False,
+    )

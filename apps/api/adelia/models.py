@@ -7,7 +7,7 @@ from sqlalchemy import (
     Boolean, Column, CheckConstraint, Date, DateTime, Float, ForeignKey,
     Index, Integer, LargeBinary, String, Text, text
 )
-from sqlalchemy.dialects.postgresql import UUID, UUID as PG_UUID, JSONB
+from sqlalchemy.dialects.postgresql import UUID, JSONB
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 from sqlalchemy.sql import func
 from pgvector.sqlalchemy import Vector
@@ -89,10 +89,10 @@ class Briefing(Base):
     __tablename__ = "briefings"
 
     id: Mapped[PyUUID] = mapped_column(
-        PG_UUID(as_uuid=True), primary_key=True, server_default=text("gen_random_uuid()")
+        UUID(as_uuid=True), primary_key=True, server_default=text("gen_random_uuid()")
     )
     user_id: Mapped[PyUUID] = mapped_column(
-        PG_UUID(as_uuid=True), ForeignKey("users.id", ondelete="CASCADE"), nullable=False
+        UUID(as_uuid=True), ForeignKey("users.id", ondelete="CASCADE"), nullable=False
     )
     target_specialty: Mapped[str] = mapped_column(String(64), nullable=False)
     payload: Mapped[dict | None] = mapped_column(JSONB, nullable=True)
@@ -115,20 +115,20 @@ class BriefingCitation(Base):
     __tablename__ = "briefing_citations"
 
     id: Mapped[PyUUID] = mapped_column(
-        PG_UUID(as_uuid=True), primary_key=True, server_default=text("gen_random_uuid()")
+        UUID(as_uuid=True), primary_key=True, server_default=text("gen_random_uuid()")
     )
     briefing_id: Mapped[PyUUID] = mapped_column(
-        PG_UUID(as_uuid=True),
+        UUID(as_uuid=True),
         ForeignKey("briefings.id", ondelete="CASCADE"),
         nullable=False,
     )
     entity_id: Mapped[PyUUID | None] = mapped_column(
-        PG_UUID(as_uuid=True),
+        UUID(as_uuid=True),
         ForeignKey("entities.id", ondelete="SET NULL"),
         nullable=True,
     )
     document_id: Mapped[PyUUID | None] = mapped_column(
-        PG_UUID(as_uuid=True),
+        UUID(as_uuid=True),
         ForeignKey("documents.id", ondelete="SET NULL"),
         nullable=True,
     )

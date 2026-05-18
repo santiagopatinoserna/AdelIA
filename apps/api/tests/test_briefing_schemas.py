@@ -7,6 +7,7 @@ from pydantic import ValidationError
 
 from adelia.schemas import (
     AppliedFilter,
+    BriefingCreate,
     BriefingPayload,
     BriefingSections,
     BriefingStatus,
@@ -74,3 +75,13 @@ def test_briefing_payload_minimal_valid():
     )
     assert payload.schema_version == "1.0"
     assert payload.sections.allergies == "no_known_allergies"
+
+
+def test_citation_rejects_overlength_quote():
+    with pytest.raises(ValidationError):
+        Citation(document_id=uuid4(), raw_quote="x" * 2001)
+
+
+def test_specialty_rejects_unknown_value():
+    with pytest.raises(ValidationError):
+        BriefingCreate(target_specialty="neurology")
