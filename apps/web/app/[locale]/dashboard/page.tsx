@@ -28,12 +28,26 @@ export default async function DashboardPage({
     <main className="mx-auto max-w-3xl px-6 py-12">
       <div className="flex items-center justify-between">
         <h1 className="text-2xl font-semibold">{t("title")}</h1>
-        <Link
-          href={`/${locale}/dashboard/upload`}
-          className="rounded-md bg-slate-900 px-4 py-2 text-sm text-white hover:bg-slate-800"
-        >
-          {t("uploadCta")}
-        </Link>
+        <div className="flex gap-2">
+          <Link
+            href={`/${locale}/dashboard/chat`}
+            className="rounded-md border border-slate-300 px-4 py-2 text-sm hover:bg-slate-50"
+          >
+            Chat
+          </Link>
+          <Link
+            href={`/${locale}/dashboard/briefings`}
+            className="rounded-md border border-slate-300 px-4 py-2 text-sm hover:bg-slate-50"
+          >
+            Briefings
+          </Link>
+          <Link
+            href={`/${locale}/dashboard/upload`}
+            className="rounded-md bg-slate-900 px-4 py-2 text-sm text-white hover:bg-slate-800"
+          >
+            {t("uploadCta")}
+          </Link>
+        </div>
       </div>
       {docs.length === 0 ? (
         <p className="mt-12 text-center text-slate-500">{t("empty")}</p>
