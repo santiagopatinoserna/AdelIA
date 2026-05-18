@@ -20,6 +20,7 @@ from adelia.auth import get_current_user_id
 from adelia.db import AsyncSessionLocal, get_db
 from adelia.models import Chunk, Document, Entity
 from adelia.schemas import DocumentOut, ExtractedEntity, derive_status
+from adelia.services import briefing_repo
 from adelia.storage import S3Storage
 from adelia.workers.chunker import ChunkConfig, chunk_hierarchical
 from adelia.workers.embed import embed_texts
@@ -144,6 +145,14 @@ async def process_document(document_id: uuid.UUID, mime_type: str) -> None:
                 for chunk_record, vec in zip(chunk_records, vectors, strict=True):
                     chunk_record.embedding = vec
                     session.add(chunk_record)
+
+            # Stage 5 (M5 T9): Mark any prior briefings of this user as stale.
+            # User uploaded new data → previously generated briefings no longer reflect it.
+            await briefing_repo.mark_stale_for_user(
+                session,
+                user_id=doc.user_id,
+                since=datetime.now(timezone.utc),
+            )
         except (RuntimeError, httpx.HTTPStatusError, MistralError, ClientError, EndpointConnectionError, OpenAIAPIError) as exc:
             logger.exception(
                 "process_document failed for document_id=%s: %s",
