@@ -1,0 +1,11 @@
+{
+  "specialty": "gynecology",
+  "rules_version": "1.0",
+  "include_immunizations": false,
+  "include_family_history": true,
+  "include_social_history": false,
+  "highlight_observations": ["LMP", "Pap_smear", "mammogram", "estradiol"],
+  "exclude_observations": [],
+  "vital_emphasis": ["BP", "weight"],
+  "qa_pre_baker_hints": "Gynecologist — menstrual history, contraception, pregnancies, last Pap/mammogram dates, family history of breast/ovarian conditions, current hormonal meds."
+}

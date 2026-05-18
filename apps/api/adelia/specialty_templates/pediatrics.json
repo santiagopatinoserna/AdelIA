@@ -1,0 +1,11 @@
+{
+  "specialty": "pediatrics",
+  "rules_version": "1.0",
+  "include_immunizations": true,
+  "include_family_history": false,
+  "include_social_history": false,
+  "highlight_observations": ["weight_percentile", "height_percentile", "head_circumference"],
+  "exclude_observations": [],
+  "vital_emphasis": ["weight_percentile", "height_percentile", "head_circumference"],
+  "qa_pre_baker_hints": "Pediatric specialist — focus on developmental milestones, immunization status, growth percentile trends, allergy/infection history, school/feeding/sleep patterns."
+}

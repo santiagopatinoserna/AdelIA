@@ -1,0 +1,11 @@
+{
+  "specialty": "cardiology",
+  "rules_version": "1.0",
+  "include_immunizations": false,
+  "include_family_history": true,
+  "include_social_history": true,
+  "highlight_observations": ["BP", "HR", "lipid_panel", "cholesterol", "LDL", "HDL", "troponin", "ECG"],
+  "exclude_observations": [],
+  "vital_emphasis": ["BP", "HR"],
+  "qa_pre_baker_hints": "Cardiologist — chest pain history, exertional symptoms, lipid panel + BP trends, family history of cardiac events, smoking/alcohol status, current cardio meds."
+}

@@ -1,0 +1,11 @@
+{
+  "specialty": "gastroenterology",
+  "rules_version": "1.0",
+  "include_immunizations": false,
+  "include_family_history": true,
+  "include_social_history": true,
+  "highlight_observations": ["ALT", "AST", "bilirubin", "albumin", "fecal_calprotectin", "endoscopy", "colonoscopy"],
+  "exclude_observations": [],
+  "vital_emphasis": ["weight", "BMI"],
+  "qa_pre_baker_hints": "Gastroenterologist — GI symptoms timeline, recent imaging/endoscopy results, liver function trends, family history of GI cancers/IBD, alcohol use, current GI meds."
+}

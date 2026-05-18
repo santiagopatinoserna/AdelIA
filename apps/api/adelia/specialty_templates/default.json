@@ -1,0 +1,11 @@
+{
+  "specialty": "default",
+  "rules_version": "1.0",
+  "include_immunizations": false,
+  "include_family_history": false,
+  "include_social_history": false,
+  "highlight_observations": [],
+  "exclude_observations": [],
+  "vital_emphasis": ["BP", "HR", "weight"],
+  "qa_pre_baker_hints": "General practitioner — ask about active problems, medications, recent changes, and red-flag symptoms."
+}

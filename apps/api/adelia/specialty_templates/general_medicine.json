@@ -1,0 +1,11 @@
+{
+  "specialty": "general_medicine",
+  "rules_version": "1.0",
+  "include_immunizations": true,
+  "include_family_history": true,
+  "include_social_history": true,
+  "highlight_observations": ["BP", "HR", "weight", "HbA1c", "cholesterol", "TSH"],
+  "exclude_observations": [],
+  "vital_emphasis": ["BP", "HR", "weight"],
+  "qa_pre_baker_hints": "General practitioner — comprehensive review across active problems, medications, recent labs, lifestyle factors, immunization gaps, family history red flags."
+}
