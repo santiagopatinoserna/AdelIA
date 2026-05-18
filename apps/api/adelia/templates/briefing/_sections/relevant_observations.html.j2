@@ -1,0 +1,16 @@
+<section class="section">
+  <h2>Relevant observations</h2>
+  {% if payload.sections.relevant_observations %}
+  <ul>
+    {% for o in payload.sections.relevant_observations %}
+    <li>
+      <strong>{{ o.name }}</strong>: {{ o.value }}{% if o.unit %} {{ o.unit }}{% endif %}{% if o.date %} — {{ o.date }}{% endif %}{% if o.trend %} ({{ o.trend }}){% endif %}
+      <span class="provenance-badge {{ o.provenance }}"></span>
+      {% for c in o.citations %}<sup class="citation" data-citation-id="{{ c.entity_id }}">[{{ loop.index }}]</sup>{% endfor %}
+    </li>
+    {% endfor %}
+  </ul>
+  {% else %}
+  <p class="no-data">No relevant observations recorded.</p>
+  {% endif %}
+</section>

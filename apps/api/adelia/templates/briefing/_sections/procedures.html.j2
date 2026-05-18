@@ -1,0 +1,16 @@
+<section class="section">
+  <h2>Procedures</h2>
+  {% if payload.sections.procedures %}
+  <ul>
+    {% for p in payload.sections.procedures %}
+    <li>
+      {{ p.name }}{% if p.date %} — {{ p.date }}{% endif %}
+      <span class="provenance-badge {{ p.provenance }}"></span>
+      {% for c in p.citations %}<sup class="citation" data-citation-id="{{ c.entity_id }}">[{{ loop.index }}]</sup>{% endfor %}
+    </li>
+    {% endfor %}
+  </ul>
+  {% else %}
+  <p class="no-data">No procedures recorded.</p>
+  {% endif %}
+</section>

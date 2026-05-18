@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <title>AdelIA Briefing — {{ payload.patient.name }} — {{ payload.target_specialty.value }}</title>
+  <link rel="stylesheet" href="/static/briefing/briefing.css">
+</head>
+<body class="briefing">
+  <header class="briefing-header">
+    <h1>AdelIA Briefing · {{ payload.patient.name }} · {{ payload.patient.age }} {{ payload.patient.sex }}</h1>
+    <div class="meta">
+      Generated: {{ payload.generated_at.strftime("%Y-%m-%d %H:%M UTC") }}
+      · Target specialty: <strong>{{ payload.target_specialty.value | replace("_", " ") }}</strong>
+    </div>
+  </header>
+
+  {% include "briefing/_sections/reason_for_consult.html.j2" %}
+  {% include "briefing/_sections/active_problems.html.j2" %}
+  {% include "briefing/_sections/medications.html.j2" %}
+  {% include "briefing/_sections/allergies.html.j2" %}
+  {% if payload.sections.immunizations is not none %}
+    {% include "briefing/_sections/immunizations.html.j2" %}
+  {% endif %}
+  {% include "briefing/_sections/procedures.html.j2" %}
+  {% if payload.sections.family_history is not none %}
+    {% include "briefing/_sections/family_history.html.j2" %}
+  {% endif %}
+  {% include "briefing/_sections/relevant_observations.html.j2" %}
+  {% include "briefing/_sections/open_questions.html.j2" %}
+
+  <footer class="disclaimer">
+    <p>AI-generated briefing. Verify all clinical findings with the source documents.
+    AdelIA is a personal documentation tool, not a medical device.</p>
+  </footer>
+</body>
+</html>

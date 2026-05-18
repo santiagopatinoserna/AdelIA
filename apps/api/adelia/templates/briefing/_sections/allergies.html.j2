@@ -1,0 +1,16 @@
+<section class="section">
+  <h2>Allergies</h2>
+  {% if payload.sections.allergies == "no_known_allergies" %}
+    <p>No known allergies.</p>
+  {% elif payload.sections.allergies %}
+  <ul>
+    {% for a in payload.sections.allergies %}
+    <li>
+      <strong>{{ a.substance }}</strong>{% if a.reaction %} — {{ a.reaction }}{% endif %}{% if a.severity %} ({{ a.severity }}){% endif %}
+      <span class="provenance-badge {{ a.provenance }}"></span>
+      {% for c in a.citations %}<sup class="citation" data-citation-id="{{ c.entity_id }}">[{{ loop.index }}]</sup>{% endfor %}
+    </li>
+    {% endfor %}
+  </ul>
+  {% endif %}
+</section>

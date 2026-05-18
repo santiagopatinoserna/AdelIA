@@ -1,0 +1,16 @@
+<section class="section">
+  <h2>Current medications</h2>
+  {% if payload.sections.medications %}
+  <ul>
+    {% for m in payload.sections.medications %}
+    <li>
+      <strong>{{ m.name }}</strong>{% if m.dose %} {{ m.dose }}{% endif %}{% if m.frequency %} {{ m.frequency }}{% endif %}{% if m.route %} ({{ m.route }}){% endif %}{% if m.started %} — since {{ m.started }}{% endif %}
+      <span class="provenance-badge {{ m.provenance }}"></span>
+      {% for c in m.citations %}<sup class="citation" data-citation-id="{{ c.entity_id }}">[{{ loop.index }}]</sup>{% endfor %}
+    </li>
+    {% endfor %}
+  </ul>
+  {% else %}
+  <p class="no-data">No current medications recorded.</p>
+  {% endif %}
+</section>
