@@ -1,5 +1,11 @@
 import { auth } from "@/lib/auth";
 
+import type {
+  BriefingCreate,
+  BriefingDetailOut,
+  BriefingOut,
+} from "./briefing-types";
+
 export const API_URL = process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:8000";
 
 export type DocumentStatus = "uploaded" | "processing" | "ready" | "failed";
@@ -36,3 +42,39 @@ export async function getDocument(id: string): Promise<DocumentDTO> {
   if (!res.ok) throw new Error(`getDocument: ${res.status}`);
   return res.json();
 }
+
+// M5 briefings namespace
+export const briefings = {
+  async create(input: BriefingCreate): Promise<BriefingOut> {
+    const res = await authedFetch("/briefings", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(input),
+    });
+    if (!res.ok) throw new Error(`briefings.create: ${res.status}`);
+    return res.json();
+  },
+
+  async list(): Promise<BriefingOut[]> {
+    const res = await authedFetch("/briefings");
+    if (!res.ok) throw new Error(`briefings.list: ${res.status}`);
+    return res.json();
+  },
+
+  async getById(id: string): Promise<BriefingDetailOut> {
+    const res = await authedFetch(`/briefings/${id}`);
+    if (!res.ok) throw new Error(`briefings.getById: ${res.status}`);
+    return res.json();
+  },
+
+  async regenerate(id: string): Promise<BriefingOut> {
+    const res = await authedFetch(`/briefings/${id}/regenerate`, { method: "POST" });
+    if (!res.ok) throw new Error(`briefings.regenerate: ${res.status}`);
+    return res.json();
+  },
+
+  async remove(id: string): Promise<void> {
+    const res = await authedFetch(`/briefings/${id}`, { method: "DELETE" });
+    if (!res.ok) throw new Error(`briefings.remove: ${res.status}`);
+  },
+};
