@@ -6,7 +6,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
 
 from adelia.db import engine
-from adelia.routers import briefings, chat, documents, health
+from adelia.routers import briefings, chat, documents, health, ingestion
 
 
 @asynccontextmanager
@@ -33,3 +33,4 @@ app.include_router(health.router)
 app.include_router(documents.router)
 app.include_router(chat.router)
 app.include_router(briefings.router)
+app.include_router(ingestion.router)

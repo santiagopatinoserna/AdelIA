@@ -248,3 +248,82 @@ class BriefingOut(BaseModel):
 class BriefingDetailOut(BriefingOut):
     payload: BriefingPayload | None = None
     html_render: str | None = None
+
+
+# ============================================================================
+# M4 ingestion surfaces
+# ============================================================================
+
+
+IngestionSource = Literal[
+    "web", "telegram", "email", "apple_health", "ccd_import", "gdpr_response"
+]
+
+
+class TelegramLinkOut(BaseModel):
+    user_id: UUID
+    chat_id: int
+    username: str | None
+    linked_at: datetime
+
+    model_config = ConfigDict(from_attributes=True)
+
+
+class TelegramLinkRequest(BaseModel):
+    """Web returns a signed token; user sends /start <token> to the bot."""
+    bot_url: str
+    link_token: str
+    expires_at: datetime
+
+
+class EmailAliasOut(BaseModel):
+    user_id: UUID
+    alias: str  # e.g. "abc12345@in.adelia.app"
+    created_at: datetime
+
+    model_config = ConfigDict(from_attributes=True)
+
+
+class IngestionEventOut(BaseModel):
+    id: UUID
+    source: IngestionSource
+    document_count: int
+    entity_count: int
+    error_message: str | None
+    created_at: datetime
+
+    model_config = ConfigDict(from_attributes=True)
+
+
+class IngestionImportResult(BaseModel):
+    """Returned by /ingestion/apple-health/import and /ingestion/ccd/import."""
+    event_id: UUID
+    source: IngestionSource
+    document_count: int
+    entity_count: int
+    elapsed_seconds: float
+    sample_names: list[str] = Field(default_factory=list)  # first 5 entity names for UX
+
+
+class GuideSummary(BaseModel):
+    slug: str
+    title: str
+    description: str
+    estimated_time: str | None = None
+
+
+class GuideContent(GuideSummary):
+    markdown: str  # full body
+    front_matter: dict = Field(default_factory=dict)
+
+
+class GDPRTemplateSummary(BaseModel):
+    country: str  # 'ES', 'FR', 'US'
+    authority: str
+    legal_basis: str
+    response_deadline: str
+    output_language: str
+
+
+class GDPRTemplateContent(GDPRTemplateSummary):
+    markdown: str
