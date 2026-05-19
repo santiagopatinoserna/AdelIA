@@ -4,7 +4,7 @@ from datetime import datetime
 from uuid import UUID as PyUUID
 
 from sqlalchemy import (
-    Boolean, Column, CheckConstraint, Date, DateTime, Float, ForeignKey,
+    BigInteger, Boolean, Column, CheckConstraint, Date, DateTime, Float, ForeignKey,
     Index, Integer, LargeBinary, String, Text, text
 )
 from sqlalchemy.dialects.postgresql import UUID, JSONB
@@ -186,4 +186,55 @@ class ChatMessage(Base):
 
     __table_args__ = (
         CheckConstraint("role IN ('user','assistant')", name="chat_messages_role_check"),
+    )
+
+
+# ============================================================================
+# M4 ingestion surface models
+# ============================================================================
+
+
+class TelegramLink(Base):
+    __tablename__ = "telegram_links"
+    user_id = Column(
+        UUID(as_uuid=True),
+        ForeignKey("users.id", ondelete="CASCADE"),
+        primary_key=True,
+    )
+    chat_id = Column(BigInteger, nullable=False, unique=True)
+    username = Column(String(64))
+    linked_at = Column(DateTime(timezone=True), server_default=func.now(), nullable=False)
+
+
+class EmailAlias(Base):
+    __tablename__ = "email_aliases"
+    user_id = Column(
+        UUID(as_uuid=True),
+        ForeignKey("users.id", ondelete="CASCADE"),
+        primary_key=True,
+    )
+    alias = Column(String(128), nullable=False, unique=True, index=True)
+    created_at = Column(DateTime(timezone=True), server_default=func.now(), nullable=False)
+
+
+class IngestionEvent(Base):
+    __tablename__ = "ingestion_events"
+    id = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
+    user_id = Column(
+        UUID(as_uuid=True),
+        ForeignKey("users.id", ondelete="CASCADE"),
+        nullable=False,
+        index=True,
+    )
+    source = Column(String(32), nullable=False)
+    document_count = Column(Integer, nullable=False, server_default=text("0"))
+    entity_count = Column(Integer, nullable=False, server_default=text("0"))
+    error_message = Column(Text)
+    created_at = Column(DateTime(timezone=True), server_default=func.now(), nullable=False)
+
+    __table_args__ = (
+        CheckConstraint(
+            "source IN ('web', 'telegram', 'email', 'apple_health', 'ccd_import', 'gdpr_response')",
+            name="ck_ingestion_events_source",
+        ),
     )
