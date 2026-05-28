@@ -33,14 +33,14 @@ export default async function IngestionPage({ params }: Props) {
       <h1 className="text-2xl font-semibold">{t("ingestion.title")}</h1>
       <p className="mt-1 text-sm text-slate-600">{t("ingestion.subtitle")}</p>
 
-      <section className="mt-8 grid grid-cols-1 gap-4 md:grid-cols-2">
+      <section className="mt-8 grid grid-cols-2 gap-4 md:grid-cols-4">
         <Link
           href={`/${locale}/dashboard/ingestion/apple-health`}
           className="rounded-lg border border-slate-200 bg-white p-4 hover:bg-slate-50"
         >
           <div className="text-3xl">📱</div>
           <h3 className="mt-2 font-medium">Apple Health</h3>
-          <p className="text-xs text-slate-600">Sube tu export.zip → biométricos importados</p>
+          <p className="text-xs text-slate-600">export.zip → biométricos</p>
         </Link>
         <Link
           href={`/${locale}/dashboard/ingestion/ccd`}
@@ -48,7 +48,23 @@ export default async function IngestionPage({ params }: Props) {
         >
           <div className="text-3xl">🏥</div>
           <h3 className="mt-2 font-medium">MyChart / CCD</h3>
-          <p className="text-xs text-slate-600">Sube CCD XML de tu portal de paciente</p>
+          <p className="text-xs text-slate-600">XML del portal paciente</p>
+        </Link>
+        <Link
+          href={`/${locale}/dashboard/ingestion/telegram`}
+          className="rounded-lg border border-slate-200 bg-white p-4 hover:bg-slate-50"
+        >
+          <div className="text-3xl">💬</div>
+          <h3 className="mt-2 font-medium">Telegram</h3>
+          <p className="text-xs text-slate-600">Reenvía docs al bot</p>
+        </Link>
+        <Link
+          href={`/${locale}/dashboard/ingestion/email`}
+          className="rounded-lg border border-slate-200 bg-white p-4 hover:bg-slate-50"
+        >
+          <div className="text-3xl">📧</div>
+          <h3 className="mt-2 font-medium">Email</h3>
+          <p className="text-xs text-slate-600">Forward a tu alias</p>
         </Link>
       </section>
 

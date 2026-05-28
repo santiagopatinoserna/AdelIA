@@ -311,3 +311,7 @@ class Profile(Base):
             name="ck_profiles_relationship",
         ),
     )
+
+
+# M6 ShareLink already defined at line 145 — uses existing schema from migration 0001:
+# fields: revoked (bool), access_count, last_accessed_at, expires_at, token.
