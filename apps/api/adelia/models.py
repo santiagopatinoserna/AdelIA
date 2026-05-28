@@ -238,3 +238,46 @@ class IngestionEvent(Base):
             name="ck_ingestion_events_source",
         ),
     )
+
+
+# ============================================================================
+# v0.2 — Dual-RAG: clinical evidence (guidelines + papers + protocols)
+# ============================================================================
+
+
+class EvidenceSource(Base):
+    __tablename__ = "evidence_sources"
+    id = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
+    source_type = Column(String(32), nullable=False)  # guideline | paper | protocol | reference
+    title = Column(String(512), nullable=False)
+    organization = Column(String(128))
+    publication_year = Column(Integer)
+    url = Column(String(1024))
+    specialties = Column(JSONB)  # list of specialty tags — stored as JSONB array for simplicity
+    license = Column(String(64))
+    language = Column(String(8), server_default=text("'en'"))
+    created_at = Column(DateTime(timezone=True), server_default=func.now(), nullable=False)
+    updated_at = Column(DateTime(timezone=True), server_default=func.now(), nullable=False)
+
+    __table_args__ = (
+        CheckConstraint(
+            "source_type IN ('guideline', 'paper', 'protocol', 'reference')",
+            name="ck_evidence_sources_type",
+        ),
+    )
+
+
+class EvidenceChunk(Base):
+    __tablename__ = "evidence_chunks"
+    id = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
+    source_id = Column(
+        UUID(as_uuid=True),
+        ForeignKey("evidence_sources.id", ondelete="CASCADE"),
+        nullable=False,
+        index=True,
+    )
+    content = Column(Text, nullable=False)
+    chunk_index = Column(Integer, nullable=False)
+    chunk_metadata = Column(JSONB)
+    embedding = Column(Vector(1024))
+    created_at = Column(DateTime(timezone=True), server_default=func.now(), nullable=False)
