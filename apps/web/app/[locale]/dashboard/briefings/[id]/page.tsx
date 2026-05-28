@@ -6,7 +6,9 @@ import { useTranslations } from "next-intl";
 
 import { briefings as briefingsApi } from "@/lib/api-client";
 import type { BriefingDetailOut } from "@/lib/briefing-types";
+import { sharing } from "@/lib/sharing-client";
 import { BriefingDetail } from "@/components/briefing/briefing-detail";
+import { ShareDialog } from "@/components/briefing/share-dialog";
 import { StaleBanner } from "@/components/briefing/stale-banner";
 
 export default function BriefingDetailPage() {
@@ -19,6 +21,7 @@ export default function BriefingDetailPage() {
   const [briefing, setBriefing] = useState<BriefingDetailOut | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [regenerating, setRegenerating] = useState(false);
+  const [showShare, setShowShare] = useState(false);
 
   const fetchBriefing = useCallback(async () => {
     if (!id) return;
@@ -66,10 +69,31 @@ export default function BriefingDetailPage() {
 
   return (
     <main className="mx-auto max-w-4xl px-6 py-10">
-      <div className="mb-4 text-sm text-slate-600">
-        Status: <strong>{t(`briefing.status.${briefing.status}`)}</strong>
-        {briefing.status === "processing" && (
-          <span className="ml-2">— {t("briefing.polling")}</span>
+      <div className="mb-4 flex items-center justify-between text-sm text-slate-600">
+        <div>
+          Status: <strong>{t(`briefing.status.${briefing.status}`)}</strong>
+          {briefing.status === "processing" && (
+            <span className="ml-2">— {t("briefing.polling")}</span>
+          )}
+        </div>
+        {briefing.status === "ready" && (
+          <div className="flex gap-2">
+            <a
+              href={sharing.pdfUrl(briefing.id)}
+              target="_blank"
+              rel="noopener"
+              className="rounded border border-slate-300 px-3 py-1.5 text-xs hover:bg-slate-50"
+            >
+              📄 PDF
+            </a>
+            <button
+              type="button"
+              onClick={() => setShowShare(true)}
+              className="rounded bg-slate-900 px-3 py-1.5 text-xs text-white hover:bg-slate-800"
+            >
+              🔗 Compartir
+            </button>
+          </div>
         )}
       </div>
 
@@ -85,6 +109,10 @@ export default function BriefingDetailPage() {
 
       {briefing.status === "ready" && (
         <BriefingDetail briefing={briefing} locale={locale} />
+      )}
+
+      {showShare && briefing.status === "ready" && (
+        <ShareDialog briefingId={briefing.id} onClose={() => setShowShare(false)} />
       )}
     </main>
   );
