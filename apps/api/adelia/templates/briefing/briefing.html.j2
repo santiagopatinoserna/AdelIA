@@ -28,6 +28,23 @@
   {% include "briefing/_sections/relevant_observations.html.j2" %}
   {% include "briefing/_sections/open_questions.html.j2" %}
 
+  {% if payload.evidence_citations %}
+  <section class="section evidence">
+    <h2>📘 Clinical evidence consulted</h2>
+    <ul>
+      {% for ev in payload.evidence_citations %}
+      <li>
+        <strong>[{{ ev.tag }}]</strong>
+        {{ ev.title }}
+        {% if ev.organization %} — {{ ev.organization }}{% endif %}
+        {% if ev.year %} ({{ ev.year }}){% endif %}
+        {% if ev.url %} · <a href="{{ ev.url }}" target="_blank" rel="noopener">source</a>{% endif %}
+      </li>
+      {% endfor %}
+    </ul>
+  </section>
+  {% endif %}
+
   <footer class="disclaimer">
     <p>AI-generated briefing. Verify all clinical findings with the source documents.
     AdelIA is a personal documentation tool, not a medical device.</p>

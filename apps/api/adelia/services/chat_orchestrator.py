@@ -9,6 +9,13 @@ from uuid import UUID
 from mistralai.client.sdk import Mistral
 
 from adelia.config import settings
+from adelia.db import AsyncSessionLocal
+from adelia.enrichment.evidence_retrieval import (
+    EvidenceMatch,
+    evidence_citations_for_response,
+    format_evidence_for_prompt,
+    retrieve_evidence,
+)
 from adelia.schemas import ChatCitation
 from adelia.services.retrieval import retrieve_relevant_chunks
 from adelia.services.structured_query import query_observations_by_name_and_date_range
@@ -24,16 +31,18 @@ class ChatEvent:
     type: Literal["token", "final", "error"]
     content: str = ""
     citations: list[ChatCitation] = field(default_factory=list)
+    evidence_citations: list[dict] = field(default_factory=list)
 
 
 _SYSTEM_PROMPT = """Eres un asistente médico que responde EXCLUSIVAMENTE basándote en
-los fragmentos de la historia clínica del usuario proporcionados como contexto.
+los datos del paciente Y la evidencia clínica proporcionada como contexto.
 
 Reglas estrictas:
-- Si la información no está en el contexto, di "No tengo información suficiente".
-- Cita los fragmentos con marcadores numéricos [1], [2], ... que corresponden
-  al orden de los fragmentos del contexto.
-- Responde en español, en un párrafo corto.
+- Si la información NO está en el contexto del paciente NI en la evidencia, di "No tengo información suficiente".
+- Cita datos del paciente con marcadores numéricos [1], [2], ... correspondientes al orden de los fragmentos del paciente.
+- Cita guidelines/evidencia con marcadores [ev_1], [ev_2], ... correspondientes a la sección "Clinical evidence".
+- Cuando combines ambos (e.g. "tu HbA1c X% [2] está en rango prediabetes según ADA [ev_1]"), separa claramente paciente vs evidencia.
+- Responde en español, en uno o dos párrafos cortos.
 - NUNCA inventes datos médicos. NUNCA des consejos médicos definitivos.
 - Termina con "Verifica con tu médico antes de tomar decisiones clínicas."
 """
@@ -89,16 +98,44 @@ async def _stream_llm_tokens(
                 yield piece
 
 
+async def _retrieve_evidence_for_query(
+    query_embedding: list[float] | None,
+    *,
+    top_k: int = 4,
+) -> list[EvidenceMatch]:
+    """Best-effort evidence retrieval. Returns [] on any error (graceful degradation).
+
+    Dual-RAG: complements patient retrieval with clinical guidelines.
+    """
+    if query_embedding is None:
+        return []
+    try:
+        async with AsyncSessionLocal() as session:
+            return await retrieve_evidence(
+                session,
+                query_embedding=query_embedding,
+                top_k=top_k,
+                max_distance=0.45,
+            )
+    except Exception as e:
+        logger.warning("evidence retrieval failed (continuing without): %s", e)
+        return []
+
+
 async def answer_question_streaming(
     *, user_id: UUID, question: str
 ) -> AsyncIterator[ChatEvent]:
-    """Main orchestrator: detect temporal intent → retrieve context → stream LLM.
+    """Main orchestrator: detect temporal intent → retrieve patient + evidence context → stream LLM.
 
-    Yields ChatEvent(type='token', content=...) for each LLM token, then a
-    single ChatEvent(type='final', citations=[...]) at the end. On error,
-    yields ChatEvent(type='error', content=<message>).
+    Dual-RAG: patient chunks (or temporal observations) PLUS clinical guidelines
+    (from evidence_chunks). Citations returned in separate namespaces:
+    - citations: list[ChatCitation] (patient data — linkable to /dashboard/documents)
+    - evidence_citations: list[dict] (guidelines — linkable to source URLs)
     """
     citations: list[ChatCitation] = []
+    evidence_citations: list[dict] = []
+    query_embedding: list[float] | None = None
+
     try:
         temporal = detect_temporal_intent(question)
         if temporal is not None:
@@ -108,12 +145,14 @@ async def answer_question_streaming(
                 from_date=temporal.from_date,
                 to_date=temporal.to_date,
             )
-            context = _format_temporal_context(rows)
-            user_msg = (
-                f"Pregunta del usuario: {question}\n\n"
-                f"Datos estructurados de observaciones:\n{context}"
-            )
-            # Map each row to a Citation surrogate (chunk_id ← entity id)
+            patient_context = _format_temporal_context(rows)
+            # Also embed for evidence retrieval (temporal queries benefit from
+            # guidelines about the queried lab — e.g. "HbA1c curve" → ADA targets)
+            try:
+                qe = await embed_texts([question])
+                query_embedding = qe[0] if qe else None
+            except Exception as e:
+                logger.warning("embed for evidence failed in temporal path: %s", e)
             for r in rows:
                 citations.append(
                     ChatCitation(
@@ -130,16 +169,13 @@ async def answer_question_streaming(
                 raise RuntimeError(
                     "embed_texts returned empty — cannot retrieve chunks"
                 )
+            query_embedding = query_embeds[0]
             chunks = await retrieve_relevant_chunks(
                 user_id=user_id,
-                query_embedding=query_embeds[0],
+                query_embedding=query_embedding,
                 top_k=8,
             )
-            context = _format_rag_context(chunks)
-            user_msg = (
-                f"Pregunta del usuario: {question}\n\n"
-                f"Fragmentos del contexto:\n{context}"
-            )
+            patient_context = _format_rag_context(chunks)
             for c in chunks:
                 citations.append(
                     ChatCitation(
@@ -150,10 +186,27 @@ async def answer_question_streaming(
                     )
                 )
 
+        # Dual-RAG: parallel evidence retrieval
+        evidence_matches = await _retrieve_evidence_for_query(query_embedding)
+        evidence_block = format_evidence_for_prompt(evidence_matches)
+        evidence_citations = evidence_citations_for_response(evidence_matches)
+
+        # Compose final user message with both contexts
+        sections = [f"Pregunta del usuario: {question}\n"]
+        if patient_context:
+            sections.append(f"## Patient data (cite as [N]):\n{patient_context}")
+        if evidence_block:
+            sections.append(evidence_block)
+        user_msg = "\n\n".join(sections)
+
         async for token in _stream_llm_tokens(_SYSTEM_PROMPT, user_msg):
             yield ChatEvent(type="token", content=token)
 
-        yield ChatEvent(type="final", citations=citations)
+        yield ChatEvent(
+            type="final",
+            citations=citations,
+            evidence_citations=evidence_citations,
+        )
     except Exception as exc:  # noqa: BLE001 — surface to client as error event
         logger.exception("answer_question_streaming failed: %s", exc)
         yield ChatEvent(type="error", content=str(exc))

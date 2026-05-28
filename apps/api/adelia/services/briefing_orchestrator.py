@@ -18,10 +18,16 @@ from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from adelia.db import AsyncSessionLocal
+from adelia.enrichment.evidence_retrieval import (
+    evidence_citations_for_response,
+    format_evidence_for_prompt,
+    retrieve_evidence,
+)
 from adelia.models import Document, Entity, User
 from adelia.schemas import (
     AppliedFilter,
     BriefingPayload,
+    EvidenceCitation,
     PatientHeader,
     Specialty,
 )
@@ -30,6 +36,7 @@ from adelia.services.briefing_html_renderer import render_briefing_html
 from adelia.services.qa_pre_baker import bake_questions, QAPrebakerError
 from adelia.services.sbar_formatter import EntityInput, format_sections
 from adelia.specialty_templates import load_template
+from adelia.workers.embed import embed_texts
 
 logger = logging.getLogger(__name__)
 
@@ -130,6 +137,40 @@ def _entities_to_text_block(entities: list[EntityInput]) -> str:
     return "\n".join(lines)
 
 
+async def _retrieve_specialty_evidence(
+    *,
+    target_specialty: Specialty,
+    entities_text: str,
+    top_k: int = 5,
+) -> tuple[str, list[EvidenceCitation]]:
+    """Retrieve evidence relevant to the specialty.
+
+    Embeds a synthetic query from specialty + recent entities, runs evidence
+    retrieval filtered by specialty tag. Returns (formatted_prompt_block, citations).
+    Gracefully degrades to empty on error.
+    """
+    try:
+        query_text = f"{target_specialty.value} clinical guidelines for: {entities_text[:1500]}"
+        embeds = await embed_texts([query_text])
+        if not embeds:
+            return "", []
+        async with AsyncSessionLocal() as session:
+            matches = await retrieve_evidence(
+                session,
+                query_embedding=embeds[0],
+                specialties=[target_specialty.value],
+                top_k=top_k,
+                max_distance=0.55,  # slightly more lenient for briefings
+            )
+        prompt_block = format_evidence_for_prompt(matches)
+        citation_dicts = evidence_citations_for_response(matches)
+        citations = [EvidenceCitation(**c) for c in citation_dicts]
+        return prompt_block, citations
+    except Exception as e:
+        logger.warning("specialty evidence retrieval failed (continuing): %s", e)
+        return "", []
+
+
 async def run(
     *,
     briefing_id: UUID,
@@ -140,6 +181,10 @@ async def run(
 
     Idempotent semantics: always updates the briefing row (status to ready or failed
     + completed_at always set in finally).
+
+    Dual-RAG: enriches Q&A pre-baker with specialty-relevant clinical evidence
+    (ADA, AHA, NICE, etc. — depending on target_specialty). Evidence citations
+    flow into BriefingPayload.evidence_citations for UI rendering.
     """
     status = "failed"
     error_message: str | None = None
@@ -158,10 +203,26 @@ async def run(
 
         template = load_template(target_specialty)
         entities_text = _entities_to_text_block(entities)
+
+        # Dual-RAG: pull specialty-relevant clinical evidence
+        evidence_block, evidence_citations = await _retrieve_specialty_evidence(
+            target_specialty=target_specialty,
+            entities_text=entities_text,
+        )
+
+        # Append evidence to specialty_hints (non-breaking, qa_pre_baker prompt grows)
+        enriched_hints = template.qa_pre_baker_hints
+        if evidence_block:
+            enriched_hints = (
+                f"{template.qa_pre_baker_hints}\n\n"
+                f"Use the following clinical guidelines to inform the Q&A "
+                f"(but still ground each answer in patient citations):\n\n{evidence_block}"
+            )
+
         qa_items, llm_meta = bake_questions(
             specialty=target_specialty,
             entities_text=entities_text,
-            specialty_hints=template.qa_pre_baker_hints,
+            specialty_hints=enriched_hints,
             source_raw_texts=sources,
         )
         sections.open_questions = qa_items
@@ -176,6 +237,7 @@ async def run(
                 specialty=target_specialty.value, rules_version=template.rules_version
             ),
             llm_meta=llm_meta,
+            evidence_citations=evidence_citations,
         )
 
         html = render_briefing_html(payload)

@@ -219,6 +219,18 @@ class LLMMeta(BaseModel):
     cost_estimate_usd: float
 
 
+class EvidenceCitation(BaseModel):
+    """Clinical evidence citation (separate namespace from patient Citation)."""
+    tag: str  # e.g. 'ev_1'
+    source_id: str
+    chunk_id: str
+    title: str
+    organization: str | None = None
+    year: int | None = None
+    url: str | None = None
+    snippet: str
+
+
 class BriefingPayload(BaseModel):
     schema_version: Literal["1.0"] = "1.0"
     generated_at: datetime
@@ -227,6 +239,7 @@ class BriefingPayload(BaseModel):
     sections: BriefingSections
     applied_filter: AppliedFilter
     llm_meta: LLMMeta
+    evidence_citations: list[EvidenceCitation] = Field(default_factory=list)
 
 
 class BriefingCreate(BaseModel):
