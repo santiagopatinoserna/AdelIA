@@ -24,6 +24,7 @@ dependencies = [
     "nh3>=0.2",
     "greenlet>=3.5.0",
     "lxml>=5.0",
+    "rapidfuzz>=3.0",
 ]
 
 [dependency-groups]
