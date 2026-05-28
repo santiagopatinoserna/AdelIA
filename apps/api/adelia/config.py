@@ -20,6 +20,14 @@ class Settings(BaseSettings):
     mistral_api_key: str = ""
     openai_api_key: str = ""
 
+    # M4 ingestion surfaces
+    telegram_bot_token: str = ""
+    telegram_webhook_secret: str = ""
+    telegram_bot_mode: str = "webhook"  # "webhook" | "polling"
+    postmark_inbound_token: str = ""
+    adelia_email_domain: str = "in.adelia.app"
+    adelia_app_url: str = "http://localhost:3000"
+
     @property
     def database_url(self) -> str:
         return (
