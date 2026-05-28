@@ -281,3 +281,33 @@ class EvidenceChunk(Base):
     chunk_metadata = Column(JSONB)
     embedding = Column(Vector(1024))
     created_at = Column(DateTime(timezone=True), server_default=func.now(), nullable=False)
+
+
+# ============================================================================
+# v0.2 — Multi-profile (familiar) support
+# ============================================================================
+
+
+class Profile(Base):
+    __tablename__ = "profiles"
+    id = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
+    user_id = Column(
+        UUID(as_uuid=True),
+        ForeignKey("users.id", ondelete="CASCADE"),
+        nullable=False,
+        index=True,
+    )
+    display_name = Column(String(128), nullable=False)
+    relationship = Column(String(64), nullable=False, server_default=text("'self'"))
+    date_of_birth = Column(Date)
+    sex = Column(String(8))
+    is_default = Column(Boolean, nullable=False, server_default=text("false"))
+    created_at = Column(DateTime(timezone=True), server_default=func.now(), nullable=False)
+    deleted_at = Column(DateTime(timezone=True))
+
+    __table_args__ = (
+        CheckConstraint(
+            "relationship IN ('self', 'child', 'parent', 'spouse', 'sibling', 'other')",
+            name="ck_profiles_relationship",
+        ),
+    )
