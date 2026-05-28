@@ -1,0 +1,219 @@
+{
+  "_meta": {
+    "purpose": "Starter set of pharmacogenomic + clinically actionable variants for v0.2. Source: ClinVar + PharmGKB + CPIC guidelines (all public databases). NOT exhaustive — represents the highest-impact, well-validated variants where 23andMe-style genotype data is sufficient for clinical action.",
+    "version": "1.0",
+    "updated": "2026-05-18",
+    "disclaimer": "Variant interpretation requires confirmation in a CLIA-certified lab. AdelIA flags potential variants for clinician discussion — NOT a diagnostic test.",
+    "fields": {
+      "rsid": "RefSNP ID (dbSNP)",
+      "gene": "HGNC gene symbol",
+      "clinical_significance": "ClinVar review status",
+      "phenotype": "Associated condition or drug response",
+      "actionability": "What to do clinically",
+      "alleles": "List of alleles where the risk applies",
+      "category": "pharmacogenomics | disease_risk | carrier_status"
+    }
+  },
+  "variants": [
+    {
+      "rsid": "rs4244285",
+      "gene": "CYP2C19",
+      "alleles_risk": ["A"],
+      "category": "pharmacogenomics",
+      "phenotype": "CYP2C19 *2 — reduced clopidogrel activation",
+      "actionability": "Carriers may have reduced clopidogrel antiplatelet effect — consider alternative (ticagrelor, prasugrel) for ACS/PCI",
+      "evidence_level": "CPIC Level A",
+      "url": "https://www.pharmgkb.org/variant/PA166154999"
+    },
+    {
+      "rsid": "rs1799853",
+      "gene": "CYP2C9",
+      "alleles_risk": ["T"],
+      "category": "pharmacogenomics",
+      "phenotype": "CYP2C9 *2 — slower warfarin metabolism",
+      "actionability": "Warfarin requires reduced starting dose (~20-30%); use IWPC algorithm for dosing",
+      "evidence_level": "CPIC Level A",
+      "url": "https://www.pharmgkb.org/variant/PA166155013"
+    },
+    {
+      "rsid": "rs9923231",
+      "gene": "VKORC1",
+      "alleles_risk": ["T"],
+      "category": "pharmacogenomics",
+      "phenotype": "Increased warfarin sensitivity",
+      "actionability": "Reduce warfarin starting dose; use IWPC algorithm",
+      "evidence_level": "CPIC Level A",
+      "url": "https://www.pharmgkb.org/variant/PA166155018"
+    },
+    {
+      "rsid": "rs3892097",
+      "gene": "CYP2D6",
+      "alleles_risk": ["A"],
+      "category": "pharmacogenomics",
+      "phenotype": "CYP2D6 *4 — poor metabolizer of codeine/tramadol",
+      "actionability": "Codeine inactive at standard dose → analgesia failure. Avoid codeine. Tramadol may also be ineffective.",
+      "evidence_level": "CPIC Level A",
+      "url": "https://www.pharmgkb.org/variant/PA166155047"
+    },
+    {
+      "rsid": "rs4149056",
+      "gene": "SLCO1B1",
+      "alleles_risk": ["C"],
+      "category": "pharmacogenomics",
+      "phenotype": "SLCO1B1 *5 — increased simvastatin myopathy risk",
+      "actionability": "Avoid simvastatin > 40mg in homozygotes; consider rosuvastatin/atorvastatin",
+      "evidence_level": "CPIC Level A",
+      "url": "https://www.pharmgkb.org/variant/PA166155186"
+    },
+    {
+      "rsid": "rs2032582",
+      "gene": "ABCB1",
+      "alleles_risk": ["T"],
+      "category": "pharmacogenomics",
+      "phenotype": "P-glycoprotein efflux pump variant — altered drug levels",
+      "actionability": "Discussion-worthy with prescriber for substrates (digoxin, dabigatran)",
+      "evidence_level": "PharmGKB Level 2A",
+      "url": "https://www.pharmgkb.org/variant/PA166155215"
+    },
+    {
+      "rsid": "rs1057910",
+      "gene": "CYP2C9",
+      "alleles_risk": ["C"],
+      "category": "pharmacogenomics",
+      "phenotype": "CYP2C9 *3 — slower warfarin metabolism",
+      "actionability": "Similar to *2 — reduce warfarin starting dose substantially",
+      "evidence_level": "CPIC Level A",
+      "url": "https://www.pharmgkb.org/variant/PA166155014"
+    },
+    {
+      "rsid": "rs429358",
+      "gene": "APOE",
+      "alleles_risk": ["C"],
+      "category": "disease_risk",
+      "phenotype": "APOE ε4 — increased Alzheimer disease risk",
+      "actionability": "Lifestyle interventions evidence-based for risk reduction; not deterministic. Genetic counseling recommended before testing children.",
+      "evidence_level": "ClinVar — pathogenic with reduced penetrance",
+      "url": "https://www.ncbi.nlm.nih.gov/snp/rs429358"
+    },
+    {
+      "rsid": "rs7412",
+      "gene": "APOE",
+      "alleles_risk": ["T"],
+      "category": "disease_risk",
+      "phenotype": "APOE ε2 — protective against late-onset AD; increased type III hyperlipoproteinemia risk in homozygotes",
+      "actionability": "Lipid panel monitoring; consider if dyslipidemia hard to control",
+      "evidence_level": "ClinVar",
+      "url": "https://www.ncbi.nlm.nih.gov/snp/rs7412"
+    },
+    {
+      "rsid": "rs1801133",
+      "gene": "MTHFR",
+      "alleles_risk": ["T"],
+      "category": "disease_risk",
+      "phenotype": "MTHFR C677T — mildly elevated homocysteine in homozygotes",
+      "actionability": "Folate supplementation may reduce homocysteine; clinical impact debated. Do NOT treat based on genotype alone — measure homocysteine first.",
+      "evidence_level": "ClinVar — risk factor, weak association",
+      "url": "https://www.ncbi.nlm.nih.gov/snp/rs1801133"
+    },
+    {
+      "rsid": "rs6025",
+      "gene": "F5",
+      "alleles_risk": ["A"],
+      "category": "disease_risk",
+      "phenotype": "Factor V Leiden — increased venous thromboembolism risk",
+      "actionability": "Increased VTE risk (3-5x heterozygous, 10x homozygous). Caution with estrogen contraceptives, post-surgery prophylaxis discussion. Not anticoagulation alone based on carrier status.",
+      "evidence_level": "ClinVar — pathogenic",
+      "url": "https://www.ncbi.nlm.nih.gov/snp/rs6025"
+    },
+    {
+      "rsid": "rs1799963",
+      "gene": "F2",
+      "alleles_risk": ["A"],
+      "category": "disease_risk",
+      "phenotype": "Prothrombin G20210A — increased VTE risk",
+      "actionability": "Similar VTE counseling as Factor V Leiden. Heterozygotes ~3x risk; homozygotes rare and higher",
+      "evidence_level": "ClinVar — pathogenic",
+      "url": "https://www.ncbi.nlm.nih.gov/snp/rs1799963"
+    },
+    {
+      "rsid": "rs1800497",
+      "gene": "ANKK1",
+      "alleles_risk": ["T"],
+      "category": "disease_risk",
+      "phenotype": "DRD2 TaqI A1 — reduced dopamine D2 receptor density (debated clinical significance)",
+      "actionability": "Lifestyle/addiction risk awareness; not actionable on its own",
+      "evidence_level": "PharmGKB Level 3",
+      "url": "https://www.pharmgkb.org/variant/PA166155095"
+    },
+    {
+      "rsid": "rs1800629",
+      "gene": "TNF",
+      "alleles_risk": ["A"],
+      "category": "disease_risk",
+      "phenotype": "TNF-α -308 G>A — altered inflammatory response",
+      "actionability": "Discussion-worthy in autoimmune contexts; clinical action limited",
+      "evidence_level": "PharmGKB",
+      "url": "https://www.pharmgkb.org/variant/PA166155285"
+    },
+    {
+      "rsid": "rs8050136",
+      "gene": "FTO",
+      "alleles_risk": ["A"],
+      "category": "disease_risk",
+      "phenotype": "FTO variant — small (~3kg) BMI increase in homozygotes",
+      "actionability": "Lifestyle counseling; effect modifiable by diet/exercise",
+      "evidence_level": "ClinVar",
+      "url": "https://www.ncbi.nlm.nih.gov/snp/rs8050136"
+    },
+    {
+      "rsid": "rs7903146",
+      "gene": "TCF7L2",
+      "alleles_risk": ["T"],
+      "category": "disease_risk",
+      "phenotype": "TCF7L2 — strongest common variant for type 2 diabetes risk",
+      "actionability": "Lifestyle intervention more effective in carriers (DPP study); enhanced T2D screening",
+      "evidence_level": "ClinVar — risk factor",
+      "url": "https://www.ncbi.nlm.nih.gov/snp/rs7903146"
+    },
+    {
+      "rsid": "rs1799945",
+      "gene": "HFE",
+      "alleles_risk": ["G"],
+      "category": "disease_risk",
+      "phenotype": "HFE H63D — mild iron overload risk; C282Y (rs1800562) more severe",
+      "actionability": "Iron studies (ferritin, transferrin saturation) periodically; treat only if biochemical iron overload",
+      "evidence_level": "ClinVar",
+      "url": "https://www.ncbi.nlm.nih.gov/snp/rs1799945"
+    },
+    {
+      "rsid": "rs1800562",
+      "gene": "HFE",
+      "alleles_risk": ["A"],
+      "category": "disease_risk",
+      "phenotype": "HFE C282Y — hereditary hemochromatosis risk allele",
+      "actionability": "Homozygotes (C282Y/C282Y) — annual iron studies; phlebotomy if ferritin elevated. Heterozygotes generally asymptomatic.",
+      "evidence_level": "ClinVar — pathogenic",
+      "url": "https://www.ncbi.nlm.nih.gov/snp/rs1800562"
+    },
+    {
+      "rsid": "rs1801131",
+      "gene": "MTHFR",
+      "alleles_risk": ["G"],
+      "category": "disease_risk",
+      "phenotype": "MTHFR A1298C — milder than C677T",
+      "actionability": "Same as C677T — measure homocysteine if relevant",
+      "evidence_level": "ClinVar — risk factor",
+      "url": "https://www.ncbi.nlm.nih.gov/snp/rs1801131"
+    },
+    {
+      "rsid": "rs28933973",
+      "gene": "CFTR",
+      "alleles_risk": ["DEL"],
+      "category": "carrier_status",
+      "phenotype": "CFTR ΔF508 — most common cystic fibrosis-causing mutation",
+      "actionability": "Heterozygous carriers asymptomatic but offspring risk if partner also carrier. Genetic counseling pre-conception recommended.",
+      "evidence_level": "ClinVar — pathogenic",
+      "url": "https://www.ncbi.nlm.nih.gov/snp/rs113993960"
+    }
+  ]
+}
