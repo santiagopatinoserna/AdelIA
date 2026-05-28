@@ -8,12 +8,25 @@ export type Citation = {
   page: number | null;
 };
 
+export type EvidenceCitation = {
+  tag: string;
+  source_id: string;
+  chunk_id: string;
+  title: string;
+  organization?: string | null;
+  year?: number | null;
+  url?: string | null;
+  snippet: string;
+  distance?: number;
+};
+
 export type ChatMessage = {
   id: string;
   session_id: string;
   role: "user" | "assistant";
   content: string;
   citations: Citation[];
+  evidence_citations?: EvidenceCitation[];
   created_at: string;
 };
 

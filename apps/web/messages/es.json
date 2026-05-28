@@ -42,6 +42,107 @@
     "citationLabel": "Ver fuente",
     "deleteSession": "Eliminar"
   },
+  "ingestion": {
+    "title": "Importar datos",
+    "subtitle": "Liberate your data — exporta de cualquier plataforma médica.",
+    "guidesTab": "Guías por plataforma",
+    "gdprTab": "Plantillas GDPR/HIPAA",
+    "uploadAppleHealth": "Subir Apple Health export.zip",
+    "uploadCcd": "Subir CCD XML",
+    "processing": "Procesando…",
+    "imported": "Importado:",
+    "entities": "entidades",
+    "documents": "documentos",
+    "elapsed": "Tiempo:",
+    "openGuide": "Abrir guía",
+    "openTemplate": "Abrir plantilla",
+    "estimatedTime": "Tiempo estimado:"
+  },
+  "enrichment": {
+    "title": "Insights v0.2",
+    "subtitle": "Normalización + interacciones + ranges + trials + genoma + perfiles",
+    "tabs": {
+      "overview": "Resumen",
+      "profiles": "Perfiles familiares",
+      "drugs": "Interacciones",
+      "labs": "Valores referencia",
+      "trials": "Ensayos clínicos",
+      "genomics": "Genoma",
+      "codes": "Normalización"
+    },
+    "profiles": {
+      "self": "Yo",
+      "child": "Hijo/a",
+      "parent": "Padre/Madre",
+      "spouse": "Pareja",
+      "sibling": "Hermano/a",
+      "other": "Otro",
+      "addProfile": "Añadir perfil",
+      "displayName": "Nombre",
+      "relationship": "Relación",
+      "dob": "Fecha de nacimiento",
+      "sex": "Sexo",
+      "setDefault": "Marcar como predeterminado",
+      "default": "Predeterminado",
+      "delete": "Borrar",
+      "cannotDelete": "No se puede borrar (es tu único perfil)"
+    },
+    "drugs": {
+      "addMedication": "Añadir medicamento",
+      "placeholder": "metformin, warfarin, ...",
+      "check": "Revisar interacciones",
+      "noInteractions": "Sin interacciones conocidas",
+      "severity": {
+        "contraindicated": "Contraindicado",
+        "major": "Grave",
+        "moderate": "Moderada",
+        "minor": "Leve"
+      }
+    },
+    "labs": {
+      "addLab": "Añadir analítica",
+      "evaluate": "Evaluar",
+      "low": "Bajo",
+      "normal": "Normal",
+      "high": "Alto",
+      "reference": "Referencia"
+    },
+    "trials": {
+      "search": "Buscar ensayos",
+      "condition": "Condición",
+      "country": "País",
+      "noResults": "Sin ensayos abiertos para esta condición",
+      "viewStudy": "Ver estudio"
+    },
+    "genomics": {
+      "upload": "Subir 23andMe raw_data.txt",
+      "disclaimer": "Los resultados son orientativos. NO sustituyen análisis CLIA-certificado.",
+      "categories": {
+        "pharmacogenomics": "Farmacogenómica",
+        "disease_risk": "Riesgo de enfermedad",
+        "carrier_status": "Portador"
+      },
+      "zygosity": {
+        "homozygous": "Homocigoto",
+        "heterozygous": "Heterocigoto",
+        "absent": "Ausente"
+      }
+    },
+    "codes": {
+      "lookup": "Buscar código",
+      "placeholder": "diabetes tipo 2, hipertensión, ...",
+      "icd10": "ICD-10",
+      "snomed": "SNOMED CT",
+      "noMatch": "Sin código encontrado"
+    },
+    "coverage": {
+      "concepts": "Conceptos normalizados",
+      "labs": "Analíticas",
+      "drugs": "Medicamentos",
+      "interactions": "Interacciones",
+      "variants": "Variantes"
+    }
+  },
   "briefing": {
     "title": "Briefings",
     "newButton": "Crear nuevo briefing",

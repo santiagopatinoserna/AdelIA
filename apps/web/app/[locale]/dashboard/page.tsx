@@ -28,22 +28,34 @@ export default async function DashboardPage({
     <main className="mx-auto max-w-3xl px-6 py-12">
       <div className="flex items-center justify-between">
         <h1 className="text-2xl font-semibold">{t("title")}</h1>
-        <div className="flex gap-2">
+        <div className="flex flex-wrap gap-2">
           <Link
             href={`/${locale}/dashboard/chat`}
-            className="rounded-md border border-slate-300 px-4 py-2 text-sm hover:bg-slate-50"
+            className="rounded-md border border-slate-300 px-3 py-2 text-sm hover:bg-slate-50"
           >
-            Chat
+            💬 Chat
           </Link>
           <Link
             href={`/${locale}/dashboard/briefings`}
-            className="rounded-md border border-slate-300 px-4 py-2 text-sm hover:bg-slate-50"
+            className="rounded-md border border-slate-300 px-3 py-2 text-sm hover:bg-slate-50"
           >
-            Briefings
+            📋 Briefings
+          </Link>
+          <Link
+            href={`/${locale}/dashboard/ingestion`}
+            className="rounded-md border border-slate-300 px-3 py-2 text-sm hover:bg-slate-50"
+          >
+            📥 Importar
+          </Link>
+          <Link
+            href={`/${locale}/dashboard/enrichment`}
+            className="rounded-md border border-slate-300 px-3 py-2 text-sm hover:bg-slate-50"
+          >
+            ✨ Insights
           </Link>
           <Link
             href={`/${locale}/dashboard/upload`}
-            className="rounded-md bg-slate-900 px-4 py-2 text-sm text-white hover:bg-slate-800"
+            className="rounded-md bg-slate-900 px-3 py-2 text-sm text-white hover:bg-slate-800"
           >
             {t("uploadCta")}
           </Link>
