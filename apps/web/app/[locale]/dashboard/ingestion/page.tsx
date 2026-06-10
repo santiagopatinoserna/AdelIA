@@ -39,7 +39,7 @@ export default async function IngestionPage({ params }: Props) {
           className="rounded-lg border border-slate-200 bg-white p-4 hover:bg-slate-50"
         >
           <div className="text-3xl">📱</div>
-          <h3 className="mt-2 font-medium">Apple Health</h3>
+          <h2 className="mt-2 font-medium">Apple Health</h2>
           <p className="text-xs text-slate-600">{t("ingestion.overview.appleHealthDesc")}</p>
         </Link>
         <Link
@@ -47,7 +47,7 @@ export default async function IngestionPage({ params }: Props) {
           className="rounded-lg border border-slate-200 bg-white p-4 hover:bg-slate-50"
         >
           <div className="text-3xl">🏥</div>
-          <h3 className="mt-2 font-medium">MyChart / CCD</h3>
+          <h2 className="mt-2 font-medium">MyChart / CCD</h2>
           <p className="text-xs text-slate-600">{t("ingestion.overview.ccdDesc")}</p>
         </Link>
         <Link
@@ -55,7 +55,7 @@ export default async function IngestionPage({ params }: Props) {
           className="rounded-lg border border-slate-200 bg-white p-4 hover:bg-slate-50"
         >
           <div className="text-3xl">💬</div>
-          <h3 className="mt-2 font-medium">Telegram</h3>
+          <h2 className="mt-2 font-medium">Telegram</h2>
           <p className="text-xs text-slate-600">{t("ingestion.overview.telegramDesc")}</p>
         </Link>
         <Link
@@ -63,7 +63,7 @@ export default async function IngestionPage({ params }: Props) {
           className="rounded-lg border border-slate-200 bg-white p-4 hover:bg-slate-50"
         >
           <div className="text-3xl">📧</div>
-          <h3 className="mt-2 font-medium">{t("ingestion.overview.emailTitle")}</h3>
+          <h2 className="mt-2 font-medium">{t("ingestion.overview.emailTitle")}</h2>
           <p className="text-xs text-slate-600">{t("ingestion.overview.emailDesc")}</p>
         </Link>
       </section>

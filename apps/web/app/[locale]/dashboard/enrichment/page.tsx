@@ -70,7 +70,7 @@ export default async function EnrichmentDashboardPage({ params }: Props) {
             className="rounded-lg border border-slate-200 bg-white p-4 hover:bg-slate-50"
           >
             <div className="text-3xl">{tab.emoji}</div>
-            <h3 className="mt-2 font-medium">{t(`enrichment.tabs.${tab.slug}`)}</h3>
+            <h2 className="mt-2 font-medium">{t(`enrichment.tabs.${tab.slug}`)}</h2>
           </Link>
         ))}
       </section>

@@ -59,6 +59,7 @@ export default async function DashboardPage({
           </Link>
           <Link
             href="/dashboard/settings"
+            aria-label={t("settingsLink")}
             className="rounded-md border border-slate-300 px-3 py-2 text-sm hover:bg-slate-50"
           >
             ⚙️

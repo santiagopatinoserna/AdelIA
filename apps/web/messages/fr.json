@@ -19,7 +19,8 @@
       "failed": "Échec"
     },
     "entitiesAndChunks": "{count, plural, =0 {Aucune entité extraite} =1 {1 entité} other {# entités}} · {chunks, plural, =0 {Aucun chunk} =1 {1 chunk} other {# chunks}}",
-    "ocrProcessing": "OCR en cours… mise à jour automatique"
+    "ocrProcessing": "OCR en cours… mise à jour automatique",
+    "settingsLink": "Paramètres du compte"
   },
   "upload": {
     "title": "Téléverser un document",

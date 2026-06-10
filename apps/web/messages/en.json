@@ -19,7 +19,8 @@
       "failed": "Failed"
     },
     "entitiesAndChunks": "{count, plural, =0 {No entities extracted} =1 {1 entity} other {# entities}} · {chunks, plural, =0 {No chunks} =1 {1 chunk} other {# chunks}}",
-    "ocrProcessing": "Running OCR… updates automatically"
+    "ocrProcessing": "Running OCR… updates automatically",
+    "settingsLink": "Account settings"
   },
   "upload": {
     "title": "Upload document",
