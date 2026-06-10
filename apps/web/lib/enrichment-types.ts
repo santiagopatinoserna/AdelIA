@@ -161,3 +161,8 @@ export interface EvidenceCitation {
   snippet: string;
   distance?: number;
 }
+
+export interface SavedGenomics {
+  analyzed_at: string | null;
+  variants: VariantHit[];
+}

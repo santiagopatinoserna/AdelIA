@@ -183,7 +183,8 @@
         "homozygous": "Homocigoto",
         "heterozygous": "Heterocigoto",
         "absent": "Ausente"
-      }
+      },
+      "savedFrom": "Análisis guardado del"
     },
     "codes": {
       "lookup": "Buscar código",

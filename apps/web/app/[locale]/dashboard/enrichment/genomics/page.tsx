@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useTranslations } from "next-intl";
 
 import { enrichment } from "@/lib/api-client-browser";
@@ -16,8 +16,23 @@ export default function GenomicsPage() {
   const t = useTranslations();
   const [file, setFile] = useState<File | null>(null);
   const [hits, setHits] = useState<VariantHit[]>([]);
+  const [analyzedAt, setAnalyzedAt] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    enrichment
+      .savedGenomics()
+      .then((saved) => {
+        if (saved.variants.length) {
+          setHits(saved.variants);
+          setAnalyzedAt(saved.analyzed_at);
+        }
+      })
+      .catch(() => {
+        // no saved analysis (or transient error) — page still works via upload
+      });
+  }, []);
 
   async function upload() {
     if (!file) return;
@@ -26,6 +41,7 @@ export default function GenomicsPage() {
     try {
       const res = await enrichment.uploadGenomics(file);
       setHits(res);
+      setAnalyzedAt(new Date().toISOString());
     } catch (e) {
       setError(String(e));
     } finally {
@@ -37,6 +53,12 @@ export default function GenomicsPage() {
     <main className="mx-auto max-w-3xl px-6 py-10">
       <h1 className="text-2xl font-semibold">🧬 {t("enrichment.tabs.genomics")}</h1>
       <p className="mt-1 text-sm text-slate-600">{t("enrichment.genomics.disclaimer")}</p>
+      {analyzedAt && (
+        <p className="mt-1 text-xs text-slate-400">
+          {t("enrichment.genomics.savedFrom")}{" "}
+          {new Date(analyzedAt).toLocaleDateString()}
+        </p>
+      )}
 
       <div className="mt-6 rounded-lg border-2 border-dashed border-slate-300 bg-white p-6 text-center">
         <input

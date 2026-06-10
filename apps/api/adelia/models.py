@@ -316,3 +316,20 @@ class Profile(Base):
 
 # M6 ShareLink already defined at line 145 — uses existing schema from migration 0001:
 # fields: revoked (bool), access_count, last_accessed_at, expires_at, token.
+
+
+class GenomicVariant(Base):
+    __tablename__ = "genomic_variants"
+    id = Column(UUID(as_uuid=True), primary_key=True, server_default=text("gen_random_uuid()"))
+    user_id = Column(UUID(as_uuid=True), ForeignKey("users.id", ondelete="CASCADE"), nullable=False)
+    rsid = Column(String(32), nullable=False)
+    gene = Column(String(64))
+    user_genotype = Column(String(8), nullable=False)
+    risk_alleles = Column(JSONB, nullable=False)
+    zygosity = Column(String(16), nullable=False)
+    category = Column(String(32), nullable=False)
+    phenotype = Column(Text, nullable=False)
+    actionability = Column(Text)
+    evidence_level = Column(Text)
+    url = Column(String(1024))
+    analyzed_at = Column(DateTime(timezone=True), server_default=func.now(), nullable=False)

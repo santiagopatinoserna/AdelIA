@@ -180,18 +180,18 @@ def test_trials_endpoint_handles_network_error(monkeypatch):
 # ----------------------------------------------------------------------------
 
 
-def test_genomics_upload_matches_variants():
-    _override_auth(uuid4())
+async def test_genomics_upload_matches_variants(client):
+    from tests.db_helpers import make_user
+
+    user_id = await make_user()
+    _override_auth(user_id)
     try:
-        with TestClient(app) as client:
-            with _GENOMICS_FIXTURE.open("rb") as f:
-                resp = client.post(
-                    "/enrichment/genomics/upload",
-                    headers={"Authorization": "Bearer dummy"},
-                    files={
-                        "file": ("genome.txt", f.read(), "text/plain")
-                    },
-                )
+        with _GENOMICS_FIXTURE.open("rb") as f:
+            resp = await client.post(
+                "/enrichment/genomics/upload",
+                headers={"Authorization": "Bearer dummy"},
+                files={"file": ("genome.txt", f.read(), "text/plain")},
+            )
         assert resp.status_code == 200
         body = resp.json()
         # Fixture has several PGx hits — at least CYP2C19

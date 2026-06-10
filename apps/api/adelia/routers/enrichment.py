@@ -16,16 +16,18 @@ Endpoints:
 from __future__ import annotations
 
 import logging
-from datetime import date
+from datetime import date, datetime
 from typing import Annotated
 from uuid import UUID
 
+import sqlalchemy as sa
 from fastapi import APIRouter, Depends, File, HTTPException, Query, Response, UploadFile, status
 from pydantic import BaseModel, Field
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from adelia.auth import get_current_user_id
 from adelia.db import get_db
+from adelia.models import GenomicVariant
 from adelia.enrichment import (
     drug_interactions as drug_svc,
     genomics as gen_svc,
@@ -238,7 +240,8 @@ class VariantHitOut(BaseModel):
 @router.post("/genomics/upload", response_model=list[VariantHitOut])
 async def genomics_upload(
     file: Annotated[UploadFile, File(description="23andMe raw_data.txt")],
-    _user_id: UUID = Depends(get_current_user_id),
+    user_id: Annotated[UUID, Depends(get_current_user_id)],
+    db: Annotated[AsyncSession, Depends(get_db)],
 ):
     # Allow 23andMe text/csv/tsv content types
     if file.content_type not in {
@@ -259,6 +262,27 @@ async def genomics_upload(
     genotypes = list(gen_svc.parse_23andme_raw(stream))
     hits = gen_svc.match_variants(genotypes)
 
+    # Persist ONLY the matched variants (~20 rows), never the raw file —
+    # data minimization. Re-upload replaces the previous analysis.
+    await db.execute(
+        sa.delete(GenomicVariant).where(GenomicVariant.user_id == user_id)
+    )
+    for h in hits:
+        db.add(GenomicVariant(
+            user_id=user_id,
+            rsid=h.rsid,
+            gene=h.gene,
+            user_genotype=h.user_genotype,
+            risk_alleles=list(h.risk_alleles),
+            zygosity=h.zygosity,
+            category=h.category,
+            phenotype=h.phenotype,
+            actionability=h.actionability,
+            evidence_level=h.evidence_level,
+            url=h.url,
+        ))
+    await db.commit()
+
     return [
         VariantHitOut(
             rsid=h.rsid,
@@ -274,6 +298,43 @@ async def genomics_upload(
         )
         for h in hits
     ]
+
+
+class SavedGenomicsOut(BaseModel):
+    analyzed_at: datetime | None = None
+    variants: list[VariantHitOut]
+
+
+@router.get("/genomics", response_model=SavedGenomicsOut)
+async def genomics_saved(
+    user_id: Annotated[UUID, Depends(get_current_user_id)],
+    db: Annotated[AsyncSession, Depends(get_db)],
+):
+    """Saved analysis — the page loads this instead of asking for a re-upload."""
+    result = await db.execute(
+        sa.select(GenomicVariant)
+        .where(GenomicVariant.user_id == user_id)
+        .order_by(GenomicVariant.category, GenomicVariant.gene)
+    )
+    rows = result.scalars().all()
+    return SavedGenomicsOut(
+        analyzed_at=rows[0].analyzed_at if rows else None,
+        variants=[
+            VariantHitOut(
+                rsid=r.rsid,
+                gene=r.gene,
+                user_genotype=r.user_genotype,
+                risk_alleles=list(r.risk_alleles or []),
+                zygosity=r.zygosity,
+                category=r.category,
+                phenotype=r.phenotype,
+                actionability=r.actionability,
+                evidence_level=r.evidence_level,
+                url=r.url,
+            )
+            for r in rows
+        ],
+    )
 
 
 # ============================================================================
