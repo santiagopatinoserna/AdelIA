@@ -4,6 +4,7 @@ import { Link } from "@/lib/navigation";
 import { getTranslations } from "next-intl/server";
 import { listDocuments, type DocumentDTO } from "@/lib/api-client";
 import { DocumentCard } from "@/components/document-card";
+import { LocaleSwitcher } from "@/components/locale-switcher";
 
 export default async function DashboardPage({
   params,
@@ -26,6 +27,9 @@ export default async function DashboardPage({
 
   return (
     <main className="mx-auto max-w-3xl px-6 py-12">
+      <div className="mb-2 flex justify-end">
+        <LocaleSwitcher current={locale} />
+      </div>
       <div className="flex items-center justify-between">
         <h1 className="text-2xl font-semibold">{t("title")}</h1>
         <div className="flex flex-wrap gap-2">

@@ -69,7 +69,7 @@ export function ChatPageClient({
     setMessages((prev) => [...prev, userMsg, { role: "assistant", content: "", citations: [] }]);
     try {
       let createdSessionId: string | null = null;
-      for await (const event of streamChat(text, activeId)) {
+      for await (const event of streamChat(text, activeId, locale)) {
         if (event.type === "start") {
           createdSessionId = event.session_id;
         } else if (event.type === "token") {
@@ -119,7 +119,7 @@ export function ChatPageClient({
     } finally {
       setBusy(false);
     }
-  }, [activeId, sessions]);
+  }, [activeId, locale, sessions]);
 
   return (
     <div className="flex w-full">

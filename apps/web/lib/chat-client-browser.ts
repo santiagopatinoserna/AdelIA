@@ -41,6 +41,7 @@ export async function deleteChatSession(id: string): Promise<void> {
 export async function* streamChat(
   question: string,
   sessionId: string | null,
+  locale: string = "es",
 ): AsyncGenerator<StreamEvent> {
   const res = await fetch("/api/backend/chat", {
     method: "POST",
@@ -48,7 +49,7 @@ export async function* streamChat(
       "Content-Type": "application/json",
       Accept: "text/event-stream",
     },
-    body: JSON.stringify({ session_id: sessionId, question }),
+    body: JSON.stringify({ session_id: sessionId, question, locale }),
   });
   if (!res.ok || !res.body) {
     throw new Error(`streamChat failed: ${res.status}`);

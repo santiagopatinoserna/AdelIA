@@ -100,7 +100,10 @@ async def post_chat(
         }
         try:
             async for event in answer_question_streaming(
-                user_id=user_id, question=payload.question, history=history
+                user_id=user_id,
+                question=payload.question,
+                history=history,
+                locale=payload.locale,
             ):
                 if event.type == "token":
                     assistant_content_parts.append(event.content)

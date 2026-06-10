@@ -1,0 +1,180 @@
+{
+  "common": {
+    "appName": "AdelIA",
+    "tagline": "Your personal medical vault with AI"
+  },
+  "home": {
+    "hero": "Your medical history, yours. AI analysis in 2 modes.",
+    "subhero": "Free self-analysis + portable briefing for any specialist.",
+    "cta": "Get started"
+  },
+  "dashboard": {
+    "title": "My documents",
+    "uploadCta": "Upload file",
+    "empty": "Nothing uploaded yet",
+    "status": {
+      "processing": "Processing…",
+      "ready": "Ready",
+      "failed": "Failed"
+    },
+    "entitiesAndChunks": "{count, plural, =0 {No entities extracted} =1 {1 entity} other {# entities}} · {chunks, plural, =0 {No chunks} =1 {1 chunk} other {# chunks}}",
+    "ocrProcessing": "Running OCR… updates automatically"
+  },
+  "upload": {
+    "title": "Upload document",
+    "drop": "Drop a PDF, image or audio file here",
+    "or": "or",
+    "browse": "Choose a file",
+    "uploading": "Uploading…",
+    "success": "Uploaded. Running OCR…"
+  },
+  "signin": {
+    "emailPlaceholder": "you@email.com",
+    "sendMagicLink": "Send magic link"
+  },
+  "chat": {
+    "title": "Chat with your medical history",
+    "newSession": "New conversation",
+    "emptyHistory": "No conversations yet",
+    "placeholder": "Ask your medical record…",
+    "send": "Send",
+    "thinking": "Thinking…",
+    "noContext": "I don't have enough information.",
+    "citationLabel": "View source",
+    "deleteSession": "Delete"
+  },
+  "ingestion": {
+    "title": "Import data",
+    "subtitle": "Liberate your data — export from any medical platform.",
+    "guidesTab": "Platform guides",
+    "gdprTab": "GDPR/HIPAA templates",
+    "uploadAppleHealth": "Upload Apple Health export.zip",
+    "uploadCcd": "Upload CCD XML",
+    "processing": "Processing…",
+    "imported": "Imported:",
+    "entities": "entities",
+    "documents": "documents",
+    "elapsed": "Time:",
+    "openGuide": "Open guide",
+    "openTemplate": "Open template",
+    "estimatedTime": "Estimated time:"
+  },
+  "enrichment": {
+    "title": "Insights v0.2",
+    "subtitle": "Normalization + interactions + ranges + trials + genome + profiles",
+    "tabs": {
+      "overview": "Overview",
+      "profiles": "Family profiles",
+      "drugs": "Interactions",
+      "labs": "Reference ranges",
+      "trials": "Clinical trials",
+      "genomics": "Genome",
+      "codes": "Normalization"
+    },
+    "profiles": {
+      "self": "Me",
+      "child": "Child",
+      "parent": "Parent",
+      "spouse": "Partner",
+      "sibling": "Sibling",
+      "other": "Other",
+      "addProfile": "Add profile",
+      "displayName": "Name",
+      "relationship": "Relationship",
+      "dob": "Date of birth",
+      "sex": "Sex",
+      "setDefault": "Set as default",
+      "default": "Default",
+      "delete": "Delete",
+      "cannotDelete": "Cannot delete (it's your only profile)"
+    },
+    "drugs": {
+      "addMedication": "Add medication",
+      "placeholder": "metformin, warfarin, ...",
+      "check": "Check interactions",
+      "noInteractions": "No known interactions",
+      "severity": {
+        "contraindicated": "Contraindicated",
+        "major": "Major",
+        "moderate": "Moderate",
+        "minor": "Minor"
+      }
+    },
+    "labs": {
+      "addLab": "Add lab result",
+      "evaluate": "Evaluate",
+      "low": "Low",
+      "normal": "Normal",
+      "high": "High",
+      "reference": "Reference"
+    },
+    "trials": {
+      "search": "Search trials",
+      "condition": "Condition",
+      "country": "Country",
+      "noResults": "No open trials for this condition",
+      "viewStudy": "View study"
+    },
+    "genomics": {
+      "upload": "Upload 23andMe raw_data.txt",
+      "disclaimer": "Results are indicative only. NOT a substitute for CLIA-certified testing.",
+      "categories": {
+        "pharmacogenomics": "Pharmacogenomics",
+        "disease_risk": "Disease risk",
+        "carrier_status": "Carrier status"
+      },
+      "zygosity": {
+        "homozygous": "Homozygous",
+        "heterozygous": "Heterozygous",
+        "absent": "Absent"
+      }
+    },
+    "codes": {
+      "lookup": "Look up code",
+      "placeholder": "type 2 diabetes, hypertension, ...",
+      "icd10": "ICD-10",
+      "snomed": "SNOMED CT",
+      "noMatch": "No code found"
+    },
+    "coverage": {
+      "concepts": "Normalized concepts",
+      "labs": "Lab tests",
+      "drugs": "Medications",
+      "interactions": "Interactions",
+      "variants": "Variants"
+    }
+  },
+  "briefing": {
+    "title": "Briefings",
+    "newButton": "Create new briefing",
+    "listEmpty": "No briefings generated yet. Create the first one.",
+    "specialty": {
+      "label": "Target specialty",
+      "placeholder": "Select the doctor's specialty",
+      "pediatrics": "Pediatrics",
+      "endocrinology": "Endocrinology",
+      "cardiology": "Cardiology",
+      "gynecology": "Gynecology",
+      "gastroenterology": "Gastroenterology",
+      "dermatology": "Dermatology",
+      "general_medicine": "General medicine",
+      "default": "Other / Not listed"
+    },
+    "status": {
+      "processing": "Generating…",
+      "ready": "Ready",
+      "failed": "Failed"
+    },
+    "createButton": "Generate briefing",
+    "regenerate": "Regenerate",
+    "delete": "Delete",
+    "deleteConfirm": "Delete this briefing? This action is reversible (soft delete).",
+    "staleBanner": "You've uploaded new data since this briefing was generated. Regenerate?",
+    "errorBanner": "Generation failed. Detail:",
+    "polling": "Refreshing every 2 seconds…",
+    "createdAt": "Created: ",
+    "completedAt": "Completed: ",
+    "downloadPdf": "Download PDF",
+    "sharedLink": "Create shareable link"
+  }
+}

@@ -33,18 +33,40 @@ class ChatEvent:
     evidence_citations: list[dict] = field(default_factory=list)
 
 
-_SYSTEM_PROMPT = """Eres un asistente médico que responde EXCLUSIVAMENTE basándote en
+# Per-locale response-language + mandatory closing disclaimer (v0.1.1 i18n).
+_LOCALE_RULES = {
+    "es": (
+        "Responde en español, en uno o dos párrafos cortos.",
+        'Termina con "Verifica con tu médico antes de tomar decisiones clínicas."',
+        '"No tengo información suficiente"',
+    ),
+    "en": (
+        "Answer in English, in one or two short paragraphs.",
+        'End with "Verify with your doctor before making clinical decisions."',
+        '"I don\'t have enough information"',
+    ),
+    "fr": (
+        "Réponds en français, en un ou deux paragraphes courts.",
+        'Termine par "Vérifiez avec votre médecin avant toute décision clinique."',
+        '"Je n\'ai pas assez d\'informations"',
+    ),
+}
+
+
+def _system_prompt(locale: str) -> str:
+    lang_rule, disclaimer_rule, no_info = _LOCALE_RULES.get(locale, _LOCALE_RULES["es"])
+    return f"""Eres un asistente médico que responde EXCLUSIVAMENTE basándote en
 los datos del paciente Y la evidencia clínica proporcionada como contexto.
 
 Reglas estrictas:
-- Si la información NO está en el contexto del paciente, NI en la evidencia, NI en turnos anteriores de esta conversación, di "No tengo información suficiente".
+- Si la información NO está en el contexto del paciente, NI en la evidencia, NI en turnos anteriores de esta conversación, di {no_info}.
 - El historial de la conversación ES contexto válido: resuelve referencias ("ese valor", "¿y en 2023?") usando los datos ya citados en turnos anteriores, manteniendo sus marcadores originales.
 - Cita datos del paciente con marcadores numéricos [1], [2], ... correspondientes al orden de los fragmentos del paciente.
 - Cita guidelines/evidencia con marcadores [ev_1], [ev_2], ... correspondientes a la sección "Clinical evidence".
 - Cuando combines ambos (e.g. "tu HbA1c X% [2] está en rango prediabetes según ADA [ev_1]"), separa claramente paciente vs evidencia.
-- Responde en español, en uno o dos párrafos cortos.
+- {lang_rule}
 - NUNCA inventes datos médicos. NUNCA des consejos médicos definitivos.
-- Termina con "Verifica con tu médico antes de tomar decisiones clínicas."
+- {disclaimer_rule}
 """
 
 
@@ -126,7 +148,7 @@ async def _retrieve_evidence_for_query(
 
 
 async def answer_question_streaming(
-    *, user_id: UUID, question: str, history: list[dict] | None = None
+    *, user_id: UUID, question: str, history: list[dict] | None = None, locale: str = "es"
 ) -> AsyncIterator[ChatEvent]:
     """Main orchestrator: detect temporal intent → retrieve patient + evidence context → stream LLM.
 
@@ -210,7 +232,7 @@ async def answer_question_streaming(
             sections.append(evidence_block)
         user_msg = "\n\n".join(sections)
 
-        async for token in _stream_llm_tokens(_SYSTEM_PROMPT, user_msg, history=history):
+        async for token in _stream_llm_tokens(_system_prompt(locale), user_msg, history=history):
             yield ChatEvent(type="token", content=token)
 
         yield ChatEvent(

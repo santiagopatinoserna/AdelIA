@@ -1,0 +1,180 @@
+{
+  "common": {
+    "appName": "AdelIA",
+    "tagline": "Votre coffre-fort médical personnel avec IA"
+  },
+  "home": {
+    "hero": "Votre dossier médical, à vous. Analyse IA en 2 modes.",
+    "subhero": "Auto-analyse libre + briefing portable pour tout spécialiste.",
+    "cta": "Commencer"
+  },
+  "dashboard": {
+    "title": "Mes documents",
+    "uploadCta": "Téléverser un fichier",
+    "empty": "Rien de téléversé pour l'instant",
+    "status": {
+      "processing": "Traitement…",
+      "ready": "Prêt",
+      "failed": "Échec"
+    },
+    "entitiesAndChunks": "{count, plural, =0 {Aucune entité extraite} =1 {1 entité} other {# entités}} · {chunks, plural, =0 {Aucun chunk} =1 {1 chunk} other {# chunks}}",
+    "ocrProcessing": "OCR en cours… mise à jour automatique"
+  },
+  "upload": {
+    "title": "Téléverser un document",
+    "drop": "Déposez un PDF, une image ou un audio ici",
+    "or": "ou",
+    "browse": "Choisir un fichier",
+    "uploading": "Téléversement…",
+    "success": "Téléversé. OCR en cours…"
+  },
+  "signin": {
+    "emailPlaceholder": "vous@email.com",
+    "sendMagicLink": "Envoyer le magic link"
+  },
+  "chat": {
+    "title": "Chat avec votre dossier médical",
+    "newSession": "Nouvelle conversation",
+    "emptyHistory": "Pas encore de conversations",
+    "placeholder": "Interrogez votre dossier médical…",
+    "send": "Envoyer",
+    "thinking": "Réflexion…",
+    "noContext": "Je n'ai pas assez d'informations.",
+    "citationLabel": "Voir la source",
+    "deleteSession": "Supprimer"
+  },
+  "ingestion": {
+    "title": "Importer des données",
+    "subtitle": "Libérez vos données — exportez depuis toute plateforme médicale.",
+    "guidesTab": "Guides par plateforme",
+    "gdprTab": "Modèles RGPD/HIPAA",
+    "uploadAppleHealth": "Téléverser Apple Health export.zip",
+    "uploadCcd": "Téléverser CCD XML",
+    "processing": "Traitement…",
+    "imported": "Importé :",
+    "entities": "entités",
+    "documents": "documents",
+    "elapsed": "Durée :",
+    "openGuide": "Ouvrir le guide",
+    "openTemplate": "Ouvrir le modèle",
+    "estimatedTime": "Durée estimée :"
+  },
+  "enrichment": {
+    "title": "Insights v0.2",
+    "subtitle": "Normalisation + interactions + plages + essais + génome + profils",
+    "tabs": {
+      "overview": "Aperçu",
+      "profiles": "Profils familiaux",
+      "drugs": "Interactions",
+      "labs": "Valeurs de référence",
+      "trials": "Essais cliniques",
+      "genomics": "Génome",
+      "codes": "Normalisation"
+    },
+    "profiles": {
+      "self": "Moi",
+      "child": "Enfant",
+      "parent": "Parent",
+      "spouse": "Conjoint(e)",
+      "sibling": "Frère/Sœur",
+      "other": "Autre",
+      "addProfile": "Ajouter un profil",
+      "displayName": "Nom",
+      "relationship": "Lien",
+      "dob": "Date de naissance",
+      "sex": "Sexe",
+      "setDefault": "Définir par défaut",
+      "default": "Par défaut",
+      "delete": "Supprimer",
+      "cannotDelete": "Suppression impossible (c'est votre seul profil)"
+    },
+    "drugs": {
+      "addMedication": "Ajouter un médicament",
+      "placeholder": "metformine, warfarine, ...",
+      "check": "Vérifier les interactions",
+      "noInteractions": "Aucune interaction connue",
+      "severity": {
+        "contraindicated": "Contre-indiqué",
+        "major": "Majeure",
+        "moderate": "Modérée",
+        "minor": "Mineure"
+      }
+    },
+    "labs": {
+      "addLab": "Ajouter une analyse",
+      "evaluate": "Évaluer",
+      "low": "Bas",
+      "normal": "Normal",
+      "high": "Élevé",
+      "reference": "Référence"
+    },
+    "trials": {
+      "search": "Rechercher des essais",
+      "condition": "Pathologie",
+      "country": "Pays",
+      "noResults": "Aucun essai ouvert pour cette pathologie",
+      "viewStudy": "Voir l'étude"
+    },
+    "genomics": {
+      "upload": "Téléverser 23andMe raw_data.txt",
+      "disclaimer": "Résultats indicatifs uniquement. NE remplacent PAS une analyse certifiée CLIA.",
+      "categories": {
+        "pharmacogenomics": "Pharmacogénomique",
+        "disease_risk": "Risque de maladie",
+        "carrier_status": "Statut de porteur"
+      },
+      "zygosity": {
+        "homozygous": "Homozygote",
+        "heterozygous": "Hétérozygote",
+        "absent": "Absent"
+      }
+    },
+    "codes": {
+      "lookup": "Rechercher un code",
+      "placeholder": "diabète de type 2, hypertension, ...",
+      "icd10": "CIM-10",
+      "snomed": "SNOMED CT",
+      "noMatch": "Aucun code trouvé"
+    },
+    "coverage": {
+      "concepts": "Concepts normalisés",
+      "labs": "Analyses",
+      "drugs": "Médicaments",
+      "interactions": "Interactions",
+      "variants": "Variants"
+    }
+  },
+  "briefing": {
+    "title": "Briefings",
+    "newButton": "Créer un nouveau briefing",
+    "listEmpty": "Aucun briefing généré pour l'instant. Créez le premier.",
+    "specialty": {
+      "label": "Spécialité cible",
+      "placeholder": "Sélectionnez la spécialité du médecin",
+      "pediatrics": "Pédiatrie",
+      "endocrinology": "Endocrinologie",
+      "cardiology": "Cardiologie",
+      "gynecology": "Gynécologie",
+      "gastroenterology": "Gastro-entérologie",
+      "dermatology": "Dermatologie",
+      "general_medicine": "Médecine générale",
+      "default": "Autre / Non listée"
+    },
+    "status": {
+      "processing": "Génération…",
+      "ready": "Prêt",
+      "failed": "Échec"
+    },
+    "createButton": "Générer le briefing",
+    "regenerate": "Régénérer",
+    "delete": "Supprimer",
+    "deleteConfirm": "Supprimer ce briefing ? Cette action est réversible (soft delete).",
+    "staleBanner": "Vous avez ajouté des données depuis la génération de ce briefing. Régénérer ?",
+    "errorBanner": "La génération a échoué. Détail :",
+    "polling": "Actualisation toutes les 2 secondes…",
+    "createdAt": "Créé : ",
+    "completedAt": "Terminé : ",
+    "downloadPdf": "Télécharger le PDF",
+    "sharedLink": "Créer un lien partageable"
+  }
+}

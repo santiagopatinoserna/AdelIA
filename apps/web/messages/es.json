@@ -174,7 +174,7 @@
     "polling": "Actualizando cada 2 segundos…",
     "createdAt": "Creado: ",
     "completedAt": "Completado: ",
-    "downloadPdf": "Descargar PDF (v0.1.1)",
-    "sharedLink": "Crear link compartible (v0.1.1)"
+    "downloadPdf": "Descargar PDF",
+    "sharedLink": "Crear link compartible"
   }
 }

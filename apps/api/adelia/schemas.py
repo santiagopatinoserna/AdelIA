@@ -96,6 +96,7 @@ class ChatSessionDetailOut(ChatSessionOut):
 class ChatRequest(BaseModel):
     session_id: UUID | None = None  # if None → create new session
     question: str = Field(min_length=1, max_length=4000)
+    locale: Literal["es", "en", "fr"] = "es"  # answer language
 
 
 # ============================================================================

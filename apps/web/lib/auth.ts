@@ -21,7 +21,8 @@ export const authConfig: NextAuthConfig = {
       apiKey: process.env.RESEND_API_KEY,
     }),
   ],
-  pages: { signIn: "/es/signin" },
+  // Bare path — the next-intl middleware prefixes the active locale.
+  pages: { signIn: "/signin" },
   session: { strategy: "jwt" },
   secret: process.env.AUTH_SECRET,
   // Self-hosted deploys (Fly.io, localhost prod) sit behind a proxy or a
