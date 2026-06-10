@@ -89,7 +89,8 @@ async def test_list_documents_filters_by_user(client, monkeypatch):
     assert response.status_code == 200
     docs = response.json()
     assert len(docs) == 1
-    assert docs[0]["s3_key"] == "users/a/x.pdf"
+    assert docs[0]["file_name"] == "x.pdf"
+    assert "s3_key" not in docs[0]
 
 
 @pytest.mark.skipif(

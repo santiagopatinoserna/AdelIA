@@ -48,12 +48,46 @@ def _is_audio(mime_type: str) -> bool:
     return any(mime_type.startswith(prefix) for prefix in AUDIO_MIME_PREFIXES)
 
 
+# Transient-failure retry for external API stages (Mistral OCR/extract/embed,
+# Whisper). Bounded in-process backoff — the v0.1.1 alternative to a Celery
+# queue. Tests can shrink RETRY_DELAYS to keep runs fast.
+RETRY_DELAYS: tuple[float, ...] = (1.0, 4.0)
+
+
+async def _with_retry(stage: str, make_call):
+    """Run make_call() retrying RETRY_DELAYS times on transient errors.
+
+    Non-transient errors (RuntimeError = misconfiguration) propagate at once.
+    """
+    last_exc: Exception | None = None
+    for attempt, delay in enumerate((*RETRY_DELAYS, None)):
+        try:
+            return await make_call()
+        except (httpx.HTTPStatusError, MistralError, ClientError, EndpointConnectionError, OpenAIAPIError) as exc:
+            last_exc = exc
+            if delay is None:
+                break
+            logger.warning(
+                "%s failed (attempt %d, retrying in %.0fs): %s",
+                stage, attempt + 1, delay, exc,
+            )
+            await asyncio.sleep(delay)
+    raise last_exc
+
+
+def _file_name_from_key(s3_key: str) -> str:
+    """users/{uid}/{uuid4}-{safe_name} → safe_name (the user-facing name)."""
+    leaf = s3_key.rsplit("/", 1)[-1]
+    # uuid4 canonical form is 36 chars followed by the '-' separator we add
+    return leaf[37:] if len(leaf) > 37 and leaf[36] == "-" else leaf
+
+
 def _doc_to_out(doc: Document, *, entity_count: int = 0, chunk_count: int = 0) -> DocumentOut:
     return DocumentOut(
         id=doc.id,
         source=doc.source,
         mime_type=doc.mime_type,
-        s3_key=doc.s3_key,
+        file_name=_file_name_from_key(doc.s3_key),
         raw_text=doc.raw_text,
         created_at=doc.created_at,
         processed_at=doc.processed_at,
@@ -76,9 +110,13 @@ async def process_document(document_id: uuid.UUID, mime_type: str) -> None:
 
             # Stage 1: Get raw text via transcribe (audio) or OCR (pdf/image)
             if _is_audio(mime_type):
-                raw_text = await transcribe_audio(body, mime_type)
+                raw_text = await _with_retry(
+                    "transcribe", lambda: transcribe_audio(body, mime_type)
+                )
             elif mime_type == "application/pdf" or mime_type.startswith("image/"):
-                raw_text = await extract_text_from_pdf(body, mime_type)
+                raw_text = await _with_retry(
+                    "ocr", lambda: extract_text_from_pdf(body, mime_type)
+                )
             else:
                 raw_text = ""
 
@@ -89,7 +127,9 @@ async def process_document(document_id: uuid.UUID, mime_type: str) -> None:
             entity_records: list[Entity] = []
             entity_ranges: dict[str, tuple[int, int]] = {}
             if raw_text:
-                extracted: list[ExtractedEntity] = await extract_entities(raw_text)
+                extracted: list[ExtractedEntity] = await _with_retry(
+                    "extract", lambda: extract_entities(raw_text)
+                )
                 for ex in extracted:
                     entity = Entity(
                         user_id=doc.user_id,
@@ -143,7 +183,7 @@ async def process_document(document_id: uuid.UUID, mime_type: str) -> None:
 
             # Stage 4: Embed chunks → set Chunk.embedding
             if chunk_texts:
-                vectors = await embed_texts(chunk_texts)
+                vectors = await _with_retry("embed", lambda: embed_texts(chunk_texts))
                 for chunk_record, vec in zip(chunk_records, vectors, strict=True):
                     chunk_record.embedding = vec
                     session.add(chunk_record)
@@ -198,7 +238,16 @@ async def upload_document(
         s3_key=s3_key,
     )
     db.add(doc)
-    await db.commit()
+    try:
+        await db.commit()
+    except Exception:
+        # Compensate: a failed commit after the S3 put would leave an orphan
+        # blob nobody references (v0.1.1 transactional-outbox carry-over).
+        try:
+            await storage.delete_object(s3_key)
+        except Exception:  # noqa: BLE001 — best effort, original error matters more
+            logger.exception("orphan blob cleanup failed for %s", s3_key)
+        raise
     await db.refresh(doc)
 
     background.add_task(process_document, doc.id, file.content_type)
@@ -264,15 +313,4 @@ async def get_document(
         sa.select(sa.func.count()).select_from(Chunk).where(Chunk.document_id == doc.id)
     )
 
-    return DocumentOut(
-        id=doc.id,
-        source=doc.source,
-        mime_type=doc.mime_type,
-        s3_key=doc.s3_key,
-        raw_text=doc.raw_text,
-        created_at=doc.created_at,
-        processed_at=doc.processed_at,
-        status=derive_status(doc.raw_text, doc.processed_at),
-        entity_count=entity_count or 0,
-        chunk_count=chunk_count or 0,
-    )
+    return _doc_to_out(doc, entity_count=entity_count or 0, chunk_count=chunk_count or 0)

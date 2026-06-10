@@ -46,6 +46,7 @@ async def retrieve_relevant_chunks(
     async with AsyncSessionLocal() as session:
         # Join chunks → documents to enforce soft-delete filter at the SQL layer.
         # Use pgvector cosine distance — lower is more similar.
+        distance_expr = Chunk.embedding.cosine_distance(query_embedding)
         stmt = (
             sa.select(
                 Chunk.id.label("chunk_id"),
@@ -53,7 +54,7 @@ async def retrieve_relevant_chunks(
                 Chunk.user_id.label("user_id"),
                 Chunk.content,
                 Chunk.chunk_metadata.label("metadata"),
-                Chunk.embedding.cosine_distance(query_embedding).label("distance"),
+                distance_expr.label("distance"),
                 Document.deleted_at.label("doc_deleted_at"),
             )
             .join(Document, Document.id == Chunk.document_id)
@@ -61,7 +62,7 @@ async def retrieve_relevant_chunks(
                 Chunk.user_id == user_id,
                 Document.deleted_at.is_(None),
             )
-            .order_by(sa.text("distance ASC"))
+            .order_by(distance_expr.asc())
             .limit(top_k)
         )
         result = await session.execute(stmt)

@@ -1,5 +1,5 @@
 from datetime import date
-from typing import Any
+from typing import TypedDict
 from uuid import UUID
 
 import sqlalchemy as sa
@@ -9,13 +9,22 @@ from adelia.db import AsyncSessionLocal
 from adelia.models import Entity
 
 
+class ObservationRow(TypedDict):
+    id: UUID
+    name: str
+    value: dict | None
+    event_date: date | None
+    raw_quote: str | None
+    document_id: UUID
+
+
 async def query_observations_by_name_and_date_range(
     *,
     user_id: UUID,
     name_substring: str,
     from_date: date | None,
     to_date: date | None,
-) -> list[dict[str, Any]]:
+) -> list[ObservationRow]:
     """Return entities of type 'observation' whose name contains the given
     substring (case-insensitive), within the date window.
 
@@ -61,13 +70,13 @@ async def query_observations_by_name_and_date_range(
         stmt = stmt.limit(50)
         result = await session.execute(stmt)
         return [
-            {
+            ObservationRow(**{
                 "id": row.id,
                 "name": row.name,
                 "value": row.value,
                 "event_date": row.event_date,
                 "raw_quote": row.raw_quote,
                 "document_id": row.document_id,
-            }
+            })
             for row in result.all()
         ]

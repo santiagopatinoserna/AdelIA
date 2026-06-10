@@ -10,11 +10,11 @@ class DocumentOut(BaseModel):
     id: UUID
     source: Literal["web", "manual"]
     mime_type: str
-    s3_key: str
+    file_name: str
     raw_text: str | None
     created_at: datetime
     processed_at: datetime | None
-    status: Literal["uploaded", "processing", "ready", "failed"]
+    status: Literal["processing", "ready", "failed"]
     entity_count: int = 0
     chunk_count: int = 0
 

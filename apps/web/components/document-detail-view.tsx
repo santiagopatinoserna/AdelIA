@@ -18,7 +18,7 @@ export function DocumentDetailView({
   const [doc, setDoc] = useState<DocumentDTO>(initialDoc);
   const t = useTranslations("dashboard");
 
-  const processing = doc.status === "processing" || doc.status === "uploaded";
+  const processing = doc.status === "processing";
 
   useEffect(() => {
     if (!processing) return;
@@ -33,7 +33,7 @@ export function DocumentDetailView({
     return () => clearInterval(timer);
   }, [processing, doc.id]);
 
-  const fileName = doc.s3_key.split("/").pop() ?? doc.s3_key;
+  const fileName = doc.file_name;
   return (
     <main className="mx-auto max-w-3xl px-6 py-12">
       <div className="flex items-center justify-between">

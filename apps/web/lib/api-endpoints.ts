@@ -25,13 +25,13 @@ import type {
   VariantHit,
 } from "./enrichment-types";
 
-export type DocumentStatus = "uploaded" | "processing" | "ready" | "failed";
+export type DocumentStatus = "processing" | "ready" | "failed";
 
 export type DocumentDTO = {
   id: string;
   source: "web" | "manual";
   mime_type: string;
-  s3_key: string;
+  file_name: string;
   raw_text: string | null;
   created_at: string;
   processed_at: string | null;

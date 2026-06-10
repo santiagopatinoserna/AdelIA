@@ -3,7 +3,7 @@ import type { DocumentDTO } from "@/lib/api-client";
 import { StatusBadge } from "./status-badge";
 
 export function DocumentCard({ doc, locale }: { doc: DocumentDTO; locale: string }) {
-  const fileName = doc.s3_key.split("/").pop() ?? doc.s3_key;
+  const fileName = doc.file_name;
   return (
     <Link
       href={`/dashboard/documents/${doc.id}`}
