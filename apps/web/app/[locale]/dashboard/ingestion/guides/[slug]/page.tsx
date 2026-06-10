@@ -2,11 +2,13 @@
 
 import { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
+import { useTranslations } from "next-intl";
 
 import { ingestion } from "@/lib/api-client-browser";
 import type { GuideContent } from "@/lib/enrichment-types";
 
 export default function GuideViewerPage() {
+  const tCommon = useTranslations("common");
   const params = useParams<{ slug: string }>();
   const slug = params?.slug ?? "";
   const [guide, setGuide] = useState<GuideContent | null>(null);
@@ -29,7 +31,7 @@ export default function GuideViewerPage() {
   }
 
   if (!guide) {
-    return <main className="mx-auto max-w-3xl px-6 py-10">Loading…</main>;
+    return <main className="mx-auto max-w-3xl px-6 py-10">{tCommon("loading")}</main>;
   }
 
   return (

@@ -1,7 +1,8 @@
 {
   "common": {
     "appName": "AdelIA",
-    "tagline": "Your personal medical vault with AI"
+    "tagline": "Your personal medical vault with AI",
+    "loading": "Loading…"
   },
   "home": {
     "hero": "Your medical history, yours. AI analysis in 2 modes.",
@@ -57,7 +58,54 @@
     "elapsed": "Time:",
     "openGuide": "Open guide",
     "openTemplate": "Open template",
-    "estimatedTime": "Estimated time:"
+    "estimatedTime": "Estimated time:",
+    "sampleLabel": "Sample:",
+    "entityCount": "{count, plural, =1 {1 entity} other {# entities}}",
+    "documentCount": "{count, plural, =1 {1 document} other {# documents}}",
+    "overview": {
+      "appleHealthDesc": "export.zip → biometrics",
+      "ccdDesc": "XML from the patient portal",
+      "telegramDesc": "Forward docs to the bot",
+      "emailTitle": "Email",
+      "emailDesc": "Forward to your alias"
+    },
+    "appleHealth": {
+      "title": "Apple Health import",
+      "instructions": "Settings → Health → Export All Health Data → drag the ZIP here"
+    },
+    "ccd": {
+      "title": "CCD / MyChart import",
+      "instructions": "Upload the XML downloaded from your patient portal (Epic, Cerner, Allscripts, Athena…)"
+    },
+    "gdpr": {
+      "meta": "{legalBasis} · deadline: {deadline} · language: {language}",
+      "copyTemplate": "Copy template",
+      "copied": "Copied"
+    },
+    "telegram": {
+      "title": "Link Telegram",
+      "subtitle": "Forward medical PDFs, photos and audio files to the bot and they are ingested automatically.",
+      "openBot": "Open the bot in Telegram ({url})",
+      "step2": "Tap \"Start\" or send:",
+      "copy": "Copy",
+      "tokenExpiry": "The token expires in 1 hour. If it takes too long, refresh this page to generate a new one.",
+      "step3": "Once linked, forward any PDF/photo/audio to the bot. It will be processed automatically."
+    },
+    "email": {
+      "title": "Email forwarding",
+      "subtitle": "Every medical document you receive by email — forward it to your unique alias and it will be ingested automatically.",
+      "aliasLabel": "Your unique alias",
+      "copy": "Copy",
+      "gmailTitle": "Set up forwarding (Gmail)",
+      "gmailStep1": "1. Gmail → Settings → Filters → Create new filter",
+      "gmailStep2": "2. Match emails from your hospital / doctor",
+      "forwardStep": "3. Action → Forward to {alias}",
+      "gmailStep4": "4. (Optional) Skip Inbox to automate",
+      "outlookTitle": "Set up forwarding (Outlook / iCloud)",
+      "outlookStep1": "1. Settings → Mail → Rules → New rule",
+      "outlookStep2": "2. Match condition (sender, subject keywords)",
+      "warning": "Emails forwarded to your alias are processed automatically. Only forward medical content you want in your vault."
+    }
   },
   "enrichment": {
     "title": "Insights v0.2",
@@ -86,7 +134,10 @@
       "setDefault": "Set as default",
       "default": "Default",
       "delete": "Delete",
-      "cannotDelete": "Cannot delete (it's your only profile)"
+      "cannotDelete": "Cannot delete (it's your only profile)",
+      "create": "Create",
+      "cancel": "Cancel",
+      "deleteConfirm": "Delete profile?"
     },
     "drugs": {
       "addMedication": "Add medication",
@@ -106,7 +157,10 @@
       "low": "Low",
       "normal": "Normal",
       "high": "High",
-      "reference": "Reference"
+      "reference": "Reference",
+      "sexLabel": "Sex:",
+      "namePlaceholder": "HbA1c, glucose, ldl, ...",
+      "valuePlaceholder": "value"
     },
     "trials": {
       "search": "Search trials",
@@ -118,6 +172,7 @@
     "genomics": {
       "upload": "Upload 23andMe raw_data.txt",
       "disclaimer": "Results are indicative only. NOT a substitute for CLIA-certified testing.",
+      "source": "source",
       "categories": {
         "pharmacogenomics": "Pharmacogenomics",
         "disease_risk": "Disease risk",
@@ -134,7 +189,9 @@
       "placeholder": "type 2 diabetes, hypertension, ...",
       "icd10": "ICD-10",
       "snomed": "SNOMED CT",
-      "noMatch": "No code found"
+      "noMatch": "No code found",
+      "category": "Category",
+      "match": "Match"
     },
     "coverage": {
       "concepts": "Normalized concepts",
@@ -175,6 +232,24 @@
     "createdAt": "Created: ",
     "completedAt": "Completed: ",
     "downloadPdf": "Download PDF",
-    "sharedLink": "Create shareable link"
+    "sharedLink": "Create shareable link",
+    "statusLabel": "Status:",
+    "share": {
+      "title": "Share briefing",
+      "button": "Share",
+      "ttlLabel": "Link duration",
+      "ttl": {
+        "1h": "1 hour",
+        "24h": "24 hours (default)",
+        "7d": "7 days",
+        "30d": "30 days (max)"
+      },
+      "creating": "Generating...",
+      "createButton": "Generate shareable link",
+      "activeUntil": "Active link · expires {date}",
+      "revoke": "Revoke",
+      "revokeConfirm": "Revoke this link? Anyone with the URL will no longer be able to view it.",
+      "disclaimer": "Anyone with the URL can view the briefing until it expires or you revoke it. AdelIA logs accesses for auditing."
+    }
   }
 }

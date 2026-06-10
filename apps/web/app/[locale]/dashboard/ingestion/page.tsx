@@ -40,7 +40,7 @@ export default async function IngestionPage({ params }: Props) {
         >
           <div className="text-3xl">📱</div>
           <h3 className="mt-2 font-medium">Apple Health</h3>
-          <p className="text-xs text-slate-600">export.zip → biométricos</p>
+          <p className="text-xs text-slate-600">{t("ingestion.overview.appleHealthDesc")}</p>
         </Link>
         <Link
           href="/dashboard/ingestion/ccd"
@@ -48,7 +48,7 @@ export default async function IngestionPage({ params }: Props) {
         >
           <div className="text-3xl">🏥</div>
           <h3 className="mt-2 font-medium">MyChart / CCD</h3>
-          <p className="text-xs text-slate-600">XML del portal paciente</p>
+          <p className="text-xs text-slate-600">{t("ingestion.overview.ccdDesc")}</p>
         </Link>
         <Link
           href="/dashboard/ingestion/telegram"
@@ -56,15 +56,15 @@ export default async function IngestionPage({ params }: Props) {
         >
           <div className="text-3xl">💬</div>
           <h3 className="mt-2 font-medium">Telegram</h3>
-          <p className="text-xs text-slate-600">Reenvía docs al bot</p>
+          <p className="text-xs text-slate-600">{t("ingestion.overview.telegramDesc")}</p>
         </Link>
         <Link
           href="/dashboard/ingestion/email"
           className="rounded-lg border border-slate-200 bg-white p-4 hover:bg-slate-50"
         >
           <div className="text-3xl">📧</div>
-          <h3 className="mt-2 font-medium">Email</h3>
-          <p className="text-xs text-slate-600">Forward a tu alias</p>
+          <h3 className="mt-2 font-medium">{t("ingestion.overview.emailTitle")}</h3>
+          <p className="text-xs text-slate-600">{t("ingestion.overview.emailDesc")}</p>
         </Link>
       </section>
 

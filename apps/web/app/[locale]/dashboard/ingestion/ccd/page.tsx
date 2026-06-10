@@ -30,9 +30,9 @@ export default function CcdImportPage() {
 
   return (
     <main className="mx-auto max-w-2xl px-6 py-10">
-      <h1 className="text-2xl font-semibold">🏥 CCD / MyChart import</h1>
+      <h1 className="text-2xl font-semibold">🏥 {t("ingestion.ccd.title")}</h1>
       <p className="mt-1 text-sm text-slate-600">
-        Sube el XML descargado del portal de pacientes (Epic, Cerner, Allscripts, Athena…)
+        {t("ingestion.ccd.instructions")}
       </p>
 
       <div className="mt-6 rounded-lg border-2 border-dashed border-slate-300 bg-white p-8 text-center">
@@ -64,11 +64,11 @@ export default function CcdImportPage() {
           <h3 className="font-semibold text-green-900">{t("ingestion.imported")}</h3>
           <ul className="mt-2 space-y-1 text-sm text-green-800">
             <li>
-              {result.entity_count} {t("ingestion.entities")}
+              {t("ingestion.entityCount", { count: result.entity_count })}
             </li>
             {result.sample_names.length > 0 && (
               <li className="mt-2 text-xs">
-                Sample: {result.sample_names.join(", ")}
+                {t("ingestion.sampleLabel")} {result.sample_names.join(", ")}
               </li>
             )}
           </ul>

@@ -56,9 +56,9 @@ export default function CodesLookupPage() {
                 <dd className="font-mono">{result.icd10}</dd>
                 <dt className="text-slate-600">{t("enrichment.codes.snomed")}:</dt>
                 <dd className="font-mono">{result.snomed}</dd>
-                <dt className="text-slate-600">Category:</dt>
+                <dt className="text-slate-600">{t("enrichment.codes.category")}:</dt>
                 <dd>{result.category}</dd>
-                <dt className="text-slate-600">Match:</dt>
+                <dt className="text-slate-600">{t("enrichment.codes.match")}:</dt>
                 <dd>{result.match_score}%</dd>
               </dl>
             </>

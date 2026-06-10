@@ -30,9 +30,9 @@ export default function AppleHealthImportPage() {
 
   return (
     <main className="mx-auto max-w-2xl px-6 py-10">
-      <h1 className="text-2xl font-semibold">📱 Apple Health import</h1>
+      <h1 className="text-2xl font-semibold">📱 {t("ingestion.appleHealth.title")}</h1>
       <p className="mt-1 text-sm text-slate-600">
-        Settings → Health → Export All Health Data → arrastra el ZIP aquí
+        {t("ingestion.appleHealth.instructions")}
       </p>
 
       <div className="mt-6 rounded-lg border-2 border-dashed border-slate-300 bg-white p-8 text-center">
@@ -64,17 +64,17 @@ export default function AppleHealthImportPage() {
           <h3 className="font-semibold text-green-900">{t("ingestion.imported")}</h3>
           <ul className="mt-2 space-y-1 text-sm text-green-800">
             <li>
-              {result.entity_count} {t("ingestion.entities")}
+              {t("ingestion.entityCount", { count: result.entity_count })}
             </li>
             <li>
-              {result.document_count} {t("ingestion.documents")}
+              {t("ingestion.documentCount", { count: result.document_count })}
             </li>
             <li>
               {t("ingestion.elapsed")} {result.elapsed_seconds.toFixed(2)}s
             </li>
             {result.sample_names.length > 0 && (
               <li className="mt-2 text-xs">
-                Sample: {result.sample_names.join(", ")}
+                {t("ingestion.sampleLabel")} {result.sample_names.join(", ")}
               </li>
             )}
           </ul>

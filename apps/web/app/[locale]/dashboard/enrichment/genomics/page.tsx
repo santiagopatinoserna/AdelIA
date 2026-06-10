@@ -88,7 +88,7 @@ export default function GenomicsPage() {
                 <>
                   {" · "}
                   <a href={h.url} target="_blank" rel="noopener" className="text-blue-700 hover:underline">
-                    source
+                    {t("enrichment.genomics.source")}
                   </a>
                 </>
               )}

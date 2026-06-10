@@ -1,7 +1,8 @@
 {
   "common": {
     "appName": "AdelIA",
-    "tagline": "Tu vault médico personal con IA"
+    "tagline": "Tu vault médico personal con IA",
+    "loading": "Cargando…"
   },
   "home": {
     "hero": "Tu historia clínica, tuya. Análisis IA en 2 modos.",
@@ -57,7 +58,54 @@
     "elapsed": "Tiempo:",
     "openGuide": "Abrir guía",
     "openTemplate": "Abrir plantilla",
-    "estimatedTime": "Tiempo estimado:"
+    "estimatedTime": "Tiempo estimado:",
+    "sampleLabel": "Muestra:",
+    "entityCount": "{count, plural, =1 {1 entidad} other {# entidades}}",
+    "documentCount": "{count, plural, =1 {1 documento} other {# documentos}}",
+    "overview": {
+      "appleHealthDesc": "export.zip → biométricos",
+      "ccdDesc": "XML del portal paciente",
+      "telegramDesc": "Reenvía docs al bot",
+      "emailTitle": "Email",
+      "emailDesc": "Reenvía a tu alias"
+    },
+    "appleHealth": {
+      "title": "Importar Apple Health",
+      "instructions": "Ajustes → Salud → Exportar todos los datos de salud → arrastra el ZIP aquí"
+    },
+    "ccd": {
+      "title": "Importar CCD / MyChart",
+      "instructions": "Sube el XML descargado del portal de pacientes (Epic, Cerner, Allscripts, Athena…)"
+    },
+    "gdpr": {
+      "meta": "{legalBasis} · plazo: {deadline} · idioma: {language}",
+      "copyTemplate": "Copiar plantilla",
+      "copied": "Copiado"
+    },
+    "telegram": {
+      "title": "Enlazar Telegram",
+      "subtitle": "Reenvía PDFs, fotos y audios médicos al bot y se ingestan automáticamente.",
+      "openBot": "Abrir bot en Telegram ({url})",
+      "step2": "Pulsa \"Start\" o envía:",
+      "copy": "Copiar",
+      "tokenExpiry": "Token expira en 1 hora. Si tarda, refresca esta página para generar uno nuevo.",
+      "step3": "Una vez enlazado, reenvía cualquier PDF/foto/audio al bot. Lo procesará automáticamente."
+    },
+    "email": {
+      "title": "Reenvío por email",
+      "subtitle": "Cada documento médico que recibas por email — reenvíalo a tu alias único y se ingestará automáticamente.",
+      "aliasLabel": "Tu alias único",
+      "copy": "Copiar",
+      "gmailTitle": "Configurar reenvío (Gmail)",
+      "gmailStep1": "1. Gmail → Configuración → Filtros → Crear filtro",
+      "gmailStep2": "2. Filtra los emails de tu hospital / médico",
+      "forwardStep": "3. Acción → Reenviar a {alias}",
+      "gmailStep4": "4. (Opcional) Saltar Recibidos para automatizar",
+      "outlookTitle": "Configurar reenvío (Outlook / iCloud)",
+      "outlookStep1": "1. Configuración → Correo → Reglas → Nueva regla",
+      "outlookStep2": "2. Condición (remitente, palabras clave del asunto)",
+      "warning": "Los emails reenviados a tu alias se procesan automáticamente. Solo reenvía contenido médico que quieras tener en tu vault."
+    }
   },
   "enrichment": {
     "title": "Insights v0.2",
@@ -86,7 +134,10 @@
       "setDefault": "Marcar como predeterminado",
       "default": "Predeterminado",
       "delete": "Borrar",
-      "cannotDelete": "No se puede borrar (es tu único perfil)"
+      "cannotDelete": "No se puede borrar (es tu único perfil)",
+      "create": "Crear",
+      "cancel": "Cancelar",
+      "deleteConfirm": "¿Borrar perfil?"
     },
     "drugs": {
       "addMedication": "Añadir medicamento",
@@ -106,7 +157,10 @@
       "low": "Bajo",
       "normal": "Normal",
       "high": "Alto",
-      "reference": "Referencia"
+      "reference": "Referencia",
+      "sexLabel": "Sexo:",
+      "namePlaceholder": "HbA1c, glucosa, ldl, ...",
+      "valuePlaceholder": "valor"
     },
     "trials": {
       "search": "Buscar ensayos",
@@ -118,6 +172,7 @@
     "genomics": {
       "upload": "Subir 23andMe raw_data.txt",
       "disclaimer": "Los resultados son orientativos. NO sustituyen análisis CLIA-certificado.",
+      "source": "fuente",
       "categories": {
         "pharmacogenomics": "Farmacogenómica",
         "disease_risk": "Riesgo de enfermedad",
@@ -134,7 +189,9 @@
       "placeholder": "diabetes tipo 2, hipertensión, ...",
       "icd10": "ICD-10",
       "snomed": "SNOMED CT",
-      "noMatch": "Sin código encontrado"
+      "noMatch": "Sin código encontrado",
+      "category": "Categoría",
+      "match": "Coincidencia"
     },
     "coverage": {
       "concepts": "Conceptos normalizados",
@@ -175,6 +232,24 @@
     "createdAt": "Creado: ",
     "completedAt": "Completado: ",
     "downloadPdf": "Descargar PDF",
-    "sharedLink": "Crear link compartible"
+    "sharedLink": "Crear link compartible",
+    "statusLabel": "Estado:",
+    "share": {
+      "title": "Compartir briefing",
+      "button": "Compartir",
+      "ttlLabel": "Duración del link",
+      "ttl": {
+        "1h": "1 hora",
+        "24h": "24 horas (default)",
+        "7d": "7 días",
+        "30d": "30 días (máx)"
+      },
+      "creating": "Generando...",
+      "createButton": "Generar link compartible",
+      "activeUntil": "Link activo · expira {date}",
+      "revoke": "Revocar",
+      "revokeConfirm": "¿Revocar este link? Cualquiera con el URL ya no podrá verlo.",
+      "disclaimer": "Cualquiera con el URL puede ver el briefing hasta que expire o lo revoques. AdelIA cuenta accesos para auditoría."
+    }
   }
 }

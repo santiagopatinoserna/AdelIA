@@ -57,7 +57,7 @@ export default function LabRangesPage() {
       <h1 className="text-2xl font-semibold">🔬 {t("enrichment.tabs.labs")}</h1>
 
       <div className="mt-4 flex items-center gap-2 text-sm">
-        <label>Sex:</label>
+        <label>{t("enrichment.labs.sexLabel")}</label>
         <select
           value={sex}
           onChange={(e) => setSex(e.target.value as "M" | "F" | "")}
@@ -76,14 +76,14 @@ export default function LabRangesPage() {
               type="text"
               value={lab.name}
               onChange={(e) => update(i, "name", e.target.value)}
-              placeholder="HbA1c, glucose, ldl, ..."
+              placeholder={t("enrichment.labs.namePlaceholder")}
               className="flex-1 rounded border border-slate-300 px-3 py-2 text-sm"
             />
             <input
               type="text"
               value={lab.value}
               onChange={(e) => update(i, "value", e.target.value)}
-              placeholder="value"
+              placeholder={t("enrichment.labs.valuePlaceholder")}
               className="w-24 rounded border border-slate-300 px-3 py-2 text-sm"
             />
             <button

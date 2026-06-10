@@ -1,7 +1,8 @@
 {
   "common": {
     "appName": "AdelIA",
-    "tagline": "Votre coffre-fort médical personnel avec IA"
+    "tagline": "Votre coffre-fort médical personnel avec IA",
+    "loading": "Chargement…"
   },
   "home": {
     "hero": "Votre dossier médical, à vous. Analyse IA en 2 modes.",
@@ -57,7 +58,54 @@
     "elapsed": "Durée :",
     "openGuide": "Ouvrir le guide",
     "openTemplate": "Ouvrir le modèle",
-    "estimatedTime": "Durée estimée :"
+    "estimatedTime": "Durée estimée :",
+    "sampleLabel": "Échantillon :",
+    "entityCount": "{count, plural, =1 {1 entité} other {# entités}}",
+    "documentCount": "{count, plural, =1 {1 document} other {# documents}}",
+    "overview": {
+      "appleHealthDesc": "export.zip → données biométriques",
+      "ccdDesc": "XML du portail patient",
+      "telegramDesc": "Transférez vos docs au bot",
+      "emailTitle": "E-mail",
+      "emailDesc": "Transférez vers votre alias"
+    },
+    "appleHealth": {
+      "title": "Import Apple Health",
+      "instructions": "Réglages → Santé → Exporter toutes les données de santé → déposez le ZIP ici"
+    },
+    "ccd": {
+      "title": "Import CCD / MyChart",
+      "instructions": "Téléversez le XML téléchargé depuis votre portail patient (Epic, Cerner, Allscripts, Athena…)"
+    },
+    "gdpr": {
+      "meta": "{legalBasis} · délai : {deadline} · langue : {language}",
+      "copyTemplate": "Copier le modèle",
+      "copied": "Copié"
+    },
+    "telegram": {
+      "title": "Lier Telegram",
+      "subtitle": "Transférez vos PDF, photos et audios médicaux au bot et ils sont ingérés automatiquement.",
+      "openBot": "Ouvrir le bot dans Telegram ({url})",
+      "step2": "Appuyez sur \"Start\" ou envoyez :",
+      "copy": "Copier",
+      "tokenExpiry": "Le token expire dans 1 heure. Si rien ne se passe, actualisez cette page pour en générer un nouveau.",
+      "step3": "Une fois lié, transférez n'importe quel PDF/photo/audio au bot. Il sera traité automatiquement."
+    },
+    "email": {
+      "title": "Transfert par e-mail",
+      "subtitle": "Chaque document médical que vous recevez par e-mail — transférez-le vers votre alias unique et il sera ingéré automatiquement.",
+      "aliasLabel": "Votre alias unique",
+      "copy": "Copier",
+      "gmailTitle": "Configurer le transfert (Gmail)",
+      "gmailStep1": "1. Gmail → Paramètres → Filtres → Créer un filtre",
+      "gmailStep2": "2. Ciblez les e-mails de votre hôpital / médecin",
+      "forwardStep": "3. Action → Transférer vers {alias}",
+      "gmailStep4": "4. (Facultatif) Ignorer la boîte de réception pour automatiser",
+      "outlookTitle": "Configurer le transfert (Outlook / iCloud)",
+      "outlookStep1": "1. Paramètres → Courrier → Règles → Nouvelle règle",
+      "outlookStep2": "2. Condition (expéditeur, mots-clés de l'objet)",
+      "warning": "Les e-mails transférés vers votre alias sont traités automatiquement. Ne transférez que le contenu médical que vous souhaitez conserver dans votre coffre-fort."
+    }
   },
   "enrichment": {
     "title": "Insights v0.2",
@@ -86,7 +134,10 @@
       "setDefault": "Définir par défaut",
       "default": "Par défaut",
       "delete": "Supprimer",
-      "cannotDelete": "Suppression impossible (c'est votre seul profil)"
+      "cannotDelete": "Suppression impossible (c'est votre seul profil)",
+      "create": "Créer",
+      "cancel": "Annuler",
+      "deleteConfirm": "Supprimer ce profil ?"
     },
     "drugs": {
       "addMedication": "Ajouter un médicament",
@@ -106,7 +157,10 @@
       "low": "Bas",
       "normal": "Normal",
       "high": "Élevé",
-      "reference": "Référence"
+      "reference": "Référence",
+      "sexLabel": "Sexe :",
+      "namePlaceholder": "HbA1c, glucose, ldl, ...",
+      "valuePlaceholder": "valeur"
     },
     "trials": {
       "search": "Rechercher des essais",
@@ -118,6 +172,7 @@
     "genomics": {
       "upload": "Téléverser 23andMe raw_data.txt",
       "disclaimer": "Résultats indicatifs uniquement. NE remplacent PAS une analyse certifiée CLIA.",
+      "source": "source",
       "categories": {
         "pharmacogenomics": "Pharmacogénomique",
         "disease_risk": "Risque de maladie",
@@ -134,7 +189,9 @@
       "placeholder": "diabète de type 2, hypertension, ...",
       "icd10": "CIM-10",
       "snomed": "SNOMED CT",
-      "noMatch": "Aucun code trouvé"
+      "noMatch": "Aucun code trouvé",
+      "category": "Catégorie",
+      "match": "Correspondance"
     },
     "coverage": {
       "concepts": "Concepts normalisés",
@@ -175,6 +232,24 @@
     "createdAt": "Créé : ",
     "completedAt": "Terminé : ",
     "downloadPdf": "Télécharger le PDF",
-    "sharedLink": "Créer un lien partageable"
+    "sharedLink": "Créer un lien partageable",
+    "statusLabel": "Statut :",
+    "share": {
+      "title": "Partager le briefing",
+      "button": "Partager",
+      "ttlLabel": "Durée du lien",
+      "ttl": {
+        "1h": "1 heure",
+        "24h": "24 heures (par défaut)",
+        "7d": "7 jours",
+        "30d": "30 jours (max)"
+      },
+      "creating": "Génération...",
+      "createButton": "Générer un lien partageable",
+      "activeUntil": "Lien actif · expire le {date}",
+      "revoke": "Révoquer",
+      "revokeConfirm": "Révoquer ce lien ? Toute personne disposant de l'URL ne pourra plus le voir.",
+      "disclaimer": "Toute personne disposant de l'URL peut voir le briefing jusqu'à son expiration ou sa révocation. AdelIA comptabilise les accès à des fins d'audit."
+    }
   }
 }

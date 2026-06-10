@@ -60,7 +60,7 @@ export default function ProfilesPage() {
   }
 
   async function handleDelete(id: string) {
-    if (!confirm("¿Borrar perfil?")) return;
+    if (!confirm(t("enrichment.profiles.deleteConfirm"))) return;
     try {
       await enrichment.deleteProfile(id);
       await refresh();
@@ -157,7 +157,7 @@ export default function ProfilesPage() {
             <option value="">—</option>
             <option value="M">M</option>
             <option value="F">F</option>
-            <option value="other">Other</option>
+            <option value="other">{t("enrichment.profiles.other")}</option>
           </select>
           <div className="flex gap-2">
             <button
@@ -165,14 +165,14 @@ export default function ProfilesPage() {
               onClick={handleAdd}
               className="rounded bg-slate-900 px-3 py-1.5 text-sm text-white hover:bg-slate-800"
             >
-              Crear
+              {t("enrichment.profiles.create")}
             </button>
             <button
               type="button"
               onClick={() => setShowAdd(false)}
               className="rounded border border-slate-300 px-3 py-1.5 text-sm hover:bg-slate-50"
             >
-              Cancelar
+              {t("enrichment.profiles.cancel")}
             </button>
           </div>
         </div>

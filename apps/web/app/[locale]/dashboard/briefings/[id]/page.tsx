@@ -64,14 +64,14 @@ export default function BriefingDetailPage() {
   }
 
   if (!briefing) {
-    return <main className="mx-auto max-w-3xl px-6 py-10">Loading…</main>;
+    return <main className="mx-auto max-w-3xl px-6 py-10">{t("common.loading")}</main>;
   }
 
   return (
     <main className="mx-auto max-w-4xl px-6 py-10">
       <div className="mb-4 flex items-center justify-between text-sm text-slate-600">
         <div>
-          Status: <strong>{t(`briefing.status.${briefing.status}`)}</strong>
+          {t("briefing.statusLabel")} <strong>{t(`briefing.status.${briefing.status}`)}</strong>
           {briefing.status === "processing" && (
             <span className="ml-2">— {t("briefing.polling")}</span>
           )}
@@ -91,7 +91,7 @@ export default function BriefingDetailPage() {
               onClick={() => setShowShare(true)}
               className="rounded bg-slate-900 px-3 py-1.5 text-xs text-white hover:bg-slate-800"
             >
-              🔗 Compartir
+              🔗 {t("briefing.share.button")}
             </button>
           </div>
         )}
