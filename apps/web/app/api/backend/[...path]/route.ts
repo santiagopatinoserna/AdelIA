@@ -7,7 +7,28 @@ import { auth } from "@/lib/auth";
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:8000";
 
+// Only user-scoped API surfaces ride the proxy. Notably excluded:
+// /ingestion/webhooks (machine auth via provider secrets, not user JWTs)
+// and /s/* (public share links — no session should be attached).
+const ALLOWED_PREFIXES = [
+  "documents",
+  "chat",
+  "briefings",
+  "enrichment",
+  "shares",
+  "ingestion",
+];
+
+function isAllowed(path: string[]): boolean {
+  if (path.length === 0) return false;
+  if (path[0] === "ingestion" && path[1] === "webhooks") return false;
+  return ALLOWED_PREFIXES.includes(path[0]);
+}
+
 async function proxy(request: NextRequest, path: string[]) {
+  if (!isAllowed(path)) {
+    return NextResponse.json({ detail: "Not found" }, { status: 404 });
+  }
   const session = await auth();
   const token = session?.jwt;
   if (!token) {

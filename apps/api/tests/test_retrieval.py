@@ -49,3 +49,45 @@ async def test_retrieve_filters_soft_deleted_documents():
     # documents and asserts they don't appear.
     for r in results:
         assert r.document_deleted_at is None
+
+
+@pytest.mark.skipif(not PG_AVAILABLE, reason="needs Postgres")
+async def test_parent_window_rebuilt_from_raw_text():
+    """Parent expansion: the LLM context window is rebuilt from raw_text
+    offsets across sibling chunks — exact text, no overlap duplication."""
+    from tests.db_helpers import make_user
+    from adelia.db import AsyncSessionLocal
+    from adelia.models import Chunk, Document
+    from adelia.services.retrieval import retrieve_relevant_chunks
+
+    user_id = await make_user()
+    raw = "A" * 100 + "B" * 100 + "C" * 100  # parent 0 covers [0, 300)
+    async with AsyncSessionLocal() as session:
+        doc = Document(
+            user_id=user_id, source="web", mime_type="application/pdf",
+            s3_key="users/x/parent.pdf", raw_text=raw,
+        )
+        session.add(doc)
+        await session.flush()
+        for i in range(3):
+            session.add(Chunk(
+                document_id=doc.id, user_id=user_id,
+                content=raw[i * 100:(i + 1) * 100],
+                embedding=[0.1] * 1024,
+                chunk_index=i,
+                chunk_metadata={
+                    "parent_index": 0,
+                    "start_char": i * 100,
+                    "end_char": (i + 1) * 100,
+                    "entity_ids": [],
+                },
+            ))
+        await session.commit()
+
+    results = await retrieve_relevant_chunks(
+        user_id=user_id, query_embedding=[0.1] * 1024, top_k=2
+    )
+    assert results, "expected hits"
+    for r in results:
+        assert r.parent_content == raw  # full [0,300) window
+        assert len(r.content) == 100    # citation quote stays small

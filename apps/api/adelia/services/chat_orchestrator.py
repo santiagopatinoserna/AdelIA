@@ -79,10 +79,13 @@ Reglas estrictas:
 
 
 def _format_rag_context(chunks: list) -> str:
-    """Format retrieved chunks as numbered context for the LLM prompt."""
+    """Format retrieved chunks as numbered context for the LLM prompt.
+
+    Uses the expanded parent window when available — the small chunk stays
+    the citation quote, but the LLM sees the surrounding context."""
     lines = []
     for i, c in enumerate(chunks, start=1):
-        lines.append(f"[{i}] {c.content}")
+        lines.append(f"[{i}] {getattr(c, 'parent_content', None) or c.content}")
     return "\n\n".join(lines)
 
 
