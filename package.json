@@ -7,5 +7,6 @@
     "dev:api": "uv --directory apps/api run uvicorn adelia.main:app --reload",
     "dev:infra": "docker compose -f infra/docker-compose.dev.yml up -d",
     "test:api": "uv --directory apps/api run pytest"
-  }
+  },
+  "packageManager": "pnpm@10.11.0"
 }

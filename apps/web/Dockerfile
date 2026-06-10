@@ -1,0 +1,28 @@
+# AdelIA web — production image (Next.js standalone output).
+# Build context must be the REPO ROOT (pnpm workspace):
+#   docker build -f apps/web/Dockerfile .
+FROM node:20-bookworm-slim AS builder
+
+RUN corepack enable && corepack prepare pnpm@10.11.0 --activate
+
+WORKDIR /repo
+COPY pnpm-workspace.yaml package.json pnpm-lock.yaml ./
+COPY apps/web/package.json apps/web/package.json
+RUN pnpm install --frozen-lockfile --filter @adelia/web...
+
+COPY apps/web apps/web
+# NEXT_PUBLIC_ vars are inlined at build time.
+ARG NEXT_PUBLIC_API_URL=http://localhost:8000
+ENV NEXT_PUBLIC_API_URL=$NEXT_PUBLIC_API_URL
+RUN pnpm --filter @adelia/web build
+
+FROM node:20-bookworm-slim AS runner
+ENV NODE_ENV=production
+WORKDIR /app
+
+# Standalone bundle carries its own pruned node_modules.
+COPY --from=builder /repo/apps/web/.next/standalone ./
+COPY --from=builder /repo/apps/web/.next/static ./apps/web/.next/static
+
+EXPOSE 3000
+CMD ["node", "apps/web/server.js"]

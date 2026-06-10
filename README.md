@@ -133,7 +133,16 @@ Both should exit 0.
 
 ## Self-host
 
-`docker compose -f infra/docker-compose.dev.yml` is a dev profile. A production self-host compose file is on the v0.1.1 roadmap.
+Dev profile: `docker compose -f infra/docker-compose.dev.yml up -d`.
+
+Production profile (builds the API and web images — same Dockerfiles a Fly.io deploy uses):
+
+```bash
+cp .env.prod.example .env.prod   # fill in secrets
+docker compose -f infra/docker-compose.prod.yml --env-file .env.prod up -d --build
+```
+
+Web on `:3000`, API on `:8000` (override with `WEB_PORT`/`API_PORT`). The API container runs `alembic upgrade head` on boot. Put a TLS proxy (Caddy/Traefik) in front for anything beyond a LAN.
 
 ## Roadmap
 
