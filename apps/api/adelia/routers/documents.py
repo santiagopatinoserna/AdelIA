@@ -262,27 +262,23 @@ async def list_documents(
     limit: Annotated[int, Query(ge=1, le=200)] = 50,
     offset: Annotated[int, Query(ge=0)] = 0,
 ):
-    # Aggregate counts in one query (no per-row roundtrips) so the list
-    # view shows real entity/chunk numbers instead of 0.
-    entity_counts = (
-        sa.select(Entity.document_id, sa.func.count().label("n"))
-        .where(Entity.deleted_at.is_(None))
-        .group_by(Entity.document_id)
-        .subquery()
+    # Correlated scalar counts: 2 index lookups per returned row (≤limit),
+    # O(page) instead of O(total table) — the previous GROUP BY subqueries
+    # seq-scanned entities+chunks across ALL users on every dashboard load.
+    entity_count = (
+        sa.select(sa.func.count())
+        .where(Entity.document_id == Document.id, Entity.deleted_at.is_(None))
+        .correlate(Document)
+        .scalar_subquery()
     )
-    chunk_counts = (
-        sa.select(Chunk.document_id, sa.func.count().label("n"))
-        .group_by(Chunk.document_id)
-        .subquery()
+    chunk_count = (
+        sa.select(sa.func.count())
+        .where(Chunk.document_id == Document.id)
+        .correlate(Document)
+        .scalar_subquery()
     )
     result = await db.execute(
-        select(
-            Document,
-            sa.func.coalesce(entity_counts.c.n, 0),
-            sa.func.coalesce(chunk_counts.c.n, 0),
-        )
-        .outerjoin(entity_counts, entity_counts.c.document_id == Document.id)
-        .outerjoin(chunk_counts, chunk_counts.c.document_id == Document.id)
+        select(Document, entity_count, chunk_count)
         .where(Document.user_id == user_id, Document.deleted_at.is_(None))
         .order_by(Document.created_at.desc())
         .limit(limit)
