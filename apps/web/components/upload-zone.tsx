@@ -3,15 +3,7 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { useTranslations } from "next-intl";
 
-export function UploadZone({
-  apiUrl,
-  jwt,
-  locale,
-}: {
-  apiUrl: string;
-  jwt: string;
-  locale: string;
-}) {
+export function UploadZone({ locale }: { locale: string }) {
   const t = useTranslations("upload");
   const router = useRouter();
   const [busy, setBusy] = useState(false);
@@ -23,10 +15,11 @@ export function UploadZone({
     try {
       const fd = new FormData();
       fd.append("file", file);
-      const res = await fetch(`${apiUrl}/documents`, {
+      // Same-origin proxy signs the request server-side — the JWT never
+      // reaches the browser (invariant since the api split).
+      const res = await fetch("/api/backend/documents", {
         method: "POST",
         body: fd,
-        headers: { Authorization: `Bearer ${jwt}` },
       });
       if (!res.ok) throw new Error(`status ${res.status}`);
       // No router.refresh() — dashboard fetches with cache: "no-store"

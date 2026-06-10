@@ -1,6 +1,6 @@
 import NextAuth, { type NextAuthConfig } from "next-auth";
 import Resend from "next-auth/providers/resend";
-import { SignJWT } from "jose";
+import { SignJWT, decodeJwt } from "jose";
 
 import { AdeliaPgAdapter } from "./auth-adapter";
 
@@ -34,7 +34,19 @@ export const authConfig: NextAuthConfig = {
       // Sign an HS256 JWT for the FastAPI backend bridge.
       // Backend (T6 auth.py) verifies with the same AUTH_SECRET.
       const t = token as typeof token & AdeliaToken;
-      if (t.sub && !t.rawJwt) {
+      // Re-sign when missing OR within 24h of expiry: the Auth.js session
+      // lives 30 days, the bridge JWT 7 — without renewal every API call
+      // turns 401 on day 8 while the user still looks signed in.
+      let needsSigning = !t.rawJwt;
+      if (t.rawJwt) {
+        try {
+          const { exp } = decodeJwt(t.rawJwt);
+          needsSigning = !exp || exp * 1000 - Date.now() < 24 * 60 * 60 * 1000;
+        } catch {
+          needsSigning = true;
+        }
+      }
+      if (t.sub && needsSigning) {
         const secret = new TextEncoder().encode(process.env.AUTH_SECRET ?? "");
         t.rawJwt = await new SignJWT({
           sub: t.sub,

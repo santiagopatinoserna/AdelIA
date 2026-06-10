@@ -333,3 +333,9 @@ class GenomicVariant(Base):
     evidence_level = Column(Text)
     url = Column(String(1024))
     analyzed_at = Column(DateTime(timezone=True), server_default=func.now(), nullable=False)
+
+
+class BlobTombstone(Base):
+    __tablename__ = "blob_tombstones"
+    s3_key = Column(String(1024), primary_key=True)
+    created_at = Column(DateTime(timezone=True), server_default=func.now(), nullable=False)

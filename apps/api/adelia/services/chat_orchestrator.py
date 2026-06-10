@@ -248,23 +248,29 @@ async def answer_question_streaming(
             _system_prompt(locale), user_msg, history=history
         ).__aiter__()
         stream_start = time.monotonic()
-        while True:
-            remaining = STREAM_TOTAL_TIMEOUT_S - (time.monotonic() - stream_start)
-            if remaining <= 0:
-                raise TimeoutError(
-                    f"chat stream exceeded {STREAM_TOTAL_TIMEOUT_S:.0f}s total budget"
-                )
-            try:
-                token = await asyncio.wait_for(
-                    token_iter.__anext__(), timeout=min(TOKEN_GAP_TIMEOUT_S, remaining)
-                )
-            except StopAsyncIteration:
-                break
-            except asyncio.TimeoutError:
-                raise TimeoutError(
-                    f"chat stream stalled >{TOKEN_GAP_TIMEOUT_S:.0f}s between tokens"
-                )
-            yield ChatEvent(type="token", content=token)
+        try:
+            while True:
+                remaining = STREAM_TOTAL_TIMEOUT_S - (time.monotonic() - stream_start)
+                if remaining <= 0:
+                    raise TimeoutError(
+                        f"chat stream exceeded {STREAM_TOTAL_TIMEOUT_S:.0f}s total budget"
+                    )
+                try:
+                    token = await asyncio.wait_for(
+                        token_iter.__anext__(), timeout=min(TOKEN_GAP_TIMEOUT_S, remaining)
+                    )
+                except StopAsyncIteration:
+                    break
+                except asyncio.TimeoutError:
+                    raise TimeoutError(
+                        f"chat stream stalled >{TOKEN_GAP_TIMEOUT_S:.0f}s between tokens"
+                    )
+                yield ChatEvent(type="token", content=token)
+        finally:
+            # Abandoning the generator without aclose() leaves the HTTP
+            # stream to Mistral open until GC — the exact leak these
+            # timeouts exist to prevent.
+            await token_iter.aclose()
 
         yield ChatEvent(
             type="final",

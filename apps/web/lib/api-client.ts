@@ -7,7 +7,12 @@ import { auth } from "@/lib/auth";
 
 import { makeApi } from "./api-endpoints";
 
-export const API_URL = process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:8000";
+// Server-side fetches must use the internal upstream inside docker; the
+// public origin is what the browser sees, not necessarily reachable here.
+export const API_URL =
+  process.env.API_INTERNAL_URL ??
+  process.env.NEXT_PUBLIC_API_URL ??
+  "http://localhost:8000";
 
 export type {
   DocumentDTO,

@@ -94,6 +94,7 @@ services:
         condition: service_healthy
     environment:
       AUTH_SECRET: ${AUTH_SECRET}
+      API_INTERNAL_URL: http://api:8000
       NEXTAUTH_URL: ${ADELIA_APP_URL:-http://localhost:3000}
       RESEND_API_KEY: ${RESEND_API_KEY:-}
       POSTGRES_HOST: postgres

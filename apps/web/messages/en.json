@@ -20,7 +20,9 @@
     },
     "entitiesAndChunks": "{count, plural, =0 {No entities extracted} =1 {1 entity} other {# entities}} · {chunks, plural, =0 {No chunks} =1 {1 chunk} other {# chunks}}",
     "ocrProcessing": "Running OCR… updates automatically",
-    "settingsLink": "Account settings"
+    "settingsLink": "Account settings",
+    "navImport": "Import",
+    "navInsights": "Insights"
   },
   "upload": {
     "title": "Upload document",
