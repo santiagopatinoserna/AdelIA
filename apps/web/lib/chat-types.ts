@@ -5,6 +5,7 @@ export type Citation = {
   document_id: string;
   raw_quote: string;
   page: number | null;
+  source_type?: "chunk" | "entity";
 };
 
 export type EvidenceCitation = {

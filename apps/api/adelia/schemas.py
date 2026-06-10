@@ -65,10 +65,17 @@ class ExtractedEntity(BaseModel):
 
 
 class ChatCitation(BaseModel):
+    """Citation for a chat answer.
+
+    source_type discriminates what chunk_id points at: a chunks.id for the
+    RAG path, an entities.id for the structured-temporal path (the field
+    name predates the split; renaming would break persisted messages).
+    """
     chunk_id: UUID
     document_id: UUID
     raw_quote: str
     page: int | None = None
+    source_type: Literal["chunk", "entity"] = "chunk"
 
 
 class ChatMessageOut(BaseModel):

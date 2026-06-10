@@ -2,7 +2,17 @@
 
 Open source personal medical vault + AI analysis (self-analysis + doctor briefing).
 
-**Status:** v0.1 in development. M1 (foundation) — see `docs/specs/` and `docs/plans/`.
+**Status:** v0.2.0-rc1 — all v0.1 milestones (M1-M6) + v0.2 enrichment layers shipped on `main`. See `docs/specs/` and `docs/plans/` for design history.
+
+**What works today** (verified E2E):
+
+- 📄 Upload PDF/image/audio → Mistral OCR / Whisper → entity extraction → hierarchical chunks + embeddings (auto-retry on transient API failures)
+- 💬 Chat over your records (SSE streaming, multi-turn memory, dual-RAG with clinical guidelines, citations) — answers in ES/EN/FR
+- 📋 Doctor briefing generator (SBAR-style, 8 specialties, anti-hallucination QA pre-baker) — fully localized es/en/fr, including the PDF
+- 🔗 Sharing: signed links with TTL + revoke, public HTML view, WeasyPrint PDF
+- ✨ Enrichment: ICD-10/SNOMED normalization, lab reference ranges, drug-drug interactions, ClinicalTrials.gov matching, 23andMe genomics, family profiles
+- 📥 Import wizards: Apple Health, CCD/MyChart, platform guides, GDPR request templates
+- 🌍 UI in Spanish, English and French (next-intl, locale switcher)
 
 **License:** AGPL-3.0. See `LICENSE`.
 
@@ -11,7 +21,7 @@ Open source personal medical vault + AI analysis (self-analysis + doctor briefin
 
 ## Architecture
 
-- `apps/web` — Next.js 15 frontend (Auth.js v5 magic links via Resend, next-intl ES strings)
+- `apps/web` — Next.js 15 frontend (Auth.js v5 magic links via Resend + custom Pg adapter, next-intl es/en/fr, JWT-signing proxy at `/api/backend` so the token never reaches the browser)
 - `apps/api` — FastAPI backend (Python 3.12, SQLAlchemy 2, Alembic, pgvector)
 - `infra/docker-compose.dev.yml` — Postgres 16 + pgvector + MinIO
 - See `docs/specs/2026-05-05-adelia-v0.1-design.md` for the full v0.1 design spec.
@@ -82,12 +92,12 @@ uv --directory apps/api run alembic upgrade head
 
 ```bash
 pnpm dev:api    # FastAPI on :8000
-pnpm dev:web    # Next.js on :3000
+pnpm dev:web    # Next.js on :3000 (use -p 3001 if :3000 is taken — keep NEXTAUTH_URL in sync)
 ```
 
 **6. Visit the app:**
 
-http://localhost:3000/es
+http://localhost:3000/es (or /en, /fr)
 
 You should see the AdelIA home page. Click "Empezar" → sign in with magic link → dashboard.
 
@@ -110,7 +120,7 @@ You should see the AdelIA home page. Click "Empezar" → sign in with magic link
 pnpm test:api
 ```
 
-With Docker Compose running and AUTH_SECRET set in `apps/api/.env`, you should see 7+ passed tests. With `MISTRAL_API_KEY` set, the OCR test runs live. Document tests use `skipif(True)` and need to be enabled manually (toggle to `False` in `tests/test_documents.py`).
+With Docker Compose running (Postgres + MinIO) and keys set in `apps/api/.env`, the full suite runs ~280 tests including live Postgres integration tests (auto-detected via TCP probe — override with `PG_AVAILABLE=0/1`) and live Mistral OCR/extract tests when `MISTRAL_API_KEY` is set.
 
 **Frontend (typecheck + production build):**
 
@@ -127,10 +137,9 @@ Both should exit 0.
 
 ## Roadmap
 
-- **v0.1 (this milestone):** core OCR ingest + dashboard + detail. Spanish UI only. Manual reload for status.
-- **v0.1.1 (post-launch):** EN + FR i18n strings, auto-poll on detail page, Telegram bot ingest, email forwarding ingest, PWA installable, pagination.
-- **v0.2:** Whisper audio transcription, WhatsApp ingest, hosted subscription tier ($5/mo), clinician_verified provenance.
-- **v0.3:** Doctor query mode, Mon Espace Santé (FR) integration, Sanidad ES (per CCAA).
+- **Now (pre-launch ops):** Fly.io deploy, Resend domain verification, Telegram bot + Postmark inbound keys (scaffolding is merged and tested).
+- **v0.2.x:** live consultation recording (Whisper streaming), WhatsApp ingest, hosted subscription tier, clinician_verified provenance.
+- **v0.3:** doctor query mode (QR + ephemeral session), Mon Espace Santé (FR) integration, Sanidad ES (per CCAA).
 
 ## Contributing
 

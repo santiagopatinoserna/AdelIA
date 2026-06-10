@@ -1,8 +1,9 @@
 import logging
+import time
 from contextlib import asynccontextmanager
 from pathlib import Path
 
-from fastapi import FastAPI
+from fastapi import FastAPI, Request
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
 
@@ -21,6 +22,13 @@ from adelia.routers import (
 
 
 logger = logging.getLogger("adelia")
+# uvicorn only configures its own loggers; give the adelia namespace a
+# stdout handler so access/slow-request lines actually surface.
+if not logging.getLogger("adelia").handlers:
+    _handler = logging.StreamHandler()
+    _handler.setFormatter(logging.Formatter("%(asctime)s %(levelname)s %(name)s %(message)s"))
+    logging.getLogger("adelia").addHandler(_handler)
+    logging.getLogger("adelia").setLevel(logging.INFO)
 
 
 @asynccontextmanager
@@ -33,6 +41,36 @@ async def lifespan(app: FastAPI):
 
 
 app = FastAPI(title="AdelIA API", version="0.1.0", lifespan=lifespan)
+
+SLOW_REQUEST_THRESHOLD_S = 2.0
+
+
+@app.middleware("http")
+async def request_logging(request: Request, call_next):
+    """Minimal structured access log + slow-request warning.
+
+    Fly.io/Grafana pick logs from stdout — this is the v0.1.1 observability
+    baseline until OpenTelemetry lands. Skips /health to keep probes quiet.
+    """
+    if request.url.path == "/health":
+        return await call_next(request)
+    start = time.monotonic()
+    try:
+        response = await call_next(request)
+    except Exception:
+        elapsed_ms = (time.monotonic() - start) * 1000
+        logger.exception(
+            "request_failed method=%s path=%s elapsed_ms=%.0f",
+            request.method, request.url.path, elapsed_ms,
+        )
+        raise
+    elapsed = time.monotonic() - start
+    log = logger.warning if elapsed > SLOW_REQUEST_THRESHOLD_S else logger.info
+    log(
+        "request method=%s path=%s status=%d elapsed_ms=%.0f",
+        request.method, request.url.path, response.status_code, elapsed * 1000,
+    )
+    return response
 
 app.add_middleware(
     CORSMiddleware,

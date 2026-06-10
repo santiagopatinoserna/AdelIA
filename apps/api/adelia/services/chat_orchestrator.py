@@ -204,6 +204,7 @@ async def answer_question_streaming(
                         document_id=r["document_id"],
                         raw_quote=r["raw_quote"] or "",
                         page=None,
+                        source_type="entity",
                     )
                 )
         else:
