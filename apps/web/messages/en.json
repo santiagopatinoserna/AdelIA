@@ -251,5 +251,14 @@
       "revokeConfirm": "Revoke this link? Anyone with the URL will no longer be able to view it.",
       "disclaimer": "Anyone with the URL can view the briefing until it expires or you revoke it. AdelIA logs accesses for auditing."
     }
+  },
+  "settings": {
+    "title": "Account settings",
+    "emailLabel": "Account email",
+    "dangerTitle": "Danger zone",
+    "dangerBody": "Deleting your account permanently erases all your documents, entities, briefings, chats, profiles and share links, including the original files. This action is NOT reversible (right to erasure, GDPR art. 17).",
+    "confirmLabel": "Type {email} to confirm:",
+    "deleteButton": "Delete my account permanently",
+    "deleting": "Deleting…"
   }
 }

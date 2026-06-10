@@ -51,3 +51,27 @@ test("upload → auto-poll to ready → detail shows OCR text", async ({ browser
   });
   await context.close();
 });
+
+test("account deletion: type-to-confirm erases and signs out", async ({ browser }) => {
+  const email = `e2e-gdpr-${Date.now()}@adelia.test`;
+  const { cookie } = await seedUserAndSessionCookie(email);
+  const context = await browser.newContext();
+  await context.addCookies([cookie]);
+  const page = await context.newPage();
+
+  await page.goto("/es/dashboard/settings");
+  const deleteButton = page.getByRole("button", { name: /Eliminar mi cuenta/ });
+  await expect(deleteButton).toBeDisabled();
+
+  await page.getByPlaceholder(email).fill(email);
+  await expect(deleteButton).toBeEnabled();
+  await deleteButton.click();
+
+  // signOut redirects to home
+  await page.waitForURL(/\/(es)?\/?$/, { timeout: 20_000 });
+
+  // the session cookie is gone → dashboard bounces to signin
+  await page.goto("/es/dashboard");
+  await expect(page).toHaveURL(/\/es\/signin/, { timeout: 10_000 });
+  await context.close();
+});

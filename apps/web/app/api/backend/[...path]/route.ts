@@ -17,6 +17,7 @@ const ALLOWED_PREFIXES = [
   "enrichment",
   "shares",
   "ingestion",
+  "users",
 ];
 
 function isAllowed(path: string[]): boolean {

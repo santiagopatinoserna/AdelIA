@@ -251,5 +251,14 @@
       "revokeConfirm": "Révoquer ce lien ? Toute personne disposant de l'URL ne pourra plus le voir.",
       "disclaimer": "Toute personne disposant de l'URL peut voir le briefing jusqu'à son expiration ou sa révocation. AdelIA comptabilise les accès à des fins d'audit."
     }
+  },
+  "settings": {
+    "title": "Paramètres du compte",
+    "emailLabel": "E-mail du compte",
+    "dangerTitle": "Zone de danger",
+    "dangerBody": "La suppression de votre compte efface définitivement tous vos documents, entités, briefings, conversations, profils et liens partagés, y compris les fichiers originaux. Cette action n'est PAS réversible (droit à l'effacement, art. 17 RGPD).",
+    "confirmLabel": "Saisissez {email} pour confirmer :",
+    "deleteButton": "Supprimer définitivement mon compte",
+    "deleting": "Suppression…"
   }
 }

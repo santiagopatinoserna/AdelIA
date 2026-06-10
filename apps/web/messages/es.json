@@ -251,5 +251,14 @@
       "revokeConfirm": "¿Revocar este link? Cualquiera con el URL ya no podrá verlo.",
       "disclaimer": "Cualquiera con el URL puede ver el briefing hasta que expire o lo revoques. AdelIA cuenta accesos para auditoría."
     }
+  },
+  "settings": {
+    "title": "Ajustes de cuenta",
+    "emailLabel": "Email de la cuenta",
+    "dangerTitle": "Zona de peligro",
+    "dangerBody": "Eliminar tu cuenta borra de forma permanente todos tus documentos, entidades, briefings, chats, perfiles y links compartidos, incluidos los archivos originales. Esta acción NO es reversible (derecho de supresión, art. 17 RGPD).",
+    "confirmLabel": "Escribe {email} para confirmar:",
+    "deleteButton": "Eliminar mi cuenta definitivamente",
+    "deleting": "Eliminando…"
   }
 }
