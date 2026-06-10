@@ -30,6 +30,7 @@ test("locale switcher: /en dashboard renders English", async ({ browser }) => {
 });
 
 test("upload → auto-poll to ready → detail shows OCR text", async ({ browser }) => {
+  test.skip(!process.env.MISTRAL_API_KEY, "needs live Mistral OCR");
   const { cookie } = await seedUserAndSessionCookie(
     `e2e-upload-${Date.now()}@adelia.test`,
   );

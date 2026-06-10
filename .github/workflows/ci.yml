@@ -123,3 +123,77 @@ jobs:
 
       - name: Build
         run: pnpm build
+
+  e2e:
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: pgvector/pgvector:pg16
+        env:
+          POSTGRES_USER: adelia
+          POSTGRES_PASSWORD: adelia_ci
+          POSTGRES_DB: adelia
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U adelia -d adelia"
+          --health-interval 5s
+          --health-timeout 3s
+          --health-retries 10
+    env:
+      POSTGRES_HOST: localhost
+      POSTGRES_PORT: "5432"
+      POSTGRES_USER: adelia
+      POSTGRES_PASSWORD: adelia_ci
+      POSTGRES_DB: adelia
+      AUTH_SECRET: ci-only-secret
+      NEXTAUTH_URL: http://localhost:3001
+      NEXT_PUBLIC_API_URL: http://localhost:8000
+      E2E_BASE_URL: http://localhost:3001
+      # No MISTRAL_API_KEY: the upload spec self-skips; auth/locale/a11y/GDPR run.
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: astral-sh/setup-uv@v5
+        with:
+          version: "0.5.x"
+
+      - name: API deps + migrations
+        working-directory: apps/api
+        run: |
+          uv sync --frozen
+          uv run alembic upgrade head
+
+      - name: Start API
+        working-directory: apps/api
+        run: |
+          nohup uv run uvicorn adelia.main:app --port 8000 > /tmp/api.log 2>&1 &
+          for i in $(seq 1 30); do curl -fsS http://localhost:8000/health && break || sleep 1; done
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Web deps + build
+        run: |
+          corepack enable
+          pnpm install --frozen-lockfile
+          pnpm --filter @adelia/web build
+
+      - name: Start web
+        working-directory: apps/web
+        run: |
+          nohup pnpm start -p 3001 > /tmp/web.log 2>&1 &
+          for i in $(seq 1 30); do curl -fsS http://localhost:3001/es > /dev/null && break || sleep 1; done
+
+      - name: Install Playwright browsers
+        working-directory: apps/web
+        run: pnpm exec playwright install --with-deps chromium
+
+      - name: E2E
+        working-directory: apps/web
+        run: pnpm e2e
+
+      - name: Logs on failure
+        if: failure()
+        run: tail -50 /tmp/api.log /tmp/web.log
