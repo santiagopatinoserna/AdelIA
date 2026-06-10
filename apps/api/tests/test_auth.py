@@ -96,3 +96,29 @@ def test_get_current_user_id_missing_sub_returns_401(monkeypatch):
 
     assert response.status_code == 401
     assert response.json()["detail"] == "Token missing sub"
+
+
+def test_empty_secret_rejects_all_tokens_with_503(monkeypatch):
+    """Empty AUTH_SECRET must NOT silently accept tokens signed with "" —
+    that would let anyone forge a session (v0.1.1 security carry-over)."""
+    monkeypatch.setattr(settings, "auth_secret", "")
+    forged = jwt.encode(
+        {
+            "sub": "11111111-1111-1111-1111-111111111111",
+            "exp": datetime.now(timezone.utc) + timedelta(seconds=3600),
+        },
+        "",
+        algorithm="HS256",
+    )
+    client = TestClient(_make_test_app())
+
+    response = client.get("/whoami", headers={"Authorization": f"Bearer {forged}"})
+
+    assert response.status_code == 503
+    assert response.json()["detail"] == "Server auth not configured"
+
+
+def test_decode_with_empty_secret_raises_runtime_error(monkeypatch):
+    monkeypatch.setattr(settings, "auth_secret", "")
+    with pytest.raises(RuntimeError, match="AUTH_SECRET"):
+        decode_session_token("whatever")

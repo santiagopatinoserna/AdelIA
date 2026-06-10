@@ -12,6 +12,10 @@ bearer_scheme = HTTPBearer()
 
 
 def decode_session_token(token: str) -> dict[str, Any]:
+    if not settings.auth_secret:
+        # An empty secret would happily verify tokens signed with "" —
+        # i.e. anyone could forge a session. Refuse to authenticate at all.
+        raise RuntimeError("AUTH_SECRET not configured")
     return jwt.decode(token, settings.auth_secret, algorithms=["HS256"])
 
 
@@ -20,6 +24,11 @@ async def get_current_user_id(
 ) -> UUID:
     try:
         payload = decode_session_token(credentials.credentials)
+    except RuntimeError:
+        raise HTTPException(
+            status_code=status.HTTP_503_SERVICE_UNAVAILABLE,
+            detail="Server auth not configured",
+        )
     except JWTError:
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,

@@ -5,7 +5,7 @@ import pytest
 from sqlalchemy import select
 
 from adelia.db import AsyncSessionLocal
-from adelia.models import Document, User
+from adelia.models import Chunk, Document, Entity, User
 from tests.test_auth import make_token
 
 from tests.pg_gate import PG_AVAILABLE
@@ -90,3 +90,60 @@ async def test_list_documents_filters_by_user(client, monkeypatch):
     docs = response.json()
     assert len(docs) == 1
     assert docs[0]["s3_key"] == "users/a/x.pdf"
+
+
+@pytest.mark.skipif(
+    not PG_AVAILABLE,
+    reason="needs Postgres running (docker compose up -d)"
+)
+async def test_list_documents_returns_real_counts_and_paginates(client, monkeypatch):
+    """List endpoint must aggregate entity/chunk counts (was hardcoded 0)
+    and honor limit/offset."""
+    from adelia.config import settings
+    monkeypatch.setattr(settings, "auth_secret", "test-secret")
+
+    user = await _seed_user(f"counts-{uuid4()}@adelia.app")
+    token = make_token(str(user.id))
+
+    async with AsyncSessionLocal() as session:
+        doc1 = Document(
+            user_id=user.id, source="web", mime_type="application/pdf",
+            s3_key="users/c/one.pdf",
+        )
+        doc2 = Document(
+            user_id=user.id, source="web", mime_type="application/pdf",
+            s3_key="users/c/two.pdf",
+        )
+        session.add_all([doc1, doc2])
+        await session.flush()
+        session.add_all([
+            Entity(
+                user_id=user.id, document_id=doc1.id, entity_type="condition",
+                name="diabetes", provenance="extracted_from_clinician_doc",
+            ),
+            Entity(
+                user_id=user.id, document_id=doc1.id, entity_type="medication",
+                name="metformin", provenance="extracted_from_clinician_doc",
+            ),
+            Chunk(
+                user_id=user.id, document_id=doc1.id, content="texto",
+                chunk_index=0,
+            ),
+        ])
+        await session.commit()
+        doc1_id = str(doc1.id)
+
+    response = await client.get(
+        "/documents", headers={"Authorization": f"Bearer {token}"}
+    )
+    assert response.status_code == 200
+    docs = {d["id"]: d for d in response.json()}
+    assert docs[doc1_id]["entity_count"] == 2
+    assert docs[doc1_id]["chunk_count"] == 1
+
+    paged = await client.get(
+        "/documents?limit=1&offset=0",
+        headers={"Authorization": f"Bearer {token}"},
+    )
+    assert paged.status_code == 200
+    assert len(paged.json()) == 1

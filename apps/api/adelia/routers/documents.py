@@ -10,7 +10,7 @@ from typing import Annotated
 import sqlalchemy as sa
 import httpx
 from botocore.exceptions import ClientError, EndpointConnectionError
-from fastapi import APIRouter, BackgroundTasks, Depends, File, HTTPException, UploadFile, status
+from fastapi import APIRouter, BackgroundTasks, Depends, File, HTTPException, UploadFile, status, Query
 from mistralai.client.errors import MistralError
 from openai import APIError as OpenAIAPIError
 from sqlalchemy import select
@@ -48,7 +48,7 @@ def _is_audio(mime_type: str) -> bool:
     return any(mime_type.startswith(prefix) for prefix in AUDIO_MIME_PREFIXES)
 
 
-def _doc_to_out(doc: Document) -> DocumentOut:
+def _doc_to_out(doc: Document, *, entity_count: int = 0, chunk_count: int = 0) -> DocumentOut:
     return DocumentOut(
         id=doc.id,
         source=doc.source,
@@ -58,6 +58,8 @@ def _doc_to_out(doc: Document) -> DocumentOut:
         created_at=doc.created_at,
         processed_at=doc.processed_at,
         status=derive_status(doc.raw_text, doc.processed_at),
+        entity_count=entity_count,
+        chunk_count=chunk_count,
     )
 
 
@@ -208,14 +210,39 @@ async def upload_document(
 async def list_documents(
     user_id: Annotated[uuid.UUID, Depends(get_current_user_id)],
     db: Annotated[AsyncSession, Depends(get_db)],
+    limit: Annotated[int, Query(ge=1, le=200)] = 50,
+    offset: Annotated[int, Query(ge=0)] = 0,
 ):
+    # Aggregate counts in one query (no per-row roundtrips) so the list
+    # view shows real entity/chunk numbers instead of 0.
+    entity_counts = (
+        sa.select(Entity.document_id, sa.func.count().label("n"))
+        .where(Entity.deleted_at.is_(None))
+        .group_by(Entity.document_id)
+        .subquery()
+    )
+    chunk_counts = (
+        sa.select(Chunk.document_id, sa.func.count().label("n"))
+        .group_by(Chunk.document_id)
+        .subquery()
+    )
     result = await db.execute(
-        select(Document)
+        select(
+            Document,
+            sa.func.coalesce(entity_counts.c.n, 0),
+            sa.func.coalesce(chunk_counts.c.n, 0),
+        )
+        .outerjoin(entity_counts, entity_counts.c.document_id == Document.id)
+        .outerjoin(chunk_counts, chunk_counts.c.document_id == Document.id)
         .where(Document.user_id == user_id, Document.deleted_at.is_(None))
         .order_by(Document.created_at.desc())
+        .limit(limit)
+        .offset(offset)
     )
-    docs = result.scalars().all()
-    return [_doc_to_out(d) for d in docs]
+    return [
+        _doc_to_out(doc, entity_count=ec, chunk_count=cc)
+        for doc, ec, cc in result.all()
+    ]
 
 
 @router.get("/{doc_id}", response_model=DocumentOut)

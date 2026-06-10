@@ -102,3 +102,35 @@ async def test_empty_retrieval_still_yields_an_answer(
     assert any(e.type == "token" for e in events)
     final = [e for e in events if e.type == "final"][0]
     assert final.citations == []
+
+
+@patch("adelia.services.chat_orchestrator.detect_temporal_intent", return_value=None)
+@patch("adelia.services.chat_orchestrator._retrieve_evidence_for_query")
+@patch("adelia.services.chat_orchestrator.retrieve_relevant_chunks")
+@patch("adelia.services.chat_orchestrator.embed_texts")
+@patch("adelia.services.chat_orchestrator._stream_llm_tokens")
+async def test_history_is_forwarded_to_llm(
+    mock_stream, mock_embed, mock_retrieve, mock_evidence, mock_temporal,
+):
+    """Multi-turn: prior session messages must reach the LLM so follow-up
+    questions resolve against the conversation, not just the fresh RAG context."""
+    user_id = uuid4()
+    mock_embed.return_value = [[0.1] * 1024]
+    mock_retrieve.return_value = []
+    mock_evidence.return_value = []
+
+    async def fake_stream(*args, **kwargs):
+        yield "ok"
+    mock_stream.side_effect = fake_stream
+
+    history = [
+        {"role": "user", "content": "¿Cuál es mi glucosa?"},
+        {"role": "assistant", "content": "Tu glucosa es 95 mg/dL [1]."},
+    ]
+    await _collect_events(
+        answer_question_streaming(
+            user_id=user_id, question="¿Y está en rango normal?", history=history
+        )
+    )
+
+    assert mock_stream.call_args.kwargs.get("history") == history

@@ -38,7 +38,8 @@ _SYSTEM_PROMPT = """Eres un asistente médico que responde EXCLUSIVAMENTE basán
 los datos del paciente Y la evidencia clínica proporcionada como contexto.
 
 Reglas estrictas:
-- Si la información NO está en el contexto del paciente NI en la evidencia, di "No tengo información suficiente".
+- Si la información NO está en el contexto del paciente, NI en la evidencia, NI en turnos anteriores de esta conversación, di "No tengo información suficiente".
+- El historial de la conversación ES contexto válido: resuelve referencias ("ese valor", "¿y en 2023?") usando los datos ya citados en turnos anteriores, manteniendo sus marcadores originales.
 - Cita datos del paciente con marcadores numéricos [1], [2], ... correspondientes al orden de los fragmentos del paciente.
 - Cita guidelines/evidencia con marcadores [ev_1], [ev_2], ... correspondientes a la sección "Clinical evidence".
 - Cuando combines ambos (e.g. "tu HbA1c X% [2] está en rango prediabetes según ADA [ev_1]"), separa claramente paciente vs evidencia.
@@ -72,9 +73,15 @@ def _format_temporal_context(rows: list[dict]) -> str:
 
 
 async def _stream_llm_tokens(
-    system_prompt: str, user_message: str
+    system_prompt: str,
+    user_message: str,
+    history: list[dict] | None = None,
 ) -> AsyncIterator[str]:
     """Stream tokens from Mistral. Yields one token-substring per chunk.
+
+    history: prior conversation turns ({"role", "content"}), oldest first.
+    The RAG context lives only in the final user message — history carries
+    the conversational thread so follow-ups ("¿y en 2023?") resolve.
 
     Raises RuntimeError if MISTRAL_API_KEY missing.
     """
@@ -82,12 +89,12 @@ async def _stream_llm_tokens(
         raise RuntimeError("MISTRAL_API_KEY not set")
 
     client = Mistral(api_key=settings.mistral_api_key)
+    messages = [{"role": "system", "content": system_prompt}]
+    messages.extend(history or [])
+    messages.append({"role": "user", "content": user_message})
     response = await client.chat.stream_async(
         model="mistral-medium-latest",
-        messages=[
-            {"role": "system", "content": system_prompt},
-            {"role": "user", "content": user_message},
-        ],
+        messages=messages,
         temperature=0.2,
     )
     async for event in response:
@@ -123,7 +130,7 @@ async def _retrieve_evidence_for_query(
 
 
 async def answer_question_streaming(
-    *, user_id: UUID, question: str
+    *, user_id: UUID, question: str, history: list[dict] | None = None
 ) -> AsyncIterator[ChatEvent]:
     """Main orchestrator: detect temporal intent → retrieve patient + evidence context → stream LLM.
 
@@ -135,6 +142,14 @@ async def answer_question_streaming(
     citations: list[ChatCitation] = []
     evidence_citations: list[dict] = []
     query_embedding: list[float] | None = None
+
+    # Elliptical follow-ups ("¿y ese valor?") embed poorly on their own —
+    # augment the retrieval query with the tail of the conversation. Temporal
+    # intent detection still runs on the raw question.
+    retrieval_query = question
+    if history:
+        tail = " ".join(m["content"] for m in history[-2:])
+        retrieval_query = f"{tail[-1000:]}\n{question}"
 
     try:
         temporal = detect_temporal_intent(question)
@@ -149,7 +164,7 @@ async def answer_question_streaming(
             # Also embed for evidence retrieval (temporal queries benefit from
             # guidelines about the queried lab — e.g. "HbA1c curve" → ADA targets)
             try:
-                qe = await embed_texts([question])
+                qe = await embed_texts([retrieval_query])
                 query_embedding = qe[0] if qe else None
             except Exception as e:
                 logger.warning("embed for evidence failed in temporal path: %s", e)
@@ -164,7 +179,7 @@ async def answer_question_streaming(
                 )
         else:
             # Standard RAG path
-            query_embeds = await embed_texts([question])
+            query_embeds = await embed_texts([retrieval_query])
             if not query_embeds:
                 raise RuntimeError(
                     "embed_texts returned empty — cannot retrieve chunks"
@@ -199,7 +214,7 @@ async def answer_question_streaming(
             sections.append(evidence_block)
         user_msg = "\n\n".join(sections)
 
-        async for token in _stream_llm_tokens(_SYSTEM_PROMPT, user_msg):
+        async for token in _stream_llm_tokens(_SYSTEM_PROMPT, user_msg, history=history):
             yield ChatEvent(type="token", content=token)
 
         yield ChatEvent(

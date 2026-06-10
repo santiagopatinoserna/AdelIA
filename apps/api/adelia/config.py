@@ -27,6 +27,8 @@ class Settings(BaseSettings):
     postmark_inbound_token: str = ""
     adelia_email_domain: str = "in.adelia.app"
     adelia_app_url: str = "http://localhost:3000"
+    # Comma-separated browser origins allowed by CORS (web app hosts).
+    cors_origins: str = "http://localhost:3000,http://localhost:3001"
 
     @property
     def database_url(self) -> str:
