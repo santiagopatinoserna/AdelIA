@@ -134,3 +134,38 @@ async def test_history_is_forwarded_to_llm(
     )
 
     assert mock_stream.call_args.kwargs.get("history") == history
+
+
+@patch("adelia.services.chat_orchestrator.detect_temporal_intent", return_value=None)
+@patch("adelia.services.chat_orchestrator._retrieve_evidence_for_query")
+@patch("adelia.services.chat_orchestrator.retrieve_relevant_chunks")
+@patch("adelia.services.chat_orchestrator.embed_texts")
+@patch("adelia.services.chat_orchestrator._stream_llm_tokens")
+async def test_stalled_stream_yields_error_event(
+    mock_stream, mock_embed, mock_retrieve, mock_evidence, mock_temporal, monkeypatch,
+):
+    """A hung LLM stream must surface an error event, not hold the SSE open."""
+    import asyncio as aio
+
+    from adelia.services import chat_orchestrator as orch
+
+    monkeypatch.setattr(orch, "TOKEN_GAP_TIMEOUT_S", 0.05)
+    monkeypatch.setattr(orch, "STREAM_TOTAL_TIMEOUT_S", 0.2)
+    mock_embed.return_value = [[0.1] * 1024]
+    mock_retrieve.return_value = []
+    mock_evidence.return_value = []
+
+    async def hung_stream(*args, **kwargs):
+        yield "primer token"
+        await aio.sleep(10)  # never sends another token
+        yield "nunca llega"
+    mock_stream.side_effect = hung_stream
+
+    events = await _collect_events(
+        answer_question_streaming(user_id=uuid4(), question="¿glucosa?")
+    )
+
+    types = [e.type for e in events]
+    assert types[0] == "token"
+    assert types[-1] == "error"
+    assert "stalled" in events[-1].content or "budget" in events[-1].content

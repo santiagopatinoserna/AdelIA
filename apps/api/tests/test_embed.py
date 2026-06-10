@@ -28,3 +28,27 @@ async def test_embed_raises_without_api_key(monkeypatch):
     monkeypatch.setattr(settings, "mistral_api_key", "")
     with pytest.raises(RuntimeError, match="MISTRAL_API_KEY not set"):
         await embed_texts(["any text"])
+
+
+async def test_embed_batches_inputs_over_100(monkeypatch):
+    """mistral-embed requests are capped; >100 inputs must split into batches."""
+    from unittest.mock import AsyncMock, MagicMock
+
+    from adelia.workers import embed as embed_mod
+
+    calls: list[int] = []
+
+    async def fake_create(model, inputs):
+        calls.append(len(inputs))
+        resp = MagicMock()
+        resp.data = [MagicMock(embedding=[0.0] * 1024) for _ in inputs]
+        return resp
+
+    client = MagicMock()
+    client.embeddings.create_async = AsyncMock(side_effect=fake_create)
+    monkeypatch.setattr(embed_mod, "get_mistral_client", lambda: client)
+
+    vectors = await embed_mod.embed_texts([f"t{i}" for i in range(250)])
+
+    assert len(vectors) == 250
+    assert calls == [100, 100, 50]

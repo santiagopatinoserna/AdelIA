@@ -1,6 +1,8 @@
 from __future__ import annotations
 
+import asyncio
 import logging
+import time
 from collections.abc import AsyncIterator
 from dataclasses import dataclass, field
 from typing import Literal
@@ -23,6 +25,12 @@ from adelia.workers.embed import embed_texts
 
 
 logger = logging.getLogger(__name__)
+
+# SSE stream guards (v0.1.1 carry-over): a hung LLM stream must not hold the
+# HTTP connection open forever. Gap = max silence between tokens; total =
+# hard cap for the whole answer.
+TOKEN_GAP_TIMEOUT_S = 30.0
+STREAM_TOTAL_TIMEOUT_S = 120.0
 
 
 @dataclass
@@ -232,7 +240,26 @@ async def answer_question_streaming(
             sections.append(evidence_block)
         user_msg = "\n\n".join(sections)
 
-        async for token in _stream_llm_tokens(_system_prompt(locale), user_msg, history=history):
+        token_iter = _stream_llm_tokens(
+            _system_prompt(locale), user_msg, history=history
+        ).__aiter__()
+        stream_start = time.monotonic()
+        while True:
+            remaining = STREAM_TOTAL_TIMEOUT_S - (time.monotonic() - stream_start)
+            if remaining <= 0:
+                raise TimeoutError(
+                    f"chat stream exceeded {STREAM_TOTAL_TIMEOUT_S:.0f}s total budget"
+                )
+            try:
+                token = await asyncio.wait_for(
+                    token_iter.__anext__(), timeout=min(TOKEN_GAP_TIMEOUT_S, remaining)
+                )
+            except StopAsyncIteration:
+                break
+            except asyncio.TimeoutError:
+                raise TimeoutError(
+                    f"chat stream stalled >{TOKEN_GAP_TIMEOUT_S:.0f}s between tokens"
+                )
             yield ChatEvent(type="token", content=token)
 
         yield ChatEvent(

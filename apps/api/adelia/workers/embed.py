@@ -1,5 +1,9 @@
 from adelia.llm import get_mistral_client
 
+# Mistral embeddings caps request size; large documents can chunk into
+# hundreds of pieces. Batch to stay under the limit (v0.1.1 carry-over).
+EMBED_BATCH_SIZE = 100
+
 
 
 async def embed_texts(texts: list[str]) -> list[list[float]]:
@@ -21,8 +25,12 @@ async def embed_texts(texts: list[str]) -> list[list[float]]:
     if not texts:
         return []
     client = get_mistral_client()
-    response = await client.embeddings.create_async(
-        model="mistral-embed",
-        inputs=texts,
-    )
-    return [item.embedding for item in response.data]
+    vectors: list[list[float]] = []
+    for start in range(0, len(texts), EMBED_BATCH_SIZE):
+        batch = texts[start : start + EMBED_BATCH_SIZE]
+        response = await client.embeddings.create_async(
+            model="mistral-embed",
+            inputs=batch,
+        )
+        vectors.extend(item.embedding for item in response.data)
+    return vectors
