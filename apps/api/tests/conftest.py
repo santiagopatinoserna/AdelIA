@@ -18,3 +18,17 @@ async def _dispose_engine():
     yield
     from adelia.db import engine
     await engine.dispose()
+
+
+@pytest.fixture(autouse=True)
+def _disable_rate_limit():
+    """The suite hammers endpoints far past production budgets; the
+    dedicated rate-limit test re-enables it explicitly."""
+    from adelia import ratelimit
+    from adelia.config import settings
+
+    previous = settings.rate_limit_enabled
+    settings.rate_limit_enabled = False
+    ratelimit.reset()
+    yield
+    settings.rate_limit_enabled = previous

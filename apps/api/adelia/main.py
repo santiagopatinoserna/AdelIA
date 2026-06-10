@@ -7,6 +7,7 @@ from fastapi import FastAPI, Request
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
 
+from adelia import ratelimit
 from adelia.config import settings
 from adelia.db import engine
 from adelia.routers import (
@@ -44,6 +45,28 @@ async def lifespan(app: FastAPI):
 app = FastAPI(title="AdelIA API", version="0.1.0", lifespan=lifespan)
 
 SLOW_REQUEST_THRESHOLD_S = 2.0
+
+
+@app.middleware("http")
+async def rate_limiting(request: Request, call_next):
+    """Outermost guard: cheap fixed-window limits before any real work."""
+    if settings.rate_limit_enabled and request.url.path != "/health":
+        identity = ratelimit.identity_from(
+            request.headers.get("authorization"),
+            request.client.host if request.client else "unknown",
+        )
+        allowed, retry_after = ratelimit.check(
+            request.method, request.url.path, identity
+        )
+        if not allowed:
+            from fastapi.responses import JSONResponse
+
+            return JSONResponse(
+                {"detail": "Rate limit exceeded"},
+                status_code=429,
+                headers={"Retry-After": str(int(retry_after) + 1)},
+            )
+    return await call_next(request)
 
 
 @app.middleware("http")
