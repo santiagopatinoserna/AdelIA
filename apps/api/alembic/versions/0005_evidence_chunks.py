@@ -34,7 +34,7 @@ def upgrade() -> None:
         sa.Column("organization", sa.String(length=128)),  # 'ADA', 'NICE', 'AHA', 'WHO'
         sa.Column("publication_year", sa.Integer()),
         sa.Column("url", sa.String(length=1024)),
-        sa.Column("specialties", postgresql.ARRAY(sa.String(length=64))),  # array of specialty tags
+        sa.Column("specialties", postgresql.JSONB()),  # array of specialty tags as JSONB
         sa.Column("license", sa.String(length=64)),  # 'public', 'creative_commons', 'fair_use'
         sa.Column("language", sa.String(length=8), server_default="en"),
         sa.Column("created_at", sa.DateTime(timezone=True), server_default=sa.text("now()"), nullable=False),
@@ -45,7 +45,7 @@ def upgrade() -> None:
         "evidence_sources",
         "source_type IN ('guideline', 'paper', 'protocol', 'reference')",
     )
-    op.create_index("idx_evidence_sources_specialties", "evidence_sources", ["specialties"], postgresql_using="gin")
+    op.create_index("idx_evidence_sources_specialties", "evidence_sources", ["specialties"], postgresql_using="gin")  # JSONB GIN index
 
     op.create_table(
         "evidence_chunks",

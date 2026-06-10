@@ -6,7 +6,7 @@ services:
       POSTGRES_PASSWORD: adelia_dev
       POSTGRES_DB: adelia
     ports:
-      - "5432:5432"
+      - "5434:5432"  # host 5434 because 5432 already used by intravel-db + factory-db + local Homebrew Postgres
     volumes:
       - ../postgres-data:/var/lib/postgresql/data
     healthcheck:

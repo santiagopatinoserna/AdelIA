@@ -44,6 +44,25 @@ def upgrade() -> None:
     op.add_column("briefings", sa.Column("completed_at", sa.DateTime(timezone=True), nullable=True))
     op.add_column("briefings", sa.Column("html_render", sa.Text(), nullable=True))
 
+    # 0001 schema lacked created_at + deleted_at — add them now (M5 ORM uses these names).
+    # created_at backfilled from existing generated_at to preserve history.
+    op.add_column(
+        "briefings",
+        sa.Column(
+            "created_at",
+            sa.DateTime(timezone=True),
+            server_default=sa.text("now()"),
+            nullable=False,
+        ),
+    )
+    op.add_column(
+        "briefings",
+        sa.Column("deleted_at", sa.DateTime(timezone=True), nullable=True),
+    )
+    op.execute(
+        "UPDATE briefings SET created_at = COALESCE(generated_at, now()) WHERE created_at IS NULL"
+    )
+
     # CRITICAL: drop columns now carried by payload JSONB — sync ORM with DB schema
     op.drop_column("briefings", "reason_for_consult")
     op.drop_column("briefings", "generated_at")
