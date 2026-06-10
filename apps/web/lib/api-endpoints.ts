@@ -10,6 +10,7 @@ import type {
 } from "./briefing-types";
 import type {
   ClinicalTrial,
+  SavedGenomics,
   CoverageStats,
   DrugInteraction,
   GDPRTemplateContent,
@@ -203,6 +204,12 @@ export function makeApi(fetcher: Fetcher) {
         if (country) params.set("country", country);
         const res = await fetcher(`/enrichment/trials?${params.toString()}`);
         if (!res.ok) throw new Error(`enrichment.searchTrials: ${res.status}`);
+        return res.json();
+      },
+
+      async savedGenomics(): Promise<SavedGenomics> {
+        const res = await fetcher("/enrichment/genomics");
+        if (!res.ok) throw new Error(`enrichment.savedGenomics: ${res.status}`);
         return res.json();
       },
 
