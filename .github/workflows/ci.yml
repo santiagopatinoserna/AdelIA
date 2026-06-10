@@ -1,0 +1,122 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  api:
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: pgvector/pgvector:pg16
+        env:
+          POSTGRES_USER: adelia
+          POSTGRES_PASSWORD: adelia_ci
+          POSTGRES_DB: adelia
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U adelia -d adelia"
+          --health-interval 5s
+          --health-timeout 3s
+          --health-retries 10
+    env:
+      POSTGRES_HOST: localhost
+      POSTGRES_PORT: "5432"
+      POSTGRES_USER: adelia
+      POSTGRES_PASSWORD: adelia_ci
+      POSTGRES_DB: adelia
+      S3_ENDPOINT_URL: http://localhost:9000
+      S3_ACCESS_KEY: minioadmin
+      S3_SECRET_KEY: minioadmin
+      S3_BUCKET: adelia-ci
+      AUTH_SECRET: ci-only-secret
+      # No MISTRAL_API_KEY / OPENAI_API_KEY: live LLM tests self-skip.
+    defaults:
+      run:
+        working-directory: apps/api
+    steps:
+      - uses: actions/checkout@v4
+
+      # GH service containers can't override the image command; MinIO needs one.
+      - name: Start MinIO
+        run: |
+          docker run -d --name minio -p 9000:9000 \
+            -e MINIO_ROOT_USER=minioadmin -e MINIO_ROOT_PASSWORD=minioadmin \
+            minio/minio:RELEASE.2024-10-13T13-34-11Z server /data
+          for i in $(seq 1 30); do
+            curl -fsS http://localhost:9000/minio/health/live && break || sleep 1
+          done
+
+      - uses: astral-sh/setup-uv@v5
+        with:
+          version: "0.5.x"
+
+      - name: Install deps
+        run: uv sync --frozen
+
+      - name: Create CI bucket
+        run: |
+          uv run python - <<'PY'
+          import boto3
+          s3 = boto3.client(
+              "s3", endpoint_url="http://localhost:9000",
+              aws_access_key_id="minioadmin", aws_secret_access_key="minioadmin",
+          )
+          try:
+              s3.create_bucket(Bucket="adelia-ci")
+          except s3.exceptions.BucketAlreadyOwnedByYou:
+              pass
+          PY
+
+      - name: Lint (ruff)
+        run: uv run ruff check .
+
+      - name: Migrations
+        run: uv run alembic upgrade head
+
+      - name: Tests
+        run: uv run pytest -q
+
+  web:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: apps/web
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Enable pnpm (pinned via packageManager)
+        run: corepack enable
+
+      - name: Install deps
+        working-directory: .
+        run: pnpm install --frozen-lockfile
+
+      - name: i18n catalogs parity (es/en/fr)
+        run: |
+          python3 - <<'PY'
+          import json
+          def flat(d, p=""):
+              out = {}
+              for k, v in d.items():
+                  kk = f"{p}.{k}" if p else k
+                  out.update(flat(v, kk)) if isinstance(v, dict) else out.update({kk: v})
+              return out
+          es, en, fr = (set(flat(json.load(open(f"messages/{l}.json")))) for l in ["es", "en", "fr"])
+          missing = (es ^ en) | (es ^ fr)
+          assert not missing, f"catalog key mismatch: {sorted(missing)[:10]}"
+          print(f"parity OK: {len(es)} keys")
+          PY
+
+      - name: Typecheck
+        run: pnpm exec tsc --noEmit
+
+      - name: Build
+        run: pnpm build
