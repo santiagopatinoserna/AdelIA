@@ -91,7 +91,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - uses: actions/setup-node@v4
+      - uses: actions/setup-node@v6
         with:
           node-version: 20
 
@@ -170,7 +170,7 @@ jobs:
           nohup uv run uvicorn adelia.main:app --port 8000 > /tmp/api.log 2>&1 &
           for i in $(seq 1 30); do curl -fsS http://localhost:8000/health && break || sleep 1; done
 
-      - uses: actions/setup-node@v4
+      - uses: actions/setup-node@v6
         with:
           node-version: 20
 
