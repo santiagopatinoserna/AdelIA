@@ -7,14 +7,17 @@ import pytest
 
 from adelia.enrichment.profile_service import ProfileCreate
 
+from tests.db_helpers import make_user
+from tests.pg_gate import PG_AVAILABLE
 
-@pytest.mark.skipif(True, reason="PG required — run locally with docker compose up")
+
+@pytest.mark.skipif(not PG_AVAILABLE, reason="PG required — run locally with docker compose up")
 @pytest.mark.asyncio
 async def test_ensure_default_profile_idempotent():
     from adelia.db import AsyncSessionLocal
     from adelia.enrichment import profile_service
 
-    user_id = uuid4()
+    user_id = await make_user()
     async with AsyncSessionLocal() as session:
         a = await profile_service.ensure_default_profile(session, user_id=user_id)
         await session.commit()
@@ -24,13 +27,13 @@ async def test_ensure_default_profile_idempotent():
         assert a.is_default is True
 
 
-@pytest.mark.skipif(True, reason="PG required")
+@pytest.mark.skipif(not PG_AVAILABLE, reason="PG required")
 @pytest.mark.asyncio
 async def test_create_additional_profile():
     from adelia.db import AsyncSessionLocal
     from adelia.enrichment import profile_service
 
-    user_id = uuid4()
+    user_id = await make_user()
     from datetime import date
     async with AsyncSessionLocal() as session:
         await profile_service.ensure_default_profile(session, user_id=user_id)
@@ -49,13 +52,13 @@ async def test_create_additional_profile():
         assert child.is_default is False
 
 
-@pytest.mark.skipif(True, reason="PG required")
+@pytest.mark.skipif(not PG_AVAILABLE, reason="PG required")
 @pytest.mark.asyncio
 async def test_set_default_demotes_previous():
     from adelia.db import AsyncSessionLocal
     from adelia.enrichment import profile_service
 
-    user_id = uuid4()
+    user_id = await make_user()
     async with AsyncSessionLocal() as session:
         first = await profile_service.ensure_default_profile(session, user_id=user_id)
         second = await profile_service.create_profile(
@@ -81,13 +84,13 @@ async def test_set_default_demotes_previous():
         assert first_refreshed.is_default is False
 
 
-@pytest.mark.skipif(True, reason="PG required")
+@pytest.mark.skipif(not PG_AVAILABLE, reason="PG required")
 @pytest.mark.asyncio
 async def test_cannot_delete_only_profile():
     from adelia.db import AsyncSessionLocal
     from adelia.enrichment import profile_service
 
-    user_id = uuid4()
+    user_id = await make_user()
     async with AsyncSessionLocal() as session:
         only_one = await profile_service.ensure_default_profile(session, user_id=user_id)
         await session.commit()
@@ -97,14 +100,14 @@ async def test_cannot_delete_only_profile():
         assert ok is False  # protected
 
 
-@pytest.mark.skipif(True, reason="PG required")
+@pytest.mark.skipif(not PG_AVAILABLE, reason="PG required")
 @pytest.mark.asyncio
 async def test_cross_user_isolation():
     from adelia.db import AsyncSessionLocal
     from adelia.enrichment import profile_service
 
-    user_a = uuid4()
-    user_b = uuid4()
+    user_a = await make_user()
+    user_b = await make_user()
     async with AsyncSessionLocal() as session:
         a_profile = await profile_service.ensure_default_profile(session, user_id=user_a)
         await session.commit()
@@ -115,13 +118,13 @@ async def test_cross_user_isolation():
         assert result is None  # opaque 404
 
 
-@pytest.mark.skipif(True, reason="PG required")
+@pytest.mark.skipif(not PG_AVAILABLE, reason="PG required")
 @pytest.mark.asyncio
 async def test_resolve_profile_id_falls_back_to_default():
     from adelia.db import AsyncSessionLocal
     from adelia.enrichment import profile_service
 
-    user_id = uuid4()
+    user_id = await make_user()
     async with AsyncSessionLocal() as session:
         default = await profile_service.ensure_default_profile(session, user_id=user_id)
         await session.commit()

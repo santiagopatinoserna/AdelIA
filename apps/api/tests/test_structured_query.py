@@ -5,9 +5,11 @@ import pytest
 
 from adelia.services.structured_query import query_observations_by_name_and_date_range
 
+from tests.pg_gate import PG_AVAILABLE
+
 
 @pytest.mark.skipif(
-    True,
+    not PG_AVAILABLE,
     reason="needs Postgres running (docker compose up -d) + alembic upgrade head"
 )
 async def test_query_observations_filters_by_name_substring_and_date_range():
@@ -26,7 +28,7 @@ async def test_query_observations_filters_by_name_substring_and_date_range():
             assert date(2020, 1, 1) <= row["event_date"] <= date(2024, 12, 31)
 
 
-@pytest.mark.skipif(True, reason="needs Postgres running")
+@pytest.mark.skipif(not PG_AVAILABLE, reason="needs Postgres running")
 async def test_query_observations_empty_user_returns_empty_list():
     """Smoke test: querying for a user with no data returns []."""
     user_id = uuid4()

@@ -4,9 +4,11 @@ import pytest
 
 from adelia.services.retrieval import RetrievedChunk, retrieve_relevant_chunks
 
+from tests.pg_gate import PG_AVAILABLE
+
 
 @pytest.mark.skipif(
-    True, reason="needs Postgres + seeded chunks with embeddings"
+    not PG_AVAILABLE, reason="needs Postgres + seeded chunks with embeddings"
 )
 async def test_retrieve_returns_top_k_relevant_chunks():
     user_id = uuid4()
@@ -22,7 +24,7 @@ async def test_retrieve_returns_top_k_relevant_chunks():
         assert r.embedding_distance is not None
 
 
-@pytest.mark.skipif(True, reason="needs Postgres")
+@pytest.mark.skipif(not PG_AVAILABLE, reason="needs Postgres")
 async def test_retrieve_includes_parent_chunk_content():
     user_id = uuid4()
     query_embedding = [0.1] * 1024
@@ -35,7 +37,7 @@ async def test_retrieve_includes_parent_chunk_content():
             assert isinstance(r.parent_content, str)
 
 
-@pytest.mark.skipif(True, reason="needs Postgres")
+@pytest.mark.skipif(not PG_AVAILABLE, reason="needs Postgres")
 async def test_retrieve_filters_soft_deleted_documents():
     user_id = uuid4()
     query_embedding = [0.1] * 1024

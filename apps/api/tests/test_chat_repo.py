@@ -10,17 +10,20 @@ from adelia.services.chat_repo import (
     persist_message,
 )
 
+from tests.db_helpers import make_user
+from tests.pg_gate import PG_AVAILABLE
 
-@pytest.mark.skipif(True, reason="needs Postgres running")
+
+@pytest.mark.skipif(not PG_AVAILABLE, reason="needs Postgres running")
 async def test_create_session_returns_session_with_default_title():
-    user_id = uuid4()
+    user_id = await make_user()
     session = await create_session(user_id=user_id)
     assert session.title == "Nueva conversación"
 
 
-@pytest.mark.skipif(True, reason="needs Postgres running")
+@pytest.mark.skipif(not PG_AVAILABLE, reason="needs Postgres running")
 async def test_persist_message_appends_to_session():
-    user_id = uuid4()
+    user_id = await make_user()
     session = await create_session(user_id=user_id)
     message = await persist_message(
         session_id=session.id,
@@ -34,9 +37,9 @@ async def test_persist_message_appends_to_session():
     assert message.session_id == session.id
 
 
-@pytest.mark.skipif(True, reason="needs Postgres running")
+@pytest.mark.skipif(not PG_AVAILABLE, reason="needs Postgres running")
 async def test_get_session_with_messages_returns_ordered_messages():
-    user_id = uuid4()
+    user_id = await make_user()
     session = await create_session(user_id=user_id)
     await persist_message(session_id=session.id, user_id=user_id, role="user", content="primero", citations=None)
     await persist_message(session_id=session.id, user_id=user_id, role="assistant", content="respuesta1", citations=[])
@@ -47,10 +50,10 @@ async def test_get_session_with_messages_returns_ordered_messages():
     assert [m.content for m in detail.messages] == ["primero", "respuesta1", "segundo"]
 
 
-@pytest.mark.skipif(True, reason="needs Postgres running")
+@pytest.mark.skipif(not PG_AVAILABLE, reason="needs Postgres running")
 async def test_list_sessions_filters_by_user_and_excludes_deleted():
-    user_a = uuid4()
-    user_b = uuid4()
+    user_a = await make_user()
+    user_b = await make_user()
     s1 = await create_session(user_id=user_a)
     s2 = await create_session(user_id=user_a)
     s3 = await create_session(user_id=user_b)
@@ -64,10 +67,10 @@ async def test_list_sessions_filters_by_user_and_excludes_deleted():
     assert s1.id not in ids_after
 
 
-@pytest.mark.skipif(True, reason="needs Postgres running")
+@pytest.mark.skipif(not PG_AVAILABLE, reason="needs Postgres running")
 async def test_delete_session_404_for_other_users():
-    user_a = uuid4()
-    user_b = uuid4()
+    user_a = await make_user()
+    user_b = await make_user()
     s = await create_session(user_id=user_a)
     result = await delete_session(session_id=s.id, user_id=user_b)
     assert result is False  # not found / not owned

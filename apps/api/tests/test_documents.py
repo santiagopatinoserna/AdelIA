@@ -8,10 +8,12 @@ from adelia.db import AsyncSessionLocal
 from adelia.models import Document, User
 from tests.test_auth import make_token
 
+from tests.pg_gate import PG_AVAILABLE
+
 # NOTE: These integration tests need a running Postgres + MinIO stack
 # (docker compose -f infra/docker-compose.dev.yml up -d) AND
 # AUTH_SECRET set + alembic upgrade head executed.
-# To enable: change `skipif(True, ...)` to `skipif(False, ...)` or remove decorator.
+# Auto-enabled when Postgres is reachable (see tests/pg_gate.py).
 
 
 async def _seed_user(email: str):
@@ -24,7 +26,7 @@ async def _seed_user(email: str):
 
 
 @pytest.mark.skipif(
-    True,  # placeholder — see comment below
+    not PG_AVAILABLE,
     reason="needs Postgres running (docker compose up -d)"
 )
 async def test_upload_creates_document_and_returns_processing(client, monkeypatch):
@@ -57,7 +59,7 @@ async def test_upload_creates_document_and_returns_processing(client, monkeypatc
 
 
 @pytest.mark.skipif(
-    True,
+    not PG_AVAILABLE,
     reason="needs Postgres running (docker compose up -d)"
 )
 async def test_list_documents_filters_by_user(client, monkeypatch):

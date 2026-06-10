@@ -7,14 +7,17 @@ import pytest
 
 from adelia.schemas import Specialty
 
+from tests.db_helpers import make_user
+from tests.pg_gate import PG_AVAILABLE
 
-@pytest.mark.skipif(True, reason="PG required — run locally with docker compose up postgres")
+
+@pytest.mark.skipif(not PG_AVAILABLE, reason="PG required — run locally with docker compose up postgres")
 @pytest.mark.asyncio
 async def test_create_briefing_returns_processing_status():
     from adelia.db import AsyncSessionLocal
     from adelia.services import briefing_repo
 
-    user_id = uuid4()
+    user_id = await make_user()
     async with AsyncSessionLocal() as session:
         briefing = await briefing_repo.create_briefing(
             session, user_id=user_id, target_specialty=Specialty.ENDOCRINOLOGY
@@ -25,13 +28,13 @@ async def test_create_briefing_returns_processing_status():
         assert briefing.target_specialty == "endocrinology"
 
 
-@pytest.mark.skipif(True, reason="PG required")
+@pytest.mark.skipif(not PG_AVAILABLE, reason="PG required")
 @pytest.mark.asyncio
 async def test_get_by_id_returns_briefing_for_owner():
     from adelia.db import AsyncSessionLocal
     from adelia.services import briefing_repo
 
-    user_id = uuid4()
+    user_id = await make_user()
     async with AsyncSessionLocal() as session:
         created = await briefing_repo.create_briefing(
             session, user_id=user_id, target_specialty=Specialty.DEFAULT
@@ -42,14 +45,14 @@ async def test_get_by_id_returns_briefing_for_owner():
         assert fetched.id == created.id
 
 
-@pytest.mark.skipif(True, reason="PG required")
+@pytest.mark.skipif(not PG_AVAILABLE, reason="PG required")
 @pytest.mark.asyncio
 async def test_get_by_id_returns_none_for_cross_user():
     from adelia.db import AsyncSessionLocal
     from adelia.services import briefing_repo
 
-    owner = uuid4()
-    other = uuid4()
+    owner = await make_user()
+    other = await make_user()
     async with AsyncSessionLocal() as session:
         created = await briefing_repo.create_briefing(
             session, user_id=owner, target_specialty=Specialty.DEFAULT
@@ -59,13 +62,13 @@ async def test_get_by_id_returns_none_for_cross_user():
         assert fetched is None
 
 
-@pytest.mark.skipif(True, reason="PG required")
+@pytest.mark.skipif(not PG_AVAILABLE, reason="PG required")
 @pytest.mark.asyncio
 async def test_list_for_user_returns_only_owned():
     from adelia.db import AsyncSessionLocal
     from adelia.services import briefing_repo
 
-    a, b = uuid4(), uuid4()
+    a, b = await make_user(), await make_user()
     async with AsyncSessionLocal() as session:
         await briefing_repo.create_briefing(session, user_id=a, target_specialty=Specialty.DEFAULT)
         await briefing_repo.create_briefing(session, user_id=a, target_specialty=Specialty.CARDIOLOGY)
@@ -75,14 +78,14 @@ async def test_list_for_user_returns_only_owned():
         assert len(a_list) == 2
 
 
-@pytest.mark.skipif(True, reason="PG required")
+@pytest.mark.skipif(not PG_AVAILABLE, reason="PG required")
 @pytest.mark.asyncio
 async def test_mark_stale_updates_older_briefings():
     from datetime import datetime, UTC, timedelta
     from adelia.db import AsyncSessionLocal
     from adelia.services import briefing_repo
 
-    user_id = uuid4()
+    user_id = await make_user()
     async with AsyncSessionLocal() as session:
         b1 = await briefing_repo.create_briefing(session, user_id=user_id, target_specialty=Specialty.DEFAULT)
         await session.commit()
@@ -92,7 +95,7 @@ async def test_mark_stale_updates_older_briefings():
         assert fetched.is_stale is True
 
 
-@pytest.mark.skipif(True, reason="PG required")
+@pytest.mark.skipif(not PG_AVAILABLE, reason="PG required")
 @pytest.mark.asyncio
 async def test_update_payload_and_status_transitions_to_ready():
     from datetime import datetime, UTC
@@ -106,7 +109,7 @@ async def test_update_payload_and_status_transitions_to_ready():
     )
     from adelia.services import briefing_repo
 
-    user_id = uuid4()
+    user_id = await make_user()
     async with AsyncSessionLocal() as session:
         b = await briefing_repo.create_briefing(
             session, user_id=user_id, target_specialty=Specialty.DEFAULT
