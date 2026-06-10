@@ -1,5 +1,5 @@
 <section class="section">
-  <h2>Immunizations</h2>
+  <h2>{{ labels.immunizations }}</h2>
   {% if payload.sections.immunizations %}
   <ul>
     {% for i in payload.sections.immunizations %}
@@ -11,6 +11,6 @@
     {% endfor %}
   </ul>
   {% else %}
-  <p class="no-data">No immunizations on file.</p>
+  <p class="no-data">{{ labels.no_immunizations }}</p>
   {% endif %}
 </section>

@@ -62,6 +62,7 @@ def _enqueue(
     briefing_id: UUID,
     user_id: UUID,
     target_specialty: Specialty,
+    locale: str = "es",
 ) -> None:
     """Wrap orchestrator.run in BackgroundTasks. Override in tests."""
     background_tasks.add_task(
@@ -69,6 +70,7 @@ def _enqueue(
         briefing_id=briefing_id,
         user_id=user_id,
         target_specialty=target_specialty,
+        locale=locale,
     )
 
 
@@ -83,7 +85,7 @@ async def create_briefing(
         db, user_id=user_id, target_specialty=payload.target_specialty
     )
     await db.commit()
-    _enqueue(background_tasks, briefing.id, user_id, payload.target_specialty)
+    _enqueue(background_tasks, briefing.id, user_id, payload.target_specialty, payload.locale)
     return _to_out(briefing)
 
 
@@ -124,7 +126,11 @@ async def regenerate_briefing(
         target_specialty=Specialty(original.target_specialty),
     )
     await db.commit()
-    _enqueue(background_tasks, new.id, user_id, Specialty(original.target_specialty))
+    original_locale = (original.payload or {}).get("locale", "es")
+    _enqueue(
+        background_tasks, new.id, user_id,
+        Specialty(original.target_specialty), original_locale,
+    )
     return _to_out(new)
 
 

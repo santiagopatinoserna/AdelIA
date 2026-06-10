@@ -1,16 +1,16 @@
 <section class="section">
-  <h2>Active problems</h2>
+  <h2>{{ labels.active_problems }}</h2>
   {% if payload.sections.active_problems %}
   <ul>
     {% for p in payload.sections.active_problems %}
     <li>
-      {{ p.name }}{% if p.status %} ({{ p.status }}){% endif %}{% if p.onset_date %} — onset {{ p.onset_date }}{% endif %}
+      {{ p.name }}{% if p.status %} ({{ p.status }}){% endif %}{% if p.onset_date %} — {{ labels.onset }} {{ p.onset_date }}{% endif %}
       <span class="provenance-badge {{ p.provenance }}"></span>
       {% for c in p.citations %}<sup class="citation" data-citation-id="{{ c.entity_id }}">[{{ loop.index }}]</sup>{% endfor %}
     </li>
     {% endfor %}
   </ul>
   {% else %}
-  <p class="no-data">No active problems recorded.</p>
+  <p class="no-data">{{ labels.no_active_problems }}</p>
   {% endif %}
 </section>

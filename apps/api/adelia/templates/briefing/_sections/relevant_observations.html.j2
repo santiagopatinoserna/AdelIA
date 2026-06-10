@@ -1,5 +1,5 @@
 <section class="section">
-  <h2>Relevant observations</h2>
+  <h2>{{ labels.relevant_observations }}</h2>
   {% if payload.sections.relevant_observations %}
   <ul>
     {% for o in payload.sections.relevant_observations %}
@@ -11,6 +11,6 @@
     {% endfor %}
   </ul>
   {% else %}
-  <p class="no-data">No relevant observations recorded.</p>
+  <p class="no-data">{{ labels.no_observations }}</p>
   {% endif %}
 </section>

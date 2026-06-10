@@ -13,6 +13,7 @@ import nh3
 from jinja2 import Environment, FileSystemLoader, select_autoescape
 
 from adelia.schemas import BriefingPayload
+from adelia.services.briefing_i18n import briefing_labels
 
 logger = logging.getLogger(__name__)
 
@@ -67,5 +68,5 @@ def render_briefing_html(payload: BriefingPayload) -> str:
     sanitized = _sanitize_payload(payload)
     env = _make_env()
     template = env.get_template("briefing/briefing.html.j2")
-    html = template.render(payload=sanitized)
+    html = template.render(payload=sanitized, labels=briefing_labels(payload.locale))
     return html

@@ -15,6 +15,7 @@ from uuid import UUID
 from pydantic import ValidationError
 
 from adelia.config import settings
+from adelia.services.briefing_i18n import qa_language
 from adelia.schemas import Citation, LLMMeta, QAItem, Specialty
 
 logger = logging.getLogger(__name__)
@@ -58,7 +59,7 @@ _QA_JSON_SCHEMA = {
 }
 
 
-def _system_prompt(specialty: Specialty, hints: str) -> str:
+def _system_prompt(specialty: Specialty, hints: str, locale: str = "es") -> str:
     return (
         "You are a clinical assistant generating pre-baked Q&A for a medical briefing.\n\n"
         f"You are preparing a briefing for a patient about to see a {specialty.value} specialist.\n"
@@ -71,6 +72,7 @@ def _system_prompt(specialty: Specialty, hints: str) -> str:
         "- raw_quote MUST appear textually in one of the provided source quotes (no rephrasing, no synthesizing).\n"
         "- If you cannot generate 5 questions with grounded answers, generate fewer (minimum 3) — never fabricate.\n\n"
         f"Specialty-specific guidance: {hints}\n\n"
+        f"{qa_language(locale)}\n\n"
         "Output JSON matching the provided schema."
     )
 
@@ -179,13 +181,14 @@ def bake_questions(
     specialty_hints: str,
     source_raw_texts: dict[str, str],
     model: str = "mistral-medium-latest",
+    locale: str = "es",
 ) -> tuple[list[QAItem], LLMMeta]:
     """Generate top-5 Q&A from patient context, with anti-hallucination filter.
 
     Returns (items, meta). Items may be 0-5 after filter; LLMMeta records cost/tokens.
     """
     client = _build_client()
-    system_prompt = _system_prompt(specialty, specialty_hints)
+    system_prompt = _system_prompt(specialty, specialty_hints, locale)
     user_content = (
         "Patient data (entities + raw_quotes):\n\n"
         f"{entities_text}\n\n"

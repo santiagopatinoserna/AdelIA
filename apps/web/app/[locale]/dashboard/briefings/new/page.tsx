@@ -21,7 +21,7 @@ export default function NewBriefingPage() {
     setSubmitting(true);
     setError(null);
     try {
-      const created = await briefingsApi.create({ target_specialty: specialty });
+      const created = await briefingsApi.create({ target_specialty: specialty, locale: locale as "es" | "en" | "fr" });
       router.push(`/${locale}/dashboard/briefings/${created.id}`);
     } catch (e) {
       setError(String(e));

@@ -175,6 +175,7 @@ async def run(
     briefing_id: UUID,
     user_id: UUID,
     target_specialty: Specialty,
+    locale: str = "es",
 ) -> None:
     """Execute the 5-stage pipeline for a single briefing_id.
 
@@ -223,11 +224,13 @@ async def run(
             entities_text=entities_text,
             specialty_hints=enriched_hints,
             source_raw_texts=sources,
+            locale=locale,
         )
         sections.open_questions = qa_items
 
         payload = BriefingPayload(
             schema_version="1.0",
+            locale=locale,  # type: ignore[arg-type]
             generated_at=datetime.now(UTC),
             target_specialty=target_specialty,
             patient=patient,

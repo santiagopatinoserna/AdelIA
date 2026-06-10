@@ -122,6 +122,7 @@ export interface BriefingDetailOut extends BriefingOut {
 }
 
 export interface BriefingCreate {
+  locale?: "es" | "en" | "fr";
   target_specialty: Specialty;
 }
 

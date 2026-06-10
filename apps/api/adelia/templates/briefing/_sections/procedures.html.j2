@@ -1,5 +1,5 @@
 <section class="section">
-  <h2>Procedures</h2>
+  <h2>{{ labels.procedures }}</h2>
   {% if payload.sections.procedures %}
   <ul>
     {% for p in payload.sections.procedures %}
@@ -11,6 +11,6 @@
     {% endfor %}
   </ul>
   {% else %}
-  <p class="no-data">No procedures recorded.</p>
+  <p class="no-data">{{ labels.no_procedures }}</p>
   {% endif %}
 </section>

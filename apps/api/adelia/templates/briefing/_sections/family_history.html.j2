@@ -1,5 +1,5 @@
 <section class="section">
-  <h2>Family history</h2>
+  <h2>{{ labels.family_history }}</h2>
   {% if payload.sections.family_history %}
   <ul>
     {% for f in payload.sections.family_history %}
@@ -11,6 +11,6 @@
     {% endfor %}
   </ul>
   {% else %}
-  <p class="no-data">No family history recorded.</p>
+  <p class="no-data">{{ labels.no_family_history }}</p>
   {% endif %}
 </section>

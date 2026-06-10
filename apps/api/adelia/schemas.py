@@ -234,6 +234,7 @@ class EvidenceCitation(BaseModel):
 
 class BriefingPayload(BaseModel):
     schema_version: Literal["1.0"] = "1.0"
+    locale: Literal["es", "en", "fr"] = "es"
     generated_at: datetime
     target_specialty: Specialty
     patient: PatientHeader
@@ -245,6 +246,7 @@ class BriefingPayload(BaseModel):
 
 class BriefingCreate(BaseModel):
     target_specialty: Specialty
+    locale: Literal["es", "en", "fr"] = "es"
 
 
 class BriefingOut(BaseModel):

@@ -1,5 +1,5 @@
 <section class="section">
-  <h2>Open questions (Q&amp;A pre-baker)</h2>
+  <h2>{{ labels.open_questions }}</h2>
   {% if payload.sections.open_questions %}
     {% for qa in payload.sections.open_questions %}
     <div class="qa-item">
@@ -8,6 +8,6 @@
     </div>
     {% endfor %}
   {% else %}
-    <p class="no-data">No pre-baked questions generated.</p>
+    <p class="no-data">{{ labels.no_open_questions }}</p>
   {% endif %}
 </section>

@@ -1,7 +1,7 @@
 <section class="section">
-  <h2>Allergies</h2>
+  <h2>{{ labels.allergies }}</h2>
   {% if payload.sections.allergies == "no_known_allergies" %}
-    <p>No known allergies.</p>
+    <p>{{ labels.no_known_allergies }}</p>
   {% elif payload.sections.allergies %}
   <ul>
     {% for a in payload.sections.allergies %}

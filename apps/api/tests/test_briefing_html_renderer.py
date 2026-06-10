@@ -65,7 +65,7 @@ def test_renders_basic_briefing_html():
 
 def test_no_known_allergies_string_renders():
     html = render_briefing_html(_payload(allergies="no_known_allergies"))
-    assert "No known allergies" in html
+    assert "Sin alergias conocidas" in html  # default locale es
 
 
 def test_hidden_immunizations_section_not_rendered():
@@ -116,3 +116,25 @@ def test_nh3_strips_script_from_narrative():
 def test_disclaimer_footer_present():
     html = render_briefing_html(_payload())
     assert "AI" in html or "disclaimer" in html.lower()
+
+
+def test_locale_en_renders_english_labels():
+    """payload.locale=en → English section headings + disclaimer + lang attr."""
+    from adelia.services.briefing_html_renderer import render_briefing_html
+
+    payload = _payload().model_copy(update={"locale": "en"})
+    html = render_briefing_html(payload)
+    assert '<html lang="en">' in html
+    assert "Current medications" in html
+    assert "Active problems" in html
+    assert "not a medical device" in html
+
+
+def test_locale_fr_renders_french_labels():
+    from adelia.services.briefing_html_renderer import render_briefing_html
+
+    payload = _payload().model_copy(update={"locale": "fr"})
+    html = render_briefing_html(payload)
+    assert '<html lang="fr">' in html
+    assert "Traitements en cours" in html
+    assert "pas un dispositif médical" in html
