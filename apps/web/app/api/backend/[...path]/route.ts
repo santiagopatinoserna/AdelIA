@@ -5,7 +5,12 @@ import { auth } from "@/lib/auth";
 // Same-origin proxy for browser → FastAPI calls. Attaches the backend JWT
 // from the Auth.js session so client components never handle the token.
 
-const API_URL = process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:8000";
+// Server-side upstream: inside docker the public origin (NEXT_PUBLIC_API_URL,
+// what the BROWSER sees) is not reachable — use the internal service URL.
+const API_URL =
+  process.env.API_INTERNAL_URL ??
+  process.env.NEXT_PUBLIC_API_URL ??
+  "http://localhost:8000";
 
 // Only user-scoped API surfaces ride the proxy. Notably excluded:
 // /ingestion/webhooks (machine auth via provider secrets, not user JWTs)
@@ -55,8 +60,10 @@ async function proxy(request: NextRequest, path: string[]) {
   });
 
   const responseHeaders = new Headers();
-  const upstreamType = upstream.headers.get("content-type");
-  if (upstreamType) responseHeaders.set("Content-Type", upstreamType);
+  for (const h of ["content-type", "content-disposition", "cache-control", "retry-after"]) {
+    const v = upstream.headers.get(h);
+    if (v) responseHeaders.set(h, v);
+  }
 
   return new NextResponse(upstream.body, {
     status: upstream.status,

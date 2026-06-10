@@ -63,7 +63,7 @@ async def _with_retry(stage: str, make_call):
     for attempt, delay in enumerate((*RETRY_DELAYS, None)):
         try:
             return await make_call()
-        except (httpx.HTTPStatusError, MistralError, ClientError, EndpointConnectionError, OpenAIAPIError) as exc:
+        except (httpx.HTTPError, MistralError, ClientError, EndpointConnectionError, OpenAIAPIError) as exc:
             last_exc = exc
             if delay is None:
                 break
@@ -195,7 +195,7 @@ async def process_document(document_id: uuid.UUID, mime_type: str) -> None:
                 user_id=doc.user_id,
                 since=datetime.now(timezone.utc),
             )
-        except (RuntimeError, httpx.HTTPStatusError, MistralError, ClientError, EndpointConnectionError, OpenAIAPIError) as exc:
+        except (RuntimeError, httpx.HTTPError, MistralError, ClientError, EndpointConnectionError, OpenAIAPIError) as exc:
             logger.exception(
                 "process_document failed for document_id=%s: %s",
                 document_id,

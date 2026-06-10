@@ -20,7 +20,9 @@
     },
     "entitiesAndChunks": "{count, plural, =0 {Sin entidades extraídas} =1 {1 entidad} other {# entidades}} · {chunks, plural, =0 {Sin chunks} =1 {1 chunk} other {# chunks}}",
     "ocrProcessing": "Procesando OCR… se actualiza automáticamente",
-    "settingsLink": "Ajustes de cuenta"
+    "settingsLink": "Ajustes de cuenta",
+    "navImport": "Importar",
+    "navInsights": "Insights"
   },
   "upload": {
     "title": "Subir documento",

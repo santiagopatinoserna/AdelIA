@@ -31,4 +31,6 @@ EXPOSE 8000
 
 # Migrations run on boot — idempotent, single-writer safe for one replica.
 # Scale-out later moves this to a release command (fly deploy --release-command).
-CMD ["sh", "-c", "uv run alembic upgrade head && uv run uvicorn adelia.main:app --host 0.0.0.0 --port 8000"]
+# --proxy-headers: behind the Fly/compose edge every client shares the
+# proxy IP otherwise — the limiter anonymous buckets would collapse.
+CMD ["sh", "-c", "uv run alembic upgrade head && uv run uvicorn adelia.main:app --host 0.0.0.0 --port 8000 --proxy-headers --forwarded-allow-ips=*"]

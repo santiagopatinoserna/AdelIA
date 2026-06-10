@@ -1,16 +1,16 @@
 """In-process fixed-window rate limiter.
 
 Single-instance v0.1.1 scope — per-replica budgets (a multi-replica deploy
-moves this to Redis). Identity is a hash of the Authorization header when
-present (≈ per user, no JWT decode on the hot path), else the client IP.
+moves this to Redis). Identity is the VALIDATED JWT sub when the request
+carries a verifiable token, else the client IP.
 
 Budgets are per (route-group, identity) per minute. 429 + Retry-After on
-exhaustion. Memory is bounded by pruning expired windows on each hit.
+exhaustion. Memory is hard-capped at MAX_KEYS with oldest-window eviction.
 """
 
 from __future__ import annotations
 
-import hashlib
+import heapq
 import time
 
 # route-prefix → requests/minute. First match wins; order matters.
@@ -26,6 +26,7 @@ ROUTE_BUDGETS: list[tuple[str, str, int]] = [
 DEFAULT_BUDGET = 240  # everything else, per identity
 
 WINDOW_SECONDS = 60.0
+MAX_KEYS = 20_000  # hard ceiling — evict oldest windows past this, expired or not
 
 _windows: dict[tuple[str, str], tuple[float, int]] = {}
 
@@ -38,8 +39,23 @@ def _budget_for(method: str, path: str) -> tuple[str, int]:
 
 
 def identity_from(auth_header: str | None, client_ip: str) -> str:
-    if auth_header:
-        return hashlib.sha256(auth_header.encode()).hexdigest()[:16]
+    """Identity = VALIDATED JWT sub, else client IP.
+
+    Hashing the raw header was bypassable: rotate a junk Authorization
+    value per request → fresh bucket every time, unlimited rate on the
+    public share endpoint included. An unverifiable header now falls into
+    the caller's IP bucket like any anonymous client.
+    """
+    if auth_header and auth_header.lower().startswith("bearer "):
+        try:
+            from adelia.auth import decode_session_token
+
+            payload = decode_session_token(auth_header[7:])
+            sub = payload.get("sub")
+            if sub:
+                return f"user:{sub}"
+        except Exception:  # noqa: BLE001 — invalid/forged token → IP bucket
+            pass
     return f"ip:{client_ip}"
 
 
@@ -58,11 +74,19 @@ def check(method: str, path: str, identity: str, now: float | None = None) -> tu
 
     _windows[key] = (window_start, count + 1)
 
-    # Opportunistic prune so the dict doesn't grow unbounded.
-    if len(_windows) > 10_000:
+    # Hard ceiling: under an identity flood every window is still live, so
+    # expiry-only pruning frees nothing. Evict the oldest windows outright.
+    if len(_windows) > MAX_KEYS:
         cutoff = now - WINDOW_SECONDS
-        for k in [k for k, (start, _) in _windows.items() if start < cutoff]:
+        expired = [k for k, (start, _) in _windows.items() if start < cutoff]
+        for k in expired:
             del _windows[k]
+        overflow = len(_windows) - MAX_KEYS
+        if overflow > 0:
+            for k in heapq.nsmallest(
+                overflow, _windows, key=lambda k: _windows[k][0]
+            ):
+                del _windows[k]
 
     return True, 0.0
 

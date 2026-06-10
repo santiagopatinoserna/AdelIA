@@ -27,12 +27,26 @@ def test_identities_are_isolated():
     assert allowed
 
 
-def test_identity_from_header_vs_ip():
-    a = ratelimit.identity_from("Bearer tok1", "1.2.3.4")
-    b = ratelimit.identity_from("Bearer tok2", "1.2.3.4")
+def test_identity_unverifiable_tokens_share_ip_bucket(monkeypatch):
+    """Rotating junk Authorization values must NOT mint fresh buckets —
+    that was a full limiter bypass. Garbage tokens collapse to the IP."""
+    from adelia.config import settings
+
+    monkeypatch.setattr(settings, "auth_secret", "test-secret")
+    a = ratelimit.identity_from("Bearer junk1", "1.2.3.4")
+    b = ratelimit.identity_from("Bearer junk2", "1.2.3.4")
     c = ratelimit.identity_from(None, "1.2.3.4")
-    assert a != b
-    assert c == "ip:1.2.3.4"
+    assert a == b == c == "ip:1.2.3.4"
+
+
+def test_identity_valid_token_gets_user_bucket(monkeypatch):
+    from adelia.config import settings
+    from tests.test_auth import make_token
+
+    monkeypatch.setattr(settings, "auth_secret", "test-secret")
+    token = make_token("22222222-2222-2222-2222-222222222222")
+    ident = ratelimit.identity_from(f"Bearer {token}", "1.2.3.4")
+    assert ident == "user:22222222-2222-2222-2222-222222222222"
 
 
 async def test_middleware_returns_429_with_retry_after(client, monkeypatch):

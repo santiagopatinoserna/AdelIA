@@ -32,12 +32,17 @@ export function ChatPageClient({
   const [messages, setMessages] = useState<LocalMsg[]>([]);
   const [busy, setBusy] = useState(false);
   const scrollRef = useRef<HTMLDivElement | null>(null);
+  // Increments whenever the visible conversation changes; in-flight stream
+  // events from a previous epoch are dropped instead of appending tokens
+  // to another session's history (or crashing on an empty list).
+  const streamEpochRef = useRef(0);
 
   useEffect(() => {
     scrollRef.current?.scrollTo({ top: scrollRef.current.scrollHeight, behavior: "smooth" });
   }, [messages, busy]);
 
   const loadSession = useCallback(async (id: string) => {
+    streamEpochRef.current += 1;
     setActiveId(id);
     const detail = await getChatSession(id);
     setMessages(
@@ -50,6 +55,7 @@ export function ChatPageClient({
   }, []);
 
   const newSession = useCallback(() => {
+    streamEpochRef.current += 1;
     setActiveId(null);
     setMessages([]);
   }, []);
@@ -64,19 +70,22 @@ export function ChatPageClient({
   }, [activeId]);
 
   const handleSubmit = useCallback(async (text: string) => {
+    const epoch = streamEpochRef.current;
+    const stale = () => streamEpochRef.current !== epoch;
     setBusy(true);
     const userMsg: LocalMsg = { role: "user", content: text, citations: [] };
     setMessages((prev) => [...prev, userMsg, { role: "assistant", content: "", citations: [] }]);
     try {
       let createdSessionId: string | null = null;
       for await (const event of streamChat(text, activeId, locale)) {
+        if (stale()) break;
         if (event.type === "start") {
           createdSessionId = event.session_id;
         } else if (event.type === "token") {
           setMessages((prev) => {
             const updated = [...prev];
             const last = updated[updated.length - 1];
-            if (last.role === "assistant") {
+            if (last?.role === "assistant") {
               updated[updated.length - 1] = { ...last, content: last.content + event.content };
             }
             return updated;
@@ -86,7 +95,7 @@ export function ChatPageClient({
           setMessages((prev) => {
             const updated = [...prev];
             const last = updated[updated.length - 1];
-            if (last.role === "assistant") {
+            if (last?.role === "assistant") {
               updated[updated.length - 1] = { ...last, citations: event.citations };
             }
             return updated;
@@ -95,23 +104,24 @@ export function ChatPageClient({
           setMessages((prev) => {
             const updated = [...prev];
             const last = updated[updated.length - 1];
-            if (last.role === "assistant") {
+            if (last?.role === "assistant") {
               updated[updated.length - 1] = { ...last, content: `Error: ${event.content}` };
             }
             return updated;
           });
         }
       }
-      if (createdSessionId && !activeId) {
+      if (createdSessionId && !activeId && !stale()) {
         setActiveId(createdSessionId);
         const refreshed = await listChatSessions().catch(() => sessions);
         setSessions(refreshed);
       }
     } catch (e) {
+      if (stale()) return;
       setMessages((prev) => {
         const updated = [...prev];
         const last = updated[updated.length - 1];
-        if (last.role === "assistant" && !last.content) {
+        if (last?.role === "assistant" && !last.content) {
           updated[updated.length - 1] = { ...last, content: `Error: ${String(e)}` };
         }
         return updated;

@@ -42,16 +42,35 @@ def _make_test_app() -> FastAPI:
     return app
 
 
-def test_get_current_user_id_valid_token_returns_uuid(monkeypatch):
+async def test_get_current_user_id_valid_token_returns_uuid(monkeypatch):
+    from httpx import ASGITransport, AsyncClient
+
+    from tests.db_helpers import make_user
+
     monkeypatch.setattr(settings, "auth_secret", "test-secret")
-    user_uuid = "11111111-1111-1111-1111-111111111111"
+    user_uuid = str(await make_user())
     token = make_token(user_uuid)
+    transport = ASGITransport(app=_make_test_app())
+    async with AsyncClient(transport=transport, base_url="http://test") as ac:
+        response = await ac.get(
+            "/whoami", headers={"Authorization": f"Bearer {token}"}
+        )
+
+    assert response.status_code == 200
+    assert response.json() == {"user_id": user_uuid}
+
+
+def test_get_current_user_id_unknown_user_returns_401(monkeypatch):
+    """A valid signature whose sub no longer exists (erased account) is 401 —
+    tokens must not outlive the user row."""
+    monkeypatch.setattr(settings, "auth_secret", "test-secret")
+    token = make_token("11111111-1111-1111-1111-111111111111")
     client = TestClient(_make_test_app())
 
     response = client.get("/whoami", headers={"Authorization": f"Bearer {token}"})
 
-    assert response.status_code == 200
-    assert response.json() == {"user_id": user_uuid}
+    assert response.status_code == 401
+    assert response.json()["detail"] == "Unknown user"
 
 
 def test_get_current_user_id_malformed_uuid_returns_401(monkeypatch):

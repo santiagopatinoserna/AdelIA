@@ -38,6 +38,13 @@ async def lifespan(app: FastAPI):
     if not settings.auth_secret:
         # Auth endpoints will answer 503 until this is fixed (adelia/auth.py).
         logger.critical("AUTH_SECRET is not set — all authenticated requests will be rejected")
+    # Retry blob deletions a crashed/failed GDPR erasure left behind.
+    try:
+        from adelia.routers.users import sweep_blob_tombstones
+
+        await sweep_blob_tombstones()
+    except Exception:  # noqa: BLE001 — sweep must never block boot
+        logger.exception("startup blob tombstone sweep failed")
     yield
     await engine.dispose()
 

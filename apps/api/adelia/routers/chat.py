@@ -1,4 +1,5 @@
 import json
+import re
 import uuid
 from typing import Annotated
 
@@ -72,11 +73,13 @@ async def post_chat(
         if existing is None:
             raise HTTPException(status_code=404)
         session_id = existing.id
+        def _truncate(text: str) -> str:
+            cut = text[:HISTORY_MAX_CHARS_PER_MESSAGE]
+            # don't leave a half-open citation marker like '[ev_1' at the cut
+            return re.sub(r"\[[^\]]*$", "", cut) if len(text) > len(cut) else cut
+
         history = [
-            {
-                "role": m.role,
-                "content": m.content[:HISTORY_MAX_CHARS_PER_MESSAGE],
-            }
+            {"role": m.role, "content": _truncate(m.content)}
             for m in existing.messages[-HISTORY_MAX_MESSAGES:]
             if m.content
         ]

@@ -49,13 +49,13 @@ export default async function DashboardPage({
             href="/dashboard/ingestion"
             className="rounded-md border border-slate-300 px-3 py-2 text-sm hover:bg-slate-50"
           >
-            📥 Importar
+            📥 {t("navImport")}
           </Link>
           <Link
             href="/dashboard/enrichment"
             className="rounded-md border border-slate-300 px-3 py-2 text-sm hover:bg-slate-50"
           >
-            ✨ Insights
+            ✨ {t("navInsights")}
           </Link>
           <Link
             href="/dashboard/settings"
