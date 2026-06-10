@@ -29,6 +29,8 @@ class Settings(BaseSettings):
     adelia_app_url: str = "http://localhost:3000"
     # Comma-separated browser origins allowed by CORS (web app hosts).
     cors_origins: str = "http://localhost:3000,http://localhost:3001"
+    # In-process per-identity rate limiting (disable only for test suites).
+    rate_limit_enabled: bool = True
 
     @property
     def database_url(self) -> str:
