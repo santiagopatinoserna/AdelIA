@@ -26,7 +26,7 @@ dependencies = [
     "lxml>=5.0",
     "rapidfuzz>=3.0",
     "python-telegram-bot>=21.0",
-    "weasyprint>=63",
+    "weasyprint>=69.0",
 ]
 
 [dependency-groups]
