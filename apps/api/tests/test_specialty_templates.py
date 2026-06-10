@@ -1,9 +1,7 @@
 """Validation tests for specialty templates loader."""
-import pytest
 
 from adelia.schemas import Specialty
 from adelia.specialty_templates import (
-    SpecialtyTemplate,
     load_template,
     list_specialties,
 )

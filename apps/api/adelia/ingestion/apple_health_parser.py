@@ -16,7 +16,6 @@ from __future__ import annotations
 from dataclasses import dataclass
 from datetime import date, datetime
 from typing import IO, Iterator
-from uuid import UUID
 
 from lxml import etree
 

@@ -3,12 +3,10 @@ exercise the parser path with mocked DB session.
 """
 from __future__ import annotations
 
-from datetime import datetime, UTC
 from pathlib import Path
 from unittest.mock import AsyncMock, MagicMock
 from uuid import UUID, uuid4
 
-import pytest
 from fastapi.testclient import TestClient
 
 from adelia.main import app

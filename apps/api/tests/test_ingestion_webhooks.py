@@ -3,8 +3,7 @@ from __future__ import annotations
 
 import hashlib
 import hmac
-import json
-from unittest.mock import AsyncMock, MagicMock
+from unittest.mock import MagicMock
 from uuid import UUID, uuid4
 
 import pytest

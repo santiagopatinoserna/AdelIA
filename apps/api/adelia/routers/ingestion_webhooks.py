@@ -7,7 +7,7 @@ from __future__ import annotations
 import logging
 from uuid import UUID
 
-from fastapi import APIRouter, Depends, Header, HTTPException, Request, status
+from fastapi import APIRouter, Depends, Header, HTTPException, Request
 
 from adelia.auth import get_current_user_id
 from adelia.config import settings

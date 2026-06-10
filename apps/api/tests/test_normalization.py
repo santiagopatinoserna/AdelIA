@@ -1,10 +1,8 @@
 """Pure unit tests for ICD-10/SNOMED normalization."""
 from __future__ import annotations
 
-import pytest
 
 from adelia.enrichment.normalization import (
-    NormalizedCode,
     coverage_stats,
     normalize,
     normalize_many,

@@ -2,7 +2,6 @@ from datetime import date
 from unittest.mock import MagicMock, patch
 from uuid import uuid4
 
-import pytest
 
 from adelia.services.chat_orchestrator import (
     ChatEvent,

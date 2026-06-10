@@ -4,12 +4,10 @@ use monkeypatched httpx.
 """
 from __future__ import annotations
 
-import io
 from pathlib import Path
 from unittest.mock import AsyncMock, MagicMock
 from uuid import UUID, uuid4
 
-import pytest
 from fastapi.testclient import TestClient
 
 from adelia.main import app
@@ -231,7 +229,6 @@ def test_profiles_endpoints_use_dependency_overrides(monkeypatch):
     _override_db()
 
     from adelia.enrichment import profile_service
-    from adelia.models import Profile
 
     fake_profile = MagicMock()
     fake_profile.id = uuid4()

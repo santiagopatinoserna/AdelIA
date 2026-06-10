@@ -5,7 +5,6 @@ from datetime import datetime, UTC
 from unittest.mock import AsyncMock, MagicMock
 from uuid import UUID, uuid4
 
-import pytest
 from fastapi.testclient import TestClient
 
 from adelia.main import app

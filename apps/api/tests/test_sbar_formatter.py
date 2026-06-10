@@ -1,10 +1,8 @@
 """Pure unit tests for sbar_formatter. No DB, no LLM, no API."""
 from __future__ import annotations
 
-from datetime import datetime, UTC
 from uuid import uuid4
 
-import pytest
 
 from adelia.schemas import Specialty
 from adelia.services.sbar_formatter import (

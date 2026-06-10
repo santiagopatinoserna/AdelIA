@@ -4,11 +4,9 @@ from __future__ import annotations
 from datetime import date
 from pathlib import Path
 
-import pytest
 
 from adelia.ingestion.apple_health_parser import (
     APPLE_HEALTH_TYPES,
-    HealthRecord,
     count_records,
     parse_health_records,
 )

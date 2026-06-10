@@ -96,7 +96,7 @@ async def list_my_shares(
     db: AsyncSession = Depends(get_db),
 ):
     links = await sharing_svc.list_shares_for_user(db, user_id=user_id)
-    return [_to_share_out(l, app_url=_app_url()) for l in links]
+    return [_to_share_out(link, app_url=_app_url()) for link in links]
 
 
 @router.delete("/shares/{token}", status_code=status.HTTP_204_NO_CONTENT)

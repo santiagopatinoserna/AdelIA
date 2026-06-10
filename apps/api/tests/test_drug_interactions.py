@@ -1,7 +1,6 @@
 """Pure unit tests for drug interaction checker."""
 from __future__ import annotations
 
-import pytest
 
 from adelia.enrichment.drug_interactions import (
     check_interactions,

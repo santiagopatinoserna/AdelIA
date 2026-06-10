@@ -1,7 +1,6 @@
 """briefing_repo CRUD tests. PG-gated until env-var migration in v0.1.1."""
 from __future__ import annotations
 
-from uuid import UUID, uuid4
 
 import pytest
 

@@ -1,6 +1,6 @@
 from datetime import date, timedelta
 
-from adelia.services.temporal import TemporalIntent, detect_temporal_intent
+from adelia.services.temporal import detect_temporal_intent
 
 
 def test_detect_curva_pattern():

@@ -15,7 +15,6 @@ from datetime import datetime, UTC
 from uuid import UUID
 
 from sqlalchemy import select
-from sqlalchemy.ext.asyncio import AsyncSession
 
 from adelia.db import AsyncSessionLocal
 from adelia.enrichment.evidence_retrieval import (

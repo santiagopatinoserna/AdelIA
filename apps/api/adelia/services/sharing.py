@@ -13,6 +13,7 @@ import logging
 import secrets
 from datetime import datetime, UTC, timedelta
 from typing import Literal
+from dataclasses import dataclass
 from uuid import UUID
 
 from sqlalchemy import select, update
@@ -87,9 +88,6 @@ async def revoke_share(
     )
     result = await session.execute(stmt)
     return (result.rowcount or 0) > 0
-
-
-from dataclasses import dataclass
 
 
 @dataclass(frozen=True)

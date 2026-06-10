@@ -1,7 +1,6 @@
 """Pure unit tests for lab reference range lookup + evaluation."""
 from __future__ import annotations
 
-import pytest
 
 from adelia.enrichment.lab_ranges import (
     coverage_count,
