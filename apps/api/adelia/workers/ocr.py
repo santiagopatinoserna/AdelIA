@@ -14,7 +14,7 @@ async def extract_text_from_pdf(body: bytes, mime_type: str) -> str:
     Args:
         body: raw bytes of the file (PDF/PNG/JPEG).
         mime_type: one of 'application/pdf', 'image/png', 'image/jpeg'.
-            Other values fall through to a 'bin' extension which Mistral
+            Other non-image values are sent as document_url, which Mistral
             will likely reject — caller should validate before calling.
 
     Returns:
@@ -36,13 +36,15 @@ async def extract_text_from_pdf(body: bytes, mime_type: str) -> str:
         "Authorization": f"Bearer {settings.mistral_api_key}",
         "Content-Type": "application/json",
     }
+    # Mistral OCR only accepts URL chunk types; raw bytes go inline as a data URI.
+    data_uri = f"data:{mime_type};base64,{encoded}"
+    if mime_type.startswith("image/"):
+        document = {"type": "image_url", "image_url": data_uri}
+    else:
+        document = {"type": "document_url", "document_url": data_uri}
     payload = {
         "model": "mistral-ocr-latest",
-        "document": {
-            "type": "document_base64",
-            "document_base64": encoded,
-            "document_name": f"upload.{_ext_from_mime(mime_type)}",
-        },
+        "document": document,
         "include_image_base64": False,
     }
 
@@ -53,11 +55,3 @@ async def extract_text_from_pdf(body: bytes, mime_type: str) -> str:
 
     pages = data.get("pages", [])
     return "\n\n".join(page.get("markdown", "") for page in pages)
-
-
-def _ext_from_mime(mime_type: str) -> str:
-    return {
-        "application/pdf": "pdf",
-        "image/png": "png",
-        "image/jpeg": "jpg",
-    }.get(mime_type, "bin")
