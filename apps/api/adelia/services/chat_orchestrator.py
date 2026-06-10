@@ -6,9 +6,8 @@ from dataclasses import dataclass, field
 from typing import Literal
 from uuid import UUID
 
-from mistralai.client.sdk import Mistral
 
-from adelia.config import settings
+from adelia.llm import get_mistral_client
 from adelia.db import AsyncSessionLocal
 from adelia.enrichment.evidence_retrieval import (
     EvidenceMatch,
@@ -85,10 +84,7 @@ async def _stream_llm_tokens(
 
     Raises RuntimeError if MISTRAL_API_KEY missing.
     """
-    if not settings.mistral_api_key:
-        raise RuntimeError("MISTRAL_API_KEY not set")
-
-    client = Mistral(api_key=settings.mistral_api_key)
+    client = get_mistral_client()
     messages = [{"role": "system", "content": system_prompt}]
     messages.extend(history or [])
     messages.append({"role": "user", "content": user_message})

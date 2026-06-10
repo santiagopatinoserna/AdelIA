@@ -17,7 +17,8 @@
       "ready": "Listo",
       "failed": "Error"
     },
-    "entitiesAndChunks": "{count, plural, =0 {Sin entidades extraídas} =1 {1 entidad} other {# entidades}} · {chunks, plural, =0 {Sin chunks} =1 {1 chunk} other {# chunks}}"
+    "entitiesAndChunks": "{count, plural, =0 {Sin entidades extraídas} =1 {1 entidad} other {# entidades}} · {chunks, plural, =0 {Sin chunks} =1 {1 chunk} other {# chunks}}",
+    "ocrProcessing": "Procesando OCR… se actualiza automáticamente"
   },
   "upload": {
     "title": "Subir documento",

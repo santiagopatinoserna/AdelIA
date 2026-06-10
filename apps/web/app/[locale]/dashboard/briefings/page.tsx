@@ -1,6 +1,6 @@
 import { auth } from "@/lib/auth";
 import { redirect } from "next/navigation";
-import Link from "next/link";
+import { Link } from "@/lib/navigation";
 import { getTranslations } from "next-intl/server";
 
 import { briefings as briefingsApi } from "@/lib/api-client";
@@ -29,7 +29,7 @@ export default async function BriefingsPage({ params }: Props) {
       <div className="mb-6 flex items-center justify-between">
         <h1 className="text-2xl font-semibold">{t("briefing.title")}</h1>
         <Link
-          href={`/${locale}/dashboard/briefings/new`}
+          href="/dashboard/briefings/new"
           className="rounded bg-slate-900 px-4 py-2 text-sm text-white hover:bg-slate-800"
         >
           {t("briefing.newButton")}

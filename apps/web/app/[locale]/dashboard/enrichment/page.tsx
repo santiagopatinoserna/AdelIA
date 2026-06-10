@@ -1,4 +1,4 @@
-import Link from "next/link";
+import { Link } from "@/lib/navigation";
 import { redirect } from "next/navigation";
 import { getTranslations } from "next-intl/server";
 
@@ -66,7 +66,7 @@ export default async function EnrichmentDashboardPage({ params }: Props) {
         {tabs.map((tab) => (
           <Link
             key={tab.slug}
-            href={`/${locale}/dashboard/enrichment/${tab.slug}`}
+            href={`/dashboard/enrichment/${tab.slug}`}
             className="rounded-lg border border-slate-200 bg-white p-4 hover:bg-slate-50"
           >
             <div className="text-3xl">{tab.emoji}</div>

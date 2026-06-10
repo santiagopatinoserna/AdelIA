@@ -1,6 +1,6 @@
 import { auth } from "@/lib/auth";
 import { redirect } from "next/navigation";
-import Link from "next/link";
+import { Link } from "@/lib/navigation";
 import { getTranslations } from "next-intl/server";
 import { listDocuments, type DocumentDTO } from "@/lib/api-client";
 import { DocumentCard } from "@/components/document-card";
@@ -30,31 +30,31 @@ export default async function DashboardPage({
         <h1 className="text-2xl font-semibold">{t("title")}</h1>
         <div className="flex flex-wrap gap-2">
           <Link
-            href={`/${locale}/dashboard/chat`}
+            href="/dashboard/chat"
             className="rounded-md border border-slate-300 px-3 py-2 text-sm hover:bg-slate-50"
           >
             💬 Chat
           </Link>
           <Link
-            href={`/${locale}/dashboard/briefings`}
+            href="/dashboard/briefings"
             className="rounded-md border border-slate-300 px-3 py-2 text-sm hover:bg-slate-50"
           >
             📋 Briefings
           </Link>
           <Link
-            href={`/${locale}/dashboard/ingestion`}
+            href="/dashboard/ingestion"
             className="rounded-md border border-slate-300 px-3 py-2 text-sm hover:bg-slate-50"
           >
             📥 Importar
           </Link>
           <Link
-            href={`/${locale}/dashboard/enrichment`}
+            href="/dashboard/enrichment"
             className="rounded-md border border-slate-300 px-3 py-2 text-sm hover:bg-slate-50"
           >
             ✨ Insights
           </Link>
           <Link
-            href={`/${locale}/dashboard/upload`}
+            href="/dashboard/upload"
             className="rounded-md bg-slate-900 px-3 py-2 text-sm text-white hover:bg-slate-800"
           >
             {t("uploadCta")}

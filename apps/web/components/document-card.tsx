@@ -1,4 +1,4 @@
-import Link from "next/link";
+import { Link } from "@/lib/navigation";
 import type { DocumentDTO } from "@/lib/api-client";
 import { StatusBadge } from "./status-badge";
 
@@ -6,7 +6,7 @@ export function DocumentCard({ doc, locale }: { doc: DocumentDTO; locale: string
   const fileName = doc.s3_key.split("/").pop() ?? doc.s3_key;
   return (
     <Link
-      href={`/${locale}/dashboard/documents/${doc.id}`}
+      href={`/dashboard/documents/${doc.id}`}
       className="block rounded-lg border border-slate-200 bg-white p-4 hover:border-slate-300"
     >
       <div className="flex items-center justify-between">

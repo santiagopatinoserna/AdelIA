@@ -2,10 +2,9 @@ import json
 import logging
 import re
 
-from mistralai.client.sdk import Mistral
 from pydantic import ValidationError
 
-from adelia.config import settings
+from adelia.llm import get_mistral_client
 from adelia.schemas import ExtractedEntity
 
 logger = logging.getLogger(__name__)
@@ -58,10 +57,7 @@ async def extract_entities(text: str) -> list[ExtractedEntity]:
             do NOT retry; alert.
         mistralai.SDKError: on API failure (transient — caller may retry).
     """
-    if not settings.mistral_api_key:
-        raise RuntimeError("MISTRAL_API_KEY not set")
-
-    client = Mistral(api_key=settings.mistral_api_key)
+    client = get_mistral_client()
 
     response = await client.chat.complete_async(
         model="mistral-medium-latest",

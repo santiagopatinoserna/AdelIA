@@ -1,6 +1,5 @@
-from mistralai.client.sdk import Mistral
+from adelia.llm import get_mistral_client
 
-from adelia.config import settings
 
 
 async def embed_texts(texts: list[str]) -> list[list[float]]:
@@ -21,10 +20,7 @@ async def embed_texts(texts: list[str]) -> list[list[float]]:
     """
     if not texts:
         return []
-    if not settings.mistral_api_key:
-        raise RuntimeError("MISTRAL_API_KEY not set")
-
-    client = Mistral(api_key=settings.mistral_api_key)
+    client = get_mistral_client()
     response = await client.embeddings.create_async(
         model="mistral-embed",
         inputs=texts,

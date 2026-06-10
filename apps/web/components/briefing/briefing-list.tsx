@@ -1,6 +1,6 @@
 "use client";
 
-import Link from "next/link";
+import { Link } from "@/lib/navigation";
 import { useTranslations } from "next-intl";
 
 import type { BriefingOut } from "@/lib/briefing-types";
@@ -20,7 +20,7 @@ export function BriefingList({ briefings, locale }: Props) {
       {briefings.map((b) => (
         <li key={b.id}>
           <Link
-            href={`/${locale}/dashboard/briefings/${b.id}`}
+            href={`/dashboard/briefings/${b.id}`}
             className="flex items-center justify-between rounded border border-slate-200 bg-white p-3 hover:bg-slate-50"
           >
             <div>

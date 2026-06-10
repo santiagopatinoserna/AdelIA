@@ -76,11 +76,11 @@ def _system_prompt(specialty: Specialty, hints: str) -> str:
 
 
 def _build_client():
-    from mistralai.client.sdk import Mistral
+    from adelia.llm import get_mistral_client
 
     if not settings.mistral_api_key:
         raise QAPrebakerError("MISTRAL_API_KEY not configured")
-    return Mistral(api_key=settings.mistral_api_key)
+    return get_mistral_client()
 
 
 def _llm_structured_call(

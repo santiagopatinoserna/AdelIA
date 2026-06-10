@@ -1,4 +1,4 @@
-import Link from "next/link";
+import { Link } from "@/lib/navigation";
 import { redirect } from "next/navigation";
 import { getTranslations } from "next-intl/server";
 
@@ -35,7 +35,7 @@ export default async function IngestionPage({ params }: Props) {
 
       <section className="mt-8 grid grid-cols-2 gap-4 md:grid-cols-4">
         <Link
-          href={`/${locale}/dashboard/ingestion/apple-health`}
+          href="/dashboard/ingestion/apple-health"
           className="rounded-lg border border-slate-200 bg-white p-4 hover:bg-slate-50"
         >
           <div className="text-3xl">📱</div>
@@ -43,7 +43,7 @@ export default async function IngestionPage({ params }: Props) {
           <p className="text-xs text-slate-600">export.zip → biométricos</p>
         </Link>
         <Link
-          href={`/${locale}/dashboard/ingestion/ccd`}
+          href="/dashboard/ingestion/ccd"
           className="rounded-lg border border-slate-200 bg-white p-4 hover:bg-slate-50"
         >
           <div className="text-3xl">🏥</div>
@@ -51,7 +51,7 @@ export default async function IngestionPage({ params }: Props) {
           <p className="text-xs text-slate-600">XML del portal paciente</p>
         </Link>
         <Link
-          href={`/${locale}/dashboard/ingestion/telegram`}
+          href="/dashboard/ingestion/telegram"
           className="rounded-lg border border-slate-200 bg-white p-4 hover:bg-slate-50"
         >
           <div className="text-3xl">💬</div>
@@ -59,7 +59,7 @@ export default async function IngestionPage({ params }: Props) {
           <p className="text-xs text-slate-600">Reenvía docs al bot</p>
         </Link>
         <Link
-          href={`/${locale}/dashboard/ingestion/email`}
+          href="/dashboard/ingestion/email"
           className="rounded-lg border border-slate-200 bg-white p-4 hover:bg-slate-50"
         >
           <div className="text-3xl">📧</div>
@@ -74,7 +74,7 @@ export default async function IngestionPage({ params }: Props) {
           {guides.map((g) => (
             <li key={g.slug}>
               <Link
-                href={`/${locale}/dashboard/ingestion/guides/${g.slug}`}
+                href={`/dashboard/ingestion/guides/${g.slug}`}
                 className="block rounded border border-slate-200 bg-white p-3 hover:bg-slate-50"
               >
                 <div className="font-medium">{g.title}</div>
@@ -96,7 +96,7 @@ export default async function IngestionPage({ params }: Props) {
           {templates.map((t) => (
             <li key={t.country}>
               <Link
-                href={`/${locale}/dashboard/ingestion/gdpr/${t.country}`}
+                href={`/dashboard/ingestion/gdpr/${t.country}`}
                 className="block rounded border border-slate-200 bg-white p-3 hover:bg-slate-50"
               >
                 <div className="font-medium">{t.country}</div>

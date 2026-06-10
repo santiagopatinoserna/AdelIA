@@ -1,8 +1,8 @@
-import { auth } from "@/lib/auth";
 import { notFound, redirect } from "next/navigation";
-import { getTranslations } from "next-intl/server";
+
+import { DocumentDetailView } from "@/components/document-detail-view";
 import { getDocument } from "@/lib/api-client";
-import { StatusBadge } from "@/components/status-badge";
+import { auth } from "@/lib/auth";
 
 export default async function DocumentDetailPage({
   params,
@@ -20,27 +20,5 @@ export default async function DocumentDetailPage({
     notFound();
   }
 
-  const t = await getTranslations("dashboard");
-  const fileName = doc.s3_key.split("/").pop() ?? doc.s3_key;
-  return (
-    <main className="mx-auto max-w-3xl px-6 py-12">
-      <div className="flex items-center justify-between">
-        <h1 className="truncate text-2xl font-semibold">{fileName}</h1>
-        <StatusBadge status={doc.status} />
-      </div>
-      <p className="mt-2 text-sm text-slate-500">
-        {new Date(doc.created_at).toLocaleString()}
-      </p>
-      <p className="mt-1 text-xs text-slate-400">
-        {t("entitiesAndChunks", { count: doc.entity_count, chunks: doc.chunk_count })}
-      </p>
-      <section className="mt-8 rounded-lg border border-slate-200 bg-white p-6">
-        {doc.raw_text ? (
-          <pre className="whitespace-pre-wrap font-sans text-sm text-slate-800">{doc.raw_text}</pre>
-        ) : (
-          <p className="text-slate-400">[ Procesando OCR… recarga en unos segundos ]</p>
-        )}
-      </section>
-    </main>
-  );
+  return <DocumentDetailView initialDoc={doc} locale={locale} />;
 }
