@@ -7,7 +7,7 @@ import {
   getChatSession,
   listChatSessions,
   streamChat,
-} from "@/lib/chat-client";
+} from "@/lib/chat-client-browser";
 import { ChatSessionsSidebar } from "./chat-sessions-sidebar";
 import { ChatMessageBubble } from "./chat-message";
 import { ChatInput } from "./chat-input";
@@ -20,12 +20,10 @@ type LocalMsg = {
 
 export function ChatPageClient({
   initialSessions,
-  jwt,
   locale,
   titleText,
 }: {
   initialSessions: ChatSession[];
-  jwt: string;
   locale: string;
   titleText: string;
 }) {
@@ -71,7 +69,7 @@ export function ChatPageClient({
     setMessages((prev) => [...prev, userMsg, { role: "assistant", content: "", citations: [] }]);
     try {
       let createdSessionId: string | null = null;
-      for await (const event of streamChat(jwt, text, activeId)) {
+      for await (const event of streamChat(text, activeId)) {
         if (event.type === "start") {
           createdSessionId = event.session_id;
         } else if (event.type === "token") {
@@ -121,7 +119,7 @@ export function ChatPageClient({
     } finally {
       setBusy(false);
     }
-  }, [activeId, jwt, sessions]);
+  }, [activeId, sessions]);
 
   return (
     <div className="flex w-full">

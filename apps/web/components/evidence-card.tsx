@@ -1,6 +1,6 @@
 "use client";
 
-import type { EvidenceCitation } from "@/lib/chat-client";
+import type { EvidenceCitation } from "@/lib/chat-types";
 
 export function EvidenceCard({
   citation,

@@ -4,7 +4,7 @@ import { useState } from "react";
 import { useRouter, useParams } from "next/navigation";
 import { useTranslations } from "next-intl";
 
-import { briefings as briefingsApi } from "@/lib/api-client";
+import { briefings as briefingsApi } from "@/lib/api-client-browser";
 import type { Specialty } from "@/lib/briefing-types";
 import { SpecialtySelect } from "@/components/briefing/specialty-select";
 

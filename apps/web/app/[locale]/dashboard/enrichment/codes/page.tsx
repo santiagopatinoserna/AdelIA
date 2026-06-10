@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { useTranslations } from "next-intl";
 
-import { enrichment } from "@/lib/api-client";
+import { enrichment } from "@/lib/api-client-browser";
 import type { NormalizedCode } from "@/lib/enrichment-types";
 
 export default function CodesLookupPage() {

@@ -1,6 +1,6 @@
 "use client";
 import { useTranslations } from "next-intl";
-import type { DocumentStatus } from "@/lib/api-client";
+import type { DocumentStatus } from "@/lib/api-client-browser";
 
 const styles: Record<DocumentStatus, string> = {
   uploaded: "bg-slate-100 text-slate-700",

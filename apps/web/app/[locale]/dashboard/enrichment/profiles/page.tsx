@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import { useTranslations } from "next-intl";
 
-import { enrichment } from "@/lib/api-client";
+import { enrichment } from "@/lib/api-client-browser";
 import type { Profile, Relationship } from "@/lib/enrichment-types";
 
 const RELATIONSHIPS: Relationship[] = ["self", "child", "parent", "spouse", "sibling", "other"];

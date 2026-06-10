@@ -1,7 +1,7 @@
 "use client";
 import { CitationCard } from "./citation-card";
 import { EvidenceCard } from "./evidence-card";
-import type { ChatMessage, Citation, EvidenceCitation } from "@/lib/chat-client";
+import type { ChatMessage, Citation, EvidenceCitation } from "@/lib/chat-types";
 
 export function ChatMessageBubble({
   message,

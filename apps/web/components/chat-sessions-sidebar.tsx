@@ -1,6 +1,6 @@
 "use client";
 import { useTranslations } from "next-intl";
-import type { ChatSession } from "@/lib/chat-client";
+import type { ChatSession } from "@/lib/chat-types";
 
 export function ChatSessionsSidebar({
   sessions,

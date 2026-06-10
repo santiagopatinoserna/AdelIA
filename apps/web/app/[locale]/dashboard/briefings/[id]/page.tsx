@@ -4,7 +4,7 @@ import { useCallback, useEffect, useState } from "react";
 import { useRouter, useParams } from "next/navigation";
 import { useTranslations } from "next-intl";
 
-import { briefings as briefingsApi } from "@/lib/api-client";
+import { briefings as briefingsApi } from "@/lib/api-client-browser";
 import type { BriefingDetailOut } from "@/lib/briefing-types";
 import { sharing } from "@/lib/sharing-client";
 import { BriefingDetail } from "@/components/briefing/briefing-detail";

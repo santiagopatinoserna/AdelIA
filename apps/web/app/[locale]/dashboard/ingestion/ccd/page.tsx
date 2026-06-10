@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { useTranslations } from "next-intl";
 
-import { ingestion } from "@/lib/api-client";
+import { ingestion } from "@/lib/api-client-browser";
 import type { IngestionImportResult } from "@/lib/enrichment-types";
 
 export default function CcdImportPage() {

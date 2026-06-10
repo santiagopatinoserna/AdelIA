@@ -1,43 +1,20 @@
+// Server-side API client. Signs requests with the session JWT via auth().
+// NEVER import from a "use client" component — auth pulls in pg (Node-only).
+// Client components use lib/api-client-browser.ts instead (same surface,
+// requests proxied through /api/backend so the token stays server-side).
+
 import { auth } from "@/lib/auth";
 
-import type {
-  BriefingCreate,
-  BriefingDetailOut,
-  BriefingOut,
-} from "./briefing-types";
-import type {
-  ClinicalTrial,
-  CoverageStats,
-  DrugInteraction,
-  GDPRTemplateContent,
-  GDPRTemplateSummary,
-  GuideContent,
-  GuideSummary,
-  IngestionImportResult,
-  LabEvalBulkRequest,
-  LabEvalResult,
-  NormalizedCode,
-  Profile,
-  ProfileCreateRequest,
-  VariantHit,
-} from "./enrichment-types";
+import { makeApi } from "./api-endpoints";
 
 export const API_URL = process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:8000";
 
-export type DocumentStatus = "uploaded" | "processing" | "ready" | "failed";
-
-export type DocumentDTO = {
-  id: string;
-  source: "web" | "manual";
-  mime_type: string;
-  s3_key: string;
-  raw_text: string | null;
-  created_at: string;
-  processed_at: string | null;
-  status: DocumentStatus;
-  entity_count: number;
-  chunk_count: number;
-};
+export type {
+  DocumentDTO,
+  DocumentStatus,
+  EmailAliasDTO,
+  TelegramLinkDTO,
+} from "./api-endpoints";
 
 async function authedFetch(path: string, init?: RequestInit) {
   const session = await auth();
@@ -47,191 +24,10 @@ async function authedFetch(path: string, init?: RequestInit) {
   return fetch(`${API_URL}${path}`, { ...init, headers, cache: "no-store" });
 }
 
-export async function listDocuments(): Promise<DocumentDTO[]> {
-  const res = await authedFetch("/documents");
-  if (!res.ok) throw new Error(`listDocuments: ${res.status}`);
-  return res.json();
-}
+const api = makeApi(authedFetch);
 
-export async function getDocument(id: string): Promise<DocumentDTO> {
-  const res = await authedFetch(`/documents/${id}`);
-  if (!res.ok) throw new Error(`getDocument: ${res.status}`);
-  return res.json();
-}
-
-// M5 briefings namespace
-export const briefings = {
-  async create(input: BriefingCreate): Promise<BriefingOut> {
-    const res = await authedFetch("/briefings", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(input),
-    });
-    if (!res.ok) throw new Error(`briefings.create: ${res.status}`);
-    return res.json();
-  },
-
-  async list(): Promise<BriefingOut[]> {
-    const res = await authedFetch("/briefings");
-    if (!res.ok) throw new Error(`briefings.list: ${res.status}`);
-    return res.json();
-  },
-
-  async getById(id: string): Promise<BriefingDetailOut> {
-    const res = await authedFetch(`/briefings/${id}`);
-    if (!res.ok) throw new Error(`briefings.getById: ${res.status}`);
-    return res.json();
-  },
-
-  async regenerate(id: string): Promise<BriefingOut> {
-    const res = await authedFetch(`/briefings/${id}/regenerate`, { method: "POST" });
-    if (!res.ok) throw new Error(`briefings.regenerate: ${res.status}`);
-    return res.json();
-  },
-
-  async remove(id: string): Promise<void> {
-    const res = await authedFetch(`/briefings/${id}`, { method: "DELETE" });
-    if (!res.ok) throw new Error(`briefings.remove: ${res.status}`);
-  },
-};
-
-// M4 ingestion namespace
-export const ingestion = {
-  async listGuides(): Promise<GuideSummary[]> {
-    const res = await authedFetch("/ingestion/guides");
-    if (!res.ok) throw new Error(`ingestion.listGuides: ${res.status}`);
-    return res.json();
-  },
-
-  async getGuide(slug: string): Promise<GuideContent> {
-    const res = await authedFetch(`/ingestion/guides/${slug}`);
-    if (!res.ok) throw new Error(`ingestion.getGuide: ${res.status}`);
-    return res.json();
-  },
-
-  async listGdprTemplates(): Promise<GDPRTemplateSummary[]> {
-    const res = await authedFetch("/ingestion/gdpr-templates");
-    if (!res.ok) throw new Error(`ingestion.listGdprTemplates: ${res.status}`);
-    return res.json();
-  },
-
-  async getGdprTemplate(country: string): Promise<GDPRTemplateContent> {
-    const res = await authedFetch(`/ingestion/gdpr-templates/${country}`);
-    if (!res.ok) throw new Error(`ingestion.getGdprTemplate: ${res.status}`);
-    return res.json();
-  },
-
-  async importAppleHealth(file: File): Promise<IngestionImportResult> {
-    const fd = new FormData();
-    fd.append("file", file);
-    const res = await authedFetch("/ingestion/apple-health/import", {
-      method: "POST",
-      body: fd,
-    });
-    if (!res.ok) throw new Error(`ingestion.importAppleHealth: ${res.status}`);
-    return res.json();
-  },
-
-  async importCcd(file: File): Promise<IngestionImportResult> {
-    const fd = new FormData();
-    fd.append("file", file);
-    const res = await authedFetch("/ingestion/ccd/import", {
-      method: "POST",
-      body: fd,
-    });
-    if (!res.ok) throw new Error(`ingestion.importCcd: ${res.status}`);
-    return res.json();
-  },
-};
-
-// v0.2 enrichment namespace
-export const enrichment = {
-  async normalize(query: string): Promise<NormalizedCode> {
-    const res = await authedFetch(
-      `/enrichment/code-normalize?query=${encodeURIComponent(query)}`,
-    );
-    if (!res.ok) throw new Error(`enrichment.normalize: ${res.status}`);
-    return res.json();
-  },
-
-  async evaluateLabs(payload: LabEvalBulkRequest): Promise<LabEvalResult[]> {
-    const res = await authedFetch("/enrichment/lab-evaluate", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(payload),
-    });
-    if (!res.ok) throw new Error(`enrichment.evaluateLabs: ${res.status}`);
-    return res.json();
-  },
-
-  async checkDrugInteractions(medications: string[]): Promise<DrugInteraction[]> {
-    const res = await authedFetch("/enrichment/drug-interactions", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ medications }),
-    });
-    if (!res.ok) throw new Error(`enrichment.checkDrugInteractions: ${res.status}`);
-    return res.json();
-  },
-
-  async searchTrials(
-    condition: string,
-    country?: string,
-    maxResults = 10,
-  ): Promise<ClinicalTrial[]> {
-    const params = new URLSearchParams({
-      condition,
-      max_results: String(maxResults),
-    });
-    if (country) params.set("country", country);
-    const res = await authedFetch(`/enrichment/trials?${params.toString()}`);
-    if (!res.ok) throw new Error(`enrichment.searchTrials: ${res.status}`);
-    return res.json();
-  },
-
-  async uploadGenomics(file: File): Promise<VariantHit[]> {
-    const fd = new FormData();
-    fd.append("file", file);
-    const res = await authedFetch("/enrichment/genomics/upload", {
-      method: "POST",
-      body: fd,
-    });
-    if (!res.ok) throw new Error(`enrichment.uploadGenomics: ${res.status}`);
-    return res.json();
-  },
-
-  async listProfiles(): Promise<Profile[]> {
-    const res = await authedFetch("/enrichment/profiles");
-    if (!res.ok) throw new Error(`enrichment.listProfiles: ${res.status}`);
-    return res.json();
-  },
-
-  async createProfile(payload: ProfileCreateRequest): Promise<Profile> {
-    const res = await authedFetch("/enrichment/profiles", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(payload),
-    });
-    if (!res.ok) throw new Error(`enrichment.createProfile: ${res.status}`);
-    return res.json();
-  },
-
-  async setDefaultProfile(id: string): Promise<Profile> {
-    const res = await authedFetch(`/enrichment/profiles/${id}/default`, {
-      method: "POST",
-    });
-    if (!res.ok) throw new Error(`enrichment.setDefaultProfile: ${res.status}`);
-    return res.json();
-  },
-
-  async deleteProfile(id: string): Promise<void> {
-    const res = await authedFetch(`/enrichment/profiles/${id}`, { method: "DELETE" });
-    if (!res.ok) throw new Error(`enrichment.deleteProfile: ${res.status}`);
-  },
-
-  async coverage(): Promise<CoverageStats> {
-    const res = await authedFetch("/enrichment/coverage");
-    if (!res.ok) throw new Error(`enrichment.coverage: ${res.status}`);
-    return res.json();
-  },
-};
+export const listDocuments = api.listDocuments;
+export const getDocument = api.getDocument;
+export const briefings = api.briefings;
+export const ingestion = api.ingestion;
+export const enrichment = api.enrichment;

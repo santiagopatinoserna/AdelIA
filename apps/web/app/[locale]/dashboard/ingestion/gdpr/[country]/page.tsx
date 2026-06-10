@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
 
-import { ingestion } from "@/lib/api-client";
+import { ingestion } from "@/lib/api-client-browser";
 import type { GDPRTemplateContent } from "@/lib/enrichment-types";
 
 export default function GdprTemplateViewerPage() {

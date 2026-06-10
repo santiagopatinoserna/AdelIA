@@ -1,5 +1,6 @@
-import { auth } from "@/lib/auth";
-import { API_URL } from "@/lib/api-client";
+// Browser sharing client ("use client" components). Authenticated calls go
+// through the same-origin /api/backend proxy; public share URLs point at the
+// API directly because they're meant to leave the app (QR, email, copy-link).
 
 export interface ShareLink {
   token: string;
@@ -12,20 +13,14 @@ export interface ShareLink {
   share_url: string;
 }
 
-async function authedHeaders(): Promise<Record<string, string>> {
-  const session = await auth();
-  const token = (session as { jwt?: string } | null)?.jwt;
-  const headers: Record<string, string> = { "Content-Type": "application/json" };
-  if (token) headers.Authorization = `Bearer ${token}`;
-  return headers;
-}
+// NEXT_PUBLIC_ vars are inlined into the client bundle at build time.
+const PUBLIC_API_URL = process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:8000";
 
 export const sharing = {
   async create(briefingId: string, ttlHours = 24): Promise<ShareLink> {
-    const headers = await authedHeaders();
-    const res = await fetch(`${API_URL}/shares`, {
+    const res = await fetch("/api/backend/shares", {
       method: "POST",
-      headers,
+      headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ briefing_id: briefingId, ttl_hours: ttlHours }),
     });
     if (!res.ok) throw new Error(`sharing.create: ${res.status}`);
@@ -33,26 +28,23 @@ export const sharing = {
   },
 
   async list(): Promise<ShareLink[]> {
-    const headers = await authedHeaders();
-    const res = await fetch(`${API_URL}/shares`, { headers, cache: "no-store" });
+    const res = await fetch("/api/backend/shares", { cache: "no-store" });
     if (!res.ok) throw new Error(`sharing.list: ${res.status}`);
     return res.json();
   },
 
   async revoke(token: string): Promise<void> {
-    const headers = await authedHeaders();
-    const res = await fetch(`${API_URL}/shares/${token}`, {
-      method: "DELETE",
-      headers,
-    });
+    const res = await fetch(`/api/backend/shares/${token}`, { method: "DELETE" });
     if (!res.ok) throw new Error(`sharing.revoke: ${res.status}`);
   },
 
+  // Owner download — needs auth, so it rides the proxy.
   pdfUrl(briefingId: string): string {
-    return `${API_URL}/briefings/${briefingId}/pdf`;
+    return `/api/backend/briefings/${briefingId}/pdf`;
   },
 
+  // Public link — signed by token, no session needed; must work outside the app.
   publicPdfUrl(token: string): string {
-    return `${API_URL}/s/${token}/pdf`;
+    return `${PUBLIC_API_URL}/s/${token}/pdf`;
   },
 };

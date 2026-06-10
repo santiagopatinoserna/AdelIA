@@ -10,13 +10,12 @@ EMAIL="m5-test-$(date +%s)@example.com"
 echo "==> [1/6] Health check"
 curl -fsS "${API_BASE}/health" | grep -q '"status":"ok"' || { echo "FAIL health"; exit 1; }
 
-echo "==> [2/6] Mint JWT for test user (uses dev /auth/dev/jwt if available)"
-TOKEN=$(curl -fsS -X POST "${API_BASE}/auth/dev/jwt" -H "Content-Type: application/json" \
-    -d "{\"email\":\"${EMAIL}\"}" | python3 -c "import sys,json;print(json.load(sys.stdin)['token'])")
+echo "==> [2/6] Mint JWT for test user (local mint — seeds user + signs with AUTH_SECRET)"
+TOKEN=$(cd apps/api && uv run python scripts/mint_dev_jwt.py "${EMAIL}")
 [ -n "${TOKEN}" ] || { echo "FAIL JWT mint"; exit 1; }
 
 echo "==> [3/6] Upload a clinical doc"
-FIXTURE="${FIXTURE:-apps/api/tests/fixtures/sample-clinical-note.txt}"
+FIXTURE="${FIXTURE:-apps/api/tests/fixtures/sample-lab-result.pdf}"
 [ -f "${FIXTURE}" ] || { echo "FAIL fixture missing: ${FIXTURE}"; exit 1; }
 DOC_ID=$(curl -fsS -X POST "${API_BASE}/documents" \
     -H "Authorization: Bearer ${TOKEN}" \
@@ -50,9 +49,9 @@ for i in $(seq 1 90); do
     BSTATUS=$(echo "${BODY}" | python3 -c "import sys,json;print(json.load(sys.stdin)['status'])")
     if [ "${BSTATUS}" = "ready" ]; then
         echo "    ready in ${i}s"
-        echo "${BODY}" | python3 <<'PY'
-import sys, json
-data = json.loads(sys.stdin.read())
+        BODY="${BODY}" python3 <<'PY'
+import json, os
+data = json.loads(os.environ["BODY"])
 assert data["status"] == "ready", f"expected ready, got {data['status']}"
 payload = data["payload"]
 assert payload is not None, "payload is None"

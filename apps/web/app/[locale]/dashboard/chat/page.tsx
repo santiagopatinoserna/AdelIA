@@ -13,7 +13,6 @@ export default async function ChatPage({
   const session = await auth();
   if (!session) redirect(`/${locale}/signin`);
 
-  const jwt = (session as { jwt?: string }).jwt ?? "";
   const sessions = await listChatSessions().catch(() => []);
   const t = await getTranslations("chat");
 
@@ -21,7 +20,6 @@ export default async function ChatPage({
     <main className="flex h-[calc(100vh-0px)] max-h-screen">
       <ChatPageClient
         initialSessions={sessions}
-        jwt={jwt}
         locale={locale}
         titleText={t("title")}
       />

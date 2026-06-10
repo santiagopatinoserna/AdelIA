@@ -2,6 +2,8 @@ import NextAuth, { type NextAuthConfig } from "next-auth";
 import Resend from "next-auth/providers/resend";
 import { SignJWT } from "jose";
 
+import { AdeliaPgAdapter } from "./auth-adapter";
+
 declare module "next-auth" {
   interface Session {
     jwt?: string;
@@ -12,6 +14,7 @@ declare module "next-auth" {
 type AdeliaToken = { rawJwt?: string };
 
 export const authConfig: NextAuthConfig = {
+  adapter: AdeliaPgAdapter(),
   providers: [
     Resend({
       from: "AdelIA <noreply@adelia.godi.ai>",
@@ -21,6 +24,9 @@ export const authConfig: NextAuthConfig = {
   pages: { signIn: "/es/signin" },
   session: { strategy: "jwt" },
   secret: process.env.AUTH_SECRET,
+  // Self-hosted deploys (Fly.io, localhost prod) sit behind a proxy or a
+  // non-canonical host; Auth.js v5 rejects them with UntrustedHost otherwise.
+  trustHost: true,
   callbacks: {
     async jwt({ token, user }) {
       if (user?.id) token.sub = user.id;

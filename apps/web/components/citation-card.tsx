@@ -1,7 +1,7 @@
 "use client";
 import Link from "next/link";
 import { useTranslations } from "next-intl";
-import type { Citation } from "@/lib/chat-client";
+import type { Citation } from "@/lib/chat-types";
 
 export function CitationCard({
   citation,
