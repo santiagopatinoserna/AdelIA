@@ -47,6 +47,23 @@ SLOW_REQUEST_THRESHOLD_S = 2.0
 
 
 @app.middleware("http")
+async def security_headers(request: Request, call_next):
+    """Baseline security headers on every API response. The public share
+    HTML (/s/{token}) renders styles from /static — same-origin CSP."""
+    response = await call_next(request)
+    response.headers.setdefault("X-Content-Type-Options", "nosniff")
+    response.headers.setdefault("Referrer-Policy", "strict-origin-when-cross-origin")
+    response.headers.setdefault("X-Frame-Options", "DENY")
+    if request.url.path.startswith("/s/"):
+        response.headers.setdefault(
+            "Content-Security-Policy",
+            "default-src 'self'; style-src 'self' 'unsafe-inline'; "
+            "img-src 'self' data:; frame-ancestors 'none'",
+        )
+    return response
+
+
+@app.middleware("http")
 async def request_logging(request: Request, call_next):
     """Minimal structured access log + slow-request warning.
 
