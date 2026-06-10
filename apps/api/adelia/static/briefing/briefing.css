@@ -1,0 +1,98 @@
+/* Briefing CSS — shared between HTML preview (M5) and WeasyPrint PDF (M6).
+   Designed for A4 print at 96dpi. */
+
+@page {
+  size: A4;
+  margin: 12mm 12mm 14mm 12mm;
+}
+
+body.briefing {
+  font-family: "Helvetica", "Arial", sans-serif;
+  font-size: 10.5pt;
+  line-height: 1.4;
+  color: #1a1a1a;
+  max-width: 186mm;
+  margin: 0 auto;
+}
+
+.briefing-header {
+  border-bottom: 2px solid #1a1a1a;
+  padding-bottom: 6pt;
+  margin-bottom: 10pt;
+}
+
+.briefing-header h1 {
+  margin: 0;
+  font-size: 14pt;
+}
+
+.briefing-header .meta {
+  font-size: 9pt;
+  color: #555;
+  margin-top: 2pt;
+}
+
+.section {
+  margin-bottom: 8pt;
+}
+
+.section h2 {
+  font-size: 11pt;
+  margin: 6pt 0 3pt 0;
+  padding-bottom: 1pt;
+  border-bottom: 1px solid #ccc;
+  text-transform: uppercase;
+  letter-spacing: 0.4pt;
+}
+
+.section ul {
+  margin: 2pt 0 4pt 14pt;
+  padding: 0;
+}
+
+.section li {
+  margin-bottom: 1pt;
+}
+
+.no-data {
+  color: #777;
+  font-style: italic;
+}
+
+.provenance-badge {
+  font-size: 8pt;
+  vertical-align: super;
+  margin-left: 2pt;
+}
+
+.provenance-badge.extracted_from_clinician_doc::before { content: "🟡"; }
+.provenance-badge.patient_stated::before { content: "🟠"; }
+
+.citation {
+  font-size: 7.5pt;
+  vertical-align: super;
+  color: #0066cc;
+  text-decoration: none;
+  margin-left: 1pt;
+}
+
+.qa-item {
+  margin-bottom: 6pt;
+}
+
+.qa-item .q {
+  font-weight: bold;
+}
+
+.qa-item .a {
+  margin-left: 12pt;
+}
+
+.disclaimer {
+  margin-top: 12pt;
+  padding-top: 6pt;
+  border-top: 1px solid #ccc;
+  font-size: 8.5pt;
+  color: #555;
+  text-align: center;
+}

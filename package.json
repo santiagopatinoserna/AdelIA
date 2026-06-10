@@ -1,0 +1,11 @@
+{
+  "name": "adelia",
+  "version": "0.1.0-m1",
+  "private": true,
+  "scripts": {
+    "dev:web": "pnpm --filter @adelia/web dev",
+    "dev:api": "uv --directory apps/api run uvicorn adelia.main:app --reload",
+    "dev:infra": "docker compose -f infra/docker-compose.dev.yml up -d",
+    "test:api": "uv --directory apps/api run pytest"
+  }
+}

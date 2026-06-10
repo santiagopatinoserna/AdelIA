@@ -1,0 +1,11 @@
+{
+  "specialty": "dermatology",
+  "rules_version": "1.0",
+  "include_immunizations": false,
+  "include_family_history": true,
+  "include_social_history": false,
+  "highlight_observations": ["skin_biopsy", "patch_test", "phototherapy_session"],
+  "exclude_observations": [],
+  "vital_emphasis": [],
+  "qa_pre_baker_hints": "Dermatologist — skin lesion onset/progression, prior biopsies and pathology, sun exposure history, family history of skin cancer, current topical/systemic dermatologic meds, allergies."
+}

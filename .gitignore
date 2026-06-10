@@ -1,0 +1,17 @@
+node_modules/
+.next/
+__pycache__/
+*.pyc
+.venv/
+.env
+.env.local
+.DS_Store
+dist/
+.uv-cache/
+.pnpm-store/
+*.log
+postgres-data/
+minio-data/
+.pytest_cache/
+coverage/
+htmlcov/

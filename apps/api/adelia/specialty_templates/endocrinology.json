@@ -1,0 +1,11 @@
+{
+  "specialty": "endocrinology",
+  "rules_version": "1.0",
+  "include_immunizations": false,
+  "include_family_history": true,
+  "include_social_history": false,
+  "highlight_observations": ["HbA1c", "glucose", "TSH", "T4", "T3", "cortisol", "vitamin_D"],
+  "exclude_observations": [],
+  "vital_emphasis": ["weight", "BP", "BMI"],
+  "qa_pre_baker_hints": "Endocrinologist — diabetes control trends (HbA1c, glucose), thyroid panel, hormonal symptoms, family history of endocrine conditions, current medications and adherence."
+}

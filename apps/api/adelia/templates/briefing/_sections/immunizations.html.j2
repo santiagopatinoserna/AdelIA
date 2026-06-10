@@ -1,0 +1,16 @@
+<section class="section">
+  <h2>Immunizations</h2>
+  {% if payload.sections.immunizations %}
+  <ul>
+    {% for i in payload.sections.immunizations %}
+    <li>
+      {{ i.name }}{% if i.date %} — {{ i.date }}{% endif %}
+      <span class="provenance-badge {{ i.provenance }}"></span>
+      {% for c in i.citations %}<sup class="citation" data-citation-id="{{ c.entity_id }}">[{{ loop.index }}]</sup>{% endfor %}
+    </li>
+    {% endfor %}
+  </ul>
+  {% else %}
+  <p class="no-data">No immunizations on file.</p>
+  {% endif %}
+</section>

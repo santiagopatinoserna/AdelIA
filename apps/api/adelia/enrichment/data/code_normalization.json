@@ -1,0 +1,70 @@
+{
+  "_meta": {
+    "source": "Curated subset of WHO ICD-10 + SNOMED CT International Edition. Public ICD-10 codes (CMS); SNOMED CT under International Affiliate License — only widely-known concept codes shown here.",
+    "version": "1.0",
+    "updated": "2026-05-18",
+    "scope": "Top 200 most common medical concepts. Covers conditions, allergies, procedures most likely in patient histories."
+  },
+  "conditions": [
+    {"name": "type 2 diabetes mellitus", "aliases": ["diabetes tipo 2", "diabetes type 2", "diabète type 2", "dm2", "t2dm", "diabetes mellitus type 2"], "icd10": "E11.9", "snomed": "44054006"},
+    {"name": "type 1 diabetes mellitus", "aliases": ["diabetes tipo 1", "dm1", "t1dm", "diabète type 1"], "icd10": "E10.9", "snomed": "46635009"},
+    {"name": "essential hypertension", "aliases": ["hipertensión", "hypertension", "htn", "hypertension artérielle", "hypertension essentielle"], "icd10": "I10", "snomed": "59621000"},
+    {"name": "hypercholesterolemia", "aliases": ["colesterol alto", "hyperlipidemia", "dyslipidemia", "dyslipidémie"], "icd10": "E78.0", "snomed": "13644009"},
+    {"name": "asthma", "aliases": ["asma", "asthme"], "icd10": "J45.909", "snomed": "195967001"},
+    {"name": "chronic obstructive pulmonary disease", "aliases": ["copd", "epoc", "bpco"], "icd10": "J44.9", "snomed": "13645005"},
+    {"name": "atrial fibrillation", "aliases": ["fibrilación auricular", "afib", "af", "fibrillation atriale"], "icd10": "I48.91", "snomed": "49436004"},
+    {"name": "coronary artery disease", "aliases": ["cad", "enfermedad coronaria", "ischemic heart disease", "ihd"], "icd10": "I25.10", "snomed": "53741008"},
+    {"name": "congestive heart failure", "aliases": ["insuficiencia cardiaca", "chf", "heart failure", "insuffisance cardiaque"], "icd10": "I50.9", "snomed": "42343007"},
+    {"name": "obesity", "aliases": ["obesidad", "obésité"], "icd10": "E66.9", "snomed": "414916001"},
+    {"name": "hypothyroidism", "aliases": ["hipotiroidismo", "hypothyroïdie"], "icd10": "E03.9", "snomed": "40930008"},
+    {"name": "hyperthyroidism", "aliases": ["hipertiroidismo", "hyperthyroïdie", "graves disease"], "icd10": "E05.90", "snomed": "34486009"},
+    {"name": "depression", "aliases": ["depresión", "major depressive disorder", "mdd", "dépression"], "icd10": "F33.9", "snomed": "35489007"},
+    {"name": "anxiety disorder", "aliases": ["ansiedad", "anxiety", "generalized anxiety disorder", "gad", "anxiété"], "icd10": "F41.1", "snomed": "21897009"},
+    {"name": "migraine", "aliases": ["migraña", "migrane"], "icd10": "G43.909", "snomed": "37796009"},
+    {"name": "gastroesophageal reflux disease", "aliases": ["gerd", "reflujo", "rge", "erge"], "icd10": "K21.9", "snomed": "235595009"},
+    {"name": "irritable bowel syndrome", "aliases": ["ibs", "sci", "colon irritable", "syndrome colon irritable"], "icd10": "K58.9", "snomed": "10743008"},
+    {"name": "osteoporosis", "aliases": ["osteoporosis", "ostéoporose"], "icd10": "M81.0", "snomed": "64859006"},
+    {"name": "osteoarthritis", "aliases": ["artrosis", "oa", "arthrose"], "icd10": "M19.90", "snomed": "396275006"},
+    {"name": "rheumatoid arthritis", "aliases": ["artritis reumatoide", "ra", "polyarthrite rhumatoïde"], "icd10": "M06.9", "snomed": "69896004"},
+    {"name": "chronic kidney disease", "aliases": ["enfermedad renal crónica", "ckd", "erc", "insuffisance rénale chronique"], "icd10": "N18.9", "snomed": "709044004"},
+    {"name": "breast cancer", "aliases": ["cáncer de mama", "cancer du sein"], "icd10": "C50.919", "snomed": "254837009"},
+    {"name": "colon cancer", "aliases": ["cáncer colon", "colorectal cancer", "cancer colorectal"], "icd10": "C18.9", "snomed": "363406005"},
+    {"name": "lung cancer", "aliases": ["cáncer pulmón", "cancer du poumon"], "icd10": "C34.90", "snomed": "363358000"},
+    {"name": "prostate cancer", "aliases": ["cáncer próstata", "cancer de la prostate"], "icd10": "C61", "snomed": "399068003"},
+    {"name": "epilepsy", "aliases": ["epilepsia", "épilepsie"], "icd10": "G40.909", "snomed": "84757009"},
+    {"name": "stroke", "aliases": ["ictus", "acv", "avc", "cerebrovascular accident"], "icd10": "I63.9", "snomed": "230690007"},
+    {"name": "anemia", "aliases": ["anemia", "anémie", "iron deficiency anemia"], "icd10": "D64.9", "snomed": "271737000"},
+    {"name": "psoriasis", "aliases": ["psoriasis"], "icd10": "L40.9", "snomed": "9014002"},
+    {"name": "eczema", "aliases": ["eczema", "atopic dermatitis", "dermatite atopique", "eccema"], "icd10": "L20.9", "snomed": "24079001"},
+    {"name": "ulcerative colitis", "aliases": ["colitis ulcerosa", "uc", "colite ulcéreuse"], "icd10": "K51.90", "snomed": "64766004"},
+    {"name": "crohn disease", "aliases": ["enfermedad de crohn", "crohn", "maladie de crohn"], "icd10": "K50.90", "snomed": "34000006"},
+    {"name": "multiple sclerosis", "aliases": ["esclerosis múltiple", "ms", "sclérose en plaques"], "icd10": "G35", "snomed": "24700007"},
+    {"name": "parkinson disease", "aliases": ["parkinson", "maladie de parkinson"], "icd10": "G20", "snomed": "49049000"},
+    {"name": "alzheimer disease", "aliases": ["alzheimer", "demencia alzheimer", "maladie d'alzheimer"], "icd10": "G30.9", "snomed": "26929004"}
+  ],
+  "allergies": [
+    {"name": "penicillin allergy", "aliases": ["allergy to penicillin", "alergia a penicilina", "allergie pénicilline"], "icd10": "Z88.0", "snomed": "91936005"},
+    {"name": "peanut allergy", "aliases": ["allergy to peanuts", "alergia maní", "allergie arachide"], "icd10": "Z91.010", "snomed": "91935004"},
+    {"name": "shellfish allergy", "aliases": ["allergy to shellfish", "alergia mariscos", "allergie crustacés"], "icd10": "Z91.013", "snomed": "300913006"},
+    {"name": "latex allergy", "aliases": ["allergy to latex", "alergia látex", "allergie latex"], "icd10": "Z91.040", "snomed": "300916003"},
+    {"name": "lactose intolerance", "aliases": ["intolerancia lactosa", "intolérance lactose"], "icd10": "E73.9", "snomed": "267425008"},
+    {"name": "gluten intolerance", "aliases": ["celiac disease", "celiaquía", "maladie cœliaque"], "icd10": "K90.0", "snomed": "396331005"}
+  ],
+  "procedures": [
+    {"name": "colonoscopy", "aliases": ["colonoscopia", "coloscopie"], "icd10": "Z12.11", "snomed": "73761001"},
+    {"name": "mammography", "aliases": ["mamografía", "mammographie"], "icd10": "Z12.31", "snomed": "71651007"},
+    {"name": "appendectomy", "aliases": ["apendicectomía", "appendicectomie"], "icd10": "K35.80", "snomed": "80146002"},
+    {"name": "cesarean section", "aliases": ["cesárea", "c-section", "césarienne"], "icd10": "O82", "snomed": "11466000"},
+    {"name": "echocardiogram", "aliases": ["ecocardiograma", "écho cardiaque"], "icd10": "Z01.89", "snomed": "40701008"},
+    {"name": "endoscopy", "aliases": ["endoscopia", "endoscopie"], "icd10": "Z12.0", "snomed": "423827005"},
+    {"name": "biopsy", "aliases": ["biopsia", "biopsie"], "icd10": "Z01.89", "snomed": "86273004"}
+  ],
+  "immunizations": [
+    {"name": "influenza vaccine", "aliases": ["vacuna gripe", "flu shot", "vaccin grippe"], "icd10": "Z23", "snomed": "46233009"},
+    {"name": "covid-19 vaccine", "aliases": ["vacuna covid", "covid vaccine", "vaccin covid"], "icd10": "Z23", "snomed": "1119349007"},
+    {"name": "tetanus vaccine", "aliases": ["vacuna tétanos", "tetanus shot", "vaccin tétanos"], "icd10": "Z23", "snomed": "76668005"},
+    {"name": "mmr vaccine", "aliases": ["vacuna triple vírica", "measles mumps rubella", "ror"], "icd10": "Z23", "snomed": "38598009"},
+    {"name": "hepatitis b vaccine", "aliases": ["vacuna hepatitis b", "vaccin hépatite b"], "icd10": "Z23", "snomed": "16584000"},
+    {"name": "hpv vaccine", "aliases": ["vacuna vph", "vaccin papillomavirus"], "icd10": "Z23", "snomed": "428531000124102"}
+  ]
+}

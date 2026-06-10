@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ClinicalDocument xmlns="urn:hl7-org:v3">
+  <recordTarget>
+    <patientRole>
+      <patient>
+        <name>
+          <given>Jane</given>
+          <family>Doe</family>
+        </name>
+        <administrativeGenderCode code="F"/>
+        <birthTime value="19850315"/>
+      </patient>
+    </patientRole>
+  </recordTarget>
+  <component>
+    <structuredBody>
+      <component>
+        <section>
+          <templateId root="2.16.840.1.113883.10.20.22.2.6.1"/>
+          <title>Allergies</title>
+          <entry>
+            <act>
+              <code displayName="Allergy to penicillin" code="91936005" codeSystemName="SNOMED-CT"/>
+              <effectiveTime value="20180510"/>
+            </act>
+          </entry>
+          <entry>
+            <act>
+              <code displayName="Allergy to peanuts" code="91935004" codeSystemName="SNOMED-CT"/>
+              <effectiveTime value="20100101"/>
+            </act>
+          </entry>
+        </section>
+      </component>
+      <component>
+        <section>
+          <templateId root="2.16.840.1.113883.10.20.22.2.1.1"/>
+          <title>Medications</title>
+          <entry>
+            <substanceAdministration>
+              <code displayName="metformin" code="6809" codeSystemName="RxNorm"/>
+              <effectiveTime value="20240115"/>
+              <doseQuantity value="500" unit="mg"/>
+              <routeCode displayName="Oral" code="C38288"/>
+            </substanceAdministration>
+          </entry>
+        </section>
+      </component>
+      <component>
+        <section>
+          <templateId root="2.16.840.1.113883.10.20.22.2.5.1"/>
+          <title>Problems</title>
+          <entry>
+            <act>
+              <code displayName="Type 2 diabetes mellitus" code="44054006" codeSystemName="SNOMED-CT"/>
+              <effectiveTime>
+                <low value="20240101"/>
+              </effectiveTime>
+              <statusCode code="active"/>
+            </act>
+          </entry>
+        </section>
+      </component>
+      <component>
+        <section>
+          <templateId root="2.16.840.1.113883.10.20.22.2.7.1"/>
+          <title>Procedures</title>
+          <entry>
+            <procedure>
+              <code displayName="Colonoscopy" code="73761001" codeSystemName="SNOMED-CT"/>
+              <effectiveTime value="20251010"/>
+            </procedure>
+          </entry>
+        </section>
+      </component>
+      <component>
+        <section>
+          <templateId root="2.16.840.1.113883.10.20.22.2.4.1"/>
+          <title>Vital Signs</title>
+          <entry>
+            <observation>
+              <code displayName="Body Weight" code="29463-7" codeSystemName="LOINC"/>
+              <effectiveTime value="20260501"/>
+              <value xsi:type="PQ" value="68.5" unit="kg" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+            </observation>
+          </entry>
+        </section>
+      </component>
+      <component>
+        <section>
+          <templateId root="2.16.840.1.113883.10.20.22.2.3.1"/>
+          <title>Lab Results</title>
+          <entry>
+            <observation>
+              <code displayName="Hemoglobin A1c" code="4548-4" codeSystemName="LOINC"/>
+              <effectiveTime value="20260120"/>
+              <value xsi:type="PQ" value="6.2" unit="%" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+            </observation>
+          </entry>
+        </section>
+      </component>
+      <component>
+        <section>
+          <templateId root="2.16.840.1.113883.10.20.22.2.2.1"/>
+          <title>Immunizations</title>
+          <entry>
+            <substanceAdministration>
+              <code displayName="Influenza vaccine" code="88" codeSystemName="CVX"/>
+              <effectiveTime value="20251015"/>
+            </substanceAdministration>
+          </entry>
+        </section>
+      </component>
+    </structuredBody>
+  </component>
+</ClinicalDocument>

@@ -1,0 +1,148 @@
+{
+  "_meta": {
+    "purpose": "Initial curated clinical evidence corpus. Each entry is one chunk-able document. Loaded into evidence_chunks via scripts/load_evidence_seed.py.",
+    "version": "1.0",
+    "updated": "2026-05-18",
+    "license_notes": "All entries reference public guidelines (ADA, AHA, NICE, WHO). Text is paraphrased to fair-use snippet length; full source URL provided for canonical reference."
+  },
+  "sources": [
+    {
+      "source_type": "guideline",
+      "title": "Diagnosis of diabetes — ADA Standards of Care 2024 §2",
+      "organization": "ADA",
+      "publication_year": 2024,
+      "url": "https://diabetesjournals.org/care/article/47/Supplement_1/S20",
+      "specialties": ["endocrinology", "general_medicine"],
+      "license": "fair_use_snippet",
+      "language": "en",
+      "chunks": [
+        "Diabetes diagnosis criteria per ADA 2024: HbA1c ≥ 6.5%, fasting plasma glucose ≥ 126 mg/dL, 2-hour plasma glucose ≥ 200 mg/dL during 75-g OGTT, or random glucose ≥ 200 mg/dL with symptoms. Confirmation with repeat testing recommended unless unequivocal hyperglycemia.",
+        "Pre-diabetes range: HbA1c 5.7-6.4%, fasting plasma glucose 100-125 mg/dL (IFG), or 2-hour OGTT 140-199 mg/dL (IGT). Risk of progression to diabetes 5-10% per year. Lifestyle intervention reduces incidence by 58% (DPP trial).",
+        "HbA1c targets: < 7% for most adults with diabetes; individualize based on duration, life expectancy, comorbidities, hypoglycemia risk. < 6.5% reasonable for select patients without significant hypoglycemia. < 8% acceptable for advanced complications or limited life expectancy."
+      ]
+    },
+    {
+      "source_type": "guideline",
+      "title": "Hypertension classification — ACC/AHA 2017 Hypertension Guideline",
+      "organization": "AHA",
+      "publication_year": 2017,
+      "url": "https://www.ahajournals.org/doi/10.1161/HYP.0000000000000065",
+      "specialties": ["cardiology", "general_medicine"],
+      "license": "fair_use_snippet",
+      "language": "en",
+      "chunks": [
+        "Blood pressure categories per ACC/AHA 2017: Normal < 120/80, Elevated 120-129/< 80, Stage 1 hypertension 130-139/80-89, Stage 2 hypertension ≥ 140/90, Hypertensive crisis > 180 and/or > 120. Measurements based on average of ≥ 2 readings on ≥ 2 occasions.",
+        "First-line antihypertensive therapy: thiazide diuretics, ACE inhibitors, ARBs, calcium channel blockers. Beta-blockers not first-line unless compelling indication (CAD, HFrEF, atrial fibrillation rate control).",
+        "BP treatment target: < 130/80 mmHg for adults with confirmed hypertension and known CVD or 10-year ASCVD risk ≥ 10%. Lower targets associated with reduced cardiovascular events but increased adverse effects in elderly + frail."
+      ]
+    },
+    {
+      "source_type": "guideline",
+      "title": "Cholesterol management — ACC/AHA 2018 Cholesterol Guideline",
+      "organization": "AHA",
+      "publication_year": 2018,
+      "url": "https://www.ahajournals.org/doi/10.1161/CIR.0000000000000625",
+      "specialties": ["cardiology", "general_medicine", "endocrinology"],
+      "license": "fair_use_snippet",
+      "language": "en",
+      "chunks": [
+        "LDL-C goals: < 70 mg/dL very high risk (clinical ASCVD with multiple major events), < 100 mg/dL primary prevention high risk. Statin therapy first-line. Add ezetimibe or PCSK9 inhibitor if goal not met.",
+        "Primary prevention statin decision: age 40-75, LDL-C 70-189 mg/dL → estimate 10-year ASCVD risk. If ≥ 7.5% borderline, discuss; ≥ 20% high → moderate-to-high intensity statin recommended. Lower threshold if diabetes or CKD."
+      ]
+    },
+    {
+      "source_type": "guideline",
+      "title": "GINA asthma — 2024 update",
+      "organization": "GINA",
+      "publication_year": 2024,
+      "url": "https://ginasthma.org/",
+      "specialties": ["pulmonology", "general_medicine", "pediatrics"],
+      "license": "fair_use_snippet",
+      "language": "en",
+      "chunks": [
+        "GINA 2024 step 1-2 (intermittent/mild persistent asthma adults + adolescents ≥ 12y): as-needed ICS-formoterol PRN preferred over SABA monotherapy. Reduces severe exacerbation risk 60% vs SABA.",
+        "Asthma control assessment: symptoms ≤ 2/week, no nocturnal awakening, no activity limitation, no reliever inhaler use ≥ 2/week. If any present → uncontrolled, step up treatment."
+      ]
+    },
+    {
+      "source_type": "guideline",
+      "title": "Atrial fibrillation stroke prevention — CHA₂DS₂-VASc + ESC 2024",
+      "organization": "ESC",
+      "publication_year": 2024,
+      "url": "https://www.escardio.org/Guidelines",
+      "specialties": ["cardiology"],
+      "license": "fair_use_snippet",
+      "language": "en",
+      "chunks": [
+        "CHA₂DS₂-VASc score for AFib stroke risk: CHF (1) + Hypertension (1) + Age ≥75 (2) or 65-74 (1) + Diabetes (1) + prior Stroke/TIA (2) + Vascular disease (1) + Sex female (1). Anticoagulation recommended ≥ 2 in men, ≥ 3 in women.",
+        "DOAC (apixaban, rivaroxaban, edoxaban, dabigatran) preferred over warfarin for most non-valvular AFib. Reduced intracranial hemorrhage vs warfarin. Warfarin retained for valvular AFib (mechanical valve, moderate-severe mitral stenosis)."
+      ]
+    },
+    {
+      "source_type": "guideline",
+      "title": "NICE breast cancer screening guidance",
+      "organization": "NICE",
+      "publication_year": 2023,
+      "url": "https://www.nice.org.uk/guidance/qs74",
+      "specialties": ["gynecology", "general_medicine", "oncology"],
+      "license": "fair_use_snippet",
+      "language": "en",
+      "chunks": [
+        "UK NHS breast screening program: women 50-71 every 3 years routine mammography. High-risk women (BRCA1/BRCA2 carriers, family history) start younger + annual MRI added. Continuation 71+ on request."
+      ]
+    },
+    {
+      "source_type": "guideline",
+      "title": "Pediatric immunization schedule — CDC 2024 + ACIP",
+      "organization": "CDC",
+      "publication_year": 2024,
+      "url": "https://www.cdc.gov/vaccines/schedules/hcp/imz/child-adolescent.html",
+      "specialties": ["pediatrics", "general_medicine"],
+      "license": "public_domain",
+      "language": "en",
+      "chunks": [
+        "Routine childhood immunizations 0-6 years: HepB at birth/1-2mo/6-18mo. DTaP at 2/4/6mo/15-18mo/4-6y. IPV at 2/4/6-18mo/4-6y. MMR at 12-15mo + 4-6y. Varicella same schedule as MMR. Hib + PCV13 series + RV. Annual influenza ≥ 6mo.",
+        "Adolescent (11-12y): Tdap booster, MenACWY, HPV series (2 doses if started < 15y, 3 doses if older). HPV recommended both sexes starting 9y."
+      ]
+    },
+    {
+      "source_type": "guideline",
+      "title": "Endometriosis diagnosis — ESHRE 2022",
+      "organization": "ESHRE",
+      "publication_year": 2022,
+      "url": "https://www.eshre.eu/Guidelines-and-Legal/Guidelines/Endometriosis-guideline",
+      "specialties": ["gynecology"],
+      "license": "fair_use_snippet",
+      "language": "en",
+      "chunks": [
+        "Endometriosis empirical diagnosis acceptable from symptoms (dysmenorrhea, dyspareunia, chronic pelvic pain, infertility) + imaging (transvaginal ultrasound). Laparoscopy no longer mandated for diagnosis but remains gold standard for staging. Treatment can begin without histologic confirmation."
+      ]
+    },
+    {
+      "source_type": "guideline",
+      "title": "Colorectal cancer screening — USPSTF 2021",
+      "organization": "USPSTF",
+      "publication_year": 2021,
+      "url": "https://www.uspreventiveservicestaskforce.org/uspstf/recommendation/colorectal-cancer-screening",
+      "specialties": ["gastroenterology", "general_medicine", "oncology"],
+      "license": "public_domain",
+      "language": "en",
+      "chunks": [
+        "USPSTF 2021 recommends screening adults 45-75 for colorectal cancer (lowered from 50). Options: stool-based (FIT annual, FIT-DNA q1-3y, gFOBT annual), direct visualization (colonoscopy q10y, CT colonography q5y, flexible sigmoidoscopy q5-10y). Stop routine screening 76+ unless individual benefit anticipated."
+      ]
+    },
+    {
+      "source_type": "protocol",
+      "title": "SBAR clinical handoff format",
+      "organization": "AHRQ",
+      "publication_year": 2020,
+      "url": "https://www.ahrq.gov/teamstepps/instructor/essentials/pocketguide.html",
+      "specialties": ["general_medicine"],
+      "license": "public_domain",
+      "language": "en",
+      "chunks": [
+        "SBAR handoff structure: Situation (current issue, 1-sentence), Background (relevant history), Assessment (current findings + likely problem), Recommendation (what's being asked or done next). Reduces miscommunication 30% vs unstructured handoff in studies."
+      ]
+    }
+  ]
+}

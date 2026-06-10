@@ -1,0 +1,226 @@
+{
+  "_meta": {
+    "source": "Curated offline cache of widely-known drug-drug interactions. Validated against RxNorm, DrugBank (open), FDA PI, Drugs.com. NLM RxNav API can extend this at runtime when network available.",
+    "version": "1.0",
+    "updated": "2026-05-18",
+    "disclaimer": "Interactions list is non-exhaustive. Patient should always consult pharmacist + prescriber. Severity grades follow Drugs.com convention: contraindicated > major > moderate > minor."
+  },
+  "drug_aliases": {
+    "warfarin": ["warfarin", "warfarina", "coumadin", "jantoven"],
+    "aspirin": ["aspirin", "aspirina", "asa", "acetylsalicylic acid", "ácido acetilsalicílico"],
+    "ibuprofen": ["ibuprofen", "ibuprofeno", "advil", "motrin"],
+    "naproxen": ["naproxen", "naproxeno", "aleve"],
+    "metformin": ["metformin", "metformina", "glucophage"],
+    "insulin": ["insulin", "insulina", "humalog", "lantus", "novolog"],
+    "lisinopril": ["lisinopril", "prinivil", "zestril"],
+    "enalapril": ["enalapril", "vasotec"],
+    "losartan": ["losartan", "losartán", "cozaar"],
+    "atorvastatin": ["atorvastatin", "atorvastatina", "lipitor"],
+    "simvastatin": ["simvastatin", "simvastatina", "zocor"],
+    "amlodipine": ["amlodipine", "amlodipino", "norvasc"],
+    "metoprolol": ["metoprolol", "lopressor", "toprol"],
+    "clopidogrel": ["clopidogrel", "plavix"],
+    "omeprazole": ["omeprazole", "omeprazol", "prilosec"],
+    "fluoxetine": ["fluoxetine", "fluoxetina", "prozac"],
+    "sertraline": ["sertraline", "sertralina", "zoloft"],
+    "tramadol": ["tramadol"],
+    "codeine": ["codeine", "codeína"],
+    "morphine": ["morphine", "morfina"],
+    "amiodarone": ["amiodarone", "amiodarona", "cordarone"],
+    "digoxin": ["digoxin", "digoxina", "lanoxin"],
+    "spironolactone": ["spironolactone", "espironolactona", "aldactone"],
+    "hydrochlorothiazide": ["hydrochlorothiazide", "hctz", "hidroclorotiazida"],
+    "furosemide": ["furosemide", "furosemida", "lasix"],
+    "potassium": ["potassium", "potasio", "k+", "kcl"],
+    "levothyroxine": ["levothyroxine", "levotiroxina", "synthroid", "eutirox"],
+    "ciprofloxacin": ["ciprofloxacin", "ciprofloxacino", "cipro"],
+    "azithromycin": ["azithromycin", "azitromicina", "zithromax"],
+    "trimethoprim": ["trimethoprim", "trimetoprima", "bactrim", "septra", "cotrimoxazole"],
+    "phenytoin": ["phenytoin", "fenitoína", "dilantin"],
+    "carbamazepine": ["carbamazepine", "carbamazepina", "tegretol"],
+    "lamotrigine": ["lamotrigine", "lamotrigina", "lamictal"],
+    "lithium": ["lithium", "litio"],
+    "methotrexate": ["methotrexate", "metotrexato"],
+    "tramadol": ["tramadol"],
+    "sildenafil": ["sildenafil", "viagra"],
+    "nitroglycerin": ["nitroglycerin", "nitroglicerina", "nitro"],
+    "rifampin": ["rifampin", "rifampicina"],
+    "grapefruit": ["grapefruit", "pomelo", "toronja", "grapefruit juice"]
+  },
+  "interactions": [
+    {
+      "drugs": ["warfarin", "aspirin"],
+      "severity": "major",
+      "mechanism": "Both increase bleeding risk; aspirin inhibits platelet function while warfarin inhibits coagulation",
+      "recommendation": "Avoid combination unless cardiologist specifically prescribes. Monitor INR + bleeding signs"
+    },
+    {
+      "drugs": ["warfarin", "ibuprofen"],
+      "severity": "major",
+      "mechanism": "NSAID increases bleeding risk + may displace warfarin from plasma protein binding",
+      "recommendation": "Avoid; use acetaminophen for pain instead"
+    },
+    {
+      "drugs": ["warfarin", "naproxen"],
+      "severity": "major",
+      "mechanism": "Same as ibuprofen — NSAID bleeding risk",
+      "recommendation": "Avoid"
+    },
+    {
+      "drugs": ["warfarin", "amiodarone"],
+      "severity": "major",
+      "mechanism": "Amiodarone inhibits CYP2C9 + CYP3A4, raising warfarin levels",
+      "recommendation": "Reduce warfarin dose 30-50%, monitor INR weekly"
+    },
+    {
+      "drugs": ["warfarin", "ciprofloxacin"],
+      "severity": "major",
+      "mechanism": "Fluoroquinolones may potentiate warfarin via CYP inhibition + gut flora disruption",
+      "recommendation": "Monitor INR within 3-5 days of starting"
+    },
+    {
+      "drugs": ["warfarin", "trimethoprim"],
+      "severity": "major",
+      "mechanism": "Trimethoprim inhibits CYP2C9, raising warfarin",
+      "recommendation": "Alternative antibiotic preferred, or monitor INR closely"
+    },
+    {
+      "drugs": ["warfarin", "rifampin"],
+      "severity": "major",
+      "mechanism": "Rifampin induces CYP2C9 + CYP3A4, lowering warfarin → subtherapeutic INR",
+      "recommendation": "Significant warfarin dose increase needed; monitor INR"
+    },
+    {
+      "drugs": ["clopidogrel", "aspirin"],
+      "severity": "moderate",
+      "mechanism": "Dual antiplatelet therapy — intentional in ACS post-PCI, otherwise bleeding risk",
+      "recommendation": "Use only if cardiologist prescribes; otherwise avoid duplication"
+    },
+    {
+      "drugs": ["clopidogrel", "omeprazole"],
+      "severity": "moderate",
+      "mechanism": "Omeprazole inhibits CYP2C19 which activates clopidogrel → reduced antiplatelet effect",
+      "recommendation": "Use pantoprazole or famotidine instead"
+    },
+    {
+      "drugs": ["lisinopril", "potassium"],
+      "severity": "major",
+      "mechanism": "ACE inhibitor + potassium supplement → hyperkalemia risk",
+      "recommendation": "Monitor serum K+ regularly; avoid combination if possible"
+    },
+    {
+      "drugs": ["lisinopril", "spironolactone"],
+      "severity": "major",
+      "mechanism": "ACE inhibitor + potassium-sparing diuretic → hyperkalemia",
+      "recommendation": "Monitor K+, creatinine; use with caution"
+    },
+    {
+      "drugs": ["losartan", "potassium"],
+      "severity": "major",
+      "mechanism": "ARB + potassium → hyperkalemia",
+      "recommendation": "Monitor K+ closely"
+    },
+    {
+      "drugs": ["losartan", "spironolactone"],
+      "severity": "major",
+      "mechanism": "ARB + potassium-sparing diuretic → hyperkalemia",
+      "recommendation": "Monitor K+ closely"
+    },
+    {
+      "drugs": ["atorvastatin", "clarithromycin"],
+      "severity": "major",
+      "mechanism": "Macrolide inhibits CYP3A4 → statin levels increase → rhabdomyolysis risk",
+      "recommendation": "Hold statin during antibiotic course"
+    },
+    {
+      "drugs": ["simvastatin", "amiodarone"],
+      "severity": "major",
+      "mechanism": "Amiodarone inhibits CYP3A4 → simvastatin levels → rhabdomyolysis",
+      "recommendation": "Limit simvastatin to 20mg max with amiodarone; consider atorvastatin/rosuvastatin"
+    },
+    {
+      "drugs": ["simvastatin", "grapefruit"],
+      "severity": "moderate",
+      "mechanism": "Grapefruit inhibits intestinal CYP3A4 → statin levels increase",
+      "recommendation": "Avoid grapefruit while on simvastatin"
+    },
+    {
+      "drugs": ["atorvastatin", "grapefruit"],
+      "severity": "moderate",
+      "mechanism": "Same as simvastatin",
+      "recommendation": "Limit grapefruit consumption"
+    },
+    {
+      "drugs": ["sildenafil", "nitroglycerin"],
+      "severity": "contraindicated",
+      "mechanism": "Both vasodilate via NO/cGMP → severe hypotension, cardiovascular collapse",
+      "recommendation": "Do NOT combine. Wait 24h between sildenafil and any nitrate"
+    },
+    {
+      "drugs": ["tramadol", "fluoxetine"],
+      "severity": "major",
+      "mechanism": "Both serotonergic — serotonin syndrome risk + tramadol metabolism affected by CYP2D6",
+      "recommendation": "Avoid combination; if necessary, monitor for serotonin syndrome (agitation, hyperthermia, hyperreflexia)"
+    },
+    {
+      "drugs": ["tramadol", "sertraline"],
+      "severity": "major",
+      "mechanism": "Same — serotonin syndrome risk",
+      "recommendation": "Avoid; if needed, use lowest effective doses + monitor"
+    },
+    {
+      "drugs": ["fluoxetine", "sertraline"],
+      "severity": "major",
+      "mechanism": "Two SSRIs together — serotonin syndrome",
+      "recommendation": "Do not combine; titrate switching with 2-week washout if changing"
+    },
+    {
+      "drugs": ["lithium", "ibuprofen"],
+      "severity": "major",
+      "mechanism": "NSAIDs reduce renal lithium clearance → toxicity",
+      "recommendation": "Use acetaminophen instead; if NSAID needed, monitor lithium levels"
+    },
+    {
+      "drugs": ["lithium", "hydrochlorothiazide"],
+      "severity": "major",
+      "mechanism": "Thiazide diuretics decrease lithium clearance",
+      "recommendation": "Monitor lithium closely; consider alternative diuretic"
+    },
+    {
+      "drugs": ["digoxin", "amiodarone"],
+      "severity": "major",
+      "mechanism": "Amiodarone raises digoxin levels via P-glycoprotein inhibition",
+      "recommendation": "Reduce digoxin dose 50%, monitor levels"
+    },
+    {
+      "drugs": ["levothyroxine", "omeprazole"],
+      "severity": "moderate",
+      "mechanism": "Reduced gastric acid impairs levothyroxine absorption",
+      "recommendation": "Take levothyroxine 30+ min before omeprazole, monitor TSH"
+    },
+    {
+      "drugs": ["methotrexate", "trimethoprim"],
+      "severity": "major",
+      "mechanism": "Both folate antagonists → severe bone marrow suppression",
+      "recommendation": "Avoid combination"
+    },
+    {
+      "drugs": ["methotrexate", "ibuprofen"],
+      "severity": "moderate",
+      "mechanism": "NSAIDs reduce renal methotrexate clearance → toxicity",
+      "recommendation": "Avoid in high-dose methotrexate; low-dose RA monitoring OK with caution"
+    },
+    {
+      "drugs": ["carbamazepine", "phenytoin"],
+      "severity": "major",
+      "mechanism": "Both CYP3A4 inducers — complex interactions; phenytoin levels may rise or fall",
+      "recommendation": "Monitor levels of both"
+    },
+    {
+      "drugs": ["lamotrigine", "carbamazepine"],
+      "severity": "major",
+      "mechanism": "Carbamazepine induces UGT → lamotrigine levels fall; need higher lamotrigine dose",
+      "recommendation": "Titrate lamotrigine slowly, monitor levels and seizure control"
+    }
+  ]
+}

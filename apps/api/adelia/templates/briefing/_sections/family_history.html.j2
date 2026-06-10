@@ -1,0 +1,16 @@
+<section class="section">
+  <h2>Family history</h2>
+  {% if payload.sections.family_history %}
+  <ul>
+    {% for f in payload.sections.family_history %}
+    <li>
+      <strong>{{ f.relation }}</strong>: {{ f.condition }}
+      <span class="provenance-badge {{ f.provenance }}"></span>
+      {% for c in f.citations %}<sup class="citation" data-citation-id="{{ c.entity_id }}">[{{ loop.index }}]</sup>{% endfor %}
+    </li>
+    {% endfor %}
+  </ul>
+  {% else %}
+  <p class="no-data">No family history recorded.</p>
+  {% endif %}
+</section>
