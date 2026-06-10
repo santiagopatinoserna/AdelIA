@@ -106,6 +106,37 @@ services:
     ports:
       - "${WEB_PORT:-3000}:3000"
 
+  backup:
+    image: pgvector/pgvector:pg16
+    restart: unless-stopped
+    depends_on:
+      postgres:
+        condition: service_healthy
+    environment:
+      PGHOST: postgres
+      PGUSER: ${POSTGRES_USER:-adelia}
+      PGPASSWORD: ${POSTGRES_PASSWORD}
+      PGDATABASE: ${POSTGRES_DB:-adelia}
+      BACKUP_INTERVAL_SECONDS: ${BACKUP_INTERVAL_SECONDS:-86400}
+      BACKUP_RETENTION_DAYS: ${BACKUP_RETENTION_DAYS:-14}
+    volumes:
+      - pgbackups:/backups
+    entrypoint: >
+      sh -c '
+        echo "backup sidecar: every $${BACKUP_INTERVAL_SECONDS}s, retention $${BACKUP_RETENTION_DAYS}d";
+        while true; do
+          STAMP=$$(date +%Y%m%d-%H%M%S);
+          if pg_dump --format=custom --compress=6 --file="/backups/adelia-$${STAMP}.dump"; then
+            echo "backup ok: adelia-$${STAMP}.dump ($$(du -h /backups/adelia-$${STAMP}.dump | cut -f1))";
+          else
+            echo "backup FAILED at $${STAMP}" >&2;
+          fi;
+          find /backups -name "adelia-*.dump" -mtime +$${BACKUP_RETENTION_DAYS} -delete;
+          sleep "$${BACKUP_INTERVAL_SECONDS}";
+        done
+      '
+
 volumes:
   pgdata:
   miniodata:
+  pgbackups:

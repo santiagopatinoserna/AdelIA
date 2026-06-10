@@ -144,6 +144,20 @@ docker compose -f infra/docker-compose.prod.yml --env-file .env.prod up -d --bui
 
 Web on `:3000`, API on `:8000` (override with `WEB_PORT`/`API_PORT`). The API container runs `alembic upgrade head` on boot. Put a TLS proxy (Caddy/Traefik) in front for anything beyond a LAN.
 
+### Backups
+
+A `backup` sidecar runs `pg_dump` (custom format, compressed) every 24h into the `pgbackups` volume, pruning dumps older than 14 days (`BACKUP_INTERVAL_SECONDS` / `BACKUP_RETENTION_DAYS`). Restore:
+
+```bash
+# list available dumps
+docker compose -f infra/docker-compose.prod.yml exec backup ls -lh /backups
+# restore one (drops and recreates objects)
+docker compose -f infra/docker-compose.prod.yml exec backup \
+  pg_restore --clean --if-exists -d adelia /backups/adelia-YYYYMMDD-HHMMSS.dump
+```
+
+Document blobs live in the `miniodata` volume — snapshot it at the filesystem level alongside the DB dumps (the dump covers metadata; blobs are the original files).
+
 ## Roadmap
 
 - **Now (pre-launch ops):** Fly.io deploy, Resend domain verification, Telegram bot + Postmark inbound keys (scaffolding is merged and tested).
