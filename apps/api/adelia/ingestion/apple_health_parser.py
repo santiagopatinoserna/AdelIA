@@ -99,7 +99,13 @@ def parse_health_records(source: IO[bytes] | str, max_records: int | None = None
     Yields HealthRecord per Record element whose `type` is in APPLE_HEALTH_TYPES.
     """
     count = 0
-    context = etree.iterparse(source, events=("end",), tag="Record")
+    # Security: this parses user-uploaded files. Disable entity resolution
+    # and network access so a malicious export cannot exfiltrate server files
+    # via an external XML entity (XXE). Explicit, not relying on lxml defaults.
+    context = etree.iterparse(
+        source, events=("end",), tag="Record",
+        resolve_entities=False, no_network=True, load_dtd=False,
+    )
 
     for _event, elem in context:
         apple_type = elem.get("type", "")
