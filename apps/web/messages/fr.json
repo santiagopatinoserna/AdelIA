@@ -45,7 +45,9 @@
     "thinking": "Réflexion…",
     "noContext": "Je n'ai pas assez d'informations.",
     "citationLabel": "Voir la source",
-    "deleteSession": "Supprimer"
+    "deleteSession": "Supprimer",
+    "openSessions": "Voir les conversations",
+    "closeSessions": "Fermer"
   },
   "ingestion": {
     "title": "Importer des données",
