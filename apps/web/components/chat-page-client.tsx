@@ -1,5 +1,6 @@
 "use client";
 import { useCallback, useEffect, useRef, useState } from "react";
+import { useTranslations } from "next-intl";
 import {
   type ChatSession,
   type Citation,
@@ -27,10 +28,12 @@ export function ChatPageClient({
   locale: string;
   titleText: string;
 }) {
+  const t = useTranslations("chat");
   const [sessions, setSessions] = useState<ChatSession[]>(initialSessions);
   const [activeId, setActiveId] = useState<string | null>(null);
   const [messages, setMessages] = useState<LocalMsg[]>([]);
   const [busy, setBusy] = useState(false);
+  const [sidebarOpen, setSidebarOpen] = useState(false);
   const scrollRef = useRef<HTMLDivElement | null>(null);
   // Increments whenever the visible conversation changes; in-flight stream
   // events from a previous epoch are dropped instead of appending tokens
@@ -136,12 +139,22 @@ export function ChatPageClient({
       <ChatSessionsSidebar
         sessions={sessions}
         activeId={activeId}
-        onSelect={loadSession}
-        onNew={newSession}
+        onSelect={(id) => { loadSession(id); setSidebarOpen(false); }}
+        onNew={() => { newSession(); setSidebarOpen(false); }}
         onDelete={handleDelete}
+        isOpen={sidebarOpen}
+        onClose={() => setSidebarOpen(false)}
       />
-      <section className="flex flex-1 flex-col">
-        <header className="border-b border-slate-200 bg-white px-6 py-4">
+      <section className="flex min-w-0 flex-1 flex-col">
+        <header className="flex items-center gap-3 border-b border-slate-200 bg-white px-4 py-4 md:px-6">
+          <button
+            type="button"
+            onClick={() => setSidebarOpen(true)}
+            aria-label={t("openSessions")}
+            className="rounded-md border border-slate-300 px-2 py-1 text-sm md:hidden"
+          >
+            ☰
+          </button>
           <h1 className="text-base font-semibold">{titleText}</h1>
         </header>
         <div ref={scrollRef} className="flex-1 overflow-y-auto bg-slate-50 px-6 py-6">
