@@ -120,11 +120,20 @@ async def main() -> int:
         payload = r.json()["payload"]
         print("  ✓ briefing generado\n")
 
-    # 4. clinical correctness
-    blob = (str(payload.get("sections", {}))).lower()
-    missing_dx = [f.name_contains for f in CASE.must_find
-                  if f.entity_type in ("condition", "medication")
-                  and not any(t.lower() in blob for t in f.name_contains)]
+    # 4. clinical correctness — the diagnosis/med must be in ITS section, not
+    # merely somewhere in the payload (avoids a false OK if it only shows up
+    # in a pre-baked question).
+    sections = payload.get("sections", {})
+    problems_blob = str(sections.get("active_problems") or []).lower()
+    meds_blob = str(sections.get("medications") or []).lower()
+    missing_dx = []
+    for f in CASE.must_find:
+        if f.entity_type == "condition":
+            if not any(t.lower() in problems_blob for t in f.name_contains):
+                missing_dx.append(f.name_contains)
+        elif f.entity_type == "medication":
+            if not any(t.lower() in meds_blob for t in f.name_contains):
+                missing_dx.append(f.name_contains)
 
     # 5. traceability: every citation's raw_quote must appear in the source doc
     items = list(_iter_items(payload))

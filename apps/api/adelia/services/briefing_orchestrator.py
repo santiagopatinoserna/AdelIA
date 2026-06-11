@@ -67,6 +67,7 @@ async def _load_user_entities_and_sources(
                 value=e.value or {},
                 event_date=e.event_date.isoformat() if e.event_date else None,
                 raw_quote=e.raw_quote or "",
+                status=e.status,
                 provenance=e.provenance or "extracted_from_clinician_doc",
             )
             for e in rows
