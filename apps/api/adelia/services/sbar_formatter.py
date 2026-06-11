@@ -10,6 +10,8 @@ as a pure transformation. Keeps this module testable without Postgres.
 """
 from __future__ import annotations
 
+import re
+import unicodedata
 from typing import Literal
 from uuid import UUID
 
@@ -42,6 +44,7 @@ class EntityInput(BaseModel):
     value: dict = Field(default_factory=dict)
     event_date: str | None = None
     raw_quote: str
+    status: str | None = None
     provenance: Literal["extracted_from_clinician_doc", "patient_stated"]
 
 
@@ -51,6 +54,49 @@ def _to_citation(e: EntityInput) -> Citation:
         entity_id=e.id,
         raw_quote=e.raw_quote,
     )
+
+
+# Statuses meaning "not a current medication" — a planned/recommended drug
+# from a PLAN section must not land on the doctor's active medication list.
+_NON_CURRENT_MED_STATUS = {
+    "planned", "recommended", "proposed", "suspended",
+    "discontinued", "stopped", "held",
+}
+
+
+def _norm_words(name: str) -> list[str]:
+    ascii_name = unicodedata.normalize("NFKD", name).encode("ascii", "ignore").decode()
+    return [w for w in re.split(r"\W+", ascii_name.lower()) if w]
+
+
+def _group_key(name: str, key_words: int) -> tuple[str, ...]:
+    words = _norm_words(name)
+    return tuple(words[:key_words]) if words else (name.lower(),)
+
+
+def _dedupe_items(entities: list[EntityInput], key_words: int) -> list[tuple[EntityInput, list[Citation]]]:
+    """Collapse entities whose names share their first `key_words` significant
+    words (same clinical concept). Returns (representative, merged citations):
+    keeps the most specific (longest) name, preserves every variant's citation
+    so traceability survives the dedup."""
+    groups: dict[tuple[str, ...], list[EntityInput]] = {}
+    order: list[tuple[str, ...]] = []
+    for e in entities:
+        key = _group_key(e.name, key_words)
+        if key not in groups:
+            groups[key] = []
+            order.append(key)
+        groups[key].append(e)
+    return [
+        (max(groups[k], key=lambda e: len(e.name)), [_to_citation(e) for e in groups[k]])
+        for k in order
+    ]
+
+
+def _is_current_medication(e: EntityInput) -> bool:
+    # status lives on the entity; older docs may also carry it in value.
+    status = e.status or ((e.value or {}).get("status") if isinstance(e.value, dict) else None)
+    return str(status).lower() not in _NON_CURRENT_MED_STATUS
 
 
 def _filter_observations(
@@ -89,17 +135,22 @@ def format_sections(
     for e in entities:
         by_type.setdefault(e.entity_type, []).append(e)
 
+    # Dedupe the same condition stated twice (e.g. "DM2 mal controlada" +
+    # "DM2 descompensada") into one problem, merging citations.
     active_problems = [
         ProblemItem(
             name=e.name,
             status=e.value.get("status") if isinstance(e.value, dict) else None,
             onset_date=e.event_date,
-            citations=[_to_citation(e)],
+            citations=cites,
             provenance=e.provenance,
         )
-        for e in by_type.get("condition", [])
+        for e, cites in _dedupe_items(by_type.get("condition", []), key_words=3)
     ]
 
+    # Only CURRENT meds reach the active list; a planned/recommended drug
+    # ("add an SGLT2 inhibitor") is filtered out. Then dedupe by drug name.
+    current_meds = [e for e in by_type.get("medication", []) if _is_current_medication(e)]
     medications = [
         MedicationItem(
             name=e.name,
@@ -107,10 +158,10 @@ def format_sections(
             route=e.value.get("route") if isinstance(e.value, dict) else None,
             frequency=e.value.get("frequency") if isinstance(e.value, dict) else None,
             started=e.event_date,
-            citations=[_to_citation(e)],
+            citations=cites,
             provenance=e.provenance,
         )
-        for e in by_type.get("medication", [])
+        for e, cites in _dedupe_items(current_meds, key_words=1)
     ]
 
     allergy_entities = by_type.get("allergy", [])

@@ -33,6 +33,14 @@ Optional fields:
 - code: the code itself
 - page: page number if multi-page
 
+Clinical-quality rule (so a doctor sees a trustworthy medication list):
+- CURRENT vs PLANNED medications: a drug the patient is ACTIVELY taking gets
+  status "current". A drug merely RECOMMENDED or PLANNED (e.g. under "PLAN",
+  "anadir", "iniciar", "se recomienda", "considerar") gets status "planned" —
+  do NOT present it as a current medication.
+  Extract EVERY diagnosis you find — never omit one to avoid repetition;
+  de-duplication happens downstream, your job is recall.
+
 Return ONLY a JSON object: {"entities": [...]}. No prose, no markdown fence, just JSON.
 
 If the document contains no medical information, return {"entities": []}.
