@@ -1,7 +1,6 @@
 """Connection-pool discipline: the upload endpoint and the processing
 pipeline must not hold a pooled connection across slow S3/LLM I/O."""
 import asyncio
-from uuid import uuid4
 
 import pytest
 
