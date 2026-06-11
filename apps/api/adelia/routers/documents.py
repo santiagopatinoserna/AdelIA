@@ -17,6 +17,7 @@ from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from adelia.auth import get_current_user_id
+from adelia.config import settings
 from adelia.db import AsyncSessionLocal, get_db
 from adelia.models import Chunk, Document, Entity
 from adelia.schemas import DocumentOut, ExtractedEntity, derive_status
@@ -97,128 +98,139 @@ def _doc_to_out(doc: Document, *, entity_count: int = 0, chunk_count: int = 0) -
     )
 
 
+_processing_semaphore: asyncio.Semaphore | None = None
+
+
+def _get_processing_semaphore() -> asyncio.Semaphore:
+    global _processing_semaphore
+    if _processing_semaphore is None:
+        _processing_semaphore = asyncio.Semaphore(settings.doc_processing_concurrency)
+    return _processing_semaphore
+
+
 async def process_document(document_id: uuid.UUID, mime_type: str) -> None:
+    # Cap concurrent pipelines: a burst of uploads queues here instead of
+    # each grabbing a DB connection + Mistral call at once (pool/API
+    # exhaustion → 500). Waiting tasks hold no connection.
+    async with _get_processing_semaphore():
+        await _process_document_inner(document_id, mime_type)
+
+
+async def _process_document_inner(document_id: uuid.UUID, mime_type: str) -> None:
     """BackgroundTask: download from S3, transcribe/OCR, extract entities,
-    chunk + embed. Persist all stages atomically per document."""
+    chunk + embed.
+
+    DB connections are held only for two short reads/writes — never across
+    the slow OCR/extract/embed network I/O. Holding a pooled connection for
+    the whole ~6s pipeline exhausted the pool under concurrent uploads
+    (QueuePool timeout → 500). Entity/Chunk ids are generated client-side so
+    the in-memory records can be built before any second connection.
+    """
+    # Short read: just the fields the pipeline needs, then release the conn.
     async with AsyncSessionLocal() as session:
         doc = await session.get(Document, document_id)
         if doc is None:
             return
-        try:
-            body_stream = await storage.get_object(doc.s3_key)
-            body = await asyncio.to_thread(body_stream.read)
+        s3_key = doc.s3_key
+        user_id = doc.user_id
 
-            # Stage 1: Get raw text via transcribe (audio) or OCR (pdf/image)
-            if _is_audio(mime_type):
-                raw_text = await _with_retry(
-                    "transcribe", lambda: transcribe_audio(body, mime_type)
-                )
-            elif mime_type == "application/pdf" or mime_type.startswith("image/"):
-                raw_text = await _with_retry(
-                    "ocr", lambda: extract_text_from_pdf(body, mime_type)
-                )
-            else:
-                raw_text = ""
+    raw_text = ""
+    entities: list[Entity] = []
+    chunks: list[Chunk] = []
 
-            doc.raw_text = raw_text
-            await session.flush()  # ensure doc.id usable for FKs below
+    try:
+        body_stream = await storage.get_object(s3_key)
+        body = await asyncio.to_thread(body_stream.read)
 
-            # Stage 2: Entity extraction → persist entities table
-            entity_records: list[Entity] = []
+        # Stage 1: raw text via transcribe (audio) or OCR (pdf/image)
+        if _is_audio(mime_type):
+            raw_text = await _with_retry("transcribe", lambda: transcribe_audio(body, mime_type))
+        elif mime_type == "application/pdf" or mime_type.startswith("image/"):
+            raw_text = await _with_retry("ocr", lambda: extract_text_from_pdf(body, mime_type))
+
+        if raw_text:
+            # Stage 2: entity extraction (ids assigned now for entity_ranges)
+            extracted: list[ExtractedEntity] = await _with_retry(
+                "extract", lambda: extract_entities(raw_text)
+            )
             entity_ranges: dict[str, tuple[int, int]] = {}
-            if raw_text:
-                extracted: list[ExtractedEntity] = await _with_retry(
-                    "extract", lambda: extract_entities(raw_text)
-                )
-                for ex in extracted:
-                    entity = Entity(
-                        user_id=doc.user_id,
-                        document_id=doc.id,
-                        entity_type=ex.entity_type,
-                        coding_system=ex.coding_system,
-                        code=ex.code,
-                        name=ex.name,
-                        value=ex.value,
-                        event_date=ex.event_date,
-                        status=ex.status,
-                        provenance=ex.provenance,
-                        confidence=ex.confidence,
-                        raw_quote=ex.raw_quote,
-                        page=ex.page,
-                        needs_review=ex.confidence < NEEDS_REVIEW_CONFIDENCE_THRESHOLD,
-                    )
-                    session.add(entity)
-                    entity_records.append(entity)
-                await session.flush()  # populate entity.id for FK use
-                for ent in entity_records:
-                    if ent.raw_quote and ent.raw_quote in raw_text:
-                        s = raw_text.find(ent.raw_quote)
-                        entity_ranges[str(ent.id)] = (s, s + len(ent.raw_quote))
+            for ex in extracted:
+                eid = uuid.uuid4()
+                entities.append(Entity(
+                    id=eid,
+                    user_id=user_id,
+                    document_id=document_id,
+                    entity_type=ex.entity_type,
+                    coding_system=ex.coding_system,
+                    code=ex.code,
+                    name=ex.name,
+                    value=ex.value,
+                    event_date=ex.event_date,
+                    status=ex.status,
+                    provenance=ex.provenance,
+                    confidence=ex.confidence,
+                    raw_quote=ex.raw_quote,
+                    page=ex.page,
+                    needs_review=ex.confidence < NEEDS_REVIEW_CONFIDENCE_THRESHOLD,
+                ))
+                if ex.raw_quote and ex.raw_quote in raw_text:
+                    s = raw_text.find(ex.raw_quote)
+                    entity_ranges[str(eid)] = (s, s + len(ex.raw_quote))
 
-            # Stage 3: Hierarchical chunking
-            chunk_records: list[Chunk] = []
-            chunk_texts: list[str] = []
-            if raw_text:
-                chunk_output = chunk_hierarchical(
-                    raw_text,
-                    ChunkConfig(small_size=350, parent_size=1500, overlap=50),
-                    entity_ranges=entity_ranges,
-                )
-                for sc in chunk_output.small_chunks:
-                    chunk_record = Chunk(
-                        document_id=doc.id,
-                        user_id=doc.user_id,
-                        content=sc.content,
-                        chunk_index=sc.chunk_index,
-                        chunk_metadata={
-                            "parent_index": sc.parent_index,
-                            "token_count": sc.token_count,
-                            "start_char": sc.start_char,
-                            "end_char": sc.end_char,
-                            "entity_ids": sc.entity_ids,
-                        },
-                    )
-                    chunk_records.append(chunk_record)
-                    chunk_texts.append(sc.content)
+            # Stage 3: hierarchical chunking
+            chunk_output = chunk_hierarchical(
+                raw_text,
+                ChunkConfig(small_size=350, parent_size=1500, overlap=50),
+                entity_ranges=entity_ranges,
+            )
+            small = chunk_output.small_chunks
+            chunk_texts = [sc.content for sc in small]
 
-            # Stage 4: Embed chunks → set Chunk.embedding
-            if chunk_texts:
-                vectors = await _with_retry("embed", lambda: embed_texts(chunk_texts))
-                for chunk_record, vec in zip(chunk_records, vectors, strict=True):
-                    chunk_record.embedding = vec
-                    session.add(chunk_record)
+            # Stage 4: embed (slow network I/O — no DB connection held)
+            vectors = await _with_retry("embed", lambda: embed_texts(chunk_texts)) if chunk_texts else []
+            for sc, vec in zip(small, vectors, strict=True):
+                chunks.append(Chunk(
+                    document_id=document_id,
+                    user_id=user_id,
+                    content=sc.content,
+                    chunk_index=sc.chunk_index,
+                    embedding=vec,
+                    chunk_metadata={
+                        "parent_index": sc.parent_index,
+                        "token_count": sc.token_count,
+                        "start_char": sc.start_char,
+                        "end_char": sc.end_char,
+                        "entity_ids": sc.entity_ids,
+                    },
+                ))
+    except (RuntimeError, httpx.HTTPError, MistralError, ClientError, EndpointConnectionError, OpenAIAPIError) as exc:
+        logger.exception("process_document failed for document_id=%s: %s", document_id, exc)
+        raw_text, entities, chunks = "", [], []
+    except Exception as exc:  # noqa: BLE001 — final fallback to set processed_at
+        logger.exception("process_document unexpected failure for document_id=%s: %s", document_id, exc)
+        raw_text, entities, chunks = "", [], []
 
-            # Stage 5 (M5 T9): Mark any prior briefings of this user as stale.
-            # User uploaded new data → previously generated briefings no longer reflect it.
-            await briefing_repo.mark_stale_for_user(
-                session,
-                user_id=doc.user_id,
-                since=datetime.now(timezone.utc),
-            )
-        except (RuntimeError, httpx.HTTPError, MistralError, ClientError, EndpointConnectionError, OpenAIAPIError) as exc:
-            logger.exception(
-                "process_document failed for document_id=%s: %s",
-                document_id,
-                exc,
-            )
-            doc.raw_text = doc.raw_text or None
-        except Exception as exc:  # noqa: BLE001 — final fallback to set processed_at
-            logger.exception(
-                "process_document unexpected failure for document_id=%s: %s",
-                document_id,
-                exc,
-            )
-            doc.raw_text = doc.raw_text or None
-        finally:
-            doc.processed_at = datetime.now(timezone.utc)
-            await session.commit()
+    # Short write: persist everything in one quick transaction.
+    async with AsyncSessionLocal() as session:
+        doc = await session.get(Document, document_id)
+        if doc is None:
+            return
+        doc.raw_text = raw_text or None
+        if entities:
+            session.add_all(entities)
+        if chunks:
+            session.add_all(chunks)
+        await briefing_repo.mark_stale_for_user(
+            session, user_id=user_id, since=datetime.now(timezone.utc)
+        )
+        doc.processed_at = datetime.now(timezone.utc)
+        await session.commit()
 
 
 @router.post("", response_model=DocumentOut, status_code=status.HTTP_201_CREATED)
 async def upload_document(
     background: BackgroundTasks,
     user_id: Annotated[uuid.UUID, Depends(get_current_user_id)],
-    db: Annotated[AsyncSession, Depends(get_db)],
     file: UploadFile = File(...),
 ):
     if file.content_type not in ALLOWED_MIME:
@@ -229,6 +241,8 @@ async def upload_document(
         raise HTTPException(status_code=413, detail="File exceeds 50 MB limit")
     safe_name = re.sub(r"[^\w.\-]", "_", pathlib.Path(file.filename or "upload").name)
     s3_key = f"users/{user_id}/{uuid.uuid4()}-{safe_name}"
+    # Upload to S3 BEFORE acquiring a DB connection — a pooled connection held
+    # across the blob upload exhausted the pool under concurrent uploads.
     await storage.put_object(s3_key, io.BytesIO(body), content_type=file.content_type)
 
     doc = Document(
@@ -237,18 +251,19 @@ async def upload_document(
         mime_type=file.content_type,
         s3_key=s3_key,
     )
-    db.add(doc)
-    try:
-        await db.commit()
-    except Exception:
-        # Compensate: a failed commit after the S3 put would leave an orphan
-        # blob nobody references (v0.1.1 transactional-outbox carry-over).
+    async with AsyncSessionLocal() as db:
+        db.add(doc)
         try:
-            await storage.delete_object(s3_key)
-        except Exception:  # noqa: BLE001 — best effort, original error matters more
-            logger.exception("orphan blob cleanup failed for %s", s3_key)
-        raise
-    await db.refresh(doc)
+            await db.commit()
+        except Exception:
+            # Compensate: a failed commit after the S3 put would leave an
+            # orphan blob nobody references (transactional-outbox carry-over).
+            try:
+                await storage.delete_object(s3_key)
+            except Exception:  # noqa: BLE001 — best effort, original error matters
+                logger.exception("orphan blob cleanup failed for %s", s3_key)
+            raise
+        await db.refresh(doc)
 
     background.add_task(process_document, doc.id, file.content_type)
 
