@@ -207,9 +207,15 @@ def _parse_entry_common(entry_el, section_key: str) -> CCDEntry | None:
     )
 
 
+# Security: CCD files are user-uploaded. Disable entity resolution + network
+# so a malicious document cannot exfiltrate server files via an external XML
+# entity (XXE). Explicit, not relying on lxml version defaults.
+_SECURE_PARSER = etree.XMLParser(resolve_entities=False, no_network=True, load_dtd=False)
+
+
 def parse_ccd(source: IO[bytes] | str) -> CCDDocument:
     """Parse a CCD XML document and return CCDDocument with all extracted entries."""
-    tree = etree.parse(source)
+    tree = etree.parse(source, _SECURE_PARSER)
     root = tree.getroot()
     patient = _parse_patient(root)
 
