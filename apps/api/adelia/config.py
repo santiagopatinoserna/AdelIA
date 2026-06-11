@@ -31,6 +31,14 @@ class Settings(BaseSettings):
     cors_origins: str = "http://localhost:3000,http://localhost:3001"
     # In-process per-identity rate limiting (disable only for test suites).
     rate_limit_enabled: bool = True
+    # DB connection pool — defaults too small for concurrent uploads.
+    db_pool_size: int = 20
+    db_max_overflow: int = 20
+    db_pool_timeout: int = 30
+    # Max documents processed concurrently in-process (BackgroundTasks).
+    # Bounds DB-pool + Mistral-API pressure; excess uploads queue, not 500.
+    # v0.2 replaces in-process tasks with a real worker queue (Celery).
+    doc_processing_concurrency: int = 8
 
     @property
     def database_url(self) -> str:
