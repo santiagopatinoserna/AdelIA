@@ -45,6 +45,24 @@ async def lifespan(app: FastAPI):
         await sweep_blob_tombstones()
     except Exception:  # noqa: BLE001 — sweep must never block boot
         logger.exception("startup blob tombstone sweep failed")
+    # Load clinical evidence corpora (seed + per-topic files). Idempotent by
+    # title, so re-running on every boot is safe; new topics drop in as JSON.
+    if settings.mistral_api_key:
+        try:
+            from pathlib import Path as _Path
+
+            from adelia.enrichment.evidence_loader import (
+                load_evidence_file,
+                load_seed_if_empty,
+            )
+
+            await load_seed_if_empty()
+            _data_dir = _Path(__file__).parent / "enrichment" / "data"
+            for _f in sorted(_data_dir.glob("evidence_*.json")):
+                if _f.name != "evidence_seed.json":
+                    await load_evidence_file(_f)
+        except Exception:  # noqa: BLE001 — evidence load must never block boot
+            logger.exception("startup evidence load failed")
     yield
     await engine.dispose()
 
