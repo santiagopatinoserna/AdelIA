@@ -1,0 +1,106 @@
+{
+  "_meta": {
+    "title": "Cuestionario clínico de control — reflujo gastroesofágico infantil",
+    "version": "1.0",
+    "purpose": "Anamnesis estructurada completa del reflujo de un niño. Cada pregunta está FUNDAMENTADA en las guías de referencia (campo 'why' + 'source'), nunca improvisada. Las respuestas forman el control longitudinal del caso y alimentan la valoración del chat/briefing y el Modo Consulta.",
+    "based_on": [
+      "Rosen R, et al. NASPGHAN-ESPGHAN Pediatric GERD Clinical Practice Guidelines. JPGN 2018;66(3):516-554.",
+      "NICE NG1. Gastro-oesophageal reflux disease in children and young people (2015, upd. 2019).",
+      "NIDDK. Acid Reflux (GER & GERD) in Infants."
+    ],
+    "principle": "0 errores no es posible con IA; el sustituto es trazabilidad total: cada ítem cita su fundamento y cada respuesta/valoración posterior citará su fuente del corpus."
+  },
+  "sections": [
+    {
+      "id": "perinatal",
+      "title": "Nacimiento y antecedentes perinatales",
+      "rationale": "La prematuridad y ciertas condiciones congénitas son factores de riesgo establecidos de GERD y cambian el umbral de preocupación.",
+      "questions": [
+        {"id": "gestational_age_weeks", "text": "¿A las cuántas semanas de gestación nació?", "type": "number", "unit": "semanas", "why": "La prematuridad es factor de riesgo de GERD y modifica el manejo.", "source": "NIDDK; NASPGHAN-ESPGHAN 2018"},
+        {"id": "birth_weight_g", "text": "¿Cuánto pesó al nacer?", "type": "number", "unit": "gramos", "why": "El bajo peso/prematuridad se asocian a más reflujo y a evaluar el crecimiento desde una base distinta.", "source": "NASPGHAN-ESPGHAN 2018"},
+        {"id": "delivery_type", "text": "Tipo de parto", "type": "choice", "options": ["Vaginal", "Cesárea"], "why": "Contexto perinatal; orienta sobre la microbiota y complicaciones neonatales.", "source": "anamnesis estándar"},
+        {"id": "nicu_admission", "text": "¿Ingresó en neonatología (UCIN)?", "type": "choice", "options": ["No", "Sí"], "why": "Un ingreso neonatal sugiere comorbilidad que puede causar o agravar el reflujo.", "source": "NASPGHAN-ESPGHAN 2018"},
+        {"id": "congenital_conditions", "text": "¿Tiene alguna de estas condiciones diagnosticadas?", "type": "multichoice", "options": ["Ninguna", "Prematuridad", "Atresia esofágica operada", "Hernia de hiato", "Parálisis cerebral / daño neurológico", "Fibrosis quística", "Síndrome genético"], "why": "Son los factores de riesgo de GERD que las guías citan explícitamente; su presencia hace el reflujo patológico más probable y persistente.", "source": "NIDDK; NASPGHAN-ESPGHAN 2018"}
+      ]
+    },
+    {
+      "id": "feeding",
+      "title": "Alimentación",
+      "rationale": "La primera línea de manejo del reflujo es nutricional; conocer el detalle de la alimentación es imprescindible antes de cualquier fármaco.",
+      "questions": [
+        {"id": "feeding_type", "text": "¿Cómo se alimenta actualmente?", "type": "choice", "options": ["Lactancia materna exclusiva", "Fórmula", "Mixta", "Lactancia + sólidos", "Fórmula + sólidos"], "why": "El manejo conservador difiere entre pecho y fórmula (NICE pauta pasos distintos).", "source": "NICE NG1"},
+        {"id": "formula_name", "text": "Si toma fórmula, ¿cuál (marca y tipo)?", "type": "text", "why": "Permite saber si ya usa una hidrolizada (relevante para descartar alergia a proteína de leche de vaca).", "source": "NASPGHAN-ESPGHAN 2018"},
+        {"id": "feed_volume_frequency", "text": "Volumen y frecuencia de las tomas (ej. 120 ml cada 3 h)", "type": "text", "why": "El sobrealimentar es causa frecuente de regurgitación; reducir volumen o fraccionar es el primer paso.", "source": "NICE NG1"},
+        {"id": "thickener_used", "text": "¿Habéis probado espesar las tomas?", "type": "choice", "options": ["No", "Sí, con resultado", "Sí, sin resultado"], "why": "El espesado reduce la regurgitación; saber si ya se probó evita repetir o saltar pasos.", "source": "NICE NG1; NASPGHAN-ESPGHAN 2018"},
+        {"id": "cow_milk_elimination_tried", "text": "¿Se ha probado eliminar la proteína de leche de vaca (fórmula hidrolizada o dieta materna sin lácteos) durante 2-4 semanas?", "type": "choice", "options": ["No", "Sí, mejoró", "Sí, sin cambio"], "why": "La alergia a proteína de leche de vaca imita el reflujo; el ensayo de eliminación es diagnóstico clave.", "source": "NASPGHAN-ESPGHAN 2018"}
+      ]
+    },
+    {
+      "id": "symptoms",
+      "title": "Síntomas y su cronología",
+      "rationale": "Caracterizar los síntomas distingue el reflujo fisiológico (no necesita tratamiento) de la enfermedad por reflujo.",
+      "questions": [
+        {"id": "symptom_onset_age_weeks", "text": "¿A qué edad empezaron los síntomas?", "type": "number", "unit": "semanas de vida", "why": "El inicio antes de las 2 semanas o después de los 6 meses es bandera de alarma de otra causa.", "source": "NICE NG1; NASPGHAN-ESPGHAN 2018"},
+        {"id": "regurgitation_frequency", "text": "¿Con qué frecuencia regurgita o 'echa bocanadas'?", "type": "choice", "options": ["Rara vez", "Tras algunas tomas", "Tras casi todas las tomas", "Varias veces entre tomas"], "why": "La frecuencia/volumen ayuda a graduar y a explicar a la familia la evolución natural esperable.", "source": "NASPGHAN-ESPGHAN 2018"},
+        {"id": "distress_signs", "text": "¿Presenta alguno de estos signos?", "type": "multichoice", "options": ["Ninguno", "Arqueo de la espalda / posturas anómalas de cuello (Sandifer)", "Irritabilidad/llanto marcado al regurgitar", "Rechazo del alimento", "Atragantamiento o arcadas", "Tos o sibilancias", "Despertares frecuentes"], "why": "Estos signos, junto con la regurgitación, orientan a enfermedad por reflujo (GERD) y no a reflujo simple.", "source": "NIDDK; NASPGHAN-ESPGHAN 2018"},
+        {"id": "symptom_trend", "text": "Desde que empezaron, los síntomas están…", "type": "choice", "options": ["Mejorando", "Igual", "Empeorando"], "why": "La evolución natural es a mejorar entre los 6 y 18 meses; un empeoramiento obliga a reevaluar.", "source": "NICE NG1"}
+      ]
+    },
+    {
+      "id": "red_flags",
+      "title": "Signos de ALARMA (importante)",
+      "rationale": "Cualquiera de estos significa que NO es reflujo simple y exige evaluación médica urgente. Esta sección nunca se omite.",
+      "questions": [
+        {"id": "bilious_vomit", "text": "¿Ha vomitado líquido VERDE o amarillo-verdoso (bilioso)?", "type": "choice", "options": ["No", "Sí"], "why": "El vómito bilioso puede indicar obstrucción intestinal / vólvulo: EMERGENCIA QUIRÚRGICA.", "source": "NICE NG1; NASPGHAN-ESPGHAN 2018", "alarm": true},
+        {"id": "blood", "text": "¿Sangre en el vómito o en las heces?", "type": "choice", "options": ["No", "Sí"], "why": "Sangrado digestivo: requiere evaluación especializada urgente.", "source": "NICE NG1", "alarm": true},
+        {"id": "projectile_vomit", "text": "¿Vómitos en proyectil, fuertes, en un bebé menor de 2 meses?", "type": "choice", "options": ["No", "Sí"], "why": "Posible estenosis pilórica: derivación quirúrgica urgente.", "source": "NICE NG1", "alarm": true},
+        {"id": "weight_loss", "text": "¿Ha perdido peso o no gana peso (estancamiento)?", "type": "choice", "options": ["No", "Sí"], "why": "El estancamiento del crecimiento descarta reflujo banal y obliga a investigar.", "source": "NICE NG1; NASPGHAN-ESPGHAN 2018", "alarm": true},
+        {"id": "neuro_fever", "text": "¿Fiebre, letargo, convulsiones o fontanela abombada?", "type": "choice", "options": ["No", "Sí"], "why": "Sugieren infección o patología neurológica, no reflujo.", "source": "NICE NG1", "alarm": true}
+      ]
+    },
+    {
+      "id": "medication",
+      "title": "Medicación tomada (qué, dosis, desde cuándo y respuesta)",
+      "rationale": "Saber exactamente qué fármacos ha recibido, a qué dosis, desde cuándo y con qué respuesta es clave: muchos se prescriben sin indicación y algunos tienen riesgos.",
+      "questions": [
+        {"id": "ppi", "text": "Inhibidor de la bomba de protones (omeprazol, esomeprazol, lansoprazol)", "type": "med_detail", "fields": ["nombre", "dosis", "desde_cuando", "respuesta"], "why": "En lactantes los IBP no superan al placebo y tienen riesgos (infecciones, sobrecrecimiento bacteriano); registrar su uso es esencial para cuestionar o retirar.", "source": "NASPGHAN-ESPGHAN 2018; NICE NG1"},
+        {"id": "h2ra", "text": "Anti-H2 (ranitidina, famotidina)", "type": "med_detail", "fields": ["nombre", "dosis", "desde_cuando", "respuesta"], "why": "Otra clase de supresor de ácido; misma lógica de indicación estricta.", "source": "NICE NG1"},
+        {"id": "alginate", "text": "Alginato (Gaviscon infantil)", "type": "med_detail", "fields": ["dosis", "desde_cuando", "respuesta"], "why": "Es la opción recomendada como ensayo de 1-2 semanas; registrar respuesta guía el siguiente paso.", "source": "NICE NG1"},
+        {"id": "prokinetic", "text": "Procinético (domperidona, metoclopramida, eritromicina)", "type": "med_detail", "fields": ["nombre", "dosis", "desde_cuando", "respuesta"], "why": "NO se recomiendan salvo acuerdo de especialista por su balance riesgo-beneficio; su uso debe justificarse.", "source": "NICE NG1", "alarm": false},
+        {"id": "hydrolyzed_formula", "text": "Fórmula extensamente hidrolizada o de aminoácidos", "type": "med_detail", "fields": ["nombre", "desde_cuando", "respuesta"], "why": "Es el ensayo diagnóstico de alergia a proteína de leche de vaca; su respuesta es muy informativa.", "source": "NASPGHAN-ESPGHAN 2018"}
+      ]
+    },
+    {
+      "id": "growth",
+      "title": "Crecimiento",
+      "rationale": "El crecimiento es el dato objetivo más importante: un niño que crece bien casi nunca tiene una enfermedad grave por reflujo.",
+      "questions": [
+        {"id": "current_weight_kg", "text": "Peso actual", "type": "number", "unit": "kg", "why": "Para situar en el percentil y seguir la curva.", "source": "NASPGHAN-ESPGHAN 2018"},
+        {"id": "current_height_cm", "text": "Talla/longitud actual", "type": "number", "unit": "cm", "why": "Complementa el peso para valorar el crecimiento global.", "source": "anamnesis estándar"},
+        {"id": "weight_percentile", "text": "Percentil de peso (si lo sabéis)", "type": "text", "why": "El seguimiento del percentil detecta el estancamiento, bandera de alarma.", "source": "NICE NG1"},
+        {"id": "growth_curve_trend", "text": "La curva de peso está…", "type": "choice", "options": ["Subiendo bien", "Plana/estancada", "Bajando"], "why": "La tendencia de la curva es más informativa que un valor aislado.", "source": "NICE NG1"}
+      ]
+    },
+    {
+      "id": "family_genetics",
+      "title": "Antecedentes familiares y genética",
+      "rationale": "La atopia y el reflujo familiar aumentan la probabilidad de alergia y de enfermedad por reflujo; los síndromes genéticos cambian el manejo.",
+      "questions": [
+        {"id": "family_reflux", "text": "¿Hay familiares de primer grado con reflujo/ERGE o esófago de Barrett?", "type": "choice", "options": ["No", "Sí", "No lo sé"], "why": "El componente familiar aumenta la probabilidad de enfermedad por reflujo.", "source": "NASPGHAN-ESPGHAN 2018"},
+        {"id": "family_atopy", "text": "¿Antecedentes familiares de alergias, asma, eccema o alergia alimentaria?", "type": "choice", "options": ["No", "Sí", "No lo sé"], "why": "La atopia familiar eleva el riesgo de alergia a proteína de leche de vaca, que imita el reflujo.", "source": "NASPGHAN-ESPGHAN 2018"},
+        {"id": "known_genetic", "text": "¿Algún síndrome o enfermedad genética/metabólica diagnosticada en el niño o la familia?", "type": "text", "why": "Ciertos síndromes (neurológicos, conectivos) cursan con reflujo grave y persistente.", "source": "NASPGHAN-ESPGHAN 2018"},
+        {"id": "siblings_reflux", "text": "¿Hermanos con reflujo o alergia a la leche?", "type": "choice", "options": ["No", "Sí", "No aplica"], "why": "Patrón familiar útil para el diagnóstico diferencial.", "source": "anamnesis estándar"}
+      ]
+    },
+    {
+      "id": "impact",
+      "title": "Impacto en el día a día",
+      "rationale": "El impacto en sueño y alimentación pesa en la decisión de tratar y en el seguimiento.",
+      "questions": [
+        {"id": "sleep_impact", "text": "¿El reflujo afecta al sueño del bebé?", "type": "choice", "options": ["No", "Algo", "Bastante"], "why": "El impacto sobre el sueño/bienestar es criterio para considerar un ensayo de tratamiento.", "source": "NICE NG1"},
+        {"id": "feeding_impact", "text": "¿Afecta a la alimentación (rechazo, llanto al comer)?", "type": "choice", "options": ["No", "Algo", "Bastante"], "why": "La aversión alimentaria con regurgitación es indicación de valorar endoscopia.", "source": "NICE NG1"},
+        {"id": "family_concern", "text": "¿Qué es lo que más os preocupa ahora mismo?", "type": "text", "why": "Centrar el control en la preocupación real de la familia mejora la conversación con el médico.", "source": "enfoque centrado en el paciente"}
+      ]
+    }
+  ]
+}

@@ -18,6 +18,7 @@ from adelia.routers import (
     health,
     ingestion,
     ingestion_webhooks,
+    clinical,
     sharing,
     users,
 )
@@ -159,3 +160,4 @@ app.include_router(ingestion_webhooks.router)
 app.include_router(enrichment.router)
 app.include_router(sharing.router)
 app.include_router(users.router)
+app.include_router(clinical.router)
