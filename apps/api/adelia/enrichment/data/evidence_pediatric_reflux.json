@@ -1,0 +1,114 @@
+{
+  "_meta": {
+    "purpose": "Curated evidence corpus on infant/child gastroesophageal reflux (GER) and reflux disease (GERD). Built from the international reference guidelines so AdelIA's chat + consultation companion can answer and argue about a child's reflux with real, citable evidence.",
+    "version": "1.0",
+    "updated": "2026-06-12",
+    "topic": "pediatric_gastroesophageal_reflux",
+    "license_notes": "All entries paraphrase public guidelines (NASPGHAN-ESPGHAN 2018, NICE NG1, NIDDK) to fair-use snippet length. Canonical source URL provided for each. Text in Spanish for patient-facing retrieval.",
+    "primary_sources": [
+      "Rosen R, Vandenplas Y, Singendonk M, et al. Pediatric Gastroesophageal Reflux Clinical Practice Guidelines: Joint Recommendations of NASPGHAN and ESPGHAN. JPGN 2018;66(3):516-554.",
+      "NICE NG1. Gastro-oesophageal reflux disease in children and young people (2015, updated 2019).",
+      "NIDDK. Acid Reflux (GER & GERD) in Infants."
+    ]
+  },
+  "sources": [
+    {
+      "source_type": "guideline",
+      "title": "Reflujo (GER) vs enfermedad por reflujo (GERD) e historia natural en el lactante — NASPGHAN-ESPGHAN 2018 / NICE NG1",
+      "organization": "NASPGHAN-ESPGHAN",
+      "publication_year": 2018,
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC6416385/",
+      "specialties": ["pediatrics", "gastroenterology", "general_medicine"],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "chunks": [
+        "El reflujo gastroesofágico (GER) es el paso del contenido del estómago al esófago, con o sin regurgitación o vómito. Es un proceso FISIOLÓGICO normal en el bebé: la regurgitación afecta al menos al 40% de los lactantes sanos. Solo se llama enfermedad por reflujo (GERD) cuando el reflujo causa síntomas molestos o complicaciones (escaso aumento de peso, esofagitis, problemas respiratorios). Distinguir GER fisiológico de GERD patológico es la decisión clave: la mayoría de los bebés que 'echan bocanadas' NO tienen una enfermedad.",
+        "Historia natural del reflujo del lactante: la regurgitación suele empezar entre la 1ª y la 2ª semana de vida, alcanza su PICO hacia los 4 meses, y mejora espontáneamente entre los 6 y los 18 meses en la gran mayoría. Resuelve antes del primer año en aproximadamente el 90% de los bebés afectados (NICE). La regurgitación sin esfuerzo, por sí sola, NO requiere investigación ni tratamiento. El inicio del vómito DESPUÉS de los 6 meses o su persistencia MÁS ALLÁ de los 12 meses sugiere un diagnóstico alternativo y obliga a reevaluar."
+      ]
+    },
+    {
+      "source_type": "guideline",
+      "title": "Signos de alarma (red flags) en el reflujo del lactante — cuándo NO es reflujo simple — NICE NG1 / NASPGHAN-ESPGHAN 2018",
+      "organization": "NICE",
+      "publication_year": 2019,
+      "url": "https://www.nice.org.uk/guidance/ng1/chapter/Recommendations",
+      "specialties": ["pediatrics", "gastroenterology", "general_medicine"],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "chunks": [
+        "Signos de ALARMA que indican que NO es reflujo simple y exigen evaluación urgente en un bebé: vómito BILIOSO (verde o amarillo-verdoso) — posible obstrucción intestinal o vólvulo, una EMERGENCIA QUIRÚRGICA; hematemesis (sangre en el vómito, no por sangre deglutida); vómito en PROYECTIL frecuente en menores de 2 meses — posible estenosis pilórica, requiere derivación quirúrgica urgente; inicio del vómito antes de las 2 semanas o después de los 6 meses de vida.",
+        "Más signos de alarma en el reflujo infantil que obligan a descartar otra causa: estancamiento o pérdida de peso (failure to thrive); rechazo del alimento, disfagia (dificultad para tragar); sangre en las heces; diarrea crónica; distensión, dolor o masa abdominal; fiebre, fontanela abombada, letargo o convulsiones; anemia ferropénica inexplicada; exploración neurológica anormal. Ante cualquiera de estos, NO atribuirlo a reflujo sin investigar."
+      ]
+    },
+    {
+      "source_type": "guideline",
+      "title": "Manejo conservador del reflujo del lactante (lactancia, fórmula, espesantes, alginato) — NICE NG1",
+      "organization": "NICE",
+      "publication_year": 2019,
+      "url": "https://www.nice.org.uk/guidance/ng1/chapter/Recommendations",
+      "specialties": ["pediatrics", "gastroenterology", "general_medicine"],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "chunks": [
+        "Bebé amamantado con reflujo: NO suspender la lactancia materna — el reflujo casi nunca es una buena razón para dejar de amamantar. Primer paso: que un profesional con formación evalúe la TÉCNICA de lactancia. Si persiste regurgitación frecuente con malestar marcado, considerar un ensayo de ALGINATO durante 1-2 semanas; si mejora, continuar pero intentar suspenderlo a intervalos para ver si sigue siendo necesario.",
+        "Bebé con fórmula y regurgitación con malestar — manejo ESCALONADO (un paso antes del siguiente): (1) revisar la historia de alimentación; (2) reducir el volumen de las tomas SOLO si es excesivo para el peso; (3) ensayar tomas más pequeñas y frecuentes manteniendo el total diario; (4) ensayar fórmula ESPESADA (con almidón de arroz, almidón de maíz o goma garrofín). Si no funciona, retirar la fórmula espesada y ensayar alginato 1-2 semanas. Probiótico Lactobacillus reuteri DSM 17938 puede ayudar según datos limitados.",
+        "Posición para dormir en el bebé con reflujo: SIEMPRE boca arriba (supino) por el riesgo de muerte súbita del lactante (SIDS). NO usar manejo posicional para tratar el reflujo en bebés que duermen: ni elevar la cabecera, ni decúbito lateral, ni prono. La elevación de la cabeza NO está recomendada y aumenta el riesgo. Esta es una de las recomendaciones más importantes y peor seguidas."
+      ]
+    },
+    {
+      "source_type": "guideline",
+      "title": "Alergia a proteína de leche de vaca: imita el reflujo — NASPGHAN-ESPGHAN 2018",
+      "organization": "NASPGHAN-ESPGHAN",
+      "publication_year": 2018,
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC6416385/",
+      "specialties": ["pediatrics", "gastroenterology"],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "chunks": [
+        "La alergia a las proteínas de la leche de vaca (APLV) puede IMITAR al reflujo y es una causa tratable que se confunde a menudo. Si hay síntomas atópicos (eccema), diarrea crónica o sangre en las heces, ensayar durante 2-4 semanas una fórmula extensamente hidrolizada — o, si el bebé es amamantado, una dieta de eliminación de lácteos (y soja) en la MADRE. Si los síntomas mejoran claramente con la eliminación y reaparecen al reintroducir, el diagnóstico es alergia a proteína de leche de vaca, no reflujo. Es una pregunta clave que el pediatra debe descartar antes de medicar para reflujo."
+      ]
+    },
+    {
+      "source_type": "guideline",
+      "title": "Fármacos en el reflujo del lactante: cuándo SÍ, cuándo NO, y sus riesgos — NASPGHAN-ESPGHAN 2018 / NICE NG1",
+      "organization": "NASPGHAN-ESPGHAN",
+      "publication_year": 2018,
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC6416385/",
+      "specialties": ["pediatrics", "gastroenterology", "general_medicine"],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "chunks": [
+        "Fármacos en el reflujo del bebé: NO ofrecer supresores de ácido (inhibidores de la bomba de protones —IBP, como omeprazol— ni anti-H2) para tratar la regurgitación aislada. En lactantes, los ensayos clínicos de IBP NO mostraron mejor reducción de síntomas que el placebo, y NO se recomiendan como prueba diagnóstica. Considerar un ensayo de 4 semanas de IBP solo si hay dificultades de alimentación inexplicadas, malestar o estancamiento del peso, o en niños mayores con pirosis o dolor retroesternal persistente — y reevaluar al terminar.",
+        "Riesgos de la supresión de ácido (IBP) en niños — por eso no se usan a la ligera: sobrecrecimiento bacteriano del intestino delgado, mayor riesgo de infecciones respiratorias y gastrointestinales, eccema, e infección por Clostridium difficile. Además, NO ofrecer metoclopramida, domperidona ni eritromicina (procinéticos) salvo que un especialista pediátrico lo acuerde y el beneficio supere claramente al riesgo. Pregunta clave para el médico: '¿por qué este fármaco y no medidas conservadoras primero, y por cuánto tiempo?'"
+      ]
+    },
+    {
+      "source_type": "guideline",
+      "title": "Cuándo derivar y qué pruebas hacer en el reflujo infantil — NICE NG1",
+      "organization": "NICE",
+      "publication_year": 2019,
+      "url": "https://www.nice.org.uk/guidance/ng1/chapter/Recommendations",
+      "specialties": ["pediatrics", "gastroenterology"],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "chunks": [
+        "Cuándo derivar o hacer pruebas en el reflujo infantil: endoscopia digestiva alta si hay hematemesis (no por sangre deglutida), melena (heces negras), disfagia, ausencia de mejoría después del año de edad, estancamiento del peso persistente con regurgitación, aversión alimentaria con historia de regurgitación, o anemia ferropénica inexplicada. NO se debe hacer un estudio baritado (contraste) para diagnosticar o evaluar la gravedad del GERD.",
+        "pH-metría / impedancia esofágica (pH-MII): considerar ante sospecha de aspiración pulmonar recurrente, apneas o eventos tipo convulsión inexplicados, inflamación de la vía aérea superior, otitis media de repetición, erosión dental con discapacidad neurológica, o antes de una cirugía antirreflujo (funduplicatura). En atención primaria y SIN signos de alarma, NO están indicadas las pruebas diagnósticas de entrada: lo correcto es explicar a los padres la evolución natural y dar medidas conservadoras."
+      ]
+    },
+    {
+      "source_type": "reference",
+      "title": "Síntomas de GERD frente a reflujo simple y por qué los bebés tienen reflujo — NIDDK",
+      "organization": "NIDDK",
+      "publication_year": 2024,
+      "url": "https://www.niddk.nih.gov/health-information/digestive-diseases/acid-reflux-ger-gerd-infants/symptoms-causes",
+      "specialties": ["pediatrics", "gastroenterology", "general_medicine"],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "chunks": [
+        "Síntomas que distinguen la enfermedad por reflujo (GERD) del reflujo simple en el bebé: arqueo de la espalda y movimientos anómalos de cuello y mentón (síndrome de Sandifer), atragantamiento, arcadas o problemas para tragar, irritabilidad marcada sobre todo al regurgitar, rechazo del alimento o pérdida de apetito, y vómitos. Complicaciones posibles: escaso aumento de peso, tos o sibilancias. La irritabilidad o el llanto AISLADOS, sin estos signos, normalmente NO bastan para diagnosticar GERD.",
+        "Por qué los bebés tienen reflujo (causas fisiológicas): el esófago y el esfínter esofágico inferior están inmaduros, pasan mucho tiempo tumbados los primeros 6 meses, y su alimentación es líquida y de gran volumen en relación con su tamaño. Mejora a medida que el bebé se mantiene más incorporado, empieza con sólidos y crece. Tienen MÁS riesgo de GERD los bebés con prematuridad, fibrosis quística, parálisis cerebral, hernia de hiato o atresia esofágica operada."
+      ]
+    }
+  ]
+}

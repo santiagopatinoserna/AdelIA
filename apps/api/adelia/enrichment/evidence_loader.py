@@ -83,11 +83,73 @@ async def load_seed_if_empty() -> tuple[int, int]:
         return sources_added, chunks_added
 
 
+async def load_evidence_file(path: Path) -> tuple[int, int]:
+    """Ingest one evidence JSON file additively, idempotent by source title.
+
+    Unlike load_seed_if_empty, this ADDS to whatever is already loaded and
+    skips any source whose title already exists — so re-running is safe and
+    new topic corpora (e.g. pediatric reflux) can be layered in.
+
+    Returns: (sources_inserted, chunks_inserted).
+    """
+    with path.open("r", encoding="utf-8") as f:
+        data = json.load(f)
+
+    async with AsyncSessionLocal() as session:
+        existing = await session.execute(select(EvidenceSource.title))
+        existing_titles = {row[0] for row in existing.all()}
+
+        sources_added = 0
+        chunks_added = 0
+        for src_data in data.get("sources", []):
+            if src_data["title"] in existing_titles:
+                continue
+            chunks_text = list(src_data.get("chunks", []))
+            source = EvidenceSource(
+                source_type=src_data["source_type"],
+                title=src_data["title"],
+                organization=src_data.get("organization"),
+                publication_year=src_data.get("publication_year"),
+                url=src_data.get("url"),
+                specialties=src_data.get("specialties", []),
+                license=src_data.get("license"),
+                language=src_data.get("language", "en"),
+            )
+            session.add(source)
+            await session.flush()
+            sources_added += 1
+            if not chunks_text:
+                continue
+            embeddings = await embed_texts(chunks_text)
+            for idx, (text_chunk, emb) in enumerate(zip(chunks_text, embeddings, strict=True)):
+                session.add(EvidenceChunk(
+                    source_id=source.id,
+                    content=text_chunk,
+                    chunk_index=idx,
+                    chunk_metadata={"section": src_data["title"]},
+                    embedding=emb,
+                ))
+                chunks_added += 1
+        await session.commit()
+        logger.info("evidence file %s: +%d sources, +%d chunks", path.name, sources_added, chunks_added)
+        return sources_added, chunks_added
+
+
 def main() -> None:
-    """CLI entry: python -m adelia.enrichment.evidence_loader."""
+    """CLI: python -m adelia.enrichment.evidence_loader [path/to/file.json]
+
+    No argument: seed-if-empty (original). With a file path: additive
+    idempotent load of that file.
+    """
+    import sys
+
     logging.basicConfig(level=logging.INFO)
-    sources, chunks = asyncio.run(load_seed_if_empty())
-    print(f"Loaded {sources} sources, {chunks} chunks (0,0 = already populated)")
+    if len(sys.argv) > 1:
+        sources, chunks = asyncio.run(load_evidence_file(Path(sys.argv[1])))
+        print(f"Loaded {sources} new sources, {chunks} new chunks from {sys.argv[1]}")
+    else:
+        sources, chunks = asyncio.run(load_seed_if_empty())
+        print(f"Loaded {sources} sources, {chunks} chunks (0,0 = already populated)")
 
 
 if __name__ == "__main__":
