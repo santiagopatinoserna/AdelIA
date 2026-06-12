@@ -51,7 +51,10 @@ export function* parseBufferBlocks(
   read: () => string,
   write: (rest: string) => void,
 ): Generator<StreamEvent> {
-  let buffer = read();
+  // SSE servers (sse-starlette) separate events with CRLF CRLF; normalize so
+  // the split works whether the separator is \n\n or \r\n\r\n. Without this,
+  // tokens arrive but never parse — the chat answer never renders.
+  let buffer = read().replace(/\r\n/g, "\n");
   let blockEnd: number;
   while ((blockEnd = buffer.indexOf("\n\n")) !== -1) {
     const rawBlock = buffer.slice(0, blockEnd);
