@@ -1,10 +1,11 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useTranslations } from "next-intl";
 import { Share2, X, Copy, Check, FileDown, Ban } from "lucide-react";
 
 import { sharing, type ShareLink } from "@/lib/sharing-client";
+import { useFocusTrap } from "@/lib/use-focus-trap";
 
 interface Props {
   briefingId: string;
@@ -25,6 +26,8 @@ export function ShareDialog({ briefingId, onClose }: Props) {
   const [creating, setCreating] = useState(false);
   const [copied, setCopied] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const dialogRef = useRef<HTMLDivElement>(null);
+  useFocusTrap(dialogRef, true);
 
   async function handleCreate() {
     setCreating(true);
@@ -72,6 +75,7 @@ export function ShareDialog({ briefingId, onClose }: Props) {
       onClick={onClose}
     >
       <div
+        ref={dialogRef}
         role="dialog"
         aria-modal="true"
         onClick={(e) => e.stopPropagation()}

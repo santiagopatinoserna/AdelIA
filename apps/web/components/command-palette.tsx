@@ -3,6 +3,7 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import { useRouter } from "@/lib/navigation";
 import { useTranslations } from "next-intl";
+import { useFocusTrap } from "@/lib/use-focus-trap";
 import {
   Search,
   MessagesSquare,
@@ -32,6 +33,8 @@ export function CommandPalette() {
   const [query, setQuery] = useState("");
   const [sel, setSel] = useState(0);
   const inputRef = useRef<HTMLInputElement>(null);
+  const dialogRef = useRef<HTMLDivElement>(null);
+  useFocusTrap(dialogRef, open);
 
   const commands: Cmd[] = useMemo(
     () => [
@@ -60,6 +63,9 @@ export function CommandPalette() {
       if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === "k") {
         e.preventDefault();
         setOpen((o) => !o);
+      } else if (e.key === "Escape") {
+        // Close from anywhere in the palette (focus may be on a list item).
+        setOpen(false);
       }
     };
     document.addEventListener("keydown", onKey);
@@ -118,6 +124,7 @@ export function CommandPalette() {
           onClick={() => setOpen(false)}
         >
           <div
+            ref={dialogRef}
             role="dialog"
             aria-modal="true"
             aria-label={tc("label")}
