@@ -5,13 +5,11 @@ import { Link } from "@/lib/navigation";
 import { getTranslations } from "next-intl/server";
 import { listDocuments, type DocumentDTO } from "@/lib/api-client";
 import { DocumentCard } from "@/components/document-card";
-import { LocaleSwitcher } from "@/components/locale-switcher";
 import {
   MessagesSquare,
   ClipboardList,
   Download,
   Sparkles,
-  Settings,
   UploadCloud,
   FolderOpen,
   Baby,
@@ -58,31 +56,7 @@ export default async function DashboardPage({
   ];
 
   return (
-    <div className="min-h-screen">
-      {/* Top bar */}
-      <header className="sticky top-0 z-20 border-b border-line/70 bg-canvas/80 backdrop-blur-md">
-        <div className="mx-auto flex max-w-5xl items-center justify-between px-6 py-3.5">
-          <Link href="/dashboard" className="font-display text-xl font-semibold tracking-tight text-pine-900">
-            Adel<span className="text-honey-500">IA</span>
-          </Link>
-          <div className="flex items-center gap-2.5">
-            <LocaleSwitcher current={locale} />
-            <Link
-              href="/dashboard/settings"
-              aria-label={t("settingsLink")}
-              className="ad-btn ad-btn-ghost h-9 w-9 p-0"
-            >
-              <Settings className="h-4 w-4" strokeWidth={2} />
-            </Link>
-            <Link href="/dashboard/upload" className="ad-btn ad-btn-primary px-4 py-2 text-sm">
-              <UploadCloud className="h-4 w-4" strokeWidth={2.2} />
-              {t("uploadCta")}
-            </Link>
-          </div>
-        </div>
-      </header>
-
-      <main className="mx-auto max-w-5xl px-6 py-10">
+    <main className="mx-auto max-w-5xl px-6 py-10">
         {/* Quick-access nav */}
         <nav className="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-6">
           {nav.map((item, i) => (
@@ -130,7 +104,6 @@ export default async function DashboardPage({
             ))}
           </ul>
         )}
-      </main>
-    </div>
+    </main>
   );
 }

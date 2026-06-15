@@ -28,7 +28,7 @@ export default async function ChatPage({
   const t = await getTranslations("chat");
 
   return (
-    <main className="flex h-[calc(100vh-0px)] max-h-screen">
+    <main className="flex h-[calc(100dvh-3.5rem)]">
       <ChatPageClient
         initialSessions={sessions}
         locale={locale}
