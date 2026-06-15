@@ -349,5 +349,10 @@
     "label": "Buscar",
     "home": "Inicio",
     "newChat": "Nueva conversación"
+  },
+  "connectivity": {
+    "offline": "Sin conexión",
+    "offlineBody": "Algunas funciones necesitan internet.",
+    "online": "Conexión restablecida"
   }
 }

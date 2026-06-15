@@ -349,5 +349,10 @@
     "label": "Search",
     "home": "Home",
     "newChat": "New conversation"
+  },
+  "connectivity": {
+    "offline": "You're offline",
+    "offlineBody": "Some features need an internet connection.",
+    "online": "Back online"
   }
 }

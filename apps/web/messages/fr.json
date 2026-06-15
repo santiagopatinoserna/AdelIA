@@ -349,5 +349,10 @@
     "label": "Rechercher",
     "home": "Accueil",
     "newChat": "Nouvelle conversation"
+  },
+  "connectivity": {
+    "offline": "Hors ligne",
+    "offlineBody": "Certaines fonctions nécessitent Internet.",
+    "online": "Connexion rétablie"
   }
 }
