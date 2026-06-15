@@ -73,7 +73,8 @@
     "example3": "Summarize my latest labs and flag anything out of range",
     "stop": "Stop",
     "copy": "Copy",
-    "copied": "Copied"
+    "copied": "Copied",
+    "scrollToLatest": "Jump to latest"
   },
   "ingestion": {
     "title": "Import data",

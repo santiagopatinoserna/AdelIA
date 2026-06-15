@@ -73,7 +73,8 @@
     "example3": "Résume mes derniers résultats et signale ce qui est hors normes",
     "stop": "Arrêter",
     "copy": "Copier",
-    "copied": "Copié"
+    "copied": "Copié",
+    "scrollToLatest": "Aller au dernier"
   },
   "ingestion": {
     "title": "Importer des données",
