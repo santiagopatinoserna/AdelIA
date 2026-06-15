@@ -7,7 +7,19 @@
   "home": {
     "hero": "Tu historia clínica, tuya. Análisis IA en 2 modos.",
     "subhero": "Self-analysis libre + briefing portable para cualquier especialista.",
-    "cta": "Empezar"
+    "cta": "Empezar",
+    "eyebrow": "Vault médico · IA con evidencia",
+    "ctaSecondary": "Ver cómo funciona",
+    "proofLabel": "Respuesta con evidencia",
+    "proofQuestion": "¿Es normal que mi bebé regurgite después de cada toma?",
+    "proofAnswer": "La regurgitación es habitual en lactantes y suele mejorar hacia los 12 meses sin tratamiento; las señales de alarma son pérdida de peso, rechazo del alimento o sangre.",
+    "proofSource": "NASPGHAN–ESPGHAN 2018 · Reflujo gastroesofágico pediátrico",
+    "feature1Title": "Tu historia, tuya",
+    "feature1Body": "Tus informes médicos cifrados en un vault privado. Tú decides qué se comparte y con quién.",
+    "feature2Title": "Cada respuesta, justificada",
+    "feature2Body": "Nada de respuestas vagas: cada afirmación se apoya en literatura médica real, citada y verificable.",
+    "feature3Title": "Acompaña en la consulta",
+    "feature3Body": "Genera preguntas con argumentos a partir de lo que dice el médico. Pacientes informados, médicos mejores."
   },
   "dashboard": {
     "title": "Mis documentos",

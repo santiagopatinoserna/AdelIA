@@ -1,1 +1,200 @@
 @import "tailwindcss";
+
+/* ============================================================================
+   AdelIA — design system: "calidez clínica" (warm clinical / editorial health)
+   Pine-green authority + honey warmth on a warm-cream canvas. Trust, not cold.
+   Differentiator: evidence/citation treatment rendered as a first-class object.
+   ========================================================================== */
+
+@theme {
+  --font-display: var(--font-fraunces), Georgia, "Times New Roman", serif;
+  --font-sans: var(--font-hanken), ui-sans-serif, system-ui, sans-serif;
+  --font-mono: ui-monospace, "SF Mono", "Cascadia Code", monospace;
+
+  /* Canvas & ink */
+  --color-canvas: #f4f1e9;
+  --color-surface: #fffefb;
+  --color-surface-2: #faf7f0;
+  --color-ink: #18201b;
+  --color-ink-soft: #586059;
+  --color-ink-faint: #646b64;
+  --color-line: #e7e0d3;
+  --color-line-strong: #d8cfbd;
+
+  /* Pine (primary) */
+  --color-pine-50: #e9f1ec;
+  --color-pine-100: #cfe3d9;
+  --color-pine-200: #a9cdbd;
+  --color-pine-400: #2f8268;
+  --color-pine-500: #1a6c55;
+  --color-pine-600: #115443;
+  --color-pine-700: #0d4234;
+  --color-pine-800: #0b3429;
+  --color-pine-900: #0a2820;
+
+  /* Honey (accent) */
+  --color-honey-100: #f6e9cf;
+  --color-honey-200: #eed6a6;
+  --color-honey-400: #d99f43;
+  --color-honey-500: #c4862b;
+  --color-honey-600: #a36e1f;
+
+  /* Clay (alarm / red-flag) */
+  --color-clay-50: #f8e9e4;
+  --color-clay-100: #f1d3c9;
+  --color-clay-500: #b8402a;
+  --color-clay-600: #973020;
+  --color-clay-700: #7a2616;
+
+  --radius-sm: 0.5rem;
+  --radius: 0.875rem;
+  --radius-lg: 1.25rem;
+  --radius-xl: 1.75rem;
+
+  --shadow-soft: 0 1px 2px rgb(24 32 27 / 0.04), 0 6px 16px -8px rgb(24 32 27 / 0.10);
+  --shadow-lift: 0 2px 4px rgb(24 32 27 / 0.05), 0 18px 40px -16px rgb(11 52 41 / 0.22);
+  --shadow-glow: 0 0 0 1px rgb(17 84 67 / 0.08), 0 24px 60px -24px rgb(11 52 41 / 0.30);
+
+  --ease-out-soft: cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@layer base {
+  html {
+    -webkit-text-size-adjust: 100%;
+    scrollbar-gutter: stable;
+  }
+
+  body {
+    background-color: var(--color-canvas);
+    color: var(--color-ink);
+    font-family: var(--font-sans);
+    /* Atmospheric depth: soft pine + honey light-washes over warm cream */
+    background-image:
+      radial-gradient(58rem 40rem at 8% -8%, rgb(26 108 85 / 0.07), transparent 60%),
+      radial-gradient(48rem 36rem at 102% 4%, rgb(196 134 43 / 0.08), transparent 55%),
+      radial-gradient(60rem 50rem at 50% 116%, rgb(17 84 67 / 0.06), transparent 60%);
+    background-attachment: fixed;
+    min-height: 100vh;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+  }
+
+  h1, h2, h3, h4 {
+    font-family: var(--font-display);
+    font-weight: 540;
+    letter-spacing: -0.012em;
+    color: var(--color-pine-900);
+  }
+
+  ::selection {
+    background: var(--color-pine-100);
+    color: var(--color-pine-900);
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--color-pine-500);
+    outline-offset: 2px;
+    border-radius: 4px;
+  }
+
+  ::-webkit-scrollbar { width: 11px; height: 11px; }
+  ::-webkit-scrollbar-thumb {
+    background: var(--color-line-strong);
+    border: 3px solid transparent;
+    background-clip: content-box;
+    border-radius: 99px;
+  }
+  ::-webkit-scrollbar-thumb:hover { background: var(--color-pine-200); background-clip: content-box; }
+}
+
+@layer components {
+  /* Frosted card — the workhorse surface */
+  .ad-card {
+    background: var(--color-surface);
+    border: 1px solid var(--color-line);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-soft);
+  }
+  .ad-card-hover {
+    transition: transform 0.2s var(--ease-out-soft), box-shadow 0.2s var(--ease-out-soft),
+      border-color 0.2s var(--ease-out-soft);
+  }
+  .ad-card-hover:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-lift);
+    border-color: var(--color-pine-200);
+  }
+
+  /* Buttons */
+  .ad-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    font-weight: 560;
+    border-radius: 0.75rem;
+    transition: transform 0.18s var(--ease-out-soft), box-shadow 0.18s var(--ease-out-soft),
+      background-color 0.18s var(--ease-out-soft), color 0.18s var(--ease-out-soft),
+      border-color 0.18s var(--ease-out-soft);
+  }
+  .ad-btn:active { transform: translateY(1px) scale(0.99); }
+
+  .ad-btn-primary {
+    background: linear-gradient(180deg, var(--color-pine-500), var(--color-pine-700));
+    color: #f3f7f3;
+    box-shadow: 0 1px 0 rgb(255 255 255 / 0.12) inset, var(--shadow-soft);
+  }
+  .ad-btn-primary:hover { box-shadow: 0 1px 0 rgb(255 255 255 / 0.14) inset, var(--shadow-lift); }
+
+  .ad-btn-ghost {
+    background: var(--color-surface);
+    color: var(--color-ink);
+    border: 1px solid var(--color-line-strong);
+  }
+  .ad-btn-ghost:hover { background: var(--color-surface-2); border-color: var(--color-pine-200); }
+
+  /* Evidence tag — the trust differentiator: [ev_1] */
+  .ad-ev-tag {
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    font-weight: 600;
+    letter-spacing: 0.02em;
+    color: var(--color-pine-600);
+    background: var(--color-pine-50);
+    border: 1px solid var(--color-pine-100);
+    border-radius: 0.4rem;
+    padding: 0.05rem 0.34rem;
+  }
+
+  .ad-eyebrow {
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    font-weight: 600;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--color-pine-600);
+  }
+}
+
+@layer utilities {
+  .text-balance { text-wrap: balance; }
+  .ad-grain { position: relative; }
+  .ad-grain::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    opacity: 0.4;
+    mix-blend-mode: multiply;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.05'/%3E%3C/svg%3E");
+  }
+  @keyframes ad-rise {
+    from { opacity: 0; transform: translateY(14px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  .ad-rise { animation: ad-rise 0.7s var(--ease-out-soft) both; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation-duration: 0.001ms !important; transition-duration: 0.001ms !important; }
+}

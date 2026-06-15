@@ -7,7 +7,19 @@
   "home": {
     "hero": "Votre dossier médical, à vous. Analyse IA en 2 modes.",
     "subhero": "Auto-analyse libre + briefing portable pour tout spécialiste.",
-    "cta": "Commencer"
+    "cta": "Commencer",
+    "eyebrow": "Coffre médical · IA fondée sur des preuves",
+    "ctaSecondary": "Voir comment ça marche",
+    "proofLabel": "Réponse fondée sur des preuves",
+    "proofQuestion": "Est-il normal que mon bébé régurgite après chaque tétée ?",
+    "proofAnswer": "La régurgitation est fréquente chez le nourrisson et disparaît généralement vers 12 mois sans traitement ; les signes d'alerte sont la perte de poids, le refus de s'alimenter ou la présence de sang.",
+    "proofSource": "NASPGHAN–ESPGHAN 2018 · Reflux gastro-œsophagien pédiatrique",
+    "feature1Title": "Votre histoire, la vôtre",
+    "feature1Body": "Vos documents médicaux chiffrés dans un coffre privé. Vous décidez de ce qui est partagé, et avec qui.",
+    "feature2Title": "Chaque réponse, justifiée",
+    "feature2Body": "Pas de réponses vagues : chaque affirmation s'appuie sur une littérature médicale réelle, citée et vérifiable.",
+    "feature3Title": "À vos côtés en consultation",
+    "feature3Body": "Transforme les propos du médecin en questions argumentées. Des patients informés, de meilleurs médecins."
   },
   "dashboard": {
     "title": "Mes documents",

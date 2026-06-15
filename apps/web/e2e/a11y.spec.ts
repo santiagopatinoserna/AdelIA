@@ -5,6 +5,15 @@ import { seedUserAndSessionCookie } from "./utils/session";
 
 // Serious/critical violations fail; minor/moderate get logged for later.
 async function scan(page: import("@playwright/test").Page, label: string) {
+  // Audit the SETTLED UI: wait for entrance animations (ad-rise fade/slide) to
+  // finish so contrast is measured at final opacity, not mid-fade. Capped so a
+  // looping animation can never hang the scan.
+  await page.evaluate(() =>
+    Promise.race([
+      Promise.allSettled(document.getAnimations().map((a) => a.finished)),
+      new Promise((resolve) => setTimeout(resolve, 1500)),
+    ]),
+  );
   const results = await new AxeBuilder({ page }).analyze();
   const blocking = results.violations.filter((v) =>
     ["serious", "critical"].includes(v.impact ?? ""),

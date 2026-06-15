@@ -7,7 +7,19 @@
   "home": {
     "hero": "Your medical history, yours. AI analysis in 2 modes.",
     "subhero": "Free self-analysis + portable briefing for any specialist.",
-    "cta": "Get started"
+    "cta": "Get started",
+    "eyebrow": "Medical vault · Evidence-grounded AI",
+    "ctaSecondary": "See how it works",
+    "proofLabel": "Evidence-backed answer",
+    "proofQuestion": "Is it normal for my baby to spit up after every feed?",
+    "proofAnswer": "Regurgitation is common in infants and usually resolves by 12 months without treatment; red flags are weight loss, feed refusal or blood.",
+    "proofSource": "NASPGHAN–ESPGHAN 2018 · Pediatric gastroesophageal reflux",
+    "feature1Title": "Your history, yours",
+    "feature1Body": "Your medical records encrypted in a private vault. You decide what is shared, and with whom.",
+    "feature2Title": "Every answer, justified",
+    "feature2Body": "No vague replies: every claim is grounded in real medical literature, cited and verifiable.",
+    "feature3Title": "By your side in the room",
+    "feature3Body": "Turns what the doctor says into argued questions. Informed patients, better doctors."
   },
   "dashboard": {
     "title": "My documents",
