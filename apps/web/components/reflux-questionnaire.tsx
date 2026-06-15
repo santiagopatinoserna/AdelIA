@@ -137,8 +137,8 @@ export function RefluxQuestionnaire() {
         <span className="font-sans">{t("intro")}</span>
       </p>
 
-      {/* Sticky progress */}
-      <div className="sticky top-0 z-10 -mx-6 mt-6 border-y border-line bg-canvas/85 px-6 py-3 backdrop-blur-md">
+      {/* Sticky progress — sits just below the dashboard top bar (h-14) */}
+      <div className="sticky top-14 z-10 -mx-6 mt-6 border-y border-line bg-canvas/85 px-6 py-3 backdrop-blur-md">
         <div className="flex items-center justify-between text-xs">
           <span className="font-mono text-ink-soft">{t("progress", { done, total })}</span>
           <button
