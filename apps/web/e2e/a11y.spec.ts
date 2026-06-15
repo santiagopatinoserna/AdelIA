@@ -45,6 +45,7 @@ test("a11y: authenticated surfaces", async ({ browser }) => {
     ["/es/dashboard", "dashboard"],
     ["/es/dashboard/settings", "settings"],
     ["/es/dashboard/briefings", "briefings"],
+    ["/es/dashboard/questionnaire", "questionnaire"],
     ["/es/dashboard/ingestion", "ingestion"],
     ["/es/dashboard/ingestion/apple-health", "ingestion/apple-health"],
     ["/es/dashboard/ingestion/ccd", "ingestion/ccd"],

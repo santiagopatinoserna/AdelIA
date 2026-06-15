@@ -289,5 +289,24 @@
     "confirmLabel": "Saisissez {email} pour confirmer :",
     "deleteButton": "Supprimer définitivement mon compte",
     "deleting": "Suppression…"
+  },
+  "questionnaire": {
+    "title": "Suivi du reflux",
+    "subtitle": "Anamnèse structurée. Chaque question est fondée sur de vraies recommandations cliniques.",
+    "intro": "Traçabilité totale : chaque item cite sa source. Vos réponses sont enregistrées sur cet appareil.",
+    "whyLabel": "Pourquoi cette question",
+    "sourceLabel": "Source",
+    "progress": "{done} sur {total} renseignées",
+    "saved": "Enregistré sur cet appareil",
+    "alarm": "Alerte",
+    "reset": "Effacer les réponses",
+    "resetConfirm": "Effacer toutes vos réponses de cet appareil ?",
+    "navLabel": "Suivi reflux",
+    "answerPlaceholder": "Votre réponse…",
+    "medName": "Nom",
+    "medDose": "Dose",
+    "medSince": "Depuis quand",
+    "medResponse": "Réponse",
+    "loadError": "Impossible de charger le questionnaire."
   }
 }
