@@ -2,7 +2,13 @@
   "common": {
     "appName": "AdelIA",
     "tagline": "Tu vault médico personal con IA",
-    "loading": "Cargando…"
+    "loading": "Cargando…",
+    "errorTitle": "Algo salió mal",
+    "errorBody": "Hubo un error inesperado. Puedes reintentar o volver al inicio.",
+    "retry": "Reintentar",
+    "notFoundTitle": "Página no encontrada",
+    "notFoundBody": "La página que buscas no existe o se ha movido.",
+    "backHome": "Volver al inicio"
   },
   "home": {
     "hero": "Tu historia clínica, tuya. Análisis IA en 2 modos.",
@@ -59,7 +65,12 @@
     "citationLabel": "Ver fuente",
     "deleteSession": "Eliminar",
     "openSessions": "Ver conversaciones",
-    "closeSessions": "Cerrar"
+    "closeSessions": "Cerrar",
+    "emptyTitle": "Pregunta a tu historial médico",
+    "emptySubtitle": "Cada respuesta se apoya en tu data y en evidencia clínica citada.",
+    "example1": "¿Qué debería preguntar en mi próxima consulta?",
+    "example2": "¿Hay interacciones entre mis medicamentos?",
+    "example3": "Resume mis últimos análisis y señala lo fuera de rango"
   },
   "ingestion": {
     "title": "Importar datos",
