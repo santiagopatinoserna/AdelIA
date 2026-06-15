@@ -57,6 +57,38 @@ export function ConsultaMode() {
   const [listening, setListening] = useState(false);
   const [micSupported, setMicSupported] = useState(false);
   const [copied, setCopied] = useState(false);
+  const [hydrated, setHydrated] = useState(false);
+
+  // Survive a reload: a parent uses this mid-appointment, where the phone can
+  // lock/reload — don't lose the argued questions. A consulta is point-in-time
+  // (not tied to live data), so there's no staleness to guard against.
+  useEffect(() => {
+    try {
+      const raw = localStorage.getItem("adelia:consulta:v1");
+      if (raw) {
+        const d = JSON.parse(raw);
+        if (d.input) setInput(d.input);
+        if (d.answer) setAnswer(d.answer);
+        if (Array.isArray(d.citations)) setCitations(d.citations);
+      }
+    } catch {
+      /* corrupt store — ignore */
+    }
+    setHydrated(true);
+  }, []);
+
+  useEffect(() => {
+    // Persist only when settled (not every streamed token).
+    if (!hydrated || busy) return;
+    try {
+      localStorage.setItem(
+        "adelia:consulta:v1",
+        JSON.stringify({ input, answer, citations }),
+      );
+    } catch {
+      /* private mode / quota — keep in memory */
+    }
+  }, [input, answer, citations, busy, hydrated]);
 
   async function copyOutput() {
     try {
