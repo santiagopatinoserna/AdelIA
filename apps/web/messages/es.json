@@ -337,5 +337,12 @@
     "regenerate": "Regenerar",
     "copy": "Copiar",
     "copied": "Copiado"
+  },
+  "command": {
+    "placeholder": "Buscar o ir a…",
+    "noResults": "Sin resultados",
+    "label": "Buscar",
+    "home": "Inicio",
+    "newChat": "Nueva conversación"
   }
 }

@@ -6,6 +6,7 @@ import { Settings, UploadCloud } from "lucide-react";
 import { Link } from "@/lib/navigation";
 import { LocaleSwitcher } from "@/components/locale-switcher";
 import { DashboardSectionNav } from "@/components/dashboard-section-nav";
+import { CommandPalette } from "@/components/command-palette";
 
 // Persistent chrome for every authenticated page: wordmark (→ dashboard),
 // language, settings, upload. Sub-pages used to render bare, with no way to
@@ -33,6 +34,7 @@ export default async function DashboardLayout({
           <DashboardSectionNav />
         </div>
         <div className="flex shrink-0 items-center gap-2.5">
+          <CommandPalette />
           <LocaleSwitcher current={locale} />
           <Link
             href="/dashboard/settings"
