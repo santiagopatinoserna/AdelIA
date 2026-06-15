@@ -29,6 +29,11 @@ test("recorrido completo: garantía de éxito en navegador", async ({ browser })
   await settle(page);
   await page.screenshot({ path: `${SHOTS}/1-dashboard.png`, fullPage: true });
 
+  // 1b. Settings — email + danger zone
+  await page.goto("/es/dashboard/settings");
+  await settle(page);
+  await page.screenshot({ path: `${SHOTS}/7-settings.png`, fullPage: true });
+
   // 2. Chat — ask about the baby's reflux, expect an evidence-cited answer
   await page.goto("/es/dashboard/chat");
   await page.getByPlaceholder(/Pregunta a tu historial/).fill(
