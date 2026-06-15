@@ -316,7 +316,9 @@
     "needMoreAnswers": "Responde algunas preguntas para generar la valoración.",
     "valoracionError": "No se pudo generar la valoración. Inténtalo de nuevo.",
     "regenerateValoracion": "Regenerar",
-    "sourcesLabel": "Fuentes citadas"
+    "sourcesLabel": "Fuentes citadas",
+    "copy": "Copiar",
+    "copied": "Copiado"
   },
   "consulta": {
     "title": "Modo Consulta",
@@ -332,6 +334,8 @@
     "navLabel": "Modo Consulta",
     "sourcesLabel": "Fuentes citadas",
     "clear": "Limpiar",
-    "regenerate": "Regenerar"
+    "regenerate": "Regenerar",
+    "copy": "Copiar",
+    "copied": "Copiado"
   }
 }

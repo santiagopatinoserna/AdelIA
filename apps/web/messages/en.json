@@ -316,7 +316,9 @@
     "needMoreAnswers": "Answer a few questions to generate the assessment.",
     "valoracionError": "Could not generate the assessment. Please try again.",
     "regenerateValoracion": "Regenerate",
-    "sourcesLabel": "Cited sources"
+    "sourcesLabel": "Cited sources",
+    "copy": "Copy",
+    "copied": "Copied"
   },
   "consulta": {
     "title": "Appointment mode",
@@ -332,6 +334,8 @@
     "navLabel": "Appointment mode",
     "sourcesLabel": "Cited sources",
     "clear": "Clear",
-    "regenerate": "Regenerate"
+    "regenerate": "Regenerate",
+    "copy": "Copy",
+    "copied": "Copied"
   }
 }
