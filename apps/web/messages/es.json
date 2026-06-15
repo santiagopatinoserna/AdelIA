@@ -289,5 +289,24 @@
     "confirmLabel": "Escribe {email} para confirmar:",
     "deleteButton": "Eliminar mi cuenta definitivamente",
     "deleting": "Eliminando…"
+  },
+  "questionnaire": {
+    "title": "Control del reflujo",
+    "subtitle": "Anamnesis estructurada. Cada pregunta está fundamentada en guías clínicas reales.",
+    "intro": "Trazabilidad total: cada ítem cita su fuente. Tus respuestas se guardan en este dispositivo.",
+    "whyLabel": "Por qué se pregunta",
+    "sourceLabel": "Fuente",
+    "progress": "{done} de {total} respondidas",
+    "saved": "Guardado en este dispositivo",
+    "alarm": "Alarma",
+    "reset": "Borrar respuestas",
+    "resetConfirm": "¿Borrar todas tus respuestas de este dispositivo?",
+    "navLabel": "Control reflujo",
+    "answerPlaceholder": "Tu respuesta…",
+    "medName": "Nombre",
+    "medDose": "Dosis",
+    "medSince": "Desde cuándo",
+    "medResponse": "Respuesta",
+    "loadError": "No se pudo cargar el cuestionario."
   }
 }

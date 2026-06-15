@@ -289,5 +289,24 @@
     "confirmLabel": "Type {email} to confirm:",
     "deleteButton": "Delete my account permanently",
     "deleting": "Deleting…"
+  },
+  "questionnaire": {
+    "title": "Reflux control",
+    "subtitle": "Structured history. Every question is grounded in real clinical guidelines.",
+    "intro": "Full traceability: every item cites its source. Your answers are saved on this device.",
+    "whyLabel": "Why we ask",
+    "sourceLabel": "Source",
+    "progress": "{done} of {total} answered",
+    "saved": "Saved on this device",
+    "alarm": "Red flag",
+    "reset": "Clear answers",
+    "resetConfirm": "Clear all your answers from this device?",
+    "navLabel": "Reflux control",
+    "answerPlaceholder": "Your answer…",
+    "medName": "Name",
+    "medDose": "Dose",
+    "medSince": "Since when",
+    "medResponse": "Response",
+    "loadError": "Could not load the questionnaire."
   }
 }
