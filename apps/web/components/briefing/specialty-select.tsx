@@ -14,12 +14,12 @@ export function SpecialtySelect({ value, onChange, disabled }: Props) {
   const t = useTranslations();
   return (
     <div className="flex flex-col gap-2">
-      <label className="text-sm font-medium">{t("briefing.specialty.label")}</label>
+      <label className="text-sm font-medium text-ink">{t("briefing.specialty.label")}</label>
       <select
         value={value}
         onChange={(e) => onChange(e.target.value as Specialty)}
         disabled={disabled}
-        className="rounded border border-slate-300 bg-white px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-slate-500 disabled:bg-slate-100"
+        className="rounded-xl border border-line-strong bg-surface px-3 py-2 text-sm text-ink focus:border-pine-400 focus:outline-none focus:ring-2 focus:ring-pine-100 disabled:bg-surface-2"
       >
         {SPECIALTIES.map((s) => (
           <option key={s.value} value={s.value}>
