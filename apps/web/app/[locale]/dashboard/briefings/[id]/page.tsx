@@ -4,6 +4,8 @@ import { useCallback, useEffect, useState } from "react";
 import { useRouter, useParams } from "next/navigation";
 import { useTranslations } from "next-intl";
 
+import { FileDown, Share2 } from "lucide-react";
+
 import { briefings as briefingsApi } from "@/lib/api-client-browser";
 import type { BriefingDetailOut } from "@/lib/briefing-types";
 import { sharing } from "@/lib/sharing-client";
@@ -58,20 +60,20 @@ export default function BriefingDetailPage() {
   if (error) {
     return (
       <main className="mx-auto max-w-3xl px-6 py-10">
-        <div className="rounded border border-red-300 bg-red-50 p-4 text-red-900">{error}</div>
+        <div className="rounded-xl border border-clay-100 bg-clay-50 p-4 text-clay-700">{error}</div>
       </main>
     );
   }
 
   if (!briefing) {
-    return <main className="mx-auto max-w-3xl px-6 py-10">{t("common.loading")}</main>;
+    return <main className="mx-auto max-w-3xl px-6 py-10 text-ink-soft">{t("common.loading")}</main>;
   }
 
   return (
     <main className="mx-auto max-w-4xl px-6 py-10">
-      <div className="mb-4 flex items-center justify-between text-sm text-slate-600">
+      <div className="mb-4 flex items-center justify-between gap-3 text-sm text-ink-soft">
         <div>
-          {t("briefing.statusLabel")} <strong>{t(`briefing.status.${briefing.status}`)}</strong>
+          {t("briefing.statusLabel")} <strong className="text-pine-800">{t(`briefing.status.${briefing.status}`)}</strong>
           {briefing.status === "processing" && (
             <span className="ml-2">— {t("briefing.polling")}</span>
           )}
@@ -82,16 +84,18 @@ export default function BriefingDetailPage() {
               href={sharing.pdfUrl(briefing.id)}
               target="_blank"
               rel="noopener"
-              className="rounded border border-slate-300 px-3 py-1.5 text-xs hover:bg-slate-50"
+              className="ad-btn ad-btn-ghost px-3 py-1.5 text-xs"
             >
-              📄 PDF
+              <FileDown className="h-3.5 w-3.5" strokeWidth={2} />
+              PDF
             </a>
             <button
               type="button"
               onClick={() => setShowShare(true)}
-              className="rounded bg-slate-900 px-3 py-1.5 text-xs text-white hover:bg-slate-800"
+              className="ad-btn ad-btn-primary px-3 py-1.5 text-xs"
             >
-              🔗 {t("briefing.share.button")}
+              <Share2 className="h-3.5 w-3.5" strokeWidth={2} />
+              {t("briefing.share.button")}
             </button>
           </div>
         )}
@@ -102,7 +106,7 @@ export default function BriefingDetailPage() {
       )}
 
       {briefing.status === "failed" && (
-        <div className="mb-4 rounded border border-red-300 bg-red-50 p-3 text-sm text-red-900">
+        <div className="mb-4 rounded-xl border border-clay-100 bg-clay-50 p-3 text-sm text-clay-700">
           {t("briefing.errorBanner")} {briefing.error_message}
         </div>
       )}

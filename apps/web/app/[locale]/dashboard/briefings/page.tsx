@@ -2,6 +2,7 @@ import { auth } from "@/lib/auth";
 import { redirect } from "next/navigation";
 import { Link } from "@/lib/navigation";
 import { getTranslations } from "next-intl/server";
+import { Plus } from "lucide-react";
 
 import { briefings as briefingsApi } from "@/lib/api-client";
 import type { BriefingOut } from "@/lib/briefing-types";
@@ -27,11 +28,9 @@ export default async function BriefingsPage({ params }: Props) {
   return (
     <main className="mx-auto max-w-3xl px-6 py-10">
       <div className="mb-6 flex items-center justify-between">
-        <h1 className="text-2xl font-semibold">{t("briefing.title")}</h1>
-        <Link
-          href="/dashboard/briefings/new"
-          className="rounded bg-slate-900 px-4 py-2 text-sm text-white hover:bg-slate-800"
-        >
+        <h1 className="text-2xl text-pine-900">{t("briefing.title")}</h1>
+        <Link href="/dashboard/briefings/new" className="ad-btn ad-btn-primary px-4 py-2 text-sm">
+          <Plus className="h-4 w-4" strokeWidth={2.4} />
           {t("briefing.newButton")}
         </Link>
       </div>

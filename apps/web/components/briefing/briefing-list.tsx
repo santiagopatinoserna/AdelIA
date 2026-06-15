@@ -13,31 +13,31 @@ interface Props {
 export function BriefingList({ briefings, locale }: Props) {
   const t = useTranslations();
   if (briefings.length === 0) {
-    return <p className="text-slate-500">{t("briefing.listEmpty")}</p>;
+    return <p className="text-ink-soft">{t("briefing.listEmpty")}</p>;
   }
   return (
-    <ul className="flex flex-col gap-2">
+    <ul className="flex flex-col gap-2.5">
       {briefings.map((b) => (
         <li key={b.id}>
           <Link
             href={`/dashboard/briefings/${b.id}`}
-            className="flex items-center justify-between rounded border border-slate-200 bg-white p-3 hover:bg-slate-50"
+            className="ad-card ad-card-hover flex items-center justify-between gap-3 p-4"
           >
-            <div>
-              <div className="font-medium">
+            <div className="min-w-0">
+              <div className="flex items-center gap-2 font-medium text-ink">
                 {t(`briefing.specialty.${b.target_specialty}`)}
                 {b.is_stale && (
-                  <span className="ml-2 rounded bg-yellow-100 px-1.5 py-0.5 text-xs text-yellow-800">
+                  <span className="rounded-md bg-honey-100 px-1.5 py-0.5 text-[10px] font-semibold uppercase tracking-wide text-honey-600">
                     stale
                   </span>
                 )}
               </div>
-              <div className="text-xs text-slate-500">
+              <div className="mt-1 font-mono text-xs text-ink-faint">
                 {t("briefing.createdAt")}
-                {new Date(b.created_at).toLocaleString()}
+                {new Date(b.created_at).toLocaleString(locale)}
               </div>
             </div>
-            <span className="text-xs uppercase text-slate-600">
+            <span className="ad-eyebrow shrink-0">
               {t(`briefing.status.${b.status}`)}
             </span>
           </Link>

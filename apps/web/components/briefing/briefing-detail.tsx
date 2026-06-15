@@ -19,20 +19,21 @@ export function BriefingDetail({ briefing }: Props) {
       const target = e.target as HTMLElement;
       const ent = target.closest<HTMLElement>("[data-citation-id]");
       if (!ent) return;
-      ent.classList.toggle("text-red-600");
+      ent.classList.toggle("bg-honey-100");
+      ent.classList.toggle("rounded");
     };
     root.addEventListener("click", handler);
     return () => root.removeEventListener("click", handler);
   }, []);
 
   if (!briefing.html_render) {
-    return <div className="text-slate-500">No HTML render available.</div>;
+    return <div className="text-ink-soft">No HTML render available.</div>;
   }
 
   return (
     <div
       ref={rootRef}
-      className="briefing-render rounded border border-slate-200 bg-white p-6"
+      className="briefing-render ad-card p-6"
       dangerouslySetInnerHTML={{ __html: briefing.html_render }}
     />
   );
