@@ -2,15 +2,16 @@
 
 import { useState } from "react";
 import { useTranslations } from "next-intl";
+import { Pill, X, CheckCircle2 } from "lucide-react";
 
 import { enrichment } from "@/lib/api-client-browser";
 import type { DrugInteraction, Severity } from "@/lib/enrichment-types";
 
 const SEVERITY_STYLE: Record<Severity, string> = {
-  contraindicated: "border-red-500 bg-red-50 text-red-900",
-  major: "border-orange-500 bg-orange-50 text-orange-900",
-  moderate: "border-yellow-400 bg-yellow-50 text-yellow-900",
-  minor: "border-blue-300 bg-blue-50 text-blue-900",
+  contraindicated: "border-clay-500 bg-clay-50 text-clay-700",
+  major: "border-clay-500 bg-clay-50 text-clay-700",
+  moderate: "border-honey-400 bg-honey-100/60 text-ink",
+  minor: "border-pine-400 bg-pine-50 text-ink",
 };
 
 export default function DrugInteractionsPage() {
@@ -44,7 +45,10 @@ export default function DrugInteractionsPage() {
 
   return (
     <main className="mx-auto max-w-3xl px-6 py-10">
-      <h1 className="text-2xl font-semibold">💊 {t("enrichment.tabs.drugs")}</h1>
+      <h1 className="flex items-center gap-2 text-2xl text-pine-900">
+        <Pill className="h-5 w-5 text-pine-500" strokeWidth={2} />
+        {t("enrichment.tabs.drugs")}
+      </h1>
 
       <div className="mt-6 flex gap-2">
         <input
@@ -53,12 +57,13 @@ export default function DrugInteractionsPage() {
           onChange={(e) => setNewMed(e.target.value)}
           onKeyDown={(e) => e.key === "Enter" && addMed()}
           placeholder={t("enrichment.drugs.placeholder")}
-          className="flex-1 rounded border border-slate-300 px-3 py-2 text-sm"
+          aria-label={t("enrichment.drugs.placeholder")}
+          className="flex-1 rounded-xl border border-line-strong bg-surface px-3 py-2 text-sm text-ink placeholder:text-ink-faint focus:border-pine-400 focus:outline-none focus:ring-2 focus:ring-pine-100"
         />
         <button
           type="button"
           onClick={addMed}
-          className="rounded bg-slate-900 px-3 py-2 text-sm text-white hover:bg-slate-800"
+          className="ad-btn ad-btn-primary px-3 py-2 text-sm"
         >
           +
         </button>
@@ -68,11 +73,16 @@ export default function DrugInteractionsPage() {
         {meds.map((m, i) => (
           <li
             key={`${m}-${i}`}
-            className="flex items-center gap-1 rounded-full bg-slate-100 px-3 py-1 text-sm"
+            className="flex items-center gap-1 rounded-full bg-pine-50 px-3 py-1 text-sm text-pine-700 ring-1 ring-pine-100"
           >
             {m}
-            <button type="button" onClick={() => removeMed(i)} className="text-slate-500">
-              ×
+            <button
+              type="button"
+              onClick={() => removeMed(i)}
+              aria-label="Remove"
+              className="text-ink-faint transition-colors hover:text-clay-600"
+            >
+              <X className="h-4 w-4" strokeWidth={2} />
             </button>
           </li>
         ))}
@@ -82,14 +92,15 @@ export default function DrugInteractionsPage() {
         type="button"
         onClick={check}
         disabled={meds.length < 2 || loading}
-        className="mt-4 rounded bg-slate-900 px-4 py-2 text-sm font-medium text-white hover:bg-slate-800 disabled:bg-slate-400"
+        className="ad-btn ad-btn-primary mt-4 px-4 py-2 text-sm disabled:opacity-50"
       >
         {loading ? "..." : t("enrichment.drugs.check")}
       </button>
 
       {checked && interactions.length === 0 && (
-        <div className="mt-6 rounded border border-green-300 bg-green-50 p-4 text-sm text-green-800">
-          ✅ {t("enrichment.drugs.noInteractions")}
+        <div className="mt-6 flex items-center gap-2 rounded-xl border border-pine-100 bg-pine-50 p-4 text-sm text-pine-800">
+          <CheckCircle2 className="h-4 w-4 text-pine-500" strokeWidth={2.2} />
+          {t("enrichment.drugs.noInteractions")}
         </div>
       )}
 
@@ -97,13 +108,13 @@ export default function DrugInteractionsPage() {
         {interactions.map((i, idx) => (
           <li
             key={idx}
-            className={`rounded border-l-4 p-3 ${SEVERITY_STYLE[i.severity]}`}
+            className={`rounded-xl border-l-4 p-3 ${SEVERITY_STYLE[i.severity]}`}
           >
             <div className="flex items-center justify-between">
               <strong>
                 {i.drug_a} ↔ {i.drug_b}
               </strong>
-              <span className="rounded bg-white/50 px-2 py-0.5 text-xs uppercase">
+              <span className="ad-eyebrow rounded bg-surface/70 px-2 py-0.5">
                 {t(`enrichment.drugs.severity.${i.severity}`)}
               </span>
             </div>
