@@ -1,6 +1,7 @@
 "use client";
 import { CitationCard } from "./citation-card";
 import { EvidenceCard } from "./evidence-card";
+import { Markdown } from "./markdown";
 import { Database, BookMarked } from "lucide-react";
 import type { ChatMessage, Citation, EvidenceCitation } from "@/lib/chat-types";
 
@@ -29,7 +30,11 @@ export function ChatMessageBubble({
             : "rounded-2xl rounded-bl-md border border-line bg-surface text-ink"
         }`}
       >
-        <p className="whitespace-pre-wrap leading-relaxed">{message.content}</p>
+        {isUser ? (
+          <p className="whitespace-pre-wrap leading-relaxed">{message.content}</p>
+        ) : (
+          <Markdown>{message.content}</Markdown>
+        )}
         {!isUser && message.citations.length > 0 && (
           <div className="mt-3 border-t border-line pt-3">
             <div className="ad-eyebrow flex items-center gap-1.5">
