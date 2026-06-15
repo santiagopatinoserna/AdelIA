@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
 import { useTranslations } from "next-intl";
+import { Check, Copy, FileText } from "lucide-react";
 
 import { ingestion } from "@/lib/api-client-browser";
 import type { GDPRTemplateContent } from "@/lib/enrichment-types";
@@ -36,8 +37,11 @@ export default function GdprTemplateViewerPage() {
 
   return (
     <main className="mx-auto max-w-3xl px-6 py-10">
-      <h1 className="text-2xl font-semibold">{tpl.country} — {tpl.authority}</h1>
-      <p className="mt-1 text-sm text-slate-600">
+      <h1 className="flex items-center gap-2 text-2xl text-pine-900">
+        <FileText className="h-5 w-5 text-pine-500" strokeWidth={2} />
+        {tpl.country} — {tpl.authority}
+      </h1>
+      <p className="mt-1 text-sm text-ink-soft">
         {t("meta", {
           legalBasis: tpl.legal_basis,
           deadline: tpl.response_deadline,
@@ -47,11 +51,21 @@ export default function GdprTemplateViewerPage() {
       <button
         type="button"
         onClick={copyTemplate}
-        className="mt-4 rounded bg-slate-900 px-4 py-2 text-sm font-medium text-white hover:bg-slate-800"
+        className="ad-btn ad-btn-primary mt-4 px-4 py-2 text-sm"
       >
-        {copied ? `✅ ${t("copied")}` : `📋 ${t("copyTemplate")}`}
+        {copied ? (
+          <>
+            <Check className="h-4 w-4" />
+            {t("copied")}
+          </>
+        ) : (
+          <>
+            <Copy className="h-4 w-4" />
+            {t("copyTemplate")}
+          </>
+        )}
       </button>
-      <pre className="mt-6 whitespace-pre-wrap rounded border border-slate-200 bg-white p-6 font-mono text-xs">
+      <pre className="mt-6 whitespace-pre-wrap rounded-lg border border-line bg-surface-2 p-6 font-mono text-xs text-ink">
         {tpl.markdown}
       </pre>
     </main>

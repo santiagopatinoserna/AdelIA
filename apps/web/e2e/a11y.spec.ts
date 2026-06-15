@@ -46,7 +46,15 @@ test("a11y: authenticated surfaces", async ({ browser }) => {
     ["/es/dashboard/settings", "settings"],
     ["/es/dashboard/briefings", "briefings"],
     ["/es/dashboard/ingestion", "ingestion"],
+    ["/es/dashboard/ingestion/apple-health", "ingestion/apple-health"],
+    ["/es/dashboard/ingestion/ccd", "ingestion/ccd"],
     ["/es/dashboard/enrichment", "enrichment"],
+    ["/es/dashboard/enrichment/labs", "enrichment/labs"],
+    ["/es/dashboard/enrichment/drugs", "enrichment/drugs"],
+    ["/es/dashboard/enrichment/profiles", "enrichment/profiles"],
+    ["/es/dashboard/enrichment/trials", "enrichment/trials"],
+    ["/es/dashboard/enrichment/genomics", "enrichment/genomics"],
+    ["/es/dashboard/enrichment/codes", "enrichment/codes"],
     ["/es/dashboard/upload", "upload"],
   ] as const) {
     await page.goto(path);
