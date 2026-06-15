@@ -307,6 +307,15 @@
     "medDose": "Dose",
     "medSince": "Since when",
     "medResponse": "Response",
-    "loadError": "Could not load the questionnaire."
+    "loadError": "Could not load the questionnaire.",
+    "valoracionTitle": "Evidence-based assessment",
+    "valoracionLead": "Generate an assessment by cross-referencing your answers with the corpus evidence (1,936 articles), cited.",
+    "generateBtn": "Generate assessment",
+    "generating": "Analyzing with the evidence…",
+    "valoracionDisclaimer": "Indicative, with cited evidence. Not a substitute for your pediatrician's judgment.",
+    "needMoreAnswers": "Answer a few questions to generate the assessment.",
+    "valoracionError": "Could not generate the assessment. Please try again.",
+    "regenerateValoracion": "Regenerate",
+    "sourcesLabel": "Cited sources"
   }
 }

@@ -12,6 +12,8 @@ import {
   Trash2,
 } from "lucide-react";
 
+import { RefluxValoracion } from "./reflux-valoracion";
+
 type Question = {
   id: string;
   text: string;
@@ -184,6 +186,9 @@ export function RefluxQuestionnaire() {
           );
         })}
       </div>
+
+      {/* Evidence-based assessment from the answers (existing chat/RAG endpoint) */}
+      <RefluxValoracion sections={data.sections} answers={answers} />
 
       {/* Footer: save indicator */}
       <p className="mt-10 flex items-center justify-center gap-1.5 text-xs text-ink-faint">

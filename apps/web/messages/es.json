@@ -307,6 +307,15 @@
     "medDose": "Dosis",
     "medSince": "Desde cuándo",
     "medResponse": "Respuesta",
-    "loadError": "No se pudo cargar el cuestionario."
+    "loadError": "No se pudo cargar el cuestionario.",
+    "valoracionTitle": "Valoración fundamentada",
+    "valoracionLead": "Genera una valoración del control cruzando tus respuestas con la evidencia del corpus (1.936 artículos), citada.",
+    "generateBtn": "Generar valoración",
+    "generating": "Analizando con la evidencia…",
+    "valoracionDisclaimer": "Orientativo, con evidencia citada. No sustituye el criterio de tu pediatra.",
+    "needMoreAnswers": "Responde algunas preguntas para generar la valoración.",
+    "valoracionError": "No se pudo generar la valoración. Inténtalo de nuevo.",
+    "regenerateValoracion": "Regenerar",
+    "sourcesLabel": "Fuentes citadas"
   }
 }
