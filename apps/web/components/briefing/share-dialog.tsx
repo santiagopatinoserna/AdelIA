@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useTranslations } from "next-intl";
 import { Share2, X, Copy, Check, FileDown, Ban } from "lucide-react";
 
@@ -57,9 +57,26 @@ export function ShareDialog({ briefingId, onClose }: Props) {
     }
   }
 
+  // Escape closes the dialog (standard modal behavior).
+  useEffect(() => {
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") onClose();
+    };
+    document.addEventListener("keydown", onKey);
+    return () => document.removeEventListener("keydown", onKey);
+  }, [onClose]);
+
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-pine-900/50 p-4 backdrop-blur-sm">
-      <div className="ad-card w-full max-w-lg p-6 shadow-glow">
+    <div
+      className="fixed inset-0 z-50 flex items-center justify-center bg-pine-900/50 p-4 backdrop-blur-sm"
+      onClick={onClose}
+    >
+      <div
+        role="dialog"
+        aria-modal="true"
+        onClick={(e) => e.stopPropagation()}
+        className="ad-card w-full max-w-lg p-6 shadow-glow"
+      >
         <div className="mb-4 flex items-center justify-between">
           <h2 className="flex items-center gap-2 text-lg text-pine-900">
             <Share2 className="h-4 w-4 text-pine-500" strokeWidth={2} />
