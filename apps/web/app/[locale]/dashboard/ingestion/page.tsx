@@ -1,6 +1,7 @@
 import { Link } from "@/lib/navigation";
 import { redirect } from "next/navigation";
 import { getTranslations } from "next-intl/server";
+import { Activity, Building2, Send, Mail, BookOpen, FileText, Clock } from "lucide-react";
 
 import { auth } from "@/lib/auth";
 import { ingestion } from "@/lib/api-client";
@@ -28,60 +29,52 @@ export default async function IngestionPage({ params }: Props) {
     templates = [];
   }
 
+  const sources = [
+    { slug: "apple-health", Icon: Activity, title: "Apple Health", desc: t("ingestion.overview.appleHealthDesc") },
+    { slug: "ccd", Icon: Building2, title: "MyChart / CCD", desc: t("ingestion.overview.ccdDesc") },
+    { slug: "telegram", Icon: Send, title: "Telegram", desc: t("ingestion.overview.telegramDesc") },
+    { slug: "email", Icon: Mail, title: t("ingestion.overview.emailTitle"), desc: t("ingestion.overview.emailDesc") },
+  ];
+
   return (
     <main className="mx-auto max-w-4xl px-6 py-10">
-      <h1 className="text-2xl font-semibold">{t("ingestion.title")}</h1>
-      <p className="mt-1 text-sm text-slate-600">{t("ingestion.subtitle")}</p>
+      <h1 className="text-2xl text-pine-900">{t("ingestion.title")}</h1>
+      <p className="mt-1 text-sm text-ink-soft">{t("ingestion.subtitle")}</p>
 
       <section className="mt-8 grid grid-cols-2 gap-4 md:grid-cols-4">
-        <Link
-          href="/dashboard/ingestion/apple-health"
-          className="rounded-lg border border-slate-200 bg-white p-4 hover:bg-slate-50"
-        >
-          <div className="text-3xl">📱</div>
-          <h2 className="mt-2 font-medium">Apple Health</h2>
-          <p className="text-xs text-slate-600">{t("ingestion.overview.appleHealthDesc")}</p>
-        </Link>
-        <Link
-          href="/dashboard/ingestion/ccd"
-          className="rounded-lg border border-slate-200 bg-white p-4 hover:bg-slate-50"
-        >
-          <div className="text-3xl">🏥</div>
-          <h2 className="mt-2 font-medium">MyChart / CCD</h2>
-          <p className="text-xs text-slate-600">{t("ingestion.overview.ccdDesc")}</p>
-        </Link>
-        <Link
-          href="/dashboard/ingestion/telegram"
-          className="rounded-lg border border-slate-200 bg-white p-4 hover:bg-slate-50"
-        >
-          <div className="text-3xl">💬</div>
-          <h2 className="mt-2 font-medium">Telegram</h2>
-          <p className="text-xs text-slate-600">{t("ingestion.overview.telegramDesc")}</p>
-        </Link>
-        <Link
-          href="/dashboard/ingestion/email"
-          className="rounded-lg border border-slate-200 bg-white p-4 hover:bg-slate-50"
-        >
-          <div className="text-3xl">📧</div>
-          <h2 className="mt-2 font-medium">{t("ingestion.overview.emailTitle")}</h2>
-          <p className="text-xs text-slate-600">{t("ingestion.overview.emailDesc")}</p>
-        </Link>
+        {sources.map((s) => (
+          <Link
+            key={s.slug}
+            href={`/dashboard/ingestion/${s.slug}`}
+            className="ad-card ad-card-hover p-4"
+          >
+            <span className="inline-flex h-10 w-10 items-center justify-center rounded-xl bg-pine-50 text-pine-600 ring-1 ring-pine-100">
+              <s.Icon className="h-5 w-5" strokeWidth={2} />
+            </span>
+            <h2 className="mt-3 text-base text-pine-900">{s.title}</h2>
+            <p className="mt-1 text-xs leading-relaxed text-ink-soft">{s.desc}</p>
+          </Link>
+        ))}
       </section>
 
-      <section className="mt-10">
-        <h2 className="text-lg font-semibold">{t("ingestion.guidesTab")}</h2>
-        <ul className="mt-3 grid grid-cols-1 gap-2 md:grid-cols-2">
+      <section className="mt-12">
+        <h2 className="flex items-center gap-2 text-lg text-pine-900">
+          <BookOpen className="h-4 w-4 text-pine-500" strokeWidth={2} />
+          {t("ingestion.guidesTab")}
+        </h2>
+        <ul className="mt-4 grid grid-cols-1 gap-2.5 md:grid-cols-2">
           {guides.map((g) => (
             <li key={g.slug}>
               <Link
                 href={`/dashboard/ingestion/guides/${g.slug}`}
-                className="block rounded border border-slate-200 bg-white p-3 hover:bg-slate-50"
+                className="ad-card ad-card-hover block p-4"
               >
-                <div className="font-medium">{g.title}</div>
-                <div className="mt-1 text-xs text-slate-600">{g.description}</div>
+                <div className="font-medium text-ink">{g.title}</div>
+                <div className="mt-1 text-xs leading-relaxed text-ink-soft">{g.description}</div>
                 {g.estimated_time && (
-                  <div className="mt-1 text-xs text-slate-500">
-                    {t("ingestion.estimatedTime")} {g.estimated_time}
+                  <div className="mt-2 flex items-center gap-1 font-mono text-[11px] text-ink-faint">
+                    <Clock className="h-3 w-3" strokeWidth={2} />
+                    {g.estimated_time}
                   </div>
                 )}
               </Link>
@@ -90,18 +83,21 @@ export default async function IngestionPage({ params }: Props) {
         </ul>
       </section>
 
-      <section className="mt-10">
-        <h2 className="text-lg font-semibold">{t("ingestion.gdprTab")}</h2>
-        <ul className="mt-3 grid grid-cols-1 gap-2 md:grid-cols-3">
-          {templates.map((t) => (
-            <li key={t.country}>
+      <section className="mt-12">
+        <h2 className="flex items-center gap-2 text-lg text-pine-900">
+          <FileText className="h-4 w-4 text-pine-500" strokeWidth={2} />
+          {t("ingestion.gdprTab")}
+        </h2>
+        <ul className="mt-4 grid grid-cols-1 gap-2.5 md:grid-cols-3">
+          {templates.map((tpl) => (
+            <li key={tpl.country}>
               <Link
-                href={`/dashboard/ingestion/gdpr/${t.country}`}
-                className="block rounded border border-slate-200 bg-white p-3 hover:bg-slate-50"
+                href={`/dashboard/ingestion/gdpr/${tpl.country}`}
+                className="ad-card ad-card-hover block p-4"
               >
-                <div className="font-medium">{t.country}</div>
-                <div className="mt-1 text-xs text-slate-600">{t.authority}</div>
-                <div className="mt-1 text-[10px] text-slate-500">{t.legal_basis}</div>
+                <div className="font-medium text-ink">{tpl.country}</div>
+                <div className="mt-1 text-xs text-ink-soft">{tpl.authority}</div>
+                <div className="mt-1 text-[10px] text-ink-faint">{tpl.legal_basis}</div>
               </Link>
             </li>
           ))}

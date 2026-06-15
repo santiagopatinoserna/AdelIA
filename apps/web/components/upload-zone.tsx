@@ -2,6 +2,7 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { useTranslations } from "next-intl";
+import { UploadCloud, Loader2 } from "lucide-react";
 
 export function UploadZone({ locale }: { locale: string }) {
   const t = useTranslations("upload");
@@ -39,11 +40,14 @@ export function UploadZone({ locale }: { locale: string }) {
         const f = e.dataTransfer.files[0];
         if (f) upload(f);
       }}
-      className="rounded-lg border-2 border-dashed border-slate-300 bg-white px-6 py-16 text-center"
+      className="ad-card rounded-2xl border-2 border-dashed border-line-strong bg-surface-2/60 px-6 py-16 text-center transition-colors hover:border-pine-200"
     >
-      <p className="text-slate-600">{t("drop")}</p>
-      <p className="mt-1 text-sm text-slate-400">{t("or")}</p>
-      <label className="mt-4 inline-block cursor-pointer rounded-md bg-slate-900 px-4 py-2 text-sm text-white hover:bg-slate-800">
+      <span className="mx-auto inline-flex h-14 w-14 items-center justify-center rounded-2xl bg-pine-50 text-pine-400 ring-1 ring-pine-100">
+        <UploadCloud className="h-7 w-7" strokeWidth={1.8} />
+      </span>
+      <p className="mt-5 text-ink-soft">{t("drop")}</p>
+      <p className="mt-1 text-sm text-ink-faint">{t("or")}</p>
+      <label className="ad-btn ad-btn-primary mt-5 inline-flex cursor-pointer px-5 py-2.5 text-sm">
         {t("browse")}
         <input
           type="file"
@@ -55,8 +59,13 @@ export function UploadZone({ locale }: { locale: string }) {
           }}
         />
       </label>
-      {busy && <p className="mt-4 text-amber-700">{t("uploading")}</p>}
-      {error && <p className="mt-4 text-rose-700">{error}</p>}
+      {busy && (
+        <p className="mt-4 flex items-center justify-center gap-1.5 text-honey-600">
+          <Loader2 className="h-4 w-4 animate-spin" strokeWidth={2.2} />
+          {t("uploading")}
+        </p>
+      )}
+      {error && <p className="mt-4 text-clay-600">{error}</p>}
     </div>
   );
 }
