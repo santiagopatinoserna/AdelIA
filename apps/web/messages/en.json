@@ -70,7 +70,10 @@
     "emptySubtitle": "Every answer is grounded in your data and cited clinical evidence.",
     "example1": "What should I ask at my next appointment?",
     "example2": "Are there interactions between my medications?",
-    "example3": "Summarize my latest labs and flag anything out of range"
+    "example3": "Summarize my latest labs and flag anything out of range",
+    "stop": "Stop",
+    "copy": "Copy",
+    "copied": "Copied"
   },
   "ingestion": {
     "title": "Import data",
