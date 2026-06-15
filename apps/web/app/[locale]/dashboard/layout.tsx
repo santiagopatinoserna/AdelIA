@@ -7,6 +7,7 @@ import { Link } from "@/lib/navigation";
 import { LocaleSwitcher } from "@/components/locale-switcher";
 import { DashboardSectionNav } from "@/components/dashboard-section-nav";
 import { CommandPalette } from "@/components/command-palette";
+import { OnlineStatus } from "@/components/online-status";
 
 // Persistent chrome for every authenticated page: wordmark (→ dashboard),
 // language, settings, upload. Sub-pages used to render bare, with no way to
@@ -23,6 +24,7 @@ export default async function DashboardLayout({
 
   return (
     <div className="flex min-h-[100dvh] flex-col">
+      <OnlineStatus />
       <header className="sticky top-0 z-30 flex h-14 shrink-0 items-center justify-between gap-4 border-b border-line/70 bg-canvas/80 px-4 backdrop-blur-md md:px-6">
         <div className="flex min-w-0 items-center gap-4">
           <Link
