@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { useTranslations, useLocale } from "next-intl";
-import { Sparkles, Loader2, RotateCcw, ShieldCheck } from "lucide-react";
+import { Sparkles, Loader2, RotateCcw, ShieldCheck, Copy, Check } from "lucide-react";
 
 import { streamChat, type Citation } from "@/lib/chat-client-browser";
 import { Markdown } from "./markdown";
@@ -53,6 +53,17 @@ export function RefluxValoracion({
   const [citations, setCitations] = useState<Citation[]>([]);
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [copied, setCopied] = useState(false);
+
+  async function copyOutput() {
+    try {
+      await navigator.clipboard.writeText(text);
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2000);
+    } catch {
+      /* clipboard blocked — no-op */
+    }
+  }
 
   const answeredCount = sections
     .flatMap((s) => s.questions)
@@ -144,14 +155,28 @@ export function RefluxValoracion({
                 <ShieldCheck className="h-3.5 w-3.5 text-pine-400" strokeWidth={2} />
                 {t("valoracionDisclaimer")}
               </p>
-              <button
-                type="button"
-                onClick={generate}
-                className="ad-btn ad-btn-ghost shrink-0 px-3 py-1.5 text-xs"
-              >
-                <RotateCcw className="h-3.5 w-3.5" strokeWidth={2} />
-                {t("regenerateValoracion")}
-              </button>
+              <div className="flex shrink-0 gap-2">
+                <button
+                  type="button"
+                  onClick={copyOutput}
+                  className="ad-btn ad-btn-ghost px-3 py-1.5 text-xs"
+                >
+                  {copied ? (
+                    <Check className="h-3.5 w-3.5 text-pine-500" strokeWidth={2.4} />
+                  ) : (
+                    <Copy className="h-3.5 w-3.5" strokeWidth={2} />
+                  )}
+                  {copied ? t("copied") : t("copy")}
+                </button>
+                <button
+                  type="button"
+                  onClick={generate}
+                  className="ad-btn ad-btn-ghost px-3 py-1.5 text-xs"
+                >
+                  <RotateCcw className="h-3.5 w-3.5" strokeWidth={2} />
+                  {t("regenerateValoracion")}
+                </button>
+              </div>
             </div>
           )}
         </div>

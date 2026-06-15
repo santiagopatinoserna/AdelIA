@@ -9,6 +9,8 @@ import {
   Loader2,
   RotateCcw,
   ShieldCheck,
+  Copy,
+  Check,
 } from "lucide-react";
 
 import { streamChat, type Citation } from "@/lib/chat-client-browser";
@@ -54,6 +56,17 @@ export function ConsultaMode() {
   const [error, setError] = useState<string | null>(null);
   const [listening, setListening] = useState(false);
   const [micSupported, setMicSupported] = useState(false);
+  const [copied, setCopied] = useState(false);
+
+  async function copyOutput() {
+    try {
+      await navigator.clipboard.writeText(answer);
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2000);
+    } catch {
+      /* clipboard blocked — no-op */
+    }
+  }
   const recRef = useRef<SpeechRecognitionLike | null>(null);
   const baseRef = useRef("");
 
@@ -204,14 +217,28 @@ export function ConsultaMode() {
                 <ShieldCheck className="h-3.5 w-3.5 text-pine-400" strokeWidth={2} />
                 {t("disclaimer")}
               </p>
-              <button
-                type="button"
-                onClick={generate}
-                className="ad-btn ad-btn-ghost shrink-0 px-3 py-1.5 text-xs"
-              >
-                <RotateCcw className="h-3.5 w-3.5" strokeWidth={2} />
-                {t("regenerate")}
-              </button>
+              <div className="flex shrink-0 gap-2">
+                <button
+                  type="button"
+                  onClick={copyOutput}
+                  className="ad-btn ad-btn-ghost px-3 py-1.5 text-xs"
+                >
+                  {copied ? (
+                    <Check className="h-3.5 w-3.5 text-pine-500" strokeWidth={2.4} />
+                  ) : (
+                    <Copy className="h-3.5 w-3.5" strokeWidth={2} />
+                  )}
+                  {copied ? t("copied") : t("copy")}
+                </button>
+                <button
+                  type="button"
+                  onClick={generate}
+                  className="ad-btn ad-btn-ghost px-3 py-1.5 text-xs"
+                >
+                  <RotateCcw className="h-3.5 w-3.5" strokeWidth={2} />
+                  {t("regenerate")}
+                </button>
+              </div>
             </div>
           )}
         </div>
