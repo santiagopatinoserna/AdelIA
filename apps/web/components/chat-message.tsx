@@ -32,8 +32,14 @@ export function ChatMessageBubble({
       >
         {isUser ? (
           <p className="whitespace-pre-wrap leading-relaxed">{message.content}</p>
-        ) : (
+        ) : message.content.trim() ? (
           <Markdown>{message.content}</Markdown>
+        ) : (
+          <span className="flex items-center gap-1 py-1" role="status" aria-label="…">
+            <span className="ad-typing-dot h-1.5 w-1.5 rounded-full bg-pine-400" />
+            <span className="ad-typing-dot h-1.5 w-1.5 rounded-full bg-pine-400" style={{ animationDelay: "150ms" }} />
+            <span className="ad-typing-dot h-1.5 w-1.5 rounded-full bg-pine-400" style={{ animationDelay: "300ms" }} />
+          </span>
         )}
         {!isUser && message.citations.length > 0 && (
           <div className="mt-3 border-t border-line pt-3">
