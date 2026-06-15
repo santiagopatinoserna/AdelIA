@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import { auth } from "@/lib/auth";
 import { redirect } from "next/navigation";
 import { Link } from "@/lib/navigation";
@@ -10,6 +11,16 @@ import { BriefingList } from "@/components/briefing/briefing-list";
 
 interface Props {
   params: Promise<{ locale: string }>;
+}
+
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ locale: string }>;
+}): Promise<Metadata> {
+  const { locale } = await params;
+  const t = await getTranslations({ locale, namespace: "briefing" });
+  return { title: t("title") };
 }
 
 export default async function BriefingsPage({ params }: Props) {
