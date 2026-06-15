@@ -1,8 +1,8 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useTranslations, useLocale } from "next-intl";
-import { Sparkles, Loader2, RotateCcw, ShieldCheck, Copy, Check } from "lucide-react";
+import { Sparkles, Loader2, RotateCcw, ShieldCheck, Copy, Check, AlertTriangle } from "lucide-react";
 
 import { streamChat, type Citation } from "@/lib/chat-client-browser";
 import { Markdown } from "./markdown";
@@ -36,6 +36,20 @@ function formatAnswer(q: Question, v: Answer): string {
   return String(v ?? "");
 }
 
+const STORAGE_KEY = "adelia:valoracion:v1";
+
+// Stable fingerprint of the answered questions — lets us detect when the
+// answers have changed since a saved valoración, so we never present a stale
+// medical assessment as current.
+function fingerprint(a: Record<string, Answer>): string {
+  return JSON.stringify(
+    Object.keys(a)
+      .filter((k) => isAnswered(a[k]))
+      .sort()
+      .map((k) => [k, a[k]]),
+  );
+}
+
 // Realizes the "valoración fundamentada": composes the filled answers into a
 // prompt and streams a cited assessment through the EXISTING chat/RAG endpoint
 // (1,936-article corpus + the child's data). No backend change — frontend
@@ -54,6 +68,28 @@ export function RefluxValoracion({
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [copied, setCopied] = useState(false);
+  // Fingerprint of the answers the current valoración was generated from.
+  const [generatedFp, setGeneratedFp] = useState("");
+
+  // Restore a saved valoración so it survives a reload.
+  useEffect(() => {
+    try {
+      const raw = localStorage.getItem(STORAGE_KEY);
+      if (raw) {
+        const d = JSON.parse(raw);
+        if (d.text) {
+          setText(d.text);
+          setCitations(Array.isArray(d.citations) ? d.citations : []);
+          setGeneratedFp(d.fp ?? "");
+        }
+      }
+    } catch {
+      /* corrupt store — ignore */
+    }
+  }, []);
+
+  // True when the answers have changed since the shown valoración was made.
+  const isStale = !!text && !busy && fingerprint(answers) !== generatedFp;
 
   async function copyOutput() {
     try {
@@ -86,15 +122,32 @@ export function RefluxValoracion({
   }
 
   async function generate() {
+    const fp = fingerprint(answers);
     setBusy(true);
     setError(null);
     setText("");
     setCitations([]);
+    let acc = "";
+    let cits: Citation[] = [];
     try {
       for await (const ev of streamChat(composePrompt(), null, locale)) {
-        if (ev.type === "token") setText((prev) => prev + ev.content);
-        else if (ev.type === "final") setCitations(ev.citations ?? []);
-        else if (ev.type === "error") setError(ev.content);
+        if (ev.type === "token") {
+          acc += ev.content;
+          setText(acc);
+        } else if (ev.type === "final") {
+          cits = ev.citations ?? [];
+          setCitations(cits);
+        } else if (ev.type === "error") {
+          setError(ev.content);
+        }
+      }
+      if (acc) {
+        setGeneratedFp(fp);
+        try {
+          localStorage.setItem(STORAGE_KEY, JSON.stringify({ fp, text: acc, citations: cits }));
+        } catch {
+          /* private mode / quota — keep in memory */
+        }
       }
     } catch (e) {
       setError(String(e));
@@ -128,6 +181,12 @@ export function RefluxValoracion({
 
       {(busy || text) && (
         <div className="ad-card mt-4 p-5">
+          {isStale && (
+            <div className="mb-3 flex items-start gap-2 rounded-lg border border-honey-200 bg-honey-100/60 p-2.5 text-xs text-ink">
+              <AlertTriangle className="mt-px h-3.5 w-3.5 shrink-0 text-honey-600" strokeWidth={2.2} />
+              {t("valoracionStale")}
+            </div>
+          )}
           {busy && !text && (
             <p className="flex items-center gap-2 text-sm text-ink-soft">
               <Loader2 className="h-4 w-4 animate-spin text-pine-400" strokeWidth={2} />

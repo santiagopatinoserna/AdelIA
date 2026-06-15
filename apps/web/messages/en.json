@@ -321,7 +321,8 @@
     "regenerateValoracion": "Regenerate",
     "sourcesLabel": "Cited sources",
     "copy": "Copy",
-    "copied": "Copied"
+    "copied": "Copied",
+    "valoracionStale": "You've changed answers since this assessment — regenerate to update it."
   },
   "consulta": {
     "title": "Appointment mode",

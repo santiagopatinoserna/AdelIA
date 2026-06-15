@@ -321,7 +321,8 @@
     "regenerateValoracion": "Régénérer",
     "sourcesLabel": "Sources citées",
     "copy": "Copier",
-    "copied": "Copié"
+    "copied": "Copié",
+    "valoracionStale": "Vous avez modifié des réponses depuis cette évaluation — régénérez-la pour la mettre à jour."
   },
   "consulta": {
     "title": "Mode Consultation",
