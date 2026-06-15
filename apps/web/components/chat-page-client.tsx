@@ -40,6 +40,8 @@ export function ChatPageClient({
   // events from a previous epoch are dropped instead of appending tokens
   // to another session's history (or crashing on an empty list).
   const streamEpochRef = useRef(0);
+  // Aborts the in-flight stream when the user presses Stop.
+  const abortRef = useRef<AbortController | null>(null);
 
   useEffect(() => {
     scrollRef.current?.scrollTo({ top: scrollRef.current.scrollHeight, behavior: "smooth" });
@@ -76,12 +78,14 @@ export function ChatPageClient({
   const handleSubmit = useCallback(async (text: string) => {
     const epoch = streamEpochRef.current;
     const stale = () => streamEpochRef.current !== epoch;
+    const controller = new AbortController();
+    abortRef.current = controller;
     setBusy(true);
     const userMsg: LocalMsg = { role: "user", content: text, citations: [] };
     setMessages((prev) => [...prev, userMsg, { role: "assistant", content: "", citations: [] }]);
     try {
       let createdSessionId: string | null = null;
-      for await (const event of streamChat(text, activeId, locale)) {
+      for await (const event of streamChat(text, activeId, locale, controller.signal)) {
         if (stale()) break;
         if (event.type === "start") {
           createdSessionId = event.session_id;
@@ -121,7 +125,8 @@ export function ChatPageClient({
         setSessions(refreshed);
       }
     } catch (e) {
-      if (stale()) return;
+      // User switched sessions or pressed Stop — keep the partial answer, no error.
+      if (stale() || controller.signal.aborted) return;
       setMessages((prev) => {
         const updated = [...prev];
         const last = updated[updated.length - 1];
@@ -134,6 +139,8 @@ export function ChatPageClient({
       setBusy(false);
     }
   }, [activeId, locale, sessions]);
+
+  const stop = useCallback(() => abortRef.current?.abort(), []);
 
   return (
     <div className="flex w-full">
@@ -192,7 +199,7 @@ export function ChatPageClient({
             )}
           </div>
         </div>
-        <ChatInput onSubmit={handleSubmit} disabled={busy} />
+        <ChatInput onSubmit={handleSubmit} disabled={busy} onStop={stop} />
       </section>
     </div>
   );

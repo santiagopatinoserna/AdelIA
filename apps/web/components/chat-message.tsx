@@ -1,8 +1,10 @@
 "use client";
+import { useState } from "react";
+import { useTranslations } from "next-intl";
 import { CitationCard } from "./citation-card";
 import { EvidenceCard } from "./evidence-card";
 import { Markdown } from "./markdown";
-import { Database, BookMarked } from "lucide-react";
+import { Database, BookMarked, Copy, Check } from "lucide-react";
 import type { ChatMessage, Citation, EvidenceCitation } from "@/lib/chat-types";
 
 export function ChatMessageBubble({
@@ -19,8 +21,20 @@ export function ChatMessageBubble({
       };
   locale: string;
 }) {
+  const t = useTranslations("chat");
   const isUser = message.role === "user";
   const evidence = message.evidence_citations ?? [];
+  const [copied, setCopied] = useState(false);
+
+  async function copy() {
+    try {
+      await navigator.clipboard.writeText(message.content);
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2000);
+    } catch {
+      /* clipboard blocked */
+    }
+  }
   return (
     <div className={`flex ${isUser ? "justify-end" : "justify-start"}`}>
       <div
@@ -66,6 +80,20 @@ export function ChatMessageBubble({
               ))}
             </div>
           </div>
+        )}
+        {!isUser && message.content.trim() && (
+          <button
+            type="button"
+            onClick={copy}
+            className="mt-3 inline-flex items-center gap-1 text-xs text-ink-faint transition-colors hover:text-pine-600"
+          >
+            {copied ? (
+              <Check className="h-3 w-3 text-pine-500" strokeWidth={2.4} />
+            ) : (
+              <Copy className="h-3 w-3" strokeWidth={2} />
+            )}
+            {copied ? t("copied") : t("copy")}
+          </button>
         )}
       </div>
     </div>

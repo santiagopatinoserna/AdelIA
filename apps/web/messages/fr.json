@@ -70,7 +70,10 @@
     "emptySubtitle": "Chaque réponse s'appuie sur vos données et des preuves cliniques citées.",
     "example1": "Que devrais-je demander à mon prochain rendez-vous ?",
     "example2": "Y a-t-il des interactions entre mes médicaments ?",
-    "example3": "Résume mes derniers résultats et signale ce qui est hors normes"
+    "example3": "Résume mes derniers résultats et signale ce qui est hors normes",
+    "stop": "Arrêter",
+    "copy": "Copier",
+    "copied": "Copié"
   },
   "ingestion": {
     "title": "Importer des données",

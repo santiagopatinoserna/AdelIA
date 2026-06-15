@@ -1,14 +1,16 @@
 "use client";
 import { useRef, useState } from "react";
 import { useTranslations } from "next-intl";
-import { Send, Loader2 } from "lucide-react";
+import { Send, Square } from "lucide-react";
 
 export function ChatInput({
   onSubmit,
   disabled,
+  onStop,
 }: {
   onSubmit: (text: string) => void;
   disabled: boolean;
+  onStop?: () => void;
 }) {
   const t = useTranslations("chat");
   const [text, setText] = useState("");
@@ -63,24 +65,27 @@ export function ChatInput({
         aria-label={t("placeholder")}
         className="max-h-40 flex-1 resize-none rounded-xl border border-line-strong bg-surface px-4 py-2.5 text-sm leading-relaxed text-ink placeholder:text-ink-faint focus:border-pine-400 focus:outline-none focus:ring-2 focus:ring-pine-100 disabled:bg-surface-2"
       />
-      <button
-        type="submit"
-        disabled={disabled || !text.trim()}
-        aria-label={disabled ? t("thinking") : t("send")}
-        className="ad-btn ad-btn-primary px-3.5 py-2.5 text-sm disabled:cursor-not-allowed disabled:opacity-50 sm:px-4"
-      >
-        {disabled ? (
-          <>
-            <Loader2 className="h-4 w-4 animate-spin" strokeWidth={2.2} />
-            <span className="hidden sm:inline">{t("thinking")}</span>
-          </>
-        ) : (
-          <>
-            <Send className="h-4 w-4" strokeWidth={2.2} />
-            <span className="hidden sm:inline">{t("send")}</span>
-          </>
-        )}
-      </button>
+      {disabled ? (
+        <button
+          type="button"
+          onClick={onStop}
+          aria-label={t("stop")}
+          className="ad-btn ad-btn-ghost px-3.5 py-2.5 text-sm sm:px-4"
+        >
+          <Square className="h-3.5 w-3.5 fill-current" strokeWidth={2} />
+          <span className="hidden sm:inline">{t("stop")}</span>
+        </button>
+      ) : (
+        <button
+          type="submit"
+          disabled={!text.trim()}
+          aria-label={t("send")}
+          className="ad-btn ad-btn-primary px-3.5 py-2.5 text-sm disabled:cursor-not-allowed disabled:opacity-50 sm:px-4"
+        >
+          <Send className="h-4 w-4" strokeWidth={2.2} />
+          <span className="hidden sm:inline">{t("send")}</span>
+        </button>
+      )}
     </form>
   );
 }

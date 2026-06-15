@@ -70,7 +70,10 @@
     "emptySubtitle": "Cada respuesta se apoya en tu data y en evidencia clínica citada.",
     "example1": "¿Qué debería preguntar en mi próxima consulta?",
     "example2": "¿Hay interacciones entre mis medicamentos?",
-    "example3": "Resume mis últimos análisis y señala lo fuera de rango"
+    "example3": "Resume mis últimos análisis y señala lo fuera de rango",
+    "stop": "Detener",
+    "copy": "Copiar",
+    "copied": "Copiado"
   },
   "ingestion": {
     "title": "Importar datos",
