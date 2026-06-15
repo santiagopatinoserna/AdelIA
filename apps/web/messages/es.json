@@ -73,7 +73,8 @@
     "example3": "Resume mis últimos análisis y señala lo fuera de rango",
     "stop": "Detener",
     "copy": "Copiar",
-    "copied": "Copiado"
+    "copied": "Copiado",
+    "scrollToLatest": "Ir al último mensaje"
   },
   "ingestion": {
     "title": "Importar datos",
