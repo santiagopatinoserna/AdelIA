@@ -317,5 +317,21 @@
     "valoracionError": "No se pudo generar la valoración. Inténtalo de nuevo.",
     "regenerateValoracion": "Regenerar",
     "sourcesLabel": "Fuentes citadas"
+  },
+  "consulta": {
+    "title": "Modo Consulta",
+    "subtitle": "Durante la cita: escribe o dicta lo que dice el médico y AdelIA te da preguntas con argumento y señales a vigilar, citadas.",
+    "placeholder": "Escribe o dicta lo que acaba de decir el médico…",
+    "listen": "Dictar",
+    "listening": "Escuchando…",
+    "generate": "Generar preguntas",
+    "generating": "Pensando con la evidencia…",
+    "disclaimer": "Orientativo y citado. Tú y tu médico decidís — pero con argumentos.",
+    "emptyPrompt": "¿Qué acaba de decir el médico?",
+    "error": "No se pudo generar. Inténtalo de nuevo.",
+    "navLabel": "Modo Consulta",
+    "sourcesLabel": "Fuentes citadas",
+    "clear": "Limpiar",
+    "regenerate": "Regenerar"
   }
 }

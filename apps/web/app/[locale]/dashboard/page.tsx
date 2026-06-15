@@ -15,6 +15,7 @@ import {
   UploadCloud,
   FolderOpen,
   Baby,
+  Stethoscope,
 } from "lucide-react";
 
 export async function generateMetadata({
@@ -38,6 +39,7 @@ export default async function DashboardPage({
 
   const t = await getTranslations("dashboard");
   const tq = await getTranslations("questionnaire");
+  const tcons = await getTranslations("consulta");
   let docs: DocumentDTO[] = [];
   try {
     docs = await listDocuments();
@@ -50,6 +52,7 @@ export default async function DashboardPage({
     { href: "/dashboard/chat", icon: MessagesSquare, label: "Chat" },
     { href: "/dashboard/briefings", icon: ClipboardList, label: "Briefings" },
     { href: "/dashboard/questionnaire", icon: Baby, label: tq("navLabel") },
+    { href: "/dashboard/consulta", icon: Stethoscope, label: tcons("navLabel") },
     { href: "/dashboard/ingestion", icon: Download, label: t("navImport") },
     { href: "/dashboard/enrichment", icon: Sparkles, label: t("navInsights") },
   ];
@@ -81,7 +84,7 @@ export default async function DashboardPage({
 
       <main className="mx-auto max-w-5xl px-6 py-10">
         {/* Quick-access nav */}
-        <nav className="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-5">
+        <nav className="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-6">
           {nav.map((item, i) => (
             <Link
               key={item.href}

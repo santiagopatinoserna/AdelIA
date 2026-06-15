@@ -317,5 +317,21 @@
     "valoracionError": "Impossible de générer l'évaluation. Réessayez.",
     "regenerateValoracion": "Régénérer",
     "sourcesLabel": "Sources citées"
+  },
+  "consulta": {
+    "title": "Mode Consultation",
+    "subtitle": "Pendant le rendez-vous : écrivez ou dictez ce que dit le médecin et AdelIA vous donne des questions argumentées et des signes à surveiller, cités.",
+    "placeholder": "Écrivez ou dictez ce que le médecin vient de dire…",
+    "listen": "Dicter",
+    "listening": "Écoute…",
+    "generate": "Générer des questions",
+    "generating": "Réflexion avec les preuves…",
+    "disclaimer": "À titre indicatif et cité. Vous et votre médecin décidez — mais avec des arguments.",
+    "emptyPrompt": "Qu'est-ce que le médecin vient de dire ?",
+    "error": "Échec de la génération. Réessayez.",
+    "navLabel": "Mode Consultation",
+    "sourcesLabel": "Sources citées",
+    "clear": "Effacer",
+    "regenerate": "Régénérer"
   }
 }
