@@ -2,7 +2,13 @@
   "common": {
     "appName": "AdelIA",
     "tagline": "Votre coffre-fort médical personnel avec IA",
-    "loading": "Chargement…"
+    "loading": "Chargement…",
+    "errorTitle": "Une erreur s'est produite",
+    "errorBody": "Une erreur inattendue s'est produite. Réessayez ou revenez à l'accueil.",
+    "retry": "Réessayer",
+    "notFoundTitle": "Page introuvable",
+    "notFoundBody": "La page que vous cherchez n'existe pas ou a été déplacée.",
+    "backHome": "Retour à l'accueil"
   },
   "home": {
     "hero": "Votre dossier médical, à vous. Analyse IA en 2 modes.",
@@ -59,7 +65,12 @@
     "citationLabel": "Voir la source",
     "deleteSession": "Supprimer",
     "openSessions": "Voir les conversations",
-    "closeSessions": "Fermer"
+    "closeSessions": "Fermer",
+    "emptyTitle": "Interrogez votre historique médical",
+    "emptySubtitle": "Chaque réponse s'appuie sur vos données et des preuves cliniques citées.",
+    "example1": "Que devrais-je demander à mon prochain rendez-vous ?",
+    "example2": "Y a-t-il des interactions entre mes médicaments ?",
+    "example3": "Résume mes derniers résultats et signale ce qui est hors normes"
   },
   "ingestion": {
     "title": "Importer des données",

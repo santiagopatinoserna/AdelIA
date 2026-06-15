@@ -1,7 +1,7 @@
 "use client";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { useTranslations } from "next-intl";
-import { Menu } from "lucide-react";
+import { Menu, Stethoscope, Sparkles, ArrowUpRight } from "lucide-react";
 import {
   type ChatSession,
   type Citation,
@@ -159,10 +159,37 @@ export function ChatPageClient({
           <h1 className="text-lg text-pine-900">{titleText}</h1>
         </header>
         <div ref={scrollRef} className="flex-1 overflow-y-auto px-4 py-6 md:px-6">
-          <div className="mx-auto max-w-3xl space-y-3">
-            {messages.map((m, i) => (
-              <ChatMessageBubble key={i} message={m} locale={locale} />
-            ))}
+          <div className="mx-auto max-w-3xl">
+            {messages.length === 0 ? (
+              <div className="ad-rise mx-auto mt-10 max-w-xl text-center md:mt-16">
+                <span className="mx-auto inline-flex h-14 w-14 items-center justify-center rounded-2xl bg-pine-50 text-pine-500 ring-1 ring-pine-100">
+                  <Stethoscope className="h-7 w-7" strokeWidth={1.8} />
+                </span>
+                <h2 className="mt-5 font-display text-2xl text-pine-900">{t("emptyTitle")}</h2>
+                <p className="mx-auto mt-2 max-w-sm text-sm text-ink-soft">{t("emptySubtitle")}</p>
+                <div className="mt-7 flex flex-col gap-2">
+                  {[t("example1"), t("example2"), t("example3")].map((ex) => (
+                    <button
+                      key={ex}
+                      type="button"
+                      onClick={() => handleSubmit(ex)}
+                      disabled={busy}
+                      className="ad-card ad-card-hover group flex items-center gap-3 px-4 py-3 text-left text-sm text-ink disabled:opacity-60"
+                    >
+                      <Sparkles className="h-4 w-4 shrink-0 text-honey-500" strokeWidth={2} />
+                      <span className="flex-1">{ex}</span>
+                      <ArrowUpRight className="h-4 w-4 shrink-0 text-ink-faint transition-colors group-hover:text-pine-500" strokeWidth={2} />
+                    </button>
+                  ))}
+                </div>
+              </div>
+            ) : (
+              <div className="space-y-3">
+                {messages.map((m, i) => (
+                  <ChatMessageBubble key={i} message={m} locale={locale} />
+                ))}
+              </div>
+            )}
           </div>
         </div>
         <ChatInput onSubmit={handleSubmit} disabled={busy} />

@@ -2,7 +2,13 @@
   "common": {
     "appName": "AdelIA",
     "tagline": "Your personal medical vault with AI",
-    "loading": "Loading…"
+    "loading": "Loading…",
+    "errorTitle": "Something went wrong",
+    "errorBody": "An unexpected error occurred. You can retry or go back home.",
+    "retry": "Retry",
+    "notFoundTitle": "Page not found",
+    "notFoundBody": "The page you are looking for doesn't exist or has moved.",
+    "backHome": "Back to home"
   },
   "home": {
     "hero": "Your medical history, yours. AI analysis in 2 modes.",
@@ -59,7 +65,12 @@
     "citationLabel": "View source",
     "deleteSession": "Delete",
     "openSessions": "Show conversations",
-    "closeSessions": "Close"
+    "closeSessions": "Close",
+    "emptyTitle": "Ask your medical history",
+    "emptySubtitle": "Every answer is grounded in your data and cited clinical evidence.",
+    "example1": "What should I ask at my next appointment?",
+    "example2": "Are there interactions between my medications?",
+    "example3": "Summarize my latest labs and flag anything out of range"
   },
   "ingestion": {
     "title": "Import data",
