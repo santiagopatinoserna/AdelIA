@@ -307,6 +307,15 @@
     "medDose": "Dose",
     "medSince": "Depuis quand",
     "medResponse": "Réponse",
-    "loadError": "Impossible de charger le questionnaire."
+    "loadError": "Impossible de charger le questionnaire.",
+    "valoracionTitle": "Évaluation fondée sur des preuves",
+    "valoracionLead": "Générez une évaluation en croisant vos réponses avec les preuves du corpus (1 936 articles), citées.",
+    "generating": "Analyse avec les preuves…",
+    "generateBtn": "Générer l'évaluation",
+    "valoracionDisclaimer": "À titre indicatif, avec preuves citées. Ne remplace pas l'avis de votre pédiatre.",
+    "needMoreAnswers": "Renseignez quelques questions pour générer l'évaluation.",
+    "valoracionError": "Impossible de générer l'évaluation. Réessayez.",
+    "regenerateValoracion": "Régénérer",
+    "sourcesLabel": "Sources citées"
   }
 }
