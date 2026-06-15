@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import { Link } from "@/lib/navigation";
 import { redirect } from "next/navigation";
 import { getTranslations } from "next-intl/server";
@@ -9,6 +10,16 @@ import type { CoverageStats } from "@/lib/enrichment-types";
 
 interface Props {
   params: Promise<{ locale: string }>;
+}
+
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ locale: string }>;
+}): Promise<Metadata> {
+  const { locale } = await params;
+  const t = await getTranslations({ locale, namespace: "enrichment" });
+  return { title: t("title") };
 }
 
 export default async function EnrichmentDashboardPage({ params }: Props) {
