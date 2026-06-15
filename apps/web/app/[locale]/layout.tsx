@@ -1,5 +1,5 @@
 import { NextIntlClientProvider } from "next-intl";
-import { getMessages } from "next-intl/server";
+import { getMessages, getTranslations } from "next-intl/server";
 import type { Metadata, Viewport } from "next";
 import { Fraunces, Hanken_Grotesk } from "next/font/google";
 
@@ -19,12 +19,37 @@ const hanken = Hanken_Grotesk({
   display: "swap",
 });
 
-export const metadata: Metadata = {
-  title: "AdelIA",
-  description: "Tu vault médico personal con IA",
-  appleWebApp: { capable: true, title: "AdelIA", statusBarStyle: "default" },
-  icons: { apple: "/icons/apple-touch-icon.png" },
-};
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ locale: string }>;
+}): Promise<Metadata> {
+  const { locale } = await params;
+  const c = await getTranslations({ locale, namespace: "common" });
+  const h = await getTranslations({ locale, namespace: "home" });
+  const title = `${c("appName")} — ${c("tagline")}`;
+  const description = `${h("hero")} ${h("subhero")}`;
+  return {
+    metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL ?? "https://adelia.godi.ai"),
+    title: { default: title, template: `%s · ${c("appName")}` },
+    description,
+    applicationName: "AdelIA",
+    appleWebApp: { capable: true, title: "AdelIA", statusBarStyle: "default" },
+    icons: {
+      icon: [{ url: "/icon.svg", type: "image/svg+xml" }],
+      apple: "/icons/apple-touch-icon.png",
+    },
+    openGraph: {
+      type: "website",
+      siteName: "AdelIA",
+      title,
+      description,
+      locale,
+      images: [{ url: "/icons/icon-512.png", width: 512, height: 512, alt: "AdelIA" }],
+    },
+    twitter: { card: "summary", title, description },
+  };
+}
 
 export const viewport: Viewport = {
   themeColor: "#0a2820",
