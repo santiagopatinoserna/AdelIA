@@ -354,5 +354,11 @@
     "offline": "Sin conexión",
     "offlineBody": "Algunas funciones necesitan internet.",
     "online": "Conexión restablecida"
+  },
+  "install": {
+    "title": "Instala AdelIA",
+    "body": "Tenla a mano en tu pantalla de inicio, como una app.",
+    "cta": "Instalar",
+    "dismiss": "Ahora no"
   }
 }

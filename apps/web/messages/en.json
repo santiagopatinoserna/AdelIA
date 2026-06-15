@@ -354,5 +354,11 @@
     "offline": "You're offline",
     "offlineBody": "Some features need an internet connection.",
     "online": "Back online"
+  },
+  "install": {
+    "title": "Install AdelIA",
+    "body": "Keep it on your home screen, like an app.",
+    "cta": "Install",
+    "dismiss": "Not now"
   }
 }
