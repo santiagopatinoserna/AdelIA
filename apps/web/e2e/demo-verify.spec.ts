@@ -4,6 +4,17 @@ import { seedUserAndSessionCookie } from "./utils/session";
 
 const SHOTS = "/tmp/adelia-shots";
 
+// Wait for entrance animations (ad-rise) to finish so screenshots capture the
+// settled UI a user sees, not a mid-fade frame. Capped so it can never hang.
+async function settle(page: import("@playwright/test").Page) {
+  await page.evaluate(() =>
+    Promise.race([
+      Promise.allSettled(document.getAnimations().map((a) => a.finished)),
+      new Promise((resolve) => setTimeout(resolve, 1200)),
+    ]),
+  );
+}
+
 // A real-browser walkthrough AS Santiago, proving each screen works end to end.
 test("recorrido completo: garantía de éxito en navegador", async ({ browser }) => {
   // Reuse the seeded account that already has the reflux document.
@@ -15,6 +26,7 @@ test("recorrido completo: garantía de éxito en navegador", async ({ browser })
   // 1. Dashboard — must show the seeded document
   await page.goto("/es/dashboard");
   await expect(page.getByRole("heading", { name: "Mis documentos" })).toBeVisible();
+  await settle(page);
   await page.screenshot({ path: `${SHOTS}/1-dashboard.png`, fullPage: true });
 
   // 2. Chat — ask about the baby's reflux, expect an evidence-cited answer
@@ -28,18 +40,22 @@ test("recorrido completo: garantía de éxito en navegador", async ({ browser })
   // The answer now renders; it ends with the disclaimer.
   await expect(page.locator("text=/Verifica con tu médico/i")).toBeVisible({ timeout: 120000 });
   await page.waitForTimeout(500);
+  await settle(page);
   await page.screenshot({ path: `${SHOTS}/2-chat-reflujo.png`, fullPage: true });
 
   // 3. Briefings
   await page.goto("/es/dashboard/briefings");
+  await settle(page);
   await page.screenshot({ path: `${SHOTS}/3-briefings.png`, fullPage: true });
 
   // 4. Importar (Apple Health hub)
   await page.goto("/es/dashboard/ingestion");
+  await settle(page);
   await page.screenshot({ path: `${SHOTS}/4-importar.png`, fullPage: true });
 
   // 5. Insights
   await page.goto("/es/dashboard/enrichment");
+  await settle(page);
   await page.screenshot({ path: `${SHOTS}/5-insights.png`, fullPage: true });
 
   await ctx.close();

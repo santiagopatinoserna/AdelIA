@@ -1,9 +1,23 @@
 import { NextIntlClientProvider } from "next-intl";
 import { getMessages } from "next-intl/server";
 import type { Metadata, Viewport } from "next";
+import { Fraunces, Hanken_Grotesk } from "next/font/google";
 
 import { ServiceWorkerRegister } from "@/components/sw-register";
 import "../globals.css";
+
+// Distinctive editorial pairing — characterful serif display + humanist sans.
+const fraunces = Fraunces({
+  subsets: ["latin"],
+  variable: "--font-fraunces",
+  display: "swap",
+  axes: ["opsz", "SOFT"],
+});
+const hanken = Hanken_Grotesk({
+  subsets: ["latin"],
+  variable: "--font-hanken",
+  display: "swap",
+});
 
 export const metadata: Metadata = {
   title: "AdelIA",
@@ -13,7 +27,7 @@ export const metadata: Metadata = {
 };
 
 export const viewport: Viewport = {
-  themeColor: "#0f172a",
+  themeColor: "#0a2820",
 };
 
 export default async function LocaleLayout({
@@ -26,8 +40,8 @@ export default async function LocaleLayout({
   const { locale } = await params;
   const messages = await getMessages();
   return (
-    <html lang={locale}>
-      <body className="bg-slate-50 text-slate-900 antialiased">
+    <html lang={locale} className={`${fraunces.variable} ${hanken.variable}`}>
+      <body className="antialiased">
         <NextIntlClientProvider messages={messages}>{children}</NextIntlClientProvider>
         <ServiceWorkerRegister />
       </body>
