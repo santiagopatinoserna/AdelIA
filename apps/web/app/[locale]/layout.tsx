@@ -45,9 +45,9 @@ export async function generateMetadata({
       title,
       description,
       locale,
-      images: [{ url: "/icons/icon-512.png", width: 512, height: 512, alt: "AdelIA" }],
+      // og:image comes from the file-based app/[locale]/opengraph-image.tsx
     },
-    twitter: { card: "summary", title, description },
+    twitter: { card: "summary_large_image", title, description },
   };
 }
 
