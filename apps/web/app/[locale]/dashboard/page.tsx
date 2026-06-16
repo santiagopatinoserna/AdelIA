@@ -81,7 +81,7 @@ export default async function DashboardPage({
           <h1 className="text-2xl text-pine-900">{t("title")}</h1>
           {docs.length > 0 && (
             <span className="font-mono text-xs text-ink-faint">
-              {docs.length} {docs.length === 1 ? "documento" : "documentos"}
+              {t("documentsCount", { count: docs.length })}
             </span>
           )}
         </div>

@@ -40,7 +40,8 @@
     "ocrProcessing": "Procesando OCR… se actualiza automáticamente",
     "settingsLink": "Ajustes de cuenta",
     "navImport": "Importar",
-    "navInsights": "Insights"
+    "navInsights": "Insights",
+    "documentsCount": "{count, plural, =1 {1 documento} other {# documentos}}"
   },
   "upload": {
     "title": "Subir documento",
@@ -74,7 +75,9 @@
     "stop": "Detener",
     "copy": "Copiar",
     "copied": "Copiado",
-    "scrollToLatest": "Ir al último mensaje"
+    "scrollToLatest": "Ir al último mensaje",
+    "citationSourceUserData": "Tu data",
+    "citationSourceEvidence": "Evidencia clínica"
   },
   "ingestion": {
     "title": "Importar datos",
@@ -284,7 +287,9 @@
       "revoke": "Revocar",
       "revokeConfirm": "¿Revocar este link? Cualquiera con el URL ya no podrá verlo.",
       "disclaimer": "Cualquiera con el URL puede ver el briefing hasta que expire o lo revoques. AdelIA cuenta accesos para auditoría."
-    }
+    },
+    "staleBadge": "Desactualizado",
+    "noRender": "No hay versión renderizada disponible."
   },
   "settings": {
     "title": "Ajustes de cuenta",

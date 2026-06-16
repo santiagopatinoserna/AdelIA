@@ -40,7 +40,8 @@
     "ocrProcessing": "Running OCR… updates automatically",
     "settingsLink": "Account settings",
     "navImport": "Import",
-    "navInsights": "Insights"
+    "navInsights": "Insights",
+    "documentsCount": "{count, plural, =1 {1 document} other {# documents}}"
   },
   "upload": {
     "title": "Upload document",
@@ -74,7 +75,9 @@
     "stop": "Stop",
     "copy": "Copy",
     "copied": "Copied",
-    "scrollToLatest": "Jump to latest"
+    "scrollToLatest": "Jump to latest",
+    "citationSourceUserData": "Your data",
+    "citationSourceEvidence": "Clinical evidence"
   },
   "ingestion": {
     "title": "Import data",
@@ -284,7 +287,9 @@
       "revoke": "Revoke",
       "revokeConfirm": "Revoke this link? Anyone with the URL will no longer be able to view it.",
       "disclaimer": "Anyone with the URL can view the briefing until it expires or you revoke it. AdelIA logs accesses for auditing."
-    }
+    },
+    "staleBadge": "Stale",
+    "noRender": "No rendered version available."
   },
   "settings": {
     "title": "Account settings",
