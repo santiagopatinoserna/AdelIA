@@ -40,7 +40,8 @@
     "ocrProcessing": "OCR en cours… mise à jour automatique",
     "settingsLink": "Paramètres du compte",
     "navImport": "Importer",
-    "navInsights": "Insights"
+    "navInsights": "Insights",
+    "documentsCount": "{count, plural, =1 {1 document} other {# documents}}"
   },
   "upload": {
     "title": "Téléverser un document",
@@ -74,7 +75,9 @@
     "stop": "Arrêter",
     "copy": "Copier",
     "copied": "Copié",
-    "scrollToLatest": "Aller au dernier"
+    "scrollToLatest": "Aller au dernier",
+    "citationSourceUserData": "Vos données",
+    "citationSourceEvidence": "Preuves cliniques"
   },
   "ingestion": {
     "title": "Importer des données",
@@ -284,7 +287,9 @@
       "revoke": "Révoquer",
       "revokeConfirm": "Révoquer ce lien ? Toute personne disposant de l'URL ne pourra plus le voir.",
       "disclaimer": "Toute personne disposant de l'URL peut voir le briefing jusqu'à son expiration ou sa révocation. AdelIA comptabilise les accès à des fins d'audit."
-    }
+    },
+    "staleBadge": "Obsolète",
+    "noRender": "Aucune version générée disponible."
   },
   "settings": {
     "title": "Paramètres du compte",

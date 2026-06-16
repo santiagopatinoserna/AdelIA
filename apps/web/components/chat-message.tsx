@@ -59,7 +59,7 @@ export function ChatMessageBubble({
           <div className="mt-3 border-t border-line pt-3">
             <div className="ad-eyebrow flex items-center gap-1.5">
               <Database className="h-3 w-3" strokeWidth={2.4} />
-              {"Tu data"}
+              {t("citationSourceUserData")}
             </div>
             <div className="mt-1.5 flex flex-wrap gap-1">
               {message.citations.map((c, i) => (
@@ -72,7 +72,7 @@ export function ChatMessageBubble({
           <div className="mt-3 border-t border-line pt-3">
             <div className="ad-eyebrow flex items-center gap-1.5 !text-honey-600">
               <BookMarked className="h-3 w-3" strokeWidth={2.4} />
-              {"Evidencia clínica"}
+              {t("citationSourceEvidence")}
             </div>
             <div className="mt-1.5 flex flex-col gap-1.5">
               {evidence.map((ev) => (

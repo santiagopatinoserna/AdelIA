@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef } from "react";
+import { useTranslations } from "next-intl";
 
 import type { BriefingDetailOut } from "@/lib/briefing-types";
 
@@ -10,6 +11,7 @@ interface Props {
 }
 
 export function BriefingDetail({ briefing }: Props) {
+  const t = useTranslations();
   const rootRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
@@ -27,7 +29,7 @@ export function BriefingDetail({ briefing }: Props) {
   }, []);
 
   if (!briefing.html_render) {
-    return <div className="text-ink-soft">No HTML render available.</div>;
+    return <div className="text-ink-soft">{t("briefing.noRender")}</div>;
   }
 
   return (
