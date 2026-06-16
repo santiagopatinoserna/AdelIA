@@ -262,7 +262,8 @@
       "interactions": "Interactions",
       "variants": "Variants"
     },
-    "searchError": "The search could not be completed. Please try again."
+    "searchError": "The search could not be completed. Please try again.",
+    "coverageUnavailable": "Coverage statistics could not be loaded. The service may be temporarily unavailable."
   },
   "briefing": {
     "title": "Briefings",

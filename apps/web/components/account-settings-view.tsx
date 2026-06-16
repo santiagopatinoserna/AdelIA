@@ -41,12 +41,14 @@ export function AccountSettingsView({ email }: { email: string }) {
           {t("dangerTitle")}
         </h2>
         <p className="mt-2 text-sm text-clay-700">{t("dangerBody")}</p>
-        <label className="mt-4 block text-xs font-medium text-clay-700">
+        <label htmlFor="confirm-delete" className="mt-4 block text-xs font-medium text-clay-700">
           {t("confirmLabel", { email })}
           <input
+            id="confirm-delete"
             type="text"
             value={confirmText}
             onChange={(e) => setConfirmText(e.target.value)}
+            autoComplete="off"
             className="mt-1.5 w-full rounded-lg border border-clay-100 bg-surface px-3 py-2 font-mono text-sm text-ink focus:border-clay-500 focus:outline-none focus:ring-2 focus:ring-clay-100"
             placeholder={email}
           />
@@ -56,7 +58,7 @@ export function AccountSettingsView({ email }: { email: string }) {
           type="button"
           onClick={deleteAccount}
           disabled={!armed || busy}
-          className="ad-btn mt-4 bg-clay-600 px-4 py-2 text-sm font-medium text-white hover:bg-clay-700 disabled:cursor-not-allowed disabled:opacity-40"
+          className="ad-btn ad-btn-danger mt-4 px-4 py-2 text-sm font-medium"
         >
           {busy ? t("deleting") : t("deleteButton")}
         </button>

@@ -20,7 +20,7 @@ export function StaleBanner({ onRegenerate, disabled }: Props) {
         type="button"
         onClick={onRegenerate}
         disabled={disabled}
-        className="ad-btn shrink-0 bg-honey-500 px-3 py-1.5 text-xs font-medium text-white hover:bg-honey-600 disabled:opacity-50"
+        className="ad-btn ad-btn-accent shrink-0 px-3 py-1.5 text-xs font-medium"
       >
         {t("briefing.regenerate")}
       </button>
