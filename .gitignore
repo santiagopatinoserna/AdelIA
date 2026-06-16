@@ -15,3 +15,6 @@ minio-data/
 .pytest_cache/
 coverage/
 htmlcov/
+
+# Scratch / manual verification scripts
+apps/web/_*.mjs

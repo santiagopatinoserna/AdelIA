@@ -13,13 +13,17 @@ export default function TrialsPage() {
   const [country, setCountry] = useState("");
   const [trials, setTrials] = useState<ClinicalTrial[]>([]);
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
   async function search() {
     if (!condition.trim()) return;
     setLoading(true);
+    setError(null);
     try {
       const res = await enrichment.searchTrials(condition, country || undefined);
       setTrials(res);
+    } catch {
+      setError(t("enrichment.searchError"));
     } finally {
       setLoading(false);
     }
@@ -58,6 +62,12 @@ export default function TrialsPage() {
           {loading ? "..." : t("enrichment.trials.search")}
         </button>
       </div>
+
+      {error && (
+        <div className="mt-4 rounded-xl border border-clay-100 bg-clay-50 p-3 text-sm text-clay-700">
+          {error}
+        </div>
+      )}
 
       {trials.length === 0 && !loading && condition && (
         <p className="mt-6 text-sm text-ink-faint">{t("enrichment.trials.noResults")}</p>

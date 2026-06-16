@@ -24,6 +24,7 @@ export default function LabRangesPage() {
   const [sex, setSex] = useState<"M" | "F" | "">("");
   const [results, setResults] = useState<LabEvalResult[]>([]);
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
   function update(i: number, field: keyof LabInput, value: string) {
     const next = [...labs];
@@ -41,6 +42,7 @@ export default function LabRangesPage() {
 
   async function evaluate() {
     setLoading(true);
+    setError(null);
     try {
       const valid = labs.filter((l) => l.name && l.value);
       const res = await enrichment.evaluateLabs({
@@ -48,6 +50,8 @@ export default function LabRangesPage() {
         sex: sex || null,
       });
       setResults(res);
+    } catch {
+      setError(t("enrichment.searchError"));
     } finally {
       setLoading(false);
     }
@@ -120,6 +124,12 @@ export default function LabRangesPage() {
       >
         {loading ? "…" : t("enrichment.labs.evaluate")}
       </button>
+
+      {error && (
+        <div className="mt-4 rounded-xl border border-clay-100 bg-clay-50 p-3 text-sm text-clay-700">
+          {error}
+        </div>
+      )}
 
       <ul className="mt-6 space-y-2">
         {results.map((r, idx) => (

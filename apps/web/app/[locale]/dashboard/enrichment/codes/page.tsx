@@ -12,13 +12,17 @@ export default function CodesLookupPage() {
   const [query, setQuery] = useState("");
   const [result, setResult] = useState<NormalizedCode | null>(null);
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
   async function lookup() {
     if (!query.trim()) return;
     setLoading(true);
+    setError(null);
     try {
       const res = await enrichment.normalize(query);
       setResult(res);
+    } catch {
+      setError(t("enrichment.searchError"));
     } finally {
       setLoading(false);
     }
@@ -50,6 +54,12 @@ export default function CodesLookupPage() {
           {loading ? "..." : t("enrichment.codes.lookup")}
         </button>
       </div>
+
+      {error && (
+        <div className="mt-4 rounded-xl border border-clay-100 bg-clay-50 p-3 text-sm text-clay-700">
+          {error}
+        </div>
+      )}
 
       {result && (
         <div className="ad-card mt-6 p-4">
