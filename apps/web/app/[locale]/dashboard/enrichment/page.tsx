@@ -59,6 +59,12 @@ export default async function EnrichmentDashboardPage({ params }: Props) {
       <h1 className="text-2xl text-pine-900">{t("enrichment.title")}</h1>
       <p className="mt-1 text-sm text-ink-soft">{t("enrichment.subtitle")}</p>
 
+      {!stats && (
+        <div className="mt-6 rounded-xl border border-clay-100 bg-clay-50 p-3 text-sm text-clay-700">
+          {t("enrichment.coverageUnavailable")}
+        </div>
+      )}
+
       {coverage.length > 0 && (
         <section className="mt-8 grid grid-cols-2 gap-3 md:grid-cols-5">
           {coverage.map((c) => (

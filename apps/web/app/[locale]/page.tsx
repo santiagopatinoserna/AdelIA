@@ -143,7 +143,10 @@ export default function HomePage() {
           <div className="mt-12 grid gap-5 md:grid-cols-2">
             {/* Mode A — self-analysis (pine) */}
             <article className="ad-card relative overflow-hidden p-7 md:p-8">
-              <span className="absolute right-6 top-6 font-display text-5xl font-semibold text-pine-50 select-none">
+              <span
+                aria-hidden
+                className="absolute right-6 top-6 font-display text-5xl font-semibold text-pine-50 select-none"
+              >
                 A
               </span>
               <p className="ad-eyebrow">{t("home.modeALabel")}</p>
@@ -166,10 +169,13 @@ export default function HomePage() {
 
             {/* Mode B — briefing (honey) */}
             <article className="ad-card relative overflow-hidden p-7 md:p-8">
-              <span className="absolute right-6 top-6 font-display text-5xl font-semibold text-honey-100 select-none">
+              <span
+                aria-hidden
+                className="absolute right-6 top-6 font-display text-5xl font-semibold text-honey-100 select-none"
+              >
                 B
               </span>
-              <p className="ad-eyebrow !text-honey-600">{t("home.modeBLabel")}</p>
+              <p className="ad-eyebrow !text-honey-700">{t("home.modeBLabel")}</p>
               <div className="mt-3 flex items-center gap-3">
                 <span className="inline-flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-honey-100 text-honey-600 ring-1 ring-honey-200">
                   <Stethoscope className="h-5 w-5" strokeWidth={2} />

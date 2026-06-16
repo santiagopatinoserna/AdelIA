@@ -38,6 +38,7 @@
   --color-honey-400: #d99f43;
   --color-honey-500: #c4862b;
   --color-honey-600: #a36e1f;
+  --color-honey-700: #7e5214; /* AA text on cream (≥4.5:1) — honey-600 is decorative only */
 
   /* Clay (alarm / red-flag) */
   --color-clay-50: #f8e9e4;
@@ -138,6 +139,12 @@
       border-color 0.18s var(--ease-out-soft);
   }
   .ad-btn:active { transform: translateY(1px) scale(0.99); }
+  .ad-btn:disabled {
+    cursor: not-allowed;
+    opacity: 0.5;
+    box-shadow: none;
+  }
+  .ad-btn:disabled:active { transform: none; }
 
   .ad-btn-primary {
     background: linear-gradient(180deg, var(--color-pine-500), var(--color-pine-700));
@@ -152,6 +159,22 @@
     border: 1px solid var(--color-line-strong);
   }
   .ad-btn-ghost:hover { background: var(--color-surface-2); border-color: var(--color-pine-200); }
+
+  /* Accent (honey) — secondary affordances like regenerate / stale actions */
+  .ad-btn-accent {
+    background: linear-gradient(180deg, var(--color-honey-400), var(--color-honey-600));
+    color: #fffdf8;
+    box-shadow: 0 1px 0 rgb(255 255 255 / 0.18) inset, var(--shadow-soft);
+  }
+  .ad-btn-accent:hover { box-shadow: 0 1px 0 rgb(255 255 255 / 0.22) inset, var(--shadow-lift); }
+
+  /* Danger (clay) — destructive actions like delete account */
+  .ad-btn-danger {
+    background: linear-gradient(180deg, var(--color-clay-500), var(--color-clay-700));
+    color: #fdf1ee;
+    box-shadow: 0 1px 0 rgb(255 255 255 / 0.10) inset, var(--shadow-soft);
+  }
+  .ad-btn-danger:hover { box-shadow: 0 1px 0 rgb(255 255 255 / 0.12) inset, var(--shadow-lift); }
 
   /* Evidence tag — the trust differentiator: [ev_1] */
   .ad-ev-tag {

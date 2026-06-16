@@ -262,7 +262,8 @@
       "interactions": "Interactions",
       "variants": "Variants"
     },
-    "searchError": "La recherche n'a pas pu aboutir. Réessayez."
+    "searchError": "La recherche n'a pas pu aboutir. Réessayez.",
+    "coverageUnavailable": "Les statistiques de couverture n'ont pas pu être chargées. Le service est peut-être temporairement indisponible."
   },
   "briefing": {
     "title": "Briefings",
