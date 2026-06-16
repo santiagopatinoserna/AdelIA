@@ -232,7 +232,8 @@
       "drugs": "Medications",
       "interactions": "Interactions",
       "variants": "Variants"
-    }
+    },
+    "searchError": "The search could not be completed. Please try again."
   },
   "briefing": {
     "title": "Briefings",

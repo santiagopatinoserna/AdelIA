@@ -21,6 +21,7 @@ export default function DrugInteractionsPage() {
   const [interactions, setInteractions] = useState<DrugInteraction[]>([]);
   const [checked, setChecked] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
   function addMed() {
     if (!newMed.trim()) return;
@@ -34,10 +35,13 @@ export default function DrugInteractionsPage() {
 
   async function check() {
     setLoading(true);
+    setError(null);
     try {
       const res = await enrichment.checkDrugInteractions(meds);
       setInteractions(res);
       setChecked(true);
+    } catch {
+      setError(t("enrichment.searchError"));
     } finally {
       setLoading(false);
     }
@@ -96,6 +100,12 @@ export default function DrugInteractionsPage() {
       >
         {loading ? "..." : t("enrichment.drugs.check")}
       </button>
+
+      {error && (
+        <div className="mt-4 rounded-xl border border-clay-100 bg-clay-50 p-3 text-sm text-clay-700">
+          {error}
+        </div>
+      )}
 
       {checked && interactions.length === 0 && (
         <div className="mt-6 flex items-center gap-2 rounded-xl border border-pine-100 bg-pine-50 p-4 text-sm text-pine-800">
