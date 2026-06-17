@@ -51,7 +51,18 @@
     "footerDisclaimer": "Outil de documentation personnelle de santé. Ne remplace pas l'avis médical et ne constitue pas un dispositif médical.",
     "footerGithub": "GitHub",
     "footerDashboard": "Se connecter",
-    "footerLicense": "AGPL-3.0 · Conçu avec soin par Godi.AI"
+    "footerLicense": "AGPL-3.0 · Conçu avec soin par Godi.AI",
+    "modeADemoQ": "Quand dois-je m'inquiéter des régurgitations ?",
+    "modeADemoA": "Les signaux d'alerte sont la perte de poids, le refus alimentaire ou du sang ; sans eux, c'est généralement physiologique et s'améliore vers un an.",
+    "modeADemoSource": "NASPGHAN-ESPGHAN 2018 · Reflux gastro-œsophagien pédiatrique",
+    "modeBDemoTitle": "Aperçu · briefing",
+    "modeBDemoMeta": "Nourrisson · 8 mois · visite de routine",
+    "modeBDemoS1Label": "Antécédents",
+    "modeBDemoS1": "Reflux physiologique léger, en amélioration. Vaccins à jour.",
+    "modeBDemoS2Label": "Observations",
+    "modeBDemoS2": "Courbe de poids et de taille dans les percentiles attendus.",
+    "modeBDemoS3Label": "Questions pour le pédiatre",
+    "modeBDemoS3": "Faut-il revoir l'introduction des aliments solides ?"
   },
   "dashboard": {
     "title": "Mes documents",

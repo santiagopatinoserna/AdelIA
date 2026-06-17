@@ -12,6 +12,7 @@ import {
   ScrollText,
   Server,
   KeyRound,
+  FileText,
 } from "lucide-react";
 
 const GITHUB_URL = "https://github.com/santiagopatinoserna/AdelIA";
@@ -24,8 +25,11 @@ export default function HomePage() {
     { icon: Quote, title: t("home.feature2Title"), body: t("home.feature2Body") },
     { icon: MessagesSquare, title: t("home.feature3Title"), body: t("home.feature3Body") },
   ];
-  const modeAExamples = [t("home.modeAEx1"), t("home.modeAEx2"), t("home.modeAEx3")];
-  const modeBExamples = [t("home.modeBEx1"), t("home.modeBEx2"), t("home.modeBEx3")];
+  const briefingRows = [
+    { label: t("home.modeBDemoS1Label"), body: t("home.modeBDemoS1") },
+    { label: t("home.modeBDemoS2Label"), body: t("home.modeBDemoS2") },
+    { label: t("home.modeBDemoS3Label"), body: t("home.modeBDemoS3") },
+  ];
   const ossChips = [
     { icon: ScrollText, label: t("home.ossChip1") },
     { icon: Server, label: t("home.ossChip2") },
@@ -157,14 +161,22 @@ export default function HomePage() {
                 <h3 className="font-display text-xl text-pine-900">{t("home.modeATitle")}</h3>
               </div>
               <p className="mt-4 text-[15px] leading-relaxed text-ink-soft">{t("home.modeABody")}</p>
-              <ul className="mt-5 flex flex-col gap-2">
-                {modeAExamples.map((ex) => (
-                  <li key={ex} className="flex items-start gap-2 text-sm text-ink">
-                    <ArrowRight className="mt-0.5 h-3.5 w-3.5 shrink-0 text-pine-400" strokeWidth={2.4} />
-                    <span className="italic">“{ex}”</span>
-                  </li>
-                ))}
-              </ul>
+              {/* Realistic chat preview — mirrors the actual product UI */}
+              <div className="mt-5 flex flex-col gap-2.5">
+                <div className="flex justify-end">
+                  <div className="max-w-[85%] rounded-2xl rounded-br-md bg-gradient-to-b from-pine-600 to-pine-700 px-3.5 py-2 text-sm leading-relaxed text-[#eef3ee]">
+                    {t("home.modeADemoQ")}
+                  </div>
+                </div>
+                <div className="flex justify-start">
+                  <div className="max-w-[92%] rounded-2xl rounded-bl-md border border-line bg-surface px-3.5 py-2.5 text-sm leading-relaxed text-ink shadow-soft">
+                    {t("home.modeADemoA")} <span className="ad-ev-tag align-middle">ev_1</span>
+                    <span className="mt-2 block font-mono text-[11px] text-ink-faint">
+                      {t("home.modeADemoSource")}
+                    </span>
+                  </div>
+                </div>
+              </div>
             </article>
 
             {/* Mode B — briefing (honey) */}
@@ -183,14 +195,27 @@ export default function HomePage() {
                 <h3 className="font-display text-xl text-pine-900">{t("home.modeBTitle")}</h3>
               </div>
               <p className="mt-4 text-[15px] leading-relaxed text-ink-soft">{t("home.modeBBody")}</p>
-              <ul className="mt-5 flex flex-col gap-2">
-                {modeBExamples.map((ex) => (
-                  <li key={ex} className="flex items-start gap-2 text-sm text-ink">
-                    <ArrowRight className="mt-0.5 h-3.5 w-3.5 shrink-0 text-honey-500" strokeWidth={2.4} />
-                    <span>{ex}</span>
-                  </li>
-                ))}
-              </ul>
+              {/* Realistic one-page briefing preview */}
+              <div className="mt-5 rounded-xl border border-line bg-surface-2 p-4">
+                <div className="flex items-center justify-between gap-2">
+                  <span className="ad-eyebrow !text-honey-700">{t("home.modeBDemoTitle")}</span>
+                  <FileText className="h-4 w-4 text-honey-500" strokeWidth={2} />
+                </div>
+                <p className="mt-1 font-mono text-[11px] text-ink-faint">{t("home.modeBDemoMeta")}</p>
+                <dl className="mt-3 flex flex-col gap-2.5">
+                  {briefingRows.map((row, i) => (
+                    <div key={row.label} className="border-t border-line pt-2.5 first:border-t-0 first:pt-0">
+                      <dt className="text-[11px] font-semibold uppercase tracking-wide text-pine-600">
+                        {row.label}
+                      </dt>
+                      <dd className="mt-0.5 text-sm leading-snug text-ink">
+                        {row.body}
+                        {i === 1 && <span className="ad-ev-tag ml-1 align-middle">ev_1</span>}
+                      </dd>
+                    </div>
+                  ))}
+                </dl>
+              </div>
             </article>
           </div>
         </section>

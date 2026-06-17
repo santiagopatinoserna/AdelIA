@@ -51,7 +51,18 @@
     "footerDisclaimer": "Personal health documentation tool. It does not replace medical advice and is not a medical device.",
     "footerGithub": "GitHub",
     "footerDashboard": "Sign in",
-    "footerLicense": "AGPL-3.0 · Made with care by Godi.AI"
+    "footerLicense": "AGPL-3.0 · Made with care by Godi.AI",
+    "modeADemoQ": "When should I worry about spit-up?",
+    "modeADemoA": "Red flags are weight loss, food refusal or blood; without them it's usually physiological and improves by the first year.",
+    "modeADemoSource": "NASPGHAN-ESPGHAN 2018 · Pediatric gastroesophageal reflux",
+    "modeBDemoTitle": "Preview · briefing",
+    "modeBDemoMeta": "Infant · 8 months · routine check-up",
+    "modeBDemoS1Label": "Background",
+    "modeBDemoS1": "Mild physiological reflux, improving. Vaccines up to date.",
+    "modeBDemoS2Label": "Findings",
+    "modeBDemoS2": "Weight and height curve within expected percentiles.",
+    "modeBDemoS3Label": "Questions for the pediatrician",
+    "modeBDemoS3": "Should we review the introduction of solid foods?"
   },
   "dashboard": {
     "title": "My documents",

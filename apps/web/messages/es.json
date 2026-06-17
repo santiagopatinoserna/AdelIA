@@ -51,7 +51,18 @@
     "footerDisclaimer": "Herramienta de documentación personal de salud. No sustituye el consejo médico ni constituye un dispositivo médico.",
     "footerGithub": "GitHub",
     "footerDashboard": "Entrar",
-    "footerLicense": "AGPL-3.0 · Hecho con cuidado por Godi.AI"
+    "footerLicense": "AGPL-3.0 · Hecho con cuidado por Godi.AI",
+    "modeADemoQ": "¿Cuándo debería preocuparme por la regurgitación?",
+    "modeADemoA": "Las señales de alarma son pérdida de peso, rechazo del alimento o sangre; sin ellas suele ser fisiológica y mejora hacia el primer año.",
+    "modeADemoSource": "NASPGHAN-ESPGHAN 2018 · Reflujo gastroesofágico pediátrico",
+    "modeBDemoTitle": "Vista previa · briefing",
+    "modeBDemoMeta": "Lactante · 8 meses · revisión rutinaria",
+    "modeBDemoS1Label": "Antecedentes",
+    "modeBDemoS1": "Reflujo fisiológico leve, en mejoría. Vacunas al día.",
+    "modeBDemoS2Label": "Hallazgos",
+    "modeBDemoS2": "Curva de peso y talla dentro de percentiles esperados.",
+    "modeBDemoS3Label": "Preguntas para el pediatra",
+    "modeBDemoS3": "¿Conviene revisar la introducción de alimentos sólidos?"
   },
   "dashboard": {
     "title": "Mis documentos",
