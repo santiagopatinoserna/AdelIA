@@ -17,6 +17,7 @@ import {
   X,
   BookMarked,
   Sparkles,
+  Baby,
 } from "lucide-react";
 
 const GITHUB_URL = "https://github.com/santiagopatinoserna/AdelIA";
@@ -38,6 +39,13 @@ export default function HomePage() {
     { icon: ScrollText, label: t("home.ossChip1") },
     { icon: Server, label: t("home.ossChip2") },
     { icon: KeyRound, label: t("home.ossChip3") },
+  ];
+  const timeline = [
+    { age: t("home.mixT1Age"), event: t("home.mixT1") },
+    { age: t("home.mixT2Age"), event: t("home.mixT2") },
+    { age: t("home.mixT3Age"), event: t("home.mixT3") },
+    { age: t("home.mixT4Age"), event: t("home.mixT4") },
+    { age: t("home.mixT5Age"), event: t("home.mixT5") },
   ];
   const evStats = [
     { value: t("home.evStat1V"), label: t("home.evStat1L") },
@@ -256,6 +264,65 @@ export default function HomePage() {
                 </dl>
               </div>
             </article>
+          </div>
+        </section>
+
+        {/* Fusion — the baby's full history (from birth) × the science */}
+        <section id="story" className="mt-28 scroll-mt-24">
+          <div className="mx-auto max-w-2xl text-center">
+            <p className="ad-eyebrow flex items-center justify-center gap-2">
+              <Baby className="h-3.5 w-3.5" strokeWidth={2.2} />
+              {t("home.mixEyebrow")}
+            </p>
+            <h2 className="mt-3 text-balance font-display text-3xl leading-tight text-pine-900 md:text-4xl">
+              {t("home.mixTitle")}
+            </h2>
+            <p className="mt-4 text-[15px] leading-relaxed text-ink-soft">{t("home.mixBody")}</p>
+          </div>
+
+          <div className="mt-10 grid gap-5 md:grid-cols-2 md:items-stretch">
+            {/* Left: the baby's history from birth */}
+            <div className="ad-card flex flex-col p-6 md:p-7">
+              <div className="ad-eyebrow flex items-center gap-2">
+                <Baby className="h-3.5 w-3.5" strokeWidth={2.2} />
+                {t("home.mixTimelineLabel")}
+              </div>
+              <ol className="relative mt-5 flex flex-col gap-4 border-l border-line-strong pl-5">
+                {timeline.map((item) => (
+                  <li key={item.age} className="relative">
+                    <span
+                      aria-hidden
+                      className="absolute -left-[1.43rem] top-1 h-2.5 w-2.5 rounded-full bg-pine-400 ring-2 ring-surface"
+                    />
+                    <div className="font-mono text-xs font-semibold text-pine-700">{item.age}</div>
+                    <div className="text-sm leading-snug text-ink">{item.event}</div>
+                  </li>
+                ))}
+              </ol>
+            </div>
+
+            {/* Right: history × science = personalized, cited answer */}
+            <div className="ad-card flex flex-col p-6 ring-1 ring-pine-200 md:p-7">
+              <div className="ad-eyebrow flex items-center gap-2 !text-honey-700">
+                <Sparkles className="h-3.5 w-3.5" strokeWidth={2.2} />
+                {t("home.mixAnswerLabel")}
+              </div>
+              <div className="mt-5 rounded-2xl rounded-bl-md border border-line bg-surface px-4 py-3.5 text-sm leading-relaxed text-ink shadow-soft">
+                {t("home.mixAnswer")}
+              </div>
+              <div className="mt-auto flex flex-wrap gap-x-5 gap-y-2 pt-5 text-xs text-ink-faint">
+                <span className="inline-flex items-center gap-1.5">
+                  <span className="rounded-[0.4rem] border border-pine-100 bg-pine-50 px-1.5 font-mono text-[0.7rem] font-semibold text-pine-600">
+                    [N]
+                  </span>
+                  {t("home.mixLegendData")}
+                </span>
+                <span className="inline-flex items-center gap-1.5">
+                  <span className="ad-ev-tag">ev_N</span>
+                  {t("home.mixLegendEv")}
+                </span>
+              </div>
+            </div>
           </div>
         </section>
 
