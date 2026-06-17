@@ -20,6 +20,13 @@ class Settings(BaseSettings):
     mistral_api_key: str = ""
     openai_api_key: str = ""
 
+    # Generation LLM (chat answers + briefings). Embeddings/OCR always use
+    # Mistral — OpenAI has no embeddings parity here. Flip to "openai" once the
+    # OpenAI account has credits; "mistral" is the working default.
+    llm_provider: str = "mistral"  # "mistral" | "openai"
+    mistral_chat_model: str = "mistral-medium-latest"
+    openai_chat_model: str = "gpt-4o"
+
     # M4 ingestion surfaces
     telegram_bot_token: str = ""
     telegram_webhook_secret: str = ""
