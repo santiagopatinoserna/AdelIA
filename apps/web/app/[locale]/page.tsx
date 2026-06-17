@@ -13,6 +13,10 @@ import {
   Server,
   KeyRound,
   FileText,
+  Check,
+  X,
+  BookMarked,
+  Sparkles,
 } from "lucide-react";
 
 const GITHUB_URL = "https://github.com/santiagopatinoserna/AdelIA";
@@ -34,6 +38,41 @@ export default function HomePage() {
     { icon: ScrollText, label: t("home.ossChip1") },
     { icon: Server, label: t("home.ossChip2") },
     { icon: KeyRound, label: t("home.ossChip3") },
+  ];
+  const evStats = [
+    { value: t("home.evStat1V"), label: t("home.evStat1L") },
+    { value: t("home.evStat2V"), label: t("home.evStat2L") },
+    { value: t("home.evStat3V"), label: t("home.evStat3L") },
+    { value: t("home.evStat4V"), label: t("home.evStat4L") },
+  ];
+  // Real organizations present in the evidence corpus (verifiable in DB).
+  const evOrgs = ["NASPGHAN-ESPGHAN", "NICE", "CDC", "AHA", "ADA", "ESC", "GINA", "USPSTF"];
+  const vsRows = [
+    { l: t("home.vsR1L"), g: t("home.vsR1G"), a: t("home.vsR1A") },
+    { l: t("home.vsR2L"), g: t("home.vsR2G"), a: t("home.vsR2A") },
+    { l: t("home.vsR3L"), g: t("home.vsR3G"), a: t("home.vsR3A") },
+    { l: t("home.vsR4L"), g: t("home.vsR4G"), a: t("home.vsR4A") },
+    { l: t("home.vsR5L"), g: t("home.vsR5G"), a: t("home.vsR5A") },
+  ];
+  const tiers = [
+    {
+      name: t("home.prT1Name"), price: t("home.prT1Price"), cadence: t("home.prT1Cad"),
+      desc: t("home.prT1Desc"), cta: t("home.prT1Cta"), href: GITHUB_URL, external: true,
+      highlight: false,
+      features: [t("home.prT1F1"), t("home.prT1F2"), t("home.prT1F3"), t("home.prT1F4")],
+    },
+    {
+      name: t("home.prT2Name"), price: t("home.prT2Price"), cadence: t("home.prT2Cad"),
+      desc: t("home.prT2Desc"), cta: t("home.prT2Cta"), href: "/dashboard", external: false,
+      highlight: true, badge: t("home.prT2Badge"),
+      features: [t("home.prT2F1"), t("home.prT2F2"), t("home.prT2F3"), t("home.prT2F4")],
+    },
+    {
+      name: t("home.prT3Name"), price: t("home.prT3Price"), cadence: t("home.prT3Cad"),
+      desc: t("home.prT3Desc"), cta: t("home.prT3Cta"), href: "/dashboard", external: false,
+      highlight: false,
+      features: [t("home.prT3F1"), t("home.prT3F2"), t("home.prT3F3"), t("home.prT3F4")],
+    },
   ];
 
   return (
@@ -220,6 +259,102 @@ export default function HomePage() {
           </div>
         </section>
 
+        {/* Evidence guarantee — where every answer comes from */}
+        <section id="evidence" className="mt-28 scroll-mt-24">
+          <div className="mx-auto max-w-2xl text-center">
+            <p className="ad-eyebrow flex items-center justify-center gap-2">
+              <BookMarked className="h-3.5 w-3.5" strokeWidth={2.2} />
+              {t("home.evEyebrow")}
+            </p>
+            <h2 className="mt-3 text-balance font-display text-3xl leading-tight text-pine-900 md:text-4xl">
+              {t("home.evTitle")}
+            </h2>
+            <p className="mt-4 text-[15px] leading-relaxed text-ink-soft">{t("home.evBody")}</p>
+          </div>
+          <div className="mt-10 grid grid-cols-2 gap-3 md:grid-cols-4">
+            {evStats.map((s) => (
+              <div key={s.label} className="ad-card p-5 text-center">
+                <div className="font-display text-3xl font-semibold text-pine-700">{s.value}</div>
+                <div className="mt-1 text-xs leading-snug text-ink-soft">{s.label}</div>
+              </div>
+            ))}
+          </div>
+          <div className="mt-8 flex flex-col items-center gap-3">
+            <span className="ad-eyebrow">{t("home.evSourcesLabel")}</span>
+            <div className="flex max-w-3xl flex-wrap items-center justify-center gap-2">
+              {evOrgs.map((o) => (
+                <span
+                  key={o}
+                  className="rounded-full border border-line-strong bg-surface px-3 py-1 font-mono text-xs text-ink-soft"
+                >
+                  {o}
+                </span>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        {/* Classic GPT vs AdelIA — honest, structural comparison */}
+        <section className="mt-28">
+          <div className="mx-auto max-w-2xl text-center">
+            <p className="ad-eyebrow">{t("home.vsEyebrow")}</p>
+            <h2 className="mt-3 text-balance font-display text-3xl leading-tight text-pine-900 md:text-4xl">
+              {t("home.vsTitle")}
+            </h2>
+            <p className="mt-4 text-lg font-medium italic text-ink-soft">{t("home.vsQuestion")}</p>
+          </div>
+          <div className="mt-10 grid gap-5 md:grid-cols-2">
+            <div className="ad-card p-6">
+              <div className="flex items-center gap-2">
+                <span className="inline-flex h-8 w-8 items-center justify-center rounded-lg bg-clay-50 text-clay-500 ring-1 ring-clay-100">
+                  <X className="h-4 w-4" strokeWidth={2.4} />
+                </span>
+                <span className="text-sm font-semibold text-ink">{t("home.vsGptLabel")}</span>
+              </div>
+              <p className="mt-4 rounded-2xl rounded-bl-md border border-line bg-surface-2 px-3.5 py-2.5 text-sm leading-relaxed text-ink-soft">
+                {t("home.vsGptAnswer")}
+              </p>
+              <p className="mt-3 flex items-start gap-1.5 text-xs text-clay-600">
+                <X className="mt-0.5 h-3.5 w-3.5 shrink-0" strokeWidth={2.4} />
+                {t("home.vsGptNote")}
+              </p>
+            </div>
+            <div className="ad-card p-6 ring-1 ring-pine-200">
+              <div className="flex items-center gap-2">
+                <span className="inline-flex h-8 w-8 items-center justify-center rounded-lg bg-pine-50 text-pine-600 ring-1 ring-pine-100">
+                  <Check className="h-4 w-4" strokeWidth={2.4} />
+                </span>
+                <span className="text-sm font-semibold text-pine-900">{t("home.vsColAdelia")}</span>
+              </div>
+              <div className="mt-4 rounded-2xl rounded-bl-md border border-line bg-surface px-3.5 py-2.5 text-sm leading-relaxed text-ink shadow-soft">
+                {t("home.vsAdeliaAnswer")} <span className="ad-ev-tag align-middle">ev_1</span>
+                <span className="mt-2 block font-mono text-[11px] text-ink-faint">{t("home.vsAdeliaSource")}</span>
+              </div>
+              <p className="mt-3 flex items-start gap-1.5 text-xs text-pine-600">
+                <Check className="mt-0.5 h-3.5 w-3.5 shrink-0" strokeWidth={2.4} />
+                {t("home.vsAdeliaNote")}
+              </p>
+            </div>
+          </div>
+          <div className="ad-card mt-5 overflow-hidden">
+            <div className="grid grid-cols-[1.4fr_1fr_1fr] border-b border-line bg-surface-2 text-[11px] font-semibold uppercase tracking-wide text-ink-faint">
+              <div className="px-4 py-2.5" />
+              <div className="px-4 py-2.5 text-center">{t("home.vsColGpt")}</div>
+              <div className="px-4 py-2.5 text-center text-pine-700">{t("home.vsColAdelia")}</div>
+            </div>
+            {vsRows.map((r) => (
+              <div
+                key={r.l}
+                className="grid grid-cols-[1.4fr_1fr_1fr] border-b border-line text-sm last:border-b-0"
+              >
+                <div className="px-4 py-2.5 font-medium text-ink">{r.l}</div>
+                <div className="px-4 py-2.5 text-center text-ink-soft">{r.g}</div>
+                <div className="px-4 py-2.5 text-center font-medium text-pine-700">{r.a}</div>
+              </div>
+            ))}
+          </div>
+        </section>
+
         {/* Open-source / data sovereignty band */}
         <section className="mt-28">
           <div className="ad-grain ad-card relative overflow-hidden border-pine-800 bg-pine-900 p-8 md:p-12">
@@ -262,6 +397,72 @@ export default function HomePage() {
               </div>
             </div>
           </div>
+        </section>
+        {/* Pricing — how you use it */}
+        <section id="pricing" className="mt-28 scroll-mt-24">
+          <div className="mx-auto max-w-2xl text-center">
+            <p className="ad-eyebrow flex items-center justify-center gap-2">
+              <Sparkles className="h-3.5 w-3.5" strokeWidth={2.2} />
+              {t("home.prEyebrow")}
+            </p>
+            <h2 className="mt-3 text-balance font-display text-3xl leading-tight text-pine-900 md:text-4xl">
+              {t("home.prTitle")}
+            </h2>
+          </div>
+          <div className="mt-12 grid gap-5 md:grid-cols-3 md:items-start">
+            {tiers.map((tier) => (
+              <div
+                key={tier.name}
+                className={`ad-card relative flex flex-col p-7 ${
+                  tier.highlight ? "ring-2 ring-pine-500 md:-mt-3 md:mb-3" : ""
+                }`}
+              >
+                {tier.badge && (
+                  <span className="absolute -top-3 left-1/2 -translate-x-1/2 whitespace-nowrap rounded-full bg-pine-600 px-3 py-1 text-[11px] font-semibold text-[#f3f7f3]">
+                    {tier.badge}
+                  </span>
+                )}
+                <h3 className="font-display text-xl text-pine-900">{tier.name}</h3>
+                <div className="mt-2 flex items-baseline gap-1">
+                  <span className="font-display text-4xl font-semibold text-pine-900">{tier.price}</span>
+                  <span className="text-sm text-ink-faint">{tier.cadence}</span>
+                </div>
+                <p className="mt-3 text-sm leading-relaxed text-ink-soft">{tier.desc}</p>
+                <ul className="mt-5 flex flex-1 flex-col gap-2.5">
+                  {tier.features.map((f) => (
+                    <li key={f} className="flex items-start gap-2 text-sm text-ink">
+                      <Check className="mt-0.5 h-4 w-4 shrink-0 text-pine-500" strokeWidth={2.4} />
+                      {f}
+                    </li>
+                  ))}
+                </ul>
+                {tier.external ? (
+                  <a
+                    href={tier.href}
+                    target="_blank"
+                    rel="noreferrer"
+                    className={`ad-btn mt-7 px-5 py-2.5 text-sm ${
+                      tier.highlight ? "ad-btn-primary" : "ad-btn-ghost"
+                    }`}
+                  >
+                    {tier.cta}
+                  </a>
+                ) : (
+                  <Link
+                    href={tier.href}
+                    className={`ad-btn mt-7 px-5 py-2.5 text-sm ${
+                      tier.highlight ? "ad-btn-primary" : "ad-btn-ghost"
+                    }`}
+                  >
+                    {tier.cta}
+                  </Link>
+                )}
+              </div>
+            ))}
+          </div>
+          <p className="mx-auto mt-6 max-w-2xl text-center text-xs text-ink-faint">
+            {t("home.prFootnote")}
+          </p>
         </section>
       </main>
 
