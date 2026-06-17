@@ -25,7 +25,7 @@ class Settings(BaseSettings):
     # OpenAI account has credits; "mistral" is the working default.
     llm_provider: str = "mistral"  # "mistral" | "openai"
     mistral_chat_model: str = "mistral-medium-latest"
-    openai_chat_model: str = "gpt-4o"
+    openai_chat_model: str = "gpt-5.1"
 
     # M4 ingestion surfaces
     telegram_bot_token: str = ""
