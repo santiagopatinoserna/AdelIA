@@ -9,6 +9,7 @@ from typing import Literal
 from uuid import UUID
 
 
+from adelia.config import settings
 from adelia.llm import get_mistral_client
 from adelia.db import AsyncSessionLocal
 from adelia.enrichment.evidence_retrieval import (
@@ -63,17 +64,20 @@ _LOCALE_RULES = {
 
 def _system_prompt(locale: str) -> str:
     lang_rule, disclaimer_rule, no_info = _LOCALE_RULES.get(locale, _LOCALE_RULES["es"])
-    return f"""Eres un asistente médico que responde EXCLUSIVAMENTE basándote en
-los datos del paciente Y la evidencia clínica proporcionada como contexto.
+    return f"""Eres el asistente de salud de AdelIA, enfocado en el seguimiento de
+la salud de bebés y niños. Respondes sobre los datos del bebé proporcionados,
+pero TODA interpretación o afirmación clínica debe SUSTENTARSE EXCLUSIVAMENTE en
+los estudios de investigación / guías clínicas provistos en la sección
+"Clinical evidence". No respondes desde tu conocimiento general.
 
 Reglas estrictas:
-- Si la información NO está en el contexto del paciente, NI en la evidencia, NI en turnos anteriores de esta conversación, di {no_info}.
-- El historial de la conversación ES contexto válido: resuelve referencias ("ese valor", "¿y en 2023?") usando los datos ya citados en turnos anteriores, manteniendo sus marcadores originales.
-- Cita datos del paciente con marcadores numéricos [1], [2], ... correspondientes al orden de los fragmentos del paciente.
-- Cita guidelines/evidencia con marcadores [ev_1], [ev_2], ... correspondientes a la sección "Clinical evidence".
-- Cuando combines ambos (e.g. "tu HbA1c X% [2] está en rango prediabetes según ADA [ev_1]"), separa claramente paciente vs evidencia.
+- Toda interpretación, valoración o recomendación clínica DEBE apoyarse en al menos una cita de evidencia [ev_1], [ev_2], ... Si NO hay un estudio o guía en el contexto que respalde la respuesta clínica, di {no_info} y explica que no hay evidencia de investigación que la sustente. NO interpretes ni aconsejes sin respaldo de investigación.
+- Puedes reportar los datos del bebé como hechos (valores, fechas, qué dijo cada médico) citándolos con marcadores numéricos [1], [2], ... del orden de los fragmentos del paciente — pero NO los interpretes clínicamente sin una cita [ev_N].
+- El historial de la conversación ES contexto válido: resuelve referencias ("ese valor", "¿y a los 6 meses?") usando los datos ya citados en turnos anteriores, manteniendo sus marcadores originales.
+- Cita los estudios/guías con marcadores [ev_1], [ev_2], ... de la sección "Clinical evidence".
+- Separa claramente el dato del bebé de la evidencia (e.g. "regurgita tras cada toma [1]; según NASPGHAN-ESPGHAN es habitual y mejora hacia los 12 meses [ev_1]").
 - {lang_rule}
-- NUNCA inventes datos médicos. NUNCA des consejos médicos definitivos.
+- NUNCA inventes datos médicos ni estudios. NUNCA des consejos médicos definitivos.
 - {disclaimer_rule}
 """
 
@@ -109,20 +113,32 @@ async def _stream_llm_tokens(
     user_message: str,
     history: list[dict] | None = None,
 ) -> AsyncIterator[str]:
-    """Stream tokens from Mistral. Yields one token-substring per chunk.
+    """Stream generation tokens from the configured provider.
 
-    history: prior conversation turns ({"role", "content"}), oldest first.
-    The RAG context lives only in the final user message — history carries
-    the conversational thread so follow-ups ("¿y en 2023?") resolve.
+    Provider is selected by settings.llm_provider ("mistral" | "openai").
+    Embeddings/OCR always use Mistral regardless — only generation is
+    pluggable. history: prior turns ({"role","content"}), oldest first; the
+    RAG context lives only in the final user message.
 
-    Raises RuntimeError if MISTRAL_API_KEY missing.
+    Raises RuntimeError if the selected provider's API key is missing.
     """
-    client = get_mistral_client()
-    messages = [{"role": "system", "content": system_prompt}]
+    messages: list[dict] = [{"role": "system", "content": system_prompt}]
     messages.extend(history or [])
     messages.append({"role": "user", "content": user_message})
+
+    if settings.llm_provider == "openai":
+        async for piece in _stream_openai_tokens(messages):
+            yield piece
+    else:
+        async for piece in _stream_mistral_tokens(messages):
+            yield piece
+
+
+async def _stream_mistral_tokens(messages: list[dict]) -> AsyncIterator[str]:
+    """Raises RuntimeError if MISTRAL_API_KEY missing."""
+    client = get_mistral_client()
     response = await client.chat.stream_async(
-        model="mistral-medium-latest",
+        model=settings.mistral_chat_model,
         messages=messages,
         temperature=0.2,
     )
@@ -130,6 +146,29 @@ async def _stream_llm_tokens(
         if event.data and event.data.choices:
             delta = event.data.choices[0].delta
             piece = getattr(delta, "content", "") or ""
+            if piece:
+                yield piece
+
+
+async def _stream_openai_tokens(messages: list[dict]) -> AsyncIterator[str]:
+    """Stream tokens from OpenAI chat completions.
+
+    Raises RuntimeError if OPENAI_API_KEY missing (config error, no retry).
+    """
+    if not settings.openai_api_key:
+        raise RuntimeError("OPENAI_API_KEY not set")
+    from openai import AsyncOpenAI
+
+    client = AsyncOpenAI(api_key=settings.openai_api_key)
+    stream = await client.chat.completions.create(
+        model=settings.openai_chat_model,
+        messages=messages,
+        temperature=0.2,
+        stream=True,
+    )
+    async for chunk in stream:
+        if chunk.choices:
+            piece = chunk.choices[0].delta.content or ""
             if piece:
                 yield piece
 
