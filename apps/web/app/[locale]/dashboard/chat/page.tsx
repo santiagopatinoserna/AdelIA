@@ -3,6 +3,7 @@ import { auth } from "@/lib/auth";
 import { redirect } from "next/navigation";
 import { getTranslations } from "next-intl/server";
 import { listChatSessions } from "@/lib/chat-client";
+import { listDocuments } from "@/lib/api-client";
 import { ChatPageClient } from "@/components/chat-page-client";
 
 export async function generateMetadata({
@@ -24,7 +25,10 @@ export default async function ChatPage({
   const session = await auth();
   if (!session) redirect(`/${locale}/signin`);
 
-  const sessions = await listChatSessions().catch(() => []);
+  const [sessions, docs] = await Promise.all([
+    listChatSessions().catch(() => []),
+    listDocuments().catch(() => []),
+  ]);
   const t = await getTranslations("chat");
 
   return (
@@ -33,6 +37,7 @@ export default async function ChatPage({
         initialSessions={sessions}
         locale={locale}
         titleText={t("title")}
+        hasDocs={docs.length > 0}
       />
     </main>
   );

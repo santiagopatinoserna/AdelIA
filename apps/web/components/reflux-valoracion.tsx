@@ -181,10 +181,22 @@ export function RefluxValoracion({
 
       {(busy || text) && (
         <div className="ad-card mt-4 p-5">
+          <div className="mb-3 flex items-start gap-2 rounded-lg border border-honey-200 bg-honey-100/50 p-2.5 text-xs leading-relaxed text-ink">
+            <ShieldCheck className="mt-px h-3.5 w-3.5 shrink-0 text-honey-600" strokeWidth={2.2} />
+            {t("valoracionDisclaimerTop")}
+          </div>
           {isStale && (
-            <div className="mb-3 flex items-start gap-2 rounded-lg border border-honey-200 bg-honey-100/60 p-2.5 text-xs text-ink">
-              <AlertTriangle className="mt-px h-3.5 w-3.5 shrink-0 text-honey-600" strokeWidth={2.2} />
-              {t("valoracionStale")}
+            <div className="mb-3 flex flex-wrap items-center gap-2 rounded-lg border border-clay-100 bg-clay-50 p-2.5 text-xs text-clay-700">
+              <AlertTriangle className="h-3.5 w-3.5 shrink-0 text-clay-600" strokeWidth={2.2} />
+              <span className="flex-1">{t("valoracionStale")}</span>
+              <button
+                type="button"
+                onClick={generate}
+                className="ad-btn ad-btn-ghost px-2.5 py-1 text-xs"
+              >
+                <RotateCcw className="h-3 w-3" strokeWidth={2.2} />
+                {t("regenerateValoracion")}
+              </button>
             </div>
           )}
           {busy && !text && (
