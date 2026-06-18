@@ -23,7 +23,7 @@ export default function AppleHealthImportPage() {
       const res = await ingestion.importAppleHealth(file);
       setResult(res);
     } catch (e) {
-      setError(String(e));
+      setError(t("common.actionError"));
     } finally {
       setSubmitting(false);
     }

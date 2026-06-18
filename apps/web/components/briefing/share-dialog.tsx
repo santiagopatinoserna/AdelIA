@@ -36,7 +36,7 @@ export function ShareDialog({ briefingId, onClose }: Props) {
       const created = await sharing.create(briefingId, ttl);
       setLink(created);
     } catch (e) {
-      setError(String(e));
+      setError(t("actionError"));
     } finally {
       setCreating(false);
     }
@@ -56,7 +56,7 @@ export function ShareDialog({ briefingId, onClose }: Props) {
       await sharing.revoke(link.token);
       setLink(null);
     } catch (e) {
-      setError(String(e));
+      setError(t("actionError"));
     }
   }
 

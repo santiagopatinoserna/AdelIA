@@ -8,7 +8,9 @@
     "retry": "Réessayer",
     "notFoundTitle": "Page introuvable",
     "notFoundBody": "La page que vous cherchez n'existe pas ou a été déplacée.",
-    "backHome": "Retour à l'accueil"
+    "backHome": "Retour à l'accueil",
+    "remove": "Retirer",
+    "actionError": "Impossible de terminer. Vérifiez votre connexion et réessayez."
   },
   "home": {
     "hero": "La santé de votre bébé, au même endroit. Avec une IA fondée sur la recherche.",
@@ -184,7 +186,8 @@
   },
   "signin": {
     "emailPlaceholder": "vous@email.com",
-    "sendMagicLink": "Envoyer le magic link"
+    "sendMagicLink": "Envoyer le magic link",
+    "emailLabel": "E-mail"
   },
   "chat": {
     "title": "Chat avec votre dossier médical",
@@ -246,7 +249,8 @@
     "gdpr": {
       "meta": "{legalBasis} · délai : {deadline} · langue : {language}",
       "copyTemplate": "Copier le modèle",
-      "copied": "Copié"
+      "copied": "Copié",
+      "actionError": "Impossible de terminer. Vérifiez votre connexion et réessayez."
     },
     "telegram": {
       "title": "Lier Telegram",
@@ -326,7 +330,8 @@
       "reference": "Référence",
       "sexLabel": "Sexe :",
       "namePlaceholder": "HbA1c, glucose, ldl, ...",
-      "valuePlaceholder": "valeur"
+      "valuePlaceholder": "valeur",
+      "noResults": "Aucun résultat pour ces valeurs."
     },
     "trials": {
       "search": "Rechercher des essais",
@@ -349,7 +354,8 @@
         "heterozygous": "Hétérozygote",
         "absent": "Absent"
       },
-      "savedFrom": "Analyse enregistrée du"
+      "savedFrom": "Analyse enregistrée du",
+      "noResults": "Aucune variante trouvée dans ce fichier."
     },
     "codes": {
       "lookup": "Rechercher un code",
@@ -421,7 +427,8 @@
       "disclaimer": "Toute personne disposant de l'URL peut voir le briefing jusqu'à son expiration ou sa révocation. AdelIA comptabilise les accès à des fins d'audit."
     },
     "staleBadge": "Obsolète",
-    "noRender": "Aucune version générée disponible."
+    "noRender": "Aucune version générée disponible.",
+    "actionError": "Impossible de terminer. Vérifiez votre connexion et réessayez."
   },
   "settings": {
     "title": "Paramètres du compte",
@@ -430,7 +437,8 @@
     "dangerBody": "La suppression de votre compte efface définitivement tous vos documents, entités, briefings, conversations, profils et liens partagés, y compris les fichiers originaux. Cette action n'est PAS réversible (droit à l'effacement, art. 17 RGPD).",
     "confirmLabel": "Saisissez {email} pour confirmer :",
     "deleteButton": "Supprimer définitivement mon compte",
-    "deleting": "Suppression…"
+    "deleting": "Suppression…",
+    "actionError": "Impossible de terminer. Vérifiez votre connexion et réessayez."
   },
   "questionnaire": {
     "title": "Suivi du reflux",
@@ -461,7 +469,8 @@
     "sourcesLabel": "Sources citées",
     "copy": "Copier",
     "copied": "Copié",
-    "valoracionStale": "Vous avez modifié des réponses depuis cette évaluation — régénérez-la pour la mettre à jour."
+    "valoracionStale": "Vous avez modifié des réponses depuis cette évaluation — régénérez-la pour la mettre à jour.",
+    "actionError": "Impossible de terminer. Vérifiez votre connexion et réessayez."
   },
   "consulta": {
     "title": "Mode Consultation",

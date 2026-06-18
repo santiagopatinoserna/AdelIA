@@ -21,14 +21,22 @@ export default function SignInPage() {
           <h1 className="mt-6 text-2xl text-pine-900">{t("signin.sendMagicLink")}</h1>
           <p className="mt-2 text-sm text-ink-soft">{t("common.tagline")}</p>
           <form action={handleSignIn} className="mt-7 space-y-3">
+            <label htmlFor="email" className="block text-sm font-medium text-ink-soft">
+              {t("signin.emailLabel")}
+            </label>
             <div className="relative">
               <Mail className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-ink-faint" strokeWidth={2} />
               <input
+                id="email"
                 name="email"
                 type="email"
                 required
+                autoComplete="email"
+                inputMode="email"
+                autoCapitalize="off"
+                spellCheck={false}
                 placeholder={t("signin.emailPlaceholder")}
-                className="w-full rounded-xl border border-line-strong bg-surface py-2.5 pl-9 pr-3 text-sm text-ink placeholder:text-ink-faint focus:border-pine-400 focus:outline-none focus:ring-2 focus:ring-pine-100"
+                className="w-full rounded-xl border border-line-strong bg-surface py-2.5 pl-9 pr-3 text-base text-ink placeholder:text-ink-faint focus:border-pine-400 focus:outline-none focus:ring-2 focus:ring-pine-100"
               />
             </div>
             <button type="submit" className="ad-btn ad-btn-primary w-full py-2.5 text-sm">

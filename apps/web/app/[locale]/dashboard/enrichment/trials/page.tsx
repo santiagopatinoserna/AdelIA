@@ -59,12 +59,12 @@ export default function TrialsPage() {
           disabled={loading || !condition.trim()}
           className="ad-btn ad-btn-primary px-4 py-2 text-sm disabled:opacity-50"
         >
-          {loading ? "..." : t("enrichment.trials.search")}
+          {loading ? t("common.loading") : t("enrichment.trials.search")}
         </button>
       </div>
 
       {error && (
-        <div className="mt-4 rounded-xl border border-clay-100 bg-clay-50 p-3 text-sm text-clay-700">
+        <div role="alert" className="mt-4 rounded-xl border border-clay-100 bg-clay-50 p-3 text-sm text-clay-700">
           {error}
         </div>
       )}

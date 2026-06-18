@@ -43,8 +43,8 @@ export default function GenomicsPage() {
       const res = await enrichment.uploadGenomics(file);
       setHits(res);
       setAnalyzedAt(new Date().toISOString());
-    } catch (e) {
-      setError(String(e));
+    } catch {
+      setError(t("enrichment.searchError"));
     } finally {
       setLoading(false);
     }
@@ -79,12 +79,12 @@ export default function GenomicsPage() {
           disabled={!file || loading}
           className="ad-btn ad-btn-primary mt-4 px-4 py-2 text-sm disabled:opacity-50"
         >
-          {loading ? "..." : t("enrichment.genomics.upload")}
+          {loading ? t("common.loading") : t("enrichment.genomics.upload")}
         </button>
       </div>
 
       {error && (
-        <div className="mt-4 rounded-lg border border-clay-100 bg-clay-50 p-3 text-sm text-clay-700">
+        <div role="alert" className="mt-4 rounded-lg border border-clay-100 bg-clay-50 p-3 text-sm text-clay-700">
           {error}
         </div>
       )}
@@ -124,6 +124,10 @@ export default function GenomicsPage() {
           </li>
         ))}
       </ul>
+
+      {analyzedAt && !loading && !error && hits.length === 0 && (
+        <p className="mt-4 text-sm text-ink-faint">{t("enrichment.genomics.noResults")}</p>
+      )}
     </main>
   );
 }

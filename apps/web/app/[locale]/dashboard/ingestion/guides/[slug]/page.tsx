@@ -20,7 +20,7 @@ export default function GuideViewerPage() {
     ingestion
       .getGuide(slug)
       .then(setGuide)
-      .catch((e) => setError(String(e)));
+      .catch(() => setError(tCommon("actionError")));
   }, [slug]);
 
   if (error) {

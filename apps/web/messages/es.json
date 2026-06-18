@@ -8,7 +8,9 @@
     "retry": "Reintentar",
     "notFoundTitle": "Página no encontrada",
     "notFoundBody": "La página que buscas no existe o se ha movido.",
-    "backHome": "Volver al inicio"
+    "backHome": "Volver al inicio",
+    "remove": "Quitar",
+    "actionError": "No se pudo completar. Revisa tu conexión e inténtalo de nuevo."
   },
   "home": {
     "hero": "La salud de tu bebé, en un solo lugar. Con IA basada en estudios.",
@@ -184,7 +186,8 @@
   },
   "signin": {
     "emailPlaceholder": "tu@email.com",
-    "sendMagicLink": "Enviar magic link"
+    "sendMagicLink": "Enviar magic link",
+    "emailLabel": "Correo electrónico"
   },
   "chat": {
     "title": "Chat con tu historia clínica",
@@ -246,7 +249,8 @@
     "gdpr": {
       "meta": "{legalBasis} · plazo: {deadline} · idioma: {language}",
       "copyTemplate": "Copiar plantilla",
-      "copied": "Copiado"
+      "copied": "Copiado",
+      "actionError": "No se pudo completar. Revisa tu conexión e inténtalo de nuevo."
     },
     "telegram": {
       "title": "Enlazar Telegram",
@@ -326,7 +330,8 @@
       "reference": "Referencia",
       "sexLabel": "Sexo:",
       "namePlaceholder": "HbA1c, glucosa, ldl, ...",
-      "valuePlaceholder": "valor"
+      "valuePlaceholder": "valor",
+      "noResults": "Sin resultados para esos valores."
     },
     "trials": {
       "search": "Buscar ensayos",
@@ -349,7 +354,8 @@
         "heterozygous": "Heterocigoto",
         "absent": "Ausente"
       },
-      "savedFrom": "Análisis guardado del"
+      "savedFrom": "Análisis guardado del",
+      "noResults": "No se encontraron variantes en ese archivo."
     },
     "codes": {
       "lookup": "Buscar código",
@@ -421,7 +427,8 @@
       "disclaimer": "Cualquiera con el URL puede ver el briefing hasta que expire o lo revoques. AdelIA cuenta accesos para auditoría."
     },
     "staleBadge": "Desactualizado",
-    "noRender": "No hay versión renderizada disponible."
+    "noRender": "No hay versión renderizada disponible.",
+    "actionError": "No se pudo completar. Revisa tu conexión e inténtalo de nuevo."
   },
   "settings": {
     "title": "Ajustes de cuenta",
@@ -430,7 +437,8 @@
     "dangerBody": "Eliminar tu cuenta borra de forma permanente todos tus documentos, entidades, briefings, chats, perfiles y links compartidos, incluidos los archivos originales. Esta acción NO es reversible (derecho de supresión, art. 17 RGPD).",
     "confirmLabel": "Escribe {email} para confirmar:",
     "deleteButton": "Eliminar mi cuenta definitivamente",
-    "deleting": "Eliminando…"
+    "deleting": "Eliminando…",
+    "actionError": "No se pudo completar. Revisa tu conexión e inténtalo de nuevo."
   },
   "questionnaire": {
     "title": "Control del reflujo",
@@ -461,7 +469,8 @@
     "sourcesLabel": "Fuentes citadas",
     "copy": "Copiar",
     "copied": "Copiado",
-    "valoracionStale": "Has cambiado respuestas desde esta valoración — regenérala para actualizarla."
+    "valoracionStale": "Has cambiado respuestas desde esta valoración — regenérala para actualizarla.",
+    "actionError": "No se pudo completar. Revisa tu conexión e inténtalo de nuevo."
   },
   "consulta": {
     "title": "Modo Consulta",

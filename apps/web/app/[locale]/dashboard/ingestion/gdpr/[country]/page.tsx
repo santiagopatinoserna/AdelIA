@@ -22,7 +22,7 @@ export default function GdprTemplateViewerPage() {
     ingestion
       .getGdprTemplate(country)
       .then(setTpl)
-      .catch((e) => setError(String(e)));
+      .catch((e) => setError(t("actionError")));
   }, [country]);
 
   async function copyTemplate() {

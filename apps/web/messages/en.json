@@ -8,7 +8,9 @@
     "retry": "Retry",
     "notFoundTitle": "Page not found",
     "notFoundBody": "The page you are looking for doesn't exist or has moved.",
-    "backHome": "Back to home"
+    "backHome": "Back to home",
+    "remove": "Remove",
+    "actionError": "Couldn't complete. Check your connection and try again."
   },
   "home": {
     "hero": "Your baby's health, in one place. With AI grounded in research.",
@@ -184,7 +186,8 @@
   },
   "signin": {
     "emailPlaceholder": "you@email.com",
-    "sendMagicLink": "Send magic link"
+    "sendMagicLink": "Send magic link",
+    "emailLabel": "Email"
   },
   "chat": {
     "title": "Chat with your medical history",
@@ -246,7 +249,8 @@
     "gdpr": {
       "meta": "{legalBasis} · deadline: {deadline} · language: {language}",
       "copyTemplate": "Copy template",
-      "copied": "Copied"
+      "copied": "Copied",
+      "actionError": "Couldn't complete. Check your connection and try again."
     },
     "telegram": {
       "title": "Link Telegram",
@@ -326,7 +330,8 @@
       "reference": "Reference",
       "sexLabel": "Sex:",
       "namePlaceholder": "HbA1c, glucose, ldl, ...",
-      "valuePlaceholder": "value"
+      "valuePlaceholder": "value",
+      "noResults": "No results for those values."
     },
     "trials": {
       "search": "Search trials",
@@ -349,7 +354,8 @@
         "heterozygous": "Heterozygous",
         "absent": "Absent"
       },
-      "savedFrom": "Saved analysis from"
+      "savedFrom": "Saved analysis from",
+      "noResults": "No variants found in that file."
     },
     "codes": {
       "lookup": "Look up code",
@@ -421,7 +427,8 @@
       "disclaimer": "Anyone with the URL can view the briefing until it expires or you revoke it. AdelIA logs accesses for auditing."
     },
     "staleBadge": "Stale",
-    "noRender": "No rendered version available."
+    "noRender": "No rendered version available.",
+    "actionError": "Couldn't complete. Check your connection and try again."
   },
   "settings": {
     "title": "Account settings",
@@ -430,7 +437,8 @@
     "dangerBody": "Deleting your account permanently erases all your documents, entities, briefings, chats, profiles and share links, including the original files. This action is NOT reversible (right to erasure, GDPR art. 17).",
     "confirmLabel": "Type {email} to confirm:",
     "deleteButton": "Delete my account permanently",
-    "deleting": "Deleting…"
+    "deleting": "Deleting…",
+    "actionError": "Couldn't complete. Check your connection and try again."
   },
   "questionnaire": {
     "title": "Reflux control",
@@ -461,7 +469,8 @@
     "sourcesLabel": "Cited sources",
     "copy": "Copy",
     "copied": "Copied",
-    "valoracionStale": "You've changed answers since this assessment — regenerate to update it."
+    "valoracionStale": "You've changed answers since this assessment — regenerate to update it.",
+    "actionError": "Couldn't complete. Check your connection and try again."
   },
   "consulta": {
     "title": "Appointment mode",
