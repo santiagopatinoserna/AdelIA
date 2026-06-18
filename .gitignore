@@ -19,3 +19,4 @@ htmlcov/
 # Scratch / manual verification scripts
 apps/web/_*.mjs
 apps/web/_*.png
+.env.prod

@@ -1,0 +1,26 @@
+adelia.godi.ai {
+    # API under /api (strip the prefix) — the web's browser proxy + public PDFs.
+    handle /api/* {
+        uri strip_prefix /api
+        reverse_proxy api:8000
+    }
+    # Public share links are served by the API at /s/{token} (no /api prefix).
+    # share_url is https://adelia.godi.ai/s/{token}; without this they 404.
+    handle /s/* {
+        reverse_proxy api:8000
+    }
+    # Everything else is the Next.js web app.
+    handle {
+        reverse_proxy web:3000
+    }
+
+    encode zstd gzip
+
+    # Defense-in-depth headers (the app also sets its own CSP in next.config).
+    header {
+        Strict-Transport-Security "max-age=31536000; includeSubDomains"
+        X-Content-Type-Options "nosniff"
+        Referrer-Policy "strict-origin-when-cross-origin"
+        -Server
+    }
+}

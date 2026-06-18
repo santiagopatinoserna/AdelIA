@@ -1,0 +1,35 @@
+# Production edge: Caddy terminates TLS for adelia.godi.ai and reverse-proxies
+# to the web + api containers. Apply as an override on top of the prod compose:
+#
+#   docker compose -f infra/docker-compose.prod.yml -f docker-compose.caddy.yml \
+#     --env-file .env.prod up -d --build
+#
+# With Caddy in front, web/api are NOT published to the public interface — they
+# bind to localhost only, reachable from Caddy over the compose network.
+services:
+  caddy:
+    image: caddy:2
+    restart: unless-stopped
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./Caddyfile:/etc/caddy/Caddyfile:ro
+      - caddy_data:/data
+      - caddy_config:/config
+    depends_on:
+      - web
+      - api
+
+  # Do not expose app ports on the public interface — Caddy is the only entry.
+  web:
+    ports:
+      - "127.0.0.1:3000:3000"
+
+  api:
+    ports:
+      - "127.0.0.1:8000:8000"
+
+volumes:
+  caddy_data:
+  caddy_config:
