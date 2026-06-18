@@ -37,9 +37,9 @@
     "modeAEx2": "Est-il normal qu'il régurgite après chaque tétée ?",
     "modeAEx3": "Résume ses dernières visites et signale les points d'alerte",
     "modeBLabel": "Mode B · Pour la consultation",
-    "modeBTitle": "Une synthèse pour le pédiatre",
+    "modeBTitle": "Le briefing pour le pédiatre",
     "modeBBody": "Générez une synthèse d'une page, partageable par lien sécurisé ou en PDF. Le spécialiste comprend votre bébé en 30 secondes, sans avoir à tout réexpliquer.",
-    "modeBEx1": "Synthèse pour la visite de l'enfant",
+    "modeBEx1": "Briefing pour la visite de l'enfant",
     "modeBEx2": "Résumé avec sa courbe de croissance",
     "modeBEx3": "Lien éphémère ou PDF : vous maîtrisez ce qui est visible",
     "ossEyebrow": "Open source · vos données vous appartiennent",
@@ -57,7 +57,7 @@
     "modeADemoQ": "Quand dois-je m'inquiéter des régurgitations ?",
     "modeADemoA": "Les signaux d'alerte sont la perte de poids, le refus alimentaire ou du sang ; sans eux, c'est généralement physiologique et s'améliore vers un an.",
     "modeADemoSource": "NASPGHAN-ESPGHAN 2018 · Reflux gastro-œsophagien pédiatrique",
-    "modeBDemoTitle": "Aperçu · synthèse",
+    "modeBDemoTitle": "Aperçu · briefing",
     "modeBDemoMeta": "Nourrisson · 8 mois · visite de routine",
     "modeBDemoS1Label": "Antécédents",
     "modeBDemoS1": "Reflux physiologique léger, en amélioration. Vaccins à jour.",
@@ -123,7 +123,7 @@
     "prT2F1": "Hébergé et mis à jour par nous",
     "prT2F2": "IA comprise (aucune clé à gérer)",
     "prT2F3": "Coffre chiffré + sauvegardes",
-    "prT2F4": "Synthèses et PDF illimités",
+    "prT2F4": "Briefings et PDF illimités",
     "prT2Cta": "Commencer",
     "prT3Name": "Avec spécialiste",
     "prT3Price": "16€",
@@ -132,7 +132,7 @@
     "prT3F1": "Tout le plan Géré",
     "prT3F2": "1 revue/mois d'un spécialiste",
     "prT3F3": "Spécialiste selon le sujet (reflux, sommeil, alimentation…)",
-    "prT3F4": "Répond avec la synthèse de votre bébé sous les yeux",
+    "prT3F4": "Répond avec le briefing de votre bébé sous les yeux",
     "prT3Cta": "Commencer",
     "prFootnote": "Prix indicatifs, en validation. La revue du spécialiste est asynchrone ; les téléconsultations en direct arriveront dans un plan supérieur.",
     "mixEyebrow": "Votre bébé × la science",
@@ -167,7 +167,7 @@
     "ocrProcessing": "Lecture du document en cours… mise à jour automatique",
     "settingsLink": "Paramètres du compte",
     "navImport": "Importer",
-    "navInsights": "Analyses",
+    "navInsights": "Insights",
     "documentsCount": "{count, plural, =1 {1 document} other {# documents}}",
     "welcomeTitle": "Bienvenue sur AdelIA",
     "welcomeSubtitle": "Réunissez la santé de votre bébé en un seul endroit et posez vos questions. C'est parti, en 3 étapes.",
@@ -196,7 +196,7 @@
   },
   "signin": {
     "emailPlaceholder": "vous@exemple.com",
-    "sendMagicLink": "Recevoir mon lien de connexion",
+    "sendMagicLink": "Recevoir mon magic link",
     "emailLabel": "Adresse e-mail"
   },
   "chat": {
@@ -439,7 +439,7 @@
     "staleBadge": "Obsolète",
     "noRender": "Aucune version générée disponible.",
     "actionError": "Impossible de terminer. Vérifiez votre connexion et réessayez.",
-    "navLabel": "Synthèses"
+    "navLabel": "Briefings"
   },
   "settings": {
     "title": "Paramètres du compte",
