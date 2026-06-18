@@ -517,5 +517,18 @@
     "body": "Gardez-la sur votre écran d'accueil, comme une app.",
     "cta": "Installer",
     "dismiss": "Plus tard"
+  },
+  "checkin": {
+    "dismiss": "Pas maintenant",
+    "upload": "Un nouveau document pour votre bébé ? Ajoutez-le pour tout garder à jour.",
+    "uploadCta": "Ajouter",
+    "weight": "Combien pèse votre bébé maintenant ? Demandez à son histoire comment évolue sa courbe.",
+    "weightCta": "Demander",
+    "doubt": "Une question sur sa santé cette semaine ? Je suis là pour répondre.",
+    "doubtCta": "Demander",
+    "checkup": "Une visite ou un vaccin bientôt ? Ajoutez-le dès que vous l'avez.",
+    "checkupCta": "Ajouter",
+    "feeding": "Un changement d'alimentation ou de sommeil ? Notez-le dans son suivi.",
+    "feedingCta": "Noter"
   }
 }

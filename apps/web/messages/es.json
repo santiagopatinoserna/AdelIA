@@ -517,5 +517,18 @@
     "body": "Tenla a mano en tu pantalla de inicio, como una app.",
     "cta": "Instalar",
     "dismiss": "Ahora no"
+  },
+  "checkin": {
+    "dismiss": "Ahora no",
+    "upload": "¿Tienes un informe nuevo de tu bebé? Súbelo para tenerlo todo al día.",
+    "uploadCta": "Subir",
+    "weight": "¿Cuánto pesa ahora tu bebé? Pregúntale a su historia cómo va su curva.",
+    "weightCta": "Preguntar",
+    "doubt": "¿Alguna duda sobre su salud esta semana? Estoy para responderte.",
+    "doubtCta": "Preguntar",
+    "checkup": "¿Toca revisión o vacuna pronto? Súbela en cuanto la tengas.",
+    "checkupCta": "Añadir",
+    "feeding": "¿Algún cambio en su alimentación o sueño? Déjalo anotado en su control.",
+    "feedingCta": "Anotar"
   }
 }

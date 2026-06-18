@@ -6,6 +6,7 @@ import { getTranslations } from "next-intl/server";
 import { listDocuments, type DocumentDTO } from "@/lib/api-client";
 import { DocumentCard } from "@/components/document-card";
 import { InstallPrompt } from "@/components/install-prompt";
+import { CheckInPrompt } from "@/components/check-in-prompt";
 import {
   MessagesSquare,
   ClipboardList,
@@ -116,6 +117,7 @@ export default async function DashboardPage({
   return (
     <main className="mx-auto max-w-5xl px-6 py-10">
         <InstallPrompt />
+        <CheckInPrompt />
         <nav className="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-6">
           {nav.map((item, i) => (
             <Link
