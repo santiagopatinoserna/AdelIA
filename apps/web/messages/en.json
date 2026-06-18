@@ -517,5 +517,18 @@
     "body": "Keep it on your home screen, like an app.",
     "cta": "Install",
     "dismiss": "Not now"
+  },
+  "checkin": {
+    "dismiss": "Not now",
+    "upload": "Got a new record for your baby? Add it to keep everything up to date.",
+    "uploadCta": "Upload",
+    "weight": "How much does your baby weigh now? Ask their history how the curve looks.",
+    "weightCta": "Ask",
+    "doubt": "Any health question this week? I'm here to answer.",
+    "doubtCta": "Ask",
+    "checkup": "A check-up or vaccine coming up? Add it as soon as you have it.",
+    "checkupCta": "Add",
+    "feeding": "Any change in feeding or sleep? Note it down in their check-in.",
+    "feedingCta": "Log"
   }
 }
