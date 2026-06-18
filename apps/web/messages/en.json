@@ -174,7 +174,13 @@
     "or": "or",
     "browse": "Choose a file",
     "uploading": "Uploading…",
-    "success": "Uploaded. Running OCR…"
+    "success": "Uploaded. Running OCR…",
+    "hint": "PDF, PNG, JPG or audio · up to 25 MB",
+    "dropActive": "Drop the file to upload",
+    "errType": "That file type isn't supported. Upload a PDF, an image (PNG/JPG) or audio.",
+    "errSize": "That file is too large (max 25 MB). Try a lighter photo or PDF.",
+    "errGeneric": "Upload failed. Check your connection and try again.",
+    "retry": "Try again"
   },
   "signin": {
     "emailPlaceholder": "you@email.com",

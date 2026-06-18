@@ -174,7 +174,13 @@
     "or": "o",
     "browse": "Elige un archivo",
     "uploading": "Subiendo…",
-    "success": "Subido. Procesando OCR…"
+    "success": "Subido. Procesando OCR…",
+    "hint": "PDF, PNG, JPG o audio · hasta 25 MB",
+    "dropActive": "Suelta el archivo para subirlo",
+    "errType": "Ese tipo de archivo no vale. Sube un PDF, una imagen (PNG/JPG) o un audio.",
+    "errSize": "El archivo pesa demasiado (máximo 25 MB). Prueba con una foto o un PDF más ligero.",
+    "errGeneric": "No se pudo subir. Revisa tu conexión e inténtalo de nuevo.",
+    "retry": "Reintentar"
   },
   "signin": {
     "emailPlaceholder": "tu@email.com",

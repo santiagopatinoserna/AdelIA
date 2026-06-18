@@ -174,7 +174,13 @@
     "or": "ou",
     "browse": "Choisir un fichier",
     "uploading": "Téléversement…",
-    "success": "Téléversé. OCR en cours…"
+    "success": "Téléversé. OCR en cours…",
+    "hint": "PDF, PNG, JPG ou audio · jusqu'à 25 Mo",
+    "dropActive": "Déposez le fichier pour l'envoyer",
+    "errType": "Ce type de fichier n'est pas pris en charge. Envoyez un PDF, une image (PNG/JPG) ou un audio.",
+    "errSize": "Ce fichier est trop volumineux (max 25 Mo). Essayez une photo ou un PDF plus léger.",
+    "errGeneric": "Échec de l'envoi. Vérifiez votre connexion et réessayez.",
+    "retry": "Réessayer"
   },
   "signin": {
     "emailPlaceholder": "vous@email.com",
