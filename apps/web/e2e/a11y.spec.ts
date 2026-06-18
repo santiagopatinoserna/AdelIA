@@ -44,7 +44,9 @@ test("a11y: authenticated surfaces", async ({ browser }) => {
   for (const [path, label] of [
     ["/es/dashboard", "dashboard"],
     ["/es/dashboard/settings", "settings"],
+    ["/es/dashboard/chat", "chat"],
     ["/es/dashboard/briefings", "briefings"],
+    ["/es/dashboard/briefings/new", "briefings/new"],
     ["/es/dashboard/questionnaire", "questionnaire"],
     ["/es/dashboard/consulta", "consulta"],
     ["/es/dashboard/ingestion", "ingestion"],
