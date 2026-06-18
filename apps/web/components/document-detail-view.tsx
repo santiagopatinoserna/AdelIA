@@ -1,14 +1,15 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useTranslations } from "next-intl";
-import { ArrowLeft } from "lucide-react";
+import { ArrowLeft, RotateCcw } from "lucide-react";
 
 import { Link } from "@/lib/navigation";
 import { getDocument, type DocumentDTO } from "@/lib/api-client-browser";
 import { StatusBadge } from "@/components/status-badge";
 
 const POLL_INTERVAL_MS = 2500;
+const MAX_POLLS = 120; // ~5 min — then stop the spinner and offer a reload
 
 export function DocumentDetailView({
   initialDoc,
@@ -18,13 +19,24 @@ export function DocumentDetailView({
   locale: string;
 }) {
   const [doc, setDoc] = useState<DocumentDTO>(initialDoc);
+  const [timedOut, setTimedOut] = useState(false);
+  const pollsRef = useRef(0);
   const t = useTranslations("dashboard");
 
   const processing = doc.status === "processing";
 
   useEffect(() => {
     if (!processing) return;
+    pollsRef.current = 0;
+    setTimedOut(false);
     const timer = setInterval(async () => {
+      // Don't poll forever — a stuck OCR job should surface a recoverable state.
+      if (pollsRef.current >= MAX_POLLS) {
+        setTimedOut(true);
+        clearInterval(timer);
+        return;
+      }
+      pollsRef.current += 1;
       try {
         const fresh = await getDocument(doc.id);
         setDoc(fresh);
@@ -54,12 +66,23 @@ export function DocumentDetailView({
           dateStyle: "medium",
           timeStyle: "short",
         }).format(new Date(doc.created_at))}
-        {" · "}
-        {t("entitiesAndChunks", { count: doc.entity_count, chunks: doc.chunk_count })}
+        {doc.raw_text ? `  ·  ${t("docReady")}` : ""}
       </p>
       <section className="ad-card mt-8 p-6">
         {doc.raw_text ? (
           <pre className="whitespace-pre-wrap font-sans text-sm leading-relaxed text-ink">{doc.raw_text}</pre>
+        ) : timedOut ? (
+          <div className="text-center">
+            <p className="text-sm text-ink-soft">{t("ocrTimeout")}</p>
+            <button
+              type="button"
+              onClick={() => window.location.reload()}
+              className="ad-btn ad-btn-ghost mt-3 px-4 py-2 text-sm"
+            >
+              <RotateCcw className="h-3.5 w-3.5" strokeWidth={2} />
+              {t("ocrReload")}
+            </button>
+          </div>
         ) : (
           <p className="animate-pulse text-ink-faint">{t("ocrProcessing")}</p>
         )}

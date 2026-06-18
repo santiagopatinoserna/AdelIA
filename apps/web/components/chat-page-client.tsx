@@ -1,7 +1,8 @@
 "use client";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { useTranslations } from "next-intl";
-import { Menu, Stethoscope, Sparkles, ArrowUpRight, ArrowDown } from "lucide-react";
+import { Menu, Stethoscope, Sparkles, ArrowUpRight, ArrowDown, UploadCloud, FileText } from "lucide-react";
+import { Link } from "@/lib/navigation";
 import {
   type ChatSession,
   type Citation,
@@ -24,10 +25,12 @@ export function ChatPageClient({
   initialSessions,
   locale,
   titleText,
+  hasDocs,
 }: {
   initialSessions: ChatSession[];
   locale: string;
   titleText: string;
+  hasDocs: boolean;
 }) {
   const t = useTranslations("chat");
   const [sessions, setSessions] = useState<ChatSession[]>(initialSessions);
@@ -129,7 +132,7 @@ export function ChatPageClient({
             const updated = [...prev];
             const last = updated[updated.length - 1];
             if (last?.role === "assistant") {
-              updated[updated.length - 1] = { ...last, content: `Error: ${event.content}` };
+              updated[updated.length - 1] = { ...last, content: t("errorAnswer") };
             }
             return updated;
           });
@@ -147,7 +150,7 @@ export function ChatPageClient({
         const updated = [...prev];
         const last = updated[updated.length - 1];
         if (last?.role === "assistant" && !last.content) {
-          updated[updated.length - 1] = { ...last, content: `Error: ${String(e)}` };
+          updated[updated.length - 1] = { ...last, content: t("errorAnswer") };
         }
         return updated;
       });
@@ -183,7 +186,22 @@ export function ChatPageClient({
         </header>
         <div ref={scrollRef} onScroll={onScroll} className="flex-1 overflow-y-auto px-4 py-6 md:px-6">
           <div className="mx-auto max-w-3xl">
-            {messages.length === 0 ? (
+            {messages.length === 0 && !hasDocs ? (
+              <div className="ad-rise mx-auto mt-10 max-w-md text-center md:mt-16">
+                <span className="mx-auto inline-flex h-14 w-14 items-center justify-center rounded-2xl bg-pine-50 text-pine-500 ring-1 ring-pine-100">
+                  <FileText className="h-7 w-7" strokeWidth={1.8} />
+                </span>
+                <h2 className="mt-5 font-display text-2xl text-pine-900">{t("noDocTitle")}</h2>
+                <p className="mx-auto mt-2 max-w-sm text-sm text-ink-soft">{t("noDocBody")}</p>
+                <Link
+                  href="/dashboard/upload"
+                  className="ad-btn ad-btn-primary mt-6 inline-flex px-5 py-3 text-sm"
+                >
+                  <UploadCloud className="h-4 w-4" strokeWidth={2.2} />
+                  {t("noDocCta")}
+                </Link>
+              </div>
+            ) : messages.length === 0 ? (
               <div className="ad-rise mx-auto mt-10 max-w-xl text-center md:mt-16">
                 <span className="mx-auto inline-flex h-14 w-14 items-center justify-center rounded-2xl bg-pine-50 text-pine-500 ring-1 ring-pine-100">
                   <Stethoscope className="h-7 w-7" strokeWidth={1.8} />

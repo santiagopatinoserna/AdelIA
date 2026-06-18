@@ -164,7 +164,7 @@
       "failed": "Échec"
     },
     "entitiesAndChunks": "{count, plural, =0 {Aucune donnée extraite} =1 {1 donnée} other {# données}} · {chunks, plural, =0 {Aucun extrait} =1 {1 extrait} other {# extraits}}",
-    "ocrProcessing": "Lecture du document en cours… mise à jour automatique",
+    "ocrProcessing": "On lit ton document… mise à jour automatique",
     "settingsLink": "Paramètres du compte",
     "navImport": "Importer",
     "navInsights": "Insights",
@@ -178,32 +178,48 @@
     "step3Title": "Apporte-le au pédiatre",
     "step3Body": "AdelIA prépare une synthèse claire d'une page pour la consultation.",
     "firstUploadCta": "Ajouter mon premier document",
-    "orQuestionnaire": "Pas encore de documents ? Commence par le suivi de ton bébé"
+    "orQuestionnaire": "Pas encore de documents ? Commence par le suivi de ton bébé",
+    "ocrTimeout": "Ça prend plus de temps que d'habitude. Recharge dans un instant ou réessaie.",
+    "ocrReload": "Recharger",
+    "docReady": "Document prêt · tu peux poser tes questions"
   },
   "upload": {
     "title": "Importer un document",
-    "drop": "Glisse ici un PDF, une image ou un audio",
+    "drop": "Touche pour choisir un fichier",
     "or": "ou",
     "browse": "Choisir un fichier",
     "uploading": "Import en cours…",
     "success": "Importé. Lecture du document en cours…",
-    "hint": "PDF, PNG, JPG ou audio · jusqu'à 25 Mo",
+    "hint": "Documents PDF, photos (JPG/PNG) ou notes vocales · jusqu'à 25 Mo",
     "dropActive": "Déposez le fichier pour l'importer",
     "errType": "Ce format n'est pas pris en charge. Importe un PDF, une image (PNG/JPG) ou un audio.",
     "errSize": "Ce fichier est trop volumineux (25 Mo max). Essaie une photo ou un PDF plus léger.",
     "errGeneric": "L'import a échoué. Vérifie ta connexion et réessaie.",
-    "retry": "Réessayer"
+    "retry": "Réessayer",
+    "intro": "Ajoute le carnet de santé de ton bébé, une analyse ou le compte-rendu du pédiatre.",
+    "dropDesktop": "ou glisse-le ici",
+    "examplesToggle": "Qu'est-ce que je peux ajouter ?",
+    "examples": "Ex : une photo du carnet, le PDF d'une analyse ou une note vocale du pédiatre.",
+    "successToast": "Document ajouté. On le lit — tu peux attendre ou continuer à explorer."
   },
   "signin": {
     "emailPlaceholder": "toi@exemple.com",
     "sendMagicLink": "Recevoir mon magic link",
-    "emailLabel": "Adresse e-mail"
+    "emailLabel": "Adresse e-mail",
+    "heading": "Connecte-toi avec ton email",
+    "instr": "Entre ton email : on t'envoie un lien privé pour te connecter, sans mot de passe.",
+    "sending": "Envoi…",
+    "sentTitle": "Regarde tes emails ✉️",
+    "sentBody": "On a envoyé un lien sécurisé à {email}. Il expire dans 15 min. Tu ne le vois pas ? Vérifie tes spams.",
+    "resend": "Renvoyer un lien",
+    "errorMsg": "On n'a pas pu envoyer l'email. Vérifie ta connexion et réessaie.",
+    "secure": "Tes infos sont chiffrées et rien qu'à toi."
   },
   "chat": {
-    "title": "Chat avec votre dossier médical",
+    "title": "Demander à AdelIA",
     "newSession": "Nouvelle conversation",
     "emptyHistory": "Pas encore de conversations",
-    "placeholder": "Interrogez votre dossier médical…",
+    "placeholder": "Ex : Mon bébé dort mal et régurgite après les repas.",
     "send": "Envoyer",
     "thinking": "Réflexion…",
     "noContext": "Je n'ai pas assez d'informations.",
@@ -211,17 +227,21 @@
     "deleteSession": "Supprimer",
     "openSessions": "Voir les conversations",
     "closeSessions": "Fermer",
-    "emptyTitle": "Interrogez votre historique médical",
-    "emptySubtitle": "Chaque réponse s'appuie sur vos données et des preuves cliniques citées.",
-    "example1": "Que devrais-je demander à mon prochain rendez-vous ?",
-    "example2": "Y a-t-il des interactions entre mes médicaments ?",
-    "example3": "Résume mes derniers résultats et signale ce qui est hors normes",
+    "emptyTitle": "Pose ta question à AdelIA",
+    "emptySubtitle": "Pose ta question normalement. Chaque réponse s'appuie sur l'historique de ton bébé et des études médicales citées.",
+    "example1": "Mon bébé régurgite beaucoup, c'est normal ?",
+    "example2": "Quand faut-il s'inquiéter d'une fièvre ?",
+    "example3": "Résume sa courbe de croissance.",
     "stop": "Arrêter",
     "copy": "Copier",
     "copied": "Copié",
     "scrollToLatest": "Aller au dernier",
     "citationSourceUserData": "Vos données",
-    "citationSourceEvidence": "Preuves cliniques"
+    "citationSourceEvidence": "Preuves cliniques",
+    "noDocTitle": "Ajoute d'abord un document",
+    "noDocBody": "Pour répondre sur ton bébé, AdelIA a besoin d'au moins un document : le carnet, une analyse ou le compte-rendu du pédiatre.",
+    "noDocCta": "Ajouter un document",
+    "errorAnswer": "Je n'ai pas pu traiter ta question. Vérifie ta connexion et réessaie."
   },
   "ingestion": {
     "title": "Importer des données",
@@ -481,7 +501,8 @@
     "copy": "Copier",
     "copied": "Copié",
     "valoracionStale": "Vous avez modifié des réponses depuis cette évaluation — régénérez-la pour la mettre à jour.",
-    "actionError": "Impossible de terminer. Vérifiez votre connexion et réessayez."
+    "actionError": "Impossible de terminer. Vérifiez votre connexion et réessayez.",
+    "valoracionDisclaimerTop": "C'est indicatif et sourcé, ce n'est pas un diagnostic. Toi et ton pédiatre décidez. En cas d'urgence, appelle les secours."
   },
   "consulta": {
     "title": "Mode Consultation",
