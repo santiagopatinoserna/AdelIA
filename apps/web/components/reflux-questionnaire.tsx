@@ -106,7 +106,7 @@ export function RefluxQuestionnaire() {
   if (error) {
     return (
       <div className="mx-auto max-w-2xl px-6 py-10">
-        <div className="rounded-xl border border-clay-100 bg-clay-50 p-4 text-sm text-clay-700">
+        <div role="alert" className="rounded-xl border border-clay-100 bg-clay-50 p-4 text-sm text-clay-700">
           {t("loadError")}
         </div>
       </div>

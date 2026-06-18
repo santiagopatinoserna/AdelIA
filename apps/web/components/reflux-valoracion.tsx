@@ -242,7 +242,7 @@ export function RefluxValoracion({
       )}
 
       {error && (
-        <div className="mt-4 rounded-xl border border-clay-100 bg-clay-50 p-3 text-sm text-clay-700">
+        <div role="alert" className="mt-4 rounded-xl border border-clay-100 bg-clay-50 p-3 text-sm text-clay-700">
           {t("valoracionError")}
         </div>
       )}
