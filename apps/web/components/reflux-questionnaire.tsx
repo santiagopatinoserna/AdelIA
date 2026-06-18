@@ -234,6 +234,8 @@ function QuestionCard({
             <input
               type="number"
               inputMode="decimal"
+              min={0}
+              step="any"
               value={(value as string) ?? ""}
               onChange={(e) => onChange(e.target.value)}
               aria-label={q.text}
