@@ -168,7 +168,17 @@
     "settingsLink": "Account settings",
     "navImport": "Import",
     "navInsights": "Insights",
-    "documentsCount": "{count, plural, =1 {1 document} other {# documents}}"
+    "documentsCount": "{count, plural, =1 {1 document} other {# documents}}",
+    "welcomeTitle": "Welcome to AdelIA",
+    "welcomeSubtitle": "Bring your baby's health into one place and ask anything. Start in 3 steps.",
+    "step1Title": "Upload their records",
+    "step1Body": "A photo or PDF: the health booklet, a lab result, the doctor's report.",
+    "step2Title": "Ask in your own words",
+    "step2Body": "Answers backed by cited medical research — no vague replies.",
+    "step3Title": "Take it to the pediatrician",
+    "step3Body": "AdelIA prepares a clear one-page summary for the visit.",
+    "firstUploadCta": "Upload the first record",
+    "orQuestionnaire": "No records yet? Start with your baby's check-in"
   },
   "upload": {
     "title": "Upload document",

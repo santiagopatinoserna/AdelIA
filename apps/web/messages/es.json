@@ -168,7 +168,17 @@
     "settingsLink": "Ajustes de cuenta",
     "navImport": "Importar",
     "navInsights": "Insights",
-    "documentsCount": "{count, plural, =1 {1 documento} other {# documentos}}"
+    "documentsCount": "{count, plural, =1 {1 documento} other {# documentos}}",
+    "welcomeTitle": "Bienvenida a AdelIA",
+    "welcomeSubtitle": "Reúne la salud de tu bebé en un solo sitio y pregúntale lo que quieras. Empieza en 3 pasos.",
+    "step1Title": "Sube sus informes",
+    "step1Body": "Una foto o un PDF: la cartilla, una analítica o el informe del médico.",
+    "step2Title": "Pregunta en tu idioma",
+    "step2Body": "Te responde con estudios médicos citados, nada de respuestas vagas.",
+    "step3Title": "Llévalo al pediatra",
+    "step3Body": "AdelIA prepara un resumen claro de una página para la consulta.",
+    "firstUploadCta": "Subir el primer informe",
+    "orQuestionnaire": "¿Aún no tienes informes? Empieza por el control de tu bebé"
   },
   "upload": {
     "title": "Subir documento",
