@@ -438,7 +438,8 @@
     },
     "staleBadge": "Desactualizado",
     "noRender": "No hay versión renderizada disponible.",
-    "actionError": "No se pudo completar. Revisa tu conexión e inténtalo de nuevo."
+    "actionError": "No se pudo completar. Revisa tu conexión e inténtalo de nuevo.",
+    "navLabel": "Resúmenes"
   },
   "settings": {
     "title": "Ajustes de cuenta",

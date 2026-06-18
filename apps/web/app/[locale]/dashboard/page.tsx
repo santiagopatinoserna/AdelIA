@@ -39,6 +39,7 @@ export default async function DashboardPage({
   const t = await getTranslations("dashboard");
   const tq = await getTranslations("questionnaire");
   const tcons = await getTranslations("consulta");
+  const tb = await getTranslations("briefing");
   let docs: DocumentDTO[] = [];
   try {
     docs = await listDocuments();
@@ -49,7 +50,7 @@ export default async function DashboardPage({
 
   const nav = [
     { href: "/dashboard/chat", icon: MessagesSquare, label: "Chat" },
-    { href: "/dashboard/briefings", icon: ClipboardList, label: "Briefings" },
+    { href: "/dashboard/briefings", icon: ClipboardList, label: tb("navLabel") },
     { href: "/dashboard/questionnaire", icon: Baby, label: tq("navLabel") },
     { href: "/dashboard/consulta", icon: Stethoscope, label: tcons("navLabel") },
     { href: "/dashboard/ingestion", icon: Download, label: t("navImport") },
