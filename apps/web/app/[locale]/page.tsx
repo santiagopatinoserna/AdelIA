@@ -550,14 +550,14 @@ export default function HomePage() {
               href={GITHUB_URL}
               target="_blank"
               rel="noreferrer"
-              className="inline-flex items-center gap-1.5 text-ink-soft transition-colors hover:text-pine-700"
+              className="inline-flex items-center gap-1.5 py-1.5 text-ink-soft transition-colors hover:text-pine-700"
             >
               <Code2 className="h-4 w-4" strokeWidth={2} />
               {t("home.footerGithub")}
             </a>
             <Link
               href="/dashboard"
-              className="inline-flex items-center gap-1.5 text-ink-soft transition-colors hover:text-pine-700"
+              className="inline-flex items-center gap-1.5 py-1.5 text-ink-soft transition-colors hover:text-pine-700"
             >
               <ArrowRight className="h-4 w-4" strokeWidth={2} />
               {t("home.footerDashboard")}

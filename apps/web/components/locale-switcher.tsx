@@ -20,8 +20,8 @@ export function LocaleSwitcher({ current }: { current: string }) {
           aria-current={l === current ? "true" : undefined}
           className={
             l === current
-              ? "rounded-md bg-pine-600 px-2 py-1 font-semibold text-white"
-              : "rounded-md px-2 py-1 font-medium text-ink-soft transition-colors hover:bg-pine-50 hover:text-pine-700"
+              ? "inline-flex min-h-[34px] items-center rounded-md bg-pine-600 px-2.5 py-1.5 font-semibold text-white"
+              : "inline-flex min-h-[34px] items-center rounded-md px-2.5 py-1.5 font-medium text-ink-soft transition-colors hover:bg-pine-50 hover:text-pine-700"
           }
         >
           {LABELS[l]}
