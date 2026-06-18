@@ -23,7 +23,7 @@ export default function CcdImportPage() {
       const res = await ingestion.importCcd(file);
       setResult(res);
     } catch (e) {
-      setError(String(e));
+      setError(t("common.actionError"));
     } finally {
       setSubmitting(false);
     }

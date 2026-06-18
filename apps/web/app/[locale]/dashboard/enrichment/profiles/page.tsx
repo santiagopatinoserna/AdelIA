@@ -24,7 +24,7 @@ export default function ProfilesPage() {
       const list = await enrichment.listProfiles();
       setProfiles(list);
     } catch (e) {
-      setError(String(e));
+      setError(t("common.actionError"));
     }
   }
 
@@ -47,7 +47,7 @@ export default function ProfilesPage() {
       setShowAdd(false);
       await refresh();
     } catch (e) {
-      setError(String(e));
+      setError(t("common.actionError"));
     }
   }
 
@@ -56,7 +56,7 @@ export default function ProfilesPage() {
       await enrichment.setDefaultProfile(id);
       await refresh();
     } catch (e) {
-      setError(String(e));
+      setError(t("common.actionError"));
     }
   }
 
@@ -66,7 +66,7 @@ export default function ProfilesPage() {
       await enrichment.deleteProfile(id);
       await refresh();
     } catch (e) {
-      setError(String(e));
+      setError(t("common.actionError"));
     }
   }
 
@@ -78,7 +78,7 @@ export default function ProfilesPage() {
       </h1>
 
       {error && (
-        <div className="mt-4 rounded-lg border border-clay-100 bg-clay-50 p-3 text-sm text-clay-700">
+        <div role="alert" className="mt-4 rounded-lg border border-clay-100 bg-clay-50 p-3 text-sm text-clay-700">
           {error}
         </div>
       )}

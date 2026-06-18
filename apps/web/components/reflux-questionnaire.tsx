@@ -237,7 +237,7 @@ function QuestionCard({
               value={(value as string) ?? ""}
               onChange={(e) => onChange(e.target.value)}
               aria-label={q.text}
-              className="w-32 rounded-xl border border-line-strong bg-surface px-3 py-2 text-sm text-ink focus:border-pine-400 focus:outline-none focus:ring-2 focus:ring-pine-100"
+              className="w-32 rounded-xl border border-line-strong bg-surface px-3 py-2 text-base text-ink focus:border-pine-400 focus:outline-none focus:ring-2 focus:ring-pine-100"
             />
             {q.unit && <span className="text-sm text-ink-faint">{q.unit}</span>}
           </div>
@@ -250,7 +250,7 @@ function QuestionCard({
             onChange={(e) => onChange(e.target.value)}
             placeholder={t("answerPlaceholder")}
             aria-label={q.text}
-            className="w-full rounded-xl border border-line-strong bg-surface px-3 py-2 text-sm text-ink placeholder:text-ink-faint focus:border-pine-400 focus:outline-none focus:ring-2 focus:ring-pine-100"
+            className="w-full rounded-xl border border-line-strong bg-surface px-3 py-2 text-base text-ink placeholder:text-ink-faint focus:border-pine-400 focus:outline-none focus:ring-2 focus:ring-pine-100"
           />
         )}
 

@@ -22,7 +22,7 @@ export function AccountSettingsView({ email }: { email: string }) {
       if (res.status !== 204) throw new Error(`HTTP ${res.status}`);
       await signOut({ callbackUrl: "/" });
     } catch (e) {
-      setError(String(e));
+      setError(t("actionError"));
       setBusy(false);
     }
   }

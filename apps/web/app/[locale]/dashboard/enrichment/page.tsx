@@ -60,7 +60,7 @@ export default async function EnrichmentDashboardPage({ params }: Props) {
       <p className="mt-1 text-sm text-ink-soft">{t("enrichment.subtitle")}</p>
 
       {!stats && (
-        <div className="mt-6 rounded-xl border border-clay-100 bg-clay-50 p-3 text-sm text-clay-700">
+        <div role="alert" className="mt-6 rounded-xl border border-clay-100 bg-clay-50 p-3 text-sm text-clay-700">
           {t("enrichment.coverageUnavailable")}
         </div>
       )}

@@ -150,7 +150,7 @@ export function RefluxValoracion({
         }
       }
     } catch (e) {
-      setError(String(e));
+      setError(t("actionError"));
     } finally {
       setBusy(false);
     }

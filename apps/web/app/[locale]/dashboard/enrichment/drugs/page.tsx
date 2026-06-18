@@ -83,8 +83,8 @@ export default function DrugInteractionsPage() {
             <button
               type="button"
               onClick={() => removeMed(i)}
-              aria-label="Remove"
-              className="text-ink-faint transition-colors hover:text-clay-600"
+              aria-label={t("common.remove")}
+              className="-mr-1 rounded-full p-1 text-ink-faint transition-colors hover:text-clay-600"
             >
               <X className="h-4 w-4" strokeWidth={2} />
             </button>
@@ -98,11 +98,11 @@ export default function DrugInteractionsPage() {
         disabled={meds.length < 2 || loading}
         className="ad-btn ad-btn-primary mt-4 px-4 py-2 text-sm disabled:opacity-50"
       >
-        {loading ? "..." : t("enrichment.drugs.check")}
+        {loading ? t("common.loading") : t("enrichment.drugs.check")}
       </button>
 
       {error && (
-        <div className="mt-4 rounded-xl border border-clay-100 bg-clay-50 p-3 text-sm text-clay-700">
+        <div role="alert" className="mt-4 rounded-xl border border-clay-100 bg-clay-50 p-3 text-sm text-clay-700">
           {error}
         </div>
       )}

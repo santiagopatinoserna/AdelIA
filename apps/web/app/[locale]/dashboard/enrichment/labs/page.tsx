@@ -25,6 +25,7 @@ export default function LabRangesPage() {
   const [results, setResults] = useState<LabEvalResult[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [evaluated, setEvaluated] = useState(false);
 
   function update(i: number, field: keyof LabInput, value: string) {
     const next = [...labs];
@@ -50,6 +51,7 @@ export default function LabRangesPage() {
         sex: sex || null,
       });
       setResults(res);
+      setEvaluated(true);
     } catch {
       setError(t("enrichment.searchError"));
     } finally {
@@ -100,8 +102,8 @@ export default function LabRangesPage() {
             <button
               type="button"
               onClick={() => removeRow(i)}
-              aria-label="Remove"
-              className="px-2 text-ink-faint transition-colors hover:text-clay-600"
+              aria-label={t("common.remove")}
+              className="rounded-lg px-2 py-1.5 text-ink-faint transition-colors hover:text-clay-600"
             >
               <X className="h-4 w-4" strokeWidth={2} />
             </button>
@@ -122,11 +124,11 @@ export default function LabRangesPage() {
         disabled={loading || labs.every((l) => !l.name)}
         className="ad-btn ad-btn-primary mt-4 px-4 py-2 text-sm disabled:opacity-50"
       >
-        {loading ? "…" : t("enrichment.labs.evaluate")}
+        {loading ? t("common.loading") : t("enrichment.labs.evaluate")}
       </button>
 
       {error && (
-        <div className="mt-4 rounded-xl border border-clay-100 bg-clay-50 p-3 text-sm text-clay-700">
+        <div role="alert" className="mt-4 rounded-xl border border-clay-100 bg-clay-50 p-3 text-sm text-clay-700">
           {error}
         </div>
       )}
@@ -153,6 +155,10 @@ export default function LabRangesPage() {
           </li>
         ))}
       </ul>
+
+      {evaluated && !loading && !error && results.length === 0 && (
+        <p className="mt-4 text-sm text-ink-faint">{t("enrichment.labs.noResults")}</p>
+      )}
     </main>
   );
 }

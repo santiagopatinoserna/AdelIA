@@ -31,7 +31,7 @@ export default function BriefingDetailPage() {
       const b = await briefingsApi.getById(id);
       setBriefing(b);
     } catch (e) {
-      setError(String(e));
+      setError(t("common.actionError"));
     }
   }, [id]);
 
@@ -52,7 +52,7 @@ export default function BriefingDetailPage() {
       const newBriefing = await briefingsApi.regenerate(id);
       router.push(`/${locale}/dashboard/briefings/${newBriefing.id}`);
     } catch (e) {
-      setError(String(e));
+      setError(t("common.actionError"));
       setRegenerating(false);
     }
   }

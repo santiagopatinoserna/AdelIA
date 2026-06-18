@@ -155,8 +155,8 @@ export function ConsultaMode() {
         else if (ev.type === "final") setCitations(ev.citations ?? []);
         else if (ev.type === "error") setError(ev.content);
       }
-    } catch (e) {
-      setError(String(e));
+    } catch {
+      setError(t("error"));
     } finally {
       setBusy(false);
     }
@@ -183,7 +183,7 @@ export function ConsultaMode() {
           onChange={(e) => setInput(e.target.value)}
           placeholder={t("placeholder")}
           aria-label={t("placeholder")}
-          className="mt-2 w-full resize-y rounded-xl border border-line-strong bg-surface px-3 py-2.5 text-sm leading-relaxed text-ink placeholder:text-ink-faint focus:border-pine-400 focus:outline-none focus:ring-2 focus:ring-pine-100"
+          className="mt-2 w-full resize-y rounded-xl border border-line-strong bg-surface px-3 py-2.5 text-base leading-relaxed text-ink placeholder:text-ink-faint focus:border-pine-400 focus:outline-none focus:ring-2 focus:ring-pine-100"
         />
         <div className="mt-3 flex items-center justify-between gap-2">
           {micSupported ? (
@@ -277,7 +277,7 @@ export function ConsultaMode() {
       )}
 
       {error && (
-        <div className="mt-4 rounded-xl border border-clay-100 bg-clay-50 p-3 text-sm text-clay-700">
+        <div role="alert" className="mt-4 rounded-xl border border-clay-100 bg-clay-50 p-3 text-sm text-clay-700">
           {t("error")}
         </div>
       )}
