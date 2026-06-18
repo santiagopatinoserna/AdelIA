@@ -438,7 +438,8 @@
     },
     "staleBadge": "Stale",
     "noRender": "No rendered version available.",
-    "actionError": "Couldn't complete. Check your connection and try again."
+    "actionError": "Couldn't complete. Check your connection and try again.",
+    "navLabel": "Briefings"
   },
   "settings": {
     "title": "Account settings",
