@@ -213,7 +213,8 @@
     "dropDesktop": "or drag it here",
     "examplesToggle": "What can I upload?",
     "examples": "E.g. a photo of the health record, a lab PDF, or a voice note from the doctor.",
-    "successToast": "Document uploaded. We're reading it — you can wait or keep exploring."
+    "successToast": "Document uploaded. We're reading it — you can wait or keep exploring.",
+    "goDashboard": "Go to my dashboard"
   },
   "signin": {
     "emailPlaceholder": "you@email.com",
@@ -403,7 +404,12 @@
       "namePlaceholder": "HbA1c, glucose, ldl, ...",
       "valuePlaceholder": "value",
       "noResults": "No results for those values.",
-      "needOne": "Enter at least one test to evaluate"
+      "needOne": "Enter at least one test to evaluate",
+      "sexChoose": "Choose…",
+      "sexBoy": "Boy",
+      "sexGirl": "Girl",
+      "sexHint": "Normal values vary by the baby's sex.",
+      "sexRequired": "Choose the baby's sex to evaluate."
     },
     "trials": {
       "search": "Search trials",
@@ -538,7 +544,8 @@
       "title": "We couldn't generate the summary",
       "body": "This can happen if a document is unreadable. Try again or add more documents.",
       "uploadMore": "Upload more documents"
-    }
+    },
+    "generatingPatience": "This usually takes 1-2 minutes. You can wait here."
   },
   "settings": {
     "title": "Account settings",

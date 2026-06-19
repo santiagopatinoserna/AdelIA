@@ -177,6 +177,13 @@ export default function BriefingDetailPage() {
 
 function BriefingLoading({ title }: { title: string }) {
   const t = useTranslations();
+  // A live elapsed counter reassures on slow connections that work is ongoing
+  // (not frozen) — the mom-QA pass flagged the bare spinner as anxiety-inducing.
+  const [secs, setSecs] = useState(0);
+  useEffect(() => {
+    const id = setInterval(() => setSecs((s) => s + 1), 1000);
+    return () => clearInterval(id);
+  }, []);
   return (
     <div className="ad-card space-y-4 p-5" aria-live="polite">
       <div className="flex items-center gap-3">
@@ -187,7 +194,9 @@ function BriefingLoading({ title }: { title: string }) {
         />
         <div>
           <p className="text-sm font-medium text-ink">{title}</p>
-          <p className="text-sm text-ink-soft">{t("briefing.generatingSubtitle")}</p>
+          <p className="text-sm text-ink-soft">
+            {t("briefing.generatingPatience")} · {secs}s
+          </p>
         </div>
       </div>
       <div className="ad-rise space-y-3">
