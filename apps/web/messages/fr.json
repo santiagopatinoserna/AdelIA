@@ -552,5 +552,26 @@
     "checkupCta": "Ajouter",
     "feeding": "Un changement dans son alimentation ou son sommeil ? Note-le dans son suivi.",
     "feedingCta": "Noter"
+  },
+  "billing": {
+    "title": "Commence gratuitement, 30 jours",
+    "subtitle": "Toute la santé de ton bébé avec une IA qui répond, preuves à l'appui. Essaie un mois — rien n'est débité aujourd'hui.",
+    "priceFree": "Gratuit 30 jours",
+    "priceThen": "puis 8€/mois",
+    "f1": "Ajoute tous les documents de ton bébé, sans limite",
+    "f2": "Pose toutes tes questions : réponses sourcées dans de vraies études",
+    "f3": "Des résumés prêts pour le pédiatre",
+    "f4": "Tes données chiffrées et rien qu'à toi. Annule quand tu veux.",
+    "startCta": "Commencer mon mois gratuit",
+    "cardNote": "On demande ta carte pour que le service ne s'arrête pas à la fin de l'essai. Rien n'est débité aujourd'hui.",
+    "secure": "Paiement sécurisé avec Stripe. Ta carte ne passe jamais par nos serveurs.",
+    "errorMsg": "Impossible d'ouvrir le paiement. Réessaie dans un instant.",
+    "activeTitle": "Tout est prêt ✨",
+    "activeBody": "Ton abonnement est actif.",
+    "trialUntil": "Ton mois gratuit est actif. Premier débit : {date}.",
+    "manageCta": "Gérer l'abonnement ou la carte",
+    "goDashboard": "Aller à mon espace",
+    "successNote": "C'est parti ! Ton mois gratuit a commencé. Profite d'AdelIA.",
+    "canceledNote": "Pas de souci — rien n'a été débité. Tu peux commencer quand tu veux."
   }
 }

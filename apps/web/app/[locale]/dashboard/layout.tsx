@@ -3,6 +3,7 @@ import { redirect } from "next/navigation";
 import { getLocale, getTranslations } from "next-intl/server";
 import { Settings, UploadCloud } from "lucide-react";
 
+import { billingStatus } from "@/lib/api-client";
 import { Link } from "@/lib/navigation";
 import { LocaleSwitcher } from "@/components/locale-switcher";
 import { DashboardSectionNav } from "@/components/dashboard-section-nav";
@@ -20,6 +21,27 @@ export default async function DashboardLayout({
   const locale = await getLocale();
   const session = await auth();
   if (!session) redirect(`/${locale}/signin`);
+
+  // Paywall: a mom needs an active trial or subscription to use the product.
+  // Fail-open on a transient API error so a hiccup never locks out a paying
+  // user; Stripe webhooks remain the source of truth for the status itself.
+  try {
+    const billing = await billingStatus();
+    if (!billing.active) redirect(`/${locale}/billing`);
+  } catch (err) {
+    // Next's redirect() throws a NEXT_REDIRECT signal — never swallow it.
+    if (
+      typeof err === "object" &&
+      err !== null &&
+      "digest" in err &&
+      typeof (err as { digest?: unknown }).digest === "string" &&
+      (err as { digest: string }).digest.startsWith("NEXT_REDIRECT")
+    ) {
+      throw err;
+    }
+    // genuine fetch error → allow access (fail open)
+  }
+
   const t = await getTranslations("dashboard");
 
   return (

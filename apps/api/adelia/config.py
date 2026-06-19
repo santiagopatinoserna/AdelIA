@@ -20,6 +20,14 @@ class Settings(BaseSettings):
     mistral_api_key: str = ""
     openai_api_key: str = ""
 
+    # Stripe billing — 30-day free trial then a recurring subscription. Card is
+    # required up front (payment_method_collection="always"); no charge during
+    # the trial. Empty secret => billing disabled (endpoints return 503).
+    stripe_secret_key: str = ""
+    stripe_webhook_secret: str = ""
+    stripe_price_id: str = ""  # the recurring Price (e.g. 8€/mo) the trial is on
+    stripe_trial_days: int = 30
+
     # Generation LLM (chat answers + briefings). Embeddings/OCR always use
     # Mistral — OpenAI has no embeddings parity here. Flip to "openai" once the
     # OpenAI account has credits; "mistral" is the working default.
