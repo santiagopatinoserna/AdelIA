@@ -33,10 +33,12 @@ export function BriefingDetail({ briefing }: Props) {
   }
 
   return (
-    <div
-      ref={rootRef}
-      className="briefing-render ad-card p-6"
-      dangerouslySetInnerHTML={{ __html: briefing.html_render }}
-    />
+    <div className="ad-card overflow-x-auto p-4 sm:p-6">
+      <div
+        ref={rootRef}
+        className="briefing-render prose prose-sm max-w-full prose-table:block prose-table:overflow-x-auto"
+        dangerouslySetInnerHTML={{ __html: briefing.html_render }}
+      />
+    </div>
   );
 }

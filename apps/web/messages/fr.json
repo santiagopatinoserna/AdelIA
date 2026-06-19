@@ -454,7 +454,10 @@
       "activeUntil": "Lien actif · expire le {date}",
       "revoke": "Révoquer",
       "revokeConfirm": "Révoquer ce lien ? Toute personne disposant de l'URL ne pourra plus le voir.",
-      "disclaimer": "Toute personne disposant de l'URL peut voir le briefing jusqu'à son expiration ou sa révocation. AdelIA comptabilise les accès à des fins d'audit."
+      "disclaimer": "Toute personne disposant de l'URL peut voir le briefing jusqu'à son expiration ou sa révocation. AdelIA comptabilise les accès à des fins d'audit.",
+      "privacyNotice": "Toute personne ayant ce lien pourra voir les données médicales de ton bébé. Ne le partage qu'avec qui tu décides.",
+      "privacyAck": "Je comprends et je veux créer le lien.",
+      "ttlHelp": "Le lien se désactive tout seul après ce délai, par sécurité."
     },
     "staleBadge": "Obsolète",
     "noRender": "Aucune version générée disponible.",
@@ -502,7 +505,8 @@
     "copied": "Copié",
     "valoracionStale": "Vous avez modifié des réponses depuis cette évaluation — régénérez-la pour la mettre à jour.",
     "actionError": "Impossible de terminer. Vérifiez votre connexion et réessayez.",
-    "valoracionDisclaimerTop": "C'est indicatif et sourcé, ce n'est pas un diagnostic. Toi et ton pédiatre décidez. En cas d'urgence, appelle les secours."
+    "valoracionDisclaimerTop": "C'est indicatif et sourcé, ce n'est pas un diagnostic. Toi et ton pédiatre décidez. En cas d'urgence, appelle les secours.",
+    "redFlagsBanner": "⚠ Signes d'alerte. Si tu en coches un, contacte ton pédiatre aujourd'hui."
   },
   "consulta": {
     "title": "Mode Consultation",
@@ -520,7 +524,8 @@
     "clear": "Effacer",
     "regenerate": "Régénérer",
     "copy": "Copier",
-    "copied": "Copié"
+    "copied": "Copié",
+    "example": "Exemple : « Le médecin dit que le poids est un peu bas et veut commencer le lait infantile. » AdelIA te donne des questions argumentées et des signaux à surveiller."
   },
   "command": {
     "placeholder": "Rechercher ou aller à…",
