@@ -2,7 +2,16 @@ import type { Metadata } from "next";
 import { Link } from "@/lib/navigation";
 import { redirect } from "next/navigation";
 import { getTranslations } from "next-intl/server";
-import { Activity, Building2, Send, Mail, BookOpen, FileText, Clock } from "lucide-react";
+import {
+  Activity,
+  Building2,
+  Send,
+  Mail,
+  BookOpen,
+  FileText,
+  Clock,
+  UploadCloud,
+} from "lucide-react";
 
 import { auth } from "@/lib/auth";
 import { ingestion } from "@/lib/api-client";
@@ -40,7 +49,17 @@ export default async function IngestionPage({ params }: Props) {
     templates = [];
   }
 
-  const sources = [
+  // The fastest path for a mom: a photo or a PDF. Surfaced first, badged.
+  const photoSource = {
+    href: "/dashboard/upload",
+    Icon: UploadCloud,
+    title: t("ingestion.overview.photoTitle"),
+    desc: t("ingestion.overview.photoDesc"),
+    fastest: true,
+  };
+
+  // Other import channels — still primary, just not the quickest.
+  const channelSources = [
     { slug: "apple-health", Icon: Activity, title: "Apple Health", desc: t("ingestion.overview.appleHealthDesc") },
     { slug: "ccd", Icon: Building2, title: "MyChart / CCD", desc: t("ingestion.overview.ccdDesc") },
     { slug: "telegram", Icon: Send, title: "Telegram", desc: t("ingestion.overview.telegramDesc") },
@@ -52,23 +71,50 @@ export default async function IngestionPage({ params }: Props) {
       <h1 className="text-2xl text-pine-900">{t("ingestion.title")}</h1>
       <p className="mt-1 text-sm text-ink-soft">{t("ingestion.subtitle")}</p>
 
-      <section className="mt-8 grid grid-cols-2 gap-4 md:grid-cols-4">
-        {sources.map((s) => (
+      <section className="mt-8">
+        <h2 className="text-base font-medium text-pine-900">{t("ingestion.startHereTitle")}</h2>
+        <p className="mt-0.5 text-xs text-ink-soft">{t("ingestion.startHereHint")}</p>
+
+        <div className="mt-4 grid grid-cols-2 gap-4 md:grid-cols-4">
           <Link
-            key={s.slug}
-            href={`/dashboard/ingestion/${s.slug}`}
-            className="ad-card ad-card-hover p-4"
+            href={photoSource.href}
+            className="ad-card ad-card-hover relative p-4 ring-1 ring-pine-200"
           >
-            <span className="inline-flex h-10 w-10 items-center justify-center rounded-xl bg-pine-50 text-pine-600 ring-1 ring-pine-100">
-              <s.Icon className="h-5 w-5" strokeWidth={2} />
+            <span className="ad-eyebrow absolute right-3 top-3 rounded-full bg-honey-100 px-2 py-0.5 text-honey-700">
+              {t("ingestion.fastestBadge")}
             </span>
-            <h2 className="mt-3 text-base text-pine-900">{s.title}</h2>
-            <p className="mt-1 text-xs leading-relaxed text-ink-soft">{s.desc}</p>
+            <span className="inline-flex h-10 w-10 items-center justify-center rounded-xl bg-pine-50 text-pine-600 ring-1 ring-pine-100">
+              <photoSource.Icon className="h-5 w-5" strokeWidth={2} />
+            </span>
+            <h3 className="mt-3 text-base text-pine-900">{photoSource.title}</h3>
+            <p className="mt-1 text-xs leading-relaxed text-ink-soft">{photoSource.desc}</p>
           </Link>
-        ))}
+
+          {channelSources.map((s) => (
+            <Link
+              key={s.slug}
+              href={`/dashboard/ingestion/${s.slug}`}
+              className="ad-card ad-card-hover p-4"
+            >
+              <span className="inline-flex h-10 w-10 items-center justify-center rounded-xl bg-pine-50 text-pine-600 ring-1 ring-pine-100">
+                <s.Icon className="h-5 w-5" strokeWidth={2} />
+              </span>
+              <h3 className="mt-3 text-base text-pine-900">{s.title}</h3>
+              <p className="mt-1 text-xs leading-relaxed text-ink-soft">{s.desc}</p>
+            </Link>
+          ))}
+        </div>
       </section>
 
-      <section className="mt-12">
+      <details className="ad-card mt-12 p-5">
+        <summary className="cursor-pointer list-none text-base font-medium text-pine-900 marker:hidden">
+          {t("ingestion.advancedTitle")}
+          <span className="mt-0.5 block text-xs font-normal text-ink-soft">
+            {t("ingestion.advancedHint")}
+          </span>
+        </summary>
+
+        <section className="mt-8">
         <h2 className="flex items-center gap-2 text-lg text-pine-900">
           <BookOpen className="h-4 w-4 text-pine-500" strokeWidth={2} />
           {t("ingestion.guidesTab")}
@@ -114,6 +160,7 @@ export default async function IngestionPage({ params }: Props) {
           ))}
         </ul>
       </section>
+      </details>
     </main>
   );
 }

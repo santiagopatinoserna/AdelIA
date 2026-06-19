@@ -8,6 +8,9 @@ import {
   AlertTriangle,
   Check,
   CheckCircle2,
+  Circle,
+  ChevronDown,
+  Clock,
   Loader2,
   Trash2,
 } from "lucide-react";
@@ -46,6 +49,7 @@ export function RefluxQuestionnaire() {
   const [error, setError] = useState(false);
   const [answers, setAnswers] = useState<Record<string, Answer>>({});
   const [hydrated, setHydrated] = useState(false);
+  const [showSummary, setShowSummary] = useState(false);
 
   // Hydrate saved answers before we start persisting (avoid clobbering them).
   useEffect(() => {
@@ -88,6 +92,27 @@ export function RefluxQuestionnaire() {
   const total = allQuestions.length;
   const done = allQuestions.filter((q) => isAnswered(answers[q.id])).length;
   const pct = total ? Math.round((done / total) * 100) : 0;
+
+  // Per-section status for the resume-after-interruption summary:
+  // any unanswered alarm question → ⚠, all answered → ✓, none → ○.
+  const sectionStatus = useMemo(() => {
+    if (!data) return [] as { id: string; title: string; status: "alarm" | "done" | "pending"; done: number; total: number }[];
+    return data.sections.map((s) => {
+      const d = s.questions.filter((q) => isAnswered(answers[q.id])).length;
+      const hasAlarm = s.questions.some((q) => q.alarm && isAnswered(answers[q.id]));
+      const status: "alarm" | "done" | "pending" = hasAlarm
+        ? "alarm"
+        : d === s.questions.length && d > 0
+          ? "done"
+          : "pending";
+      return { id: s.id, title: s.title, status, done: d, total: s.questions.length };
+    });
+  }, [data, answers]);
+
+  function jumpTo(id: string) {
+    setShowSummary(false);
+    document.getElementById(`section-${id}`)?.scrollIntoView({ behavior: "smooth", block: "start" });
+  }
 
   function setAnswer(id: string, value: Answer) {
     setAnswers((prev) => ({ ...prev, [id]: value }));
@@ -139,15 +164,20 @@ export function RefluxQuestionnaire() {
 
       {/* Sticky progress — sits just below the dashboard top bar (h-14) */}
       <div className="sticky top-14 z-10 -mx-6 mt-6 border-y border-line bg-canvas/85 px-6 py-3 backdrop-blur-md">
-        <div className="flex items-center justify-between text-xs">
-          <span className="font-mono text-ink-soft">{t("progress", { done, total })}</span>
+        <div className="flex items-center justify-between gap-3 text-xs">
           <button
             type="button"
-            onClick={reset}
-            className="inline-flex items-center gap-1 text-ink-faint transition-colors hover:text-clay-600"
+            onClick={() => setShowSummary((v) => !v)}
+            aria-expanded={showSummary}
+            className="inline-flex items-center gap-1.5 text-ink-soft transition-colors hover:text-pine-700"
           >
-            <Trash2 className="h-3 w-3" strokeWidth={2} />
-            {t("reset")}
+            <Clock className="h-3.5 w-3.5 text-pine-400" strokeWidth={2.2} />
+            <span className="font-medium">{t("progressContext")}</span>
+            <span className="text-ink-faint">· {t("progress", { done, total })}</span>
+            <ChevronDown
+              className={`h-3.5 w-3.5 transition-transform ${showSummary ? "rotate-180" : ""}`}
+              strokeWidth={2.2}
+            />
           </button>
         </div>
         <div className="mt-2 h-1.5 overflow-hidden rounded-full bg-line">
@@ -156,6 +186,40 @@ export function RefluxQuestionnaire() {
             style={{ width: `${pct}%` }}
           />
         </div>
+
+        {/* Collapsible per-section summary — tap a row to jump and resume. */}
+        {showSummary && (
+          <div className="mt-3 space-y-1 border-t border-line pt-3">
+            {sectionStatus.map((s) => (
+              <button
+                key={s.id}
+                type="button"
+                onClick={() => jumpTo(s.id)}
+                className="flex w-full items-center gap-2 rounded-lg px-2 py-1.5 text-left text-xs text-ink-soft transition-colors hover:bg-surface-2"
+              >
+                {s.status === "alarm" ? (
+                  <AlertTriangle className="h-3.5 w-3.5 shrink-0 text-clay-600" strokeWidth={2.4} />
+                ) : s.status === "done" ? (
+                  <CheckCircle2 className="h-3.5 w-3.5 shrink-0 text-pine-500" strokeWidth={2.4} />
+                ) : (
+                  <Circle className="h-3.5 w-3.5 shrink-0 text-ink-faint" strokeWidth={2} />
+                )}
+                <span className="flex-1 truncate">{s.title}</span>
+                <span className="shrink-0 font-mono text-[11px] text-ink-faint">
+                  {s.done}/{s.total}
+                </span>
+              </button>
+            ))}
+            <button
+              type="button"
+              onClick={reset}
+              className="mt-1 inline-flex items-center gap-1.5 rounded-lg border border-clay-100 bg-clay-50 px-2.5 py-1.5 text-[11px] font-medium text-clay-700 transition-colors hover:bg-clay-100"
+            >
+              <Trash2 className="h-3 w-3" strokeWidth={2.2} />
+              {t("reset")}
+            </button>
+          </div>
+        )}
       </div>
 
       {/* Sections */}
@@ -165,7 +229,8 @@ export function RefluxQuestionnaire() {
           return (
             <section
               key={section.id}
-              className={isAlarm ? "rounded-2xl bg-clay-50/50 p-4 ring-1 ring-clay-100 sm:p-5" : ""}
+              id={`section-${section.id}`}
+              className={`scroll-mt-28 ${isAlarm ? "rounded-2xl bg-clay-50/50 p-4 ring-1 ring-clay-100 sm:p-5" : ""}`}
             >
               <h2
                 className={`flex items-center gap-2 text-lg ${isAlarm ? "text-clay-700" : "text-pine-900"}`}

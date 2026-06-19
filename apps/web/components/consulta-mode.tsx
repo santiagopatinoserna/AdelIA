@@ -101,6 +101,10 @@ export function ConsultaMode() {
   }
   const recRef = useRef<SpeechRecognitionLike | null>(null);
   const baseRef = useRef("");
+  // Scroll the streamed answer into view when the first token lands — it can
+  // render below the fold after the parent taps "Generar".
+  const outputRef = useRef<HTMLDivElement | null>(null);
+  const scrolledRef = useRef(false);
 
   useEffect(() => {
     setMicSupported(getSpeechCtor() !== null);
@@ -149,10 +153,18 @@ export function ConsultaMode() {
     setError(null);
     setAnswer("");
     setCitations([]);
+    scrolledRef.current = false;
     try {
       for await (const ev of streamChat(composePrompt(), null, locale)) {
-        if (ev.type === "token") setAnswer((prev) => prev + ev.content);
-        else if (ev.type === "final") setCitations(ev.citations ?? []);
+        if (ev.type === "token") {
+          setAnswer((prev) => prev + ev.content);
+          if (!scrolledRef.current) {
+            scrolledRef.current = true;
+            requestAnimationFrame(() =>
+              outputRef.current?.scrollIntoView({ behavior: "smooth", block: "start" }),
+            );
+          }
+        } else if (ev.type === "final") setCitations(ev.citations ?? []);
         else if (ev.type === "error") setError(ev.content);
       }
     } catch {
@@ -227,12 +239,15 @@ export function ConsultaMode() {
 
       {/* Output */}
       {(busy || answer) && (
-        <div className="ad-card ad-rise mt-4 p-5">
+        <div ref={outputRef} className="ad-card ad-rise mt-4 scroll-mt-28 p-5">
           {busy && !answer && (
-            <p className="flex items-center gap-2 text-sm text-ink-soft">
-              <Loader2 className="h-4 w-4 animate-spin text-pine-400" strokeWidth={2} />
-              {t("generating")}
-            </p>
+            <div className="flex items-center gap-3 py-2">
+              <Loader2 className="h-6 w-6 shrink-0 animate-spin text-pine-500" strokeWidth={2} />
+              <div>
+                <p className="text-base font-medium text-pine-900">{t("generating")}</p>
+                <p className="mt-0.5 text-sm text-ink-soft">{t("generatingHint")}</p>
+              </div>
+            </div>
           )}
           {answer && (
             <div className="text-[15px] text-ink">

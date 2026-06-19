@@ -108,6 +108,9 @@ export default function GenomicsPage() {
                 </span>
               </div>
             </div>
+            <p className="mt-2 text-xs text-ink-soft">
+              {t(`enrichment.genomics.zygosityPlain.${h.zygosity}`)}
+            </p>
             <p className="mt-2 text-sm font-medium text-ink">{h.phenotype}</p>
             <p className="mt-1 text-sm text-ink">→ {h.actionability}</p>
             <div className="mt-2 text-xs text-ink-faint">

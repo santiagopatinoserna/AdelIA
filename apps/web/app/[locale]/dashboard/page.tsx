@@ -48,13 +48,20 @@ export default async function DashboardPage({
     docs = [];
   }
 
-  const nav = [
+  // Progressive disclosure: surface the 3 core actions prominently, tuck the
+  // more advanced ones under a visually lighter "Más opciones" group. Nothing
+  // is removed — every feature stays one tap away.
+  const primaryNav = [
     { href: "/dashboard/chat", icon: MessagesSquare, label: "Chat" },
-    { href: "/dashboard/briefings", icon: ClipboardList, label: tb("navLabel") },
+    { href: "/dashboard/upload", icon: UploadCloud, label: t("navUpload") },
     { href: "/dashboard/questionnaire", icon: Baby, label: tq("navLabel") },
+  ];
+
+  const moreNav = [
+    { href: "/dashboard/briefings", icon: ClipboardList, label: tb("navLabel") },
     { href: "/dashboard/consulta", icon: Stethoscope, label: tcons("navLabel") },
-    { href: "/dashboard/ingestion", icon: Download, label: t("navImport") },
     { href: "/dashboard/enrichment", icon: Sparkles, label: t("navInsights") },
+    { href: "/dashboard/ingestion", icon: Download, label: t("navImport") },
   ];
 
   const steps = [
@@ -119,21 +126,44 @@ export default async function DashboardPage({
     <main className="mx-auto max-w-5xl px-6 py-10">
         <InstallPrompt />
         <CheckInPrompt />
-        <nav className="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-6">
-          {nav.map((item, i) => (
+
+        {/* Core actions — big and obvious for a first-time mom. */}
+        <nav aria-label={t("navPrimaryLabel")} className="grid grid-cols-1 gap-3 sm:grid-cols-3">
+          {primaryNav.map((item, i) => (
             <Link
               key={item.href}
               href={item.href}
-              className="ad-card ad-card-hover ad-rise flex items-center gap-3 px-4 py-3.5"
+              className="ad-card ad-card-hover ad-rise flex items-center gap-3 px-5 py-4"
               style={{ animationDelay: `${i * 60}ms` }}
             >
-              <span className="inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-pine-50 text-pine-600 ring-1 ring-pine-100">
-                <item.icon className="h-4.5 w-4.5" strokeWidth={2} />
+              <span className="inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-pine-50 text-pine-600 ring-1 ring-pine-100">
+                <item.icon className="h-5 w-5" strokeWidth={2} />
               </span>
-              <span className="text-sm font-medium text-ink">{item.label}</span>
+              <span className="text-base font-medium text-ink">{item.label}</span>
             </Link>
           ))}
         </nav>
+
+        {/* Advanced features — lighter, grouped, never in the way. */}
+        <div className="mt-7">
+          <p className="ad-eyebrow text-ink-faint">{t("navMoreLabel")}</p>
+          <nav
+            aria-label={t("navMoreLabel")}
+            className="mt-3 grid grid-cols-2 gap-2.5 sm:grid-cols-4"
+          >
+            {moreNav.map((item, i) => (
+              <Link
+                key={item.href}
+                href={item.href}
+                className="ad-card ad-card-hover ad-rise flex items-center gap-2.5 bg-surface-2/40 px-3.5 py-3"
+                style={{ animationDelay: `${(primaryNav.length + i) * 60}ms` }}
+              >
+                <item.icon className="h-4 w-4 shrink-0 text-ink-faint" strokeWidth={2} />
+                <span className="text-sm text-ink-soft">{item.label}</span>
+              </Link>
+            ))}
+          </nav>
+        </div>
 
         <div className="mt-12 flex items-baseline justify-between">
           <h1 className="text-2xl text-pine-900">{t("title")}</h1>

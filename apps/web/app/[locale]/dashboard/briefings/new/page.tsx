@@ -13,15 +13,18 @@ export default function NewBriefingPage() {
   const router = useRouter();
   const params = useParams<{ locale: string }>();
   const locale = params?.locale ?? "es";
-  const [specialty, setSpecialty] = useState<Specialty>("default");
+  const [specialty, setSpecialty] = useState<Specialty | "">("pediatrics");
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
+  const canSubmit = specialty !== "";
+
   async function handleSubmit() {
+    if (!canSubmit) return;
     setSubmitting(true);
     setError(null);
     try {
-      const created = await briefingsApi.create({ target_specialty: specialty, locale: locale as "es" | "en" | "fr" });
+      const created = await briefingsApi.create({ target_specialty: specialty as Specialty, locale: locale as "es" | "en" | "fr" });
       router.push(`/${locale}/dashboard/briefings/${created.id}`);
     } catch (e) {
       setError(t("common.actionError"));
@@ -39,14 +42,36 @@ export default function NewBriefingPage() {
             {error}
           </div>
         )}
-        <button
-          type="button"
-          onClick={handleSubmit}
-          disabled={submitting}
-          className="ad-btn ad-btn-primary px-4 py-2 text-sm disabled:opacity-50"
-        >
-          {submitting ? t("briefing.status.processing") : t("briefing.createButton")}
-        </button>
+        {submitting && (
+          <div className="ad-card space-y-3 p-4" aria-live="polite">
+            <div className="flex items-center gap-3">
+              <span
+                className="h-5 w-5 shrink-0 animate-spin rounded-full border-2 border-pine-200 border-t-pine-600"
+                role="status"
+                aria-label={t("briefing.generatingTitle")}
+              />
+              <p className="text-sm font-medium text-ink">{t("briefing.generatingTitle")}</p>
+            </div>
+            <div className="ad-rise space-y-2.5">
+              <div className="h-3 w-11/12 rounded bg-surface-2" />
+              <div className="h-3 w-9/12 rounded bg-surface-2" />
+              <div className="h-3 w-10/12 rounded bg-surface-2" />
+            </div>
+          </div>
+        )}
+        <div className="space-y-2">
+          <button
+            type="button"
+            onClick={handleSubmit}
+            disabled={submitting || !canSubmit}
+            className="ad-btn ad-btn-primary px-4 py-2 text-sm disabled:opacity-50"
+          >
+            {submitting ? t("briefing.status.processing") : t("briefing.createButton")}
+          </button>
+          {!canSubmit && !submitting && (
+            <p className="text-sm text-ink-soft">{t("briefing.specialty.required")}</p>
+          )}
+        </div>
       </div>
     </main>
   );

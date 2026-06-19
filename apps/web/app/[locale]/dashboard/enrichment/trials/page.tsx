@@ -57,11 +57,17 @@ export default function TrialsPage() {
           type="button"
           onClick={search}
           disabled={loading || !condition.trim()}
-          className="ad-btn ad-btn-primary px-4 py-2 text-sm disabled:opacity-50"
+          className="ad-btn ad-btn-primary px-4 py-2 text-sm disabled:cursor-not-allowed disabled:border disabled:border-line-strong disabled:bg-surface-2 disabled:text-ink-faint disabled:opacity-100"
         >
           {loading ? t("common.loading") : t("enrichment.trials.search")}
         </button>
       </div>
+
+      {!condition.trim() && !loading && (
+        <p className="mt-2 inline-flex items-center rounded-full border border-line-strong bg-surface-2 px-2.5 py-1 text-xs text-ink-soft">
+          {t("enrichment.trials.needCondition")}
+        </p>
+      )}
 
       {error && (
         <div role="alert" className="mt-4 rounded-xl border border-clay-100 bg-clay-50 p-3 text-sm text-clay-700">
@@ -94,6 +100,29 @@ export default function TrialsPage() {
               {trial.phase && ` · ${trial.phase}`}
               {trial.sponsor && ` · ${trial.sponsor}`}
             </div>
+            {trial.phase && (
+              <p className="mt-1 text-xs text-ink-soft">{t("enrichment.trials.phaseLegend")}</p>
+            )}
+            {(trial.eligibility_age_min ||
+              trial.eligibility_age_max ||
+              trial.eligibility_sex) && (
+              <div className="mt-2 inline-flex flex-wrap items-center gap-2 rounded-lg bg-pine-50 px-2.5 py-1.5 text-xs text-pine-800 ring-1 ring-pine-100">
+                <span className="font-medium">{t("enrichment.trials.whoCanJoin")}:</span>
+                {(trial.eligibility_age_min || trial.eligibility_age_max) && (
+                  <span>
+                    {t("enrichment.trials.ageLabel")}{" "}
+                    {trial.eligibility_age_min ?? "—"}
+                    {" – "}
+                    {trial.eligibility_age_max ?? "—"}
+                  </span>
+                )}
+                {trial.eligibility_sex && (
+                  <span>
+                    {t("enrichment.trials.sexLabel")} {trial.eligibility_sex}
+                  </span>
+                )}
+              </div>
+            )}
             <p className="mt-2 text-sm text-ink-soft">{trial.brief_summary}</p>
             {trial.locations.length > 0 && (
               <ul className="mt-2 flex flex-wrap gap-1">

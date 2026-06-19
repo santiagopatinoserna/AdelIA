@@ -49,11 +49,17 @@ export default function CodesLookupPage() {
           type="button"
           onClick={lookup}
           disabled={loading || !query.trim()}
-          className="ad-btn ad-btn-primary px-4 py-2 text-sm disabled:opacity-50"
+          className="ad-btn ad-btn-primary px-4 py-2 text-sm disabled:cursor-not-allowed disabled:border disabled:border-line-strong disabled:bg-surface-2 disabled:text-ink-faint disabled:opacity-100"
         >
           {loading ? t("common.loading") : t("enrichment.codes.lookup")}
         </button>
       </div>
+
+      {!query.trim() && !loading && (
+        <p className="mt-2 inline-flex items-center rounded-full border border-line-strong bg-surface-2 px-2.5 py-1 text-xs text-ink-soft">
+          {t("enrichment.codes.needQuery")}
+        </p>
+      )}
 
       {error && (
         <div role="alert" className="mt-4 rounded-xl border border-clay-100 bg-clay-50 p-3 text-sm text-clay-700">

@@ -181,7 +181,11 @@
     "orQuestionnaire": "¿Aún no tienes informes? Empieza por el control de tu bebé",
     "ocrTimeout": "Esto tarda más de lo normal. Recarga en un momento o vuelve a intentarlo.",
     "ocrReload": "Recargar",
-    "docReady": "Documento listo · ya puedes preguntar"
+    "docReady": "Documento listo · ya puedes preguntar",
+    "navUpload": "Subir documento",
+    "navPrimaryLabel": "Acciones principales",
+    "navMoreLabel": "Más opciones",
+    "loadingSpace": "Cargando tu espacio…"
   },
   "upload": {
     "title": "Subir documento",
@@ -266,7 +270,9 @@
       "ccdDesc": "XML del portal paciente",
       "telegramDesc": "Reenvía docs al bot",
       "emailTitle": "Email",
-      "emailDesc": "Reenvía a tu alias"
+      "emailDesc": "Reenvía a tu alias",
+      "photoTitle": "Foto o PDF",
+      "photoDesc": "Haz una foto del informe o sube el PDF"
     },
     "appleHealth": {
       "title": "Importar Apple Health",
@@ -305,7 +311,12 @@
       "outlookStep1": "1. Configuración → Correo → Reglas → Nueva regla",
       "outlookStep2": "2. Condición (remitente, palabras clave del asunto)",
       "warning": "Los emails reenviados a tu alias se procesan automáticamente. Solo reenvía contenido médico que quieras tener en tu vault."
-    }
+    },
+    "startHereTitle": "Empieza aquí",
+    "startHereHint": "Elige una opción, la que más fácil te resulte.",
+    "fastestBadge": "Más rápido",
+    "advancedTitle": "Opciones avanzadas",
+    "advancedHint": "Guías por plataforma y plantillas para pedir tus datos. Solo si las necesitas."
   },
   "enrichment": {
     "title": "Insights v0.2",
@@ -349,6 +360,22 @@
         "major": "Grave",
         "moderate": "Moderada",
         "minor": "Leve"
+      },
+      "needTwo": "Añade otro medicamento para revisar interacciones",
+      "severityMeans": "Qué significa",
+      "noInteractionsTitle": "Buena noticia: sin interacciones conocidas entre {drugs}.",
+      "noInteractionsHint": "Confírmalo con tu pediatra antes de combinarlos.",
+      "severityMom": {
+        "contraindicated": "No usar juntos",
+        "major": "Probablemente inseguro",
+        "moderate": "Posible precaución",
+        "minor": "Bajo riesgo"
+      },
+      "severityPlain": {
+        "contraindicated": "No deberían tomarse a la vez. Habla con tu médico antes de combinarlos.",
+        "major": "Juntos pueden causar problemas serios. Mejor consultarlo con tu médico.",
+        "moderate": "Suelen poder combinarse, pero conviene vigilarlo. Coméntalo en tu próxima visita.",
+        "minor": "El riesgo es pequeño. Aun así, díselo a tu médico por si acaso."
       }
     },
     "labs": {
@@ -361,14 +388,20 @@
       "sexLabel": "Sexo:",
       "namePlaceholder": "HbA1c, glucosa, ldl, ...",
       "valuePlaceholder": "valor",
-      "noResults": "Sin resultados para esos valores."
+      "noResults": "Sin resultados para esos valores.",
+      "needOne": "Escribe al menos una analítica para evaluar"
     },
     "trials": {
       "search": "Buscar ensayos",
       "condition": "Condición",
       "country": "País",
       "noResults": "Sin ensayos abiertos para esta condición",
-      "viewStudy": "Ver estudio"
+      "viewStudy": "Ver estudio",
+      "needCondition": "Escribe una condición para buscar estudios",
+      "phaseLegend": "La fase indica lo avanzado que está el estudio (las primeras son más experimentales).",
+      "whoCanJoin": "Quién puede participar",
+      "ageLabel": "Edad",
+      "sexLabel": "Sexo:"
     },
     "genomics": {
       "upload": "Subir 23andMe raw_data.txt",
@@ -385,7 +418,12 @@
         "absent": "Ausente"
       },
       "savedFrom": "Análisis guardado del",
-      "noResults": "No se encontraron variantes en ese archivo."
+      "noResults": "No se encontraron variantes en ese archivo.",
+      "zygosityPlain": {
+        "homozygous": "Tienes 2 copias. Coméntalo con tu médico para entender qué significa para ti.",
+        "heterozygous": "Tienes 1 copia (portadora). Quienes son portadores suelen estar sanos.",
+        "absent": "No tienes ninguna copia de esta variante."
+      }
     },
     "codes": {
       "lookup": "Buscar código",
@@ -394,7 +432,8 @@
       "snomed": "SNOMED CT",
       "noMatch": "Sin código encontrado",
       "category": "Categoría",
-      "match": "Coincidencia"
+      "match": "Coincidencia",
+      "needQuery": "Escribe un diagnóstico o síntoma para buscar su código"
     },
     "coverage": {
       "concepts": "Conceptos normalizados",
@@ -404,15 +443,22 @@
       "variants": "Variantes"
     },
     "searchError": "No se pudo completar la búsqueda. Inténtalo de nuevo.",
-    "coverageUnavailable": "No se pudieron cargar las estadísticas de cobertura. El servicio puede estar temporalmente no disponible."
+    "coverageUnavailable": "No se pudieron cargar las estadísticas de cobertura. El servicio puede estar temporalmente no disponible.",
+    "intro": {
+      "eyebrow": "Tus Insights",
+      "title": "Entiende los datos de salud de tu peque",
+      "body": "Aquí puedes revisar interacciones entre medicamentos, entender una analítica, mirar el genoma o buscar estudios. Empieza por la tarjeta que necesites; no hace falta tener nada preparado.",
+      "reassurance": "Todo es orientativo y privado. Confírmalo siempre con tu pediatra o médico.",
+      "coverageToggle": "Ver qué tenemos en la base de datos"
+    }
   },
   "briefing": {
     "title": "Briefings",
     "newButton": "Crear nuevo briefing",
     "listEmpty": "Aún no has generado ningún briefing. Crea el primero.",
     "specialty": {
-      "label": "Especialidad target",
-      "placeholder": "Selecciona la especialidad del médico",
+      "label": "¿Qué médico verás?",
+      "placeholder": "Elige una especialidad",
       "pediatrics": "Pediatría",
       "endocrinology": "Endocrinología",
       "cardiology": "Cardiología",
@@ -420,7 +466,9 @@
       "gastroenterology": "Gastroenterología",
       "dermatology": "Dermatología",
       "general_medicine": "Medicina general",
-      "default": "Otra / No listada"
+      "default": "Otra / No listada",
+      "helper": "Esto personaliza el resumen para esa especialidad.",
+      "required": "Elige una especialidad para poder generar el briefing."
     },
     "status": {
       "processing": "Generando…",
@@ -462,7 +510,18 @@
     "staleBadge": "Desactualizado",
     "noRender": "No hay versión renderizada disponible.",
     "actionError": "No se pudo completar. Revisa tu conexión e inténtalo de nuevo.",
-    "navLabel": "Resúmenes"
+    "navLabel": "Resúmenes",
+    "generatingTitle": "Preparando tu briefing…",
+    "generatingSubtitle": "Analizando tus documentos y cruzándolos con estudios médicos…",
+    "timeout": {
+      "title": "Esto está tardando más de lo normal",
+      "body": "Algo se atascó por el camino. Vuelve a intentarlo y debería salir."
+    },
+    "failure": {
+      "title": "No pudimos generar el resumen",
+      "body": "Puede pasar si un documento es ilegible. Vuelve a intentarlo o sube más documentos.",
+      "uploadMore": "Subir más documentos"
+    }
   },
   "settings": {
     "title": "Ajustes de cuenta",
@@ -506,7 +565,9 @@
     "valoracionStale": "Has cambiado respuestas desde esta valoración — regenérala para actualizarla.",
     "actionError": "No se pudo completar. Revisa tu conexión e inténtalo de nuevo.",
     "valoracionDisclaimerTop": "Esto es orientativo y citado, no es un diagnóstico. Tú y tu pediatra decidís. En una emergencia, llama a urgencias.",
-    "redFlagsBanner": "⚠ Señales de alarma. Si marcas alguna, contacta hoy con tu pediatra."
+    "redFlagsBanner": "⚠ Señales de alarma. Si marcas alguna, contacta hoy con tu pediatra.",
+    "progressContext": "Chequeo del reflujo · ~5 min",
+    "generatingHint": "Cruzando las respuestas con la evidencia… unos segundos."
   },
   "consulta": {
     "title": "Modo Consulta",
@@ -525,7 +586,8 @@
     "regenerate": "Regenerar",
     "copy": "Copiar",
     "copied": "Copiado",
-    "example": "Ejemplo: «El médico dice que el peso está algo bajo y quiere empezar con fórmula». AdelIA te dará preguntas con fundamento y señales a vigilar."
+    "example": "Ejemplo: «El médico dice que el peso está algo bajo y quiere empezar con fórmula». AdelIA te dará preguntas con fundamento y señales a vigilar.",
+    "generatingHint": "Analizando lo que dijo el médico y cruzándolo con estudios… unos segundos."
   },
   "command": {
     "placeholder": "Buscar o ir a…",
