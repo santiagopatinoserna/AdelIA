@@ -67,18 +67,20 @@ export default function LabRangesPage() {
       </h1>
 
       <div className="mt-4 flex items-center gap-2 text-sm text-ink">
-        <label>{t("enrichment.labs.sexLabel")}</label>
+        <label htmlFor="lab-sex">{t("enrichment.labs.sexLabel")}</label>
         <select
+          id="lab-sex"
           value={sex}
           onChange={(e) => setSex(e.target.value as "M" | "F" | "")}
           aria-label={t("enrichment.labs.sexLabel")}
-          className="rounded-lg border border-line-strong bg-surface px-2 py-1 text-ink focus:border-pine-400 focus:outline-none focus:ring-2 focus:ring-pine-100"
+          className="rounded-lg border border-line-strong bg-surface px-2 py-1 text-ink focus:border-pine-400 focus:outline-none focus:ring-2 focus:ring-pine-300"
         >
-          <option value="">—</option>
-          <option value="M">M</option>
-          <option value="F">F</option>
+          <option value="">{t("enrichment.labs.sexChoose")}</option>
+          <option value="M">{t("enrichment.labs.sexBoy")}</option>
+          <option value="F">{t("enrichment.labs.sexGirl")}</option>
         </select>
       </div>
+      <p className="mt-1.5 text-xs text-ink-soft">{t("enrichment.labs.sexHint")}</p>
 
       <div className="mt-6 space-y-2">
         {labs.map((lab, i) => (
@@ -122,16 +124,20 @@ export default function LabRangesPage() {
         <button
           type="button"
           onClick={evaluate}
-          disabled={loading || labs.every((l) => !l.name)}
+          disabled={loading || labs.every((l) => !l.name) || !sex}
           className="ad-btn ad-btn-primary px-4 py-2 text-sm disabled:cursor-not-allowed disabled:border disabled:border-line-strong disabled:bg-surface-2 disabled:text-ink-faint disabled:opacity-100"
         >
           {loading ? t("common.loading") : t("enrichment.labs.evaluate")}
         </button>
-        {labs.every((l) => !l.name) && !loading && (
+        {labs.every((l) => !l.name) && !loading ? (
           <span className="inline-flex items-center rounded-full border border-line-strong bg-surface-2 px-2.5 py-1 text-xs text-ink-soft">
             {t("enrichment.labs.needOne")}
           </span>
-        )}
+        ) : !sex && !loading ? (
+          <span className="inline-flex items-center rounded-full border border-line-strong bg-surface-2 px-2.5 py-1 text-xs text-ink-soft">
+            {t("enrichment.labs.sexRequired")}
+          </span>
+        ) : null}
       </div>
 
       {error && (

@@ -213,7 +213,8 @@
     "dropDesktop": "ou glisse-le ici",
     "examplesToggle": "Qu'est-ce que je peux ajouter ?",
     "examples": "Ex : une photo du carnet, le PDF d'une analyse ou une note vocale du pédiatre.",
-    "successToast": "Document ajouté. On le lit — tu peux attendre ou continuer à explorer."
+    "successToast": "Document ajouté. On le lit — tu peux attendre ou continuer à explorer.",
+    "goDashboard": "Voir mon espace"
   },
   "signin": {
     "emailPlaceholder": "toi@exemple.com",
@@ -403,7 +404,12 @@
       "namePlaceholder": "HbA1c, glucose, ldl, ...",
       "valuePlaceholder": "valeur",
       "noResults": "Aucun résultat pour ces valeurs.",
-      "needOne": "Saisis au moins une analyse à évaluer"
+      "needOne": "Saisis au moins une analyse à évaluer",
+      "sexChoose": "Choisis…",
+      "sexBoy": "Garçon",
+      "sexGirl": "Fille",
+      "sexHint": "Les valeurs normales varient selon le sexe du bébé.",
+      "sexRequired": "Choisis le sexe du bébé pour évaluer."
     },
     "trials": {
       "search": "Rechercher des essais",
@@ -538,7 +544,8 @@
       "title": "On n'a pas pu générer le résumé",
       "body": "Ça peut arriver si un document est illisible. Réessaie ou ajoute d'autres documents.",
       "uploadMore": "Ajouter des documents"
-    }
+    },
+    "generatingPatience": "Ça prend en général 1-2 minutes. Tu peux attendre ici."
   },
   "settings": {
     "title": "Paramètres du compte",

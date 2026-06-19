@@ -50,7 +50,10 @@ export default function NewBriefingPage() {
                 role="status"
                 aria-label={t("briefing.generatingTitle")}
               />
-              <p className="text-sm font-medium text-ink">{t("briefing.generatingTitle")}</p>
+              <div>
+                <p className="text-sm font-medium text-ink">{t("briefing.generatingTitle")}</p>
+                <p className="text-sm text-ink-soft">{t("briefing.generatingPatience")}</p>
+              </div>
             </div>
             <div className="ad-rise space-y-2.5">
               <div className="h-3 w-11/12 rounded bg-surface-2" />

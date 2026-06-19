@@ -53,10 +53,12 @@ export function UploadZone({ locale }: { locale: string }) {
         return;
       }
       if (!res.ok) throw new Error(`status ${res.status}`);
-      // Confirm success before leaving — a silent redirect makes moms re-upload.
+      // Confirm success and let the mom continue when SHE's ready — show an
+      // explicit button. A gentle auto-redirect is only a slow fallback so a
+      // distracted parent isn't stranded on this screen.
       setBusy(false);
       setDone(true);
-      setTimeout(() => router.push(`/${locale}/dashboard`), 1300);
+      setTimeout(() => router.push(`/${locale}/dashboard`), 5000);
       return;
     } catch {
       // Never surface raw "Error: status 500" to a parent — friendly + localized.
@@ -122,10 +124,19 @@ export function UploadZone({ locale }: { locale: string }) {
           </p>
         )}
         {done && (
-          <p className="mt-4 flex items-center justify-center gap-1.5 text-pine-600" role="status">
-            <CheckCircle2 className="h-4 w-4" strokeWidth={2.2} />
-            {t("successToast")}
-          </p>
+          <div className="mt-4 flex flex-col items-center gap-3" role="status">
+            <p className="flex items-center gap-1.5 text-pine-600">
+              <CheckCircle2 className="h-4 w-4" strokeWidth={2.2} />
+              {t("successToast")}
+            </p>
+            <button
+              type="button"
+              onClick={() => router.push(`/${locale}/dashboard`)}
+              className="ad-btn ad-btn-primary px-5 py-2.5 text-sm"
+            >
+              {t("goDashboard")}
+            </button>
+          </div>
         )}
         {error && (
           <p

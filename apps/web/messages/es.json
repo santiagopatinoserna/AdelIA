@@ -213,7 +213,8 @@
     "dropDesktop": "o arrástralo aquí",
     "examplesToggle": "¿Qué puedo subir?",
     "examples": "Ej: una foto de la cartilla, el PDF de un análisis o una nota de voz del pediatra.",
-    "successToast": "Documento subido. Lo estamos leyendo — puedes esperar o seguir explorando."
+    "successToast": "Documento subido. Lo estamos leyendo — puedes esperar o seguir explorando.",
+    "goDashboard": "Ver mi panel"
   },
   "signin": {
     "emailPlaceholder": "tu@email.com",
@@ -403,7 +404,12 @@
       "namePlaceholder": "HbA1c, glucosa, ldl, ...",
       "valuePlaceholder": "valor",
       "noResults": "Sin resultados para esos valores.",
-      "needOne": "Escribe al menos una analítica para evaluar"
+      "needOne": "Escribe al menos una analítica para evaluar",
+      "sexChoose": "Elige…",
+      "sexBoy": "Niño",
+      "sexGirl": "Niña",
+      "sexHint": "Los valores normales cambian según el sexo del bebé.",
+      "sexRequired": "Elige el sexo del bebé para evaluar."
     },
     "trials": {
       "search": "Buscar ensayos",
@@ -538,7 +544,8 @@
       "title": "No pudimos generar el resumen",
       "body": "Puede pasar si un documento es ilegible. Vuelve a intentarlo o sube más documentos.",
       "uploadMore": "Subir más documentos"
-    }
+    },
+    "generatingPatience": "Suele tardar 1-2 minutos. Puedes esperar aquí."
   },
   "settings": {
     "title": "Ajustes de cuenta",
