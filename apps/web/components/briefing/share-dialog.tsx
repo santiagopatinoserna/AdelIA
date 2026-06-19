@@ -22,6 +22,7 @@ const TTL_PRESETS = [
 export function ShareDialog({ briefingId, onClose }: Props) {
   const t = useTranslations("briefing");
   const [ttl, setTtl] = useState(24);
+  const [ack, setAck] = useState(false);
   const [link, setLink] = useState<ShareLink | null>(null);
   const [creating, setCreating] = useState(false);
   const [copied, setCopied] = useState(false);
@@ -104,6 +105,9 @@ export function ShareDialog({ briefingId, onClose }: Props) {
 
         {!link ? (
           <>
+            <p className="mb-4 rounded-xl border border-honey-200 bg-honey-100/50 p-3 text-sm font-medium leading-relaxed text-ink">
+              {t("share.privacyNotice")}
+            </p>
             <div className="mb-4">
               <label className="text-sm font-medium text-ink">{t("share.ttlLabel")}</label>
               <select
@@ -117,12 +121,22 @@ export function ShareDialog({ briefingId, onClose }: Props) {
                   </option>
                 ))}
               </select>
+              <p className="mt-1.5 text-xs text-ink-faint">{t("share.ttlHelp")}</p>
             </div>
+            <label className="mb-4 flex items-start gap-2 text-sm text-ink">
+              <input
+                type="checkbox"
+                checked={ack}
+                onChange={(e) => setAck(e.target.checked)}
+                className="mt-0.5 h-4 w-4 shrink-0 accent-pine-600"
+              />
+              <span>{t("share.privacyAck")}</span>
+            </label>
             <button
               type="button"
               onClick={handleCreate}
-              disabled={creating}
-              className="ad-btn ad-btn-primary w-full py-2 text-sm disabled:opacity-50"
+              disabled={creating || !ack}
+              className="ad-btn ad-btn-primary w-full py-2 text-sm disabled:cursor-not-allowed disabled:opacity-50"
             >
               {creating ? t("share.creating") : t("share.createButton")}
             </button>
@@ -172,7 +186,7 @@ export function ShareDialog({ briefingId, onClose }: Props) {
           </>
         )}
 
-        <p className="mt-4 text-[10px] text-ink-faint">{t("share.disclaimer")}</p>
+        <p className="mt-4 text-xs leading-relaxed text-ink-faint">{t("share.disclaimer")}</p>
       </div>
     </div>
   );

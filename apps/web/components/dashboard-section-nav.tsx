@@ -28,7 +28,10 @@ export function DashboardSectionNav() {
   ];
 
   return (
-    <nav aria-label="Secciones" className="hidden items-center gap-0.5 md:flex">
+    <nav
+      aria-label="Secciones"
+      className="-mx-1 flex items-center gap-0.5 overflow-x-auto px-1 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
+    >
       {items.map((it) => {
         const active = pathname.startsWith(it.href);
         return (
@@ -40,8 +43,8 @@ export function DashboardSectionNav() {
             title={it.label}
             className={
               active
-                ? "flex items-center gap-1.5 rounded-lg bg-pine-50 px-2.5 py-1.5 text-pine-700 ring-1 ring-pine-100"
-                : "rounded-lg p-1.5 text-ink-faint transition-colors hover:bg-pine-50 hover:text-pine-600"
+                ? "flex shrink-0 items-center gap-1.5 rounded-lg bg-pine-50 px-2.5 py-1.5 text-pine-700 ring-1 ring-pine-100"
+                : "shrink-0 rounded-lg p-1.5 text-ink-faint transition-colors hover:bg-pine-50 hover:text-pine-600"
             }
           >
             <it.icon className="h-4 w-4 shrink-0" strokeWidth={2} />

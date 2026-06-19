@@ -73,7 +73,7 @@ export function ChatSessionsSidebar({
                     <button
                       type="button"
                       onClick={() => onDelete(s.id)}
-                      className="ml-1 hidden shrink-0 rounded p-1 text-clay-500 hover:bg-clay-50 hover:text-clay-600 group-hover:inline-flex"
+                      className="ml-1 inline-flex shrink-0 rounded p-1 text-clay-500 hover:bg-clay-50 hover:text-clay-600 md:hidden md:group-hover:inline-flex"
                       aria-label={t("deleteSession")}
                     >
                       <Trash2 className="h-3.5 w-3.5" strokeWidth={2} />

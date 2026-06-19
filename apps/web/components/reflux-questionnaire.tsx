@@ -163,13 +163,21 @@ export function RefluxQuestionnaire() {
         {data.sections.map((section) => {
           const isAlarm = section.id === "red_flags";
           return (
-            <section key={section.id}>
+            <section
+              key={section.id}
+              className={isAlarm ? "rounded-2xl bg-clay-50/50 p-4 ring-1 ring-clay-100 sm:p-5" : ""}
+            >
               <h2
                 className={`flex items-center gap-2 text-lg ${isAlarm ? "text-clay-700" : "text-pine-900"}`}
               >
                 {isAlarm && <AlertTriangle className="h-4 w-4" strokeWidth={2.2} />}
                 {section.title}
               </h2>
+              {isAlarm && (
+                <p className="mt-2 flex items-start gap-1.5 rounded-lg bg-clay-100/60 px-3 py-2 text-xs font-medium leading-relaxed text-clay-700">
+                  {t("redFlagsBanner")}
+                </p>
+              )}
               <div className="mt-4 space-y-3">
                 {section.questions.map((q) => (
                   <QuestionCard
@@ -239,7 +247,7 @@ function QuestionCard({
               value={(value as string) ?? ""}
               onChange={(e) => onChange(e.target.value)}
               aria-label={q.text}
-              className="w-32 rounded-xl border border-line-strong bg-surface px-3 py-2 text-base text-ink focus:border-pine-400 focus:outline-none focus:ring-2 focus:ring-pine-100"
+              className="w-full max-w-[12rem] rounded-xl border border-line-strong bg-surface px-3 py-2 text-base text-ink focus:border-pine-400 focus:outline-none focus:ring-2 focus:ring-pine-100 sm:w-40"
             />
             {q.unit && <span className="text-sm text-ink-faint">{q.unit}</span>}
           </div>

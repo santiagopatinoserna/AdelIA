@@ -454,7 +454,10 @@
       "activeUntil": "Active link · expires {date}",
       "revoke": "Revoke",
       "revokeConfirm": "Revoke this link? Anyone with the URL will no longer be able to view it.",
-      "disclaimer": "Anyone with the URL can view the briefing until it expires or you revoke it. AdelIA logs accesses for auditing."
+      "disclaimer": "Anyone with the URL can view the briefing until it expires or you revoke it. AdelIA logs accesses for auditing.",
+      "privacyNotice": "Anyone with this link can view your baby's medical data. Share it only with someone you choose.",
+      "privacyAck": "I understand and want to create the link.",
+      "ttlHelp": "The link auto-disables after this time, for safety."
     },
     "staleBadge": "Stale",
     "noRender": "No rendered version available.",
@@ -502,7 +505,8 @@
     "copied": "Copied",
     "valoracionStale": "You've changed answers since this assessment — regenerate to update it.",
     "actionError": "Couldn't complete. Check your connection and try again.",
-    "valoracionDisclaimerTop": "This is informational and cited — not a diagnosis. You and your pediatrician decide. In an emergency, call emergency services."
+    "valoracionDisclaimerTop": "This is informational and cited — not a diagnosis. You and your pediatrician decide. In an emergency, call emergency services.",
+    "redFlagsBanner": "⚠ Warning signs. If you check any of these, contact your pediatrician today."
   },
   "consulta": {
     "title": "Appointment mode",
@@ -520,7 +524,8 @@
     "clear": "Clear",
     "regenerate": "Regenerate",
     "copy": "Copy",
-    "copied": "Copied"
+    "copied": "Copied",
+    "example": "Example: “The doctor says the weight is a bit low and wants to start formula.” AdelIA gives you grounded questions and flags to watch."
   },
   "command": {
     "placeholder": "Search or jump to…",

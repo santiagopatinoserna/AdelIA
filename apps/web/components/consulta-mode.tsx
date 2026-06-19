@@ -183,8 +183,14 @@ export function ConsultaMode() {
           onChange={(e) => setInput(e.target.value)}
           placeholder={t("placeholder")}
           aria-label={t("placeholder")}
-          className="mt-2 w-full resize-y rounded-xl border border-line-strong bg-surface px-3 py-2.5 text-base leading-relaxed text-ink placeholder:text-ink-faint focus:border-pine-400 focus:outline-none focus:ring-2 focus:ring-pine-100"
+          disabled={busy}
+          className="mt-2 w-full resize-y rounded-xl border border-line-strong bg-surface px-3 py-2.5 text-base leading-relaxed text-ink placeholder:text-ink-faint focus:border-pine-400 focus:outline-none focus:ring-2 focus:ring-pine-100 disabled:opacity-60"
         />
+        {!input.trim() && !answer && (
+          <p className="mt-2 rounded-lg bg-surface-2 px-3 py-2 text-xs leading-relaxed text-ink-soft">
+            {t("example")}
+          </p>
+        )}
         <div className="mt-3 flex items-center justify-between gap-2">
           {micSupported ? (
             <button
