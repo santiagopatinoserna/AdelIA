@@ -20,7 +20,9 @@ import {
   type LucideIcon,
 } from "lucide-react";
 
-type Cmd = { id: string; label: string; icon: LucideIcon; href: string };
+type Group = "ask" | "visit" | "manage";
+type Cmd = { id: string; label: string; desc: string; group: Group; icon: LucideIcon; href: string };
+const GROUP_ORDER: Group[] = ["ask", "visit", "manage"];
 
 // ⌘K command palette: jump to any section / action from anywhere, keyboard-first
 // (the modern web convention). Doubles as the mobile cross-section nav — the
@@ -38,16 +40,16 @@ export function CommandPalette() {
 
   const commands: Cmd[] = useMemo(
     () => [
-      { id: "home", label: tc("home"), icon: Home, href: "/dashboard" },
-      { id: "chat", label: "Chat", icon: MessagesSquare, href: "/dashboard/chat" },
-      { id: "newchat", label: tc("newChat"), icon: Plus, href: "/dashboard/chat" },
-      { id: "briefings", label: "Briefings", icon: ClipboardList, href: "/dashboard/briefings" },
-      { id: "questionnaire", label: t("questionnaire.navLabel"), icon: Baby, href: "/dashboard/questionnaire" },
-      { id: "consulta", label: t("consulta.navLabel"), icon: Stethoscope, href: "/dashboard/consulta" },
-      { id: "ingestion", label: t("dashboard.navImport"), icon: Download, href: "/dashboard/ingestion" },
-      { id: "enrichment", label: t("dashboard.navInsights"), icon: Sparkles, href: "/dashboard/enrichment" },
-      { id: "upload", label: t("dashboard.uploadCta"), icon: UploadCloud, href: "/dashboard/upload" },
-      { id: "settings", label: t("settings.title"), icon: Settings, href: "/dashboard/settings" },
+      { id: "chat", label: "Chat", desc: tc("descChat"), group: "ask", icon: MessagesSquare, href: "/dashboard/chat" },
+      { id: "newchat", label: tc("newChat"), desc: tc("descNewChat"), group: "ask", icon: Plus, href: "/dashboard/chat" },
+      { id: "questionnaire", label: t("questionnaire.navLabel"), desc: tc("descQuestionnaire"), group: "visit", icon: Baby, href: "/dashboard/questionnaire" },
+      { id: "consulta", label: t("consulta.navLabel"), desc: tc("descConsulta"), group: "visit", icon: Stethoscope, href: "/dashboard/consulta" },
+      { id: "briefings", label: "Briefings", desc: tc("descBriefings"), group: "visit", icon: ClipboardList, href: "/dashboard/briefings" },
+      { id: "home", label: tc("home"), desc: tc("descHome"), group: "manage", icon: Home, href: "/dashboard" },
+      { id: "upload", label: t("dashboard.uploadCta"), desc: tc("descUpload"), group: "manage", icon: UploadCloud, href: "/dashboard/upload" },
+      { id: "ingestion", label: t("dashboard.navImport"), desc: tc("descIngestion"), group: "manage", icon: Download, href: "/dashboard/ingestion" },
+      { id: "enrichment", label: t("dashboard.navInsights"), desc: tc("descEnrichment"), group: "manage", icon: Sparkles, href: "/dashboard/enrichment" },
+      { id: "settings", label: t("settings.title"), desc: tc("descSettings"), group: "manage", icon: Settings, href: "/dashboard/settings" },
     ],
     [t, tc],
   );
@@ -55,8 +57,22 @@ export function CommandPalette() {
   const filtered = useMemo(() => {
     const q = query.trim().toLowerCase();
     if (!q) return commands;
-    return commands.filter((c) => c.label.toLowerCase().includes(q));
+    return commands.filter(
+      (c) => c.label.toLowerCase().includes(q) || c.desc.toLowerCase().includes(q),
+    );
   }, [query, commands]);
+
+  // Keep the visual category headers while preserving the flat index used by
+  // keyboard nav (sel maps to filtered[]). We render groups in a fixed order,
+  // tracking each item's absolute index across groups.
+  const grouped = useMemo(() => {
+    return GROUP_ORDER.map((g) => ({
+      group: g,
+      items: filtered
+        .map((c, idx) => ({ c, idx }))
+        .filter(({ c }) => c.group === g),
+    })).filter((s) => s.items.length > 0);
+  }, [filtered]);
 
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
@@ -109,10 +125,10 @@ export function CommandPalette() {
         type="button"
         onClick={() => setOpen(true)}
         aria-label={tc("label")}
-        className="ad-btn ad-btn-ghost h-9 gap-2 px-2.5 text-sm text-ink-soft lg:px-3"
+        className="ad-btn ad-btn-ghost h-9 gap-2 px-3 text-sm text-ink-soft"
       >
-        <Search className="h-4 w-4" strokeWidth={2} />
-        <span className="hidden lg:inline">{tc("label")}</span>
+        <Search className="h-4 w-4 shrink-0" strokeWidth={2} />
+        <span>{tc("label")}</span>
         <kbd className="hidden rounded border border-line-strong bg-surface-2 px-1.5 py-px font-mono text-[10px] text-ink-faint lg:inline">
           ⌘K
         </kbd>
@@ -129,7 +145,7 @@ export function CommandPalette() {
             aria-modal="true"
             aria-label={tc("label")}
             onClick={(e) => e.stopPropagation()}
-            className="ad-card w-full max-w-lg overflow-hidden p-0 shadow-glow"
+            className="ad-card w-full max-w-sm overflow-hidden p-0 shadow-glow sm:max-w-lg"
           >
             <div className="flex items-center gap-2 border-b border-line px-4">
               <Search className="h-4 w-4 shrink-0 text-ink-faint" strokeWidth={2} />
@@ -145,26 +161,40 @@ export function CommandPalette() {
             </div>
             <ul className="max-h-80 overflow-y-auto p-2">
               {filtered.length === 0 ? (
-                <li className="px-3 py-6 text-center text-sm text-ink-faint">{tc("noResults")}</li>
+                <li className="px-3 py-6 text-center text-sm text-ink-soft">{tc("noResults")}</li>
               ) : (
-                filtered.map((c, i) => (
-                  <li key={c.id}>
-                    <button
-                      type="button"
-                      onClick={() => run(c)}
-                      onMouseMove={() => setSel(i)}
-                      aria-selected={i === sel}
-                      className={`flex w-full items-center gap-3 rounded-lg px-3 py-2 text-left text-sm ${
-                        i === sel ? "bg-pine-50 text-pine-800" : "text-ink"
-                      }`}
-                    >
-                      <c.icon
-                        className={`h-4 w-4 shrink-0 ${i === sel ? "text-pine-500" : "text-ink-faint"}`}
-                        strokeWidth={2}
-                      />
-                      <span className="flex-1">{c.label}</span>
-                      {i === sel && <CornerDownLeft className="h-3.5 w-3.5 text-pine-400" strokeWidth={2} />}
-                    </button>
+                grouped.map((section) => (
+                  <li key={section.group}>
+                    <p className="ad-eyebrow px-3 pb-1 pt-3 first:pt-1">{tc(`group_${section.group}`)}</p>
+                    <ul>
+                      {section.items.map(({ c, idx }) => (
+                        <li key={c.id}>
+                          <button
+                            type="button"
+                            onClick={() => run(c)}
+                            onMouseMove={() => setSel(idx)}
+                            aria-selected={idx === sel}
+                            className={`flex min-h-[44px] w-full items-center gap-3 rounded-lg px-3 py-2 text-left text-sm ${
+                              idx === sel ? "bg-pine-50 text-pine-800" : "text-ink"
+                            }`}
+                          >
+                            <c.icon
+                              className={`h-4 w-4 shrink-0 ${idx === sel ? "text-pine-500" : "text-ink-soft"}`}
+                              strokeWidth={2}
+                            />
+                            <span className="flex-1 leading-tight">
+                              <span className="block font-medium">{c.label}</span>
+                              <span className={`block text-xs ${idx === sel ? "text-pine-700" : "text-ink-soft"}`}>
+                                {c.desc}
+                              </span>
+                            </span>
+                            {idx === sel && (
+                              <CornerDownLeft className="h-3.5 w-3.5 shrink-0 text-pine-400" strokeWidth={2} />
+                            )}
+                          </button>
+                        </li>
+                      ))}
+                    </ul>
                   </li>
                 ))
               )}

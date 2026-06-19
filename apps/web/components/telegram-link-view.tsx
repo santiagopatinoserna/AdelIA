@@ -29,7 +29,7 @@ export function TelegramLinkView({
         <Send className="h-5 w-5 text-pine-500" strokeWidth={2} />
         {t("title")}
       </h1>
-      <p className="mt-1 text-sm text-ink-soft">{t("subtitle")}</p>
+      <p className="mt-1 text-sm text-ink-soft">{t("subtitleFriendly")}</p>
 
       {error && (
         <div className="mt-4 rounded-lg border border-clay-100 bg-clay-50 p-3 text-sm text-clay-700">

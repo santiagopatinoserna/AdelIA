@@ -10,7 +10,12 @@
     "notFoundBody": "The page you are looking for doesn't exist or has moved.",
     "backHome": "Back to home",
     "remove": "Remove",
-    "actionError": "Couldn't complete. Check your connection and try again."
+    "actionError": "Couldn't complete. Check your connection and try again.",
+    "language": "Language",
+    "lang_es": "Spanish",
+    "lang_en": "English",
+    "lang_fr": "French",
+    "errorId": "ID: {id} (copy it if you contact support)"
   },
   "home": {
     "hero": "All your baby's health, in one place. And an AI that answers — with the evidence to back it.",
@@ -152,7 +157,9 @@
     "mixAnswerLabel": "Their history × 1,936 studies",
     "mixAnswer": "Your baby went from 3.2 kg at birth to 7.4 kg at 6 months [2]: a gain within the expected range per WHO growth curves [ev_1]. The reflux you logged at 4 months matches the physiological peak described by NASPGHAN-ESPGHAN, which improves toward the first year [ev_2].",
     "mixLegendData": "their history",
-    "mixLegendEv": "cited studies"
+    "mixLegendEv": "cited studies",
+    "prT1DevTag": "For developers",
+    "prT2Trial": "Free for 30 days, nothing to pay today"
   },
   "dashboard": {
     "title": "My documents",
@@ -161,7 +168,9 @@
     "status": {
       "processing": "Processing…",
       "ready": "Ready",
-      "failed": "Failed"
+      "failed": "Failed",
+      "processingEta": "Reading… (~30s)",
+      "failedHint": "Try again · use a clearer photo"
     },
     "entitiesAndChunks": "{count, plural, =0 {No entities extracted} =1 {1 entity} other {# entities}} · {chunks, plural, =0 {No chunks} =1 {1 chunk} other {# chunks}}",
     "ocrProcessing": "Reading your document… updates automatically",
@@ -245,7 +254,8 @@
     "noDocTitle": "Upload a document first",
     "noDocBody": "To answer about your baby, AdelIA needs at least one document: the health record, a lab or the pediatrician's report.",
     "noDocCta": "Upload a document",
-    "errorAnswer": "I couldn't process your question. Check your connection and try again."
+    "errorAnswer": "I couldn't process your question. Check your connection and try again.",
+    "keyboardHint": "Enter to send · Shift+Enter for a new line"
   },
   "ingestion": {
     "title": "Import data",
@@ -295,7 +305,8 @@
       "step2": "Tap \"Start\" or send:",
       "copy": "Copy",
       "tokenExpiry": "The token expires in 1 hour. If it takes too long, refresh this page to generate a new one.",
-      "step3": "Once linked, forward any PDF/photo/audio to the bot. It will be processed automatically."
+      "step3": "Once linked, forward any PDF/photo/audio to the bot. It will be processed automatically.",
+      "subtitleFriendly": "Send medical PDFs, photos and voice notes to the bot and they save themselves to your vault."
     },
     "email": {
       "title": "Email forwarding",
@@ -310,7 +321,10 @@
       "outlookTitle": "Set up forwarding (Outlook / iCloud)",
       "outlookStep1": "1. Settings → Mail → Rules → New rule",
       "outlookStep2": "2. Match condition (sender, subject keywords)",
-      "warning": "Emails forwarded to your alias are processed automatically. Only forward medical content you want in your vault."
+      "warning": "Emails forwarded to your alias are processed automatically. Only forward medical content you want in your vault.",
+      "subtitleFriendly": "Forward any medical document you get by email and it saves itself to your vault.",
+      "aliasLabelFriendly": "Your special AdelIA email",
+      "warningFriendly": "Anything you forward to your special email saves automatically. Only forward what you want to keep in your vault."
     },
     "startHereTitle": "Start here",
     "startHereHint": "Pick one — whichever feels easiest.",
@@ -504,8 +518,11 @@
       "revokeConfirm": "Revoke this link? Anyone with the URL will no longer be able to view it.",
       "disclaimer": "Anyone with the URL can view the briefing until it expires or you revoke it. AdelIA logs accesses for auditing.",
       "privacyNotice": "Anyone with this link can view your baby's medical data. Share it only with someone you choose.",
-      "privacyAck": "I understand and want to create the link.",
-      "ttlHelp": "The link auto-disables after this time, for safety."
+      "privacyAck": "I understand that anyone with the link will see all of my baby's medical data. I want to create it.",
+      "ttlHelp": "The link auto-disables after this time, for safety.",
+      "copyLink": "Copy link",
+      "copied": "Link copied",
+      "close": "Close"
     },
     "staleBadge": "Stale",
     "noRender": "No rendered version available.",
@@ -531,7 +548,8 @@
     "confirmLabel": "Type {email} to confirm:",
     "deleteButton": "Delete my account permanently",
     "deleting": "Deleting…",
-    "actionError": "Couldn't complete. Check your connection and try again."
+    "actionError": "Couldn't complete. Check your connection and try again.",
+    "ackIrreversible": "I understand this deletes everything forever and can't be undone."
   },
   "questionnaire": {
     "title": "Reflux control",
@@ -587,14 +605,29 @@
     "copy": "Copy",
     "copied": "Copied",
     "example": "Example: “The doctor says the weight is a bit low and wants to start formula.” AdelIA gives you grounded questions and flags to watch.",
-    "generatingHint": "Reading what the doctor said and cross-checking it with studies… just a few seconds."
+    "generatingHint": "Reading what the doctor said and cross-checking it with studies… just a few seconds.",
+    "listenIn": "Dictate in {lang}",
+    "listeningTap": "Listening… (tap to stop)"
   },
   "command": {
     "placeholder": "Search or jump to…",
     "noResults": "No results",
     "label": "Search",
     "home": "Home",
-    "newChat": "New conversation"
+    "newChat": "New conversation",
+    "group_ask": "Ask",
+    "group_visit": "Prepare your visit",
+    "group_manage": "Your account",
+    "descChat": "Ask AdelIA about your baby",
+    "descNewChat": "Start a fresh conversation",
+    "descQuestionnaire": "Go through your baby's reflux, step by step",
+    "descConsulta": "Support during the doctor's visit",
+    "descBriefings": "Clear summaries to bring to the pediatrician",
+    "descHome": "Back to your space",
+    "descUpload": "Add a photo or a PDF",
+    "descIngestion": "Check what's being imported",
+    "descEnrichment": "Insights from your documents",
+    "descSettings": "Manage your account and data"
   },
   "connectivity": {
     "offline": "You're offline",
@@ -609,11 +642,11 @@
   },
   "checkin": {
     "dismiss": "Not now",
-    "upload": "Got a new record for your baby? Add it to keep everything up to date.",
+    "upload": "Add your baby's latest record to keep everything up to date.",
     "uploadCta": "Upload",
-    "weight": "How much does your baby weigh now? Ask their history how the curve looks.",
+    "weight": "Check how your baby's growth curve is doing.",
     "weightCta": "Ask",
-    "doubt": "Any health question this week? I'm here to help.",
+    "doubt": "Ask AdelIA anything about your baby's health.",
     "doubtCta": "Ask",
     "checkup": "A check-up or vaccine coming up? Add it as soon as you have it.",
     "checkupCta": "Add",

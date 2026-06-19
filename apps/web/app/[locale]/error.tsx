@@ -2,7 +2,8 @@
 
 import { useEffect } from "react";
 import { useTranslations } from "next-intl";
-import { AlertTriangle, RotateCcw } from "lucide-react";
+import { Link } from "@/lib/navigation";
+import { AlertTriangle, RotateCcw, Home } from "lucide-react";
 
 // Locale-scoped error boundary. Rendered inside the locale layout, so the
 // NextIntlClientProvider is present and useTranslations works.
@@ -27,10 +28,25 @@ export default function LocaleError({
         </span>
         <h1 className="mt-5 text-2xl text-pine-900">{t("errorTitle")}</h1>
         <p className="mx-auto mt-2 max-w-sm text-sm text-ink-soft">{t("errorBody")}</p>
-        <button type="button" onClick={reset} className="ad-btn ad-btn-primary mt-6 px-5 py-2.5 text-sm">
-          <RotateCcw className="h-4 w-4" strokeWidth={2.2} />
-          {t("retry")}
-        </button>
+        <div className="mt-6 flex flex-col items-center justify-center gap-2.5 sm:flex-row">
+          <button
+            type="button"
+            onClick={reset}
+            className="ad-btn ad-btn-primary min-h-[44px] w-full px-5 py-2.5 text-sm sm:w-auto"
+          >
+            <RotateCcw className="h-4 w-4" strokeWidth={2.2} />
+            {t("retry")}
+          </button>
+          <Link href="/" className="ad-btn ad-btn-ghost min-h-[44px] w-full px-5 py-2.5 text-sm sm:w-auto">
+            <Home className="h-4 w-4" strokeWidth={2.2} />
+            {t("backHome")}
+          </Link>
+        </div>
+        {error.digest && (
+          <p className="mt-5 text-xs text-ink-faint">
+            {t("errorId", { id: error.digest.slice(0, 8) })}
+          </p>
+        )}
       </div>
     </main>
   );

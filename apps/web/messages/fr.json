@@ -10,7 +10,12 @@
     "notFoundBody": "La page que tu cherches n'existe pas ou a été déplacée.",
     "backHome": "Retour à l'accueil",
     "remove": "Retirer",
-    "actionError": "Impossible de terminer. Vérifie ta connexion et réessaie."
+    "actionError": "Impossible de terminer. Vérifie ta connexion et réessaie.",
+    "language": "Langue",
+    "lang_es": "Espagnol",
+    "lang_en": "Anglais",
+    "lang_fr": "Français",
+    "errorId": "ID : {id} (copie-le si tu contactes le support)"
   },
   "home": {
     "hero": "Toute la santé de ton bébé, au même endroit. Et une IA qui répond, preuves à l'appui.",
@@ -152,7 +157,9 @@
     "mixAnswerLabel": "Son histoire × 1 936 études",
     "mixAnswer": "Votre bébé est passé de 3,2 kg à la naissance à 7,4 kg à 6 mois [2] : une prise de poids dans la norme selon les courbes de croissance de l'OMS [ev_1]. La régurgitation notée à 4 mois correspond au pic physiologique décrit par NASPGHAN-ESPGHAN, qui s'améliore vers un an [ev_2].",
     "mixLegendData": "données de son histoire",
-    "mixLegendEv": "études citées"
+    "mixLegendEv": "études citées",
+    "prT1DevTag": "Pour les développeurs",
+    "prT2Trial": "Essai gratuit de 30 jours, tu ne paies rien aujourd'hui"
   },
   "dashboard": {
     "title": "Mes documents",
@@ -161,7 +168,9 @@
     "status": {
       "processing": "Traitement…",
       "ready": "Prêt",
-      "failed": "Échec"
+      "failed": "Échec",
+      "processingEta": "Lecture en cours… (~30s)",
+      "failedHint": "Réessaie · prends une photo plus nette"
     },
     "entitiesAndChunks": "{count, plural, =0 {Aucune donnée extraite} =1 {1 donnée} other {# données}} · {chunks, plural, =0 {Aucun extrait} =1 {1 extrait} other {# extraits}}",
     "ocrProcessing": "On lit ton document… mise à jour automatique",
@@ -245,7 +254,8 @@
     "noDocTitle": "Ajoute d'abord un document",
     "noDocBody": "Pour répondre sur ton bébé, AdelIA a besoin d'au moins un document : le carnet, une analyse ou le compte-rendu du pédiatre.",
     "noDocCta": "Ajouter un document",
-    "errorAnswer": "Je n'ai pas pu traiter ta question. Vérifie ta connexion et réessaie."
+    "errorAnswer": "Je n'ai pas pu traiter ta question. Vérifie ta connexion et réessaie.",
+    "keyboardHint": "Entrée pour envoyer · Maj+Entrée pour un saut de ligne"
   },
   "ingestion": {
     "title": "Importer des données",
@@ -295,7 +305,8 @@
       "step2": "Appuyez sur \"Start\" ou envoyez :",
       "copy": "Copier",
       "tokenExpiry": "Le token expire dans 1 heure. Si rien ne se passe, actualisez cette page pour en générer un nouveau.",
-      "step3": "Une fois lié, transférez n'importe quel PDF/photo/audio au bot. Il sera traité automatiquement."
+      "step3": "Une fois lié, transférez n'importe quel PDF/photo/audio au bot. Il sera traité automatiquement.",
+      "subtitleFriendly": "Envoie tes PDF, photos et audios médicaux au bot : ils se rangent tout seuls dans ton coffre-fort."
     },
     "email": {
       "title": "Transfert par e-mail",
@@ -310,7 +321,10 @@
       "outlookTitle": "Configurer le transfert (Outlook / iCloud)",
       "outlookStep1": "1. Paramètres → Courrier → Règles → Nouvelle règle",
       "outlookStep2": "2. Condition (expéditeur, mots-clés de l'objet)",
-      "warning": "Les e-mails transférés vers votre alias sont traités automatiquement. Ne transférez que le contenu médical que vous souhaitez conserver dans votre coffre-fort."
+      "warning": "Les e-mails transférés vers votre alias sont traités automatiquement. Ne transférez que le contenu médical que vous souhaitez conserver dans votre coffre-fort.",
+      "subtitleFriendly": "Transfère n'importe quel document médical reçu par e-mail : il se range tout seul dans ton coffre-fort.",
+      "aliasLabelFriendly": "Ton e-mail spécial AdelIA",
+      "warningFriendly": "Tout ce que tu transfères vers ton e-mail spécial est enregistré automatiquement. Ne transfère que ce que tu veux garder dans ton coffre-fort."
     },
     "startHereTitle": "Commence ici",
     "startHereHint": "Choisis-en une, celle qui te semble la plus simple.",
@@ -504,8 +518,11 @@
       "revokeConfirm": "Révoquer ce lien ? Toute personne disposant de l'URL ne pourra plus le voir.",
       "disclaimer": "Toute personne disposant de l'URL peut voir le briefing jusqu'à son expiration ou sa révocation. AdelIA comptabilise les accès à des fins d'audit.",
       "privacyNotice": "Toute personne ayant ce lien pourra voir les données médicales de ton bébé. Ne le partage qu'avec qui tu décides.",
-      "privacyAck": "Je comprends et je veux créer le lien.",
-      "ttlHelp": "Le lien se désactive tout seul après ce délai, par sécurité."
+      "privacyAck": "Je comprends que toute personne ayant le lien verra toutes les données médicales de mon bébé. Je veux le créer.",
+      "ttlHelp": "Le lien se désactive tout seul après ce délai, par sécurité.",
+      "copyLink": "Copier le lien",
+      "copied": "Lien copié",
+      "close": "Fermer"
     },
     "staleBadge": "Obsolète",
     "noRender": "Aucune version générée disponible.",
@@ -531,7 +548,8 @@
     "confirmLabel": "Saisissez {email} pour confirmer :",
     "deleteButton": "Supprimer définitivement mon compte",
     "deleting": "Suppression…",
-    "actionError": "Impossible de terminer. Vérifiez votre connexion et réessayez."
+    "actionError": "Impossible de terminer. Vérifiez votre connexion et réessayez.",
+    "ackIrreversible": "Je comprends que ça supprime tout pour toujours, sans retour possible."
   },
   "questionnaire": {
     "title": "Suivi du reflux",
@@ -587,14 +605,29 @@
     "copy": "Copier",
     "copied": "Copié",
     "example": "Exemple : « Le médecin dit que le poids est un peu bas et veut commencer le lait infantile. » AdelIA te donne des questions argumentées et des signaux à surveiller.",
-    "generatingHint": "On analyse ce qu'a dit le médecin et on le croise avec les études… quelques secondes."
+    "generatingHint": "On analyse ce qu'a dit le médecin et on le croise avec les études… quelques secondes.",
+    "listenIn": "Dicter en {lang}",
+    "listeningTap": "J'écoute… (touche pour arrêter)"
   },
   "command": {
     "placeholder": "Rechercher ou aller à…",
     "noResults": "Aucun résultat",
     "label": "Rechercher",
     "home": "Accueil",
-    "newChat": "Nouvelle conversation"
+    "newChat": "Nouvelle conversation",
+    "group_ask": "Demander",
+    "group_visit": "Préparer ta visite",
+    "group_manage": "Ton compte",
+    "descChat": "Pose tes questions sur ton bébé à AdelIA",
+    "descNewChat": "Démarre une nouvelle conversation",
+    "descQuestionnaire": "Passe en revue le reflux de ton bébé, étape par étape",
+    "descConsulta": "Un appui pendant le rendez-vous chez le médecin",
+    "descBriefings": "Des résumés clairs à apporter au pédiatre",
+    "descHome": "Reviens à ton espace",
+    "descUpload": "Ajoute une photo ou un PDF",
+    "descIngestion": "Vérifie ce qui est en cours d'import",
+    "descEnrichment": "Des Insights à partir de tes documents",
+    "descSettings": "Gère ton compte et tes données"
   },
   "connectivity": {
     "offline": "Hors ligne",
@@ -609,11 +642,11 @@
   },
   "checkin": {
     "dismiss": "Plus tard",
-    "upload": "Un nouveau document pour ton bébé ? Ajoute-le pour tout garder à jour.",
+    "upload": "Ajoute le dernier document de ton bébé pour tout garder à jour.",
     "uploadCta": "Ajouter",
-    "weight": "Combien pèse ton bébé aujourd'hui ? Demande à AdelIA où en est sa courbe.",
+    "weight": "Vérifie comment évolue la courbe de croissance de ton bébé.",
     "weightCta": "Demander",
-    "doubt": "Une question sur sa santé cette semaine ? Je suis là pour t'aider.",
+    "doubt": "Pose à AdelIA n'importe quelle question sur la santé de ton bébé.",
     "doubtCta": "Demander",
     "checkup": "Une visite ou un vaccin bientôt ? Ajoute-le dès que tu l'as.",
     "checkupCta": "Ajouter",

@@ -8,10 +8,14 @@ import { AlertTriangle } from "lucide-react";
 export function AccountSettingsView({ email }: { email: string }) {
   const t = useTranslations("settings");
   const [confirmText, setConfirmText] = useState("");
+  const [acknowledged, setAcknowledged] = useState(false);
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  const armed = confirmText.trim().toLowerCase() === email.toLowerCase();
+  // Two safeguards before we arm the button: an explicit "I understand"
+  // acknowledgement AND typing the full account email. Both must pass.
+  const armed =
+    acknowledged && confirmText.trim().toLowerCase() === email.toLowerCase();
 
   async function deleteAccount() {
     if (!armed || busy) return;
@@ -41,7 +45,16 @@ export function AccountSettingsView({ email }: { email: string }) {
           {t("dangerTitle")}
         </h2>
         <p className="mt-2 text-sm text-clay-700">{t("dangerBody")}</p>
-        <label htmlFor="confirm-delete" className="mt-4 block text-xs font-medium text-clay-700">
+        <label className="mt-4 flex min-h-[44px] cursor-pointer items-start gap-2.5 text-sm text-clay-700">
+          <input
+            type="checkbox"
+            checked={acknowledged}
+            onChange={(e) => setAcknowledged(e.target.checked)}
+            className="mt-0.5 h-4 w-4 shrink-0 rounded border-clay-100 text-clay-500 focus:ring-2 focus:ring-clay-100"
+          />
+          <span>{t("ackIrreversible")}</span>
+        </label>
+        <label htmlFor="confirm-delete" className="mt-3 block text-xs font-medium text-clay-700">
           {t("confirmLabel", { email })}
           <input
             id="confirm-delete"
@@ -49,16 +62,21 @@ export function AccountSettingsView({ email }: { email: string }) {
             value={confirmText}
             onChange={(e) => setConfirmText(e.target.value)}
             autoComplete="off"
-            className="mt-1.5 w-full rounded-lg border border-clay-100 bg-surface px-3 py-2 font-mono text-sm text-ink focus:border-clay-500 focus:outline-none focus:ring-2 focus:ring-clay-100"
+            className="mt-1.5 min-h-[44px] w-full rounded-lg border border-clay-100 bg-surface px-3 py-2 font-mono text-sm text-ink focus:border-clay-500 focus:outline-none focus:ring-2 focus:ring-clay-100"
             placeholder={email}
           />
         </label>
-        {error && <p className="mt-2 text-sm font-medium text-clay-700">{error}</p>}
+        {error && (
+          <p className="mt-2 text-sm font-medium text-clay-700" role="alert">
+            {error}
+          </p>
+        )}
         <button
           type="button"
           onClick={deleteAccount}
           disabled={!armed || busy}
-          className="ad-btn ad-btn-danger mt-4 px-4 py-2 text-sm font-medium"
+          className="ad-btn ad-btn-danger mt-4 min-h-[44px] px-4 py-2 text-sm font-medium"
+          aria-busy={busy}
         >
           {busy ? t("deleting") : t("deleteButton")}
         </button>

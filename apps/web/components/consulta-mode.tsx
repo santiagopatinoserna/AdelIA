@@ -41,6 +41,12 @@ function getSpeechCtor(): SpeechCtor | null {
 }
 
 const LANG: Record<string, string> = { es: "es-ES", en: "en-US", fr: "fr-FR" };
+// Human-friendly label of the language the mic will transcribe in.
+const MIC_LABEL: Record<string, string> = {
+  es: "Español",
+  en: "English",
+  fr: "Français",
+};
 
 // Modo Consulta: the parent types/dictates what the doctor says, and AdelIA
 // returns argued questions + safety flags cross-referenced with the child's
@@ -196,7 +202,7 @@ export function ConsultaMode() {
           placeholder={t("placeholder")}
           aria-label={t("placeholder")}
           disabled={busy}
-          className="mt-2 w-full resize-y rounded-xl border border-line-strong bg-surface px-3 py-2.5 text-base leading-relaxed text-ink placeholder:text-ink-faint focus:border-pine-400 focus:outline-none focus:ring-2 focus:ring-pine-100 disabled:opacity-60"
+          className="mt-2 w-full resize-y rounded-xl border border-line-strong bg-surface px-3 py-2.5 text-base leading-relaxed text-ink placeholder:text-ink-faint focus:border-pine-400 focus:outline-none focus:ring-2 focus:ring-pine-300 disabled:opacity-60"
         />
         {!input.trim() && !answer && (
           <p className="mt-2 rounded-lg bg-surface-2 px-3 py-2 text-xs leading-relaxed text-ink-soft">
@@ -209,14 +215,19 @@ export function ConsultaMode() {
               type="button"
               onClick={toggleMic}
               aria-pressed={listening}
-              className={`ad-btn px-3 py-2 text-sm ${
+              aria-label={listening ? t("listeningTap") : t("listenIn", { lang: MIC_LABEL[locale] ?? MIC_LABEL.es })}
+              className={`ad-btn min-h-[44px] px-3 py-2 text-sm ${
                 listening
-                  ? "bg-clay-500 text-white hover:bg-clay-600"
+                  ? "bg-honey-100 text-honey-700 ring-1 ring-honey-200 hover:bg-honey-200"
                   : "ad-btn-ghost"
               }`}
             >
               <Mic className={`h-4 w-4 ${listening ? "animate-pulse" : ""}`} strokeWidth={2} />
-              {listening ? t("listening") : t("listen")}
+              <span>
+                {listening
+                  ? t("listeningTap")
+                  : t("listenIn", { lang: MIC_LABEL[locale] ?? MIC_LABEL.es })}
+              </span>
             </button>
           ) : (
             <span />

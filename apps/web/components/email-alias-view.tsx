@@ -29,7 +29,7 @@ export function EmailAliasView({
         <Mail className="h-5 w-5 text-pine-500" strokeWidth={2} />
         {t("title")}
       </h1>
-      <p className="mt-1 text-sm text-ink-soft">{t("subtitle")}</p>
+      <p className="mt-1 text-sm text-ink-soft">{t("subtitleFriendly")}</p>
 
       {error && (
         <div className="mt-4 rounded-lg border border-clay-100 bg-clay-50 p-3 text-sm text-clay-700">
@@ -40,7 +40,7 @@ export function EmailAliasView({
       {data && (
         <div className="mt-6 space-y-4">
           <div className="ad-card p-4">
-            <div className="ad-eyebrow">{t("aliasLabel")}</div>
+            <div className="ad-eyebrow">{t("aliasLabelFriendly")}</div>
             <div className="mt-2 flex items-center gap-2">
               <code className="flex-1 break-all rounded-lg border border-line bg-surface-2 px-3 py-2 font-mono text-sm text-ink">
                 {data.alias}
@@ -76,8 +76,8 @@ export function EmailAliasView({
           </section>
 
           <div className="flex items-start gap-2 rounded-lg border border-honey-200 bg-honey-100/60 p-3 text-xs text-ink">
-            <AlertTriangle className="mt-px h-3.5 w-3.5 shrink-0 text-honey-600" strokeWidth={2.2} />
-            {t("warning")}
+            <AlertTriangle className="mt-px h-3.5 w-3.5 shrink-0 text-honey-700" strokeWidth={2.2} />
+            {t("warningFriendly")}
           </div>
         </div>
       )}
