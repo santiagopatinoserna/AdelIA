@@ -181,7 +181,11 @@
     "orQuestionnaire": "Pas encore de documents ? Commence par le suivi de ton bébé",
     "ocrTimeout": "Ça prend plus de temps que d'habitude. Recharge dans un instant ou réessaie.",
     "ocrReload": "Recharger",
-    "docReady": "Document prêt · tu peux poser tes questions"
+    "docReady": "Document prêt · tu peux poser tes questions",
+    "navUpload": "Ajouter un document",
+    "navPrimaryLabel": "Actions principales",
+    "navMoreLabel": "Plus d'options",
+    "loadingSpace": "Chargement de ton espace…"
   },
   "upload": {
     "title": "Importer un document",
@@ -266,7 +270,9 @@
       "ccdDesc": "XML du portail patient",
       "telegramDesc": "Transférez vos docs au bot",
       "emailTitle": "E-mail",
-      "emailDesc": "Transférez vers votre alias"
+      "emailDesc": "Transférez vers votre alias",
+      "photoTitle": "Photo ou PDF",
+      "photoDesc": "Prends une photo du compte rendu ou ajoute le PDF"
     },
     "appleHealth": {
       "title": "Import Apple Health",
@@ -305,7 +311,12 @@
       "outlookStep1": "1. Paramètres → Courrier → Règles → Nouvelle règle",
       "outlookStep2": "2. Condition (expéditeur, mots-clés de l'objet)",
       "warning": "Les e-mails transférés vers votre alias sont traités automatiquement. Ne transférez que le contenu médical que vous souhaitez conserver dans votre coffre-fort."
-    }
+    },
+    "startHereTitle": "Commence ici",
+    "startHereHint": "Choisis-en une, celle qui te semble la plus simple.",
+    "fastestBadge": "Le plus rapide",
+    "advancedTitle": "Options avancées",
+    "advancedHint": "Guides par plateforme et modèles pour demander tes données. Seulement si tu en as besoin."
   },
   "enrichment": {
     "title": "Insights v0.2",
@@ -349,6 +360,22 @@
         "major": "Majeure",
         "moderate": "Modérée",
         "minor": "Mineure"
+      },
+      "needTwo": "Ajoute un autre médicament pour vérifier les interactions",
+      "severityMeans": "Ce que ça veut dire",
+      "noInteractionsTitle": "Bonne nouvelle : aucune interaction connue entre {drugs}.",
+      "noInteractionsHint": "Confirme avec ton pédiatre avant de les associer.",
+      "severityMom": {
+        "contraindicated": "Ne pas associer",
+        "major": "Probablement risqué",
+        "moderate": "Prudence conseillée",
+        "minor": "Faible risque"
+      },
+      "severityPlain": {
+        "contraindicated": "À ne pas prendre en même temps. Parles-en à ton médecin avant de les associer.",
+        "major": "Ensemble, ils peuvent causer des problèmes sérieux. Mieux vaut en parler à ton médecin.",
+        "moderate": "On peut souvent les associer, mais reste vigilante. Parles-en lors de ta prochaine visite.",
+        "minor": "Le risque est faible. Préviens quand même ton médecin, au cas où."
       }
     },
     "labs": {
@@ -361,14 +388,20 @@
       "sexLabel": "Sexe :",
       "namePlaceholder": "HbA1c, glucose, ldl, ...",
       "valuePlaceholder": "valeur",
-      "noResults": "Aucun résultat pour ces valeurs."
+      "noResults": "Aucun résultat pour ces valeurs.",
+      "needOne": "Saisis au moins une analyse à évaluer"
     },
     "trials": {
       "search": "Rechercher des essais",
       "condition": "Pathologie",
       "country": "Pays",
       "noResults": "Aucun essai ouvert pour cette pathologie",
-      "viewStudy": "Voir l'étude"
+      "viewStudy": "Voir l'étude",
+      "needCondition": "Saisis une condition pour chercher des études",
+      "phaseLegend": "La phase indique l'avancement de l'étude (les premières sont plus expérimentales).",
+      "whoCanJoin": "Qui peut participer",
+      "ageLabel": "Âge",
+      "sexLabel": "Sexe :"
     },
     "genomics": {
       "upload": "Téléverser 23andMe raw_data.txt",
@@ -385,7 +418,12 @@
         "absent": "Absent"
       },
       "savedFrom": "Analyse enregistrée du",
-      "noResults": "Aucune variante trouvée dans ce fichier."
+      "noResults": "Aucune variante trouvée dans ce fichier.",
+      "zygosityPlain": {
+        "homozygous": "Tu as 2 copies. Parles-en avec ton médecin pour comprendre ce que ça signifie pour toi.",
+        "heterozygous": "Tu as 1 copie (porteuse). Les personnes porteuses sont généralement en bonne santé.",
+        "absent": "Tu ne portes aucune copie de cette variante."
+      }
     },
     "codes": {
       "lookup": "Rechercher un code",
@@ -394,7 +432,8 @@
       "snomed": "SNOMED CT",
       "noMatch": "Aucun code trouvé",
       "category": "Catégorie",
-      "match": "Correspondance"
+      "match": "Correspondance",
+      "needQuery": "Saisis un diagnostic ou un symptôme pour trouver son code"
     },
     "coverage": {
       "concepts": "Concepts normalisés",
@@ -404,15 +443,22 @@
       "variants": "Variants"
     },
     "searchError": "La recherche n'a pas pu aboutir. Réessayez.",
-    "coverageUnavailable": "Les statistiques de couverture n'ont pas pu être chargées. Le service est peut-être temporairement indisponible."
+    "coverageUnavailable": "Les statistiques de couverture n'ont pas pu être chargées. Le service est peut-être temporairement indisponible.",
+    "intro": {
+      "eyebrow": "Tes Insights",
+      "title": "Comprends les données de santé de ton petit",
+      "body": "Ici tu peux vérifier les interactions entre médicaments, comprendre une analyse de sang, regarder le génome ou trouver des études. Commence par la carte dont tu as besoin, rien à préparer à l'avance.",
+      "reassurance": "Tout est indicatif et reste privé. Confirme toujours avec ton pédiatre ou ton médecin.",
+      "coverageToggle": "Voir ce qu'il y a dans notre base de données"
+    }
   },
   "briefing": {
     "title": "Briefings",
     "newButton": "Créer un nouveau briefing",
     "listEmpty": "Aucun briefing généré pour l'instant. Créez le premier.",
     "specialty": {
-      "label": "Spécialité cible",
-      "placeholder": "Sélectionnez la spécialité du médecin",
+      "label": "Quel médecin vas-tu voir ?",
+      "placeholder": "Choisis une spécialité",
       "pediatrics": "Pédiatrie",
       "endocrinology": "Endocrinologie",
       "cardiology": "Cardiologie",
@@ -420,7 +466,9 @@
       "gastroenterology": "Gastro-entérologie",
       "dermatology": "Dermatologie",
       "general_medicine": "Médecine générale",
-      "default": "Autre / Non listée"
+      "default": "Autre / Non listée",
+      "helper": "Ça adapte le résumé à cette spécialité.",
+      "required": "Choisis une spécialité pour générer le briefing."
     },
     "status": {
       "processing": "Génération…",
@@ -462,7 +510,18 @@
     "staleBadge": "Obsolète",
     "noRender": "Aucune version générée disponible.",
     "actionError": "Impossible de terminer. Vérifiez votre connexion et réessayez.",
-    "navLabel": "Briefings"
+    "navLabel": "Briefings",
+    "generatingTitle": "On prépare ton briefing…",
+    "generatingSubtitle": "On lit tes documents et on les croise avec des études médicales…",
+    "timeout": {
+      "title": "Ça prend plus de temps que d'habitude",
+      "body": "Quelque chose a coincé en route. Réessaie, ça devrait passer."
+    },
+    "failure": {
+      "title": "On n'a pas pu générer le résumé",
+      "body": "Ça peut arriver si un document est illisible. Réessaie ou ajoute d'autres documents.",
+      "uploadMore": "Ajouter des documents"
+    }
   },
   "settings": {
     "title": "Paramètres du compte",
@@ -506,7 +565,9 @@
     "valoracionStale": "Vous avez modifié des réponses depuis cette évaluation — régénérez-la pour la mettre à jour.",
     "actionError": "Impossible de terminer. Vérifiez votre connexion et réessayez.",
     "valoracionDisclaimerTop": "C'est indicatif et sourcé, ce n'est pas un diagnostic. Toi et ton pédiatre décidez. En cas d'urgence, appelle les secours.",
-    "redFlagsBanner": "⚠ Signes d'alerte. Si tu en coches un, contacte ton pédiatre aujourd'hui."
+    "redFlagsBanner": "⚠ Signes d'alerte. Si tu en coches un, contacte ton pédiatre aujourd'hui.",
+    "progressContext": "Bilan du reflux · ~5 min",
+    "generatingHint": "On croise tes réponses avec les études… quelques secondes."
   },
   "consulta": {
     "title": "Mode Consultation",
@@ -525,7 +586,8 @@
     "regenerate": "Régénérer",
     "copy": "Copier",
     "copied": "Copié",
-    "example": "Exemple : « Le médecin dit que le poids est un peu bas et veut commencer le lait infantile. » AdelIA te donne des questions argumentées et des signaux à surveiller."
+    "example": "Exemple : « Le médecin dit que le poids est un peu bas et veut commencer le lait infantile. » AdelIA te donne des questions argumentées et des signaux à surveiller.",
+    "generatingHint": "On analyse ce qu'a dit le médecin et on le croise avec les études… quelques secondes."
   },
   "command": {
     "placeholder": "Rechercher ou aller à…",

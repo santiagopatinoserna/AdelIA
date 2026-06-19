@@ -65,15 +65,28 @@ export default async function EnrichmentDashboardPage({ params }: Props) {
         </div>
       )}
 
+      {/* Friendly intro — explain what this section is for, in mom language, before showing data */}
+      <section className="ad-card ad-rise mt-8 p-5">
+        <p className="ad-eyebrow text-pine-600">{t("enrichment.intro.eyebrow")}</p>
+        <h2 className="mt-1 text-lg text-pine-900">{t("enrichment.intro.title")}</h2>
+        <p className="mt-2 text-sm text-ink-soft">{t("enrichment.intro.body")}</p>
+        <p className="mt-3 text-xs text-ink-faint">{t("enrichment.intro.reassurance")}</p>
+      </section>
+
       {coverage.length > 0 && (
-        <section className="mt-8 grid grid-cols-2 gap-3 md:grid-cols-5">
-          {coverage.map((c) => (
-            <div key={c.label} className="ad-card p-4">
-              <div className="font-display text-2xl font-semibold text-pine-700">{c.value}</div>
-              <div className="mt-0.5 text-xs text-ink-soft">{c.label}</div>
-            </div>
-          ))}
-        </section>
+        <details className="mt-6 text-sm text-ink-soft">
+          <summary className="cursor-pointer text-pine-600 hover:text-pine-700">
+            {t("enrichment.intro.coverageToggle")}
+          </summary>
+          <div className="mt-3 grid grid-cols-2 gap-3 md:grid-cols-5">
+            {coverage.map((c) => (
+              <div key={c.label} className="ad-card p-4">
+                <div className="font-display text-2xl font-semibold text-pine-700">{c.value}</div>
+                <div className="mt-0.5 text-xs text-ink-soft">{c.label}</div>
+              </div>
+            ))}
+          </div>
+        </details>
       )}
 
       <section className="mt-8 grid grid-cols-1 gap-3 md:grid-cols-3">

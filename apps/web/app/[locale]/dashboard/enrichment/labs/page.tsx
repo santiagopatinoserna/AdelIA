@@ -118,14 +118,21 @@ export default function LabRangesPage() {
         </button>
       </div>
 
-      <button
-        type="button"
-        onClick={evaluate}
-        disabled={loading || labs.every((l) => !l.name)}
-        className="ad-btn ad-btn-primary mt-4 px-4 py-2 text-sm disabled:opacity-50"
-      >
-        {loading ? t("common.loading") : t("enrichment.labs.evaluate")}
-      </button>
+      <div className="mt-4 flex flex-col items-start gap-2">
+        <button
+          type="button"
+          onClick={evaluate}
+          disabled={loading || labs.every((l) => !l.name)}
+          className="ad-btn ad-btn-primary px-4 py-2 text-sm disabled:cursor-not-allowed disabled:border disabled:border-line-strong disabled:bg-surface-2 disabled:text-ink-faint disabled:opacity-100"
+        >
+          {loading ? t("common.loading") : t("enrichment.labs.evaluate")}
+        </button>
+        {labs.every((l) => !l.name) && !loading && (
+          <span className="inline-flex items-center rounded-full border border-line-strong bg-surface-2 px-2.5 py-1 text-xs text-ink-soft">
+            {t("enrichment.labs.needOne")}
+          </span>
+        )}
+      </div>
 
       {error && (
         <div role="alert" className="mt-4 rounded-xl border border-clay-100 bg-clay-50 p-3 text-sm text-clay-700">
@@ -139,16 +146,27 @@ export default function LabRangesPage() {
             key={idx}
             className={`rounded-xl border-l-4 p-3 ${r.flag ? FLAG_STYLE[r.flag] : "border-line bg-surface"}`}
           >
-            <div className="font-medium text-ink">
-              {r.canonical_name || r.name} = {r.value ?? "?"}{r.unit ? ` ${r.unit}` : ""}
-              {r.zone_label && (
-                <span className="ml-2 rounded bg-surface/70 px-2 py-0.5 text-xs">
-                  {r.zone_label}
-                </span>
-              )}
+            <div className="flex items-center gap-2">
+              <span
+                className={`ad-eyebrow rounded px-2 py-0.5 ${
+                  r.flag === "high"
+                    ? "bg-clay-100 text-clay-700"
+                    : r.flag === "low"
+                      ? "bg-honey-100 text-ink"
+                      : "bg-pine-100 text-pine-800"
+                }`}
+              >
+                {r.flag ? t(`enrichment.labs.${r.flag}`) : t("enrichment.labs.normal")}
+              </span>
+              <span className="font-medium text-ink">
+                {r.canonical_name || r.name} = {r.value ?? "?"}{r.unit ? ` ${r.unit}` : ""}
+              </span>
             </div>
+            {r.zone_label && (
+              <div className="mt-1 text-xs text-ink-soft">{r.zone_label}</div>
+            )}
             {r.range_low != null && r.range_high != null && (
-              <div className="text-xs text-ink-soft">
+              <div className="mt-0.5 text-xs text-ink-faint">
                 {t("enrichment.labs.reference")}: {r.range_low} - {r.range_high} {r.unit ?? ""}
               </div>
             )}

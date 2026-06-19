@@ -1,8 +1,8 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useTranslations, useLocale } from "next-intl";
-import { Sparkles, Loader2, RotateCcw, ShieldCheck, Copy, Check, AlertTriangle } from "lucide-react";
+import { Sparkles, Loader2, RotateCcw, ShieldCheck, Copy, Check, AlertTriangle, Info } from "lucide-react";
 
 import { streamChat, type Citation } from "@/lib/chat-client-browser";
 import { Markdown } from "./markdown";
@@ -70,6 +70,10 @@ export function RefluxValoracion({
   const [copied, setCopied] = useState(false);
   // Fingerprint of the answers the current valoración was generated from.
   const [generatedFp, setGeneratedFp] = useState("");
+  // Scroll the streamed result into view once the first token lands (it can
+  // render below the fold after the mom taps "Generar").
+  const outputRef = useRef<HTMLDivElement | null>(null);
+  const scrolledRef = useRef(false);
 
   // Restore a saved valoración so it survives a reload.
   useEffect(() => {
@@ -127,6 +131,7 @@ export function RefluxValoracion({
     setError(null);
     setText("");
     setCitations([]);
+    scrolledRef.current = false;
     let acc = "";
     let cits: Citation[] = [];
     try {
@@ -134,6 +139,12 @@ export function RefluxValoracion({
         if (ev.type === "token") {
           acc += ev.content;
           setText(acc);
+          if (!scrolledRef.current) {
+            scrolledRef.current = true;
+            requestAnimationFrame(() =>
+              outputRef.current?.scrollIntoView({ behavior: "smooth", block: "start" }),
+            );
+          }
         } else if (ev.type === "final") {
           cits = ev.citations ?? [];
           setCitations(cits);
@@ -165,22 +176,27 @@ export function RefluxValoracion({
       <p className="mt-1 text-sm text-ink-soft">{t("valoracionLead")}</p>
 
       {!text && !busy && (
-        <button
-          type="button"
-          onClick={generate}
-          disabled={answeredCount === 0}
-          className="ad-btn ad-btn-primary mt-4 px-5 py-2.5 text-sm disabled:cursor-not-allowed disabled:opacity-50"
-        >
-          <Sparkles className="h-4 w-4" strokeWidth={2.2} />
-          {t("generateBtn")}
-        </button>
-      )}
-      {answeredCount === 0 && !busy && !text && (
-        <p className="mt-2 text-xs text-ink-faint">{t("needMoreAnswers")}</p>
+        <div className="mt-4">
+          <button
+            type="button"
+            onClick={generate}
+            disabled={answeredCount === 0}
+            className="ad-btn ad-btn-primary px-5 py-2.5 text-sm disabled:cursor-not-allowed disabled:border disabled:border-line-strong disabled:bg-surface-2 disabled:text-ink-faint disabled:shadow-none"
+          >
+            <Sparkles className="h-4 w-4" strokeWidth={2.2} />
+            {t("generateBtn")}
+          </button>
+          {answeredCount === 0 && (
+            <p className="mt-2 flex items-center gap-1.5 rounded-lg bg-surface-2 px-3 py-2 text-xs font-medium text-ink-soft">
+              <Info className="h-3.5 w-3.5 shrink-0 text-honey-600" strokeWidth={2.2} />
+              {t("needMoreAnswers")}
+            </p>
+          )}
+        </div>
       )}
 
       {(busy || text) && (
-        <div className="ad-card mt-4 p-5">
+        <div ref={outputRef} className="ad-card mt-4 scroll-mt-28 p-5">
           <div className="mb-3 flex items-start gap-2 rounded-lg border border-honey-200 bg-honey-100/50 p-2.5 text-xs leading-relaxed text-ink">
             <ShieldCheck className="mt-px h-3.5 w-3.5 shrink-0 text-honey-600" strokeWidth={2.2} />
             {t("valoracionDisclaimerTop")}
@@ -200,10 +216,13 @@ export function RefluxValoracion({
             </div>
           )}
           {busy && !text && (
-            <p className="flex items-center gap-2 text-sm text-ink-soft">
-              <Loader2 className="h-4 w-4 animate-spin text-pine-400" strokeWidth={2} />
-              {t("generating")}
-            </p>
+            <div className="flex items-center gap-3 py-2">
+              <Loader2 className="h-6 w-6 shrink-0 animate-spin text-pine-500" strokeWidth={2} />
+              <div>
+                <p className="text-base font-medium text-pine-900">{t("generating")}</p>
+                <p className="mt-0.5 text-sm text-ink-soft">{t("generatingHint")}</p>
+              </div>
+            </div>
           )}
           {text && (
             <div className="text-[15px] text-ink">

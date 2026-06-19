@@ -181,7 +181,11 @@
     "orQuestionnaire": "No records yet? Start with your baby's check-in",
     "ocrTimeout": "This is taking longer than usual. Reload in a moment or try again.",
     "ocrReload": "Reload",
-    "docReady": "Document ready · you can ask now"
+    "docReady": "Document ready · you can ask now",
+    "navUpload": "Upload document",
+    "navPrimaryLabel": "Main actions",
+    "navMoreLabel": "More options",
+    "loadingSpace": "Loading your space…"
   },
   "upload": {
     "title": "Upload document",
@@ -266,7 +270,9 @@
       "ccdDesc": "XML from the patient portal",
       "telegramDesc": "Forward docs to the bot",
       "emailTitle": "Email",
-      "emailDesc": "Forward to your alias"
+      "emailDesc": "Forward to your alias",
+      "photoTitle": "Photo or PDF",
+      "photoDesc": "Snap a photo of the report or upload the PDF"
     },
     "appleHealth": {
       "title": "Apple Health import",
@@ -305,7 +311,12 @@
       "outlookStep1": "1. Settings → Mail → Rules → New rule",
       "outlookStep2": "2. Match condition (sender, subject keywords)",
       "warning": "Emails forwarded to your alias are processed automatically. Only forward medical content you want in your vault."
-    }
+    },
+    "startHereTitle": "Start here",
+    "startHereHint": "Pick one — whichever feels easiest.",
+    "fastestBadge": "Fastest",
+    "advancedTitle": "Advanced options",
+    "advancedHint": "Platform guides and templates to request your data. Only if you need them."
   },
   "enrichment": {
     "title": "Insights v0.2",
@@ -349,6 +360,22 @@
         "major": "Major",
         "moderate": "Moderate",
         "minor": "Minor"
+      },
+      "needTwo": "Add another medication to check for interactions",
+      "severityMeans": "What it means",
+      "noInteractionsTitle": "Good news: no known interactions between {drugs}.",
+      "noInteractionsHint": "Confirm with your pediatrician before combining them.",
+      "severityMom": {
+        "contraindicated": "Don't use together",
+        "major": "Probably unsafe",
+        "moderate": "Some caution",
+        "minor": "Low risk"
+      },
+      "severityPlain": {
+        "contraindicated": "These shouldn't be taken at the same time. Talk to your doctor before combining them.",
+        "major": "Together they can cause serious problems. Best to check with your doctor.",
+        "moderate": "They can usually be combined, but it's worth keeping an eye on. Mention it at your next visit.",
+        "minor": "The risk is small. Still, let your doctor know just in case."
       }
     },
     "labs": {
@@ -361,14 +388,20 @@
       "sexLabel": "Sex:",
       "namePlaceholder": "HbA1c, glucose, ldl, ...",
       "valuePlaceholder": "value",
-      "noResults": "No results for those values."
+      "noResults": "No results for those values.",
+      "needOne": "Enter at least one test to evaluate"
     },
     "trials": {
       "search": "Search trials",
       "condition": "Condition",
       "country": "Country",
       "noResults": "No open trials for this condition",
-      "viewStudy": "View study"
+      "viewStudy": "View study",
+      "needCondition": "Enter a condition to search for studies",
+      "phaseLegend": "The phase shows how advanced the study is (earlier phases are more experimental).",
+      "whoCanJoin": "Who can join",
+      "ageLabel": "Age",
+      "sexLabel": "Sex:"
     },
     "genomics": {
       "upload": "Upload 23andMe raw_data.txt",
@@ -385,7 +418,12 @@
         "absent": "Absent"
       },
       "savedFrom": "Saved analysis from",
-      "noResults": "No variants found in that file."
+      "noResults": "No variants found in that file.",
+      "zygosityPlain": {
+        "homozygous": "You have 2 copies. Talk it through with your doctor to understand what it means for you.",
+        "heterozygous": "You have 1 copy (carrier). People who are carriers are usually healthy.",
+        "absent": "You don't carry any copy of this variant."
+      }
     },
     "codes": {
       "lookup": "Look up code",
@@ -394,7 +432,8 @@
       "snomed": "SNOMED CT",
       "noMatch": "No code found",
       "category": "Category",
-      "match": "Match"
+      "match": "Match",
+      "needQuery": "Enter a diagnosis or symptom to look up its code"
     },
     "coverage": {
       "concepts": "Normalized concepts",
@@ -404,15 +443,22 @@
       "variants": "Variants"
     },
     "searchError": "The search could not be completed. Please try again.",
-    "coverageUnavailable": "Coverage statistics could not be loaded. The service may be temporarily unavailable."
+    "coverageUnavailable": "Coverage statistics could not be loaded. The service may be temporarily unavailable.",
+    "intro": {
+      "eyebrow": "Your Insights",
+      "title": "Make sense of your little one's health data",
+      "body": "Here you can check medication interactions, make sense of a blood test, look at the genome or find studies. Start with whichever card you need — nothing to prepare first.",
+      "reassurance": "Everything here is for guidance and stays private. Always confirm it with your pediatrician or doctor.",
+      "coverageToggle": "See what's in our database"
+    }
   },
   "briefing": {
     "title": "Briefings",
     "newButton": "Create new briefing",
     "listEmpty": "No briefings generated yet. Create the first one.",
     "specialty": {
-      "label": "Target specialty",
-      "placeholder": "Select the doctor's specialty",
+      "label": "Which doctor will you see?",
+      "placeholder": "Pick a specialty",
       "pediatrics": "Pediatrics",
       "endocrinology": "Endocrinology",
       "cardiology": "Cardiology",
@@ -420,7 +466,9 @@
       "gastroenterology": "Gastroenterology",
       "dermatology": "Dermatology",
       "general_medicine": "General medicine",
-      "default": "Other / Not listed"
+      "default": "Other / Not listed",
+      "helper": "This tailors the summary for that specialty.",
+      "required": "Pick a specialty to generate the briefing."
     },
     "status": {
       "processing": "Generating…",
@@ -462,7 +510,18 @@
     "staleBadge": "Stale",
     "noRender": "No rendered version available.",
     "actionError": "Couldn't complete. Check your connection and try again.",
-    "navLabel": "Briefings"
+    "navLabel": "Briefings",
+    "generatingTitle": "Building your briefing…",
+    "generatingSubtitle": "Reading your documents and cross-checking them with medical research…",
+    "timeout": {
+      "title": "This is taking longer than usual",
+      "body": "Something got stuck along the way. Give it another try and it should go through."
+    },
+    "failure": {
+      "title": "We couldn't generate the summary",
+      "body": "This can happen if a document is unreadable. Try again or add more documents.",
+      "uploadMore": "Upload more documents"
+    }
   },
   "settings": {
     "title": "Account settings",
@@ -506,7 +565,9 @@
     "valoracionStale": "You've changed answers since this assessment — regenerate to update it.",
     "actionError": "Couldn't complete. Check your connection and try again.",
     "valoracionDisclaimerTop": "This is informational and cited — not a diagnosis. You and your pediatrician decide. In an emergency, call emergency services.",
-    "redFlagsBanner": "⚠ Warning signs. If you check any of these, contact your pediatrician today."
+    "redFlagsBanner": "⚠ Warning signs. If you check any of these, contact your pediatrician today.",
+    "progressContext": "Reflux check-up · ~5 min",
+    "generatingHint": "Cross-checking the answers with the evidence… just a few seconds."
   },
   "consulta": {
     "title": "Appointment mode",
@@ -525,7 +586,8 @@
     "regenerate": "Regenerate",
     "copy": "Copy",
     "copied": "Copied",
-    "example": "Example: “The doctor says the weight is a bit low and wants to start formula.” AdelIA gives you grounded questions and flags to watch."
+    "example": "Example: “The doctor says the weight is a bit low and wants to start formula.” AdelIA gives you grounded questions and flags to watch.",
+    "generatingHint": "Reading what the doctor said and cross-checking it with studies… just a few seconds."
   },
   "command": {
     "placeholder": "Search or jump to…",

@@ -4,7 +4,9 @@ import { useCallback, useEffect, useState } from "react";
 import { useRouter, useParams } from "next/navigation";
 import { useTranslations } from "next-intl";
 
-import { FileDown, Share2 } from "lucide-react";
+import { FileDown, Share2, RefreshCw, Upload } from "lucide-react";
+
+import Link from "next/link";
 
 import { briefings as briefingsApi } from "@/lib/api-client-browser";
 import type { BriefingDetailOut } from "@/lib/briefing-types";
@@ -24,6 +26,7 @@ export default function BriefingDetailPage() {
   const [error, setError] = useState<string | null>(null);
   const [regenerating, setRegenerating] = useState(false);
   const [showShare, setShowShare] = useState(false);
+  const [timedOut, setTimedOut] = useState(false);
 
   const fetchBriefing = useCallback(async () => {
     if (!id) return;
@@ -40,10 +43,17 @@ export default function BriefingDetailPage() {
   }, [fetchBriefing]);
 
   useEffect(() => {
-    if (!briefing || briefing.status !== "processing") return;
+    // Stop polling once the briefing is no longer processing, or once we've
+    // hit the safety cap (~10 min) so the page never spins forever.
+    if (!briefing || briefing.status !== "processing" || timedOut) return;
+    const POLL_TIMEOUT_MS = 10 * 60 * 1000;
     const interval = setInterval(fetchBriefing, 2000);
-    return () => clearInterval(interval);
-  }, [briefing, fetchBriefing]);
+    const timeout = setTimeout(() => setTimedOut(true), POLL_TIMEOUT_MS);
+    return () => {
+      clearInterval(interval);
+      clearTimeout(timeout);
+    };
+  }, [briefing, fetchBriefing, timedOut]);
 
   async function handleRegenerate() {
     if (!id) return;
@@ -66,7 +76,11 @@ export default function BriefingDetailPage() {
   }
 
   if (!briefing) {
-    return <main className="mx-auto max-w-3xl px-6 py-10 text-ink-soft">{t("common.loading")}</main>;
+    return (
+      <main className="mx-auto max-w-3xl px-6 py-10">
+        <BriefingLoading title={t("common.loading")} />
+      </main>
+    );
   }
 
   return (
@@ -105,9 +119,48 @@ export default function BriefingDetailPage() {
         <StaleBanner onRegenerate={handleRegenerate} disabled={regenerating} />
       )}
 
+      {briefing.status === "processing" && !timedOut && (
+        <BriefingLoading title={t("briefing.generatingTitle")} />
+      )}
+
+      {briefing.status === "processing" && timedOut && (
+        <div className="mb-4 rounded-xl border border-clay-100 bg-clay-50 p-4 text-sm text-clay-700">
+          <p className="font-medium">{t("briefing.timeout.title")}</p>
+          <p className="mt-1 text-clay-700/90">{t("briefing.timeout.body")}</p>
+          <button
+            type="button"
+            onClick={handleRegenerate}
+            disabled={regenerating}
+            className="ad-btn ad-btn-accent mt-3 px-3 py-1.5 text-xs font-medium"
+          >
+            <RefreshCw className="h-3.5 w-3.5" strokeWidth={2.2} />
+            {t("briefing.regenerate")}
+          </button>
+        </div>
+      )}
+
       {briefing.status === "failed" && (
-        <div className="mb-4 rounded-xl border border-clay-100 bg-clay-50 p-3 text-sm text-clay-700">
-          {t("briefing.errorBanner")} {briefing.error_message}
+        <div className="mb-4 rounded-xl border border-clay-100 bg-clay-50 p-4 text-sm text-clay-700">
+          <p className="font-medium">{t("briefing.failure.title")}</p>
+          <p className="mt-1 text-clay-700/90">{t("briefing.failure.body")}</p>
+          <div className="mt-3 flex flex-wrap gap-2">
+            <button
+              type="button"
+              onClick={handleRegenerate}
+              disabled={regenerating}
+              className="ad-btn ad-btn-accent px-3 py-1.5 text-xs font-medium"
+            >
+              <RefreshCw className="h-3.5 w-3.5" strokeWidth={2.2} />
+              {t("briefing.regenerate")}
+            </button>
+            <Link
+              href={`/${locale}/dashboard/upload`}
+              className="ad-btn ad-btn-ghost px-3 py-1.5 text-xs font-medium"
+            >
+              <Upload className="h-3.5 w-3.5" strokeWidth={2.2} />
+              {t("briefing.failure.uploadMore")}
+            </Link>
+          </div>
         </div>
       )}
 
@@ -119,5 +172,37 @@ export default function BriefingDetailPage() {
         <ShareDialog briefingId={briefing.id} onClose={() => setShowShare(false)} />
       )}
     </main>
+  );
+}
+
+function BriefingLoading({ title }: { title: string }) {
+  const t = useTranslations();
+  return (
+    <div className="ad-card space-y-4 p-5" aria-live="polite">
+      <div className="flex items-center gap-3">
+        <span
+          className="h-6 w-6 shrink-0 animate-spin rounded-full border-2 border-pine-200 border-t-pine-600"
+          role="status"
+          aria-label={title}
+        />
+        <div>
+          <p className="text-sm font-medium text-ink">{title}</p>
+          <p className="text-sm text-ink-soft">{t("briefing.generatingSubtitle")}</p>
+        </div>
+      </div>
+      <div className="ad-rise space-y-3">
+        <div className="h-3.5 w-1/3 rounded bg-surface-2" />
+        <div className="space-y-2.5">
+          <div className="h-3 w-full rounded bg-surface-2" />
+          <div className="h-3 w-11/12 rounded bg-surface-2" />
+          <div className="h-3 w-9/12 rounded bg-surface-2" />
+        </div>
+        <div className="h-3.5 w-1/4 rounded bg-surface-2" />
+        <div className="space-y-2.5">
+          <div className="h-3 w-10/12 rounded bg-surface-2" />
+          <div className="h-3 w-8/12 rounded bg-surface-2" />
+        </div>
+      </div>
+    </div>
   );
 }

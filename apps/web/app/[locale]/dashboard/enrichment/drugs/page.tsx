@@ -92,14 +92,21 @@ export default function DrugInteractionsPage() {
         ))}
       </ul>
 
-      <button
-        type="button"
-        onClick={check}
-        disabled={meds.length < 2 || loading}
-        className="ad-btn ad-btn-primary mt-4 px-4 py-2 text-sm disabled:opacity-50"
-      >
-        {loading ? t("common.loading") : t("enrichment.drugs.check")}
-      </button>
+      <div className="mt-4 flex flex-col items-start gap-2">
+        <button
+          type="button"
+          onClick={check}
+          disabled={meds.length < 2 || loading}
+          className="ad-btn ad-btn-primary px-4 py-2 text-sm disabled:cursor-not-allowed disabled:border disabled:border-line-strong disabled:bg-surface-2 disabled:text-ink-faint disabled:opacity-100"
+        >
+          {loading ? t("common.loading") : t("enrichment.drugs.check")}
+        </button>
+        {meds.length < 2 && !loading && (
+          <span className="inline-flex items-center rounded-full border border-line-strong bg-surface-2 px-2.5 py-1 text-xs text-ink-soft">
+            {t("enrichment.drugs.needTwo")}
+          </span>
+        )}
+      </div>
 
       {error && (
         <div role="alert" className="mt-4 rounded-xl border border-clay-100 bg-clay-50 p-3 text-sm text-clay-700">
@@ -108,9 +115,14 @@ export default function DrugInteractionsPage() {
       )}
 
       {checked && interactions.length === 0 && (
-        <div className="mt-6 flex items-center gap-2 rounded-xl border border-pine-100 bg-pine-50 p-4 text-sm text-pine-800">
-          <CheckCircle2 className="h-4 w-4 text-pine-500" strokeWidth={2.2} />
-          {t("enrichment.drugs.noInteractions")}
+        <div className="mt-6 flex items-start gap-2 rounded-xl border border-pine-100 bg-pine-50 p-4 text-sm text-pine-800">
+          <CheckCircle2 className="mt-0.5 h-4 w-4 shrink-0 text-pine-500" strokeWidth={2.2} />
+          <div>
+            <p className="font-medium">
+              {t("enrichment.drugs.noInteractionsTitle", { drugs: meds.join(", ") })}
+            </p>
+            <p className="mt-0.5 text-pine-700">{t("enrichment.drugs.noInteractionsHint")}</p>
+          </div>
         </div>
       )}
 
@@ -125,10 +137,13 @@ export default function DrugInteractionsPage() {
                 {i.drug_a} ↔ {i.drug_b}
               </strong>
               <span className="ad-eyebrow rounded bg-surface/70 px-2 py-0.5">
-                {t(`enrichment.drugs.severity.${i.severity}`)}
+                {t(`enrichment.drugs.severityMom.${i.severity}`)}
               </span>
             </div>
-            <p className="mt-1 text-sm">{i.mechanism}</p>
+            <p className="mt-1 text-xs text-ink-soft">
+              {t("enrichment.drugs.severityMeans")}: {t(`enrichment.drugs.severityPlain.${i.severity}`)}
+            </p>
+            <p className="mt-2 text-sm">{i.mechanism}</p>
             <p className="mt-1 text-sm font-medium">→ {i.recommendation}</p>
           </li>
         ))}
