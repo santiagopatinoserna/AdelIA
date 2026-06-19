@@ -54,8 +54,23 @@ export type EmailAliasDTO = {
 
 export type Fetcher = (path: string, init?: RequestInit) => Promise<Response>;
 
+export type BillingStatus = {
+  status: string;
+  active: boolean;
+  plan: string | null;
+  trial_end: string | null;
+  current_period_end: string | null;
+  trial_days: number;
+};
+
 export function makeApi(fetcher: Fetcher) {
   return {
+    async billingStatus(): Promise<BillingStatus> {
+      const res = await fetcher("/billing/status");
+      if (!res.ok) throw new Error(`billingStatus: ${res.status}`);
+      return res.json();
+    },
+
     async listDocuments(): Promise<DocumentDTO[]> {
       const res = await fetcher("/documents");
       if (!res.ok) throw new Error(`listDocuments: ${res.status}`);

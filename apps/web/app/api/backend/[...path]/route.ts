@@ -24,11 +24,15 @@ const ALLOWED_PREFIXES = [
   "ingestion",
   "users",
   "clinical",
+  "billing",
 ];
 
 function isAllowed(path: string[]): boolean {
   if (path.length === 0) return false;
   if (path[0] === "ingestion" && path[1] === "webhooks") return false;
+  // The Stripe webhook is machine-auth (Stripe signature), never user-session;
+  // it is exposed directly via nginx, not through this authed proxy.
+  if (path[0] === "billing" && path[1] === "webhook") return false;
   return ALLOWED_PREFIXES.includes(path[0]);
 }
 

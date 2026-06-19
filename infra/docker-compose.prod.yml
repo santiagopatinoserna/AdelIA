@@ -74,6 +74,9 @@ services:
       RESEND_API_KEY: ${RESEND_API_KEY:-}
       ADELIA_APP_URL: ${ADELIA_APP_URL:-http://localhost:3000}
       CORS_ORIGINS: ${ADELIA_APP_URL:-http://localhost:3000}
+      STRIPE_SECRET_KEY: ${STRIPE_SECRET_KEY:-}
+      STRIPE_WEBHOOK_SECRET: ${STRIPE_WEBHOOK_SECRET:-}
+      STRIPE_PRICE_ID: ${STRIPE_PRICE_ID:-}
     ports:
       - "${API_PORT:-8000}:8000"
     healthcheck:

@@ -22,6 +22,14 @@ class User(Base):
     email_verified = Column(DateTime(timezone=True), nullable=True)
     created_at = Column(DateTime(timezone=True), server_default=func.now())
 
+    # Stripe billing (30-day trial → subscription). "none" until the mom starts
+    # a trial; thereafter mirrors the Stripe subscription status.
+    stripe_customer_id = Column(String, nullable=True, unique=True, index=True)
+    subscription_status = Column(String, nullable=False, server_default=text("'none'"))
+    subscription_plan = Column(String, nullable=True)
+    trial_end = Column(DateTime(timezone=True), nullable=True)
+    current_period_end = Column(DateTime(timezone=True), nullable=True)
+
 
 class Document(Base):
     __tablename__ = "documents"

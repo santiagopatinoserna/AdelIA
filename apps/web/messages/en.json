@@ -552,5 +552,26 @@
     "checkupCta": "Add",
     "feeding": "Any change in feeding or sleep? Note it down in their check-in.",
     "feedingCta": "Log"
+  },
+  "billing": {
+    "title": "Start free, 30 days",
+    "subtitle": "All your baby's health with an AI that answers from real science. Try it for a month — nothing charged today.",
+    "priceFree": "Free for 30 days",
+    "priceThen": "then €8/mo",
+    "f1": "Upload all your baby's documents, no limit",
+    "f2": "Ask anything: answers cited from real studies",
+    "f3": "Summaries ready for the pediatrician",
+    "f4": "Your data encrypted and yours alone. Cancel anytime.",
+    "startCta": "Start my free month",
+    "cardNote": "We ask for your card so the service doesn't stop when the trial ends. Nothing is charged today.",
+    "secure": "Secure payment with Stripe. Your card never touches our servers.",
+    "errorMsg": "We couldn't open checkout. Please try again in a moment.",
+    "activeTitle": "You're all set ✨",
+    "activeBody": "Your subscription is active.",
+    "trialUntil": "Your free month is active. First charge: {date}.",
+    "manageCta": "Manage subscription or card",
+    "goDashboard": "Go to my dashboard",
+    "successNote": "Done! Your free month has started. Enjoy AdelIA.",
+    "canceledNote": "No worries — nothing was charged. You can start whenever you like."
   }
 }
