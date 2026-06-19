@@ -93,8 +93,9 @@
   }
 
   :focus-visible {
-    outline: 2px solid var(--color-pine-500);
+    outline: 2px solid var(--color-pine-400);
     outline-offset: 2px;
+    box-shadow: 0 0 0 4px rgb(47 130 104 / 0.25);
     border-radius: 4px;
   }
 
@@ -225,5 +226,12 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
-  *, *::before, *::after { animation-duration: 0.001ms !important; transition-duration: 0.001ms !important; }
+  *, *::before, *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+  /* Looping cues (typing dots, pulses) settle to a calm resting state */
+  .ad-typing-dot { animation: none !important; opacity: 0.6 !important; transform: none !important; }
 }

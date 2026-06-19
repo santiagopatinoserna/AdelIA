@@ -90,7 +90,7 @@ export function ShareDialog({ briefingId, onClose }: Props) {
           <button
             type="button"
             onClick={onClose}
-            aria-label="Close"
+            aria-label={t("share.close")}
             className="ad-btn ad-btn-ghost h-8 w-8 p-0"
           >
             <X className="h-4 w-4" strokeWidth={2} />
@@ -156,7 +156,7 @@ export function ShareDialog({ briefingId, onClose }: Props) {
                 <button
                   type="button"
                   onClick={copyLink}
-                  aria-label={t("share.title")}
+                  aria-label={copied ? t("share.copied") : t("share.copyLink")}
                   className="ad-btn ad-btn-primary px-2 py-1.5 text-xs"
                 >
                   {copied ? <Check className="h-3.5 w-3.5" strokeWidth={2.4} /> : <Copy className="h-3.5 w-3.5" strokeWidth={2.2} />}

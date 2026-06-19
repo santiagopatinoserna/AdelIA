@@ -32,7 +32,7 @@ export function OnlineStatus() {
 
   useEffect(() => {
     if (!reconnected) return;
-    const id = setTimeout(() => setReconnected(false), 2800);
+    const id = setTimeout(() => setReconnected(false), 5000);
     return () => clearTimeout(id);
   }, [reconnected]);
 
@@ -40,15 +40,15 @@ export function OnlineStatus() {
 
   return (
     <div
-      role="status"
-      aria-live="polite"
-      className={`fixed left-1/2 top-[4.25rem] z-40 flex -translate-x-1/2 items-center gap-2 rounded-full px-4 py-2 text-sm font-medium text-white shadow-lift ${
+      role={online ? "status" : "alert"}
+      aria-live={online ? "polite" : "assertive"}
+      className={`fixed left-1/2 top-[4.25rem] z-40 flex max-w-[92vw] -translate-x-1/2 items-center gap-2 rounded-full px-4 py-2 text-sm font-medium text-white shadow-lift ${
         online ? "bg-pine-600" : "bg-clay-600"
       }`}
     >
       {online ? (
         <>
-          <Wifi className="h-4 w-4" strokeWidth={2.2} />
+          <Wifi className="h-4 w-4 shrink-0" strokeWidth={2.2} />
           {t("online")}
         </>
       ) : (
@@ -56,7 +56,7 @@ export function OnlineStatus() {
           <WifiOff className="h-4 w-4 shrink-0" strokeWidth={2.2} />
           <span>
             {t("offline")}
-            <span className="hidden font-normal text-white/85 sm:inline"> — {t("offlineBody")}</span>
+            <span className="font-normal text-white/85"> — {t("offlineBody")}</span>
           </span>
         </>
       )}

@@ -12,12 +12,12 @@ import { Link } from "@/lib/navigation";
 const KEY = "adelia:checkin:v1";
 const INTERVAL_MS = 3 * 24 * 60 * 60 * 1000; // ask again at most every 3 days
 
+// Three high-intent rotations only: each pairs one clear action with its
+// destination. More than three reads as a nag and dilutes the ask.
 const PROMPTS = [
   { key: "upload", href: "/dashboard/upload" },
   { key: "weight", href: "/dashboard/questionnaire" },
   { key: "doubt", href: "/dashboard/chat" },
-  { key: "checkup", href: "/dashboard/upload" },
-  { key: "feeding", href: "/dashboard/questionnaire" },
 ] as const;
 
 export function CheckInPrompt() {
@@ -57,7 +57,7 @@ export function CheckInPrompt() {
       <Link
         href={prompt.href}
         onClick={ack}
-        className="ad-btn ad-btn-accent shrink-0 px-3.5 py-1.5 text-xs"
+        className="ad-btn ad-btn-primary min-h-[44px] shrink-0 px-4 py-2 text-xs"
       >
         {t(`${prompt.key}Cta`)}
       </Link>
@@ -65,7 +65,7 @@ export function CheckInPrompt() {
         type="button"
         onClick={ack}
         aria-label={t("dismiss")}
-        className="shrink-0 rounded-lg p-1.5 text-ink-faint transition-colors hover:text-ink"
+        className="flex min-h-[44px] min-w-[44px] shrink-0 items-center justify-center rounded-lg p-1.5 text-ink-faint transition-colors hover:text-ink"
       >
         <X className="h-4 w-4" strokeWidth={2} />
       </button>

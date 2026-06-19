@@ -66,13 +66,14 @@ export default function HomePage() {
     {
       name: t("home.prT1Name"), price: t("home.prT1Price"), cadence: t("home.prT1Cad"),
       desc: t("home.prT1Desc"), cta: t("home.prT1Cta"), href: GITHUB_URL, external: true,
-      highlight: false,
+      highlight: false, devTag: t("home.prT1DevTag"),
       features: [t("home.prT1F1"), t("home.prT1F2"), t("home.prT1F3"), t("home.prT1F4")],
     },
     {
       name: t("home.prT2Name"), price: t("home.prT2Price"), cadence: t("home.prT2Cad"),
-      desc: t("home.prT2Desc"), cta: t("home.prT2Cta"), href: "/dashboard", external: false,
+      desc: t("home.prT2Desc"), cta: t("home.prT2Cta"), href: "/billing", external: false,
       highlight: true, badge: t("home.prT2Badge"),
+      trialNote: t("home.prT2Trial"),
       features: [t("home.prT2F1"), t("home.prT2F2"), t("home.prT2F3"), t("home.prT2F4")],
     },
     {
@@ -338,11 +339,11 @@ export default function HomePage() {
             </h2>
             <p className="mt-4 text-[15px] leading-relaxed text-ink-soft">{t("home.evBody")}</p>
           </div>
-          <div className="mt-10 grid grid-cols-2 gap-3 md:grid-cols-4">
+          <div className="mt-10 grid grid-cols-2 gap-4 sm:gap-3 md:grid-cols-4">
             {evStats.map((s) => (
-              <div key={s.label} className="ad-card p-5 text-center">
-                <div className="font-display text-3xl font-semibold text-pine-700">{s.value}</div>
-                <div className="mt-1 text-xs leading-snug text-ink-soft">{s.label}</div>
+              <div key={s.label} className="ad-card px-4 py-5 text-center sm:px-5">
+                <div className="font-display text-2xl font-semibold text-pine-700 sm:text-3xl">{s.value}</div>
+                <div className="mt-1.5 text-xs leading-snug text-ink-soft">{s.label}</div>
               </div>
             ))}
           </div>
@@ -404,7 +405,8 @@ export default function HomePage() {
             </div>
           </div>
           <div className="ad-card mt-5 overflow-hidden">
-            <div className="grid grid-cols-[1.4fr_1fr_1fr] border-b border-line bg-surface-2 text-[11px] font-semibold uppercase tracking-wide text-ink-faint">
+            {/* Table header — hidden on phones, where each row becomes a stacked card */}
+            <div className="hidden grid-cols-[1.4fr_1fr_1fr] border-b border-line bg-surface-2 text-[11px] font-semibold uppercase tracking-wide text-ink-faint sm:grid">
               <div className="px-4 py-2.5" />
               <div className="px-4 py-2.5 text-center">{t("home.vsColGpt")}</div>
               <div className="px-4 py-2.5 text-center text-pine-700">{t("home.vsColAdelia")}</div>
@@ -412,11 +414,21 @@ export default function HomePage() {
             {vsRows.map((r) => (
               <div
                 key={r.l}
-                className="grid grid-cols-[1.4fr_1fr_1fr] border-b border-line text-sm last:border-b-0"
+                className="flex flex-col gap-2 border-b border-line p-4 text-sm last:border-b-0 sm:grid sm:grid-cols-[1.4fr_1fr_1fr] sm:gap-0 sm:p-0"
               >
-                <div className="px-4 py-2.5 font-medium text-ink">{r.l}</div>
-                <div className="px-4 py-2.5 text-center text-ink-soft">{r.g}</div>
-                <div className="px-4 py-2.5 text-center font-medium text-pine-700">{r.a}</div>
+                <div className="font-medium text-ink sm:px-4 sm:py-2.5">{r.l}</div>
+                <div className="flex items-baseline justify-between gap-3 text-ink-soft sm:block sm:px-4 sm:py-2.5 sm:text-center">
+                  <span className="text-[11px] font-semibold uppercase tracking-wide text-ink-faint sm:hidden">
+                    {t("home.vsColGpt")}
+                  </span>
+                  <span>{r.g}</span>
+                </div>
+                <div className="flex items-baseline justify-between gap-3 font-medium text-pine-700 sm:block sm:px-4 sm:py-2.5 sm:text-center">
+                  <span className="text-[11px] font-semibold uppercase tracking-wide text-pine-700 sm:hidden">
+                    {t("home.vsColAdelia")}
+                  </span>
+                  <span>{r.a}</span>
+                </div>
               </div>
             ))}
           </div>
@@ -489,7 +501,14 @@ export default function HomePage() {
                     {tier.badge}
                   </span>
                 )}
-                <h3 className="font-display text-xl text-pine-900">{tier.name}</h3>
+                <div className="flex flex-wrap items-center gap-x-2 gap-y-1">
+                  <h3 className="font-display text-xl text-pine-900">{tier.name}</h3>
+                  {tier.devTag && (
+                    <span className="rounded-full border border-line-strong bg-surface-2 px-2 py-0.5 text-[11px] font-medium text-ink-soft">
+                      {tier.devTag}
+                    </span>
+                  )}
+                </div>
                 <div className="mt-2 flex items-baseline gap-1">
                   <span className="font-display text-4xl font-semibold text-pine-900">{tier.price}</span>
                   <span className="text-sm text-ink-faint">{tier.cadence}</span>
@@ -523,6 +542,9 @@ export default function HomePage() {
                   >
                     {tier.cta}
                   </Link>
+                )}
+                {tier.trialNote && (
+                  <p className="mt-3 text-center text-xs text-ink-soft">{tier.trialNote}</p>
                 )}
               </div>
             ))}

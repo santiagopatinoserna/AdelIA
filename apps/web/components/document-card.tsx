@@ -19,7 +19,7 @@ export function DocumentCard({ doc, locale }: { doc: DocumentDTO; locale: string
         </div>
         <StatusBadge status={doc.status} />
       </div>
-      <p className="mt-3 pl-12 font-mono text-xs text-ink-faint">
+      <p className="mt-3 pl-12 font-mono text-xs text-ink-soft">
         {new Date(doc.created_at).toLocaleString(locale)}
       </p>
     </Link>

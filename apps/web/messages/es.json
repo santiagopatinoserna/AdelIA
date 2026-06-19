@@ -10,7 +10,12 @@
     "notFoundBody": "La página que buscas no existe o se ha movido.",
     "backHome": "Volver al inicio",
     "remove": "Quitar",
-    "actionError": "No se pudo completar. Revisa tu conexión e inténtalo de nuevo."
+    "actionError": "No se pudo completar. Revisa tu conexión e inténtalo de nuevo.",
+    "language": "Idioma",
+    "lang_es": "Español",
+    "lang_en": "Inglés",
+    "lang_fr": "Francés",
+    "errorId": "ID: {id} (cópialo si contactas con soporte)"
   },
   "home": {
     "hero": "Toda la salud de tu bebé, en un solo sitio. Y una IA que responde, con la evidencia en la mano.",
@@ -152,7 +157,9 @@
     "mixAnswerLabel": "Tu historia × 1.936 estudios",
     "mixAnswer": "Tu bebé pasó de 3,2 kg al nacer a 7,4 kg a los 6 meses [2]: una ganancia dentro de lo esperado según las curvas de crecimiento de la OMS [ev_1]. La regurgitación que anotaste a los 4 meses encaja con el pico fisiológico que describe NASPGHAN-ESPGHAN, que mejora hacia el primer año [ev_2].",
     "mixLegendData": "datos de su historia",
-    "mixLegendEv": "estudios citados"
+    "mixLegendEv": "estudios citados",
+    "prT1DevTag": "Para desarrolladores",
+    "prT2Trial": "Prueba gratis 30 días, sin pagar hoy"
   },
   "dashboard": {
     "title": "Mis documentos",
@@ -161,7 +168,9 @@
     "status": {
       "processing": "Procesando…",
       "ready": "Listo",
-      "failed": "Error"
+      "failed": "Error",
+      "processingEta": "Leyendo… (~30s)",
+      "failedHint": "Reintentar · prueba una foto más clara"
     },
     "entitiesAndChunks": "{count, plural, =0 {Sin entidades extraídas} =1 {1 entidad} other {# entidades}} · {chunks, plural, =0 {Sin chunks} =1 {1 chunk} other {# chunks}}",
     "ocrProcessing": "Leyendo tu documento… se actualiza automáticamente",
@@ -245,7 +254,8 @@
     "noDocTitle": "Primero sube un documento",
     "noDocBody": "Para responder sobre tu bebé, AdelIA necesita al menos un documento: la cartilla, un análisis o el informe del pediatra.",
     "noDocCta": "Subir un documento",
-    "errorAnswer": "No pude procesar tu pregunta. Revisa tu conexión e inténtalo de nuevo."
+    "errorAnswer": "No pude procesar tu pregunta. Revisa tu conexión e inténtalo de nuevo.",
+    "keyboardHint": "Enter para enviar · Shift+Enter para salto de línea"
   },
   "ingestion": {
     "title": "Importar datos",
@@ -295,7 +305,8 @@
       "step2": "Pulsa \"Start\" o envía:",
       "copy": "Copiar",
       "tokenExpiry": "Token expira en 1 hora. Si tarda, refresca esta página para generar uno nuevo.",
-      "step3": "Una vez enlazado, reenvía cualquier PDF/foto/audio al bot. Lo procesará automáticamente."
+      "step3": "Una vez enlazado, reenvía cualquier PDF/foto/audio al bot. Lo procesará automáticamente.",
+      "subtitleFriendly": "Envía PDFs, fotos y audios médicos al bot y se guardan solos en tu vault."
     },
     "email": {
       "title": "Reenvío por email",
@@ -310,7 +321,10 @@
       "outlookTitle": "Configurar reenvío (Outlook / iCloud)",
       "outlookStep1": "1. Configuración → Correo → Reglas → Nueva regla",
       "outlookStep2": "2. Condición (remitente, palabras clave del asunto)",
-      "warning": "Los emails reenviados a tu alias se procesan automáticamente. Solo reenvía contenido médico que quieras tener en tu vault."
+      "warning": "Los emails reenviados a tu alias se procesan automáticamente. Solo reenvía contenido médico que quieras tener en tu vault.",
+      "subtitleFriendly": "Reenvía cualquier documento médico que recibas por email y se guarda solo en tu vault.",
+      "aliasLabelFriendly": "Tu email especial de AdelIA",
+      "warningFriendly": "Todo lo que reenvíes a tu email especial se guarda automáticamente. Reenvía solo lo que quieras tener en tu vault."
     },
     "startHereTitle": "Empieza aquí",
     "startHereHint": "Elige una opción, la que más fácil te resulte.",
@@ -504,8 +518,11 @@
       "revokeConfirm": "¿Revocar este link? Cualquiera con el URL ya no podrá verlo.",
       "disclaimer": "Cualquiera con el URL puede ver el briefing hasta que expire o lo revoques. AdelIA cuenta accesos para auditoría.",
       "privacyNotice": "Cualquiera con este enlace podrá ver los datos médicos de tu bebé. Compártelo solo con quien tú decidas.",
-      "privacyAck": "Lo entiendo y quiero crear el enlace.",
-      "ttlHelp": "El enlace se desactiva solo al cumplirse este tiempo, por seguridad."
+      "privacyAck": "Entiendo que cualquiera con el enlace verá todos los datos médicos de mi bebé. Quiero crearlo.",
+      "ttlHelp": "El enlace se desactiva solo al cumplirse este tiempo, por seguridad.",
+      "copyLink": "Copiar enlace",
+      "copied": "Enlace copiado",
+      "close": "Cerrar"
     },
     "staleBadge": "Desactualizado",
     "noRender": "No hay versión renderizada disponible.",
@@ -531,7 +548,8 @@
     "confirmLabel": "Escribe {email} para confirmar:",
     "deleteButton": "Eliminar mi cuenta definitivamente",
     "deleting": "Eliminando…",
-    "actionError": "No se pudo completar. Revisa tu conexión e inténtalo de nuevo."
+    "actionError": "No se pudo completar. Revisa tu conexión e inténtalo de nuevo.",
+    "ackIrreversible": "Entiendo que esto borra todo para siempre y no se puede deshacer."
   },
   "questionnaire": {
     "title": "Control del reflujo",
@@ -587,14 +605,29 @@
     "copy": "Copiar",
     "copied": "Copiado",
     "example": "Ejemplo: «El médico dice que el peso está algo bajo y quiere empezar con fórmula». AdelIA te dará preguntas con fundamento y señales a vigilar.",
-    "generatingHint": "Analizando lo que dijo el médico y cruzándolo con estudios… unos segundos."
+    "generatingHint": "Analizando lo que dijo el médico y cruzándolo con estudios… unos segundos.",
+    "listenIn": "Dictar en {lang}",
+    "listeningTap": "Escuchando… (toca para parar)"
   },
   "command": {
     "placeholder": "Buscar o ir a…",
     "noResults": "Sin resultados",
     "label": "Buscar",
     "home": "Inicio",
-    "newChat": "Nueva conversación"
+    "newChat": "Nueva conversación",
+    "group_ask": "Preguntar",
+    "group_visit": "Preparar tu visita",
+    "group_manage": "Tu cuenta",
+    "descChat": "Pregúntale a AdelIA sobre tu bebé",
+    "descNewChat": "Empieza una conversación desde cero",
+    "descQuestionnaire": "Repasa el reflujo de tu bebé, paso a paso",
+    "descConsulta": "Apoyo durante la cita con el médico",
+    "descBriefings": "Resúmenes claros para llevar al pediatra",
+    "descHome": "Vuelve a tu espacio",
+    "descUpload": "Añade una foto o un PDF",
+    "descIngestion": "Revisa lo que se está importando",
+    "descEnrichment": "Insights a partir de tus documentos",
+    "descSettings": "Gestiona tu cuenta y tus datos"
   },
   "connectivity": {
     "offline": "Sin conexión",
@@ -609,11 +642,11 @@
   },
   "checkin": {
     "dismiss": "Ahora no",
-    "upload": "¿Tienes un informe nuevo de tu bebé? Súbelo para tenerlo todo al día.",
+    "upload": "Sube el último informe de tu bebé para tenerlo todo al día.",
     "uploadCta": "Subir",
-    "weight": "¿Cuánto pesa ahora tu bebé? Pregúntale a su historia cómo va su curva.",
+    "weight": "Consulta cómo va la curva de crecimiento de tu bebé.",
     "weightCta": "Preguntar",
-    "doubt": "¿Alguna duda sobre su salud esta semana? Estoy aquí para ayudarte.",
+    "doubt": "Pregúntale a AdelIA cualquier duda sobre la salud de tu bebé.",
     "doubtCta": "Preguntar",
     "checkup": "¿Toca revisión o vacuna pronto? Súbela en cuanto la tengas.",
     "checkupCta": "Añadir",
