@@ -680,5 +680,21 @@
     "goDashboard": "Ir a mi panel",
     "successNote": "¡Listo! Tu mes gratis ha empezado. Disfruta AdelIA.",
     "canceledNote": "No pasa nada: no se ha cobrado nada. Puedes empezar cuando quieras."
+  },
+  "agent": {
+    "greeting": "Hola 👋 ¿En qué te ayudo con la salud de tu bebé?",
+    "placeholder": "Escribe o pulsa el micro…",
+    "send": "Enviar",
+    "stop": "Parar",
+    "listen": "Dictar por voz",
+    "thinking": "Pensando…",
+    "errorAnswer": "Ups, algo falló. Inténtalo otra vez.",
+    "seeAll": "Ver todo",
+    "confirmYes": "Sí",
+    "confirmNo": "No",
+    "save": "Guardar",
+    "cardLabRange": "Rango",
+    "profileSwitch": "Perfil",
+    "suggestionsTitle": "Para ti"
   }
 }
