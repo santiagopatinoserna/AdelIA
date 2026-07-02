@@ -59,6 +59,46 @@ async def create_profile(
     return p
 
 
+async def update_profile(
+    session: AsyncSession,
+    *,
+    profile_id: UUID,
+    user_id: UUID,
+    display_name: str | None = None,
+    date_of_birth: date | None = None,
+    sex: str | None = None,
+) -> Profile | None:
+    """Update select fields on a profile, scoped to user_id (cross-user isolation).
+
+    Only the provided (non-None) fields are updated. Returns the updated
+    profile, or None if not found / not owned by user_id.
+    """
+    target = await get_profile(session, profile_id=profile_id, user_id=user_id)
+    if target is None:
+        return None
+
+    values: dict = {}
+    if display_name is not None:
+        values["display_name"] = display_name
+    if date_of_birth is not None:
+        values["date_of_birth"] = date_of_birth
+    if sex is not None:
+        values["sex"] = sex
+
+    if values:
+        stmt = (
+            update(Profile)
+            .where(Profile.id == profile_id)
+            .where(Profile.user_id == user_id)
+            .values(**values)
+        )
+        await session.execute(stmt)
+        await session.flush()
+        target = await get_profile(session, profile_id=profile_id, user_id=user_id)
+
+    return target
+
+
 async def ensure_default_profile(
     session: AsyncSession,
     *,
