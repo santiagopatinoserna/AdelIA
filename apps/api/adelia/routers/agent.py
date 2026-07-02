@@ -24,6 +24,7 @@ class AgentTurnRequest(BaseModel):
     profile_id: uuid.UUID | None = None
     locale: str = "es"
     card_action: CardAction | None = None
+    history: list[dict] | None = None
 
 def _map_event(event: AgentEvent) -> dict:
     if event.type == "token":
@@ -45,7 +46,7 @@ async def post_turn(payload: AgentTurnRequest,
         yield {"event": "start", "data": json.dumps({})}
         async for event in run_agent_turn(user_id=user_id, profile_id=payload.profile_id,
                                           message=payload.message, card_action=card_action,
-                                          locale=payload.locale):
+                                          history=payload.history, locale=payload.locale):
             yield _map_event(event)
 
     return EventSourceResponse(event_publisher())

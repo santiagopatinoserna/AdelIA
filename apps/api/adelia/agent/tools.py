@@ -8,7 +8,7 @@ TOOLS: list[dict] = [
      "description": "Busca en el expediente médico del perfil activo para responder una pregunta clínica. Úsalo para cualquier pregunta sobre los datos del paciente.",
      "input_schema": _obj({"query": {"type": "string", "description": "La pregunta o tema a buscar"}}, ["query"])},
     {"name": "evaluar_labs",
-     "description": "Evalúa un valor de laboratorio contra el rango de referencia (usa rangos pediátricos si el perfil es un bebé/niño).",
+     "description": "Evalúa un valor de laboratorio contra su rango de referencia (adulto) y aplica el sexo del perfil si está disponible.",
      "input_schema": _obj({"name": {"type": "string"}, "value": {"type": "number"}}, ["name", "value"])},
     {"name": "revisar_interacciones",
      "description": "Revisa interacciones entre una lista de medicamentos.",

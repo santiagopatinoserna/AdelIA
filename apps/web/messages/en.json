@@ -694,6 +694,10 @@
     "confirmNo": "No",
     "save": "Save",
     "cardLabRange": "Range",
+    "cardLabTitle": "Lab",
+    "cardDocTitle": "Document",
+    "cardInsightTitle": "Insight",
+    "cardDocEntities": "extracted data",
     "profileSwitch": "Profile",
     "suggestionsTitle": "For you"
   }
