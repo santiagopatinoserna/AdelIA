@@ -25,6 +25,7 @@ const ALLOWED_PREFIXES = [
   "users",
   "clinical",
   "billing",
+  "agent",
 ];
 
 function isAllowed(path: string[]): boolean {
