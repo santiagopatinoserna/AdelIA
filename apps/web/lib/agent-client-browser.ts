@@ -1,7 +1,13 @@
 import { parseAgentBlocks, type AgentStreamEvent, type AgentCard } from "@/lib/agent-types";
 
 export async function* streamAgent(
-  body: { message?: string; profile_id?: string | null; locale?: string; card_action?: object },
+  body: {
+    message?: string;
+    profile_id?: string | null;
+    locale?: string;
+    card_action?: object;
+    history?: { role: string; content: string }[];
+  },
   signal?: AbortSignal,
 ): AsyncGenerator<AgentStreamEvent> {
   const res = await fetch("/api/backend/agent/turn", {

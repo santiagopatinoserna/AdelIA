@@ -38,10 +38,11 @@ class AnthropicProvider:
     ) -> AsyncIterator[dict]:
         async with self._client.messages.stream(
             model=settings.agent_model,
-            max_tokens=1024,
+            max_tokens=2048,
             system=system,
             messages=messages,
             tools=tools,
+            thinking={"type": "disabled"},
         ) as stream:
             async for event in stream:
                 if event.type == "text":

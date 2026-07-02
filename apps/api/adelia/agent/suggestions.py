@@ -17,11 +17,12 @@ def _cid() -> str:
 async def _gather_state(*, user_id: UUID, profile_id: UUID | None) -> ProfileState:
     from adelia.db import AsyncSessionLocal
     from sqlalchemy import select, func
-    from adelia.models import Document, Profile
+    from adelia.models import Document
+    from adelia.enrichment import profile_service
     async with AsyncSessionLocal() as session:
         prof = None
         if profile_id is not None:
-            prof = await session.get(Profile, profile_id)
+            prof = await profile_service.get_profile(session, profile_id=profile_id, user_id=user_id)
         unprocessed = await session.scalar(
             select(func.count()).select_from(Document)
             .where(Document.user_id == user_id, Document.deleted_at.is_(None),

@@ -27,7 +27,16 @@ async def execute_tool(name: str, args: dict, *, user_id: UUID, profile_id: UUID
         return ToolOutcome(text="".join(parts) or "No encontré datos relevantes.")
 
     if name == "evaluar_labs":
-        r = lab_evaluate(args["name"], args["value"])
+        sex: str | None = None
+        if profile_id is not None:
+            from adelia.db import AsyncSessionLocal
+            from adelia.enrichment import profile_service
+            async with AsyncSessionLocal() as session:
+                prof = await profile_service.get_profile(session, profile_id=profile_id, user_id=user_id)
+            sex = prof.sex if prof and prof.sex in ("M", "F") else None
+            r = lab_evaluate(args["name"], args["value"], sex=sex)
+        else:
+            r = lab_evaluate(args["name"], args["value"])
         if r is None:
             return ToolOutcome(text=f"No tengo rango de referencia para {args['name']}.")
         # r.range is a ReferenceRange dataclass (not JSON-serializable) — format to a string

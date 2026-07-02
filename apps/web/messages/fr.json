@@ -694,6 +694,10 @@
     "confirmNo": "Non",
     "save": "Enregistrer",
     "cardLabRange": "Plage",
+    "cardLabTitle": "Analyse",
+    "cardDocTitle": "Document",
+    "cardInsightTitle": "Suggestion",
+    "cardDocEntities": "données extraites",
     "profileSwitch": "Profil",
     "suggestionsTitle": "Pour toi"
   }
