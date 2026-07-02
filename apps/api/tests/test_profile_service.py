@@ -119,6 +119,46 @@ async def test_cross_user_isolation():
 
 @pytest.mark.skipif(not PG_AVAILABLE, reason="PG required")
 @pytest.mark.asyncio
+async def test_update_profile():
+    from datetime import date
+
+    from adelia.db import AsyncSessionLocal
+    from adelia.enrichment import profile_service
+
+    user_id = await make_user()
+    async with AsyncSessionLocal() as session:
+        profile = await profile_service.ensure_default_profile(session, user_id=user_id)
+        await session.commit()
+
+        updated = await profile_service.update_profile(
+            session,
+            profile_id=profile.id,
+            user_id=user_id,
+            date_of_birth=date(2020, 1, 1),
+            sex="F",
+        )
+        await session.commit()
+
+        assert updated is not None
+        assert updated.date_of_birth == date(2020, 1, 1)
+        assert updated.sex == "F"
+        # display_name untouched since not passed
+        assert updated.display_name == profile.display_name
+
+        # Cross-user isolation: other user cannot update
+        other_user = await make_user()
+        blocked = await profile_service.update_profile(
+            session,
+            profile_id=profile.id,
+            user_id=other_user,
+            display_name="Should not apply",
+        )
+        await session.commit()
+        assert blocked is None
+
+
+@pytest.mark.skipif(not PG_AVAILABLE, reason="PG required")
+@pytest.mark.asyncio
 async def test_resolve_profile_id_falls_back_to_default():
     from adelia.db import AsyncSessionLocal
     from adelia.enrichment import profile_service
