@@ -19,6 +19,8 @@ class Settings(BaseSettings):
     auth_secret: str = ""
     mistral_api_key: str = ""
     openai_api_key: str = ""
+    anthropic_api_key: str = ""
+    agent_model: str = "claude-sonnet-5"
 
     # Stripe billing — 30-day free trial then a recurring subscription. Card is
     # required up front (payment_method_collection="always"); no charge during
