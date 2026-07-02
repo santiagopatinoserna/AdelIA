@@ -11,6 +11,7 @@ from adelia import ratelimit
 from adelia.config import settings
 from adelia.db import engine
 from adelia.routers import (
+    agent,
     billing,
     briefings,
     chat,
@@ -163,3 +164,4 @@ app.include_router(sharing.router)
 app.include_router(users.router)
 app.include_router(clinical.router)
 app.include_router(billing.router)
+app.include_router(agent.router)
