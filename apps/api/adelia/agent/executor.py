@@ -30,7 +30,10 @@ async def execute_tool(name: str, args: dict, *, user_id: UUID, profile_id: UUID
         r = lab_evaluate(args["name"], args["value"])
         if r is None:
             return ToolOutcome(text=f"No tengo rango de referencia para {args['name']}.")
-        card = cards.card_lab(_cid(), r.canonical_name, r.value, r.unit, r.flag, r.range, r.interpretation)
+        # r.range is a ReferenceRange dataclass (not JSON-serializable) — format to a string
+        # so the card survives json.dumps in the /agent router.
+        range_str = f"{r.range.low}-{r.range.high}"
+        card = cards.card_lab(_cid(), r.canonical_name, r.value, r.unit, r.flag, range_str, r.interpretation)
         return ToolOutcome(text=f"{r.canonical_name}: {r.value} {r.unit} ({r.interpretation}).", card=card)
 
     if name == "revisar_interacciones":
