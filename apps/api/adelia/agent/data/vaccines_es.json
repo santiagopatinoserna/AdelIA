@@ -1,0 +1,12 @@
+[
+  {"name": "Hepatitis B", "due_month": 0},
+  {"name": "Hexavalente (DTPa-VPI-Hib-HB) 1ª", "due_month": 2},
+  {"name": "Neumococo 1ª", "due_month": 2},
+  {"name": "Rotavirus 1ª", "due_month": 2},
+  {"name": "Hexavalente 2ª", "due_month": 4},
+  {"name": "Neumococo 2ª", "due_month": 4},
+  {"name": "Meningococo B 1ª", "due_month": 4},
+  {"name": "Hexavalente 3ª", "due_month": 11},
+  {"name": "Triple vírica (SRP) 1ª", "due_month": 12},
+  {"name": "Meningococo C", "due_month": 12}
+]
