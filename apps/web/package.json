@@ -10,7 +10,7 @@
     "e2e": "playwright test"
   },
   "dependencies": {
-    "@auth/core": "^0.34.3",
+    "@auth/core": "^0.41.3",
     "jose": "^6.2.3",
     "lucide-react": "^1.18.0",
     "motion": "^12.40.0",
