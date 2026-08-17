@@ -12,6 +12,15 @@ export default defineConfig({
   use: {
     baseURL: process.env.E2E_BASE_URL ?? "http://localhost:3001",
     trace: "retain-on-failure",
+    // Fake mic: lets Chromium feed MediaRecorder a synthetic audio device in
+    // headless CI, without a real permission prompt — needed by
+    // consulta-record.spec.ts (getUserMedia + MediaRecorder).
+    launchOptions: {
+      args: [
+        "--use-fake-ui-for-media-stream",
+        "--use-fake-device-for-media-stream",
+      ],
+    },
   },
   reporter: [["list"]],
 });

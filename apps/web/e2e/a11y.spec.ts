@@ -31,6 +31,8 @@ test("a11y: public pages", async ({ page }) => {
   await scan(page, "home");
   await page.goto("/es/signin");
   await scan(page, "signin");
+  await page.goto("/es/profesionales");
+  await scan(page, "profesionales");
 });
 
 test("a11y: authenticated surfaces", async ({ browser }) => {
@@ -60,6 +62,7 @@ test("a11y: authenticated surfaces", async ({ browser }) => {
     ["/es/dashboard/enrichment/genomics", "enrichment/genomics"],
     ["/es/dashboard/enrichment/codes", "enrichment/codes"],
     ["/es/dashboard/upload", "upload"],
+    ["/es/dashboard/consulta/grabar", "consulta/grabar"],
   ] as const) {
     await page.goto(path);
     await scan(page, label);
