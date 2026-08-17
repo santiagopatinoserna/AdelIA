@@ -1,11 +1,12 @@
 import uuid
 from typing import Annotated, Literal
 
-from fastapi import APIRouter, Depends, status
+from fastapi import APIRouter, Depends, HTTPException, status
 from pydantic import BaseModel, Field
 
 from adelia.auth import get_current_user_id
 from adelia.db import AsyncSessionLocal
+from adelia.enrichment import profile_service
 from adelia.models import ConsentEvent
 
 router = APIRouter(prefix="/consent-events", tags=["consent"])
@@ -30,6 +31,17 @@ async def create_declined_event(
     payload: DeclinedEventIn,
     user_id: Annotated[uuid.UUID, Depends(get_current_user_id)],
 ):
+    if payload.profile_id is not None:
+        # Ownership check before persisting — a client-supplied profile_id must be
+        # verified against user_id, same IDOR guard as documents.py.
+        # Same idiom as adelia.routers.enrichment.get_user_profile.
+        async with AsyncSessionLocal() as db:
+            owned_profile = await profile_service.get_profile(
+                db, profile_id=payload.profile_id, user_id=user_id
+            )
+        if owned_profile is None:
+            raise HTTPException(status_code=404, detail="Profile not found")
+
     ev = ConsentEvent(
         user_id=user_id,
         profile_id=payload.profile_id,
