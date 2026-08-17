@@ -54,12 +54,6 @@ export default function ProfessionalsPage() {
             </section>
           ))}
         </div>
-
-        <div className="border-t border-line pt-8">
-          <p className="text-xs text-ink-faint">
-            Esta página cumple con el artículo 14 del RGPD (regulación UE 2016/679).
-          </p>
-        </div>
       </main>
     </div>
   );
