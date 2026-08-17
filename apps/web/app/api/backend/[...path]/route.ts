@@ -19,6 +19,7 @@ const ALLOWED_PREFIXES = [
   "documents",
   "chat",
   "briefings",
+  "consent-events",
   "enrichment",
   "shares",
   "ingestion",
