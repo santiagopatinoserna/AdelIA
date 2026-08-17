@@ -325,6 +325,13 @@ async def upload_document(
     async with AsyncSessionLocal() as db:
         db.add(doc)
         if is_consulta:
+            # Flush the Document INSERT before adding the ConsentEvent: there
+            # is no ORM relationship() between them (only a bare FK column),
+            # so unit-of-work flush ordering doesn't infer it and Postgres's
+            # (non-deferred) FK check can fire on consent_events before
+            # documents has the row. Same transaction/session — atomicity
+            # (commit/compensation below) is unaffected.
+            await db.flush()
             db.add(ConsentEvent(
                 user_id=user_id,
                 profile_id=profile_id,
