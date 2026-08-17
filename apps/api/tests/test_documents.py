@@ -6,6 +6,7 @@ from sqlalchemy import select
 
 from adelia.db import AsyncSessionLocal
 from adelia.models import Chunk, Document, Entity, User
+from adelia.routers.documents import ALLOWED_MIME, normalize_mime
 from tests.test_auth import make_token
 
 from tests.pg_gate import PG_AVAILABLE
@@ -148,3 +149,15 @@ async def test_list_documents_returns_real_counts_and_paginates(client, monkeypa
     )
     assert paged.status_code == 200
     assert len(paged.json()) == 1
+
+
+def test_normalize_strips_codecs_suffix():
+    assert normalize_mime("audio/webm;codecs=opus") == "audio/webm"
+    assert normalize_mime("audio/mp4; codecs=mp4a.40.2") == "audio/mp4"
+    assert normalize_mime("application/pdf") == "application/pdf"
+    assert normalize_mime(None) == ""
+
+
+def test_browser_recording_mimes_allowed():
+    for mime in ("audio/webm", "audio/mp4", "audio/ogg", "audio/x-m4a", "audio/flac"):
+        assert mime in ALLOWED_MIME
