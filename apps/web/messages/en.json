@@ -624,7 +624,7 @@
       "scriptText": "“Is it OK if I record the visit for my baby's health record?”",
       "checkboxLabel": "I've told the professional and they don't object",
       "showInfo": "Show information for professionals",
-      "legalNoteEs": "Recording your own consultation is legal in Spain. Sharing or distributing it is not. Personal and family use only.",
+      "legalNoteEs": "Recording your own visit is legal in Spain. Sharing or distributing it is not. Personal and family use.",
       "legalNoteFr": "Always record openly: in France, secret recording can be a criminal offense (art. 226-1).",
       "legalNoteGeneric": "Always record openly, for personal and family use only.",
       "startDisabledHint": "Check the box above to enable recording",
@@ -733,7 +733,7 @@
   },
   "professionals": {
     "title": "Information for healthcare professionals",
-    "intro": "A family uses AdelIA to keep their baby's health record. With their explicit permission, they may record the visit to transcribe it into that record.",
+    "intro": "A family uses AdelIA to keep their baby's health record. With your explicit permission, they may record the visit to transcribe it into that record.",
     "whatTitle": "What is recorded and why",
     "whatBody": "The visit's audio is transcribed with AI and turned into text inside the baby's private health record. Purpose is strictly personal and family use: to accurately remember your instructions. Redistribution is prohibited under the terms of use.",
     "whereTitle": "Where it's processed",
