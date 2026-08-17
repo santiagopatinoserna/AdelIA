@@ -8,6 +8,10 @@ recordings (who informed the professional, when, under which policy text).
 Deliberately minimal: NO doctor name/center (data minimization). Deleted in
 cascade with the user account. blob_tombstones.not_before adds a deferred
 deletion window (48h audio grace) — NULL keeps today's immediate semantics.
+
+Note: downgrade() fails if any documents.source='consulta' rows still exist —
+recreating documents_source_check without 'consulta' rejects that existing
+data (the constraint isn't created NOT VALID). Purge/migrate those rows first.
 """
 from typing import Sequence, Union
 

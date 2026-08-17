@@ -643,6 +643,7 @@
       "viewDocument": "Voir la transcription",
       "micDenied": "AdelIA n'a pas la permission d'utiliser le micro. Active-la dans ton navigateur, puis recharge la page.",
       "error": "Impossible de traiter l'enregistrement. L'audio reste sauvegardé quelques jours pour réessayer.",
+      "uploadError": "Impossible d'envoyer l'enregistrement. Il est toujours sur votre appareil : réessayez maintenant.",
       "retry": "Réessayer"
     }
   },
@@ -743,6 +744,7 @@
     "rightsTitle": "Vos droits",
     "rightsBody": "Votre voix est une donnée personnelle. Vous pouvez vous opposer à l'enregistrement à tout moment (l'application supprime l'audio instantanément) et exercer vos droits RGPD d'accès, de rectification ou de suppression.",
     "contactTitle": "Contact",
-    "contactBody": "security@godi.ai — nous répondons sous 30 jours maximum."
+    "contactBody": "security@godi.ai — nous répondons sous 30 jours maximum.",
+    "back": "Retour"
   }
 }

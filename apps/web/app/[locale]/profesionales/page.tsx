@@ -27,7 +27,7 @@ export default function ProfessionalsPage() {
           className="inline-flex items-center gap-1.5 text-sm text-ink-soft transition-colors hover:text-pine-700"
         >
           <ArrowLeft className="h-4 w-4" strokeWidth={2} />
-          Atrás
+          {t("back")}
         </Link>
       </header>
 
