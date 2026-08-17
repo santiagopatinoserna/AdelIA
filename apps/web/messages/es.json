@@ -614,7 +614,37 @@
     "example": "Ejemplo: «El médico dice que el peso está algo bajo y quiere empezar con fórmula». AdelIA te dará preguntas con fundamento y señales a vigilar.",
     "generatingHint": "Analizando lo que dijo el médico y cruzándolo con estudios… unos segundos.",
     "listenIn": "Dictar en {lang}",
-    "listeningTap": "Escuchando… (toca para parar)"
+    "listeningTap": "Escuchando… (toca para parar)",
+    "record": {
+      "entryTitle": "Grabar la consulta",
+      "entryBody": "Graba la visita completa y AdelIA la transcribe al historial. El audio se elimina después.",
+      "title": "Grabar consulta",
+      "profileLabel": "¿De quién es la consulta?",
+      "scriptLabel": "Díselo así al profesional:",
+      "scriptText": "“¿Le parece bien que grabe la consulta para el historial de mi bebé?”",
+      "checkboxLabel": "He informado al profesional y no se opone",
+      "showInfo": "Mostrar información para profesionales",
+      "legalNoteEs": "Grabar tu propia consulta es legal en España. Compartirla o difundirla, no. Uso personal y familiar.",
+      "legalNoteFr": "Graba siempre de forma anunciada: en Francia la grabación oculta puede ser delito (art. 226-1).",
+      "legalNoteGeneric": "Graba siempre de forma anunciada y para uso personal y familiar.",
+      "startDisabledHint": "Marca la casilla de arriba para poder grabar",
+      "start": "Grabar",
+      "recording": "Grabando",
+      "askNow": "Pregúntaselo ahora en voz alta: así queda su OK al inicio de la grabación",
+      "keepScreenOn": "Mantén la pantalla encendida durante la grabación",
+      "stop": "Terminar y guardar",
+      "decline": "El profesional se opone",
+      "declineDone": "Grabación descartada. No se ha guardado nada.",
+      "declineFallback": "Puedes seguir con el modo dictado, sin grabar.",
+      "uploading": "Subiendo…",
+      "transcribing": "Transcribiendo la consulta…",
+      "done": "Consulta guardada en el historial",
+      "audioDeleted": "El audio se elimina tras la transcripción. Solo conservamos el texto.",
+      "viewDocument": "Ver la transcripción",
+      "micDenied": "AdelIA no tiene permiso de micrófono. Actívalo en tu navegador y recarga.",
+      "error": "No se pudo procesar la grabación. El audio queda guardado unos días para reintentar.",
+      "retry": "Reintentar"
+    }
   },
   "command": {
     "placeholder": "Buscar o ir a…",
@@ -700,5 +730,19 @@
     "cardDocEntities": "datos extraídos",
     "profileSwitch": "Perfil",
     "suggestionsTitle": "Para ti"
+  },
+  "professionals": {
+    "title": "Información para profesionales sanitarios",
+    "intro": "Una familia usa AdelIA para guardar el historial de salud de su bebé. Con su permiso explícito, puede grabar la consulta para transcribirla a ese historial.",
+    "whatTitle": "Qué se graba y para qué",
+    "whatBody": "El audio de la consulta se transcribe con IA y se convierte en texto dentro del historial privado del bebé. Finalidad exclusivamente personal y familiar: recordar sus indicaciones con fidelidad. La difusión está prohibida por las condiciones de uso.",
+    "whereTitle": "Dónde se procesa",
+    "whereBody": "Los datos se alojan y procesan en la Unión Europea. La transcripción la realiza Mistral AI (Francia) como encargado del tratamiento. Sus datos no se usan para entrenar modelos.",
+    "retentionTitle": "Cuánto se conserva",
+    "retentionBody": "El audio se elimina automáticamente tras la transcripción (máximo 48 horas). Solo se conserva el texto, dentro del historial privado de la familia.",
+    "rightsTitle": "Sus derechos",
+    "rightsBody": "Su voz es un dato personal. Puede oponerse a la grabación en cualquier momento (la app descarta el audio al instante) y ejercer sus derechos RGPD de acceso, rectificación o supresión.",
+    "contactTitle": "Contacto",
+    "contactBody": "security@godi.ai — responderemos en un plazo máximo de 30 días."
   }
 }
