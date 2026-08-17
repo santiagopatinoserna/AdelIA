@@ -324,26 +324,27 @@ async def upload_document(
     )
     async with AsyncSessionLocal() as db:
         db.add(doc)
-        if is_consulta:
-            # Flush the Document INSERT before adding the ConsentEvent: there
-            # is no ORM relationship() between them (only a bare FK column),
-            # so unit-of-work flush ordering doesn't infer it and Postgres's
-            # (non-deferred) FK check can fire on consent_events before
-            # documents has the row. Same transaction/session — atomicity
-            # (commit/compensation below) is unaffected.
-            await db.flush()
-            db.add(ConsentEvent(
-                user_id=user_id,
-                profile_id=profile_id,
-                document_id=doc.id,
-                event_type="recording_informed_professional",
-                policy_version=consent_policy_version,
-                locale=locale[:8],
-            ))
         try:
+            if is_consulta:
+                # Flush the Document INSERT before adding the ConsentEvent: there
+                # is no ORM relationship() between them (only a bare FK column),
+                # so unit-of-work flush ordering doesn't infer it and Postgres's
+                # (non-deferred) FK check can fire on consent_events before
+                # documents has the row. Flush and the ConsentEvent add both sit
+                # inside this try so a failure here also triggers the orphan-blob
+                # compensation below, same as a failed commit.
+                await db.flush()
+                db.add(ConsentEvent(
+                    user_id=user_id,
+                    profile_id=profile_id,
+                    document_id=doc.id,
+                    event_type="recording_informed_professional",
+                    policy_version=consent_policy_version,
+                    locale=locale[:8],
+                ))
             await db.commit()
         except Exception:
-            # Compensate: a failed commit after the S3 put would leave an
+            # Compensate: a failed flush/commit after the S3 put would leave an
             # orphan blob nobody references (transactional-outbox carry-over).
             try:
                 await storage.delete_object(s3_key)
