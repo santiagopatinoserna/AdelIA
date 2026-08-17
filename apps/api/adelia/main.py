@@ -15,6 +15,7 @@ from adelia.routers import (
     billing,
     briefings,
     chat,
+    consent,
     documents,
     enrichment,
     health,
@@ -157,6 +158,7 @@ app.include_router(health.router)
 app.include_router(documents.router)
 app.include_router(chat.router)
 app.include_router(briefings.router)
+app.include_router(consent.router)
 app.include_router(ingestion.router)
 app.include_router(ingestion_webhooks.router)
 app.include_router(enrichment.router)
