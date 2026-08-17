@@ -19,6 +19,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from adelia.auth import get_current_user_id
 from adelia.config import settings
 from adelia.db import AsyncSessionLocal, get_db
+from adelia.enrichment import profile_service
 from adelia.models import Chunk, ConsentEvent, Document, Entity
 from adelia.schemas import DocumentOut, ExtractedEntity, derive_status
 from adelia.services import briefing_repo
@@ -268,6 +269,17 @@ async def upload_document(
             status_code=400,
             detail="consent_policy_version required for consulta recordings",
         )
+    if profile_id is not None:
+        # Ownership check BEFORE the S3 put (fail fast, no orphan blob) — a
+        # client-supplied profile_id would otherwise let a request plant a
+        # Document/ConsentEvent/Entity/Chunk under another user's profile.
+        # Same idiom as adelia.routers.enrichment.get_user_profile.
+        async with AsyncSessionLocal() as db:
+            owned_profile = await profile_service.get_profile(
+                db, profile_id=profile_id, user_id=user_id
+            )
+        if owned_profile is None:
+            raise HTTPException(status_code=404, detail="Profile not found")
 
     body = await file.read()
     if len(body) > MAX_UPLOAD_BYTES:
