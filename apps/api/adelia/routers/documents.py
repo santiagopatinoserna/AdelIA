@@ -34,7 +34,18 @@ logger = logging.getLogger(__name__)
 router = APIRouter(prefix="/documents", tags=["documents"])
 storage = S3Storage()
 
-ALLOWED_MIME = {"application/pdf", "image/png", "image/jpeg", "audio/mpeg", "audio/wav"}
+ALLOWED_MIME = {
+    "application/pdf", "image/png", "image/jpeg",
+    "audio/mpeg", "audio/wav", "audio/webm", "audio/mp4",
+    "audio/ogg", "audio/x-m4a", "audio/flac",
+}
+
+
+def normalize_mime(content_type: str | None) -> str:
+    """MediaRecorder emits 'audio/webm;codecs=opus' — compare/store bare type."""
+    return (content_type or "").split(";")[0].strip()
+
+
 MAX_UPLOAD_BYTES = 50 * 1024 * 1024  # 50 MB — Mistral OCR limit
 
 # Confidence threshold below which an extracted entity is flagged for human review.
@@ -233,7 +244,8 @@ async def upload_document(
     user_id: Annotated[uuid.UUID, Depends(get_current_user_id)],
     file: UploadFile = File(...),
 ):
-    if file.content_type not in ALLOWED_MIME:
+    content_type = normalize_mime(file.content_type)
+    if content_type not in ALLOWED_MIME:
         raise HTTPException(status_code=415, detail=f"Unsupported mime: {file.content_type}")
 
     body = await file.read()
@@ -243,12 +255,12 @@ async def upload_document(
     s3_key = f"users/{user_id}/{uuid.uuid4()}-{safe_name}"
     # Upload to S3 BEFORE acquiring a DB connection — a pooled connection held
     # across the blob upload exhausted the pool under concurrent uploads.
-    await storage.put_object(s3_key, io.BytesIO(body), content_type=file.content_type)
+    await storage.put_object(s3_key, io.BytesIO(body), content_type=content_type)
 
     doc = Document(
         user_id=user_id,
         source="web",
-        mime_type=file.content_type,
+        mime_type=content_type,
         s3_key=s3_key,
     )
     async with AsyncSessionLocal() as db:
@@ -265,7 +277,7 @@ async def upload_document(
             raise
         await db.refresh(doc)
 
-    background.add_task(process_document, doc.id, file.content_type)
+    background.add_task(process_document, doc.id, content_type)
 
     return _doc_to_out(doc)
 
