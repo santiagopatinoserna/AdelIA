@@ -92,6 +92,88 @@ async def test_upload_consulta_rejects_non_audio(client, auth_headers):
     assert "audio" in resp.json()["detail"].lower()
 
 
+async def test_upload_rejects_profile_not_owned_by_user(client, auth_headers, monkeypatch):
+    """IDOR guard: a client-supplied profile_id must be verified against
+    user_id before it's ever written to Document/ConsentEvent/Entity/Chunk.
+    profile_service.get_profile returns None for both "doesn't exist" and
+    "belongs to someone else" (same query, see profile_service.get_profile's
+    docstring) — mocking that single return value covers both cases, matching
+    adelia.routers.enrichment.get_user_profile's 404 behavior.
+
+    No real Postgres needed: get_profile is mocked to never touch the `db`
+    argument it's given, so the AsyncSessionLocal() opened around it never
+    issues a query and never actually connects.
+    """
+    from adelia.routers import documents as documents_router
+
+    async def fake_get_profile(db, *, profile_id, user_id):
+        return None
+
+    monkeypatch.setattr(documents_router.profile_service, "get_profile", fake_get_profile)
+
+    resp = await client.post(
+        "/documents",
+        headers=auth_headers,
+        files={"file": ("c.pdf", b"%PDF-1.4", "application/pdf")},
+        data={"profile_id": str(uuid.uuid4())},
+    )
+    assert resp.status_code == 404
+    assert resp.json()["detail"] == "Profile not found"
+
+
+@pytest.mark.skipif(
+    not PG_AVAILABLE,
+    reason="needs Postgres running (docker compose up -d), same as test_profile_service.py",
+)
+async def test_upload_rejects_cross_user_profile_id(client, monkeypatch):
+    """Real end-to-end IDOR check: user A uploads with user B's profile_id.
+    Must 404 and must NOT create a Document (nor, transitively, orphan a blob
+    — the ownership check runs before the S3 put)."""
+    from datetime import date
+
+    from adelia.config import settings
+    from adelia.enrichment import profile_service
+    from adelia.enrichment.profile_service import ProfileCreate
+    from adelia.models import Document
+
+    monkeypatch.setattr(settings, "auth_secret", "test-secret")
+
+    user_a = await _seed_user(f"a-{uuid.uuid4()}@adelia.app")
+    user_b = await _seed_user(f"b-{uuid.uuid4()}@adelia.app")
+    async with AsyncSessionLocal() as session:
+        profile_b = await profile_service.create_profile(
+            session,
+            user_id=user_b,
+            data=ProfileCreate(
+                display_name="Hijo de B",
+                relationship="child",
+                date_of_birth=date(2020, 1, 1),
+                sex="F",
+            ),
+        )
+        await session.commit()
+        profile_b_id = profile_b.id
+
+    token_a = make_token(str(user_a))
+
+    resp = await client.post(
+        "/documents",
+        headers={"Authorization": f"Bearer {token_a}"},
+        files={"file": ("c.pdf", b"%PDF-1.4", "application/pdf")},
+        data={"profile_id": str(profile_b_id)},
+    )
+    assert resp.status_code == 404
+    assert resp.json()["detail"] == "Profile not found"
+
+    async with AsyncSessionLocal() as session:
+        docs = (
+            await session.execute(
+                sa.select(Document).where(Document.user_id == user_a)
+            )
+        ).scalars().all()
+    assert docs == []
+
+
 @pytest.mark.skipif(
     not PG_AVAILABLE,
     reason="needs Postgres + MinIO running (docker compose up -d), same as test_documents.py",
