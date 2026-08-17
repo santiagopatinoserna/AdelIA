@@ -2,6 +2,7 @@
 
 import logging
 import uuid
+from datetime import datetime, timezone
 from typing import Annotated
 
 import sqlalchemy as sa
@@ -56,7 +57,12 @@ async def sweep_blob_tombstones() -> None:
     from adelia.db import AsyncSessionLocal
 
     async with AsyncSessionLocal() as session:
-        result = await session.execute(sa.select(BlobTombstone.s3_key))
+        now = datetime.now(timezone.utc)
+        result = await session.execute(
+            sa.select(BlobTombstone.s3_key).where(
+                sa.or_(BlobTombstone.not_before.is_(None), BlobTombstone.not_before <= now)
+            )
+        )
         keys = [row[0] for row in result.all()]
         for key in keys:
             try:
