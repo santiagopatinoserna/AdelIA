@@ -144,6 +144,10 @@ docker compose -f infra/docker-compose.prod.yml --env-file .env.prod up -d --bui
 
 Web on `:3000`, API on `:8000` (override with `WEB_PORT`/`API_PORT`). The API container runs `alembic upgrade head` on boot. Put a TLS proxy (Caddy/Traefik) in front for anything beyond a LAN.
 
+### Data controller (GDPR)
+
+Self-hosting AdelIA makes **you** the data controller (*responsable del tratamiento*) for whatever your instance processes — on the hosted SaaS at `adelia.godi.ai`, that role is Godi.AI. This matters in particular for the **Grabar consulta** (record consultation) feature: it ships with a mandatory consent gate that requires informing the attending healthcare professional, and an audio-deletion window (48h after successful transcription, 7 days on failure) as the data-minimization safeguard the feature's DPIA (`docs/legal/dpia-grabacion-consulta.md`) relies on. If you self-host, keep both active — disabling either changes your instance's legal footing, not just its UX.
+
 ### Backups
 
 A `backup` sidecar runs `pg_dump` (custom format, compressed) every 24h into the `pgbackups` volume, pruning dumps older than 14 days (`BACKUP_INTERVAL_SECONDS` / `BACKUP_RETENTION_DAYS`). Restore:
