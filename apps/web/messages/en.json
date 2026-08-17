@@ -614,7 +614,37 @@
     "example": "Example: “The doctor says the weight is a bit low and wants to start formula.” AdelIA gives you grounded questions and flags to watch.",
     "generatingHint": "Reading what the doctor said and cross-checking it with studies… just a few seconds.",
     "listenIn": "Dictate in {lang}",
-    "listeningTap": "Listening… (tap to stop)"
+    "listeningTap": "Listening… (tap to stop)",
+    "record": {
+      "entryTitle": "Record the visit",
+      "entryBody": "Record the whole visit and AdelIA transcribes it into the health record. The audio is deleted afterwards.",
+      "title": "Record visit",
+      "profileLabel": "Whose visit is this?",
+      "scriptLabel": "Say this to the professional:",
+      "scriptText": "“Is it OK if I record the visit for my baby's health record?”",
+      "checkboxLabel": "I've told the professional and they don't object",
+      "showInfo": "Show information for professionals",
+      "legalNoteEs": "Recording your own consultation is legal in Spain. Sharing or distributing it is not. Personal and family use only.",
+      "legalNoteFr": "Always record openly: in France, secret recording can be a criminal offense (art. 226-1).",
+      "legalNoteGeneric": "Always record openly, for personal and family use only.",
+      "startDisabledHint": "Check the box above to enable recording",
+      "start": "Record",
+      "recording": "Recording",
+      "askNow": "Ask them now, out loud: that way their OK is captured right at the start of the recording",
+      "keepScreenOn": "Keep the screen on during the recording",
+      "stop": "Finish and save",
+      "decline": "The professional objects",
+      "declineDone": "Recording discarded. Nothing was saved.",
+      "declineFallback": "You can continue with dictation mode, without recording.",
+      "uploading": "Uploading…",
+      "transcribing": "Transcribing the visit…",
+      "done": "Visit saved to the health record",
+      "audioDeleted": "The audio is deleted after transcription. We only keep the text.",
+      "viewDocument": "View the transcript",
+      "micDenied": "AdelIA doesn't have microphone permission. Enable it in your browser and reload.",
+      "error": "Could not process the recording. The audio stays saved for a few days so you can retry.",
+      "retry": "Retry"
+    }
   },
   "command": {
     "placeholder": "Search or jump to…",
@@ -700,5 +730,19 @@
     "cardDocEntities": "extracted data",
     "profileSwitch": "Profile",
     "suggestionsTitle": "For you"
+  },
+  "professionals": {
+    "title": "Information for healthcare professionals",
+    "intro": "A family uses AdelIA to keep their baby's health record. With their explicit permission, they may record the visit to transcribe it into that record.",
+    "whatTitle": "What is recorded and why",
+    "whatBody": "The visit's audio is transcribed with AI and turned into text inside the baby's private health record. Purpose is strictly personal and family use: to accurately remember your instructions. Redistribution is prohibited under the terms of use.",
+    "whereTitle": "Where it's processed",
+    "whereBody": "Data is hosted and processed in the European Union. Transcription is carried out by Mistral AI (France) as processor. Your data is not used to train models.",
+    "retentionTitle": "How long it's kept",
+    "retentionBody": "The audio is automatically deleted after transcription (48 hours at most). Only the text is kept, inside the family's private health record.",
+    "rightsTitle": "Your rights",
+    "rightsBody": "Your voice is personal data. You can object to the recording at any time (the app discards the audio instantly) and exercise your GDPR rights of access, rectification or erasure.",
+    "contactTitle": "Contact",
+    "contactBody": "security@godi.ai — we respond within 30 days at most."
   }
 }

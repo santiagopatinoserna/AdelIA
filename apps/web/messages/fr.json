@@ -614,7 +614,37 @@
     "example": "Exemple : « Le médecin dit que le poids est un peu bas et veut commencer le lait infantile. » AdelIA te donne des questions argumentées et des signaux à surveiller.",
     "generatingHint": "On analyse ce qu'a dit le médecin et on le croise avec les études… quelques secondes.",
     "listenIn": "Dicter en {lang}",
-    "listeningTap": "J'écoute… (touche pour arrêter)"
+    "listeningTap": "J'écoute… (touche pour arrêter)",
+    "record": {
+      "entryTitle": "Enregistrer la consultation",
+      "entryBody": "Enregistre toute la visite et AdelIA la transcrit dans le carnet de santé. L'audio est supprimé ensuite.",
+      "title": "Enregistrer la consultation",
+      "profileLabel": "De qui est la consultation ?",
+      "scriptLabel": "Dis-le comme ça au professionnel :",
+      "scriptText": "« Est-ce que ça vous va si j'enregistre la consultation pour le carnet de santé de mon bébé ? »",
+      "checkboxLabel": "J'ai informé le professionnel, qui n'y voit pas d'inconvénient",
+      "showInfo": "Afficher les informations pour les professionnels",
+      "legalNoteEs": "Enregistrer ta consultation est légal en Espagne. La partager ou la diffuser, non. Usage personnel et familial uniquement.",
+      "legalNoteFr": "Enregistre toujours de façon annoncée : en France, l'enregistrement clandestin peut être un délit (art. 226-1).",
+      "legalNoteGeneric": "Enregistre toujours de façon annoncée, pour un usage personnel et familial uniquement.",
+      "startDisabledHint": "Coche la case ci-dessus pour pouvoir enregistrer",
+      "start": "Enregistrer",
+      "recording": "Enregistrement",
+      "askNow": "Demande-le-lui maintenant, à voix haute : comme ça, son accord est enregistré dès le début",
+      "keepScreenOn": "Garde l'écran allumé pendant l'enregistrement",
+      "stop": "Terminer et sauvegarder",
+      "decline": "Le professionnel s'y oppose",
+      "declineDone": "Enregistrement abandonné. Rien n'a été sauvegardé.",
+      "declineFallback": "Tu peux continuer avec le mode dictée, sans enregistrer.",
+      "uploading": "Envoi en cours…",
+      "transcribing": "Transcription de la consultation…",
+      "done": "Consultation sauvegardée dans le carnet de santé",
+      "audioDeleted": "L'audio est supprimé après la transcription. Nous ne conservons que le texte.",
+      "viewDocument": "Voir la transcription",
+      "micDenied": "AdelIA n'a pas la permission d'utiliser le micro. Active-la dans ton navigateur, puis recharge la page.",
+      "error": "Impossible de traiter l'enregistrement. L'audio reste sauvegardé quelques jours pour réessayer.",
+      "retry": "Réessayer"
+    }
   },
   "command": {
     "placeholder": "Rechercher ou aller à…",
@@ -700,5 +730,19 @@
     "cardDocEntities": "données extraites",
     "profileSwitch": "Profil",
     "suggestionsTitle": "Pour toi"
+  },
+  "professionals": {
+    "title": "Informations pour les professionnels de santé",
+    "intro": "Une famille utilise AdelIA pour conserver le carnet de santé de son bébé. Avec votre autorisation explicite, elle peut enregistrer la consultation pour la retranscrire dans ce carnet.",
+    "whatTitle": "Ce qui est enregistré et pourquoi",
+    "whatBody": "L'audio de la consultation est transcrit par IA et converti en texte dans le carnet de santé privé du bébé. Finalité strictement personnelle et familiale : se souvenir fidèlement de vos indications. La diffusion est interdite par les conditions d'utilisation.",
+    "whereTitle": "Où les données sont traitées",
+    "whereBody": "Les données sont hébergées et traitées dans l'Union européenne. La transcription est réalisée par Mistral AI (France) en tant que sous-traitant. Vos données ne sont pas utilisées pour entraîner des modèles.",
+    "retentionTitle": "Durée de conservation",
+    "retentionBody": "L'audio est automatiquement supprimé après la transcription (48 heures maximum). Seul le texte est conservé, dans le carnet de santé privé de la famille.",
+    "rightsTitle": "Vos droits",
+    "rightsBody": "Votre voix est une donnée personnelle. Vous pouvez vous opposer à l'enregistrement à tout moment (l'application supprime l'audio instantanément) et exercer vos droits RGPD d'accès, de rectification ou de suppression.",
+    "contactTitle": "Contact",
+    "contactBody": "security@godi.ai — nous répondons sous 30 jours maximum."
   }
 }
