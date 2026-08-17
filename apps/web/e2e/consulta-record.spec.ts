@@ -38,7 +38,7 @@ test.describe("consulta recorder", () => {
     await expect(page.getByRole("status")).toContainText("Grabando");
     await page.getByRole("button", { name: "El profesional se opone" }).click();
     await expect(page.getByText("Grabación descartada", { exact: false })).toBeVisible();
-    expect(declined).toBe(true);
+    await expect.poll(() => declined).toBe(true);
     expect(uploaded).toBe(false);
   });
 
