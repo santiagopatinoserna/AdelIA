@@ -37,6 +37,11 @@ class Settings(BaseSettings):
     mistral_chat_model: str = "mistral-medium-latest"
     openai_chat_model: str = "gpt-5.1"
 
+    # STT (speech-to-text). "mistral" = Voxtral (UE por defecto, diarización);
+    # "openai" = whisper-1 (sin diarización). Voxtral reusa mistral_api_key.
+    stt_provider: str = "mistral"  # "mistral" | "openai"
+    mistral_stt_model: str = "voxtral-mini-latest"
+
     # M4 ingestion surfaces
     telegram_bot_token: str = ""
     telegram_webhook_secret: str = ""
