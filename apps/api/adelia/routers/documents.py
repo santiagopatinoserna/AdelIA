@@ -250,11 +250,11 @@ async def _process_document_inner(document_id: uuid.UUID, mime_type: str, is_con
         )
         doc.processed_at = datetime.now(timezone.utc)
         if is_consulta:
-            # Transcription succeeded (raw_text non-empty): 48h grace so the
-            # user can still play back the recording from the UI before the
-            # audio blob is gone. Transcription failed (raw_text empty): 7
-            # days — enough time to retry/inspect before we lose the source
-            # audio entirely.
+            # Transcription succeeded (raw_text non-empty): 48h grace para
+            # reintentos/soporte antes de que el blob de audio desaparezca
+            # (no hay UI de reproducción — el acceso es al texto transcrito).
+            # Transcription failed (raw_text empty): 7 days — enough time to
+            # retry/inspect before we lose the source audio entirely.
             grace = timedelta(hours=48) if raw_text else timedelta(days=7)
             session.add(BlobTombstone(
                 s3_key=s3_key,
@@ -289,6 +289,13 @@ async def upload_document(
         raise HTTPException(
             status_code=400,
             detail="consent_policy_version required for consulta recordings",
+        )
+    if is_consulta and consent_policy_version and len(consent_policy_version) > 64:
+        # Matches ConsentEvent.policy_version (String(64)) — reject here with a
+        # clean 400 instead of letting an oversized value hit the DB and 500.
+        raise HTTPException(
+            status_code=400,
+            detail="consent_policy_version exceeds 64 characters",
         )
     if profile_id is not None:
         # Ownership check BEFORE the S3 put (fail fast, no orphan blob) — a

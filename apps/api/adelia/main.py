@@ -1,3 +1,4 @@
+import asyncio
 import logging
 import time
 from contextlib import asynccontextmanager
@@ -37,6 +38,22 @@ if not logging.getLogger("adelia").handlers:
     logging.getLogger("adelia").setLevel(logging.INFO)
 
 
+SWEEP_INTERVAL_S = 3600
+
+
+async def _periodic_tombstone_sweep() -> None:
+    """Hourly loop so 48h/7d consulta tombstones actually get deleted without
+    waiting for the next reboot/upload to trigger the opportunistic sweep."""
+    from adelia.routers.users import sweep_blob_tombstones
+
+    while True:
+        await asyncio.sleep(SWEEP_INTERVAL_S)
+        try:
+            await sweep_blob_tombstones()
+        except Exception:  # noqa: BLE001 — one bad tick must not kill the loop
+            logger.exception("periodic blob tombstone sweep failed")
+
+
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     if not settings.auth_secret:
@@ -67,7 +84,14 @@ async def lifespan(app: FastAPI):
                     await load_evidence_file(_f)
         except Exception:  # noqa: BLE001 — evidence load must never block boot
             logger.exception("startup evidence load failed")
+    sweep_task = asyncio.create_task(_periodic_tombstone_sweep())
+    logger.info("periodic blob tombstone sweep scheduled every %ds", SWEEP_INTERVAL_S)
     yield
+    sweep_task.cancel()
+    try:
+        await sweep_task
+    except asyncio.CancelledError:
+        pass
     await engine.dispose()
 
 

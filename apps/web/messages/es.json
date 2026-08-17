@@ -643,6 +643,7 @@
       "viewDocument": "Ver la transcripción",
       "micDenied": "AdelIA no tiene permiso de micrófono. Actívalo en tu navegador y recarga.",
       "error": "No se pudo procesar la grabación. El audio queda guardado unos días para reintentar.",
+      "uploadError": "No se pudo subir la grabación. Sigue en tu dispositivo: reintenta ahora.",
       "retry": "Reintentar"
     }
   },
@@ -743,6 +744,7 @@
     "rightsTitle": "Sus derechos",
     "rightsBody": "Su voz es un dato personal. Puede oponerse a la grabación en cualquier momento (la app descarta el audio al instante) y ejercer sus derechos RGPD de acceso, rectificación o supresión.",
     "contactTitle": "Contacto",
-    "contactBody": "security@godi.ai — responderemos en un plazo máximo de 30 días."
+    "contactBody": "security@godi.ai — responderemos en un plazo máximo de 30 días.",
+    "back": "Atrás"
   }
 }

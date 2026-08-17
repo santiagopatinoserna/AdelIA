@@ -11,7 +11,15 @@ export const CONSENT_POLICY_VERSION = "2026-08-17";
 
 const MIME_CANDIDATES = ["audio/webm;codecs=opus", "audio/webm", "audio/mp4"];
 
-type Phase = "gate" | "recording" | "uploading" | "transcribing" | "done" | "declined" | "error";
+type Phase =
+  | "gate"
+  | "recording"
+  | "uploading"
+  | "transcribing"
+  | "done"
+  | "declined"
+  | "error"
+  | "upload-error";
 
 function pickMime(): string {
   if (typeof MediaRecorder === "undefined") return "";
@@ -37,6 +45,9 @@ export function ConsultaRecorder() {
 
   const recorderRef = useRef<MediaRecorder | null>(null);
   const chunksRef = useRef<Blob[]>([]);
+  // Retained across an upload failure so "Reintentar" can re-POST the exact
+  // same bytes instead of forcing a re-record of an unrepeatable consult.
+  const uploadBlobRef = useRef<Blob | null>(null);
   const streamRef = useRef<MediaStream | null>(null);
   const wakeLockRef = useRef<{ release(): Promise<void> } | null>(null);
   const timerRef = useRef<ReturnType<typeof setInterval> | null>(null);
@@ -162,6 +173,7 @@ export function ConsultaRecorder() {
       // Live input level so the mom sees it's actually capturing.
       const ctx = new AudioContext();
       audioCtxRef.current = ctx;
+      void ctx.resume(); // iOS Safari can start a fresh AudioContext suspended
       const analyser = ctx.createAnalyser();
       analyser.fftSize = 256;
       ctx.createMediaStreamSource(stream).connect(analyser);
@@ -185,6 +197,7 @@ export function ConsultaRecorder() {
         discardRef.current = true;
         recorderRef.current.stop();
       }
+      recorderRef.current = null;
       cleanup();
       setError(t("error"));
       startingRef.current = false;
@@ -214,27 +227,34 @@ export function ConsultaRecorder() {
     }).catch(() => {});
   }
 
-  async function upload() {
-    const mime = recorderRef.current?.mimeType || "audio/webm";
-    const bare = mime.split(";")[0];
-    const ext = bare === "audio/mp4" ? "m4a" : bare.split("/")[1];
-    const blob = new Blob(chunksRef.current, { type: mime });
+  async function upload(retryBlob?: Blob) {
+    // First attempt builds the Blob from the just-recorded chunks; a retry
+    // after an upload failure reuses the exact same Blob via uploadBlobRef
+    // instead of re-recording (the consult itself is unrepeatable).
+    const blob = retryBlob ?? new Blob(chunksRef.current, { type: recorderRef.current?.mimeType || "audio/webm" });
+    uploadBlobRef.current = blob;
+    const bare = (blob.type || "audio/webm").split(";")[0];
+    const ext = bare === "audio/mp4" ? "m4a" : bare.split("/")[1] || "webm";
     const fd = new FormData();
     fd.append("file", blob, `consulta-${new Date().toISOString().slice(0, 10)}.${ext}`);
     if (activeId) fd.append("profile_id", activeId);
     fd.append("source", "consulta");
     fd.append("consent_policy_version", CONSENT_POLICY_VERSION);
     fd.append("locale", locale);
+    setPhase("uploading");
     try {
       const res = await fetch("/api/backend/documents", { method: "POST", body: fd });
       if (!res.ok) throw new Error(`status ${res.status}`);
       const doc = (await res.json()) as { id: string };
+      uploadBlobRef.current = null;
       setDocId(doc.id);
       setPhase("transcribing");
       poll(doc.id);
     } catch {
-      setError(t("error"));
-      setPhase("error");
+      // Distinct from transcription/start failures: the blob is retained
+      // (uploadBlobRef) so "Reintentar" here re-POSTs it directly.
+      setError(t("uploadError"));
+      setPhase("upload-error");
     }
   }
 
@@ -383,6 +403,23 @@ export function ConsultaRecorder() {
             {t("viewDocument")}
           </Link>
         )}
+      </div>
+    );
+  }
+
+  if (phase === "upload-error") {
+    return (
+      <div className="ad-card space-y-3 p-6 text-center">
+        <p role="alert" className="text-clay-600">{error}</p>
+        <button
+          type="button"
+          className="ad-btn ad-btn-ghost"
+          onClick={() => {
+            if (uploadBlobRef.current) void upload(uploadBlobRef.current);
+          }}
+        >
+          {t("retry")}
+        </button>
       </div>
     );
   }

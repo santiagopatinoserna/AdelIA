@@ -643,6 +643,7 @@
       "viewDocument": "View the transcript",
       "micDenied": "AdelIA doesn't have microphone permission. Enable it in your browser and reload.",
       "error": "Could not process the recording. The audio stays saved for a few days so you can retry.",
+      "uploadError": "Couldn't upload the recording. It's still on your device: retry now.",
       "retry": "Retry"
     }
   },
@@ -743,6 +744,7 @@
     "rightsTitle": "Your rights",
     "rightsBody": "Your voice is personal data. You can object to the recording at any time (the app discards the audio instantly) and exercise your GDPR rights of access, rectification or erasure.",
     "contactTitle": "Contact",
-    "contactBody": "security@godi.ai — we respond within 30 days at most."
+    "contactBody": "security@godi.ai — we respond within 30 days at most.",
+    "back": "Back"
   }
 }

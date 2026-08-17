@@ -81,6 +81,19 @@ async def test_upload_rejects_unknown_source(client, auth_headers):
     assert resp.status_code == 400
 
 
+async def test_upload_consulta_rejects_oversized_policy_version(client, auth_headers):
+    """ConsentEvent.policy_version is String(64) — an oversized value must be
+    rejected here with a clean 400 instead of hitting the DB and 500ing."""
+    resp = await client.post(
+        "/documents",
+        headers=auth_headers,
+        files={"file": ("c.webm", b"audio", "audio/webm;codecs=opus")},
+        data={"source": "consulta", "consent_policy_version": "x" * 65},
+    )
+    assert resp.status_code == 400
+    assert "64" in resp.json()["detail"]
+
+
 async def test_upload_consulta_rejects_non_audio(client, auth_headers):
     resp = await client.post(
         "/documents",
