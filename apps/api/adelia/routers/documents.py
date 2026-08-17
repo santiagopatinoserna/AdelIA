@@ -4,7 +4,7 @@ import logging
 import pathlib
 import re
 import uuid
-from datetime import datetime, timezone
+from datetime import datetime, timedelta, timezone
 from typing import Annotated
 
 import sqlalchemy as sa
@@ -20,7 +20,7 @@ from adelia.auth import get_current_user_id
 from adelia.config import settings
 from adelia.db import AsyncSessionLocal, get_db
 from adelia.enrichment import profile_service
-from adelia.models import Chunk, ConsentEvent, Document, Entity
+from adelia.models import BlobTombstone, Chunk, ConsentEvent, Document, Entity
 from adelia.schemas import DocumentOut, ExtractedEntity, derive_status
 from adelia.services import briefing_repo
 from adelia.storage import S3Storage
@@ -128,6 +128,12 @@ async def process_document(document_id: uuid.UUID, mime_type: str, is_consulta: 
     # exhaustion → 500). Waiting tasks hold no connection.
     async with _get_processing_semaphore():
         await _process_document_inner(document_id, mime_type, is_consulta)
+    if is_consulta:
+        from adelia.routers.users import sweep_blob_tombstones
+        try:
+            await sweep_blob_tombstones()
+        except Exception:  # noqa: BLE001 — sweep retries at next boot/upload
+            logger.exception("opportunistic tombstone sweep failed")
 
 
 async def _process_document_inner(document_id: uuid.UUID, mime_type: str, is_consulta: bool = False) -> None:
@@ -243,6 +249,21 @@ async def _process_document_inner(document_id: uuid.UUID, mime_type: str, is_con
             session, user_id=user_id, since=datetime.now(timezone.utc)
         )
         doc.processed_at = datetime.now(timezone.utc)
+        if is_consulta:
+            # Transcription succeeded (raw_text non-empty): 48h grace so the
+            # user can still play back the recording from the UI before the
+            # audio blob is gone. Transcription failed (raw_text empty): 7
+            # days — enough time to retry/inspect before we lose the source
+            # audio entirely.
+            grace = timedelta(hours=48) if raw_text else timedelta(days=7)
+            session.add(BlobTombstone(
+                s3_key=s3_key,
+                not_before=datetime.now(timezone.utc) + grace,
+            ))
+            doc.document_metadata = {
+                **(doc.document_metadata or {}),
+                "audio_deleted_scheduled": True,
+            }
         await session.commit()
 
 
