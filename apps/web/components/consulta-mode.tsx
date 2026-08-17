@@ -14,6 +14,7 @@ import {
 } from "lucide-react";
 
 import { streamChat, type Citation } from "@/lib/chat-client-browser";
+import { Link } from "@/lib/navigation";
 import { Markdown } from "./markdown";
 import { CitationCard } from "./citation-card";
 
@@ -191,6 +192,26 @@ export function ConsultaMode() {
           <p className="mt-1 text-sm text-ink-soft">{t("subtitle")}</p>
         </div>
       </div>
+
+      {/* Entry point: record the live visit instead of typing what the
+          doctor said after the fact. */}
+      <Link
+        href="/dashboard/consulta/grabar"
+        className="ad-card ad-card-hover ad-rise mt-6 block p-4"
+      >
+        <div className="flex items-center gap-3">
+          <span className="inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-honey-100 text-honey-600 ring-1 ring-honey-200">
+            <Mic className="h-5 w-5" strokeWidth={1.9} />
+          </span>
+          <div className="min-w-0 flex-1">
+            <p className="font-medium text-pine-900">{t("record.entryTitle")}</p>
+            <p className="text-sm text-ink-soft">{t("record.entryBody")}</p>
+          </div>
+          <span className="ad-btn ad-btn-accent shrink-0 px-4 py-2 text-sm" aria-hidden="true">
+            {t("record.start")}
+          </span>
+        </div>
+      </Link>
 
       {/* Input */}
       <div className="ad-card mt-6 p-4">

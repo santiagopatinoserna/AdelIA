@@ -30,7 +30,7 @@ export type DocumentStatus = "processing" | "ready" | "failed";
 
 export type DocumentDTO = {
   id: string;
-  source: "web" | "manual";
+  source: "web" | "manual" | "consulta";
   mime_type: string;
   file_name: string;
   raw_text: string | null;
