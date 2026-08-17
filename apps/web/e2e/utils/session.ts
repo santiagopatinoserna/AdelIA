@@ -22,9 +22,18 @@ export async function seedUserAndSessionCookie(email: string) {
     password: env("POSTGRES_PASSWORD", "adelia_dev"),
     database: env("POSTGRES_DB", "adelia"),
   });
+  // Seed with an active trial: dashboard routes redirect to /billing unless
+  // subscription_status is in {"trialing", "active"} (see
+  // apps/api/adelia/routers/billing.py ACTIVE_STATUSES). Without this, every
+  // dashboard-gated e2e test hits the Stripe paywall screen instead of the
+  // page under test.
   const { rows } = await pool.query(
-    `INSERT INTO users (email) VALUES ($1)
-     ON CONFLICT (email) DO UPDATE SET email = EXCLUDED.email
+    `INSERT INTO users (email, subscription_status, trial_end)
+     VALUES ($1, 'trialing', now() + interval '30 days')
+     ON CONFLICT (email) DO UPDATE
+       SET email = EXCLUDED.email,
+           subscription_status = EXCLUDED.subscription_status,
+           trial_end = EXCLUDED.trial_end
      RETURNING id`,
     [email],
   );
