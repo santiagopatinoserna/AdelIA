@@ -40,8 +40,15 @@ export function ConsultaRecorder() {
   const streamRef = useRef<MediaStream | null>(null);
   const wakeLockRef = useRef<{ release(): Promise<void> } | null>(null);
   const timerRef = useRef<ReturnType<typeof setInterval> | null>(null);
+  const pollRef = useRef<ReturnType<typeof setInterval> | null>(null);
   const audioCtxRef = useRef<AudioContext | null>(null);
   const discardRef = useRef(false);
+  // Synchronous in-flight guard: getUserMedia can hang on a permission
+  // prompt, and state (`starting`) only updates on the next render — a
+  // second tap before that render would otherwise orphan the first
+  // stream/AudioContext/timer with the mic left open.
+  const startingRef = useRef(false);
+  const [starting, setStarting] = useState(false);
 
   // Screen wake lock: iOS suspends MediaRecorder when the screen locks.
   async function acquireWakeLock() {
@@ -58,6 +65,8 @@ export function ConsultaRecorder() {
   function cleanup() {
     timerRef.current && clearInterval(timerRef.current);
     timerRef.current = null;
+    pollRef.current && clearInterval(pollRef.current);
+    pollRef.current = null;
     streamRef.current?.getTracks().forEach((tr) => tr.stop());
     streamRef.current = null;
     audioCtxRef.current?.close().catch(() => {});
@@ -66,7 +75,21 @@ export function ConsultaRecorder() {
     wakeLockRef.current = null;
   }
 
-  useEffect(() => () => cleanup(), []);
+  useEffect(
+    () => () => {
+      // An unmount must never upload. Mirror the kill switch: discard
+      // first, then stop the recorder if it's still running (stopping an
+      // already-inactive recorder throws). Without this, a browser-fired
+      // `onstop` (e.g. tracks ending) after the component is gone would
+      // see discardRef still false and POST partial audio from nowhere.
+      discardRef.current = true;
+      if (recorderRef.current && recorderRef.current.state !== "inactive") {
+        recorderRef.current.stop();
+      }
+      cleanup();
+    },
+    [],
+  );
 
   // The wake lock is auto-released by the browser whenever the tab loses
   // visibility (app switch, phone display timeout while still recording) —
@@ -82,6 +105,9 @@ export function ConsultaRecorder() {
   }, [phase]);
 
   async function start() {
+    if (startingRef.current) return;
+    startingRef.current = true;
+    setStarting(true);
     setError(null);
     let stream: MediaStream;
     try {
@@ -90,6 +116,8 @@ export function ConsultaRecorder() {
       });
     } catch {
       setError(t("micDenied"));
+      startingRef.current = false;
+      setStarting(false);
       return;
     }
     streamRef.current = stream;
@@ -134,6 +162,8 @@ export function ConsultaRecorder() {
     };
     tick();
 
+    startingRef.current = false;
+    setStarting(false);
     setPhase("recording");
   }
 
@@ -183,16 +213,19 @@ export function ConsultaRecorder() {
   }
 
   function poll(id: string) {
-    const iv = setInterval(async () => {
+    if (pollRef.current) clearInterval(pollRef.current); // guard: never stack two pollers
+    pollRef.current = setInterval(async () => {
       try {
         const res = await fetch(`/api/backend/documents/${id}`);
         if (!res.ok) return;
         const doc = (await res.json()) as { status: string };
         if (doc.status === "ready") {
-          clearInterval(iv);
+          if (pollRef.current) clearInterval(pollRef.current);
+          pollRef.current = null;
           setPhase("done");
         } else if (doc.status === "failed") {
-          clearInterval(iv);
+          if (pollRef.current) clearInterval(pollRef.current);
+          pollRef.current = null;
           setError(t("error"));
           setPhase("error");
         }
@@ -250,10 +283,15 @@ export function ConsultaRecorder() {
         <button
           type="button"
           className="ad-btn ad-btn-primary min-h-[48px] w-full"
-          disabled={!informed}
+          disabled={!informed || starting}
           onClick={start}
         >
-          <Mic className="h-5 w-5" /> {t("start")}
+          {starting ? (
+            <Loader2 className="h-5 w-5 animate-spin" />
+          ) : (
+            <Mic className="h-5 w-5" />
+          )}
+          {t("start")}
         </button>
         {!informed && <p className="text-center text-xs opacity-70">{t("startDisabledHint")}</p>}
       </div>
