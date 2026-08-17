@@ -77,12 +77,18 @@ export function ConsultaRecorder() {
 
   useEffect(
     () => () => {
-      // An unmount must never upload. Mirror the kill switch: discard
-      // first, then stop the recorder if it's still running (stopping an
-      // already-inactive recorder throws). Without this, a browser-fired
-      // `onstop` (e.g. tracks ending) after the component is gone would
-      // see discardRef still false and POST partial audio from nowhere.
-      discardRef.current = true;
+      // An unmount must discard only when it's what forces the stop —
+      // i.e. the recorder is still actively "recording". A deliberate
+      // Stop tap flips MediaRecorder to "inactive" synchronously (its
+      // `onstop` still fires async) — if the user then navigates away
+      // before `onstop` runs, discardRef must stay false so that
+      // already-in-flight upload isn't silently dropped. Without this
+      // guard for the active-recording case, a browser-fired `onstop`
+      // (e.g. tracks ending) after the component is gone would see
+      // discardRef still false and POST partial audio from nowhere.
+      if (recorderRef.current?.state === "recording") {
+        discardRef.current = true;
+      }
       if (recorderRef.current && recorderRef.current.state !== "inactive") {
         recorderRef.current.stop();
       }
@@ -124,47 +130,67 @@ export function ConsultaRecorder() {
     chunksRef.current = [];
     discardRef.current = false;
 
-    const mime = pickMime();
-    const rec = new MediaRecorder(stream, {
-      ...(mime ? { mimeType: mime } : {}),
-      audioBitsPerSecond: 32_000,
-    });
-    recorderRef.current = rec;
-    rec.ondataavailable = (e) => {
-      if (e.data.size > 0) chunksRef.current.push(e.data);
-    };
-    rec.onstop = () => {
-      cleanup();
-      if (discardRef.current) {
-        chunksRef.current = [];
-        return;
+    // Everything below can throw mid-setup (unsupported MediaRecorder
+    // options, AudioContext construction failing, etc.) — without this
+    // guard a throw here would leave startingRef/starting stuck true
+    // forever: the button would stay disabled with a spinner and the
+    // user could never retry.
+    try {
+      const mime = pickMime();
+      const rec = new MediaRecorder(stream, {
+        ...(mime ? { mimeType: mime } : {}),
+        audioBitsPerSecond: 32_000,
+      });
+      recorderRef.current = rec;
+      rec.ondataavailable = (e) => {
+        if (e.data.size > 0) chunksRef.current.push(e.data);
+      };
+      rec.onstop = () => {
+        cleanup();
+        if (discardRef.current) {
+          chunksRef.current = [];
+          return;
+        }
+        void upload();
+      };
+      rec.start(10_000); // 10s timeslice: partial data survives a crash
+
+      await acquireWakeLock();
+      setElapsed(0);
+      timerRef.current = setInterval(() => setElapsed((s) => s + 1), 1000);
+
+      // Live input level so the mom sees it's actually capturing.
+      const ctx = new AudioContext();
+      audioCtxRef.current = ctx;
+      const analyser = ctx.createAnalyser();
+      analyser.fftSize = 256;
+      ctx.createMediaStreamSource(stream).connect(analyser);
+      const buf = new Uint8Array(analyser.frequencyBinCount);
+      const tick = () => {
+        if (!audioCtxRef.current) return;
+        analyser.getByteFrequencyData(buf);
+        setLevel(Math.min(100, Math.round((buf.reduce((a, b) => a + b, 0) / buf.length / 255) * 300)));
+        requestAnimationFrame(tick);
+      };
+      tick();
+
+      startingRef.current = false;
+      setStarting(false);
+      setPhase("recording");
+    } catch {
+      // Discard whatever got created (e.g. a MediaRecorder that already
+      // started) and tear down tracks/timers/context so nothing keeps
+      // running behind the gate screen.
+      if (recorderRef.current && recorderRef.current.state !== "inactive") {
+        discardRef.current = true;
+        recorderRef.current.stop();
       }
-      void upload();
-    };
-    rec.start(10_000); // 10s timeslice: partial data survives a crash
-
-    await acquireWakeLock();
-    setElapsed(0);
-    timerRef.current = setInterval(() => setElapsed((s) => s + 1), 1000);
-
-    // Live input level so the mom sees it's actually capturing.
-    const ctx = new AudioContext();
-    audioCtxRef.current = ctx;
-    const analyser = ctx.createAnalyser();
-    analyser.fftSize = 256;
-    ctx.createMediaStreamSource(stream).connect(analyser);
-    const buf = new Uint8Array(analyser.frequencyBinCount);
-    const tick = () => {
-      if (!audioCtxRef.current) return;
-      analyser.getByteFrequencyData(buf);
-      setLevel(Math.min(100, Math.round((buf.reduce((a, b) => a + b, 0) / buf.length / 255) * 300)));
-      requestAnimationFrame(tick);
-    };
-    tick();
-
-    startingRef.current = false;
-    setStarting(false);
-    setPhase("recording");
+      cleanup();
+      setError(t("error"));
+      startingRef.current = false;
+      setStarting(false);
+      setPhase("gate");
+    }
   }
 
   function stop() {
