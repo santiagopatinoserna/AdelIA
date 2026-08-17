@@ -35,6 +35,9 @@ class Document(Base):
     __tablename__ = "documents"
     id = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
     user_id = Column(UUID(as_uuid=True), ForeignKey("users.id"), nullable=False, index=True)
+    profile_id = Column(
+        UUID(as_uuid=True), ForeignKey("profiles.id", ondelete="SET NULL"), nullable=True
+    )
     source = Column(String, nullable=False)
     mime_type = Column(String, nullable=False)
     s3_key = Column(String, nullable=False)
@@ -45,7 +48,7 @@ class Document(Base):
     deleted_at = Column(DateTime(timezone=True))
 
     __table_args__ = (
-        CheckConstraint("source IN ('web','manual')", name="documents_source_check"),
+        CheckConstraint("source IN ('web','manual','consulta')", name="documents_source_check"),
     )
 
 
@@ -54,6 +57,9 @@ class Chunk(Base):
     id = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
     document_id = Column(UUID(as_uuid=True), ForeignKey("documents.id", ondelete="CASCADE"), nullable=False)
     user_id = Column(UUID(as_uuid=True), nullable=False)
+    profile_id = Column(
+        UUID(as_uuid=True), ForeignKey("profiles.id", ondelete="SET NULL"), nullable=True
+    )
     content = Column(Text, nullable=False)
     embedding = Column(Vector(1024))
     chunk_index = Column(Integer, nullable=False)
@@ -64,6 +70,9 @@ class Entity(Base):
     __tablename__ = "entities"
     id = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
     user_id = Column(UUID(as_uuid=True), nullable=False)
+    profile_id = Column(
+        UUID(as_uuid=True), ForeignKey("profiles.id", ondelete="SET NULL"), nullable=True
+    )
     document_id = Column(UUID(as_uuid=True), ForeignKey("documents.id", ondelete="CASCADE"), nullable=False)
     entity_type = Column(String, nullable=False)
     coding_system = Column(String)
@@ -347,3 +356,35 @@ class BlobTombstone(Base):
     __tablename__ = "blob_tombstones"
     s3_key = Column(String(1024), primary_key=True)
     created_at = Column(DateTime(timezone=True), server_default=func.now(), nullable=False)
+    not_before = Column(DateTime(timezone=True))  # NULL = delete on next sweep
+
+
+CONSENT_EVENT_TYPES = ("recording_informed_professional", "recording_declined")
+
+
+class ConsentEvent(Base):
+    """Append-only RGPD accountability log for consultation recordings.
+
+    Minimization by design: no doctor name, no clinic, no content — the
+    professional's identity only exists (if mentioned) inside the transcript.
+    Cascade-deleted with the account (art. 5.2 accountability while it lives).
+    """
+    __tablename__ = "consent_events"
+    id = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
+    user_id = Column(
+        UUID(as_uuid=True), ForeignKey("users.id", ondelete="CASCADE"),
+        nullable=False, index=True,
+    )
+    profile_id = Column(UUID(as_uuid=True), ForeignKey("profiles.id", ondelete="SET NULL"))
+    document_id = Column(UUID(as_uuid=True), ForeignKey("documents.id", ondelete="SET NULL"))
+    event_type = Column(String, nullable=False)
+    policy_version = Column(String(64), nullable=False)
+    locale = Column(String(8), nullable=False)
+    created_at = Column(DateTime(timezone=True), server_default=func.now(), nullable=False)
+
+    __table_args__ = (
+        CheckConstraint(
+            "event_type IN ('recording_informed_professional','recording_declined')",
+            name="ck_consent_events_type",
+        ),
+    )
