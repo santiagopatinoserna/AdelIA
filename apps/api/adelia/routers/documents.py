@@ -10,7 +10,7 @@ from typing import Annotated
 import sqlalchemy as sa
 import httpx
 from botocore.exceptions import ClientError, EndpointConnectionError
-from fastapi import APIRouter, BackgroundTasks, Depends, File, HTTPException, UploadFile, status, Query
+from fastapi import APIRouter, BackgroundTasks, Depends, File, Form, HTTPException, UploadFile, status, Query
 from mistralai.client.errors import MistralError
 from openai import APIError as OpenAIAPIError
 from sqlalchemy import select
@@ -19,7 +19,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from adelia.auth import get_current_user_id
 from adelia.config import settings
 from adelia.db import AsyncSessionLocal, get_db
-from adelia.models import Chunk, Document, Entity
+from adelia.models import Chunk, ConsentEvent, Document, Entity
 from adelia.schemas import DocumentOut, ExtractedEntity, derive_status
 from adelia.services import briefing_repo
 from adelia.storage import S3Storage
@@ -39,6 +39,8 @@ ALLOWED_MIME = {
     "audio/mpeg", "audio/wav", "audio/webm", "audio/mp4",
     "audio/ogg", "audio/x-m4a", "audio/flac",
 }
+
+VALID_SOURCES = {"web", "manual", "consulta"}
 
 
 def normalize_mime(content_type: str | None) -> str:
@@ -119,15 +121,15 @@ def _get_processing_semaphore() -> asyncio.Semaphore:
     return _processing_semaphore
 
 
-async def process_document(document_id: uuid.UUID, mime_type: str) -> None:
+async def process_document(document_id: uuid.UUID, mime_type: str, is_consulta: bool = False) -> None:
     # Cap concurrent pipelines: a burst of uploads queues here instead of
     # each grabbing a DB connection + Mistral call at once (pool/API
     # exhaustion → 500). Waiting tasks hold no connection.
     async with _get_processing_semaphore():
-        await _process_document_inner(document_id, mime_type)
+        await _process_document_inner(document_id, mime_type, is_consulta)
 
 
-async def _process_document_inner(document_id: uuid.UUID, mime_type: str) -> None:
+async def _process_document_inner(document_id: uuid.UUID, mime_type: str, is_consulta: bool = False) -> None:
     """BackgroundTask: download from S3, transcribe/OCR, extract entities,
     chunk + embed.
 
@@ -144,6 +146,7 @@ async def _process_document_inner(document_id: uuid.UUID, mime_type: str) -> Non
             return
         s3_key = doc.s3_key
         user_id = doc.user_id
+        profile_id = doc.profile_id
 
     raw_text = ""
     entities: list[Entity] = []
@@ -155,7 +158,9 @@ async def _process_document_inner(document_id: uuid.UUID, mime_type: str) -> Non
 
         # Stage 1: raw text via transcribe (audio) or OCR (pdf/image)
         if _is_audio(mime_type):
-            raw_text = await _with_retry("transcribe", lambda: transcribe_audio(body, mime_type))
+            raw_text = await _with_retry(
+                "transcribe", lambda: transcribe_audio(body, mime_type, diarize=is_consulta)
+            )
         elif mime_type == "application/pdf" or mime_type.startswith("image/"):
             raw_text = await _with_retry("ocr", lambda: extract_text_from_pdf(body, mime_type))
 
@@ -170,6 +175,7 @@ async def _process_document_inner(document_id: uuid.UUID, mime_type: str) -> Non
                 entities.append(Entity(
                     id=eid,
                     user_id=user_id,
+                    profile_id=profile_id,
                     document_id=document_id,
                     entity_type=ex.entity_type,
                     coding_system=ex.coding_system,
@@ -203,6 +209,7 @@ async def _process_document_inner(document_id: uuid.UUID, mime_type: str) -> Non
                 chunks.append(Chunk(
                     document_id=document_id,
                     user_id=user_id,
+                    profile_id=profile_id,
                     content=sc.content,
                     chunk_index=sc.chunk_index,
                     embedding=vec,
@@ -243,10 +250,24 @@ async def upload_document(
     background: BackgroundTasks,
     user_id: Annotated[uuid.UUID, Depends(get_current_user_id)],
     file: UploadFile = File(...),
+    profile_id: Annotated[uuid.UUID | None, Form()] = None,
+    source: Annotated[str, Form()] = "web",
+    consent_policy_version: Annotated[str | None, Form()] = None,
+    locale: Annotated[str, Form()] = "es",
 ):
     content_type = normalize_mime(file.content_type)
     if content_type not in ALLOWED_MIME:
         raise HTTPException(status_code=415, detail=f"Unsupported mime: {file.content_type}")
+    if source not in VALID_SOURCES:
+        raise HTTPException(status_code=400, detail=f"Invalid source: {source}")
+    is_consulta = source == "consulta"
+    if is_consulta and not _is_audio(content_type):
+        raise HTTPException(status_code=400, detail="Consulta recordings must be audio")
+    if is_consulta and not consent_policy_version:
+        raise HTTPException(
+            status_code=400,
+            detail="consent_policy_version required for consulta recordings",
+        )
 
     body = await file.read()
     if len(body) > MAX_UPLOAD_BYTES:
@@ -257,14 +278,28 @@ async def upload_document(
     # across the blob upload exhausted the pool under concurrent uploads.
     await storage.put_object(s3_key, io.BytesIO(body), content_type=content_type)
 
+    # id generated client-side (not left to the Column default) — the
+    # ConsentEvent below needs doc.id before the INSERT flush would assign
+    # one; see the _process_document_inner docstring for the same pattern.
     doc = Document(
+        id=uuid.uuid4(),
         user_id=user_id,
-        source="web",
+        source=source,
         mime_type=content_type,
         s3_key=s3_key,
+        profile_id=profile_id,
     )
     async with AsyncSessionLocal() as db:
         db.add(doc)
+        if is_consulta:
+            db.add(ConsentEvent(
+                user_id=user_id,
+                profile_id=profile_id,
+                document_id=doc.id,
+                event_type="recording_informed_professional",
+                policy_version=consent_policy_version,
+                locale=locale[:8],
+            ))
         try:
             await db.commit()
         except Exception:
@@ -277,7 +312,7 @@ async def upload_document(
             raise
         await db.refresh(doc)
 
-    background.add_task(process_document, doc.id, content_type)
+    background.add_task(process_document, doc.id, content_type, is_consulta)
 
     return _doc_to_out(doc)
 
