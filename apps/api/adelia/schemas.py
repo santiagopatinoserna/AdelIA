@@ -8,7 +8,7 @@ from pydantic import BaseModel, ConfigDict, Field
 
 class DocumentOut(BaseModel):
     id: UUID
-    source: Literal["web", "manual"]
+    source: Literal["web", "manual", "consulta"]
     mime_type: str
     file_name: str
     raw_text: str | None
