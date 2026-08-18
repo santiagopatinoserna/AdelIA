@@ -67,13 +67,15 @@ async def test_mistral_diarized_formats_speakers(monkeypatch):
     monkeypatch.setattr(settings, "stt_provider", "mistral")
     monkeypatch.setattr(settings, "mistral_api_key", "test-key")
     captured: dict = {}
+    # Shape verified against the live API (2026-08-18): segments carry
+    # "speaker_id" (not "speaker") and diarize requires segment timestamps.
     payload = {
         "text": "ignored when segments have speakers",
         "segments": [
-            {"speaker": "speaker_0", "text": "El peso está en el percentil 60."},
-            {"speaker": "speaker_0", "text": "Todo normal."},
-            {"speaker": "speaker_1", "text": "¿Y la vacuna de los 12 meses?"},
-            {"speaker": "speaker_0", "text": "Se la ponemos hoy."},
+            {"type": "transcription_segment", "speaker_id": "speaker_1", "start": 0.0, "end": 2.5, "text": "El peso está en el percentil 60."},
+            {"type": "transcription_segment", "speaker_id": "speaker_1", "start": 2.9, "end": 5.0, "text": "Todo normal."},
+            {"type": "transcription_segment", "speaker_id": "speaker_2", "start": 5.8, "end": 8.9, "text": "¿Y la vacuna de los 12 meses?"},
+            {"type": "transcription_segment", "speaker_id": "speaker_1", "start": 9.9, "end": 12.6, "text": "Se la ponemos hoy."},
         ],
     }
     _patch_mistral_post(monkeypatch, payload, captured)
@@ -81,11 +83,29 @@ async def test_mistral_diarized_formats_speakers(monkeypatch):
     result = await transcribe_audio(b"fake-audio", "audio/webm", diarize=True)
 
     assert captured["data"]["diarize"] == "true"
+    assert captured["data"]["timestamp_granularities"] == ["segment"]
     assert result == (
         "[Hablante 1] El peso está en el percentil 60. Todo normal.\n\n"
         "[Hablante 2] ¿Y la vacuna de los 12 meses?\n\n"
         "[Hablante 1] Se la ponemos hoy."
     )
+
+
+async def test_mistral_diarized_accepts_legacy_speaker_key(monkeypatch):
+    monkeypatch.setattr(settings, "stt_provider", "mistral")
+    monkeypatch.setattr(settings, "mistral_api_key", "test-key")
+    payload = {
+        "text": "ignored",
+        "segments": [
+            {"speaker": "a", "text": "Hola."},
+            {"speaker": "b", "text": "Buenas."},
+        ],
+    }
+    _patch_mistral_post(monkeypatch, payload, {})
+
+    result = await transcribe_audio(b"fake-audio", "audio/webm", diarize=True)
+
+    assert result == "[Hablante 1] Hola.\n\n[Hablante 2] Buenas."
 
 
 async def test_mistral_diarize_without_speakers_falls_back_to_text(monkeypatch):
