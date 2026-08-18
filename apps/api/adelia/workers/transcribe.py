@@ -21,10 +21,14 @@ def _ext_from_mime(mime_type: str) -> str:
     }.get(mime_type, "wav")
 
 
+def _speaker_of(seg: dict) -> object | None:
+    return seg.get("speaker_id") if seg.get("speaker_id") is not None else seg.get("speaker")
+
+
 def _format_diarized(segments: list[dict]) -> str:
     """Group consecutive same-speaker segments into '[Hablante N] …' blocks.
 
-    Speaker labels from the API are opaque (e.g. 'speaker_0'); we map them to
+    Speaker labels from the API are opaque (e.g. 'speaker_1'); we map them to
     1, 2, … in order of first appearance. Diarization can't know WHO the
     doctor is — neutral labels, renaming is a v1.1 feature.
     """
@@ -34,7 +38,7 @@ def _format_diarized(segments: list[dict]) -> str:
         text = (seg.get("text") or "").strip()
         if not text:
             continue
-        raw = seg.get("speaker")
+        raw = _speaker_of(seg)
         if raw not in label_of:
             label_of[raw] = len(label_of) + 1
         label = label_of[raw]
@@ -58,9 +62,12 @@ async def _transcribe_mistral(body: bytes, mime_type: str, *, diarize: bool) -> 
 
     bare_mime = mime_type.split(";")[0].strip()
     ext = _ext_from_mime(bare_mime)
-    data: dict[str, str] = {"model": settings.mistral_stt_model}
+    data: dict[str, str | list[str]] = {"model": settings.mistral_stt_model}
     if diarize:
+        # Real-API contract (verified live 2026-08-18): diarize requires
+        # segment-level timestamps or the API rejects with 422.
         data["diarize"] = "true"
+        data["timestamp_granularities"] = ["segment"]
     async with httpx.AsyncClient(timeout=300.0) as client:
         resp = await client.post(
             MISTRAL_TRANSCRIBE_URL,
@@ -71,7 +78,9 @@ async def _transcribe_mistral(body: bytes, mime_type: str, *, diarize: bool) -> 
         resp.raise_for_status()
     payload = resp.json()
     segments = payload.get("segments") or []
-    if diarize and any(s.get("speaker") is not None for s in segments):
+    # Real-API field is "speaker_id" ("speaker_1", …); keep "speaker" as a
+    # defensive fallback in case the contract shifts back.
+    if diarize and any(_speaker_of(s) is not None for s in segments):
         return _format_diarized(segments)
     return payload.get("text") or ""
 
