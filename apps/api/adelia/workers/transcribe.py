@@ -1,6 +1,7 @@
 import io
 
 import httpx
+import openai
 from openai import AsyncOpenAI
 
 from adelia.config import settings
@@ -85,20 +86,61 @@ async def _transcribe_mistral(body: bytes, mime_type: str, *, diarize: bool) -> 
     return payload.get("text") or ""
 
 
-async def _transcribe_openai(body: bytes, mime_type: str) -> str:
-    """OpenAI Whisper fallback (no diarization). Unchanged v0.1 behavior."""
+async def _transcribe_openai(body: bytes, mime_type: str, *, diarize: bool = False) -> str:
+    """OpenAI whisper-1 via settings.openai_stt_base_url (EU by default, see
+    config.py). `diarize` is accepted for signature parity with
+    `_transcribe_mistral` but deliberately IGNORED: whisper-1 has no speaker
+    labels, so the transcript always comes back flat, without [Hablante N]
+    blocks, even when the caller asked for diarization.
+
+    Raises:
+        RuntimeError: no API key, bad credentials or a non-EU project (401),
+            or the account is out of credits (429 insufficient_quota). All
+            are config errors that _with_retry must NOT retry (retrying
+            burns time for nothing).
+        openai.RateLimitError: a genuine transient 429 (real rate limiting)
+            re-raised as-is, so _with_retry's existing OpenAIAPIError handler
+            keeps retrying it with backoff.
+    """
     if not settings.openai_api_key:
         raise RuntimeError("OPENAI_API_KEY not set")
 
-    client = AsyncOpenAI(api_key=settings.openai_api_key)
+    client = AsyncOpenAI(api_key=settings.openai_api_key, base_url=settings.openai_stt_base_url)
     ext = _ext_from_mime(mime_type)
     file_tuple = (f"upload.{ext}", io.BytesIO(body), mime_type)
 
-    response = await client.audio.transcriptions.create(
-        model="whisper-1",
-        file=file_tuple,
-        response_format="text",
-    )
+    try:
+        response = await client.audio.transcriptions.create(
+            model=settings.openai_stt_model,
+            file=file_tuple,
+            response_format="text",
+        )
+    except openai.AuthenticationError as exc:
+        # Live contract (2026-08-19): the EU endpoint answers 401 with
+        # "only accessible by projects with geography restrictions enabled"
+        # for projects that lack EU data residency, and that reads nothing
+        # like a bad key. Tell the operator which of the two it is.
+        if "geography restrictions" in str(exc):
+            raise RuntimeError(
+                "OpenAI: el endpoint UE exige un proyecto con residencia de "
+                "datos europea activada. Actívala en platform.openai.com, o "
+                "cambia STT_PROVIDER=mistral. Apuntar a api.openai.com "
+                "enviaría el audio fuera de la UE y contradice el aviso de "
+                "privacidad publicado."
+            ) from exc
+        raise RuntimeError(
+            "OpenAI: credenciales inválidas (401). Revisa OPENAI_API_KEY."
+        ) from exc
+    except openai.RateLimitError as exc:
+        # Live contract (2026-08-19): the real body is
+        # type="insufficient_quota", code="credit_balance_exhausted".
+        # Matching on code alone missed it and burned three retries.
+        if exc.type == "insufficient_quota" or exc.code == "credit_balance_exhausted":
+            raise RuntimeError(
+                "OpenAI sin créditos: recarga en platform.openai.com "
+                "o cambia STT_PROVIDER=mistral"
+            ) from exc
+        raise  # transient rate limit: let _with_retry retry it
     return response if isinstance(response, str) else str(response)
 
 
@@ -116,4 +158,4 @@ async def transcribe_audio(body: bytes, mime_type: str, *, diarize: bool = False
     """
     if settings.stt_provider == "mistral":
         return await _transcribe_mistral(body, mime_type, diarize=diarize)
-    return await _transcribe_openai(body, mime_type)
+    return await _transcribe_openai(body, mime_type, diarize=diarize)
