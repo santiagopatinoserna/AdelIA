@@ -41,6 +41,20 @@ class Settings(BaseSettings):
     # "openai" = whisper-1 (sin diarización). Voxtral reusa mistral_api_key.
     stt_provider: str = "mistral"  # "mistral" | "openai"
     mistral_stt_model: str = "voxtral-mini-latest"
+    openai_stt_model: str = "whisper-1"
+    # Default to the EU data-residency endpoint (not api.openai.com): the DPIA
+    # and the /profesionales page commit to patient audio never leaving the
+    # EU, and eu.api.openai.com is how we honor that for OpenAI STT. This is
+    # transcription-only: openai_chat_model and the chat client are untouched,
+    # so switching STT provider never moves where chat traffic goes.
+    #
+    # PREREQUISITE, verified live 2026-08-19: this endpoint rejects ordinary
+    # projects with 401 "This endpoint is only accessible by projects with
+    # geography restrictions enabled". Enabling OpenAI STT therefore needs an
+    # OpenAI project with EU data residency, not just credits. Pointing this
+    # at api.openai.com instead sends patient audio to the US and contradicts
+    # the published privacy notice, so that swap requires a DPIA revision.
+    openai_stt_base_url: str = "https://eu.api.openai.com/v1"
 
     # M4 ingestion surfaces
     telegram_bot_token: str = ""
