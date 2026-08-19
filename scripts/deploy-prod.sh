@@ -180,14 +180,34 @@ check_url() {
   curl -s -o /dev/null -w '%{http_code}' --max-time 10 "$1" 2>/dev/null || printf '000'
 }
 
+# A freshly recreated web container needs a few seconds before Next serves
+# traffic; checking immediately after `up -d` reports a 502 that resolves on
+# its own. Poll instead of crying wolf.
+WAIT_FOR_HTTP_ATTEMPTS=12
+WAIT_FOR_HTTP_DELAY=5
+
+wait_for_url() {
+  local url="$1" code=""
+  for ((attempt = 1; attempt <= WAIT_FOR_HTTP_ATTEMPTS; attempt++)); do
+    code="$(check_url "${url}")"
+    [[ "${code}" == "200" ]] && { printf '%s\n' "${code}"; return 0; }
+    log "  ${url} -> ${code}, retry ${attempt}/${WAIT_FOR_HTTP_ATTEMPTS} in ${WAIT_FOR_HTTP_DELAY}s"
+    sleep "${WAIT_FOR_HTTP_DELAY}"
+  done
+  printf '%s\n' "${code}"
+  return 1
+}
+
 verify() {
   local host="$1" services="$2"
   log "Verifying deployment..."
 
-  local code_home code_prof db_version expected fail=0
+  local code_home code_prof code_priv code_terms db_version expected fail=0
 
-  code_home=$(check_url "https://adelia.godi.ai/es")
+  code_home=$(wait_for_url "https://adelia.godi.ai/es") || true
   code_prof=$(check_url "https://adelia.godi.ai/es/profesionales")
+  code_priv=$(check_url "https://adelia.godi.ai/es/privacidad")
+  code_terms=$(check_url "https://adelia.godi.ai/es/terminos")
 
   db_version=$(ssh "${SSH_OPTS[@]}" "${REMOTE_USER}@${host}" \
     'docker exec infra-postgres-1 psql -U adelia -d adelia -t -c "select version_num from alembic_version;"' \
@@ -196,6 +216,8 @@ verify() {
 
   [[ "${code_home}" == "200" ]] || { log "FAIL: GET /es -> ${code_home}"; fail=1; }
   [[ "${code_prof}" == "200" ]] || { log "FAIL: GET /es/profesionales -> ${code_prof}"; fail=1; }
+  [[ "${code_priv}" == "200" ]] || { log "FAIL: GET /es/privacidad -> ${code_priv}"; fail=1; }
+  [[ "${code_terms}" == "200" ]] || { log "FAIL: GET /es/terminos -> ${code_terms}"; fail=1; }
   [[ "${db_version}" == "${expected}" ]] || { log "FAIL: alembic_version='${db_version}' expected='${expected}'"; fail=1; }
 
   cat >&2 <<EOF
@@ -205,6 +227,8 @@ Server:                 ${REMOTE_USER}@${host}
 Services rebuilt:       ${services}
 GET /es:                ${code_home}
 GET /es/profesionales:  ${code_prof}
+GET /es/privacidad:     ${code_priv}
+GET /es/terminos:       ${code_terms}
 Alembic version:        ${db_version:-<empty>} (expected: ${expected})
 ===========================================================
 EOF
