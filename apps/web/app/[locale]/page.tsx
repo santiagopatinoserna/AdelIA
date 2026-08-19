@@ -584,6 +584,18 @@ export default function HomePage() {
               <ArrowRight className="h-4 w-4" strokeWidth={2} />
               {t("home.footerDashboard")}
             </Link>
+            <Link
+              href="/privacidad"
+              className="py-1.5 text-ink-soft transition-colors hover:text-pine-700"
+            >
+              {t("home.footerPrivacy")}
+            </Link>
+            <Link
+              href="/terminos"
+              className="py-1.5 text-ink-soft transition-colors hover:text-pine-700"
+            >
+              {t("home.footerTerms")}
+            </Link>
           </nav>
         </div>
         <div className="border-t border-line">
