@@ -148,6 +148,8 @@ Web on `:3000`, API on `:8000` (override with `WEB_PORT`/`API_PORT`). The API co
 
 Self-hosting AdelIA makes **you** the data controller (*responsable del tratamiento*) for whatever your instance processes — on the hosted SaaS at `adelia.godi.ai`, that role is Godi.AI. This matters in particular for the **Grabar consulta** (record consultation) feature: it ships with a mandatory consent gate that requires informing the attending healthcare professional, and an audio-deletion window (48h after successful transcription, 7 days on failure) as the data-minimization safeguard the feature's DPIA (`docs/legal/dpia-grabacion-consulta.md`) relies on. If you self-host, keep both active — disabling either changes your instance's legal footing, not just its UX.
 
+The transcription provider is also part of that footing: `STT_PROVIDER` defaults to `mistral` (Voxtral, with speaker diarization, EU data residency), and can be switched to `openai` (`whisper-1` against the EU-residency endpoint, no diarization). Whichever you pick becomes *your* processor (*encargado del tratamiento*) for that audio — self-hosters choose their own processor and must reflect that choice in their own privacy information, not assume the SaaS DPIA's Mistral-specific terms carry over.
+
 ### Backups
 
 A `backup` sidecar runs `pg_dump` (custom format, compressed) every 24h into the `pgbackups` volume, pruning dumps older than 14 days (`BACKUP_INTERVAL_SECONDS` / `BACKUP_RETENTION_DAYS`). Restore:
@@ -161,6 +163,25 @@ docker compose -f infra/docker-compose.prod.yml exec backup \
 ```
 
 Document blobs live in the `miniodata` volume — snapshot it at the filesystem level alongside the DB dumps (the dump covers metadata; blobs are the original files).
+
+## Deploy (SaaS propio)
+
+The hosted instance at `adelia.godi.ai` runs on a home server reachable only
+by LAN IP, which changes on reboot (DHCP, no router access to reserve it).
+`scripts/deploy-prod.sh` handles that: it discovers the host (env override →
+known recent IPs → a short LAN scan), rsyncs the repo over (no `--delete` —
+the server keeps its own `.env.prod`), rebuilds `api`+`web` via
+`docker compose -f infra/docker-compose.prod.yml`, and verifies the deploy
+(HTTP 200 on `/es` and `/es/profesionales`, alembic version matches head).
+
+```bash
+./scripts/deploy-prod.sh                          # deploy api + web
+./scripts/deploy-prod.sh api                       # deploy only api
+ADELIA_HOST=192.168.1.x ./scripts/deploy-prod.sh   # force the host
+```
+
+If discovery fails, find the box with `arp -a | grep -i santiago` and pass it
+via `ADELIA_HOST`. See `DEPLOY.md` for first-time server setup (Caddy/TLS).
 
 ## Roadmap
 
