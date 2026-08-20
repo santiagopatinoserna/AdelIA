@@ -7,6 +7,7 @@ import { billingStatus } from "@/lib/api-client";
 import { Link } from "@/lib/navigation";
 import { LocaleSwitcher } from "@/components/locale-switcher";
 import { DashboardSectionNav } from "@/components/dashboard-section-nav";
+import { MobileBottomNav } from "@/components/mobile-bottom-nav";
 import { CommandPalette } from "@/components/command-palette";
 import { OnlineStatus } from "@/components/online-status";
 
@@ -58,12 +59,17 @@ export default async function DashboardLayout({
           <DashboardSectionNav />
         </div>
         <div className="flex shrink-0 items-center gap-2.5">
-          <CommandPalette />
+          {/* Search and settings live in the bottom nav / its screens on
+              mobile; keeping them here squeezed the section nav (and even the
+              logo) to zero width on a 390px viewport. */}
+          <div className="hidden sm:block">
+            <CommandPalette />
+          </div>
           <LocaleSwitcher current={locale} />
           <Link
             href="/dashboard/settings"
             aria-label={t("settingsLink")}
-            className="ad-btn ad-btn-ghost h-9 w-9 p-0"
+            className="ad-btn ad-btn-ghost hidden h-9 w-9 p-0 md:inline-flex"
           >
             <Settings className="h-4 w-4" strokeWidth={2} />
           </Link>
@@ -73,7 +79,8 @@ export default async function DashboardLayout({
           </Link>
         </div>
       </header>
-      <div className="flex-1">{children}</div>
+      <div className="flex-1 pb-14 md:pb-0">{children}</div>
+      <MobileBottomNav />
     </div>
   );
 }

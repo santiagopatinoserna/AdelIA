@@ -196,7 +196,14 @@
     "navUpload": "Upload document",
     "navPrimaryLabel": "Main actions",
     "navMoreLabel": "More options",
-    "loadingSpace": "Loading your space…"
+    "loadingSpace": "Loading your space…",
+    "navHome": "Home",
+    "navConsulta": "Visit",
+    "navUploadShort": "Upload",
+    "navHistory": "History",
+    "navSettings": "Settings",
+    "consultaDocTitle": "Visit on {date}",
+    "speakerLabel": "Speaker {n}"
   },
   "upload": {
     "title": "Upload document",
@@ -732,7 +739,13 @@
     "cardInsightTitle": "Insight",
     "cardDocEntities": "extracted data",
     "profileSwitch": "Profile",
-    "suggestionsTitle": "For you"
+    "suggestionsTitle": "For you",
+    "quickRecordTitle": "Record a visit",
+    "quickRecordBody": "With the professional's permission, I transcribe it into the record and the audio is deleted.",
+    "quickUploadTitle": "Upload the first report",
+    "quickUploadBody": "A lab result, a report or a photo of the health booklet: I read it and organize it.",
+    "quickAskTitle": "Ask me something",
+    "sampleQuestion": "Which vaccines are due at 12 months?"
   },
   "professionals": {
     "title": "Information for healthcare professionals",

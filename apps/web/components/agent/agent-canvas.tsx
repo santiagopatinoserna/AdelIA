@@ -1,13 +1,14 @@
 "use client";
 import { useEffect, useRef, useState } from "react";
 import { useTranslations } from "next-intl";
+import { Mic, UploadCloud, Sparkles } from "lucide-react";
 import { streamAgent, getSuggestions } from "@/lib/agent-client-browser";
 import type { AgentCard } from "@/lib/agent-types";
 import { CardRenderer, type CardActionHandler } from "./cards/card-renderer";
 import { AgentInput } from "./agent-input";
 import { ProfileSwitcher } from "./profile-switcher";
 import { useActiveProfile } from "@/lib/profile-context";
-import { useRouter } from "@/lib/navigation";
+import { Link, useRouter } from "@/lib/navigation";
 
 type Msg = { role: "user" | "assistant"; content: string };
 
@@ -93,12 +94,46 @@ export function AgentCanvas({ locale }: { locale: string }) {
   );
 
   return (
-    <div data-testid="agent-canvas" className="flex h-[calc(100dvh-3.5rem)] flex-col md:flex-row">
+    <div
+      data-testid="agent-canvas"
+      className="flex h-[calc(100dvh-7rem)] flex-col md:h-[calc(100dvh-3.5rem)] md:flex-row"
+    >
       {/* Chat column */}
       <section className="flex min-h-0 flex-1 flex-col">
         <ProfileSwitcher />
         <div className="min-h-0 flex-1 overflow-y-auto p-3">
           {messages.length === 0 && <p className="ad-rise font-display text-lg text-ink-soft">{t("greeting")}</p>}
+          {/* First-run quick start: an empty canvas tells a new mom nothing.
+              Three concrete doors into the product beat a blank screen. */}
+          {messages.length === 0 && (
+            <div className="mt-4 grid gap-3 sm:grid-cols-3">
+              <Link href="/dashboard/consulta/grabar" className="ad-card ad-card-hover block p-4">
+                <span className="inline-flex h-9 w-9 items-center justify-center rounded-lg bg-pine-50 text-pine-600 ring-1 ring-pine-100">
+                  <Mic className="h-4 w-4" strokeWidth={2} />
+                </span>
+                <p className="mt-2.5 text-sm font-semibold text-ink">{t("quickRecordTitle")}</p>
+                <p className="mt-1 text-xs leading-relaxed text-ink-soft">{t("quickRecordBody")}</p>
+              </Link>
+              <Link href="/dashboard/upload" className="ad-card ad-card-hover block p-4">
+                <span className="inline-flex h-9 w-9 items-center justify-center rounded-lg bg-pine-50 text-pine-600 ring-1 ring-pine-100">
+                  <UploadCloud className="h-4 w-4" strokeWidth={2} />
+                </span>
+                <p className="mt-2.5 text-sm font-semibold text-ink">{t("quickUploadTitle")}</p>
+                <p className="mt-1 text-xs leading-relaxed text-ink-soft">{t("quickUploadBody")}</p>
+              </Link>
+              <button
+                type="button"
+                onClick={() => void drive({ message: t("sampleQuestion") })}
+                className="ad-card ad-card-hover block p-4 text-left"
+              >
+                <span className="inline-flex h-9 w-9 items-center justify-center rounded-lg bg-honey-100 text-honey-700 ring-1 ring-honey-200">
+                  <Sparkles className="h-4 w-4" strokeWidth={2} />
+                </span>
+                <p className="mt-2.5 text-sm font-semibold text-ink">{t("quickAskTitle")}</p>
+                <p className="mt-1 text-xs leading-relaxed text-ink-soft">“{t("sampleQuestion")}”</p>
+              </button>
+            </div>
+          )}
           {messages.map((m, i) => (
             <div key={i} className={`my-2 ${m.role === "user" ? "text-right" : ""}`}>
               <span className={`inline-block rounded-lg px-3 py-2 ${m.role === "user" ? "bg-pine-100" : "bg-surface-2"}`}>

@@ -13,8 +13,9 @@ import {
 
 // Persistent cross-section nav in the top bar: jump between sections from any
 // page (before, you had to go back to the dashboard hub first). The active
-// section shows its label; the rest stay compact icons. Desktop only — on
-// mobile the dashboard hub is the nav.
+// section shows its label; the rest stay compact icons. Desktop only: on
+// mobile this bar has no room (it was getting squeezed to zero width), so
+// phones navigate with MobileBottomNav instead.
 export function DashboardSectionNav() {
   const pathname = usePathname();
   const t = useTranslations();
@@ -30,7 +31,7 @@ export function DashboardSectionNav() {
   return (
     <nav
       aria-label="Secciones"
-      className="-mx-1 flex items-center gap-0.5 overflow-x-auto px-1 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
+      className="-mx-1 hidden items-center gap-0.5 overflow-x-auto px-1 [scrollbar-width:none] md:flex [&::-webkit-scrollbar]:hidden"
     >
       {items.map((it) => {
         const active = pathname.startsWith(it.href);
