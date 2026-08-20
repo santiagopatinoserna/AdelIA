@@ -11,6 +11,28 @@ import { StatusBadge } from "@/components/status-badge";
 const POLL_INTERVAL_MS = 2500;
 const MAX_POLLS = 120; // ~5 min — then stop the spinner and offer a reload
 
+// Consultation transcripts arrive as "[Hablante N] …" blocks (the backend's
+// diarization format, a fixed literal regardless of UI locale). Parse them so
+// the mom reads a conversation, not a wall of bracketed text.
+type Turn = { speaker: number; text: string };
+
+function parseDiarized(text: string): Turn[] | null {
+  if (!text.trimStart().startsWith("[Hablante ")) return null;
+  const turns: Turn[] = [];
+  const re = /\[Hablante (\d+)\]\s*([\s\S]*?)(?=\s*\[Hablante \d+\]|$)/g;
+  let m: RegExpExecArray | null;
+  while ((m = re.exec(text))) {
+    const body = m[2].trim();
+    if (body) turns.push({ speaker: Number(m[1]), text: body });
+  }
+  return turns.length > 0 ? turns : null;
+}
+
+const SPEAKER_STYLES = [
+  "bg-pine-50 text-pine-700 ring-pine-100",
+  "bg-honey-100 text-honey-700 ring-honey-200",
+];
+
 export function DocumentDetailView({
   initialDoc,
   locale,
@@ -22,6 +44,7 @@ export function DocumentDetailView({
   const [timedOut, setTimedOut] = useState(false);
   const pollsRef = useRef(0);
   const t = useTranslations("dashboard");
+  const tRecord = useTranslations("consulta.record");
 
   const processing = doc.status === "processing";
 
@@ -47,7 +70,16 @@ export function DocumentDetailView({
     return () => clearInterval(timer);
   }, [processing, doc.id]);
 
-  const fileName = doc.file_name;
+  const isConsulta = doc.source === "consulta";
+  // "consulta-2026-08-20.webm" is a filename, not a title a mom should read.
+  const title = isConsulta
+    ? t("consultaDocTitle", {
+        date: new Intl.DateTimeFormat(locale, { dateStyle: "long" }).format(
+          new Date(doc.created_at),
+        ),
+      })
+    : doc.file_name;
+  const turns = isConsulta && doc.raw_text ? parseDiarized(doc.raw_text) : null;
   return (
     <main className="mx-auto max-w-3xl px-6 py-12">
       <Link
@@ -58,9 +90,12 @@ export function DocumentDetailView({
         {t("title")}
       </Link>
       <div className="flex items-start justify-between gap-3">
-        <h1 className="min-w-0 truncate text-2xl text-pine-900">{fileName}</h1>
+        <h1 className="min-w-0 truncate text-2xl text-pine-900">{title}</h1>
         <StatusBadge status={doc.status} />
       </div>
+      {isConsulta && (
+        <p className="mt-2 text-xs text-ink-faint">{tRecord("audioDeleted")}</p>
+      )}
       <p className="mt-2 font-mono text-xs text-ink-faint">
         {new Intl.DateTimeFormat(locale, {
           dateStyle: "medium",
@@ -69,7 +104,22 @@ export function DocumentDetailView({
         {doc.raw_text ? `  ·  ${t("docReady")}` : ""}
       </p>
       <section className="ad-card mt-8 p-6">
-        {doc.raw_text ? (
+        {turns ? (
+          <div className="flex flex-col gap-4">
+            {turns.map((turn, i) => (
+              <div key={i}>
+                <span
+                  className={`ad-eyebrow inline-block rounded-full px-2 py-0.5 ring-1 ${
+                    SPEAKER_STYLES[(turn.speaker - 1) % SPEAKER_STYLES.length]
+                  }`}
+                >
+                  {t("speakerLabel", { n: turn.speaker })}
+                </span>
+                <p className="mt-1.5 text-sm leading-relaxed text-ink">{turn.text}</p>
+              </div>
+            ))}
+          </div>
+        ) : doc.raw_text ? (
           <pre className="whitespace-pre-wrap font-sans text-sm leading-relaxed text-ink">{doc.raw_text}</pre>
         ) : timedOut ? (
           <div className="text-center">

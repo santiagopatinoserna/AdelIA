@@ -10,7 +10,12 @@ export default async function DashboardHome() {
     <ProfileProvider>
       <div className="relative">
         <AgentCanvas locale={locale} />
-        <Link href="/dashboard/overview" className="absolute right-3 top-2 text-sm text-ink-faint underline">
+        {/* Desktop only: on mobile it overlapped the greeting, and the
+            bottom nav's "Historial" tab covers the same destination. */}
+        <Link
+          href="/dashboard/overview"
+          className="absolute right-3 top-2 hidden text-sm text-ink-faint underline md:block"
+        >
           {t("seeAll")}
         </Link>
       </div>

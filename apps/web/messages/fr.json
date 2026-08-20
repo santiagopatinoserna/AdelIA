@@ -196,7 +196,14 @@
     "navUpload": "Ajouter un document",
     "navPrimaryLabel": "Actions principales",
     "navMoreLabel": "Plus d'options",
-    "loadingSpace": "Chargement de ton espace…"
+    "loadingSpace": "Chargement de ton espace…",
+    "navHome": "Accueil",
+    "navConsulta": "Consultation",
+    "navUploadShort": "Ajouter",
+    "navHistory": "Historique",
+    "navSettings": "Réglages",
+    "consultaDocTitle": "Consultation du {date}",
+    "speakerLabel": "Intervenant {n}"
   },
   "upload": {
     "title": "Importer un document",
@@ -732,7 +739,13 @@
     "cardInsightTitle": "Suggestion",
     "cardDocEntities": "données extraites",
     "profileSwitch": "Profil",
-    "suggestionsTitle": "Pour toi"
+    "suggestionsTitle": "Pour toi",
+    "quickRecordTitle": "Enregistre une consultation",
+    "quickRecordBody": "Avec l'accord du professionnel, je la transcris dans le carnet et l'audio est supprimé.",
+    "quickUploadTitle": "Ajoute le premier document",
+    "quickUploadBody": "Une analyse, un compte rendu ou une photo du carnet : je le lis et je l'organise.",
+    "quickAskTitle": "Pose-moi une question",
+    "sampleQuestion": "Quels vaccins sont prévus à 12 mois ?"
   },
   "professionals": {
     "title": "Informations pour les professionnels de santé",

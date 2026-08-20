@@ -196,7 +196,14 @@
     "navUpload": "Subir documento",
     "navPrimaryLabel": "Acciones principales",
     "navMoreLabel": "Más opciones",
-    "loadingSpace": "Cargando tu espacio…"
+    "loadingSpace": "Cargando tu espacio…",
+    "navHome": "Inicio",
+    "navConsulta": "Consulta",
+    "navUploadShort": "Subir",
+    "navHistory": "Historial",
+    "navSettings": "Ajustes",
+    "consultaDocTitle": "Consulta del {date}",
+    "speakerLabel": "Hablante {n}"
   },
   "upload": {
     "title": "Subir documento",
@@ -732,7 +739,13 @@
     "cardInsightTitle": "Sugerencia",
     "cardDocEntities": "datos extraídos",
     "profileSwitch": "Perfil",
-    "suggestionsTitle": "Para ti"
+    "suggestionsTitle": "Para ti",
+    "quickRecordTitle": "Graba una consulta",
+    "quickRecordBody": "Con permiso del profesional, la transcribo al historial y el audio se borra.",
+    "quickUploadTitle": "Sube el primer informe",
+    "quickUploadBody": "Un análisis, un informe o una foto de la cartilla: yo lo leo y lo organizo.",
+    "quickAskTitle": "Pregúntame algo",
+    "sampleQuestion": "¿Qué vacunas tocan a los 12 meses?"
   },
   "professionals": {
     "title": "Información para profesionales sanitarios",
