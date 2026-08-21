@@ -79,7 +79,9 @@ export default async function DashboardLayout({
           </Link>
         </div>
       </header>
-      <div className="flex-1 pb-14 md:pb-0">{children}</div>
+      {/* Matches the tab bar's h-14 PLUS its safe-area padding — plain pb-14
+          left the last element hidden behind the bar on notched iPhones. */}
+      <div className="flex-1 pb-[calc(3.5rem+env(safe-area-inset-bottom))] md:pb-0">{children}</div>
       <MobileBottomNav />
     </div>
   );

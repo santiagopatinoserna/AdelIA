@@ -215,16 +215,25 @@ export function ConsultaRecorder() {
     discardRef.current = true;
     recorderRef.current?.stop();
     setPhase("declined");
-    void fetch("/api/backend/consent-events", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        event_type: "recording_declined",
-        profile_id: activeId,
-        policy_version: CONSENT_POLICY_VERSION,
-        locale,
-      }),
-    }).catch(() => {});
+    // The declined event is the RGPD accountability trail for "the doctor
+    // said no" — worth more than one shot. Non-blocking retries with
+    // backoff; the kill switch itself never waits on the network.
+    const send = () =>
+      fetch("/api/backend/consent-events", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          event_type: "recording_declined",
+          profile_id: activeId,
+          policy_version: CONSENT_POLICY_VERSION,
+          locale,
+        }),
+      });
+    void send().catch(() =>
+      new Promise((r) => setTimeout(r, 2000)).then(() =>
+        send().catch(() => new Promise((r) => setTimeout(r, 8000)).then(() => send().catch(() => {}))),
+      ),
+    );
   }
 
   async function upload(retryBlob?: Blob) {
@@ -260,7 +269,19 @@ export function ConsultaRecorder() {
 
   function poll(id: string) {
     if (pollRef.current) clearInterval(pollRef.current); // guard: never stack two pollers
+    // Cap: a stuck pipeline must not spin "Transcribiendo…" forever. The
+    // upload DID land, so the honest copy on timeout is t("error") — the
+    // audio really is kept server-side for a retry window.
+    let polls = 0;
+    const MAX_POLLS = 100; // ~5 min at 3s
     pollRef.current = setInterval(async () => {
+      if (++polls > MAX_POLLS) {
+        if (pollRef.current) clearInterval(pollRef.current);
+        pollRef.current = null;
+        setError(t("error"));
+        setPhase("error");
+        return;
+      }
       try {
         const res = await fetch(`/api/backend/documents/${id}`);
         if (!res.ok) return;
