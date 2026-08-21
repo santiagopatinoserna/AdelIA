@@ -203,7 +203,13 @@
     "navHistory": "Historique",
     "navSettings": "Réglages",
     "consultaDocTitle": "Consultation du {date}",
-    "speakerLabel": "Intervenant {n}"
+    "speakerLabel": "Intervenant {n}",
+    "deleteDoc": "Supprimer ce document",
+    "deleteDocConfirm": "Le supprimer définitivement ? Impossible d'annuler.",
+    "deleteDocYes": "Oui, supprimer",
+    "deleteDocCancel": "Annuler",
+    "deleteDocDeleting": "Suppression…",
+    "deleteDocError": "Impossible de le supprimer. Réessaie."
   },
   "upload": {
     "title": "Importer un document",
@@ -775,7 +781,7 @@
     "recordingsTitle": "Enregistrements de consultation",
     "recordingsBody": "Quand tu enregistres une consultation, l'app t'oblige à l'annoncer d'abord : tu ne peux lancer l'enregistrement qu'après avoir confirmé que le professionnel de santé est au courant. Rien n'est jamais enregistré en cachette. L'audio est envoyé de façon chiffrée, transcrit en texte dans l'historique privé de ton bébé, puis supprimé (voir « Combien de temps on la garde »). Cette transcription peut contenir les propos du professionnel, une donnée personnelle qui lui appartient et qu'on traite sur la base de notre intérêt légitime à documenter la consultation pour le suivi de ton bébé, mis en balance avec son droit à la vie privée. Le professionnel peut s'y opposer à tout moment : il peut te demander de supprimer l'enregistrement (un bouton existe pour ça) ou écrire directement à security@godi.ai. L'enregistrement est réservé à ton usage personnel et familial. Le diffuser, le publier ou le partager en dehors de cet usage est interdit (on le rappelle aussi dans les conditions d'utilisation).",
     "rightsTitle": "Tes droits, et comment les exercer",
-    "rightsBody": "Accès : toutes tes données sont visibles dans l'app, à tout moment. Rectification : tu peux corriger les profils et informations depuis ton compte. Suppression : tu peux supprimer ton compte entier, avec tout ce qu'il contient, depuis les réglages (on ne propose pas encore la suppression d'un document isolé ni l'export FHIR en un clic ; si tu en as besoin, écris-nous). Opposition : le professionnel enregistré peut s'opposer au traitement de sa voix. Pour exercer l'un de ces droits, ou pour toute autre question, écris à security@godi.ai. Si la réponse ne te satisfait pas, tu peux saisir l'AEPD en Espagne ou la CNIL en France.",
+    "rightsBody": "Accès : toutes tes données sont visibles dans l'app, à tout moment. Rectification : tu peux corriger les profils et informations depuis ton compte. Suppression : tu peux supprimer ton compte entier, avec tout ce qu'il contient, depuis les réglages (tu peux aussi supprimer un document isolé depuis sa propre page ; ce qu'on ne propose pas encore, c'est l'export FHIR de tout en un clic ; si tu en as besoin, écris-nous). Opposition : le professionnel enregistré peut s'opposer au traitement de sa voix. Pour exercer l'un de ces droits, ou pour toute autre question, écris à security@godi.ai. Si la réponse ne te satisfait pas, tu peux saisir l'AEPD en Espagne ou la CNIL en France.",
     "neverTitle": "Ce qu'on ne fait jamais",
     "neverBody": "On ne vend jamais tes données ni celles de ton bébé, à personne. On n'utilise pas tes informations pour entraîner des modèles d'IA. On ne te trace pas : il n'y a ni analytics ni publicité dans AdelIA. AdelIA est un logiciel libre (AGPL-3.0) ; si tu préfères l'héberger toi-même, tu peux le faire, et dans ce cas c'est toi qui deviens responsable de ces données, pas Godi.AI.",
     "contactTitle": "Contact",

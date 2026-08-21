@@ -203,7 +203,13 @@
     "navHistory": "History",
     "navSettings": "Settings",
     "consultaDocTitle": "Visit on {date}",
-    "speakerLabel": "Speaker {n}"
+    "speakerLabel": "Speaker {n}",
+    "deleteDoc": "Delete this document",
+    "deleteDocConfirm": "Delete it for good? This cannot be undone.",
+    "deleteDocYes": "Yes, delete",
+    "deleteDocCancel": "Cancel",
+    "deleteDocDeleting": "Deleting…",
+    "deleteDocError": "Could not delete it. Please try again."
   },
   "upload": {
     "title": "Upload document",
@@ -775,7 +781,7 @@
     "recordingsTitle": "Consultation recordings",
     "recordingsBody": "When you record a consultation, the app requires you to announce it first: you can only start recording once you confirm the healthcare professional knows. Nothing is ever recorded secretly. The audio uploads encrypted, gets transcribed into text inside your baby's private history, and is then deleted (see 'How long we keep it'). That transcript may include the professional's own words, personal data of theirs that we process on the basis of our legitimate interest in documenting the consultation for your baby's care, weighed against their right to privacy. The professional can object at any time: they can ask you to discard the recording (there's a button for that) or write directly to security@godi.ai. Recordings are for your personal, family use only. Publishing, broadcasting, or sharing them outside that use is not allowed (we cover this in the terms of use too).",
     "rightsTitle": "Your rights, and how to use them",
-    "rightsBody": "Access: all your data is visible inside the app, any time. Rectification: you can correct profiles and details from your account. Erasure: you can delete your entire account, and everything in it, from settings (we don't currently offer deleting a single document or one-click FHIR export; if you need either, write to us). Objection: a recorded professional can object to how we process their voice. To exercise any of these rights, or for any other question, write to security@godi.ai. If you're not satisfied, you can file a complaint with the AEPD in Spain or the CNIL in France.",
+    "rightsBody": "Access: all your data is visible inside the app, any time. Rectification: you can correct profiles and details from your account. Erasure: you can delete your entire account, and everything in it, from settings (you can also delete a single document from its own page; what we don't offer yet is one-click FHIR export of everything; if you need it, write to us). Objection: a recorded professional can object to how we process their voice. To exercise any of these rights, or for any other question, write to security@godi.ai. If you're not satisfied, you can file a complaint with the AEPD in Spain or the CNIL in France.",
     "neverTitle": "What we never do",
     "neverBody": "We never sell your data or your baby's, to anyone, ever. We don't use your information to train AI models. We don't track you: there's no analytics and no advertising in AdelIA. AdelIA is open-source software (AGPL-3.0); if you'd rather host it yourself, you can, and in that case whoever runs the deployment is responsible for that data, not Godi.AI.",
     "contactTitle": "Contact",

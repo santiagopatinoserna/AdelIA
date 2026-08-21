@@ -83,6 +83,11 @@ export function makeApi(fetcher: Fetcher) {
       return res.json();
     },
 
+    async deleteDocument(id: string): Promise<void> {
+      const res = await fetcher(`/documents/${id}`, { method: "DELETE" });
+      if (!res.ok) throw new Error(`deleteDocument: ${res.status}`);
+    },
+
     briefings: {
       async create(input: BriefingCreate): Promise<BriefingOut> {
         const res = await fetcher("/briefings", {

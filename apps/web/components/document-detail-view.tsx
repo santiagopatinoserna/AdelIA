@@ -2,10 +2,10 @@
 
 import { useEffect, useRef, useState } from "react";
 import { useTranslations } from "next-intl";
-import { ArrowLeft, RotateCcw } from "lucide-react";
+import { ArrowLeft, RotateCcw, Trash2 } from "lucide-react";
 
-import { Link } from "@/lib/navigation";
-import { getDocument, type DocumentDTO } from "@/lib/api-client-browser";
+import { Link, useRouter } from "@/lib/navigation";
+import { deleteDocument, getDocument, type DocumentDTO } from "@/lib/api-client-browser";
 import { StatusBadge } from "@/components/status-badge";
 
 const POLL_INTERVAL_MS = 2500;
@@ -42,9 +42,26 @@ export function DocumentDetailView({
 }) {
   const [doc, setDoc] = useState<DocumentDTO>(initialDoc);
   const [timedOut, setTimedOut] = useState(false);
+  const [confirmingDelete, setConfirmingDelete] = useState(false);
+  const [deleting, setDeleting] = useState(false);
+  const [deleteError, setDeleteError] = useState(false);
   const pollsRef = useRef(0);
+  const router = useRouter();
   const t = useTranslations("dashboard");
   const tRecord = useTranslations("consulta.record");
+
+  async function onDelete() {
+    setDeleting(true);
+    setDeleteError(false);
+    try {
+      await deleteDocument(doc.id);
+      router.push("/dashboard/overview");
+    } catch {
+      setDeleteError(true);
+      setDeleting(false);
+      setConfirmingDelete(false);
+    }
+  }
 
   const processing = doc.status === "processing";
 
@@ -137,6 +154,48 @@ export function DocumentDetailView({
           <p className="animate-pulse text-ink-faint">{t("ocrProcessing")}</p>
         )}
       </section>
+
+      {/* Per-document erasure (GDPR art. 17). Two-tap confirm: destructive
+          and irreversible, but a modal would be heavier than the action
+          deserves on a phone. */}
+      <div className="mt-8 flex flex-wrap items-center gap-3">
+        {confirmingDelete ? (
+          <>
+            <span className="text-sm text-ink-soft">{t("deleteDocConfirm")}</span>
+            <button
+              type="button"
+              onClick={() => void onDelete()}
+              disabled={deleting}
+              className="ad-btn ad-btn-danger px-3.5 py-2 text-sm"
+            >
+              <Trash2 className="h-3.5 w-3.5" strokeWidth={2} />
+              {deleting ? t("deleteDocDeleting") : t("deleteDocYes")}
+            </button>
+            <button
+              type="button"
+              onClick={() => setConfirmingDelete(false)}
+              disabled={deleting}
+              className="ad-btn ad-btn-ghost px-3.5 py-2 text-sm"
+            >
+              {t("deleteDocCancel")}
+            </button>
+          </>
+        ) : (
+          <button
+            type="button"
+            onClick={() => setConfirmingDelete(true)}
+            className="ad-btn ad-btn-ghost px-3.5 py-2 text-sm text-clay-700"
+          >
+            <Trash2 className="h-3.5 w-3.5" strokeWidth={2} />
+            {t("deleteDoc")}
+          </button>
+        )}
+        {deleteError && (
+          <p role="alert" className="text-sm text-clay-700">
+            {t("deleteDocError")}
+          </p>
+        )}
+      </div>
     </main>
   );
 }

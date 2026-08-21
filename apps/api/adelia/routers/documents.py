@@ -420,3 +420,47 @@ async def get_document(
     )
 
     return _doc_to_out(doc, entity_count=entity_count or 0, chunk_count=chunk_count or 0)
+
+
+@router.delete("/{doc_id}", status_code=status.HTTP_204_NO_CONTENT)
+async def delete_document(
+    doc_id: uuid.UUID,
+    user_id: Annotated[uuid.UUID, Depends(get_current_user_id)],
+    db: Annotated[AsyncSession, Depends(get_db)],
+):
+    """Erase ONE document and everything derived from it (GDPR art. 17 at
+    document granularity — until now the only self-service erasure was the
+    whole account).
+
+    The row delete cascades entities and chunks (ON DELETE CASCADE, 0011);
+    consent_events.document_id and briefing_citations references go NULL
+    (SET NULL) so the consent trail and generated briefings survive. The S3
+    blob is tombstoned in the SAME transaction with no grace window (the
+    user asked for erasure, not a retry buffer) and swept right after.
+    Cross-user and nonexistent ids are an opaque 404.
+    """
+    doc = await db.get(Document, doc_id)
+    if doc is None or doc.user_id != user_id:
+        raise HTTPException(status_code=404, detail="Not found")
+
+    # not_before is set EXPLICITLY to None: a consulta blob may already carry
+    # a 48h-grace tombstone, and merge() only overwrites attributes populated
+    # on the source instance. Explicit None collapses any pending grace into
+    # immediate erasure — the user asked to delete, not to wait.
+    await db.merge(BlobTombstone(s3_key=doc.s3_key, not_before=None))
+    await db.execute(sa.delete(Document).where(Document.id == doc.id))
+    # Briefings may cite the erased entities: flag them for regeneration.
+    await briefing_repo.mark_stale_for_user(
+        db, user_id=user_id, since=datetime.now(timezone.utc)
+    )
+    await db.commit()
+
+    from adelia.routers.users import sweep_blob_tombstones
+
+    try:
+        await sweep_blob_tombstones()
+    except Exception:  # noqa: BLE001 — sweep retries at next boot/upload
+        logger.exception("sweep after document delete failed (tombstone kept)")
+
+    logger.info("document erased user_id=%s doc_id=%s", user_id, doc_id)
+    return None
