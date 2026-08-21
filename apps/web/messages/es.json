@@ -209,7 +209,11 @@
     "deleteDocYes": "Sí, borrar",
     "deleteDocCancel": "Cancelar",
     "deleteDocDeleting": "Borrando…",
-    "deleteDocError": "No se pudo borrar. Inténtalo de nuevo."
+    "deleteDocError": "No se pudo borrar. Inténtalo de nuevo.",
+    "speakerRenameHint": "Toca para ponerle nombre",
+    "speakerSuggestDoctor": "Pediatra",
+    "speakerSuggestMe": "Yo",
+    "speakerCustomPlaceholder": "Otro nombre…"
   },
   "upload": {
     "title": "Subir documento",

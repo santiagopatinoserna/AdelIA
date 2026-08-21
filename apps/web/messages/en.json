@@ -209,7 +209,11 @@
     "deleteDocYes": "Yes, delete",
     "deleteDocCancel": "Cancel",
     "deleteDocDeleting": "Deleting…",
-    "deleteDocError": "Could not delete it. Please try again."
+    "deleteDocError": "Could not delete it. Please try again.",
+    "speakerRenameHint": "Tap to name this speaker",
+    "speakerSuggestDoctor": "Doctor",
+    "speakerSuggestMe": "Me",
+    "speakerCustomPlaceholder": "Other name…"
   },
   "upload": {
     "title": "Upload document",

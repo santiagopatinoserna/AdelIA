@@ -39,6 +39,7 @@ export type DocumentDTO = {
   status: DocumentStatus;
   entity_count: number;
   chunk_count: number;
+  speaker_names?: Record<string, string> | null;
 };
 
 export type TelegramLinkDTO = {
@@ -86,6 +87,16 @@ export function makeApi(fetcher: Fetcher) {
     async deleteDocument(id: string): Promise<void> {
       const res = await fetcher(`/documents/${id}`, { method: "DELETE" });
       if (!res.ok) throw new Error(`deleteDocument: ${res.status}`);
+    },
+
+    async setSpeakerNames(id: string, names: Record<string, string>): Promise<DocumentDTO> {
+      const res = await fetcher(`/documents/${id}/speakers`, {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ speaker_names: names }),
+      });
+      if (!res.ok) throw new Error(`setSpeakerNames: ${res.status}`);
+      return res.json();
     },
 
     briefings: {

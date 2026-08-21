@@ -13,6 +13,7 @@ from botocore.exceptions import ClientError, EndpointConnectionError
 from fastapi import APIRouter, BackgroundTasks, Depends, File, Form, HTTPException, UploadFile, status, Query
 from mistralai.client.errors import MistralError
 from openai import APIError as OpenAIAPIError
+from pydantic import BaseModel, field_validator
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
@@ -109,6 +110,7 @@ def _doc_to_out(doc: Document, *, entity_count: int = 0, chunk_count: int = 0) -
         status=derive_status(doc.raw_text, doc.processed_at),
         entity_count=entity_count,
         chunk_count=chunk_count,
+        speaker_names=(doc.document_metadata or {}).get("speaker_names"),
     )
 
 
@@ -464,3 +466,49 @@ async def delete_document(
 
     logger.info("document erased user_id=%s doc_id=%s", user_id, doc_id)
     return None
+
+
+class SpeakerNamesIn(BaseModel):
+    """User-assigned names for diarized speakers, keyed by the numeric label
+    the transcript already carries ("1" -> "Pediatra"). Small and validated:
+    at most 8 speakers, names trimmed to 1-40 chars."""
+
+    speaker_names: dict[str, str]
+
+    @field_validator("speaker_names")
+    @classmethod
+    def _validate(cls, v: dict[str, str]) -> dict[str, str]:
+        if len(v) > 8:
+            raise ValueError("too many speakers")
+        cleaned: dict[str, str] = {}
+        for key, name in v.items():
+            if not key.isdigit():
+                raise ValueError(f"speaker key must be numeric: {key!r}")
+            stripped = name.strip()
+            if not (1 <= len(stripped) <= 40):
+                raise ValueError("speaker name must be 1-40 chars")
+            cleaned[key] = stripped
+        return cleaned
+
+
+@router.patch("/{doc_id}/speakers", response_model=DocumentOut)
+async def set_speaker_names(
+    doc_id: uuid.UUID,
+    payload: SpeakerNamesIn,
+    user_id: Annotated[uuid.UUID, Depends(get_current_user_id)],
+    db: Annotated[AsyncSession, Depends(get_db)],
+):
+    """Name the diarized speakers of a transcript (Pediatra / Yo). The names
+    live in documents.metadata; a NEW dict is assigned (in-place mutation
+    would not mark the JSONB column dirty). Opaque 404 across users."""
+    doc = await db.get(Document, doc_id)
+    if doc is None or doc.user_id != user_id or doc.deleted_at is not None:
+        raise HTTPException(status_code=404, detail="Not found")
+
+    doc.document_metadata = {
+        **(doc.document_metadata or {}),
+        "speaker_names": payload.speaker_names,
+    }
+    await db.commit()
+    await db.refresh(doc)
+    return _doc_to_out(doc)
