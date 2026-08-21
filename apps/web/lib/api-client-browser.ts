@@ -21,6 +21,7 @@ const api = makeApi(proxyFetch);
 export const listDocuments = api.listDocuments;
 export const getDocument = api.getDocument;
 export const deleteDocument = api.deleteDocument;
+export const setSpeakerNames = api.setSpeakerNames;
 export const briefings = api.briefings;
 export const ingestion = api.ingestion;
 export const enrichment = api.enrichment;

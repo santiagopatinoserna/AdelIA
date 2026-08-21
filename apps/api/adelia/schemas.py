@@ -17,6 +17,9 @@ class DocumentOut(BaseModel):
     status: Literal["processing", "ready", "failed"]
     entity_count: int = 0
     chunk_count: int = 0
+    # User-assigned names for diarized speakers ("1" -> "Pediatra"), stored
+    # in documents.metadata. None for non-consulta docs or before naming.
+    speaker_names: dict[str, str] | None = None
 
     model_config = ConfigDict(from_attributes=True)
 

@@ -5,7 +5,12 @@ import { useTranslations } from "next-intl";
 import { ArrowLeft, RotateCcw, Trash2 } from "lucide-react";
 
 import { Link, useRouter } from "@/lib/navigation";
-import { deleteDocument, getDocument, type DocumentDTO } from "@/lib/api-client-browser";
+import {
+  deleteDocument,
+  getDocument,
+  setSpeakerNames,
+  type DocumentDTO,
+} from "@/lib/api-client-browser";
 import { StatusBadge } from "@/components/status-badge";
 
 const POLL_INTERVAL_MS = 2500;
@@ -49,6 +54,28 @@ export function DocumentDetailView({
   const router = useRouter();
   const t = useTranslations("dashboard");
   const tRecord = useTranslations("consulta.record");
+
+  // Keyed by TURN index, not speaker number: clicking one chip must open
+  // ONE panel, not a panel on every turn of that speaker.
+  const [renamingTurn, setRenamingTurn] = useState<number | null>(null);
+  const [customName, setCustomName] = useState("");
+
+  async function nameSpeaker(speaker: number, name: string) {
+    const trimmed = name.trim().slice(0, 40);
+    if (!trimmed) return;
+    setRenamingTurn(null);
+    setCustomName("");
+    const next = { ...(doc.speaker_names ?? {}), [String(speaker)]: trimmed };
+    // Optimistic: the label flips at once; the PATCH persists it. On failure
+    // we simply fall back to the server truth at the next poll/reload.
+    setDoc((d) => ({ ...d, speaker_names: next }));
+    try {
+      const fresh = await setSpeakerNames(doc.id, next);
+      setDoc(fresh);
+    } catch {
+      /* optimistic label stays for this view; server wins on reload */
+    }
+  }
 
   async function onDelete() {
     setDeleting(true);
@@ -123,18 +150,55 @@ export function DocumentDetailView({
       <section className="ad-card mt-8 p-6">
         {turns ? (
           <div className="flex flex-col gap-4">
-            {turns.map((turn, i) => (
-              <div key={i}>
-                <span
-                  className={`ad-eyebrow inline-block rounded-full px-2 py-0.5 ring-1 ${
-                    SPEAKER_STYLES[(turn.speaker - 1) % SPEAKER_STYLES.length]
-                  }`}
-                >
-                  {t("speakerLabel", { n: turn.speaker })}
-                </span>
-                <p className="mt-1.5 text-sm leading-relaxed text-ink">{turn.text}</p>
-              </div>
-            ))}
+            {turns.map((turn, i) => {
+              const label =
+                doc.speaker_names?.[String(turn.speaker)] ??
+                t("speakerLabel", { n: turn.speaker });
+              return (
+                <div key={i}>
+                  <button
+                    type="button"
+                    onClick={() => setRenamingTurn(renamingTurn === i ? null : i)}
+                    title={t("speakerRenameHint")}
+                    className={`ad-eyebrow inline-block rounded-full px-2 py-0.5 ring-1 transition-shadow hover:ring-2 ${
+                      SPEAKER_STYLES[(turn.speaker - 1) % SPEAKER_STYLES.length]
+                    }`}
+                  >
+                    {label}
+                  </button>
+                  {renamingTurn === i && (
+                    <span className="ml-2 inline-flex flex-wrap items-center gap-1.5 align-middle">
+                      <button
+                        type="button"
+                        onClick={() => void nameSpeaker(turn.speaker, t("speakerSuggestDoctor"))}
+                        className="ad-btn ad-btn-ghost px-2 py-1 text-xs"
+                      >
+                        {t("speakerSuggestDoctor")}
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => void nameSpeaker(turn.speaker, t("speakerSuggestMe"))}
+                        className="ad-btn ad-btn-ghost px-2 py-1 text-xs"
+                      >
+                        {t("speakerSuggestMe")}
+                      </button>
+                      <input
+                        type="text"
+                        value={customName}
+                        onChange={(e) => setCustomName(e.target.value)}
+                        onKeyDown={(e) => {
+                          if (e.key === "Enter") void nameSpeaker(turn.speaker, customName);
+                        }}
+                        placeholder={t("speakerCustomPlaceholder")}
+                        maxLength={40}
+                        className="h-7 w-28 rounded-lg border border-line bg-canvas px-2 text-xs"
+                      />
+                    </span>
+                  )}
+                  <p className="mt-1.5 text-sm leading-relaxed text-ink">{turn.text}</p>
+                </div>
+              );
+            })}
           </div>
         ) : doc.raw_text ? (
           <pre className="whitespace-pre-wrap font-sans text-sm leading-relaxed text-ink">{doc.raw_text}</pre>

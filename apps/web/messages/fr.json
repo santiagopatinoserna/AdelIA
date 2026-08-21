@@ -209,7 +209,11 @@
     "deleteDocYes": "Oui, supprimer",
     "deleteDocCancel": "Annuler",
     "deleteDocDeleting": "Suppression…",
-    "deleteDocError": "Impossible de le supprimer. Réessaie."
+    "deleteDocError": "Impossible de le supprimer. Réessaie.",
+    "speakerRenameHint": "Touche pour lui donner un nom",
+    "speakerSuggestDoctor": "Pédiatre",
+    "speakerSuggestMe": "Moi",
+    "speakerCustomPlaceholder": "Autre nom…"
   },
   "upload": {
     "title": "Importer un document",
