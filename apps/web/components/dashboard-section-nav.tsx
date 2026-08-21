@@ -45,11 +45,15 @@ export function DashboardSectionNav() {
             className={
               active
                 ? "flex shrink-0 items-center gap-1.5 rounded-lg bg-pine-50 px-2.5 py-1.5 text-pine-700 ring-1 ring-pine-100"
-                : "shrink-0 rounded-lg p-1.5 text-ink-faint transition-colors hover:bg-pine-50 hover:text-pine-600"
+                : "flex shrink-0 items-center gap-1.5 rounded-lg p-1.5 text-ink-faint transition-colors hover:bg-pine-50 hover:text-pine-600 lg:px-2.5 lg:py-1.5"
             }
           >
             <it.icon className="h-4 w-4 shrink-0" strokeWidth={2} />
-            {active && <span className="text-xs font-medium">{it.label}</span>}
+            {/* Labels for everyone at lg+ — seven bare icons were a guessing
+                game; below lg the active one keeps its label as before. */}
+            <span className={`text-xs font-medium ${active ? "" : "hidden lg:inline"}`}>
+              {it.label}
+            </span>
           </Link>
         );
       })}
