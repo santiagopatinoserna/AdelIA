@@ -33,6 +33,7 @@ function pickMime(): string {
 // discards audio client-side and never uploads it.
 export function ConsultaRecorder() {
   const t = useTranslations("consulta.record");
+  const tDash = useTranslations("dashboard");
   const locale = useLocale();
   const { profiles, activeId, setActiveId } = useActiveProfile();
 
@@ -41,6 +42,7 @@ export function ConsultaRecorder() {
   const [elapsed, setElapsed] = useState(0);
   const [level, setLevel] = useState(0);
   const [docId, setDocId] = useState<string | null>(null);
+  const [doneSummary, setDoneSummary] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
 
   const recorderRef = useRef<MediaRecorder | null>(null);
@@ -285,10 +287,11 @@ export function ConsultaRecorder() {
       try {
         const res = await fetch(`/api/backend/documents/${id}`);
         if (!res.ok) return;
-        const doc = (await res.json()) as { status: string };
+        const doc = (await res.json()) as { status: string; summary?: string | null };
         if (doc.status === "ready") {
           if (pollRef.current) clearInterval(pollRef.current);
           pollRef.current = null;
+          setDoneSummary(doc.summary ?? null);
           setPhase("done");
         } else if (doc.status === "failed") {
           if (pollRef.current) clearInterval(pollRef.current);
@@ -419,6 +422,28 @@ export function ConsultaRecorder() {
         <CheckCircle2 className="mx-auto h-8 w-8 text-pine-600" />
         <p className="font-medium">{t("done")}</p>
         <p className="text-sm opacity-80">{t("audioDeleted")}</p>
+        {/* The essence, right here: the takeaway a mom wants the second the
+            visit is saved, without a trip to the document page. */}
+        {doneSummary && (
+          <div className="rounded-2xl border border-pine-100 bg-pine-50 p-4 text-left">
+            <h2 className="ad-eyebrow text-pine-700">{tDash("summaryTitle")}</h2>
+            <ul className="mt-2 space-y-1.5">
+              {doneSummary
+                .split("\n")
+                .map((line) => line.replace(/^-\s*/, "").trim())
+                .filter(Boolean)
+                .map((line, i) => (
+                  <li key={i} className="flex gap-2 text-sm leading-relaxed text-ink">
+                    <span
+                      aria-hidden
+                      className="mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full bg-pine-400"
+                    />
+                    {line}
+                  </li>
+                ))}
+            </ul>
+          </div>
+        )}
         {docId && (
           <Link href={`/dashboard/documents/${docId}`} className="ad-btn ad-btn-primary">
             {t("viewDocument")}
