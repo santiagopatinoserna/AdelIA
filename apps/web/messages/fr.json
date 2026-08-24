@@ -667,7 +667,8 @@
       "micDenied": "AdelIA n'a pas la permission d'utiliser le micro. Active-la dans ton navigateur, puis recharge la page.",
       "error": "Impossible de traiter l'enregistrement. L'audio reste sauvegardé quelques jours pour réessayer.",
       "uploadError": "Impossible d'envoyer l'enregistrement. Il est toujours sur votre appareil : réessayez maintenant.",
-      "retry": "Réessayer"
+      "retry": "Réessayer",
+      "prepareBriefing": "Préparer un résumé pour le pédiatre"
     }
   },
   "command": {

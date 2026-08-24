@@ -444,11 +444,18 @@ export function ConsultaRecorder() {
             </ul>
           </div>
         )}
-        {docId && (
-          <Link href={`/dashboard/documents/${docId}`} className="ad-btn ad-btn-primary">
-            {t("viewDocument")}
+        <div className="flex flex-wrap justify-center gap-2">
+          {docId && (
+            <Link href={`/dashboard/documents/${docId}`} className="ad-btn ad-btn-primary">
+              {t("viewDocument")}
+            </Link>
+          )}
+          {/* Close the loop recording → next visit: the briefing machinery
+              already picked up this consult's entities (stale-marking). */}
+          <Link href="/dashboard/briefings/new" className="ad-btn ad-btn-ghost">
+            {t("prepareBriefing")}
           </Link>
-        )}
+        </div>
       </div>
     );
   }

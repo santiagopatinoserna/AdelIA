@@ -239,6 +239,14 @@ export function DocumentDetailView({
         )}
       </section>
 
+      {isConsulta && doc.status === "ready" && (
+        <div className="mt-6">
+          <Link href="/dashboard/briefings/new" className="ad-btn ad-btn-accent px-3.5 py-2 text-sm">
+            {tRecord("prepareBriefing")}
+          </Link>
+        </div>
+      )}
+
       {/* Per-document erasure (GDPR art. 17). Two-tap confirm: destructive
           and irreversible, but a modal would be heavier than the action
           deserves on a phone. */}
