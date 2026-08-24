@@ -22,9 +22,13 @@ log() { printf '[verify] %s\n' "$*" >&2; }
 # real uvicorn/next-server child when only the parent PID is killed (learned
 # from this script's own first run leaving both alive).
 cleanup() {
-  pkill -f "uvicorn adelia.main:app --port ${API_PORT}" 2>/dev/null || true
-  pkill -f "next start -p ${WEB_PORT}" 2>/dev/null || true
-  pkill -f "next-server" 2>/dev/null && sleep 1 || true
+  # By PORT, never by process name: name patterns miss the orphaned
+  # next-server (its title is not in the cmdline) and could hit the OTHER
+  # next apps this box runs (pm2 on :3001, prod in Docker). fuser -k kills
+  # exactly whoever listens on OUR verify ports and nothing else.
+  fuser -k "${API_PORT}/tcp" 2>/dev/null || true
+  fuser -k "${WEB_PORT}/tcp" 2>/dev/null || true
+  sleep 1
 }
 trap cleanup EXIT
 
