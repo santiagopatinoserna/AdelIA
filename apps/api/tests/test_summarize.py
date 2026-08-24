@@ -2,6 +2,7 @@
 from __future__ import annotations
 
 import uuid
+from datetime import datetime, timezone
 
 import httpx
 import pytest
@@ -74,6 +75,8 @@ def test_document_out_surfaces_summary():
         s3_key=f"users/x/{uuid.uuid4()}-c.webm",
         raw_text="[Hablante 1] Hola.",
         document_metadata={"summary": "- Todo bien.", "audio_deleted_scheduled": True},
+        # server_default only fires in the DB; an in-memory Document needs it.
+        created_at=datetime.now(timezone.utc),
     )
     out = _doc_to_out(doc)
     assert out.summary == "- Todo bien."
