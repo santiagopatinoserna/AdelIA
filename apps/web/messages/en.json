@@ -521,7 +521,7 @@
     "deleteConfirm": "Delete this briefing? This action is reversible (soft delete).",
     "staleBanner": "You've uploaded new data since this briefing was generated. Regenerate?",
     "errorBanner": "Generation failed. Detail:",
-    "polling": "Refreshing every 2 seconds…",
+    "polling": "Usually takes 30 to 60 seconds.",
     "createdAt": "Created: ",
     "completedAt": "Completed: ",
     "downloadPdf": "Download PDF",

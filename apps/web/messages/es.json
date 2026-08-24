@@ -521,7 +521,7 @@
     "deleteConfirm": "¿Borrar este briefing? Esta acción es reversible (soft-delete).",
     "staleBanner": "Has subido data nueva desde que generaste este briefing. ¿Regenerar?",
     "errorBanner": "La generación falló. Detalle:",
-    "polling": "Actualizando cada 2 segundos…",
+    "polling": "Suele tardar entre 30 y 60 segundos.",
     "createdAt": "Creado: ",
     "completedAt": "Completado: ",
     "downloadPdf": "Descargar PDF",
