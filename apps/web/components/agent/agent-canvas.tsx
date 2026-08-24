@@ -98,11 +98,11 @@ export function AgentCanvas({ locale }: { locale: string }) {
       data-testid="agent-canvas"
       className="flex h-[calc(100dvh-7rem)] flex-col md:h-[calc(100dvh-3.5rem)] md:flex-row"
     >
-      {/* Chat column */}
-      <section className="flex min-h-0 flex-1 flex-col">
+      {/* Chat column — the page's main landmark */}
+      <main className="flex min-h-0 flex-1 flex-col">
         <ProfileSwitcher />
         <div className="min-h-0 flex-1 overflow-y-auto p-3">
-          {messages.length === 0 && <p className="ad-rise font-display text-lg text-ink-soft">{t("greeting")}</p>}
+          {messages.length === 0 && <h1 className="ad-rise font-display text-lg font-normal text-ink-soft">{t("greeting")}</h1>}
           {/* First-run quick start: an empty canvas tells a new mom nothing.
               Three concrete doors into the product beat a blank screen. */}
           {messages.length === 0 && (
@@ -148,7 +148,7 @@ export function AgentCanvas({ locale }: { locale: string }) {
         </div>
         <AgentInput locale={locale} disabled={busy} onStop={() => abortRef.current?.abort()}
                     onSubmit={(text) => void drive({ message: text })} />
-      </section>
+      </main>
       {/* Desktop: card rail beside the chat */}
       <aside className="hidden w-80 border-l border-line md:flex md:flex-col">{cardRail}</aside>
     </div>
