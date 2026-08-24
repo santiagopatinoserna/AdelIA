@@ -147,6 +147,26 @@ export function DocumentDetailView({
         }).format(new Date(doc.created_at))}
         {doc.raw_text ? `  ·  ${t("docReady")}` : ""}
       </p>
+      {/* Post-recording essence: the takeaway before the full conversation.
+          Bullets come as "- " lines from the backend, rendered as a list. */}
+      {isConsulta && doc.summary && (
+        <section className="mt-8 rounded-2xl border border-pine-100 bg-pine-50 p-5">
+          <h2 className="ad-eyebrow text-pine-700">{t("summaryTitle")}</h2>
+          <ul className="mt-2 space-y-1.5">
+            {doc.summary
+              .split("\n")
+              .map((line) => line.replace(/^-\s*/, "").trim())
+              .filter(Boolean)
+              .map((line, i) => (
+                <li key={i} className="flex gap-2 text-sm leading-relaxed text-ink">
+                  <span aria-hidden className="mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full bg-pine-400" />
+                  {line}
+                </li>
+              ))}
+          </ul>
+        </section>
+      )}
+
       <section className="ad-card mt-8 p-6">
         {turns ? (
           <div className="flex flex-col gap-4">

@@ -213,7 +213,8 @@
     "speakerRenameHint": "Touche pour lui donner un nom",
     "speakerSuggestDoctor": "Pédiatre",
     "speakerSuggestMe": "Moi",
-    "speakerCustomPlaceholder": "Autre nom…"
+    "speakerCustomPlaceholder": "Autre nom…",
+    "summaryTitle": "L'essentiel de la consultation"
   },
   "upload": {
     "title": "Importer un document",

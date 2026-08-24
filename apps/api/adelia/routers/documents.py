@@ -29,6 +29,7 @@ from adelia.workers.chunker import ChunkConfig, chunk_hierarchical
 from adelia.workers.embed import embed_texts
 from adelia.workers.extract import extract_entities
 from adelia.workers.ocr import extract_text_from_pdf
+from adelia.workers.summarize import summarize_consultation
 from adelia.workers.transcribe import transcribe_audio
 
 logger = logging.getLogger(__name__)
@@ -111,6 +112,7 @@ def _doc_to_out(doc: Document, *, entity_count: int = 0, chunk_count: int = 0) -
         entity_count=entity_count,
         chunk_count=chunk_count,
         speaker_names=(doc.document_metadata or {}).get("speaker_names"),
+        summary=(doc.document_metadata or {}).get("summary"),
     )
 
 
@@ -158,6 +160,7 @@ async def _process_document_inner(document_id: uuid.UUID, mime_type: str, is_con
         profile_id = doc.profile_id
 
     raw_text = ""
+    summary: str | None = None
     entities: list[Entity] = []
     chunks: list[Chunk] = []
 
@@ -172,6 +175,18 @@ async def _process_document_inner(document_id: uuid.UUID, mime_type: str, is_con
             )
         elif mime_type == "application/pdf" or mime_type.startswith("image/"):
             raw_text = await _with_retry("ocr", lambda: extract_text_from_pdf(body, mime_type))
+
+        if raw_text and is_consulta:
+            # Courtesy stage for recordings: a few strict bullets so the mom
+            # gets the takeaway without rereading everything. Best-effort:
+            # any failure leaves summary=None and the pipeline continues.
+            try:
+                summary = await _with_retry(
+                    "summarize", lambda: summarize_consultation(raw_text)
+                ) or None
+            except Exception:  # noqa: BLE001 — courtesy, never fatal
+                logger.exception("consultation summary failed (continuing)")
+                summary = None
 
         if raw_text:
             # Stage 2: entity extraction (ids assigned now for entity_ranges)
@@ -265,6 +280,7 @@ async def _process_document_inner(document_id: uuid.UUID, mime_type: str, is_con
             doc.document_metadata = {
                 **(doc.document_metadata or {}),
                 "audio_deleted_scheduled": True,
+                **({"summary": summary} if summary else {}),
             }
         await session.commit()
 

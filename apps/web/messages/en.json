@@ -213,7 +213,8 @@
     "speakerRenameHint": "Tap to name this speaker",
     "speakerSuggestDoctor": "Doctor",
     "speakerSuggestMe": "Me",
-    "speakerCustomPlaceholder": "Other name…"
+    "speakerCustomPlaceholder": "Other name…",
+    "summaryTitle": "The visit, in short"
   },
   "upload": {
     "title": "Upload document",

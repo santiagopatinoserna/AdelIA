@@ -223,6 +223,7 @@ async def build_export(db: AsyncSession, user_id: uuid.UUID) -> dict[str, Any]:
                     "created_at": _iso(d.created_at),
                     "raw_text": d.raw_text,
                     "speaker_names": (d.document_metadata or {}).get("speaker_names"),
+                    "summary": (d.document_metadata or {}).get("summary"),
                     "profile_id": str(d.profile_id) if d.profile_id else None,
                 }
                 for d in documents
