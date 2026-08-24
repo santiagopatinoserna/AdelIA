@@ -81,9 +81,8 @@ const DASH_SCREENS: Array<[string, string]> = [
   ["/es/dashboard/chat", "dash-chat"],
   ["/es/dashboard/consulta", "dash-consulta"],
   ["/es/dashboard/consulta/grabar", "dash-grabar"],
-  // /dashboard/documents has no list page by design (detail-only route);
-  // overview is where documents are listed.
-  ["/es/dashboard/overview", "dash-overview-docs"],
+  // Note: /dashboard/documents has no list page by design (detail-only
+  // route); overview, already covered above, is where documents are listed.
   ["/es/dashboard/briefings", "dash-briefings"],
   ["/es/dashboard/settings", "dash-settings"],
 ];
