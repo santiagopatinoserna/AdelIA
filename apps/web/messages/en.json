@@ -667,7 +667,8 @@
       "micDenied": "AdelIA doesn't have microphone permission. Enable it in your browser and reload.",
       "error": "Could not process the recording. The audio stays saved for a few days so you can retry.",
       "uploadError": "Couldn't upload the recording. It's still on your device: retry now.",
-      "retry": "Retry"
+      "retry": "Retry",
+      "prepareBriefing": "Prepare a summary for the doctor"
     }
   },
   "command": {

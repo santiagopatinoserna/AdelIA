@@ -667,7 +667,8 @@
       "micDenied": "AdelIA no tiene permiso de micrófono. Actívalo en tu navegador y recarga.",
       "error": "No se pudo procesar la grabación. El audio queda guardado unos días para reintentar.",
       "uploadError": "No se pudo subir la grabación. Sigue en tu dispositivo: reintenta ahora.",
-      "retry": "Reintentar"
+      "retry": "Reintentar",
+      "prepareBriefing": "Preparar resumen para el pediatra"
     }
   },
   "command": {
