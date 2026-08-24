@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { signOut } from "next-auth/react";
 import { useTranslations } from "next-intl";
-import { AlertTriangle } from "lucide-react";
+import { AlertTriangle, Download } from "lucide-react";
 
 export function AccountSettingsView({ email }: { email: string }) {
   const t = useTranslations("settings");
@@ -37,6 +37,22 @@ export function AccountSettingsView({ email }: { email: string }) {
       <section className="ad-card mt-6 p-4">
         <div className="ad-eyebrow">{t("emailLabel")}</div>
         <div className="mt-1.5 font-mono text-sm text-ink">{email}</div>
+      </section>
+
+      {/* GDPR art. 20 portability: a plain <a download> — the browser
+          handles the stream, no JS blob juggling, and the endpoint sets
+          Content-Disposition so it saves as adelia-export.json. */}
+      <section className="ad-card mt-6 p-4">
+        <div className="ad-eyebrow">{t("exportTitle")}</div>
+        <p className="mt-1.5 text-sm text-ink-soft">{t("exportBody")}</p>
+        <a
+          href="/api/backend/users/me/export"
+          download="adelia-export.json"
+          className="ad-btn ad-btn-ghost mt-3 px-3.5 py-2 text-sm"
+        >
+          <Download className="h-4 w-4" strokeWidth={2} />
+          {t("exportCta")}
+        </a>
       </section>
 
       <section className="mt-8 rounded-2xl border border-clay-100 bg-clay-50 p-5">

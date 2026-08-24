@@ -7,6 +7,7 @@ from typing import Annotated
 
 import sqlalchemy as sa
 from fastapi import APIRouter, Depends, status
+from fastapi.encoders import jsonable_encoder
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from adelia.auth import get_current_user_id
@@ -74,3 +75,24 @@ async def sweep_blob_tombstones() -> None:
                 sa.delete(BlobTombstone).where(BlobTombstone.s3_key == key)
             )
         await session.commit()
+
+
+@router.get("/me/export")
+async def export_my_data(
+    user_id: Annotated[uuid.UUID, Depends(get_current_user_id)],
+    db: Annotated[AsyncSession, Depends(get_db)],
+):
+    """Full data export, one click (GDPR art. 20): FHIR R4 bundle for the
+    clinical core + a raw section for everything FHIR has no slot for.
+    Download semantics via Content-Disposition."""
+    from fastapi.responses import JSONResponse
+
+    from adelia.services.data_export import build_export
+
+    payload = await build_export(db, user_id)
+    return JSONResponse(
+        content=jsonable_encoder(payload),
+        headers={
+            "Content-Disposition": 'attachment; filename="adelia-export.json"',
+        },
+    )

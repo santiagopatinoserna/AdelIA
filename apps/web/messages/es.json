@@ -575,7 +575,10 @@
     "deleteButton": "Eliminar mi cuenta definitivamente",
     "deleting": "Eliminando…",
     "actionError": "No se pudo completar. Revisa tu conexión e inténtalo de nuevo.",
-    "ackIrreversible": "Entiendo que esto borra todo para siempre y no se puede deshacer."
+    "ackIrreversible": "Entiendo que esto borra todo para siempre y no se puede deshacer.",
+    "exportTitle": "Tus datos, contigo",
+    "exportBody": "Descarga todo lo que AdelIA guarda de ti y de tu bebé en un solo fichero: el núcleo clínico en formato FHIR (el estándar que entienden los sistemas de salud) más las transcripciones y consentimientos completos.",
+    "exportCta": "Descargar todos mis datos"
   },
   "questionnaire": {
     "title": "Control del reflujo",
@@ -785,7 +788,7 @@
     "recordingsTitle": "Grabaciones de consulta",
     "recordingsBody": "Cuando grabas una consulta, la app te obliga a anunciarlo primero: solo puedes empezar a grabar después de confirmar que el profesional sanitario lo sabe. Nunca se graba a escondidas. El audio se sube cifrado, se transcribe a texto dentro del historial privado de tu bebé y después se borra (ver «Cuánto tiempo lo guardamos»). Esa transcripción puede incluir palabras del profesional, un dato personal suyo que tratamos con base en nuestro interés legítimo en documentar la consulta para el cuidado del bebé, ponderado frente a su derecho a la privacidad. El profesional puede oponerse en cualquier momento: puede pedirte que descartes la grabación (hay un botón para eso) o escribir directamente a security@godi.ai. La grabación es para tu uso personal y familiar. Difundirla, publicarla o compartirla fuera de ese uso está prohibido (lo explicamos también en las condiciones de uso).",
     "rightsTitle": "Tus derechos y cómo ejercerlos",
-    "rightsBody": "Acceso: todos tus datos son visibles dentro de la app, en cualquier momento. Rectificación: puedes corregir perfiles y datos desde tu cuenta. Supresión: puedes borrar tu cuenta entera, con todo lo que contiene, desde los ajustes (también puedes borrar un documento suelto desde su propia página; lo que aún no ofrecemos es exportar todo en formato FHIR con un clic; si lo necesitas, escríbenos). Oposición: el profesional grabado puede oponerse al tratamiento de su voz. Para ejercer cualquiera de estos derechos, o para cualquier consulta, escribe a security@godi.ai. Si no quedas satisfecho o satisfecha, puedes reclamar ante la AEPD en España o la CNIL en Francia.",
+    "rightsBody": "Acceso: todos tus datos son visibles dentro de la app, en cualquier momento. Rectificación: puedes corregir perfiles y datos desde tu cuenta. Supresión: puedes borrar tu cuenta entera, con todo lo que contiene, desde los ajustes (también puedes borrar un documento suelto desde su propia página, y descargar todos tus datos con un clic desde Ajustes, con el núcleo clínico en formato FHIR). Oposición: el profesional grabado puede oponerse al tratamiento de su voz. Para ejercer cualquiera de estos derechos, o para cualquier consulta, escribe a security@godi.ai. Si no quedas satisfecho o satisfecha, puedes reclamar ante la AEPD en España o la CNIL en Francia.",
     "neverTitle": "Lo que nunca hacemos",
     "neverBody": "No vendemos tus datos ni los de tu bebé, a nadie, nunca. No usamos tu información para entrenar modelos de IA. No te rastreamos: no hay analítica ni publicidad en AdelIA. AdelIA es software libre (AGPL-3.0); si prefieres alojarlo tú mismo o tú misma, puedes hacerlo, y en ese caso quien lo despliega es responsable de esos datos, no Godi.AI.",
     "contactTitle": "Contacto",
