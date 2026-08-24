@@ -27,6 +27,7 @@ export default function BriefingDetailPage() {
   const [regenerating, setRegenerating] = useState(false);
   const [showShare, setShowShare] = useState(false);
   const [timedOut, setTimedOut] = useState(false);
+  const [elapsed, setElapsed] = useState(0);
 
   const fetchBriefing = useCallback(async () => {
     if (!id) return;
@@ -48,9 +49,13 @@ export default function BriefingDetailPage() {
     if (!briefing || briefing.status !== "processing" || timedOut) return;
     const POLL_TIMEOUT_MS = 10 * 60 * 1000;
     const interval = setInterval(fetchBriefing, 2000);
+    // A visible elapsed count beats "updating every 2 seconds": the mom
+    // sees time moving and knows what "normal" looks like (mom-QA ask).
+    const tick = setInterval(() => setElapsed((s) => s + 1), 1000);
     const timeout = setTimeout(() => setTimedOut(true), POLL_TIMEOUT_MS);
     return () => {
       clearInterval(interval);
+      clearInterval(tick);
       clearTimeout(timeout);
     };
   }, [briefing, fetchBriefing, timedOut]);
@@ -89,7 +94,10 @@ export default function BriefingDetailPage() {
         <div>
           {t("briefing.statusLabel")} <strong className="text-pine-800">{t(`briefing.status.${briefing.status}`)}</strong>
           {briefing.status === "processing" && (
-            <span className="ml-2">— {t("briefing.polling")}</span>
+            <span className="ml-2 font-mono text-xs">
+              {String(Math.floor(elapsed / 60)).padStart(2, "0")}:
+              {String(elapsed % 60).padStart(2, "0")} · {t("briefing.polling")}
+            </span>
           )}
         </div>
         {briefing.status === "ready" && (
