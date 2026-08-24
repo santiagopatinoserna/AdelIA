@@ -88,7 +88,7 @@ export function AgentCanvas({ locale }: { locale: string }) {
   };
 
   const cardRail = (
-    <div className="flex flex-col gap-3 overflow-y-auto p-3" aria-label={t("suggestionsTitle")}>
+    <div className="flex flex-col gap-3 overflow-y-auto p-3">
       {cards.map((c) => <CardRenderer key={c.id} card={c} onAction={onCardAction} />)}
     </div>
   );
@@ -150,7 +150,12 @@ export function AgentCanvas({ locale }: { locale: string }) {
                     onSubmit={(text) => void drive({ message: text })} />
       </main>
       {/* Desktop: card rail beside the chat */}
-      <aside className="hidden w-80 border-l border-line md:flex md:flex-col">{cardRail}</aside>
+      <aside
+        aria-label={t("suggestionsTitle")}
+        className="hidden w-80 border-l border-line md:flex md:flex-col"
+      >
+        {cardRail}
+      </aside>
     </div>
   );
 }
