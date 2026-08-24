@@ -40,6 +40,8 @@ export type DocumentDTO = {
   entity_count: number;
   chunk_count: number;
   speaker_names?: Record<string, string> | null;
+  // Post-recording essence bullets (consulta docs only, best-effort).
+  summary?: string | null;
 };
 
 export type TelegramLinkDTO = {

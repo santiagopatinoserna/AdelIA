@@ -20,6 +20,8 @@ class DocumentOut(BaseModel):
     # User-assigned names for diarized speakers ("1" -> "Pediatra"), stored
     # in documents.metadata. None for non-consulta docs or before naming.
     speaker_names: dict[str, str] | None = None
+    # Post-recording essence bullets (consulta docs only, best-effort).
+    summary: str | None = None
 
     model_config = ConfigDict(from_attributes=True)
 
