@@ -1,0 +1,700 @@
+{
+  "_meta": {
+    "topic": "Adaptación a la guardería (12-24 meses): estrés y apego, continuidad del cuidador, infecciones y alimentación, protocolos de adaptación; rechazo de sólidos, ferropenia y alimentación responsiva a los 12-18 meses",
+    "compiled": "2026-08-22",
+    "method": "4 agentes de búsqueda con verificación de fuente primaria (PubMed/PMC, revistas peer-reviewed, AEP/AEPap, OMS, NICE, EYFS)",
+    "caveat": "Resúmenes en español de fuentes primarias; los chunks son paráfrasis con cifras del original, no texto literal."
+  },
+  "sources": [
+    {
+      "source_type": "study",
+      "title": "Transition to Child Care: Associations With Infant-Mother Attachment, Infant Negative Emotion, and Cortisol Elevations",
+      "organization": "Child Development",
+      "publication_year": 2004,
+      "url": "https://doi.org/10.1111/j.1467-8624.2004.00698.x",
+      "specialties": [
+        "pediatrics",
+        "general_medicine"
+      ],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "chunks": [
+        "Transition to Child Care: Associations With Infant-Mother Attachment, Infant Negative Emotion, and Cortisol Elevations (Ahnert, Gunnar, Lamb & Barthel (2004)). Tema: adaptación a la guardería, estrés y apego. Hallazgo: Tras la separación de la madre, el cortisol salival subió a niveles 75%-100% más altos que en casa, tanto en bebés de apego seguro como inseguro. A los 5 meses de guardería el cortisol seguía significativamente elevado respecto al nivel basal en casa (estrés leve crónico). Durante la fase de adaptación (madre presente) el aumento fue menor en los bebés seguros, pero esa ventaja desapareció tras la separación. Las madres que dedicaron más días a la fase de adaptación acompañada tuvieron hijos con apego igual o más seguro.",
+        "Transition to Child Care: Associations With Infant-Mother Attachment, Infant Negative Emotion, and Cortisol Elevations: implicación práctica para padres de un bebé de 12-18 meses. Con 13 meses, no comer y dormir poco durante una ampliación brusca de horario son coherentes con un pico fisiológico de estrés esperable en las primeras semanas tras una separación mal amortiguada; el estudio no dice que esto sea inocuo ni que se resuelva solo por dejar pasar los días: lo que redujo el estrés fue más tiempo de adaptación acompañada por la madre, no más horas de exposición."
+      ]
+    },
+    {
+      "source_type": "study",
+      "title": "Wiener Kinderkrippenstudie (WiKi) — La fase de adaptación de niños pequeños en guarderías vienesas",
+      "organization": "Instituto de Ciencias de la Educación",
+      "publication_year": 2007,
+      "url": "https://bildungswissenschaft.univie.ac.at/psychoanalytische-paedagogik/forschung/abgeschlossene-projekte/wiener-kinderkrippen-studie-wiki-die-eingewoehnungsphase-von-kleinkindern-in-kinderkrippen/",
+      "specialties": [
+        "pediatrics",
+        "general_medicine"
+      ],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "chunks": [
+        "Wiener Kinderkrippenstudie (WiKi) — La fase de adaptación de niños pequeños en guarderías vienesas (Datler, Ahnert et al. (Universidad de Viena, proyecto 2007-2012)). Tema: adaptación a la guardería, estrés y apego. Hallazgo: El cortisol mostró que muchos niños viven la entrada en la guardería como una carga psicológica que NO se expresa con llanto visible ('estrés silencioso'). En situaciones de estrés puntual (cambios, enfermedad, cansancio), muchos niños siguieron sufriendo la separación de sus padres varios meses después de haber empezado. Los procesos de adaptación fueron demasiado heterogéneos para clasificar niños en tipos 'se adapta bien / mal'.",
+        "Wiener Kinderkrippenstudie (WiKi) — La fase de adaptación de niños pequeños en guarderías vienesas: implicación práctica para padres de un bebé de 12-18 meses. Que hoy el bebé no llore de forma dramática no descarta que esté sufriendo la situación; el hecho de que 'lleve dos meses' no garantiza que ya esté adaptado, sobre todo si ha habido cambios de figura de referencia y ahora un salto de horario: el estudio muestra que el malestar puede reactivarse meses después ante cualquier factor de estrés añadido."
+      ]
+    },
+    {
+      "source_type": "meta_analysis",
+      "title": "Children's elevated cortisol levels at daycare: A review and meta-analysis",
+      "organization": "Early Childhood Research Quarterly",
+      "publication_year": 2006,
+      "url": "https://doi.org/10.1016/j.ecresq.2006.07.004",
+      "specialties": [
+        "pediatrics",
+        "general_medicine"
+      ],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "chunks": [
+        "Children's elevated cortisol levels at daycare: A review and meta-analysis (Vermeer & van IJzendoorn (2006)). Tema: adaptación a la guardería, estrés y apego. Hallazgo: El cortisol sube durante el día en la guardería mientras que en casa desciende (patrón diurno invertido). El tamaño de efecto combinado fue r=.18 (IC .06-.29, p=.003; 7 estudios, n=303); restringido a estudios de cortisol salival, la correlación fue r=.23, significativa solo en menores de 36 meses — la edad fue el moderador más importante.",
+        "Children's elevated cortisol levels at daycare: A review and meta-analysis: implicación práctica para padres de un bebé de 12-18 meses. A los 13 meses el bebé está justo en el rango de edad donde este meta-análisis encuentra el efecto más consistente y de mayor magnitud; a partir de los 3 años el mismo estrés fisiológico deja de detectarse con tanta claridad."
+      ]
+    },
+    {
+      "source_type": "review",
+      "title": "Daycare Attendance, Stress, and Mental Health",
+      "organization": "The Canadian Journal of Psychiatry",
+      "publication_year": 2006,
+      "url": "https://doi.org/10.1177/070674370605100909",
+      "specialties": [
+        "pediatrics",
+        "general_medicine"
+      ],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "chunks": [
+        "Daycare Attendance, Stress, and Mental Health (Geoffroy, Côté, Parent & Séguin (2006)). Tema: adaptación a la guardería, estrés y apego. Hallazgo: El efecto medio de elevación de cortisol en guardería vs. casa fue d=0.72, pero varió mucho según moderadores: guardería de baja calidad d=1.15 vs. alta calidad d=0.10; preescolares (39-59 meses) d=1.17 vs. lactantes (3-16 meses) d=0.11. Los autores concluyen que la baja calidad del cuidado y el temperamento difícil predicen elevaciones atípicas de cortisol.",
+        "Daycare Attendance, Stress, and Mental Health: implicación práctica para padres de un bebé de 12-18 meses. La calidad y estabilidad del cuidado (aquí comprometida por el cambio de educadora cada 15 días) pesa tanto o más que la simple asistencia a guardería; mejorar la continuidad de la cuidadora de referencia es la palanca que este estudio identifica como más eficaz, no reducir aún más la exposición por sí sola."
+      ]
+    },
+    {
+      "source_type": "meta_analysis",
+      "title": "Young children's cortisol levels at out-of-home child care: A meta-analysis (actualización de Vermeer & van IJzendoorn 2006 y Geoffroy et al. 2006)",
+      "organization": "Early Childhood Research Quarterly",
+      "publication_year": 2023,
+      "url": "https://doi.org/10.1016/j.ecresq.2022.12.015",
+      "specialties": [
+        "pediatrics",
+        "general_medicine"
+      ],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "chunks": [
+        "Young children's cortisol levels at out-of-home child care: A meta-analysis (actualización de Vermeer & van IJzendoorn 2006 y Geoffroy et al. 2006) (de Vet, Vrijhof, van der Veek, Linting & Vermeer (2023)). Tema: adaptación a la guardería, estrés y apego. Hallazgo: Confirma cortisol vespertino más alto en guardería que en casa. Más horas de guardería se asoció con mayor subida de cortisol (r=.15, p=.01). En cuidado en casa (no en centros), menor calidad se asoció con más subida de cortisol (r=-.27, p=.017). El temperamento del niño NO se asoció con la subida de cortisol. Los autores advierten que es 'demasiado pronto para concluir' que los lactantes sufren menos estrés que los preescolares, dado que el rango de edad en los estudios disponibles no permite separar bien los grupos.",
+        "Young children's cortisol levels at out-of-home child care: A meta-analysis (actualización de Vermeer & van IJzendoorn 2006 y Geoffroy et al. 2006): implicación práctica para padres de un bebé de 12-18 meses. La ampliación de horario de esta semana (de 4 a 6 horas) es exactamente el tipo de variable que este meta-análisis vincula de forma directa y significativa con más cortisol; introducirla de golpe, en plena adaptación no resuelta, va contra la recomendación implícita de aumentar horas de forma gradual."
+      ]
+    },
+    {
+      "source_type": "guideline",
+      "title": "Das Berliner Eingewöhnungsmodell (Modelo de adaptación de Berlín)",
+      "organization": "socialnet Lexikon",
+      "publication_year": null,
+      "url": "https://www.socialnet.de/lexikon/Berliner-Eingewoehnungsmodell",
+      "specialties": [
+        "pediatrics",
+        "general_medicine"
+      ],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "chunks": [
+        "Das Berliner Eingewöhnungsmodell (Modelo de adaptación de Berlín) (Laewen, Andres & Hédervári-Heller (Instituto INFANS, años 80, sistematizado en publicaciones posteriores)). Tema: adaptación a la guardería, estrés y apego. Hallazgo: Modelo de adaptación acompañada por un progenitor, fundamentado en la teoría etológica del apego. Duración típica: 1-3 semanas, nunca menos de 3 días. Fases: (1) sesión informativa previa; (2) fase base de 3 días con el progenitor presente 1-2h/día sin intentar separación; (3) primer intento de separación breve el día 4, observando la reacción del niño; (4) fase de estabilización con separaciones progresivamente más largas y vínculo creciente con la educadora; (5) fase final, cuando el niño acepta a la educadora como 'base segura' y explora con autonomía. Requiere una figura de referencia estable durante todo el proceso.",
+        "Das Berliner Eingewöhnungsmodell (Modelo de adaptación de Berlín): implicación práctica para padres de un bebé de 12-18 meses. El pilar del modelo es una educadora de referencia estable durante todo el proceso; un cambio de educadora cada 15 días, tal y como describe el caso, es estructuralmente incompatible con este modelo y —según su propia lógica— reinicia la necesidad de adaptación cada vez que cambia la cuidadora, en vez de permitir que se consolide la fase final de 'base segura'."
+      ]
+    },
+    {
+      "source_type": "guideline",
+      "title": "Separation Anxiety and Stranger Anxiety (guía clínica para pediatras/familias)",
+      "organization": "https://www",
+      "publication_year": null,
+      "url": "https://www.healthychildren.org/English/ages-stages/toddler/Pages/Soothing-Your-Childs-Separation-Anxiety.aspx",
+      "specialties": [
+        "pediatrics",
+        "general_medicine"
+      ],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "chunks": [
+        "Separation Anxiety and Stranger Anxiety (guía clínica para pediatras/familias) (American Academy of Pediatrics — HealthyChildren.org; ver también Merck Manual Professional Edition). Tema: adaptación a la guardería, estrés y apego. Hallazgo: La ansiedad de separación es normativa entre los 8 y los 18 meses, con pico de intensidad entre los 10 y 18 meses (o, según AAP, especialmente marcada hacia los 9 meses y de nuevo hacia los 15-18 meses). Ambas fuentes coinciden en que las separaciones son más difíciles cuando el niño tiene hambre, sueño o no se encuentra bien físicamente ('the leave-taking can be worse if your infant is hungry, tired or not feeling well').",
+        "Separation Anxiety and Stranger Anxiety (guía clínica para pediatras/familias): implicación práctica para padres de un bebé de 12-18 meses. Un bebé de 13 meses está en pleno pico normativo de ansiedad de separación por edad, y la propia guía de la AAP señala que el hambre, la falta de sueño y estar enfermo (aquí: rechazo de comida, dormir poco, mucosidad y ronquidos) son justo los factores que más intensifican esa ansiedad; no es el momento del calendario más favorable para forzar un salto de horario, y los síntomas respiratorios (flema/ronquidos) ameritan valoración pediátrica aparte, ya que el estrés no descarta una infección concurrente."
+      ]
+    },
+    {
+      "source_type": "meta_analysis",
+      "title": "Security of Children's Relationships With Nonparental Care Providers: A Meta-Analysis",
+      "organization": "Child Development",
+      "publication_year": 2006,
+      "url": "https://pubmed.ncbi.nlm.nih.gov/16686794/",
+      "specialties": [
+        "pediatrics",
+        "general_medicine"
+      ],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "chunks": [
+        "Security of Children's Relationships With Nonparental Care Providers: A Meta-Analysis (Ahnert, L., Pinquart, M., & Lamb, M. E. (2006)). Tema: continuidad de la educadora de referencia. Hallazgo: Los niños SÍ pueden desarrollar apego seguro secundario hacia una educadora no parental, pero es menos probable que hacia los padres cuando se mide con la Situación Extraña, y ese apego seguro es más probable cuanto MÁS tiempo lleva el niño matriculado (es decir, la seguridad del vínculo aumenta con el tiempo de permanencia con la misma persona, no de forma inmediata). La sensibilidad de la educadora hacia el grupo predice el apego seguro especialmente en guarderías (vs. sensibilidad individual en entornos tipo hogar).",
+        "Security of Children's Relationships With Nonparental Care Providers: A Meta-Analysis: implicación práctica para padres de un bebé de 12-18 meses. El vínculo con una educadora no se construye en 15 días; los datos que sustentan esta meta-análisis provienen de niños evaluados semanas o meses después de la incorporación, no en las dos primeras semanas. Rotar de educadora cada 15 días interrumpe precisamente el proceso (tiempo de exposición) que el estudio identifica como necesario para que se instale el apego seguro."
+      ]
+    },
+    {
+      "source_type": "study",
+      "title": "Children's Relationships With Child Care Teachers: Stability and Concordance With Parental Attachments",
+      "organization": "Child Development",
+      "publication_year": 1992,
+      "url": "https://pubmed.ncbi.nlm.nih.gov/1505245/",
+      "specialties": [
+        "pediatrics",
+        "general_medicine"
+      ],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "chunks": [
+        "Children's Relationships With Child Care Teachers: Stability and Concordance With Parental Attachments (Howes, C., & Hamilton, C. E. (1992)). Tema: continuidad de la educadora de referencia. Hallazgo: La calidad de la relación niño-educadora se mantenía estable SOLO si la educadora permanecía siendo la misma. Cuando la educadora cambiaba, la calidad de esa relación se volvía inestable, y este efecto negativo del cambio de cuidador solo dejaba de observarse a partir de los 30 meses de edad. Antes de esa edad, cada cambio de educadora reinicia el proceso de construcción del vínculo.",
+        "Children's Relationships With Child Care Teachers: Stability and Concordance With Parental Attachments: implicación práctica para padres de un bebé de 12-18 meses. A los 13 meses (muy por debajo de los 30 meses), el bebé está en la ventana de edad en la que la investigación muestra máxima vulnerabilidad a la inestabilidad del vínculo cuando cambia la educadora. Un cambio cada 15 días no permite ni siquiera completar un ciclo de estabilización antes del siguiente cambio."
+      ]
+    },
+    {
+      "source_type": "study",
+      "title": "The Changing Experience of Child Care: Changes in Teachers and in Teacher-Child Relationships and Children's Social Competence With Peers",
+      "organization": "Early Childhood Research Quarterly",
+      "publication_year": 1993,
+      "url": "https://doi.org/10.1016/S0885-2006(05)80096-1",
+      "specialties": [
+        "pediatrics",
+        "general_medicine"
+      ],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "chunks": [
+        "The Changing Experience of Child Care: Changes in Teachers and in Teacher-Child Relationships and Children's Social Competence With Peers (Howes, C., & Hamilton, C. E. (1993)). Tema: continuidad de la educadora de referencia. Hallazgo: Los niños que experimentaron múltiples cambios de educadora principal mostraron menor seguridad de apego con los cuidadores y, más adelante, mayor probabilidad de conducta socialmente retraída o agresiva con sus pares (peor competencia social observada y reportada por profesores a los 48 meses).",
+        "The Changing Experience of Child Care: Changes in Teachers and in Teacher-Child Relationships and Children's Social Competence With Peers: implicación práctica para padres de un bebé de 12-18 meses. El daño de la rotación de cuidadoras no es solo emocional inmediato: el estudio lo asocia con peor competencia social meses/años después. Justifica pedir a la guardería que minimice activamente los cambios de personal en la sala de bebés, no solo 'gestionarlos bien'."
+      ]
+    },
+    {
+      "source_type": "study",
+      "title": "Associations Between Continuity of Care in Infant-Toddler Classrooms and Child Outcomes",
+      "organization": "Early Childhood Research Quarterly",
+      "publication_year": 2018,
+      "url": "https://doi.org/10.1016/j.ecresq.2017.08.002",
+      "specialties": [
+        "pediatrics",
+        "general_medicine"
+      ],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "chunks": [
+        "Associations Between Continuity of Care in Infant-Toddler Classrooms and Child Outcomes (Horm, D. M., File, N., Bryant, D., Burchinal, M., Raikes, H., Forestieri, N., Encinger, A., & Cobo-Lewis, A. (2018)). Tema: continuidad de la educadora de referencia. Hallazgo: La continuidad del cuidador (mantener al mismo educador de referencia) se asoció con menos problemas de conducta reportados por los profesores mientras el niño estaba en el aula de bebés/gateadores, y este beneficio era MAYOR en aulas de calidad alta que en las de calidad baja. Sin embargo, no se asoció de forma clara con el desarrollo del lenguaje ni con habilidades sociales tras la transición a preescolar; los propios autores señalan que la evidencia es mixta y no respalda de forma concluyente las recomendaciones actuales de continuidad de cuidador.",
+        "Associations Between Continuity of Care in Infant-Toddler Classrooms and Child Outcomes: implicación práctica para padres de un bebé de 12-18 meses. Es la evidencia empírica más directa y reciente sobre continuidad de cuidador en aulas de bebés. Apoya pedir continuidad como buena práctica (menos problemas de conducta a corto plazo), pero con honestidad: los autores mismos piden cautela porque no está fuerte y consistentemente demostrado el beneficio a largo plazo. Útil para pedir continuidad sin sobrevender el argumento."
+      ]
+    },
+    {
+      "source_type": "study",
+      "title": "Effects of Child-Caregiver Ratio on the Interactions Between Caregivers and Children in Child-Care Centers: An Experimental Study",
+      "organization": "Child Development",
+      "publication_year": 2006,
+      "url": "https://pubmed.ncbi.nlm.nih.gov/16942494/",
+      "specialties": [
+        "pediatrics",
+        "general_medicine"
+      ],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "chunks": [
+        "Effects of Child-Caregiver Ratio on the Interactions Between Caregivers and Children in Child-Care Centers: An Experimental Study (de Schipper, E. J., Riksen-Walraven, J. M., & Geurts, S. A. (2006)). Tema: continuidad de la educadora de referencia. Hallazgo: Una ratio educadora:niño de 3:1 produjo una interacción de calidad significativamente superior a una ratio de 5:1, y este efecto fue especialmente marcado en los niños más pequeños del grupo.",
+        "Effects of Child-Caregiver Ratio on the Interactions Between Caregivers and Children in Child-Care Centers: An Experimental Study: implicación práctica para padres de un bebé de 12-18 meses. Al pedir explicaciones a la guardería, preguntar también por la ratio educadora:bebé real (no solo el nombre asignado), especialmente si el horario se amplía: más horas con ratios peores multiplica el estrés observado en el punto 6."
+      ]
+    },
+    {
+      "source_type": "study",
+      "title": "Characteristics of Infant Child Care: Factors Contributing to Positive Caregiving",
+      "organization": "Early Childhood Research Quarterly",
+      "publication_year": 1996,
+      "url": "https://doi.org/10.1016/S0885-2006(96)90009-5",
+      "specialties": [
+        "pediatrics",
+        "general_medicine"
+      ],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "chunks": [
+        "Characteristics of Infant Child Care: Factors Contributing to Positive Caregiving (NICHD Early Child Care Research Network (1996)). Tema: continuidad de la educadora de referencia. Hallazgo: En el primer año de vida, un cuidado positivo (sensible y responsivo) se asoció de forma consistente con grupos pequeños, ratios bajas cuidador:niño, y creencias no autoritarias de los cuidadores sobre la crianza; estos factores predijeron cuidado positivo en todos los tipos de entorno estudiados (centros, cuidado en hogar, cuidadores familiares).",
+        "Characteristics of Infant Child Care: Factors Contributing to Positive Caregiving: implicación práctica para padres de un bebé de 12-18 meses. Confirma que en el primer año de vida, la CALIDAD del proceso de cuidado (sensibilidad, ratio, tamaño de grupo) tiene evidencia sólida como predictor, en paralelo a la continuidad del cuidador. Ambos factores (persona estable + ratio/grupo adecuados) deben pedirse juntos a la guardería."
+      ]
+    },
+    {
+      "source_type": "meta_analysis",
+      "title": "Young Children's Cortisol Levels at Out-of-Home Child Care: A Meta-Analysis",
+      "organization": "Early Childhood Research Quarterly",
+      "publication_year": 2023,
+      "url": "https://scholarlypublications.universiteitleiden.nl/access/item:3635724/view",
+      "specialties": [
+        "pediatrics",
+        "general_medicine"
+      ],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "chunks": [
+        "Young Children's Cortisol Levels at Out-of-Home Child Care: A Meta-Analysis (de Vet, S. M., Vrijhof, C. I., van der Veek, S. M. C., Linting, M., & Vermeer, H. J. (2023)). Tema: continuidad de la educadora de referencia. Hallazgo: El cortisol (hormona de estrés) sube más a lo largo del día en la guardería que en casa, con tamaños de efecto pequeños a medianos. Más horas de permanencia en la guardería se correlacionó con un mayor incremento de cortisol a lo largo del día (r=.15, p<.05, k=8 estudios). Menor calidad del cuidado y mayor tamaño de grupo también se asociaron con más aumento de cortisol.",
+        "Young Children's Cortisol Levels at Out-of-Home Child Care: A Meta-Analysis: implicación práctica para padres de un bebé de 12-18 meses. Directamente relevante al caso: ampliar el horario de 4 a 6 horas en la misma semana en que ya hay inadaptación es, según esta evidencia, un factor que por sí solo puede aumentar el estrés fisiológico del bebé, independientemente del tema de la educadora. Sugiere no combinar ambos cambios (rotación de educadora + ampliación de horario) a la vez."
+      ]
+    },
+    {
+      "source_type": "study",
+      "title": "Understanding Cortisol Reactivity Across the Day at Child Care: The Potential Buffering Role of Secure Attachments to Caregivers",
+      "organization": "Early Childhood Research Quarterly",
+      "publication_year": 2012,
+      "url": "https://doi.org/10.1016/j.ecresq.2011.05.005",
+      "specialties": [
+        "pediatrics",
+        "general_medicine"
+      ],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "chunks": [
+        "Understanding Cortisol Reactivity Across the Day at Child Care: The Potential Buffering Role of Secure Attachments to Caregivers (Badanes, L. S., Dmitrieva, J., & Watamura, S. E. (2012)). Tema: continuidad de la educadora de referencia. Hallazgo: Los niños con apego más seguro hacia su educadora tenían más probabilidad de mostrar un descenso del cortisol a lo largo del día en la guardería (en vez de la subida típica), es decir, la educadora actuaba como amortiguador fisiológico del estrés SOLO cuando había un vínculo de apego seguro establecido con ella.",
+        "Understanding Cortisol Reactivity Across the Day at Child Care: The Potential Buffering Role of Secure Attachments to Caregivers: implicación práctica para padres de un bebé de 12-18 meses. Mecanismo que explica por qué la falta de una educadora de referencia estable impide que exista ese 'amortiguador' de estrés: sin tiempo suficiente con la misma persona, no se forma el apego seguro que permitiría regular el estrés del bebé durante la jornada."
+      ]
+    },
+    {
+      "source_type": "guideline",
+      "title": "Statutory Framework for the Early Years Foundation Stage (EYFS) — for group and school-based providers, efectivo desde enero 2024",
+      "organization": "GOV",
+      "publication_year": 2024,
+      "url": "https://www.gov.uk/government/publications/early-years-foundation-stage-framework--2",
+      "specialties": [
+        "pediatrics",
+        "general_medicine"
+      ],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "chunks": [
+        "Statutory Framework for the Early Years Foundation Stage (EYFS) — for group and school-based providers, efectivo desde enero 2024 (Department for Education, UK Government (2024)). Tema: continuidad de la educadora de referencia. Hallazgo: Texto literal verificado: 'Each child must be assigned a key person. Their role is to help ensure that every child's care is tailored to meet their individual needs, to help the child become familiar with the setting, offer a settled relationship for the child and build a relationship with their parents and/or carers' (párrafo 3.41). El marco también dice explícitamente: 'Children need to build an attachment with their key person for their confidence and well-being.'",
+        "Statutory Framework for the Early Years Foundation Stage (EYFS) — for group and school-based providers, efectivo desde enero 2024: implicación práctica para padres de un bebé de 12-18 meses. Es el estándar regulatorio de referencia en el Reino Unido: exige por ley una 'persona de referencia' (key person) fija y una 'relación asentada' (settled relationship) para cada niño desde el nacimiento. Da un argumento formal y citable para pedir a la guardería una única educadora de referencia asignada al bebé, no rotaciones cada 15 días, como estándar de buena práctica reconocido internacionalmente (aunque el marco es de aplicación en Inglaterra, no en España)."
+      ]
+    },
+    {
+      "source_type": "study",
+      "title": "Influence of attendance at day care on the common cold from birth through 13 years of age",
+      "organization": "Archives of Pediatrics & Adolescent Medicine",
+      "publication_year": 2002,
+      "url": "https://jamanetwork.com/journals/jamapediatrics/fullarticle/191522",
+      "specialties": [
+        "pediatrics",
+        "general_medicine"
+      ],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "chunks": [
+        "Influence of attendance at day care on the common cold from birth through 13 years of age (Ball TM, Holberg CJ, Aldous MB, Martinez FD, Wright AL (2002)). Tema: infecciones y alimentación en el primer año de guardería. Hallazgo: Los niños en guarderías grandes tuvieron más resfriados frecuentes en edad preescolar (52% vs 33% de los cuidados en casa en el año 2), pero esa diferencia se invirtió y protegió durante los primeros años escolares (presumiblemente por inmunidad adquirida). 'By year 13 each group of children, regardless of previous attendance in day care, had similar rates of frequent colds' — hacia los 13 años las tasas se igualan entre grupos.",
+        "Influence of attendance at day care on the common cold from birth through 13 years of age: implicación práctica para padres de un bebé de 12-18 meses. El aumento de infecciones al empezar la guardería es esperable y transitorio; no predice mala salud a largo plazo, sino adelanto de la exposición inmunológica que luego se compensa."
+      ]
+    },
+    {
+      "source_type": "study",
+      "title": "Impact of early daycare on healthcare resource use related to upper respiratory tract infections during childhood: prospective WHISTLER cohort study",
+      "organization": "BMC Medicine 12:107",
+      "publication_year": 2014,
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC4098954/",
+      "specialties": [
+        "pediatrics",
+        "general_medicine"
+      ],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "chunks": [
+        "Impact of early daycare on healthcare resource use related to upper respiratory tract infections during childhood: prospective WHISTLER cohort study (de Hoog MLA, Venekamp RP, van der Ent CK, Schilder A, Sanders EAM, Damoiseaux RAMJ, Bruijning-Verhagen P (2014)). Tema: infecciones y alimentación en el primer año de guardería. Hallazgo: Los lactantes que empezaron guardería en el primer año de vida tuvieron un 40% más de episodios de infección respiratoria alta/otitis media diagnosticados por médico antes del año de edad (IRR ajustado 1,40; IC95% 1,25-1,57) que los no asistentes, pero menos episodios después de los 4 años; a los 6 años las tasas acumuladas totales fueron casi idénticas (59,2 vs 56,2 por 100 niños-año). Entrar en guardería entre los 6 y 12 meses se asoció con el mayor uso de antibióticos (RR 1,32) y derivaciones a especialista.",
+        "Impact of early daycare on healthcare resource use related to upper respiratory tract infections during childhood: prospective WHISTLER cohort study: implicación práctica para padres de un bebé de 12-18 meses. Un exceso de infecciones en los primeros meses de guardería (como el bebé de 13 meses del caso, que entró en verano a los ~11 meses) es el patrón mejor documentado en la literatura, no una señal de que algo va mal con la adaptación."
+      ]
+    },
+    {
+      "source_type": "study",
+      "title": "Symptom Burden and Factors Associated with Acute Respiratory Infections in the First Two Years of Life — Results from the LoewenKIDS Cohort",
+      "organization": "Microorganisms 10(1):111",
+      "publication_year": 2022,
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC8781593/",
+      "specialties": [
+        "pediatrics",
+        "general_medicine"
+      ],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "chunks": [
+        "Symptom Burden and Factors Associated with Acute Respiratory Infections in the First Two Years of Life — Results from the LoewenKIDS Cohort (Langer T, Kraus PS, Falkenstein L, et al. (2022)). Tema: infecciones y alimentación en el primer año de guardería. Hallazgo: Media de 13,7 infecciones respiratorias agudas (DE 5,2) en los primeros dos años de vida (6,0 en el primer año, 7,7 en el segundo), con una duración media de 11 días por episodio. La asistencia a guardería aumentó el riesgo de infección (RR ajustado 1,27) y la mucosidad/congestión nasal fue el síntoma más prevalente en días totales.",
+        "Symptom Burden and Factors Associated with Acute Respiratory Infections in the First Two Years of Life — Results from the LoewenKIDS Cohort: implicación práctica para padres de un bebé de 12-18 meses. Cuadros con mucosidad y flema abundante de varios días de evolución en un bebé de guardería entran dentro de lo estadísticamente normal para esta franja de edad, no son atípicamente frecuentes o largos por sí solos."
+      ]
+    },
+    {
+      "source_type": "guideline",
+      "title": "IMCI Chart Booklet — Assess & Classify the Sick Child, Give Extra Fluid and Continue Feeding",
+      "organization": "WHO",
+      "publication_year": 2014,
+      "url": "https://cdn.who.int/media/docs/default-source/mca-documents/child/imci-integrated-management-of-childhood-illness/imci-in-service-training/imci-chart-booklet.pdf",
+      "specialties": [
+        "pediatrics",
+        "general_medicine"
+      ],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "chunks": [
+        "IMCI Chart Booklet — Assess & Classify the Sick Child, Give Extra Fluid and Continue Feeding (Organización Mundial de la Salud (OMS/WHO), edición 2014 (revisión vigente)). Tema: infecciones y alimentación en el primer año de guardería. Hallazgo: Bajo 'Give Extra Fluid... and Continue Feeding' la OMS instruye textualmente: 'Breastfeed frequently and for longer at each feed' durante la enfermedad. Para clasificar deshidratación exige 2 de estos signos: DESHIDRATACIÓN GRAVE = letárgico/inconsciente, ojos hundidos, no puede beber o bebe mal, pliegue cutáneo se deshace muy lentamente; ALGO DE DESHIDRATACIÓN = intranquilo/irritable, ojos hundidos, bebe con avidez/con sed, pliegue cutáneo se deshace lentamente. Para dificultad respiratoria, taquipnea = ≥50 respiraciones/min (2-12 meses) o ≥40 respiraciones/min (12 meses-5 años), y tiraje/estridor en reposo clasifica como neumonía o enfermedad grave. Fiebre presente cada día durante más de 7 días exige reevaluación.",
+        "IMCI Chart Booklet — Assess & Classify the Sick Child, Give Extra Fluid and Continue Feeding: implicación práctica para padres de un bebé de 12-18 meses. Aumentar la frecuencia y duración de las tomas de pecho durante los días de enfermedad, dejando que sustituyan a los sólidos rechazados, es exactamente lo que recomienda la OMS, no una alimentación insuficiente. Los umbrales objetivos para preocuparse son: FR ≥40 rpm sostenida (a los 13 meses), tiraje, letargia/dificultad para despertar, rechazo total de líquidos/pecho, o pañales mojados claramente escasos."
+      ]
+    },
+    {
+      "source_type": "guideline",
+      "title": "Fever in under 5s: assessment and initial management (NG143)",
+      "organization": "NICE Guideline NG143",
+      "publication_year": 2019,
+      "url": "https://www.nice.org.uk/guidance/ng143",
+      "specialties": [
+        "pediatrics",
+        "general_medicine"
+      ],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "chunks": [
+        "Fever in under 5s: assessment and initial management (NG143) (National Institute for Health and Care Excellence (NICE), 2019 (actualizada)). Tema: infecciones y alimentación en el primer año de guardería. Hallazgo: Sistema de semáforo (traffic light): taquipnea de riesgo alto = >60 rpm (0-5 meses), >50 rpm (6-12 meses), >40 rpm (>12 meses); tiraje torácico moderado-severo es signo de alerta roja. Signos de deshidratación a valorar: fontanela hundida, boca seca, ojos hundidos, ausencia de lágrimas, mal estado general. La guía indica explícitamente 'do not use duration of fever alone to predict the likelihood of serious illness', pero fiebre ≥5 días obliga a reevaluar y descartar enfermedad de Kawasaki.",
+        "Fever in under 5s: assessment and initial management (NG143): implicación práctica para padres de un bebé de 12-18 meses. Contar la frecuencia respiratoria en reposo (>40 rpm a los 13 meses es alerta) y observar si hay tiraje son las dos comprobaciones caseras más útiles ante ronquido/flema; ninguna guía usa la sola duración de la fiebre como criterio de alarma aislado."
+      ]
+    },
+    {
+      "source_type": "guideline",
+      "title": "Guía de Algoritmos en Pediatría de Atención Primaria: Falta de apetito",
+      "organization": "AEPap (Asociación Española de Pediatría de Atención Primaria)",
+      "publication_year": 2016,
+      "url": "https://algoritmos.aepap.org/algoritmo/23/falta-de-apetito",
+      "specialties": [
+        "pediatrics",
+        "general_medicine"
+      ],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "chunks": [
+        "Guía de Algoritmos en Pediatría de Atención Primaria: Falta de apetito (Martínez Rubio A, Santana Vega C, Ros Arnal I (2016)). Tema: infecciones y alimentación en el primer año de guardería. Hallazgo: El documento afirma textualmente: 'No se debe olvidar que numerosas enfermedades agudas y crónicas pueden producir anorexia.' Señala también que 'la causa que más perpetúa la inapetencia es la alimentación forzada', por lo que en un cuadro agudo la conducta recomendada es no forzar y reevaluar según evolución clínica, no según la cantidad ingerida en un día concreto.",
+        "Guía de Algoritmos en Pediatría de Atención Primaria: Falta de apetito: implicación práctica para padres de un bebé de 12-18 meses. El rechazo de sólidos de hoy, en el contexto de un proceso catarral con mucosidad y mal descanso, encaja con anorexia de causa infecciosa aguda descrita por la propia AEPap; no se debe forzar la comida, y sí vigilar hidratación mediante el pecho."
+      ]
+    },
+    {
+      "source_type": "review",
+      "title": "El niño roncador",
+      "organization": "FAPap (Formación Activa en Pediatría de Atención Primaria)",
+      "publication_year": 2011,
+      "url": "https://fapap.es/articulo/129/nino-roncador",
+      "specialties": [
+        "pediatrics",
+        "general_medicine"
+      ],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "chunks": [
+        "El niño roncador (Pin Arboledas G, Ugarte Libano R (2011)). Tema: infecciones y alimentación en el primer año de guardería. Hallazgo: Las infecciones respiratorias virales son una de las causas más frecuentes de ronquido y obstrucción nasal en lactantes y niños pequeños, junto a la hipertrofia adenoidea (más relevante con la edad) y la atopia. Se considera ronquido 'habitual' cuando ocurre más de 3 noches por semana; roncar más de 4 noches/semana se asocia con tos nocturna y asma. La derivación a ORL/unidad de sueño está indicada cuando hay sospecha de síndrome de resistencia de vía aérea superior o apnea obstructiva del sueño, o ronquido severo con hipertrofia adenoamigdalar y alteración de conducta/aprendizaje.",
+        "El niño roncador: implicación práctica para padres de un bebé de 12-18 meses. El ronquido y la flema de una noche puntual en el contexto de un catarro no son, por sí solos, motivo de derivación a ORL; sí lo sería si persisten más de 3 noches/semana de forma habitual una vez resuelto el cuadro agudo, o si hay pausas respiratorias visibles."
+      ]
+    },
+    {
+      "source_type": "review",
+      "title": "Immunological Mechanisms of Sickness Behavior in Viral Infection",
+      "organization": "Viruses 13(11):2245",
+      "publication_year": 2021,
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC8624889/",
+      "specialties": [
+        "pediatrics",
+        "general_medicine"
+      ],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "chunks": [
+        "Immunological Mechanisms of Sickness Behavior in Viral Infection (Krapić M, Kavazović I, Wensveen FM (2021)). Tema: infecciones y alimentación en el primer año de guardería. Hallazgo: El 'sickness behavior' (fiebre, pérdida de apetito, letargia, somnolencia, retraimiento social) durante una infección viral es una respuesta adaptativa orquestada por el sistema inmune, mediada por citoquinas (TNF, IL-1β, IL-6) que actúan sobre el sistema nervioso central para optimizar la respuesta antiviral y reducir el gasto energético, no un fallo o un problema de conducta.",
+        "Immunological Mechanisms of Sickness Behavior in Viral Infection: implicación práctica para padres de un bebé de 12-18 meses. Que el bebé no juegue, coma ni duerma bien en la guardería mientras cursa un catarro es la manifestación esperada de esa respuesta inmune normal (sickness behavior), coherente con estar enfermo más que con una mala adaptación al centro."
+      ]
+    },
+    {
+      "source_type": "study",
+      "title": "La adaptación a la escuela: un camino a recorrer",
+      "organization": "Familia y Salud (AEPap)",
+      "publication_year": 2018,
+      "url": "https://www.familiaysalud.es/salud-y-escuela/educacion-infantil-0/temas-psicoeducativos/la-adaptacion-la-escuela-un-camino",
+      "specialties": [
+        "pediatrics",
+        "general_medicine"
+      ],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "chunks": [
+        "La adaptación a la escuela: un camino a recorrer (Isabel Rubio Díaz, pediatra (Elche, Alicante) — 2018). Tema: periodo de adaptación a la escuela infantil. Hallazgo: El llanto o vómitos al despedirse, las rabietas, dormir mal, comer menos, aislarse y aferrarse a un objeto transicional (peluche/trapito) son manifestaciones normales de 'ansiedad por separación'. Algunos niños están bien en clase pero en casa 'se comportan como si fueran más bebés' (regresión). Cada niño tiene su propio ritmo de adaptación, que hay que respetar, y la duración depende también de cómo vivan los propios padres la separación.",
+        "La adaptación a la escuela: un camino a recorrer: implicación práctica para padres de un bebé de 12-18 meses. Los síntomas del bebé (apego intenso, rechazo de sólidos, peor sueño en casa) encajan con el cuadro esperable de ansiedad por separación y no son, por sí solos, motivo de alarma; permitir el objeto de apego, validar sus emociones y no forzar el ritmo son las medidas que respalda esta guía."
+      ]
+    },
+    {
+      "source_type": "guideline",
+      "title": "Guardería o escuela infantil. ¿Cuándo llevar al niño o dejarlo en casa?",
+      "organization": "EnFamilia",
+      "publication_year": 2019,
+      "url": "https://enfamilia.aeped.es/edades-etapas/guarderia-escuela-infantil-cuando-llevar-al-nino-dejarlo-en",
+      "specialties": [
+        "pediatrics",
+        "general_medicine"
+      ],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "chunks": [
+        "Guardería o escuela infantil. ¿Cuándo llevar al niño o dejarlo en casa? (Mª Paz González Rodríguez, pediatra — publicado 25-1-2019, revisado 3-12-2024). Tema: periodo de adaptación a la escuela infantil. Hallazgo: No debe llevarse al niño a la guardería si tiene 'síntomas de afectación de su estado general, como fiebre, dificultad respiratoria, irritabilidad, etc., o bien síntomas poco definidos y potencialmente peligrosos'. Puede volver 24 horas después de que la fiebre haya desaparecido.",
+        "Guardería o escuela infantil. ¿Cuándo llevar al niño o dejarlo en casa?: implicación práctica para padres de un bebé de 12-18 meses. Un día sin comer, sin dormir y sin jugar, tras una noche con mucha flema y ronquidos, es compatible con 'afectación del estado general' según este criterio de la AEP, aunque no haya fiebre medida; es razonable valorar no llevarlo ese día y consultar con el pediatra."
+      ]
+    },
+    {
+      "source_type": "guideline",
+      "title": "¿Cuándo no deben ir los niños a la guardería?",
+      "organization": "Familia y Salud (AEPap)",
+      "publication_year": 2013,
+      "url": "https://www.familiaysalud.es/sintomas-y-enfermedades/infecciones/de-la-la-g/cuando-no-deben-ir-los-ninos-la-guarderia",
+      "specialties": [
+        "pediatrics",
+        "general_medicine"
+      ],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "chunks": [
+        "¿Cuándo no deben ir los niños a la guardería? (Pedro J. Gorrotxategi Gorrotxategi, Ane Laka Iñurrategi, Amaia Lasa Aranzasti, Ainhoa Elduayen Vila, pediatras (C. Salud Pasaia-San Pedro / H. Donostia, Gipuzkoa) — publicado 6-1-2013, actualizado 11-7-2024). Tema: periodo de adaptación a la escuela infantil. Hallazgo: El criterio principal para decidir si un niño va o no a la guardería es el 'sentido común': si ha pasado una mala noche, tiene fiebre, diarrea, etc., no conviene llevarlo. 'Enviar a un centro de cuidado infantil a un niño que no está bien no es bueno ni para él, ni para el resto de los niños.' Para infección respiratoria simple sin fiebre ni dificultad respiratoria, la tabla no exige exclusión.",
+        "¿Cuándo no deben ir los niños a la guardería?: implicación práctica para padres de un bebé de 12-18 meses. El criterio no es solo la tabla diagnóstica (que no excluiría un catarro sin fiebre), sino el sentido común clínico global: mala noche + rechazo de comida + falta de juego son, en conjunto, señal de que 'no está bien', suficiente para quedarse en casa ese día según esta guía."
+      ]
+    },
+    {
+      "source_type": "guideline",
+      "title": "Mi bebé empieza la guardería, ¿cómo puedo mantener la lactancia materna?",
+      "organization": "Familia y Salud (AEPap)",
+      "publication_year": 2022,
+      "url": "https://www.familiaysalud.es/vivimos-sanos/lactancia-materna/seguimos-creciendo/mi-bebe-empieza-la-guarderia-como-puedo-mantener",
+      "specialties": [
+        "pediatrics",
+        "general_medicine"
+      ],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "chunks": [
+        "Mi bebé empieza la guardería, ¿cómo puedo mantener la lactancia materna? (Marta Martínez Carretero, Mª Vega Almazán Fernández de Bobadilla, pediatras — 29-1-2022). Tema: periodo de adaptación a la escuela infantil. Hallazgo: La OMS recomienda lactancia materna exclusiva hasta los 6 meses y, junto con alimentación complementaria, mantenerla 'hasta los 2 años o más'; el bebé puede seguir lactando pese a ir a la escuela infantil, con leche extraída o de forma presencial, y el centro debe facilitarlo.",
+        "Mi bebé empieza la guardería, ¿cómo puedo mantener la lactancia materna?: implicación práctica para padres de un bebé de 12-18 meses. A los 13 meses, refugiarse en el pecho y rechazar puntualmente sólidos en casa durante un pico de estrés de adaptación no compromete su nutrición mientras la lactancia sea frecuente; no hace falta forzar sólidos estos días, la leche materna sigue siendo alimento completo y además aporta seguridad emocional."
+      ]
+    },
+    {
+      "source_type": "study",
+      "title": "Relationship Building Between Toddlers and New Caregivers in Out-of-Home Childcare: Attachment Security and Caregiver Sensitivity",
+      "organization": "Early Childhood Research Quarterly",
+      "publication_year": 2017,
+      "url": "https://ora.ox.ac.uk/objects/uuid:ff3d1061-c83f-4f91-99f4-b7c308e32548",
+      "specialties": [
+        "pediatrics",
+        "general_medicine"
+      ],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "chunks": [
+        "Relationship Building Between Toddlers and New Caregivers in Out-of-Home Childcare: Attachment Security and Caregiver Sensitivity (Ereky-Stevens K, Funder A, Katschnig T, Malmberg L-E, Datler W — 2017). Tema: periodo de adaptación a la escuela infantil. Hallazgo: Los niños en guardería desarrollan un apego 'secundario' con su nuevo cuidador; este estudio mide cómo se construye esa relación a lo largo de los PRIMEROS 4 MESES en el centro, no en días o quincenas. La sensibilidad del cuidador hacia el grupo predijo mejor la seguridad del apego que la sensibilidad solo individual.",
+        "Relationship Building Between Toddlers and New Caregivers in Out-of-Home Childcare: Attachment Security and Caregiver Sensitivity: implicación práctica para padres de un bebé de 12-18 meses. Cambiar de educadora cada 15 días interrumpe estructuralmente el proceso de construir apego secundario justo cuando empezaría a formarse, ya que la investigación sitúa ese proceso en semanas/meses de continuidad; esto puede explicar razonablemente por qué el bebé no se ha adaptado en dos meses de guardería."
+      ]
+    },
+    {
+      "source_type": "study",
+      "title": "Toddlers' Stress During Transition to Childcare",
+      "organization": "European Early Childhood Education Research Journal",
+      "publication_year": 2021,
+      "url": "https://doi.org/10.1080/1350293X.2021.1895269",
+      "specialties": [
+        "pediatrics",
+        "general_medicine"
+      ],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "chunks": [
+        "Toddlers' Stress During Transition to Childcare (Nystad K, Drugli MB, Lydersen S, Lekhal R, Buøen ES — 2021). Tema: periodo de adaptación a la escuela infantil. Hallazgo: Se midió cortisol en tres fases: acompañados por los padres, separados de los padres, y tras 4-6 semanas en la guardería. Los niños MENORES de 14 meses mostraron cortisol vespertino y de tarde más alto incluso DESPUÉS de 4-6 semanas (no bajó como en los mayores), lo que según las autoras 'sugiere que los niños más pequeños necesitan más tiempo para asentarse' en la guardería.",
+        "Toddlers' Stress During Transition to Childcare: implicación práctica para padres de un bebé de 12-18 meses. A los 13 meses y con solo ~2 meses en la guardería, el bebé del caso está exactamente en el grupo de edad que esta evidencia muestra como el que MÁS tiempo necesita y el que NO reduce su estrés fisiológico a estas alturas; ampliar el horario ahora, en vez de mantenerlo estable o reducirlo, va en contra de lo que esta evidencia sugiere manejable para su edad."
+      ]
+    },
+    {
+      "source_type": "study",
+      "title": "Trajectories of picky eating during childhood: A general population study",
+      "organization": "International Journal of Eating Disorders",
+      "publication_year": 2015,
+      "url": "https://doi.org/10.1002/eat.22384",
+      "specialties": [
+        "pediatrics",
+        "general_medicine",
+        "gastroenterology"
+      ],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "chunks": [
+        "Trajectories of picky eating during childhood: A general population study. Tema: rechazo de sólidos y alimentación a los 12-18 meses. Hallazgo: Cardona Cano et al. 2015, cohorte Generation R (n=4.018). Prevalencia de selectividad alimentaria del 26,5% a los 18 meses. Cuatro trayectorias: nunca selectivo 55%, remitente entre 0-4 años 32%, inicio tardío a los 6 años 4%, persistente 4%.",
+        "Trajectories of picky eating during childhood: A general population study: implicación práctica para padres de un bebé de 12-18 meses. Un niño de 13 meses con un mes de rechazo de sólidos está dentro del patrón más común: el 86% nunca fue selectivo o remite espontáneamente. Sin más seguimiento no hay datos que indiquen persistencia."
+      ]
+    },
+    {
+      "source_type": "study",
+      "title": "Do toddlers' levels of cortisol and the perceptions of parents and professional caregivers tell the same story about transition from home to childcare? A mixed method study",
+      "organization": "Frontiers in Psychology",
+      "publication_year": 2023,
+      "url": "https://doi.org/10.3389/fpsyg.2023.1165788",
+      "specialties": [
+        "pediatrics",
+        "general_medicine",
+        "gastroenterology"
+      ],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "chunks": [
+        "Do toddlers' levels of cortisol and the perceptions of parents and professional caregivers tell the same story about transition from home to childcare? A mixed method study. Tema: rechazo de sólidos y alimentación a los 12-18 meses. Hallazgo: Drugli, Nystad, Lydersen y Brenne 2023. El cortisol matutino y vespertino de los niños pequeños aumenta de forma significativa desde el día 2 hasta el día 9 tras la separación de los padres (p<0,001 en valores vespertinos). La mayoría se asienta hacia la 4ª semana, pero el cortisol no vuelve a niveles basales hasta unos 3 meses de adaptación continua con un cuidador estable.",
+        "Do toddlers' levels of cortisol and the perceptions of parents and professional caregivers tell the same story about transition from home to childcare? A mixed method study: implicación práctica para padres de un bebé de 12-18 meses. El estudio mide la adaptación con una cuidadora ESTABLE. Una educadora que cambia cada 15 días reinicia la habituación antes de completarse (4 semanas mínimo), lo que es coherente con un estrés mantenido y, por extensión, con la pérdida de apetito."
+      ]
+    },
+    {
+      "source_type": "review",
+      "title": "Starvation and infection: The role of sickness-associated anorexia in metabolic adaptation during acute infection",
+      "organization": "Metabolism: Clinical and Experimental",
+      "publication_year": 2024,
+      "url": "https://doi.org/10.1016/j.metabol.2024.156035",
+      "specialties": [
+        "pediatrics",
+        "general_medicine",
+        "gastroenterology"
+      ],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "chunks": [
+        "Starvation and infection: The role of sickness-associated anorexia in metabolic adaptation during acute infection. Tema: rechazo de sólidos y alimentación a los 12-18 meses. Hallazgo: Jindal et al. 2024. La anorexia asociada a enfermedad es una respuesta evolutivamente conservada mediada por citoquinas proinflamatorias (IL-1, IL-6, TNF-alfa) que suprime el apetito durante las infecciones, independientemente de la voluntad del niño.",
+        "Starvation and infection: The role of sickness-associated anorexia in metabolic adaptation during acute infection: implicación práctica para padres de un bebé de 12-18 meses. Un catarro con flema añade una supresión de apetito aguda y transitoria sobre cualquier rechazo de base; se espera que remita con la infección, pero no explica por sí sola un mes entero comiendo poco."
+      ]
+    },
+    {
+      "source_type": "guideline",
+      "title": "Complementary Feeding: A Position Paper by the ESPGHAN Committee on Nutrition",
+      "organization": "ESPGHAN / Journal of Pediatric Gastroenterology and Nutrition",
+      "publication_year": 2017,
+      "url": "https://doi.org/10.1097/MPG.0000000000001454",
+      "specialties": [
+        "pediatrics",
+        "general_medicine",
+        "gastroenterology"
+      ],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "chunks": [
+        "Complementary Feeding: A Position Paper by the ESPGHAN Committee on Nutrition. Tema: rechazo de sólidos y alimentación a los 12-18 meses. Hallazgo: Fewtrell et al. 2017 (ESPGHAN). Las reservas fetales de hierro se agotan hacia los 6 meses; a partir de ahí más del 90% de los requerimientos de hierro del lactante amamantado deben cubrirse con alimentación complementaria (carne y alimentos enriquecidos). La leche de vaca es mala fuente de hierro.",
+        "Complementary Feeding: A Position Paper by the ESPGHAN Committee on Nutrition: implicación práctica para padres de un bebé de 12-18 meses. La leche materna no cubre el hierro necesario después de los 6 meses. Si un niño de 13 meses lleva un mes comiendo muy poco sólido con el pecho como alimento principal, el aporte de hierro está en riesgo estructural, no solo el calórico."
+      ]
+    },
+    {
+      "source_type": "guideline",
+      "title": "Prevención de la ferropenia en lactantes (Guía de Algoritmos en Pediatría de Atención Primaria)",
+      "organization": "AEPap",
+      "publication_year": 2015,
+      "url": "https://algoritmos.aepap.org/adjuntos/ferropenia.pdf",
+      "specialties": [
+        "pediatrics",
+        "general_medicine",
+        "gastroenterology"
+      ],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "chunks": [
+        "Prevención de la ferropenia en lactantes (Guía de Algoritmos en Pediatría de Atención Primaria). Tema: rechazo de sólidos y alimentación a los 12-18 meses. Hallazgo: AEPap 2015. La lactancia materna exclusiva más allá de los 6 meses se lista explícitamente como factor de riesgo de anemia ferropénica. Se recomienda asegurar 1 mg/kg/día de hierro vía alimentación complementaria desde el sexto mes. Anemia ferropénica: hemoglobina por debajo de 2 desviaciones estándar para edad y sexo con ferritina menor de 10 ng/ml. Criterio de cribado (AAP): hemoglobina menor de 11 g/dl o presencia de factores de riesgo justifica determinar ferritina.",
+        "Prevención de la ferropenia en lactantes (Guía de Algoritmos en Pediatría de Atención Primaria): implicación práctica para padres de un bebé de 12-18 meses. Un lactante de 13 meses con lactancia casi exclusiva durante un mes acumula factores de riesgo reconocidos: está indicado pedir hemoglobina y valorar ferritina en la próxima visita, no esperar a que se le pase."
+      ]
+    },
+    {
+      "source_type": "guideline",
+      "title": "WHO Guideline for complementary feeding of infants and young children 6-23 months of age",
+      "organization": "Organización Mundial de la Salud",
+      "publication_year": 2023,
+      "url": "https://www.who.int/publications/i/item/9789240081864",
+      "specialties": [
+        "pediatrics",
+        "general_medicine",
+        "gastroenterology"
+      ],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "chunks": [
+        "WHO Guideline for complementary feeding of infants and young children 6-23 months of age. Tema: rechazo de sólidos y alimentación a los 12-18 meses. Hallazgo: OMS 2023. A los 12-23 meses la alimentación complementaria debe cubrir unas 550 kcal/día (frente a 200 a los 6-8 meses y 300 a los 9-11). Recomienda alimentos de origen animal a diario y alimentación responsiva: prácticas que animan al niño a comer de forma autónoma en respuesta a sus señales de hambre y saciedad.",
+        "WHO Guideline for complementary feeding of infants and young children 6-23 months of age: implicación práctica para padres de un bebé de 12-18 meses. A los 13 meses más de la mitad de la energía diaria debería venir de los sólidos, no del pecho: un mes comiendo muy poco sólido es una brecha clínicamente significativa según este estándar, aunque el pecho sostenga la hidratación y parte de las calorías."
+      ]
+    },
+    {
+      "source_type": "review",
+      "title": "Growth Faltering and Failure to Thrive in Children",
+      "organization": "American Family Physician (AAFP)",
+      "publication_year": 2023,
+      "url": "https://www.aafp.org/pubs/afp/issues/2023/0600/growth-faltering-failure-to-thrive.html",
+      "specialties": [
+        "pediatrics",
+        "general_medicine",
+        "gastroenterology"
+      ],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "chunks": [
+        "Growth Faltering and Failure to Thrive in Children. Tema: rechazo de sólidos y alimentación a los 12-18 meses. Hallazgo: Goodwin, Buel y Cantrell 2023. Se confirma fallo de medro cuando el peso, el peso para la talla o el IMC caen por debajo del percentil 5 o cruzan hacia abajo más de dos líneas de percentil a lo largo del tiempo. La exploración debe incluir cribado de anemia, examen dental, perímetro braquial y descartar organomegalia o soplo; en mayores de 12 meses se recomienda un diario de alimentación de 24 horas.",
+        "Growth Faltering and Failure to Thrive in Children: implicación práctica para padres de un bebé de 12-18 meses. Ante un mes de ingesta pobre de sólidos, el pediatra debería trazar la curva de peso y talla desde el nacimiento (no un valor puntual), revisar boca, dientes en erupción y oídos, y pedir hemoglobina como parte del protocolo estándar."
+      ]
+    },
+    {
+      "source_type": "guideline",
+      "title": "The Diagnosis and Management of Acute Otitis Media (AAP clinical practice guideline)",
+      "organization": "American Academy of Pediatrics / Pediatrics",
+      "publication_year": 2013,
+      "url": "https://doi.org/10.1542/peds.2012-3488",
+      "specialties": [
+        "pediatrics",
+        "general_medicine",
+        "gastroenterology"
+      ],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "chunks": [
+        "The Diagnosis and Management of Acute Otitis Media (AAP clinical practice guideline). Tema: rechazo de sólidos y alimentación a los 12-18 meses. Hallazgo: Lieberthal et al. 2013 (AAP). La otitis media aguda es la infección más frecuente en menores de 2 años y produce irritabilidad, insomnio y mala alimentación por dolor de oído, que empeora al tumbarse, justo la postura de mamar.",
+        "The Diagnosis and Management of Acute Otitis Media (AAP clinical practice guideline): implicación práctica para padres de un bebé de 12-18 meses. En un lactante con catarro que ya rechaza comida, una otoscopia es razonable: una otitis concurrente explicaría un empeoramiento agudo esta semana sobre un patrón de base de un mes."
+      ]
+    },
+    {
+      "source_type": "study",
+      "title": "Finish your soup: counterproductive effects of pressuring children to eat on intake and affect",
+      "organization": "Appetite",
+      "publication_year": 2006,
+      "url": "https://doi.org/10.1016/j.appet.2006.01.019",
+      "specialties": [
+        "pediatrics",
+        "general_medicine",
+        "gastroenterology"
+      ],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "chunks": [
+        "Finish your soup: counterproductive effects of pressuring children to eat on intake and affect. Tema: rechazo de sólidos y alimentación a los 12-18 meses. Hallazgo: Galloway, Fiorito, Francis y Birch 2006, estudio experimental. Los niños comieron significativamente más cuando NO se les presionó a comer, e hicieron muchos menos comentarios negativos sobre la comida. La presión habitual en casa se asoció con peor respuesta afectiva hacia el alimento presionado.",
+        "Finish your soup: counterproductive effects of pressuring children to eat on intake and affect: implicación práctica para padres de un bebé de 12-18 meses. Forzar es contraproducente incluso a corto plazo. Apoya la división de responsabilidad: los padres deciden qué, cuándo y dónde; el niño decide cuánto y si come. Ofrecer sin presión y dejar autoalimentación con trozos."
+      ]
+    },
+    {
+      "source_type": "review",
+      "title": "Repeated Exposure to Foods and Early Food Acceptance: A Systematic Review (USDA NESR)",
+      "organization": "USDA Nutrition Evidence Systematic Review / NCBI Bookshelf",
+      "publication_year": 2020,
+      "url": "https://www.ncbi.nlm.nih.gov/books/NBK582166/",
+      "specialties": [
+        "pediatrics",
+        "general_medicine",
+        "gastroenterology"
+      ],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "chunks": [
+        "Repeated Exposure to Foods and Early Food Acceptance: A Systematic Review (USDA NESR). Tema: rechazo de sólidos y alimentación a los 12-18 meses. Hallazgo: Revisión sistemática USDA NESR (41 artículos, 0-24 meses). Evidencia moderada de ensayos controlados: ofrecer un alimento al día durante 8-10 o más exposiciones aumenta su aceptación en niños de 4-24 meses; el rango total en los estudios fue de 6 a 15 exposiciones. El efecto generaliza a alimentos de la misma categoría.",
+        "Repeated Exposure to Foods and Early Food Acceptance: A Systematic Review (USDA NESR): implicación práctica para padres de un bebé de 12-18 meses. Reintroducir el alimento rechazado sin presión, en raciones pequeñas, durante 8-15 exposiciones antes de concluir que no le gusta; dos o tres intentos no bastan."
+      ]
+    }
+  ]
+}
