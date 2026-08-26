@@ -7,7 +7,7 @@
   },
   "sources": [
     {
-      "source_type": "study",
+      "source_type": "paper",
       "title": "Transition to Child Care: Associations With Infant-Mother Attachment, Infant Negative Emotion, and Cortisol Elevations",
       "organization": "Child Development",
       "publication_year": 2004,
@@ -24,7 +24,7 @@
       ]
     },
     {
-      "source_type": "study",
+      "source_type": "paper",
       "title": "Wiener Kinderkrippenstudie (WiKi) — La fase de adaptación de niños pequeños en guarderías vienesas",
       "organization": "Instituto de Ciencias de la Educación",
       "publication_year": 2007,
@@ -41,7 +41,7 @@
       ]
     },
     {
-      "source_type": "meta_analysis",
+      "source_type": "paper",
       "title": "Children's elevated cortisol levels at daycare: A review and meta-analysis",
       "organization": "Early Childhood Research Quarterly",
       "publication_year": 2006,
@@ -58,7 +58,7 @@
       ]
     },
     {
-      "source_type": "review",
+      "source_type": "paper",
       "title": "Daycare Attendance, Stress, and Mental Health",
       "organization": "The Canadian Journal of Psychiatry",
       "publication_year": 2006,
@@ -75,7 +75,7 @@
       ]
     },
     {
-      "source_type": "meta_analysis",
+      "source_type": "paper",
       "title": "Young children's cortisol levels at out-of-home child care: A meta-analysis (actualización de Vermeer & van IJzendoorn 2006 y Geoffroy et al. 2006)",
       "organization": "Early Childhood Research Quarterly",
       "publication_year": 2023,
@@ -126,7 +126,7 @@
       ]
     },
     {
-      "source_type": "meta_analysis",
+      "source_type": "paper",
       "title": "Security of Children's Relationships With Nonparental Care Providers: A Meta-Analysis",
       "organization": "Child Development",
       "publication_year": 2006,
@@ -143,7 +143,7 @@
       ]
     },
     {
-      "source_type": "study",
+      "source_type": "paper",
       "title": "Children's Relationships With Child Care Teachers: Stability and Concordance With Parental Attachments",
       "organization": "Child Development",
       "publication_year": 1992,
@@ -160,7 +160,7 @@
       ]
     },
     {
-      "source_type": "study",
+      "source_type": "paper",
       "title": "The Changing Experience of Child Care: Changes in Teachers and in Teacher-Child Relationships and Children's Social Competence With Peers",
       "organization": "Early Childhood Research Quarterly",
       "publication_year": 1993,
@@ -177,7 +177,7 @@
       ]
     },
     {
-      "source_type": "study",
+      "source_type": "paper",
       "title": "Associations Between Continuity of Care in Infant-Toddler Classrooms and Child Outcomes",
       "organization": "Early Childhood Research Quarterly",
       "publication_year": 2018,
@@ -194,7 +194,7 @@
       ]
     },
     {
-      "source_type": "study",
+      "source_type": "paper",
       "title": "Effects of Child-Caregiver Ratio on the Interactions Between Caregivers and Children in Child-Care Centers: An Experimental Study",
       "organization": "Child Development",
       "publication_year": 2006,
@@ -211,7 +211,7 @@
       ]
     },
     {
-      "source_type": "study",
+      "source_type": "paper",
       "title": "Characteristics of Infant Child Care: Factors Contributing to Positive Caregiving",
       "organization": "Early Childhood Research Quarterly",
       "publication_year": 1996,
@@ -228,7 +228,7 @@
       ]
     },
     {
-      "source_type": "meta_analysis",
+      "source_type": "paper",
       "title": "Young Children's Cortisol Levels at Out-of-Home Child Care: A Meta-Analysis",
       "organization": "Early Childhood Research Quarterly",
       "publication_year": 2023,
@@ -245,7 +245,7 @@
       ]
     },
     {
-      "source_type": "study",
+      "source_type": "paper",
       "title": "Understanding Cortisol Reactivity Across the Day at Child Care: The Potential Buffering Role of Secure Attachments to Caregivers",
       "organization": "Early Childhood Research Quarterly",
       "publication_year": 2012,
@@ -279,7 +279,7 @@
       ]
     },
     {
-      "source_type": "study",
+      "source_type": "paper",
       "title": "Influence of attendance at day care on the common cold from birth through 13 years of age",
       "organization": "Archives of Pediatrics & Adolescent Medicine",
       "publication_year": 2002,
@@ -296,7 +296,7 @@
       ]
     },
     {
-      "source_type": "study",
+      "source_type": "paper",
       "title": "Impact of early daycare on healthcare resource use related to upper respiratory tract infections during childhood: prospective WHISTLER cohort study",
       "organization": "BMC Medicine 12:107",
       "publication_year": 2014,
@@ -313,7 +313,7 @@
       ]
     },
     {
-      "source_type": "study",
+      "source_type": "paper",
       "title": "Symptom Burden and Factors Associated with Acute Respiratory Infections in the First Two Years of Life — Results from the LoewenKIDS Cohort",
       "organization": "Microorganisms 10(1):111",
       "publication_year": 2022,
@@ -381,7 +381,7 @@
       ]
     },
     {
-      "source_type": "review",
+      "source_type": "paper",
       "title": "El niño roncador",
       "organization": "FAPap (Formación Activa en Pediatría de Atención Primaria)",
       "publication_year": 2011,
@@ -398,7 +398,7 @@
       ]
     },
     {
-      "source_type": "review",
+      "source_type": "paper",
       "title": "Immunological Mechanisms of Sickness Behavior in Viral Infection",
       "organization": "Viruses 13(11):2245",
       "publication_year": 2021,
@@ -415,7 +415,7 @@
       ]
     },
     {
-      "source_type": "study",
+      "source_type": "paper",
       "title": "La adaptación a la escuela: un camino a recorrer",
       "organization": "Familia y Salud (AEPap)",
       "publication_year": 2018,
@@ -483,7 +483,7 @@
       ]
     },
     {
-      "source_type": "study",
+      "source_type": "paper",
       "title": "Relationship Building Between Toddlers and New Caregivers in Out-of-Home Childcare: Attachment Security and Caregiver Sensitivity",
       "organization": "Early Childhood Research Quarterly",
       "publication_year": 2017,
@@ -500,7 +500,7 @@
       ]
     },
     {
-      "source_type": "study",
+      "source_type": "paper",
       "title": "Toddlers' Stress During Transition to Childcare",
       "organization": "European Early Childhood Education Research Journal",
       "publication_year": 2021,
@@ -517,7 +517,7 @@
       ]
     },
     {
-      "source_type": "study",
+      "source_type": "paper",
       "title": "Trajectories of picky eating during childhood: A general population study",
       "organization": "International Journal of Eating Disorders",
       "publication_year": 2015,
@@ -535,7 +535,7 @@
       ]
     },
     {
-      "source_type": "study",
+      "source_type": "paper",
       "title": "Do toddlers' levels of cortisol and the perceptions of parents and professional caregivers tell the same story about transition from home to childcare? A mixed method study",
       "organization": "Frontiers in Psychology",
       "publication_year": 2023,
@@ -553,7 +553,7 @@
       ]
     },
     {
-      "source_type": "review",
+      "source_type": "paper",
       "title": "Starvation and infection: The role of sickness-associated anorexia in metabolic adaptation during acute infection",
       "organization": "Metabolism: Clinical and Experimental",
       "publication_year": 2024,
@@ -625,7 +625,7 @@
       ]
     },
     {
-      "source_type": "review",
+      "source_type": "paper",
       "title": "Growth Faltering and Failure to Thrive in Children",
       "organization": "American Family Physician (AAFP)",
       "publication_year": 2023,
@@ -661,7 +661,7 @@
       ]
     },
     {
-      "source_type": "study",
+      "source_type": "paper",
       "title": "Finish your soup: counterproductive effects of pressuring children to eat on intake and affect",
       "organization": "Appetite",
       "publication_year": 2006,
@@ -679,7 +679,7 @@
       ]
     },
     {
-      "source_type": "review",
+      "source_type": "paper",
       "title": "Repeated Exposure to Foods and Early Food Acceptance: A Systematic Review (USDA NESR)",
       "organization": "USDA Nutrition Evidence Systematic Review / NCBI Bookshelf",
       "publication_year": 2020,
