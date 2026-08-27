@@ -74,9 +74,7 @@ def get_bot_url() -> str:
     Requires bot username configured externally — derives heuristically from
     TELEGRAM_BOT_TOKEN if not. For v0.2 we expect ADELIA_BOT_USERNAME or fallback.
     """
-    # Bot username typically derived from BotFather; not in token itself.
-    # Spec calls this "@adelia_vault_bot" — confirm with user when activating.
-    return "https://t.me/adelia_vault_bot"
+    return f"https://t.me/{settings.telegram_bot_username}"
 
 
 async def link_user_by_chat_id(
@@ -132,113 +130,87 @@ def validate_telegram_secret(header_value: str | None) -> bool:
 
 
 async def handle_update(update_data: dict) -> dict:
-    """Process a Telegram Update payload.
+    """Process a Telegram Update and REPLY through the Bot API.
 
-    Returns a small dict with {action, status, details} for logging/response.
-
-    Supported actions:
-    - /start <token>      → link user to chat_id
-    - any text msg        → reply with instructions
-    - photo / document /
-      voice / audio       → download via Bot API + POST /documents
+    - /start <token>           → link user to chat_id
+    - text (non-command)       → today's diary entry (text/plain document)
+    - voice / audio            → today's diary entry (transcribed by the pipeline)
+    - photo / document         → regular document ingestion
+    The reply is sent with sendMessage (Telegram ignores webhook response
+    bodies); the returned dict is for logging/tests only.
     """
     from adelia.db import AsyncSessionLocal
+    from adelia.services import telegram_diary as diary
 
     msg = update_data.get("message")
     if msg is None:
         return {"action": "ignore", "status": "ok", "reason": "non-message update"}
-
     chat = msg.get("chat", {})
     chat_id = chat.get("id")
     if not chat_id:
         return {"action": "ignore", "status": "ok", "reason": "no chat_id"}
-
-    text = msg.get("text", "")
+    text = (msg.get("text") or "").strip()
     from_user = msg.get("from", {})
     username = from_user.get("username")
 
-    # /start <token> command
+    async def reply(action: str, status: str, body: str, **extra) -> dict:
+        await diary.tg_send(int(chat_id), body)
+        return {"action": action, "status": status, "reply": body, **extra}
+
     if text.startswith("/start"):
         parts = text.split(maxsplit=1)
         if len(parts) < 2:
-            return {
-                "action": "start_no_token",
-                "status": "instructions",
-                "reply": "Para enlazar tu cuenta, copia el token de tu dashboard AdelIA y envía '/start <token>'.",
-            }
-        token = parts[1].strip()
-        user_id = decode_link_token(token)
+            return await reply("start_no_token", "instructions",
+                               "Para enlazar tu cuenta, copia el token de tu panel AdelIA "
+                               "(Importar → Telegram) y envía: /start TOKEN")
+        user_id = decode_link_token(parts[1].strip())
         if user_id is None:
-            return {
-                "action": "start_invalid_token",
-                "status": "error",
-                "reply": "Token inválido o expirado. Genera uno nuevo desde tu dashboard AdelIA.",
-            }
+            return await reply("start_invalid_token", "error",
+                               "Token inválido o caducado. Genera uno nuevo desde tu panel AdelIA.")
         async with AsyncSessionLocal() as session:
-            await link_user_by_chat_id(
-                session, user_id=user_id, chat_id=chat_id, username=username
-            )
+            await link_user_by_chat_id(session, user_id=user_id, chat_id=chat_id, username=username)
             await session.commit()
-        return {
-            "action": "linked",
-            "status": "ok",
-            "user_id": str(user_id),
-            "reply": "✅ Cuenta AdelIA enlazada. Reenvía aquí PDFs, fotos o audios médicos y los ingestaré automáticamente.",
-        }
+        return await reply("linked", "ok",
+                           "✅ Cuenta enlazada. Cada tarde te preguntaré cómo ha ido el día: "
+                           "respóndeme en texto o con un audio y lo guardo en su diario. "
+                           "También puedes reenviarme informes, fotos o PDFs.",
+                           user_id=str(user_id))
 
-    # File-bearing message — would download + POST /documents in production.
-    # Implementation here is a stub: returns metadata for verification.
-    file_info: dict | None = None
-    if "photo" in msg:
-        photos = msg["photo"]  # list of size variants
-        biggest = photos[-1] if photos else None
-        if biggest:
-            file_info = {"type": "photo", "file_id": biggest.get("file_id")}
-    elif "document" in msg:
-        doc = msg["document"]
-        file_info = {
-            "type": "document",
-            "file_id": doc.get("file_id"),
-            "filename": doc.get("file_name"),
-            "mime_type": doc.get("mime_type"),
-        }
-    elif "voice" in msg:
-        voice = msg["voice"]
-        file_info = {"type": "voice", "file_id": voice.get("file_id")}
-    elif "audio" in msg:
-        audio = msg["audio"]
-        file_info = {
-            "type": "audio",
-            "file_id": audio.get("file_id"),
-            "filename": audio.get("file_name"),
-        }
-
-    if file_info is None:
-        return {
-            "action": "text_only",
-            "status": "instructions",
-            "reply": "Reenvía un PDF, foto o audio médico aquí y lo ingestaré automáticamente.",
-        }
-
-    # Look up linked user
     async with AsyncSessionLocal() as session:
         user_id = await lookup_user_by_chat_id(session, chat_id=chat_id)
-
     if user_id is None:
-        return {
-            "action": "no_link",
-            "status": "error",
-            "reply": "No has enlazado tu cuenta aún. Visita /dashboard/ingestion en AdelIA para obtener un token de enlace.",
-        }
+        return await reply("no_link", "error",
+                           "Aún no has enlazado tu cuenta. En AdelIA: Importar → Telegram → copia el token "
+                           "y envíame: /start TOKEN")
 
-    # Production: download file via Bot API + POST /documents.
-    # The download flow needs TELEGRAM_BOT_TOKEN + 2 API calls (getFile → download URL).
-    # Deferred to v0.2.1 to keep this commit's diff focused — handler shape stable now.
-    return {
-        "action": "file_received",
-        "status": "queued",
-        "user_id": str(user_id),
-        "file_info": file_info,
-        "reply": "📥 Recibido. Procesando...",
-        "todo": "Download + POST /documents wiring deferred to v0.2.1",
-    }
+    if text and not text.startswith("/"):
+        try:
+            doc = await diary.diary_from_text(user_id=user_id, chat_id=int(chat_id), text=text)
+        except Exception:  # noqa: BLE001
+            logger.exception("diary_from_text failed chat_id=%s", chat_id)
+            return await reply("diary_error", "error", "No he podido guardarlo. ¿Me lo repites?")
+        return await reply("diary_text", "ok", "Anotado en el diario de hoy ✓", document_id=str(doc.id))
+
+    file_id, kind, filename = None, None, None
+    if "voice" in msg:
+        file_id, kind = msg["voice"].get("file_id"), "voice"
+    elif "audio" in msg:
+        file_id, kind, filename = msg["audio"].get("file_id"), "audio", msg["audio"].get("file_name")
+    elif "photo" in msg:
+        photos = msg["photo"]
+        file_id, kind = (photos[-1].get("file_id") if photos else None), "photo"
+    elif "document" in msg:
+        file_id, kind, filename = msg["document"].get("file_id"), "document", msg["document"].get("file_name")
+
+    if not file_id:
+        return await reply("unsupported", "instructions",
+                           "Cuéntame el día en texto o con un audio, o reenvíame un informe, foto o PDF.")
+    try:
+        doc = await diary.diary_from_file(user_id=user_id, chat_id=int(chat_id), file_id=file_id,
+                                          kind=kind, filename=filename)
+    except Exception:  # noqa: BLE001
+        logger.exception("diary_from_file failed chat_id=%s kind=%s", chat_id, kind)
+        return await reply("file_error", "error", "No he podido descargar el archivo. ¿Me lo envías otra vez?")
+    body = ("🎙 Recibido. Lo transcribo y te digo qué he entendido en un momento."
+            if kind in ("voice", "audio") else "📥 Recibido. Lo proceso y lo añado al historial.")
+    return await reply("file_received", "queued", body, document_id=str(doc.id), kind=kind)

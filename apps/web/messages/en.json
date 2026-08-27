@@ -203,6 +203,7 @@
     "navHistory": "History",
     "navSettings": "Settings",
     "consultaDocTitle": "Visit on {date}",
+    "diaryDocTitle": "Diary, {date}",
     "speakerLabel": "Speaker {n}",
     "deleteDoc": "Delete this document",
     "deleteDocConfirm": "Delete it for good? This cannot be undone.",

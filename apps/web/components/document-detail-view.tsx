@@ -116,13 +116,15 @@ export function DocumentDetailView({
 
   const isConsulta = doc.source === "consulta";
   // "consulta-2026-08-20.webm" is a filename, not a title a mom should read.
+  const longDate = (iso: string) =>
+    new Intl.DateTimeFormat(locale, { dateStyle: "long" }).format(new Date(iso));
+  // Telegram diary entries are titled by the day they describe, not by
+  // the "diario-2026-08-27.ogg" filename the bot generated.
   const title = isConsulta
-    ? t("consultaDocTitle", {
-        date: new Intl.DateTimeFormat(locale, { dateStyle: "long" }).format(
-          new Date(doc.created_at),
-        ),
-      })
-    : doc.file_name;
+    ? t("consultaDocTitle", { date: longDate(doc.created_at) })
+    : doc.diary_date
+      ? t("diaryDocTitle", { date: longDate(`${doc.diary_date}T12:00:00`) })
+      : doc.file_name;
   const turns = isConsulta && doc.raw_text ? parseDiarized(doc.raw_text) : null;
   return (
     <main className="mx-auto max-w-3xl px-6 py-12">

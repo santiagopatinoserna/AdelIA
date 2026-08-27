@@ -10,14 +10,16 @@ export function DocumentCard({ doc, locale }: { doc: DocumentDTO; locale: string
   const isConsulta = doc.source === "consulta";
   // Recordings get a human title ("Consulta del 20 de agosto de 2026"), not
   // the raw filename the recorder generated.
+  const longDate = (iso: string) =>
+    new Intl.DateTimeFormat(locale, { dateStyle: "long" }).format(new Date(iso));
+  // Telegram diary entries are titled by the day they describe, not by
+  // the "diario-2026-08-27.ogg" filename the bot generated.
   const title = isConsulta
-    ? t("consultaDocTitle", {
-        date: new Intl.DateTimeFormat(locale, { dateStyle: "long" }).format(
-          new Date(doc.created_at),
-        ),
-      })
-    : doc.file_name;
-  const Icon = isConsulta ? Mic : FileText;
+    ? t("consultaDocTitle", { date: longDate(doc.created_at) })
+    : doc.diary_date
+      ? t("diaryDocTitle", { date: longDate(`${doc.diary_date}T12:00:00`) })
+      : doc.file_name;
+  const Icon = isConsulta || (doc.diary_date && doc.mime_type.startsWith("audio/")) ? Mic : FileText;
   return (
     <Link
       href={`/dashboard/documents/${doc.id}`}

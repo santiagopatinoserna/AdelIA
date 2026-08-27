@@ -113,6 +113,7 @@ def _doc_to_out(doc: Document, *, entity_count: int = 0, chunk_count: int = 0) -
         chunk_count=chunk_count,
         speaker_names=(doc.document_metadata or {}).get("speaker_names"),
         summary=(doc.document_metadata or {}).get("summary"),
+        diary_date=(doc.document_metadata or {}).get("diary_date"),
     )
 
 
@@ -158,6 +159,8 @@ async def _process_document_inner(document_id: uuid.UUID, mime_type: str, is_con
         s3_key = doc.s3_key
         user_id = doc.user_id
         profile_id = doc.profile_id
+        preset_text = doc.raw_text or ""
+        notify_telegram = bool((doc.document_metadata or {}).get("telegram_chat_id"))
 
     raw_text = ""
     summary: str | None = None
@@ -175,6 +178,9 @@ async def _process_document_inner(document_id: uuid.UUID, mime_type: str, is_con
             )
         elif mime_type == "application/pdf" or mime_type.startswith("image/"):
             raw_text = await _with_retry("ocr", lambda: extract_text_from_pdf(body, mime_type))
+        elif mime_type.startswith("text/"):
+            # Diary/notes arrive already as text (Telegram, in-app): no stage 1.
+            raw_text = preset_text
 
         if raw_text and is_consulta:
             # Courtesy stage for recordings: a few strict bullets so the mom
@@ -283,6 +289,13 @@ async def _process_document_inner(document_id: uuid.UUID, mime_type: str, is_con
                 **({"summary": summary} if summary else {}),
             }
         await session.commit()
+
+    if notify_telegram:
+        from adelia.services.telegram_diary import notify_processed
+        try:
+            await notify_processed(document_id)
+        except Exception:  # noqa: BLE001 — a failed nudge never fails the pipeline
+            logger.exception("telegram notify failed for document_id=%s", document_id)
 
 
 @router.post("", response_model=DocumentOut, status_code=status.HTTP_201_CREATED)

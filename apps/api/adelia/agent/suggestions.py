@@ -10,6 +10,8 @@ class ProfileState:
     unprocessed_docs: int
     stale_briefing: bool
     is_child: bool
+    telegram_linked: bool = False
+    diary_today: bool = False
 
 def _cid() -> str:
     return uuid4().hex[:12]
@@ -27,11 +29,18 @@ async def _gather_state(*, user_id: UUID, profile_id: UUID | None) -> ProfileSta
             select(func.count()).select_from(Document)
             .where(Document.user_id == user_id, Document.deleted_at.is_(None),
                    Document.processed_at.is_(None)))
+        from adelia.models import TelegramLink
+        from adelia.services.telegram_diary import has_diary_for, today_iso
+        linked = await session.scalar(
+            select(func.count()).select_from(TelegramLink).where(TelegramLink.user_id == user_id))
+        diary_today = await has_diary_for(session, user_id, today_iso())
         return ProfileState(
             has_dob=bool(prof and prof.date_of_birth),
             unprocessed_docs=int(unprocessed or 0),
             stale_briefing=False,
-            is_child=bool(prof and prof.relationship == "child"))
+            is_child=bool(prof and prof.relationship == "child"),
+            telegram_linked=bool(linked),
+            diary_today=bool(diary_today))
 
 async def build_suggestions(*, user_id: UUID, profile_id: UUID | None, locale: str = "es") -> list[dict]:
     state = await _gather_state(user_id=user_id, profile_id=profile_id)
@@ -39,6 +48,16 @@ async def build_suggestions(*, user_id: UUID, profile_id: UUID | None, locale: s
     if state.is_child and not state.has_dob:
         out.append(cards.card_question(_cid(), "date_of_birth",
                                        "¿Cuál es la fecha de nacimiento del bebé?", input_type="date"))
+    if not state.diary_today:
+        if state.telegram_linked:
+            out.append(cards.card_action(_cid(), "¿Cómo ha ido hoy?",
+                                         "Cuéntamelo por Telegram, en texto o con un audio, y lo guardo en su diario.",
+                                         "Abrir Telegram", "daily_diary"))
+        else:
+            out.append(cards.card_action(_cid(), "Diario diario por Telegram",
+                                         "Enlaza Telegram y cada tarde te preguntaré cómo ha ido el día. "
+                                         "Respondes con un audio y listo.",
+                                         "Enlazar", "link_telegram"))
     if state.unprocessed_docs:
         out.append(cards.card_action(_cid(), "Documentos sin procesar",
                                      f"Tienes {state.unprocessed_docs} documento(s) por procesar.",

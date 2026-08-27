@@ -42,6 +42,8 @@ export type DocumentDTO = {
   speaker_names?: Record<string, string> | null;
   // Post-recording essence bullets (consulta docs only, best-effort).
   summary?: string | null;
+  /** Daily diary entries (Telegram): ISO date the entry is about. */
+  diary_date?: string | null;
 };
 
 export type TelegramLinkDTO = {

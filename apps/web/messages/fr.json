@@ -203,6 +203,7 @@
     "navHistory": "Historique",
     "navSettings": "Réglages",
     "consultaDocTitle": "Consultation du {date}",
+    "diaryDocTitle": "Journal du {date}",
     "speakerLabel": "Intervenant {n}",
     "deleteDoc": "Supprimer ce document",
     "deleteDocConfirm": "Le supprimer définitivement ? Impossible d'annuler.",
