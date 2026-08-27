@@ -248,7 +248,8 @@ main() {
     shift
   fi
 
-  local requested_services="${1:-api web}"
+  # Accept both `deploy-prod.sh "api web"` and `deploy-prod.sh api web`.
+  local requested_services="${*:-api web}"
   local host
 
   log "==> AdelIA prod deploy"
