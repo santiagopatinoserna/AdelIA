@@ -150,7 +150,10 @@ async def test_handle_update_text_only_message():
         }
     }
     res = await handle_update(update)
-    assert res["action"] == "text_only"
+    # Telegram-first diary: text from an unlinked chat gets linking instructions
+    # (a linked chat would get a diary entry, see tests/test_telegram_diary.py).
+    assert res["action"] == "no_link"
+    assert "/start" in res["reply"]
     assert "Reenvía" in res["reply"]
 
 
