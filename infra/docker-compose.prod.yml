@@ -77,6 +77,13 @@ services:
       STRIPE_SECRET_KEY: ${STRIPE_SECRET_KEY:-}
       STRIPE_WEBHOOK_SECRET: ${STRIPE_WEBHOOK_SECRET:-}
       STRIPE_PRICE_ID: ${STRIPE_PRICE_ID:-}
+      # Telegram-first daily diary (bot replies + 20:00 reminder). Empty
+      # token = feature off; the webhook endpoint answers 401.
+      TELEGRAM_BOT_TOKEN: ${TELEGRAM_BOT_TOKEN:-}
+      TELEGRAM_WEBHOOK_SECRET: ${TELEGRAM_WEBHOOK_SECRET:-}
+      TELEGRAM_BOT_USERNAME: ${TELEGRAM_BOT_USERNAME:-Adelia_godiai_bot}
+      DIARY_REMINDER_HOUR: ${DIARY_REMINDER_HOUR:-20}
+      DIARY_REMINDER_TZ: ${DIARY_REMINDER_TZ:-Europe/Madrid}
     ports:
       - "${API_PORT:-8000}:8000"
     healthcheck:
