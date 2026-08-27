@@ -48,12 +48,15 @@ async def telegram_webhook(
 
 
 @router.get("/telegram/link")
-async def telegram_link(user_id: UUID = Depends(get_current_user_id)):
+async def telegram_link(user_id: UUID = Depends(get_current_user_id), locale: str = "es"):
     """Mint a signed link token + return bot URL. User pastes token into
-    Telegram chat with the bot via /start <token>."""
+    Telegram chat with the bot via /start <token>. `locale` (the UI locale)
+    travels inside the token so the bot answers in that language."""
     if not settings.auth_secret:
         raise HTTPException(status_code=503, detail="AUTH_SECRET not configured")
-    token = mint_link_token(user_id)
+    if not settings.telegram_bot_token:
+        raise HTTPException(status_code=503, detail="Telegram bot not configured")
+    token = mint_link_token(user_id, locale)
     return {
         "bot_url": get_bot_url(),
         "link_token": token,

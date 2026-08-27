@@ -21,7 +21,7 @@ from adelia.auth import get_current_user_id
 from adelia.config import settings
 from adelia.db import AsyncSessionLocal, get_db
 from adelia.enrichment import profile_service
-from adelia.models import BlobTombstone, Chunk, ConsentEvent, Document, Entity
+from adelia.models import BlobTombstone, Chunk, ConsentEvent, Document, Entity, Profile
 from adelia.schemas import DocumentOut, ExtractedEntity, derive_status
 from adelia.services import briefing_repo
 from adelia.storage import S3Storage
@@ -92,6 +92,13 @@ async def _with_retry(stage: str, make_call):
     raise last_exc
 
 
+def _text_after_failure(mime_type: str, raw_text: str) -> str:
+    """What survives a pipeline failure: a text document (Telegram diary,
+    notes) already IS its text, so a failed extract/embed keeps it; for
+    audio/pdf/image an empty raw_text marks the document as failed."""
+    return raw_text if mime_type.startswith("text/") else ""
+
+
 def _file_name_from_key(s3_key: str) -> str:
     """users/{uid}/{uuid4}-{safe_name} → safe_name (the user-facing name)."""
     leaf = s3_key.rsplit("/", 1)[-1]
@@ -160,7 +167,16 @@ async def _process_document_inner(document_id: uuid.UUID, mime_type: str, is_con
         user_id = doc.user_id
         profile_id = doc.profile_id
         preset_text = doc.raw_text or ""
-        notify_telegram = bool((doc.document_metadata or {}).get("telegram_chat_id"))
+        meta = doc.document_metadata or {}
+        notify_telegram = bool(meta.get("telegram_chat_id"))
+        # Telegram diary/caption context (see adelia.services.telegram_diary).
+        diary_date = meta.get("diary_date") or None
+        caption = (meta.get("caption") or "").strip()
+        doc_locale = meta.get("locale") or "es"
+        profile_name: str | None = None
+        if diary_date and profile_id is not None:
+            profile = await session.get(Profile, profile_id)
+            profile_name = profile.display_name if profile is not None else None
 
     raw_text = ""
     summary: str | None = None
@@ -178,9 +194,21 @@ async def _process_document_inner(document_id: uuid.UUID, mime_type: str, is_con
             )
         elif mime_type == "application/pdf" or mime_type.startswith("image/"):
             raw_text = await _with_retry("ocr", lambda: extract_text_from_pdf(body, mime_type))
+            if caption and raw_text is not None:
+                # A photo/PDF caption ("Analítica 12/08, Dra. X") is context
+                # worth indexing with the OCR text.
+                raw_text = f"{caption}\n\n{raw_text}".strip()
         elif mime_type.startswith("text/"):
             # Diary/notes arrive already as text (Telegram, in-app): no stage 1.
-            raw_text = preset_text
+            # A forwarded .txt/.md has no preset text: read the stored body.
+            raw_text = preset_text or body.decode("utf-8", errors="replace").strip()
+
+        if raw_text and diary_date and not is_consulta and _is_audio(mime_type):
+            # Voice diary entries get the same "Diario de <name>, <date>."
+            # header as text ones, so chunks and entities carry the day.
+            from adelia.services.telegram_diary import render_diary_text
+
+            raw_text = render_diary_text(raw_text, diary_date, profile_name, doc_locale)
 
         if raw_text and is_consulta:
             # Courtesy stage for recordings: a few strict bullets so the mom
@@ -197,7 +225,9 @@ async def _process_document_inner(document_id: uuid.UUID, mime_type: str, is_con
         if raw_text:
             # Stage 2: entity extraction (ids assigned now for entity_ranges)
             extracted: list[ExtractedEntity] = await _with_retry(
-                "extract", lambda: extract_entities(raw_text)
+                "extract",
+                lambda: (extract_entities(raw_text, diary_date=diary_date) if diary_date
+                         else extract_entities(raw_text)),
             )
             entity_ranges: dict[str, tuple[int, int]] = {}
             for ex in extracted:
@@ -253,17 +283,19 @@ async def _process_document_inner(document_id: uuid.UUID, mime_type: str, is_con
                 ))
     except (RuntimeError, httpx.HTTPError, MistralError, ClientError, EndpointConnectionError, OpenAIAPIError) as exc:
         logger.exception("process_document failed for document_id=%s: %s", document_id, exc)
-        raw_text, entities, chunks = "", [], []
+        raw_text, entities, chunks = _text_after_failure(mime_type, raw_text), [], []
     except Exception as exc:  # noqa: BLE001 — final fallback to set processed_at
         logger.exception("process_document unexpected failure for document_id=%s: %s", document_id, exc)
-        raw_text, entities, chunks = "", [], []
+        raw_text, entities, chunks = _text_after_failure(mime_type, raw_text), [], []
 
     # Short write: persist everything in one quick transaction.
     async with AsyncSessionLocal() as session:
         doc = await session.get(Document, document_id)
         if doc is None:
             return
-        doc.raw_text = raw_text or None
+        # A text document (diary entry) keeps the text the parent wrote even
+        # when extract/embed failed: the entry must never vanish from the DB.
+        doc.raw_text = raw_text or (preset_text if mime_type.startswith("text/") else "") or None
         if entities:
             session.add_all(entities)
         if chunks:

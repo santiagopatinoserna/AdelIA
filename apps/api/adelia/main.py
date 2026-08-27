@@ -36,6 +36,10 @@ if not logging.getLogger("adelia").handlers:
     _handler.setFormatter(logging.Formatter("%(asctime)s %(levelname)s %(name)s %(message)s"))
     logging.getLogger("adelia").addHandler(_handler)
     logging.getLogger("adelia").setLevel(logging.INFO)
+# Never print the Telegram bot token (part of every Bot API URL) in logs.
+from adelia.services.telegram_diary import install_log_redaction  # noqa: E402
+
+install_log_redaction()
 
 
 SWEEP_INTERVAL_S = 3600
@@ -54,21 +58,32 @@ async def _periodic_tombstone_sweep() -> None:
             logger.exception("periodic blob tombstone sweep failed")
 
 
+def seconds_until_next_reminder(now, hour: int) -> float:
+    """Real seconds from `now` (aware, local tz) to the next `hour`:00 local.
+
+    Computed on epoch timestamps, not on the wall-clock timedelta: two
+    datetimes sharing one ZoneInfo subtract their naive values, which is
+    24 h on a DST day when the real gap is 23 h or 25 h (a reminder one hour
+    late in March, two reminders in October)."""
+    from datetime import timedelta
+
+    target = now.replace(hour=hour, minute=0, second=0, microsecond=0)
+    if target <= now:
+        target += timedelta(days=1)
+    return max(0.0, target.timestamp() - now.timestamp())
+
+
 async def _daily_diary_reminder() -> None:
     """Telegram-first daily diary: at diary_reminder_hour (local tz) nudge
     every linked chat that hasn't written today's entry."""
-    from datetime import datetime, timedelta
+    from datetime import datetime
     from zoneinfo import ZoneInfo
 
     from adelia.services.telegram_diary import send_daily_reminders
 
     tz = ZoneInfo(settings.diary_reminder_tz)
     while True:
-        now = datetime.now(tz)
-        target = now.replace(hour=settings.diary_reminder_hour, minute=0, second=0, microsecond=0)
-        if target <= now:
-            target += timedelta(days=1)
-        await asyncio.sleep((target - now).total_seconds())
+        await asyncio.sleep(seconds_until_next_reminder(datetime.now(tz), settings.diary_reminder_hour))
         try:
             sent = await send_daily_reminders()
             logger.info("daily diary reminder sent to %d chat(s)", sent)

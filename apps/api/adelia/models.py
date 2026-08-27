@@ -222,6 +222,9 @@ class TelegramLink(Base):
     chat_id = Column(BigInteger, nullable=False, unique=True)
     username = Column(String(64))
     linked_at = Column(DateTime(timezone=True), server_default=func.now(), nullable=False)
+    # UI locale at /start time (es/en/fr): the bot replies, reminders and
+    # diary headers use it. Older rows default to Spanish.
+    locale = Column(String(8), nullable=False, server_default=text("'es'"), default="es")
 
 
 class EmailAlias(Base):

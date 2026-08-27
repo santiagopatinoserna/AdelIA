@@ -16,6 +16,23 @@ PG_ENV=(POSTGRES_HOST=localhost POSTGRES_PORT=5434 POSTGRES_USER=adelia
 S3_ENV=(S3_ENDPOINT_URL=http://localhost:9000 S3_ACCESS_KEY=minioadmin
         S3_SECRET_KEY=minioadmin S3_BUCKET=adelia-dev)
 AUTH_ENV=(AUTH_SECRET=ci-only-secret AUTH_TRUST_HOST=true)
+# Diary cards (agent suggestions) are only offered when a bot token exists;
+# the diary e2e needs one. Dummy value: nothing here talks to Telegram.
+TELEGRAM_ENV=(TELEGRAM_BOT_TOKEN=e2e-dummy)
+# Live Mistral tests (OCR/embed/extract/Voxtral/clinical) self-skip without
+# MISTRAL_API_KEY. The key comes ONLY from an operator-private file, never
+# from /opt/adelia (prod):  install -m 600 /dev/null ~/.config/godi/adelia-mistral.env
+# and write MISTRAL_API_KEY=<dev key>. It always reaches the e2e api boot;
+# it reaches pytest only with VERIFY_LIVE=1 (each run then costs real calls).
+MISTRAL_ENV=()
+MISTRAL_ENV_FILE="${HOME}/.config/godi/adelia-mistral.env"
+if [[ -r "${MISTRAL_ENV_FILE}" ]]; then
+  MISTRAL_ENV=("MISTRAL_API_KEY=$(sed -n 's/^MISTRAL_API_KEY=//p' "${MISTRAL_ENV_FILE}" | head -1)")
+fi
+PYTEST_LIVE_ENV=()
+if [[ "${VERIFY_LIVE:-0}" == "1" && ${#MISTRAL_ENV[@]} -gt 0 ]]; then
+  PYTEST_LIVE_ENV=("${MISTRAL_ENV[@]}")
+fi
 
 log() { printf '[verify] %s\n' "$*" >&2; }
 # Kill by command pattern, not PID: `uv run`/`pnpm exec` wrappers orphan the
@@ -50,15 +67,22 @@ for _ in $(seq 1 30); do
 done
 (cd apps/api && env "${PG_ENV[@]}" uv run alembic upgrade head 2>&1 | tail -1)
 
-log "Backend suite..."
-(cd apps/api && env "${PG_ENV[@]}" "${S3_ENV[@]}" AUTH_SECRET=ci-only-secret uv run pytest -q 2>&1 | tail -1)
+if [[ ${#PYTEST_LIVE_ENV[@]} -eq 0 ]]; then
+  log "Backend suite (live Mistral tests skipped: no key or VERIFY_LIVE!=1)..."
+else
+  log "Backend suite (VERIFY_LIVE=1: live Mistral tests enabled)..."
+fi
+# -rs: show WHICH tests were skipped and why, so "N passed, 10 skipped" is
+# never mistaken for full coverage.
+(cd apps/api && env "${PG_ENV[@]}" "${S3_ENV[@]}" "${PYTEST_LIVE_ENV[@]}" AUTH_SECRET=ci-only-secret \
+  uv run pytest -q -rs 2>&1 | grep -E "^SKIPPED|passed|failed|error" | tail -20)
 
 log "Web build..."
 pnpm --filter @adelia/web build 2>&1 | grep -E "✓ Compiled|Error" | head -1
 
 log "Booting api:${API_PORT} + web:${WEB_PORT} for e2e..."
 cleanup
-(cd apps/api && env "${PG_ENV[@]}" "${S3_ENV[@]}" AUTH_SECRET=ci-only-secret \
+(cd apps/api && env "${PG_ENV[@]}" "${S3_ENV[@]}" "${MISTRAL_ENV[@]}" "${TELEGRAM_ENV[@]}" AUTH_SECRET=ci-only-secret \
   nohup uv run uvicorn adelia.main:app --port "${API_PORT}" >/tmp/verify-api.log 2>&1 & echo $! > /tmp/verify-api.pid)
 for _ in $(seq 1 45); do curl -sf "localhost:${API_PORT}/health" >/dev/null && break; sleep 2; done
 curl -sf "localhost:${API_PORT}/health" >/dev/null || { log "API never came up"; tail -5 /tmp/verify-api.log >&2; exit 1; }
@@ -70,9 +94,9 @@ curl -sf "localhost:${API_PORT}/health" >/dev/null || { log "API never came up";
 for _ in $(seq 1 45); do curl -sf -o /dev/null "localhost:${WEB_PORT}/es" && break; sleep 2; done
 curl -sf -o /dev/null "localhost:${WEB_PORT}/es" || { log "web never came up"; tail -5 /tmp/verify-web.log >&2; exit 1; }
 
-log "E2E (recorder + a11y)..."
+log "E2E (recorder + a11y + diary)..."
 (cd apps/web && env "${PG_ENV[@]}" AUTH_SECRET=ci-only-secret \
   E2E_BASE_URL="http://localhost:${WEB_PORT}" \
-  pnpm exec playwright test e2e/consulta-record.spec.ts e2e/a11y.spec.ts --reporter=line 2>&1 | tail -3)
+  pnpm exec playwright test e2e/consulta-record.spec.ts e2e/a11y.spec.ts e2e/diary.spec.ts --reporter=line 2>&1 | tail -3)
 
 log "ALL GREEN — safe to deploy."
