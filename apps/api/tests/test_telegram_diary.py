@@ -755,3 +755,126 @@ async def test_non_ascii_secret_header_is_401(client, monkeypatch):
     resp = await client.post("/ingestion/telegram/webhook", json={"update_id": 1},
                              headers={b"X-Telegram-Bot-Api-Secret-Token": "é".encode("utf-8")})
     assert resp.status_code == 401
+
+
+# --- second adversarial round (commit after 1b966f5) -------------------------
+
+async def _profiles_of(user_id: uuid.UUID) -> dict[str, Profile]:
+    async with AsyncSessionLocal() as session:
+        rows = (await session.execute(
+            sa.select(Profile).where(Profile.user_id == user_id, Profile.deleted_at.is_(None)))).scalars().all()
+        return {p.display_name: p for p in rows}
+
+
+async def test_reply_escapes_profile_name_html(fake_bot, linked_user):
+    chat_id = _chat()
+    await linked_user(chat_id, profiles=(("Nora <3", "child", True),))
+    out = await telegram_bot.handle_update(_msg(chat_id, text="Ha dormido bien"))
+    assert out["action"] == "diary_text"
+    body = fake_bot[-1][1]
+    assert "Nora &lt;3" in body and "Nora <3" not in body
+
+
+def test_is_ack_digits_are_content():
+    assert not telegram_bot.is_ack("38.5")
+    assert not telegram_bot.is_ack("2 biberones")
+    assert telegram_bot.is_ack("👍")
+    assert telegram_bot.is_ack("...")
+    assert telegram_bot.is_ack("Vale!")
+
+
+def _mem_profile(name: str, rel: str) -> Profile:
+    return Profile(id=uuid.uuid4(), user_id=uuid.uuid4(), display_name=name, relationship=rel)
+
+
+def test_other_names_excludes_self_profile():
+    me, adel, nora = _mem_profile("Mi perfil", "self"), _mem_profile("Adel", "child"), _mem_profile("Nora", "child")
+    assert diary._other_names([me, adel, nora], adel) == ["Nora"]
+    assert diary._other_names([me, adel], adel) == []
+
+
+async def test_resolve_profile_prefers_documented_prefix(monkeypatch):
+    adel, nora = _mem_profile("Adel", "child"), _mem_profile("Nora", "child")
+
+    async def _list(session, user_id):
+        return [adel, nora]
+
+    monkeypatch.setattr(diary, "list_profiles", _list)
+    uid = uuid.uuid4()
+    assert (await diary.resolve_profile(None, uid, "Nora: ha vomitado, no como Adel"))[0] is nora
+    assert (await diary.resolve_profile(None, uid, "Adel, ha jugado con Nora"))[0] is adel
+    assert (await diary.resolve_profile(None, uid, "hoy nora ha comido bien"))[0] is nora
+    assert (await diary.resolve_profile(None, uid, "día tranquilo"))[0] is adel
+
+
+async def test_voice_notify_quotes_only_the_transcript(fake_bot, linked_user):
+    chat_id = _chat()
+    user_id = await linked_user(chat_id)
+    adel = (await _profiles_of(user_id))["Adel"]
+    today = diary.today_iso()
+    rendered = diary.render_diary_text("ha comido medio plátano", today, "Adel", "es")
+    doc_id = await _doc(user_id, chat_id, mime="audio/ogg", raw_text=rendered,
+                        extra={"diary_date": today, "locale": "es"}, profile_id=adel.id)
+    await diary.notify_processed(doc_id)
+    body = fake_bot[-1][1]
+    assert "<i>ha comido medio plátano</i>" in body
+    assert "<i>Diario de" not in body
+
+
+async def test_token_minted_right_after_link_is_accepted(fake_bot, linked_user):
+    chat_1, chat_2 = _chat(), _chat()
+    user_id = await linked_user(chat_1, linked_at=datetime.now(UTC))
+    token = telegram_bot.mint_link_token(user_id)  # same second as the link
+    out = await telegram_bot.handle_update(_msg(chat_2, text=f"/start {token}"))
+    assert out["action"] == "linked"
+    assert (await _link_for(user_id)).chat_id == chat_2
+
+
+async def test_download_refuses_oversized_file(fake_bot, linked_user, monkeypatch):
+    chat_id = _chat()
+    await linked_user(chat_id)
+
+    def handler(request: httpx.Request) -> httpx.Response:
+        assert request.url.path.endswith("/getFile")
+        return httpx.Response(200, json={"ok": True, "result": {
+            "file_id": "big", "file_path": "documents/big.pdf", "file_size": 25 * 1024 * 1024}})
+
+    monkeypatch.setattr(httpx, "AsyncClient", _mock_client(handler))
+    with pytest.raises(diary.FileTooLarge):
+        await diary.tg_download("big", "application/pdf")
+    out = await telegram_bot.handle_update(
+        _msg(chat_id, document={"file_id": "big", "file_name": "big.pdf", "mime_type": "application/pdf"}))
+    assert out["action"] == "file_too_large"
+    assert "20 MB" in fake_bot[-1][1]
+
+
+async def test_caption_does_not_mask_empty_ocr(fake_bot, linked_user, monkeypatch):
+    chat_id = _chat()
+    user_id = await linked_user(chat_id)
+    _stub_pipeline(monkeypatch, body=b"\x89PNG", ocr="")
+    doc_id = await _doc(user_id, chat_id, mime="image/png", raw_text=None,
+                        extra={"caption": "Analítica 12/08"})
+    await docs_mod._process_document_inner(doc_id, "image/png")
+    async with AsyncSessionLocal() as session:
+        d = await session.get(Document, doc_id)
+        assert d.raw_text is None and d.processed_at is not None
+    assert "historial" in fake_bot[-1][1] and "No he encontrado texto" in fake_bot[-1][1]
+
+
+async def test_daily_card_clears_when_active_profile_is_the_parent(fake_bot, linked_user):
+    from adelia.agent.suggestions import build_suggestions
+
+    chat_id = _chat()
+    user_id = await linked_user(chat_id, profiles=(("Mi perfil", "self", True), ("Adel", "child", False),
+                                                    ("Nora", "child", False)))
+    profs = await _profiles_of(user_id)
+    today = diary.today_iso()
+    await _doc(user_id, chat_id, mime="text/plain", raw_text="Diario de Adel…",
+               extra={"diary_date": today}, profile_id=profs["Adel"].id)
+
+    def has_card(cards):
+        return any("¿Cómo ha ido hoy?" in json.dumps(c, ensure_ascii=False) for c in cards)
+
+    assert not has_card(await build_suggestions(user_id=user_id, profile_id=profs["Mi perfil"].id))
+    assert not has_card(await build_suggestions(user_id=user_id, profile_id=profs["Adel"].id))
+    assert has_card(await build_suggestions(user_id=user_id, profile_id=profs["Nora"].id))

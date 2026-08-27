@@ -328,7 +328,8 @@
       "copy": "Copy",
       "tokenExpiry": "The token expires in 1 hour. If it takes too long, refresh this page to generate a new one.",
       "step3": "Once linked, forward any PDF/photo/audio to the bot. It will be processed automatically.",
-      "subtitleFriendly": "Send medical PDFs, photos and voice notes to the bot and they save themselves to your vault."
+      "subtitleFriendly": "Send medical PDFs, photos and voice notes to the bot and they save themselves to your vault.",
+      "notAvailable": "The Telegram bot is not enabled on this installation. If you run the server, set TELEGRAM_BOT_TOKEN."
     },
     "email": {
       "title": "Email forwarding",

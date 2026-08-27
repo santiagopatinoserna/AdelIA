@@ -328,7 +328,8 @@
       "copy": "Copier",
       "tokenExpiry": "Le token expire dans 1 heure. Si rien ne se passe, actualisez cette page pour en générer un nouveau.",
       "step3": "Une fois lié, transférez n'importe quel PDF/photo/audio au bot. Il sera traité automatiquement.",
-      "subtitleFriendly": "Envoie tes PDF, photos et audios médicaux au bot : ils se rangent tout seuls dans ton coffre-fort."
+      "subtitleFriendly": "Envoie tes PDF, photos et audios médicaux au bot : ils se rangent tout seuls dans ton coffre-fort.",
+      "notAvailable": "Le bot Telegram n’est pas activé sur cette installation. Si tu administres le serveur, définis TELEGRAM_BOT_TOKEN."
     },
     "email": {
       "title": "Transfert par e-mail",

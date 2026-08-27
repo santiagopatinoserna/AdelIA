@@ -194,9 +194,10 @@ async def _process_document_inner(document_id: uuid.UUID, mime_type: str, is_con
             )
         elif mime_type == "application/pdf" or mime_type.startswith("image/"):
             raw_text = await _with_retry("ocr", lambda: extract_text_from_pdf(body, mime_type))
-            if caption and raw_text is not None:
+            if caption and raw_text and raw_text.strip():
                 # A photo/PDF caption ("Analítica 12/08, Dra. X") is context
-                # worth indexing with the OCR text.
+                # worth indexing with the OCR text. Never on its own: a
+                # caption must not turn an unreadable photo into "ready".
                 raw_text = f"{caption}\n\n{raw_text}".strip()
         elif mime_type.startswith("text/"):
             # Diary/notes arrive already as text (Telegram, in-app): no stage 1.
