@@ -22,6 +22,8 @@ class DocumentOut(BaseModel):
     speaker_names: dict[str, str] | None = None
     # Post-recording essence bullets (consulta docs only, best-effort).
     summary: str | None = None
+    # Daily diary entries (Telegram-first): ISO date the entry is about.
+    diary_date: str | None = None
 
     model_config = ConfigDict(from_attributes=True)
 

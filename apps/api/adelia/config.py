@@ -60,6 +60,11 @@ class Settings(BaseSettings):
     telegram_bot_token: str = ""
     telegram_webhook_secret: str = ""
     telegram_bot_mode: str = "webhook"  # "webhook" | "polling"
+    telegram_bot_username: str = "Adelia_godiai_bot"
+    # Daily diary reminder (Telegram-first daily interaction): at this local
+    # hour, every linked chat without a diary entry for today gets a nudge.
+    diary_reminder_hour: int = 20
+    diary_reminder_tz: str = "Europe/Madrid"
     postmark_inbound_token: str = ""
     adelia_email_domain: str = "in.adelia.app"
     adelia_app_url: str = "http://localhost:3000"

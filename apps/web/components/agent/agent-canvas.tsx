@@ -12,6 +12,9 @@ import { Link, useRouter } from "@/lib/navigation";
 
 type Msg = { role: "user" | "assistant"; content: string };
 
+// Telegram-first daily diary: the bot lives outside the app on purpose.
+const TELEGRAM_BOT_URL = `https://t.me/${process.env.NEXT_PUBLIC_TELEGRAM_BOT ?? "Adelia_godiai_bot"}`;
+
 export function AgentCanvas({ locale }: { locale: string }) {
   const t = useTranslations("agent");
   const router = useRouter();
@@ -83,6 +86,8 @@ export function AgentCanvas({ locale }: { locale: string }) {
       return;
     }
     if (intent === "process_docs") { router.push("/dashboard/overview"); return; }
+    if (intent === "daily_diary") { window.open(TELEGRAM_BOT_URL, "_blank", "noopener"); return; }
+    if (intent === "link_telegram") { router.push("/dashboard/ingestion/telegram"); return; }
     if (intent === "regen_briefing") { router.push("/dashboard/briefings"); return; }
     // unknown intent: no-op (avoid sending dead "[intent]" messages to the LLM)
   };

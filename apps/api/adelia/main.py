@@ -54,6 +54,28 @@ async def _periodic_tombstone_sweep() -> None:
             logger.exception("periodic blob tombstone sweep failed")
 
 
+async def _daily_diary_reminder() -> None:
+    """Telegram-first daily diary: at diary_reminder_hour (local tz) nudge
+    every linked chat that hasn't written today's entry."""
+    from datetime import datetime, timedelta
+    from zoneinfo import ZoneInfo
+
+    from adelia.services.telegram_diary import send_daily_reminders
+
+    tz = ZoneInfo(settings.diary_reminder_tz)
+    while True:
+        now = datetime.now(tz)
+        target = now.replace(hour=settings.diary_reminder_hour, minute=0, second=0, microsecond=0)
+        if target <= now:
+            target += timedelta(days=1)
+        await asyncio.sleep((target - now).total_seconds())
+        try:
+            sent = await send_daily_reminders()
+            logger.info("daily diary reminder sent to %d chat(s)", sent)
+        except Exception:  # noqa: BLE001 — one bad day must not kill the loop
+            logger.exception("daily diary reminder failed")
+
+
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     if not settings.auth_secret:
@@ -86,12 +108,20 @@ async def lifespan(app: FastAPI):
             logger.exception("startup evidence load failed")
     sweep_task = asyncio.create_task(_periodic_tombstone_sweep())
     logger.info("periodic blob tombstone sweep scheduled every %ds", SWEEP_INTERVAL_S)
+    reminder_task = None
+    if settings.telegram_bot_token:
+        reminder_task = asyncio.create_task(_daily_diary_reminder())
+        logger.info("daily diary reminder scheduled at %02d:00 %s",
+                    settings.diary_reminder_hour, settings.diary_reminder_tz)
     yield
-    sweep_task.cancel()
-    try:
-        await sweep_task
-    except asyncio.CancelledError:
-        pass
+    for task in (sweep_task, reminder_task):
+        if task is None:
+            continue
+        task.cancel()
+        try:
+            await task
+        except asyncio.CancelledError:
+            pass
     await engine.dispose()
 
 

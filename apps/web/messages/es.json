@@ -203,6 +203,7 @@
     "navHistory": "Historial",
     "navSettings": "Ajustes",
     "consultaDocTitle": "Consulta del {date}",
+    "diaryDocTitle": "Diario del {date}",
     "speakerLabel": "Hablante {n}",
     "deleteDoc": "Borrar este documento",
     "deleteDocConfirm": "¿Borrarlo del todo? No se puede deshacer.",
