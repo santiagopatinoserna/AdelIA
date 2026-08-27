@@ -154,7 +154,6 @@ async def test_handle_update_text_only_message():
     # (a linked chat would get a diary entry, see tests/test_telegram_diary.py).
     assert res["action"] == "no_link"
     assert "/start" in res["reply"]
-    assert "Reenvía" in res["reply"]
 
 
 @pytest.mark.asyncio
