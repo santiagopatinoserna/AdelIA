@@ -75,6 +75,7 @@ MSG: dict[str, dict[str, str]] = {
         "diary_error": "No he podido guardarlo. ¿Me lo repites?",
         "unsupported": "Cuéntame el día en texto o con un audio, o reenvíame un informe, foto o PDF.",
         "unsupported_file": "Ese tipo de archivo no lo puedo leer. Envíamelo como PDF, foto, audio o texto.",
+        "file_too_large": "Ese archivo es demasiado grande (máximo 20 MB, 1 MB si es texto). Envíamelo más pequeño o súbelo desde la web.",
         "file_error": "No he podido descargar el archivo. ¿Me lo envías otra vez?",
         "voice_received": "🎙 Recibido. Lo transcribo y te digo qué he entendido en un momento.",
         "file_received": "📥 Recibido. Lo proceso y lo añado al historial.",
@@ -116,6 +117,7 @@ MSG: dict[str, dict[str, str]] = {
         "diary_error": "I could not save that. Could you send it again?",
         "unsupported": "Tell me about the day in text or with a voice note, or forward me a report, photo or PDF.",
         "unsupported_file": "I cannot read that kind of file. Send it as a PDF, photo, audio or text.",
+        "file_too_large": "That file is too large (max 20 MB, 1 MB for text). Send a smaller one or upload it from the web app.",
         "file_error": "I could not download the file. Could you send it again?",
         "voice_received": "🎙 Got it. I am transcribing it and will tell you what I understood in a moment.",
         "file_received": "📥 Got it. I am processing it and adding it to the history.",
@@ -157,6 +159,7 @@ MSG: dict[str, dict[str, str]] = {
         "diary_error": "Je n'ai pas pu l'enregistrer. Tu peux me le renvoyer ?",
         "unsupported": "Raconte-moi la journée par texte ou par vocal, ou transfère-moi un compte rendu, une photo ou un PDF.",
         "unsupported_file": "Je ne sais pas lire ce type de fichier. Envoie-le en PDF, photo, audio ou texte.",
+        "file_too_large": "Ce fichier est trop volumineux (20 Mo maximum, 1 Mo pour du texte). Envoie-m’en un plus petit ou téléverse-le depuis l’appli web.",
         "file_error": "Je n'ai pas pu télécharger le fichier. Tu peux me le renvoyer ?",
         "voice_received": "🎙 Bien reçu. Je le transcris et je te dis ce que j'ai compris dans un instant.",
         "file_received": "📥 Bien reçu. Je le traite et je l'ajoute à l'historique.",
@@ -304,14 +307,31 @@ def _mime_for(file_path: str, mime_hint: str | None) -> str:
     return _EXT_MIME.get(ext) or (mimetypes.guess_type(file_path)[0] or "application/octet-stream")
 
 
+# Telegram serves bots files up to 20 MB; a text file that big is not a
+# note but a prompt bomb, so text/* gets a tighter cap.
+MAX_DOWNLOAD_BYTES = 20 * 1024 * 1024
+MAX_TEXT_BYTES = 1 * 1024 * 1024
+
+
+class FileTooLarge(ValueError):
+    """The Telegram file exceeds what the pipeline should ingest."""
+
+
 async def tg_download(file_id: str, mime_hint: str | None = None) -> tuple[bytes, str]:
-    """getFile + download. Returns (bytes, mime). Raises TelegramApiError only."""
+    """getFile + download. Returns (bytes, mime). Raises TelegramApiError
+    (transport/API) or FileTooLarge (refused before downloading)."""
     token = settings.telegram_bot_token
     try:
         async with httpx.AsyncClient(timeout=60.0) as client:
             meta = await client.get(f"{BOT_API}/bot{token}/getFile", params={"file_id": file_id})
             _check(meta, "getFile")
-            file_path = meta.json()["result"]["file_path"]
+            result = meta.json()["result"]
+            file_path = result["file_path"]
+            size = int(result.get("file_size") or 0)
+            if size > MAX_DOWNLOAD_BYTES or (
+                size > MAX_TEXT_BYTES and _mime_for(file_path, mime_hint).startswith("text/")
+            ):
+                raise FileTooLarge(str(size))
             blob = await client.get(f"{BOT_API}/file/bot{token}/{file_path}")
             _check(blob, "file download")
     except httpx.HTTPError as exc:
@@ -431,6 +451,12 @@ async def resolve_profile(
     if not profiles:
         return None, []
     if len(profiles) > 1 and hint_text:
+        folded = _fold(hint_text)
+        # The documented form wins first: "Nora: ha vomitado" is about Nora
+        # even if the sentence goes on to mention Adel.
+        for p in profiles:
+            if p.display_name and re.match(rf"\s*{re.escape(_fold(p.display_name))}\s*[:,\-]", folded):
+                return p, profiles
         for p in profiles:
             if p.display_name and _name_in_text(p.display_name, hint_text):
                 return p, profiles
@@ -467,7 +493,16 @@ class DiaryResult:
 
 
 def _other_names(profiles: list[Profile], chosen: Profile | None) -> list[str]:
-    return [p.display_name for p in profiles if chosen is None or p.id != chosen.id]
+    """Other profiles a message could be about: the parent's own "Mi perfil"
+    (relationship self) is never a diary subject, so it never appears in the
+    "if it was about someone else" hint."""
+    return [
+        p.display_name for p in profiles
+        if p.display_name and p.relationship != "self" and (chosen is None or p.id != chosen.id)
+    ]
+
+
+_BACKGROUND_TASKS: set[asyncio.Task] = set()
 
 
 async def ingest_bytes(
@@ -510,7 +545,11 @@ async def ingest_bytes(
             raise
         await session.refresh(doc)
         doc_id, mime_type = doc.id, doc.mime_type
-    asyncio.create_task(process_document(doc_id, mime_type, False))
+    # Keep a strong reference: the event loop only holds a weak one, so a
+    # bare create_task() can be garbage-collected mid-pipeline (asyncio docs).
+    task = asyncio.create_task(process_document(doc_id, mime_type, False))
+    _BACKGROUND_TASKS.add(task)
+    task.add_done_callback(_BACKGROUND_TASKS.discard)
     return doc
 
 
@@ -630,7 +669,13 @@ async def notify_processed(document_id: uuid.UUID) -> None:
             else:
                 text = t(loc, "notify_unreadable_other", link=link)
         elif is_diary and mime.startswith("audio/"):
-            snippet = raw[:600] + ("…" if len(raw) > 600 else "")
+            # The pipeline prefixed the transcript with the synthetic diary
+            # header; quote only what the parent actually said.
+            body = raw
+            header = render_diary_text("", meta.get("diary_date"), name if doc.profile_id else None, loc).strip()
+            if header and body.startswith(header):
+                body = body[len(header):].strip()
+            snippet = body[:600] + ("…" if len(body) > 600 else "")
             text = t(loc, "notify_voice", snippet=_html(snippet), name=_html(name), link=link)
         elif is_diary:
             text = t(loc, "notify_diary", name=_html(name), link=link)

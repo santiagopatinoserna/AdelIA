@@ -37,9 +37,13 @@ async def _gather_state(*, user_id: UUID, profile_id: UUID | None) -> ProfileSta
         from adelia.services.telegram_diary import has_diary_for, today_iso
         linked = await session.scalar(
             select(func.count()).select_from(TelegramLink).where(TelegramLink.user_id == user_id))
-        # Per profile: with two children, Nora's card stays while Adel's
-        # entry is written (entries without profile count for everyone).
-        diary_today = await has_diary_for(session, user_id, today_iso(), profile_id=profile_id)
+        # Per profile only when the active profile is a child (the bot files
+        # entries under children): with two children, Nora's card stays while
+        # Adel's entry is written. For the parent's own "Mi perfil" (self) or
+        # no profile, any entry of the day counts, otherwise the card would
+        # never clear when the default profile is the parent's.
+        scope = profile_id if (prof is not None and prof.relationship == "child") else None
+        diary_today = await has_diary_for(session, user_id, today_iso(), profile_id=scope)
         return ProfileState(
             has_dob=bool(prof and prof.date_of_birth),
             unprocessed_docs=int(unprocessed or 0),

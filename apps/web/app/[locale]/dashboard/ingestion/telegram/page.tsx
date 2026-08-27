@@ -1,4 +1,5 @@
 import { redirect } from "next/navigation";
+import { getTranslations } from "next-intl/server";
 
 import { TelegramLinkView } from "@/components/telegram-link-view";
 import { ingestion, type TelegramLinkDTO } from "@/lib/api-client";
@@ -18,7 +19,10 @@ export default async function TelegramLinkPage({
   try {
     data = await ingestion.getTelegramLink(locale);
   } catch (e) {
-    error = String(e);
+    // 503 = TELEGRAM_BOT_TOKEN not configured on this deployment: say so
+    // instead of leaking "ingestion.getTelegramLink: 503".
+    const t = await getTranslations({ locale, namespace: "ingestion.telegram" });
+    error = /: 503$/.test(String(e)) ? t("notAvailable") : String(e);
   }
 
   return <TelegramLinkView data={data} error={error} />;

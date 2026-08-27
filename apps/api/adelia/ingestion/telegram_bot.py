@@ -63,6 +63,10 @@ def mint_link_token(user_id: UUID, locale: str = "es") -> str:
         "aud": _LINK_TOKEN_AUDIENCE,
         "exp": now + _LINK_TOKEN_TTL,
         "iat": now,
+        # Sub-second issue time: JWT iat is floored to the second, so a token
+        # minted right after a /start in the same second would look older
+        # than the link and be refused as a replay.
+        "mts": now.timestamp(),
         "loc": normalize_locale(locale),
     }
     return jwt.encode(payload, settings.auth_secret, algorithm="HS256")
@@ -84,7 +88,7 @@ def decode_link_claims(token: str) -> LinkClaims | None:
         return LinkClaims(
             user_id=UUID(payload["sub"]),
             locale=normalize_locale(payload.get("loc")),
-            issued_at=datetime.fromtimestamp(int(payload["iat"]), UTC),
+            issued_at=datetime.fromtimestamp(float(payload.get("mts", payload["iat"])), UTC),
         )
     except Exception as e:
         logger.warning("link token decode failed: %s", e)
@@ -206,7 +210,7 @@ _ACKS = {
 
 
 def is_ack(text: str) -> bool:
-    if not any(ch.isalpha() for ch in text):
+    if not any(ch.isalnum() for ch in text):
         return True
     folded = "".join(
         c for c in unicodedata.normalize("NFD", text.lower()) if unicodedata.category(c) != "Mn"
@@ -311,9 +315,13 @@ async def handle_update(update_data: dict) -> dict:
         when = diary.long_date(diary.today_iso(), locale)
         link_url = diary.doc_link(res.document.id, locale)
         if res.profile is not None:
-            body = t(locale, "diary_saved", name=res.profile.display_name, date=when, link=link_url)
+            # Names are user text inside a parse_mode=HTML message: escape them
+            # or "Nora <3" makes Telegram reject the only confirmation.
+            body = t(locale, "diary_saved", name=diary._html(res.profile.display_name),
+                     date=when, link=link_url)
             if res.other_profiles:
-                body += "\n" + t(locale, "diary_other_profile_hint", example=res.other_profiles[0])
+                body += "\n" + t(locale, "diary_other_profile_hint",
+                                  example=diary._html(res.other_profiles[0]))
         else:
             body = t(locale, "diary_saved_no_profile", date=when, link=link_url)
         return await reply("diary_text", "ok", body, document_id=str(res.document.id),
@@ -341,6 +349,8 @@ async def handle_update(update_data: dict) -> dict:
         )
     except diary.UnsupportedFileType:
         return await reply("unsupported_file", "instructions", t(locale, "unsupported_file"), kind=kind)
+    except diary.FileTooLarge:
+        return await reply("file_too_large", "instructions", t(locale, "file_too_large"), kind=kind)
     except Exception:  # noqa: BLE001 — never logs the chat_id nor the token
         logger.exception("diary_from_file failed user_id=%s kind=%s", user_id, kind)
         return await reply("file_error", "error", t(locale, "file_error"))
