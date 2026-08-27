@@ -3,6 +3,7 @@ from dataclasses import dataclass
 from uuid import UUID, uuid4
 
 from adelia.agent import cards
+from adelia.config import settings
 
 @dataclass
 class ProfileState:
@@ -12,6 +13,9 @@ class ProfileState:
     is_child: bool
     telegram_linked: bool = False
     diary_today: bool = False
+    # False when TELEGRAM_BOT_TOKEN is empty: the bot is dead, so offering
+    # "Enlazar" would send the parent to a chat that never answers.
+    telegram_enabled: bool = False
 
 def _cid() -> str:
     return uuid4().hex[:12]
@@ -33,14 +37,17 @@ async def _gather_state(*, user_id: UUID, profile_id: UUID | None) -> ProfileSta
         from adelia.services.telegram_diary import has_diary_for, today_iso
         linked = await session.scalar(
             select(func.count()).select_from(TelegramLink).where(TelegramLink.user_id == user_id))
-        diary_today = await has_diary_for(session, user_id, today_iso())
+        # Per profile: with two children, Nora's card stays while Adel's
+        # entry is written (entries without profile count for everyone).
+        diary_today = await has_diary_for(session, user_id, today_iso(), profile_id=profile_id)
         return ProfileState(
             has_dob=bool(prof and prof.date_of_birth),
             unprocessed_docs=int(unprocessed or 0),
             stale_briefing=False,
             is_child=bool(prof and prof.relationship == "child"),
             telegram_linked=bool(linked),
-            diary_today=bool(diary_today))
+            diary_today=bool(diary_today),
+            telegram_enabled=bool(settings.telegram_bot_token))
 
 async def build_suggestions(*, user_id: UUID, profile_id: UUID | None, locale: str = "es") -> list[dict]:
     state = await _gather_state(user_id=user_id, profile_id=profile_id)
@@ -48,13 +55,13 @@ async def build_suggestions(*, user_id: UUID, profile_id: UUID | None, locale: s
     if state.is_child and not state.has_dob:
         out.append(cards.card_question(_cid(), "date_of_birth",
                                        "¿Cuál es la fecha de nacimiento del bebé?", input_type="date"))
-    if not state.diary_today:
+    if state.telegram_enabled and not state.diary_today:
         if state.telegram_linked:
             out.append(cards.card_action(_cid(), "¿Cómo ha ido hoy?",
                                          "Cuéntamelo por Telegram, en texto o con un audio, y lo guardo en su diario.",
                                          "Abrir Telegram", "daily_diary"))
         else:
-            out.append(cards.card_action(_cid(), "Diario diario por Telegram",
+            out.append(cards.card_action(_cid(), "Diario por Telegram",
                                          "Enlaza Telegram y cada tarde te preguntaré cómo ha ido el día. "
                                          "Respondes con un audio y listo.",
                                          "Enlazar", "link_telegram"))

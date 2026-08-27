@@ -1,6 +1,7 @@
 import json
 import logging
 import re
+from datetime import date
 
 from pydantic import ValidationError
 
@@ -50,11 +51,27 @@ If the document contains no medical information, return {"entities": []}.
 JSON_BLOCK_RE = re.compile(r"\{.*\}", re.DOTALL)
 
 
-async def extract_entities(text: str) -> list[ExtractedEntity]:
+DIARY_PROMPT_SUFFIX = """
+This document is a parent's DAILY DIARY entry about their child, dated {diary_date}.
+Besides any clinical facts, extract the everyday facts of that day as entities of
+entity_type "observation" with provenance "patient_stated":
+- feeding (what and how much), e.g. value {{"category": "feeding", "amount": "medio plátano"}}
+- sleep (hours, naps), e.g. value {{"category": "sleep", "duration": "2 h"}}
+- stools, mood, daycare, mild symptoms, e.g. value {{"category": "mood", "state": "irritable"}}
+Use event_date "{diary_date}" unless the text names another day. raw_quote must
+still be a verbatim substring. Return {{"entities": []}} only if nothing about the
+day is stated.
+"""
+
+
+async def extract_entities(text: str, *, diary_date: str | None = None) -> list[ExtractedEntity]:
     """Extract FHIR-aligned medical entities from raw text via Mistral LLM.
 
     Args:
         text: raw_text from a document (post-OCR or post-transcription).
+        diary_date: ISO date when the text is a daily diary entry. Switches the
+            prompt to everyday facts (feeding, sleep, mood...) and stamps that
+            date as event_date on entities that carry none.
 
     Returns:
         List of ExtractedEntity. Entities whose raw_quote does NOT appear verbatim
@@ -67,10 +84,14 @@ async def extract_entities(text: str) -> list[ExtractedEntity]:
     """
     client = get_mistral_client()
 
+    system_prompt = SYSTEM_PROMPT
+    if diary_date:
+        system_prompt += DIARY_PROMPT_SUFFIX.format(diary_date=diary_date)
+
     response = await client.chat.complete_async(
         model="mistral-medium-latest",
         messages=[
-            {"role": "system", "content": SYSTEM_PROMPT},
+            {"role": "system", "content": system_prompt},
             {"role": "user", "content": f"Document:\n\n{text}"},
         ],
         response_format={"type": "json_object"},
@@ -97,6 +118,8 @@ async def extract_entities(text: str) -> list[ExtractedEntity]:
             continue
         # Anti-hallucination: raw_quote MUST appear verbatim in the input text.
         if entity.raw_quote and entity.raw_quote in text:
+            if diary_date and entity.event_date is None:
+                entity.event_date = date.fromisoformat(diary_date)
             validated.append(entity)
         else:
             logger.warning(

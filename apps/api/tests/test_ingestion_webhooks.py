@@ -40,6 +40,19 @@ def test_link_token_invalid_returns_none(monkeypatch):
     assert decode_link_token("garbage.token.here") is None
 
 
+def test_link_token_carries_locale(monkeypatch):
+    from adelia.ingestion.telegram_bot import decode_link_claims
+
+    monkeypatch.setattr(settings, "auth_secret", "test-secret-32bytes-min")
+    user_id = uuid4()
+    claims = decode_link_claims(mint_link_token(user_id, "fr"))
+    assert claims is not None and claims.user_id == user_id and claims.locale == "fr"
+    assert claims.issued_at.tzinfo is not None
+    # Unknown locales fall back to Spanish; the legacy signature still works.
+    assert decode_link_claims(mint_link_token(user_id, "de")).locale == "es"
+    assert decode_link_claims(mint_link_token(user_id)).locale == "es"
+
+
 def test_link_token_no_secret_returns_none(monkeypatch):
     monkeypatch.setattr(settings, "auth_secret", "")
     assert decode_link_token("any") is None
@@ -144,7 +157,7 @@ async def test_handle_update_text_only_message():
 
     update = {
         "message": {
-            "chat": {"id": 42},
+            "chat": {"id": 42, "type": "private"},
             "from": {"username": "tester"},
             "text": "hola",
         }
@@ -162,7 +175,7 @@ async def test_handle_update_start_no_token():
 
     update = {
         "message": {
-            "chat": {"id": 42},
+            "chat": {"id": 42, "type": "private"},
             "from": {"username": "tester"},
             "text": "/start",
         }
@@ -178,7 +191,7 @@ async def test_handle_update_start_invalid_token(monkeypatch):
 
     update = {
         "message": {
-            "chat": {"id": 42},
+            "chat": {"id": 42, "type": "private"},
             "from": {"username": "tester"},
             "text": "/start bogus.token.value",
         }

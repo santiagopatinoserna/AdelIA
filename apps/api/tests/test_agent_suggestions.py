@@ -13,3 +13,21 @@ async def test_unprocessed_docs_yields_action_card():
     with patch("adelia.agent.suggestions._gather_state", return_value=state):
         cards_out = await build_suggestions(user_id=uuid4(), profile_id=None)
     assert any(c["type"] == "action" for c in cards_out)
+
+
+async def test_diary_cards_need_a_configured_bot():
+    """No TELEGRAM_BOT_TOKEN → no 'Enlazar'/'¿Cómo ha ido hoy?' cards (the bot would be dead)."""
+    off = ProfileState(has_dob=True, unprocessed_docs=0, stale_briefing=False, is_child=False,
+                       telegram_linked=False, diary_today=False, telegram_enabled=False)
+    with patch("adelia.agent.suggestions._gather_state", return_value=off):
+        cards_out = await build_suggestions(user_id=uuid4(), profile_id=None)
+    intents = {a["intent"] for c in cards_out for a in c["actions"]}
+    assert not intents & {"link_telegram", "daily_diary"}
+    assert any(c["payload"].get("title") == "Todo al día" for c in cards_out)
+
+    on = ProfileState(has_dob=True, unprocessed_docs=0, stale_briefing=False, is_child=False,
+                      telegram_linked=False, diary_today=False, telegram_enabled=True)
+    with patch("adelia.agent.suggestions._gather_state", return_value=on):
+        cards_out = await build_suggestions(user_id=uuid4(), profile_id=None)
+    card = next(c for c in cards_out if any(a["intent"] == "link_telegram" for a in c["actions"]))
+    assert card["payload"]["title"] == "Diario por Telegram"

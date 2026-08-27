@@ -16,7 +16,7 @@ export default async function TelegramLinkPage({
   let data: TelegramLinkDTO | null = null;
   let error: string | null = null;
   try {
-    data = await ingestion.getTelegramLink();
+    data = await ingestion.getTelegramLink(locale);
   } catch (e) {
     error = String(e);
   }

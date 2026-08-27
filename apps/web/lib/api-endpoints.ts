@@ -185,8 +185,10 @@ export function makeApi(fetcher: Fetcher) {
         return res.json();
       },
 
-      async getTelegramLink(): Promise<TelegramLinkDTO> {
-        const res = await fetcher("/ingestion/telegram/link");
+      /** `locale` travels inside the link token so the bot replies in the UI language. */
+      async getTelegramLink(locale?: string): Promise<TelegramLinkDTO> {
+        const qs = locale ? `?locale=${encodeURIComponent(locale)}` : "";
+        const res = await fetcher(`/ingestion/telegram/link${qs}`);
         if (!res.ok) throw new Error(`ingestion.getTelegramLink: ${res.status}`);
         return res.json();
       },
