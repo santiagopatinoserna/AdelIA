@@ -117,8 +117,12 @@ async def lifespan(app: FastAPI):
             await load_seed_if_empty()
             _data_dir = _Path(__file__).parent / "enrichment" / "data"
             for _f in sorted(_data_dir.glob("evidence_*.json")):
-                if _f.name != "evidence_seed.json":
+                if _f.name == "evidence_seed.json":
+                    continue
+                try:
                     await load_evidence_file(_f)
+                except Exception:  # noqa: BLE001 — one bad file must not skip the rest
+                    logger.exception("startup evidence load failed for %s", _f.name)
         except Exception:  # noqa: BLE001 — evidence load must never block boot
             logger.exception("startup evidence load failed")
     sweep_task = asyncio.create_task(_periodic_tombstone_sweep())
