@@ -32,3 +32,8 @@ def test_evidence_file_respects_db_constraints(path: Path):
         )
         assert s.get("chunks"), f"{path.name}: {s['title'][:60]!r} has no chunks"
         assert len(s["title"]) <= 500
+        # Column widths in models.EvidenceSource: a longer value makes the
+        # whole file fail to load at boot (StringDataRightTruncationError).
+        for field, limit in (("organization", 128), ("url", 1024), ("license", 64), ("language", 8)):
+            value = s.get(field) or ""
+            assert len(value) <= limit, f"{path.name}: {s['title'][:60]!r} {field} longer than {limit}"
