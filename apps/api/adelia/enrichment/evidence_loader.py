@@ -35,7 +35,10 @@ def _is_retryable(exc: Exception) -> bool:
     status = getattr(exc, "status_code", None)
     if status in RETRYABLE_STATUS:
         return True
-    msg = str(exc)
+    try:
+        msg = str(exc)
+    except Exception:  # noqa: BLE001 — some SDK errors cannot be stringified
+        return False
     return any(f"Status {s}" in msg or f"status {s}" in msg for s in RETRYABLE_STATUS)
 
 
@@ -50,7 +53,7 @@ async def embed_with_retry(texts: list[str]) -> list[list[float]]:
                 raise
             last = exc
             logger.warning("embedding rate-limited/transient (attempt %d), retrying in %.0fs: %s",
-                           attempt + 1, delay, str(exc)[:120])
+                           attempt + 1, delay, type(exc).__name__)
             await asyncio.sleep(delay)
     raise last  # pragma: no cover - loop always returns or raises
 
