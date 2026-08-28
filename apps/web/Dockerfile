@@ -23,6 +23,10 @@ WORKDIR /app
 # Standalone bundle carries its own pruned node_modules.
 COPY --from=builder /repo/apps/web/.next/standalone ./
 COPY --from=builder /repo/apps/web/.next/static ./apps/web/.next/static
+# Static assets are NOT part of the standalone output: without this line the
+# service worker, icons and offline page 404 (or fall through to the HTML
+# catch-all) in production, so the PWA is neither installable nor offline.
+COPY --from=builder /repo/apps/web/public ./apps/web/public
 
 EXPOSE 3000
 CMD ["node", "apps/web/server.js"]
