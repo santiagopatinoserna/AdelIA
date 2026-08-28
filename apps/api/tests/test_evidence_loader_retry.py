@@ -8,13 +8,16 @@ from adelia.enrichment import evidence_loader as loader
 
 class _RateLimited(MistralError):
     def __init__(self):
-        Exception.__init__(self, "API error occurred: Status 429. Body: rate_limited")
+        # MistralError.__str__ returns .message; mirror the SDK's attributes.
+        self.message = "API error occurred: Status 429. Body: rate_limited"
+        Exception.__init__(self, self.message)
         self.status_code = 429
 
 
 class _Fatal(MistralError):
     def __init__(self):
-        Exception.__init__(self, "API error occurred: Status 401. Body: unauthorized")
+        self.message = "API error occurred: Status 401. Body: unauthorized"
+        Exception.__init__(self, self.message)
         self.status_code = 401
 
 
