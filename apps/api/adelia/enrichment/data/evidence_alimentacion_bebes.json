@@ -1,0 +1,1093 @@
+{
+  "_meta": {
+    "topic": "Alimentación del bebé y del niño pequeño (6-24 meses): alimentación complementaria, apetito y dentición, guardería e infecciones, rechazo y neofobia, lactancia predominante y hierro, alimentación responsiva y señales de alarma",
+    "compiled": "2026-08-28",
+    "method": "8 agentes de búsqueda multilingüe (es/fr/en) + 1 verificador escéptico por fuente (fuente primaria abierta)",
+    "caveat": "Resúmenes en español de fuentes primarias; los chunks son paráfrasis con cifras del original, no texto literal."
+  },
+  "sources": [
+    {
+      "source_type": "guideline",
+      "title": "Recomendaciones de la Asociación Española de Pediatría sobre la Alimentación Complementaria",
+      "organization": "Asociación Española de Pediatría (Comité de Lactancia Materna y Comité de Nutrición)",
+      "publication_year": 2018,
+      "url": "https://www.aeped.es/publicaciones/protocolos/recomendaciones-aep-sobre-alimentacion",
+      "specialties": [
+        "pediatrics",
+        "general_medicine",
+        "gastroenterology"
+      ],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "chunks": [
+        "Recomendaciones de la Asociación Española de Pediatría sobre la Alimentación Complementaria (Gómez Fernández-Vegue M, Comités de Lactancia Materna y de Nutrición de la AEP, 2018). Tema: inicio de la alimentación complementaria (AC) y papel de la leche materna después de los 6 meses. Hallazgo: lactancia materna (LM) exclusiva 6 meses y después añadir alimentos de forma paulatina manteniendo la LM a demanda todo el tiempo que madre e hijo deseen; en no amamantados, entre el cuarto y el sexto mes, nunca antes del cuarto. Entre los 6 y 12 meses la leche materna sigue siendo el alimento principal: la AC complementa, no sustituye, y no debe reducirse el número de tomas. Con al menos 4-5 tomas de pecho al día no se precisan otros lácteos. Yogur o queso desde los 9 meses y leche de vaca entera desde los 12, pero la leche materna sigue siendo el lácteo de primera elección hasta los 2 años o más.",
+        "Recomendaciones de la Asociación Española de Pediatría sobre la Alimentación Complementaria (Gómez Fernández-Vegue M, AEP, 2018). Tema: cantidad, alimentación perceptiva y no forzar. Hallazgo: el cuidador ofrece comida sana y segura y el lactante decide cuánto come; se recomienda alimentación perceptiva, sin forzar ni distraer. El apetito difiere en cada niño y circunstancia. Obligar, presionar o premiar interfiere con la percepción de saciedad y puede aumentar el riesgo de sobrepeso, de problemas con la comida y de escasa variedad. Un rechazo inicial no es permanente: pueden hacer falta hasta 10-15 ofertas sin presión para lograr la aceptación. Los padres deciden dónde, cuándo y qué come el niño; el niño decide cuánto. Orientación: 4 o 5 tomas al día. Ofrecer el pecho ante estrés o dolor no es consolar con comida ni aumenta el riesgo de obesidad.",
+        "Recomendaciones de la Asociación Española de Pediatría sobre la Alimentación Complementaria (Gómez Fernández-Vegue M, AEP, 2018). Tema: texturas, calendario orientativo y sal. Hallazgo: iniciar texturas grumosas y semisólidas lo antes posible, nunca más tarde de los 8-9 meses; introducirlas después de los 9 meses se asocia a problemas de alimentación a largo plazo. A los 12 meses el niño puede comer lo mismo que la familia, evitando sólidos con riesgo de atragantamiento (frutos secos enteros, manzana o zanahoria cruda) hasta por encima de los 3 años. Gluten entre los 4 y los 11 meses. Sal máxima orientativa: menos de 1 g/día hasta los 12 meses y 2 g/día entre 1 y 3 años; azúcares libres y alimentos superfluos (miel, bollería, embutidos) siempre a partir de los 12 meses y cuanto más tarde mejor. Retrasar la AC más allá de las 26 semanas aumenta el riesgo de déficit de hierro y zinc."
+      ]
+    },
+    {
+      "source_type": "guideline",
+      "title": "Lactancia materna en niños mayores o \"prolongada\"",
+      "organization": "Comité de Lactancia Materna, Asociación Española de Pediatría",
+      "publication_year": 2015,
+      "url": "https://www.aeped.es/publicaciones/protocolos/lactancia-materna-en-ninos-mayores-o",
+      "specialties": [
+        "pediatrics",
+        "general_medicine"
+      ],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "chunks": [
+        "Lactancia materna en niños mayores o \"prolongada\" (Comité de Lactancia Materna de la AEP, 2015). Tema: recomendaciones sobre la lactancia materna después del primer año. Hallazgo: OMS, UNICEF, AEP, AAP y otras sociedades recomiendan la leche materna como único alimento hasta los 6 meses y después complementarla con otros alimentos al menos hasta los 12-24 meses, manteniéndola todo el tiempo que madre e hijo deseen; no hay un límite superior establecido para finalizar la lactancia. A partir de los 6 meses, además del pecho, debe ofrecerse una dieta variada y rica en hierro. No son necesarias otras fuentes de lácteos si el niño realiza al menos 4 tomas de pecho diarias. El comité señala que el término \"prolongada\" puede confundir, pues sugiere que amamantar a un niño mayor de un año está más allá de las recomendaciones, cuando en realidad es un objetivo de salud materno-infantil.",
+        "Lactancia materna en niños mayores o \"prolongada\" (Comité de Lactancia Materna de la AEP, 2015). Tema: valor nutritivo e inmunológico de la leche materna en el segundo año. Hallazgo: la leche materna no pierde sus propiedades con el tiempo; a partir del primer año de lactancia aumenta su cantidad de grasa respecto a los primeros meses, y resulta un alimento completo, de mayor calidad que la fórmula o la leche de vaca. Un niño mayor de un año que toma pecho obtiene aproximadamente 1/3 de sus necesidades calóricas y proteicas diarias de la leche materna (a veces más, sobre todo en periodos de enfermedad), además de vitaminas y minerales, y mantiene los beneficios inmunológicos con menor incidencia de infecciones. Históricamente la lactancia ha sido la norma hasta los 2-3 años, y la paleofisiología y la antropología sitúan el destete espontáneo en Homo sapiens entre los 2,5 y los 7 años.",
+        "Lactancia materna en niños mayores o \"prolongada\" (Comité de Lactancia Materna de la AEP, 2015). Tema: riesgos, rechazo social y destete. Hallazgo: no se han constatado riesgos físicos ni psicológicos en niños que toman pecho por encima de los 2-3 años; no se ha evidenciado relación con malnutrición en países en desarrollo ni está demostrada su relación con la caries infantil. El mayor problema de amamantar más allá del año es el rechazo social y profesional por prejuicios o desconocimiento de la evidencia. Cuando la madre decide destetar, no debe hacerlo bruscamente ni con engaños: la mejor estrategia es el destete gradual, sin ofrecer ni negar el pecho, negociando condiciones con el niño y ofreciendo alternativas a su necesidad de contacto. Conclusión: mantener la lactancia hasta los 12-24 meses y después todo el tiempo que madre e hijo deseen; a mayor duración, mayor beneficio potencial."
+      ]
+    },
+    {
+      "source_type": "paper",
+      "title": "Métodos de alimentación complementaria en el lactante: Mapa de la evidencia y consideraciones del Comité de Nutrición y Lactancia Materna de la AEP",
+      "organization": "Anales de Pediatría",
+      "publication_year": 2026,
+      "url": "https://doi.org/10.1016/j.anpedi.2026.504291",
+      "specialties": [
+        "pediatrics",
+        "general_medicine",
+        "gastroenterology"
+      ],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "chunks": [
+        "Métodos de alimentación complementaria en el lactante: Mapa de la evidencia y consideraciones del Comité de Nutrición y Lactancia Materna de la AEP (Jiménez-Tapia A, González Jiménez D, Gil-Campos M, Suanes Cabello A, Rodríguez Delgado J, Campoy C, et al.; Anales de Pediatría, 2026;105:504291). Tema: baby-led weaning (BLW, BLISS) frente a alimentación complementaria tradicional con cuchara y purés. Hallazgo: revisión de alcance (directrices del Instituto Joanna Briggs y extensión PRISMA-ScR) en PubMed, con búsqueda entre el 31/12/2014 y el 31/12/2025 en inglés o español; de 2.209 artículos se seleccionaron 29 (10 ensayos clínicos, 10 estudios observacionales, 7 revisiones y 2 metaanálisis). No se determinó evidencia científica suficiente para valorar si existen diferencias entre métodos en ingesta energética, distribución de macro y micronutrientes, deficiencias nutricionales o riesgo de sobrepeso y obesidad a largo plazo; los ensayos clínicos que comparan principalmente con BLISS no muestran diferencias en la ingesta total de energía ni en la distribución de macro y micronutrientes. Sobre el hierro, algunos estudios describen niveles más bajos de hemoglobina, ferritina y transferrina en lactantes con BLW frente al método estándar, pero con resultados contradictorios, y entre BLW y BLISS no se detectan diferencias en la ingesta de hierro ni en el perfil férrico sérico; las carencias de hierro, zinc o vitamina B12 parecen deberse a una falta de ingesta global o de diversidad de alimentos más que al método elegido.",
+        "Métodos de alimentación complementaria en el lactante: Mapa de la evidencia y consideraciones del Comité de Nutrición y Lactancia Materna de la AEP (Jiménez-Tapia A et al., Anales de Pediatría, 2026;105:504291). Tema: atragantamiento, limitaciones de la evidencia y postura del comité. Hallazgo: el riesgo de atragantamiento no parece estar directamente relacionado con el método, sino con la habilidad del lactante para manejar las texturas (ligada al grado de neurodesarrollo) y con el conocimiento de los padres para minimizar el riesgo (tamaños y formas apropiados para la edad, evitar alimentos duros, redondos o untuosos, supervisión constante, comer sentado y sin distracciones); una revisión sistemática reciente no halló diferencias significativas en el riesgo de atragantamiento entre BLW, BLISS y alimentación complementaria tradicional, aunque la medición depende de cuestionarios y de la memoria de los cuidadores, con riesgo de confundir el reflejo de arcada con una asfixia real. El comité concluye que no se evidencian beneficios de unos métodos sobre otros y que BLW y BLISS no han demostrado ventajas sobre la introducción progresiva de texturas; propone una recomendación personalizada, sin un enfoque único, adaptada a las necesidades del bebé y la familia, garantizando la seguridad alimentaria, texturas adecuadas al desarrollo psicomotor y hábitos saludables desde el inicio, y pide nuevos estudios que aclaren las diferencias en atragantamiento, deficiencias nutricionales y preferencias alimentarias a largo plazo."
+      ]
+    },
+    {
+      "source_type": "paper",
+      "title": "Análisis crítico de las nuevas directrices de la OMS sobre alimentación complementaria en el lactante de 6 a 23 meses de edad",
+      "organization": "Revista de Pediatría de Atención Primaria (Grupo de Gastroenterología y Nutrición de la AEPap)",
+      "publication_year": 2024,
+      "url": "https://doi.org/10.60147/17e0ce48",
+      "specialties": [
+        "pediatrics",
+        "general_medicine",
+        "gastroenterology"
+      ],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "chunks": [
+        "Análisis crítico de las nuevas directrices de la OMS sobre alimentación complementaria en el lactante de 6 a 23 meses de edad (Almazán Fernández de Bobadilla MV, García Mérida MJ, Ruiz Chércoles E, Castell Miñana M, Rodríguez Delgado J, Carbajo Ferreira ÁJ, Grupo de Gastroenterología y Nutrición de la AEPap; Rev Pediatr Aten Primaria 2024;26(103):e51-e65). Tema: valoración por el grupo de la AEPap de la guía OMS 2023 sobre alimentación complementaria. Hallazgo: la certeza de la evidencia científica es baja o muy baja para seis de las siete recomendaciones de la OMS y faltan ensayos clínicos aleatorizados que den certeza en la toma de decisiones. La recomendación de continuar la lactancia materna hasta los 2 años o más se formula con grado fuerte pero certeza de la evidencia muy baja. Conclusión: promover la lactancia materna exclusiva los primeros 6 meses e iniciar la alimentación complementaria alrededor de los 180 días de vida con una dieta diversificada y adecuada.",
+        "Análisis crítico de las nuevas directrices de la OMS sobre alimentación complementaria en el lactante de 6 a 23 meses de edad (Almazán Fernández de Bobadilla MV et al., Rev Pediatr Aten Primaria 2024;26:e51-e65). Tema: leche, azúcares y alimentación receptiva entre 6 y 23 meses. Hallazgo: según la guía OMS analizada, entre los 6 y 11 meses los lactantes no amamantados pueden recibir fórmula láctea o leche de origen animal entera pasteurizada, y entre los 12 y 23 meses leche de origen animal sin fórmulas lácteas (ambas recomendaciones condicionales, certeza baja); el grupo AEPap señala que no hay evidencia que justifique fórmulas de continuación o crecimiento a esas edades. Recomendación fuerte (certeza baja o muy baja) de no consumir alimentos con alto contenido en azúcar, sal y grasas trans ni bebidas azucaradas. Los niños deben educarse para comer de forma autónoma, respondiendo a sus necesidades fisiológicas y de desarrollo y fomentando la autorregulación. El grupo pide adaptar las directrices al contexto de nuestro entorno."
+      ]
+    },
+    {
+      "source_type": "guideline",
+      "title": "La alimentación saludable en la primera infancia",
+      "organization": "Agencia de Salud Pública de Cataluña (ASPCAT), Departamento de Salud, Generalitat de Catalunya",
+      "publication_year": 2022,
+      "url": "https://scientiasalut.gencat.cat/bitstream/handle/11351/9237.3/alimentacio_saludable_primera_infancia_2022_cas.pdf",
+      "specialties": [
+        "pediatrics",
+        "general_medicine",
+        "gastroenterology"
+      ],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "chunks": [
+        "La alimentación saludable en la primera infancia (Agencia de Salud Pública de Cataluña, Generalitat de Catalunya, diciembre de 2022; guía 0-3 años). Tema: el niño que no come y el reparto de responsabilidades. Hallazgo: la preocupación por el niño que no come es frecuente entre las familias, pero la inapetencia es a menudo un problema de equilibrio entre lo que la criatura come y lo que su familia o entorno espera que coma; todas las criaturas comen cantidades diferentes aunque tengan la misma edad y no es bueno compararlas. Las personas adultas son responsables de adquirir los alimentos saludables y de decidir cuándo, cómo y dónde se ofrecen, pero es la criatura quien decide si quiere comer y qué cantidad, porque es capaz de autorregular su ingesta según sus necesidades. Insistir y forzar a comer puede facilitar la sobrealimentación y generar aversiones alimentarias. Son realmente pocas las situaciones en que la criatura no come y queda comprometida su salud; en ese caso es precisa la supervisión del equipo de pediatría, y la mejor manera de darle la cantidad que necesita es respetar su sensación de hambre y saciedad.",
+        "La alimentación saludable en la primera infancia (Agencia de Salud Pública de Cataluña, 2022). Tema: alimentación a partir del año y lugar de la leche materna. Hallazgo: el ejemplo de menú diario para criaturas a partir de aproximadamente 18 meses incluye leche materna a demanda. A partir del año puede incorporarse la leche entera de vaca (sin azúcar ni cacao azucarado) y, en más cantidad, yogures y quesos bajos en sal, en caso de que la criatura no tome leche materna; cuando la lactancia todavía es frecuente no se ofrecerá leche de vaca ni derivados, porque la leche materna garantiza el aporte de proteínas y calcio. Las ingestas diarias recomendadas de proteínas son muy bajas: 11 g/día entre 7 y 12 meses y 13 g/día de 12 meses a 3 años (50 g de pollo ya aportan 11 g), por lo que las raciones de carne, pescado y huevo se ajustan a las necesidades proteicas y no conviene incluirlas en más de una comida al día, mientras que el resto de alimentos se adapta a la sensación de hambre y saciedad que manifiesta la criatura.",
+        "La alimentación saludable en la primera infancia (Agencia de Salud Pública de Cataluña, 2022). Tema: acompañar las comidas y señales de hambre y saciedad. Hallazgo: el acompañamiento de las personas adultas debe ser respetuoso, sin coerciones y teniendo en cuenta los gustos y la sensación de apetito y saciedad. Señales de saciedad: cerrar la boca y apartar la cabeza, dejar de succionar, empujar la comida o la mano de la persona cuidadora, extender y relajar piernas, brazos y dedos. Algunas criaturas pueden comer cantidades muy pequeñas o rechazar la comida por completo durante algunos periodos; hay que respetarlo, pero ello no implica dejar de volver a ofrecer el alimento, porque presentarlo en ocasiones variadas y ver que las personas de referencia lo toman hace muy probable que acabe comiéndolo a gusto. Ejercer presión para acabar el plato puede aumentar la resistencia a comer, y usar frases que remarcan beneficios para la salud como \"te hará fuerte\" o \"te ayudará a crecer\" puede conseguir el efecto contrario: que asocie el alimento con algo menos agradable y coma menos."
+      ]
+    },
+    {
+      "source_type": "guideline",
+      "title": "Guía para la promoción de la alimentación equilibrada en niños y niñas menores de tres años",
+      "organization": "Junta de Andalucía, Consejería de Salud y Consejería para la Igualdad y Bienestar Social",
+      "publication_year": 2005,
+      "url": "https://www.juntadeandalucia.es/export/drupaljda/salud_5af9586f07c40_guia_promocion_alimentacion_ninos.pdf",
+      "specialties": [
+        "pediatrics",
+        "general_medicine"
+      ],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "chunks": [
+        "Guía para la promoción de la alimentación equilibrada en niños y niñas menores de tres años (Borras Pruneda S et al.; Junta de Andalucía, Consejería de Salud y Consejería para la Igualdad y Bienestar Social, 2005). Tema: comportamiento normal de los niños pequeños ante la comida y descenso fisiológico del apetito. Hallazgo: la conducta de los niños de esta edad parece caprichosa a ojos de los adultos, pero es completamente normal desde el punto de vista evolutivo: no tienen mucho apetito porque a partir de los 18-24 meses disminuye notablemente la necesidad de energía para el crecimiento, ya que este es más lento; además necesitan explorar la comida, jugar y practicar. En la tabla de desarrollo, entre los 18 y 24 meses el apetito disminuye, aparecen rituales y preferencias; entre los 3 y 4 años vuelve a haber mejor apetito e interés por las comidas.",
+        "Guía para la promoción de la alimentación equilibrada en niños y niñas menores de tres años (Junta de Andalucía, Consejería de Salud, 2005). Tema: raciones, no forzar y patrones de ingesta variables. Hallazgo: ofrecer porciones pequeñas con posibilidad de pedir más; una guía general es 1 cucharada de cada alimento por cada año de edad. Si quieren menos o no quieren, no se les debe forzar en modo alguno, ni con trucos, recompensas o sobornos, y sin castigos, enfados ni humillaciones. Aproximadamente un tercio de los niños comen cantidades pequeñas en las comidas principales y picotean entre horas; se les llama malos comedores, pero ingieren las mismas calorías que los demás y es una conducta normal que debe respetarse. Son frecuentes los picos o manías por un mismo alimento durante un periodo corto (una semana), que se equilibran con el tiempo.",
+        "Guía para la promoción de la alimentación equilibrada en niños y niñas menores de tres años (Junta de Andalucía, Consejería de Salud, 2005). Tema: división de responsabilidad y señales de hambre y saciedad. Hallazgo: los cuidadores deben reconocer y responder a las claves de hambre (irritabilidad, inquietud) y de saciedad (volver la cabeza, rechazar la comida, dormirse o querer jugar). Cuando los progenitores controlan el tamaño de las comidas o presionan a comer, en lugar de dejar que el niño decida según sus sensaciones internas, su capacidad de regular la cantidad de comida se ve mermada. El mejor consejo sigue siendo la división de responsabilidad: los padres presentan una variedad de alimentos saludables y los niños deciden si comen y cuánto. Se desaconseja premiar con dulces y comer con la televisión encendida, que hace comer más de lo necesario."
+      ]
+    },
+    {
+      "source_type": "paper",
+      "title": "Mitos y realidades sobre la erupción dentaria primaria: ¿realmente produce tantos síntomas?",
+      "organization": "Revista Pediatría de Atención Primaria (AEPap)",
+      "publication_year": 2016,
+      "url": "https://pap.es/articulo/12438/mitos-y-realidades-sobre-la-erupcion-dentaria-primaria-realmente-produce-tantos-sintomas",
+      "specialties": [
+        "pediatrics",
+        "general_medicine"
+      ],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "chunks": [
+        "Mitos y realidades sobre la erupción dentaria primaria: ¿realmente produce tantos síntomas? (Esparza Olcina MJ, Orejón de Luna G; Rev Pediatr Aten Primaria 2016;18:375-7; valoración crítica de la revisión sistemática con metaanálisis de Massignan et al., Pediatrics 2016). Tema: signos y síntomas atribuibles a la salida de los dientes de leche en niños sanos de 0 a 36 meses. Hallazgo: de 75 artículos se incluyeron 16 en el análisis cualitativo y 8 en el metaanálisis, con muestras de 16 a 1.165 niños; el riesgo de sesgo fue bajo en 5 estudios, moderado en 4 y alto en 7. Con un modelo de efectos aleatorios, la prevalencia global de signos y síntomas durante la erupción fue del 70,5 % (n = 3.506; IC 95 %: 54,1 a 84,6). Los más frecuentes fueron irritación gingival (86,81 %), irritabilidad (68,19 %) y babeo (55,72 %).",
+        "Mitos y realidades sobre la erupción dentaria primaria: ¿realmente produce tantos síntomas? (Esparza Olcina MJ, Orejón de Luna G; Rev Pediatr Aten Primaria, 2016). Tema: pérdida de apetito, fiebre y diarrea durante la dentición y riesgo de atribuirlos erróneamente a los dientes. Hallazgo: el metaanálisis registró pérdida de apetito en el 37 %, sueño inquieto en el 34,5 %, mucosidad en el 31,3 %, fiebre en el 26,7 % y diarrea en el 19,5 % de los casos; para la fiebre no pudo calcularse el promedio ponderado por falta de datos, por lo que es más apropiado hablar de aumento de temperatura. Según estudios incluidos en la revisión, estos síntomas son más frecuentes con la erupción de los primeros incisivos. Ninguno es específico de la erupción dentaria: atribuirlos a la dentición podría retrasar o impedir el diagnóstico de enfermedades coincidentes con la salida de los dientes. Conviene desechar creencias poco fundadas e informar a las familias para que reconozcan y traten los síntomas atribuibles a la salida de los dientes."
+      ]
+    },
+    {
+      "source_type": "reference",
+      "title": "El segundo año de vida. Consejos de los 12 a los 24 meses",
+      "organization": "Familia y Salud (Asociación Española de Pediatría de Atención Primaria, AEPap)",
+      "publication_year": 2020,
+      "url": "https://www.familiaysalud.es/crecemos/el-segundo-ano/el-segundo-ano-de-vida-consejos-de-los-12-los-24-meses",
+      "specialties": [
+        "pediatrics",
+        "general_medicine"
+      ],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "chunks": [
+        "El segundo año de vida. Consejos de los 12 a los 24 meses (Royo Bolea C, Serrano Poveda ME; Familia y Salud, AEPap; publicado en 2011 y actualizado en 2020). Tema: por qué el niño de 12 a 24 meses come menos y cómo actuar. Hallazgo: en el segundo año de vida los niños crecen más despacio y por eso no comen tanto. No conviene forzar al niño a comer; hay que respetar su sensación de saciedad. Los carbohidratos (cereales, harinas, legumbres y verduras) son la base de la alimentación y aportan el 50 % de la energía; las proteínas se toman con carne, pescado, huevo y leche, y con medio litro de leche y un filete pequeño al día ya es suficiente. Deben evitarse los azúcares refinados y las grasas saturadas.",
+        "El segundo año de vida. Consejos de los 12 a los 24 meses (Royo Bolea C, Serrano Poveda ME; Familia y Salud, AEPap, 2020). Tema: rutinas de comida entre los 12 y 24 meses. Hallazgo: es bueno que coma alimentos sólidos, cortados en trozos pequeños para que no se atragante; no hay alimentos prohibidos, pero no se recomiendan los que suponen riesgo de atragantamiento, como los frutos secos. Es mejor no recurrir a distracciones como televisión, canciones o chupetes a la hora de comer. El tiempo dedicado a la comida será el suficiente y adecuado a la edad, y luego se puede retirar el plato sin riñas ni enfados; es bueno dejar que intente comer solo. Picotear entre horas no es recomendable y, siempre que se pueda, es preferible comer en familia, enseñando poco a poco al niño a comer de todo."
+      ]
+    },
+    {
+      "source_type": "guideline",
+      "title": "Pas à pas, votre enfant mange comme un grand. Le petit guide de la diversification alimentaire",
+      "organization": "Santé publique France",
+      "publication_year": 2021,
+      "url": "https://www.mangerbouger.fr/content/show/1500/file/Brochure-SPF-Mangerbougerfr.pdf",
+      "specialties": [
+        "pediatrics",
+        "general_medicine"
+      ],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "chunks": [
+        "Pas à pas, votre enfant mange comme un grand (Santé publique France, 2021). Tema: rechazo de un alimento nuevo, apetito y no forzar. Hallazgo: guía oficial 0-36 meses (Anses, HCSP). Si el niño rechaza un alimento, no forzar y volver a proponerlo unos días después: a menudo hay que reintentar varias veces, a veces hasta 10. Distinguir el rechazo de lo nuevo de un verdadero disgusto; nunca obligar a comer. A toda edad: proponer sin forzar, sin obligar a acabar biberón o plato; no dar comida fuera de las comidas para compensar; el apetito varía de un día a otro y puede bajar cuando empieza a comer solo. Señales de hambre: llora, agita brazos y piernas, abre la boca. Saciedad: se duerme, gira la cabeza, quiere bajarse a jugar. Si llora mucho, preguntarse si pide comida, si quiere morder por los dientes o si busca atención. Sin pantallas en la comida. (fuente en francés)",
+        "Pas à pas, votre enfant mange comme un grand (Santé publique France, 2021). Tema: hacia los 2 años el niño rechaza a menudo ciertos alimentos. Hallazgo: hasta unos 2 años la mayoría acepta alimentos nuevos aunque hagan falta varios intentos; después, a veces durante varios años, muchos se vuelven más difíciles. A los 2 años el niño afirma su autonomía y dice no a todo; puede rechazar alimentos que antes le gustaban, sobre todo verduras. Esta oposición es normal y pasa; es inútil forzar, la comida debe ser placer y no combate; volverá a probar el alimento la próxima vez que esté en el menú familiar, quizá en otra forma. Los padres deciden el menú; si rechaza un plato, no compensar con más postre ni merienda grande. Evitar el chantaje afectivo (una cucharadita más por mí, si acabas tendrás postre): el niño come porque tiene hambre, no para complacer. (fuente en francés)",
+        "Pas à pas, votre enfant mange comme un grand (Santé publique France, 2021). Tema: hitos y cantidades por edad. Hallazgo: solo leche hasta los 4 meses; diversificación entre 4 y 6 meses con todas las familias de alimentos, incluidos alergénicos (huevo, cacahuete, frutos secos en polvo) y gluten, sin orden; tras 6 meses cumplidos la leche sola ya no basta. Texturas: desde 6-8 meses triturado grueso, desde 8 meses trozos muy blandos, desde 10 meses trozos para masticar. Ritmo: hacia 8 meses 4 comidas (2 diversificadas y 2 de leche); desde 1 año 3 comidas y 1 sola merienda (no repetirla si ya merendó en la guardería). De 1 a 3 años unos 500 ml de leche al día, leche de crecimiento enriquecida en hierro o alternada con leche entera de vaca; si solo toma leche de vaca, alimentos ricos en hierro y vitamina C. Sin sal hasta 3 años; dieta vegana no adaptada antes de 3 años. (fuente en francés)"
+      ]
+    },
+    {
+      "source_type": "guideline",
+      "title": "Les nouvelles recommandations du PNNS sur la diversification alimentaire",
+      "organization": "Comité de nutrition de la Société française de pédiatrie; Perfectionnement en Pédiatrie 2022;5(2):127-133 (Elsevier Masson / SFP)",
+      "publication_year": 2022,
+      "url": "https://doi.org/10.1016/j.perped.2022.04.005",
+      "specialties": [
+        "pediatrics",
+        "general_medicine",
+        "gastroenterology"
+      ],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "chunks": [
+        "Les nouvelles recommandations du PNNS sur la diversification alimentaire (Bocquet, Briend, Chalumeau, Dupont et al., 16 autores, Comité de nutrition SFP, Perfectionnement en Pédiatrie 2022). Tema: cifras clave del PNNS 4 para 0-3 años. Hallazgo: inicio entre 4 y 6 meses; trozos desde 6 meses y siempre antes de 10 meses; sin orden de introducción de los grupos de alimentos. De 6 a 36 meses: leche y equivalentes lácteos 500-750 mL/día; carne, pescado o huevo duro 10 g/día por año de edad en curso (10 g antes de 1 año, 20 g de 1 a 2 años, 30 g de 2 a 3 años; 10 g son 2 cucharaditas de carne triturada o un cuarto de huevo en proteínas); pescado 2 veces por semana (1 magro y 1 graso); todas las frutas y verduras y el gluten desde 4 meses; hidratos complejos 40-50% de la energía total, azúcares libres por debajo del 5%, lípidos 45%; agua total 800 mL a 1 año y 1300 mL a 3 años; miel a evitar antes de 1 año (riesgo de botulismo); dieta vegana fuertemente desaconsejada. (fuente en francés)",
+        "Les nouvelles recommandations du PNNS sur la diversification alimentaire (Bocquet et al., Comité de nutrition SFP, 2022). Tema: respeto del apetito del niño. Hallazgo: la regulación del apetito depende de los aportes energéticos más que de los volúmenes y está muy presente hasta los 3 años; debe respetarse. Señales de hambre: llanto (aunque no todo llanto es hambre), agitación de brazos y piernas, boca abierta al acercarse pecho, biberón o cuchara. Saciedad: se duerme al pecho o con el biberón, aparta la cuchara con la mano, boca cerrada, cabeza girada, quiere bajarse de la silla. Las raciones indicadas son medias, excesivas para unos bebés e insuficientes para otros; los padres tienden a hacer acabar el biberón o el tarrito industrial creyendo que la cantidad está rigurosamente adaptada a la edad. Comida sin pantallas (distraído, el niño percibe peor la saciedad), 3 comidas más merienda y sin picoteo entre comidas. (fuente en francés)",
+        "Les nouvelles recommandations du PNNS sur la diversification alimentaire (Bocquet et al., Comité de nutrition SFP, 2022). Tema: neofobia alimentaria. Hallazgo: frecuente entre 18 meses y 6 años; reticencia a probar alimentos nuevos con selectividad, rechazo de alimentos antes aceptados y restricción del repertorio; no es un trastorno del desarrollo sino una fase normal y transitoria. Para limitarla, exponer al máximo de sabores y texturas durante el periodo de neofilia, de 4-6 meses a unos 18 meses; cambiar de verdura y fruta cada día; presentar el alimento en formas distintas (vapor, ensalada, gratén). Si rechaza, proponerlo otro día con benevolencia y sin forzar, perseverando al menos una decena de veces; un verdadero disgusto es posible. No felicitar por comer bien ni castigar por rechazar; no obligar a acabar el biberón o el plato; no compensar con otro alimento, más postre o picoteo entre comidas. (fuente en francés)"
+      ]
+    },
+    {
+      "source_type": "guideline",
+      "title": "Diversification alimentaire : évolution des concepts et recommandations",
+      "organization": "Comité de nutrition de la Société française de pédiatrie (Archives de Pédiatrie, Elsevier Masson)",
+      "publication_year": 2015,
+      "url": "https://doi.org/10.1016/j.arcped.2015.02.018",
+      "specialties": [
+        "pediatrics",
+        "general_medicine",
+        "gastroenterology"
+      ],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "chunks": [
+        "Diversification alimentaire : évolution des concepts et recommandations (Turck, Dupont, Vidailhet, Bocquet et al., Comité de nutrition SFP, Arch Pediatr 2015;22:457-460). Tema: recomendaciones prácticas en el niño sano nacido a término. Hallazgo: tanto si el niño es amamantado como si recibe fórmula, no hay justificación nutricional para darle otro alimento que la leche, idealmente materna, antes de los 6 meses; se recomienda continuar la lactancia durante y después de la diversificación. No empezar antes de los 4 meses (riesgo alérgico) ni después de los 6 meses, porque la leche materna o la fórmula ya no cubren por sí solas las necesidades nutricionales y el desarrollo del lactante. Nada justifica retrasar más allá de los 6 meses la diversificación en niños con riesgo alérgico (padre, madre, hermano o hermana alérgico), ni siquiera para los alimentos más alergénicos (huevo, pescado, cacahuete, trigo). El gluten introducido entre los 4 y 6 meses cumplidos no influye, ni positiva ni negativamente, en el riesgo posterior de celiaquía; sea cual sea la edad elegida (nunca antes de los 4 meses), debe empezarse con pequeñas cantidades. (fuente en francés)",
+        "Diversification alimentaire : évolution des concepts et recommandations (Turck et al., Comité de nutrition SFP, Arch Pediatr 2015;22:457-460). Tema: evidencia sobre edad de diversificación y alergia. Hallazgo: está claramente demostrado que el riesgo de eccema y alergias aumenta cuando la diversificación empieza antes de los 4 meses; en cambio, ningún estudio ha mostrado beneficio de retrasar más allá de los 4-6 meses los principales alimentos alergénicos en niños de riesgo (al menos un familiar de primer grado alérgico, es decir el 25-30% de los recién nacidos). En el estudio alemán GINI (más de 2250 niños de riesgo) la incidencia acumulada de manifestaciones alérgicas en los 10 primeros años de vida no difería según la diversificación hubiera empezado antes o después de los 4 meses; en PROBIT (Bielorrusia, seguimiento de cerca de 14 000 niños) no hubo diferencia en el efecto protector de la lactancia exclusiva a los 6,5 años entre una duración de 3 y de 6 meses. Un ensayo británico aleatorizado, monocéntrico y abierto sugiere que introducir pequeñas cantidades de cacahuete entre los 4 y 11 meses en niños de riesgo (eccema grave o alergia al huevo) puede reducir el riesgo de alergia al cacahuete a los 5 años. Prescott et al. propusieron una ventana de oportunidad: no antes de los 4 ni después de los 6 meses; sin embargo, hasta la fecha ningún ensayo aleatorizado ha demostrado que introducir un alimento después de los 6 meses aumente el riesgo de alergia a ese alimento. (fuente en francés)",
+        "Diversification alimentaire : évolution des concepts et recommandations (Turck et al., Comité de nutrition SFP, Arch Pediatr 2015;22:457-460). Tema: gluten, lactancia y celiaquía. Hallazgo: un estudio observacional estadounidense de 2005 en sujetos de riesgo asoció la introducción del gluten antes de los 3 meses cumplidos o después de los 6 meses cumplidos con más marcadores séricos de celiaquía durante los 10 primeros años de vida, frente a la introducción entre los 3 y 6 meses; pero dos ensayos aleatorizados publicados en octubre de 2014 en el NEJM (uno italiano y otro europeo), de metodología mucho más robusta, no confirmaron efecto protector de introducir el gluten antes de los 6 meses en niños de riesgo, ni tampoco efecto perjudicial. Un metaanálisis de 6 estudios observacionales concluyó una reducción a la mitad del riesgo de celiaquía en niños amamantados en el momento de introducir el gluten, efecto preventivo de la lactancia que los dos ensayos aleatorizados no confirmaron. Cantidad: en los años 1980 la prevalencia de celiaquía en Suecia era 12 veces mayor que en Dinamarca, con una ingesta de gluten 44 veces mayor a los 8 meses (4400 frente a 100 mg) y 4 veces mayor a los 12 meses (3600 frente a 900 mg). (fuente en francés)"
+      ]
+    },
+    {
+      "source_type": "guideline",
+      "title": "Allaitement maternel : les bénéfices pour la santé de l'enfant et de sa mère",
+      "organization": "Comité de nutrition de la Société française de pédiatrie (Archives de Pédiatrie, Elsevier Masson)",
+      "publication_year": 2013,
+      "url": "https://doi.org/10.1016/S0929-693X(13)72251-6",
+      "specialties": [
+        "pediatrics",
+        "general_medicine"
+      ],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "chunks": [
+        "Allaitement maternel : les bénéfices pour la santé de l'enfant et de sa mère (Comité de nutrition SFP, Turck coord., Arch Pediatr 2013;20 suppl 2:S29-S48). Tema: duración de la lactancia y continuación después del año. Hallazgo: la lactancia exclusiva permite un crecimiento normal al menos hasta los 6 meses y puede continuarse hasta los 2 años o más, según el deseo de la madre, complementada con una diversificación alimentaria de buena calidad desde los 6 meses. Francia: 65% de los nacidos en 2010 salían amamantados de la maternidad; mediana de 10 semanas en 1998; solo 5% seguían a los 4 meses frente a 65% en Suecia y Suiza, 34% en Canadá y 27% en Reino Unido; la vuelta al trabajo es la primera causa de abandono antes del tercer mes. Crecimiento: tras el primer trimestre el amamantado gana peso más despacio; al año pesa casi 600 g menos que con biberón, con talla igual. (fuente en francés)",
+        "Allaitement maternel : les bénéfices pour la santé de l'enfant et de sa mère (Comité de nutrition SFP, Turck coord., 2013). Tema: protección frente a infecciones y alergia. Hallazgo: la prevención de infecciones es hoy el argumento más convincente en términos de beneficios para la salud del niño. Metaanálisis AHRQ: otitis media aguda OR 0,77 (IC95% 0,64-0,91), y OR 0,50 (0,36-0,70) con lactancia exclusiva de más de 3 meses; diarrea aguda en el primer año OR 0,36 (0,32-0,41), efecto que persiste 2 meses tras el cese; sin efecto protector demostrado sobre las infecciones respiratorias bajas, pero 72% menos hospitalizaciones por infección respiratoria grave en menores de 1 año si es exclusiva y dura al menos 4 meses. Para ser significativo el efecto exige lactancia exclusiva de más de 3 meses; se atenúa al cesar y es menor después de los 6 meses. Alergia: con 3 meses de lactancia, dermatitis atópica OR 0,68 (0,52-0,88), en niños de riesgo OR 0,58 (0,4-0,92) pero no sin riesgo OR 1,43 (0,72-2,86); asma solo en niños de riesgo OR 0,52 (0,35-0,79). (fuente en francés)",
+        "Allaitement maternel : les bénéfices pour la santé de l'enfant et de sa mère (Comité de nutrition SFP, Turck coord., 2013). Tema: hierro, zinc y vitaminas si la lactancia se prolonga. Hallazgo: el hierro de la leche materna es escaso (0,8 mg/l en calostro, 0,3 mg/l en leche madura) y no depende de los aportes ni del estado de hierro de la madre; en nacidos a término de madre no carente, amamantados exclusivamente, el estado de hierro es satisfactorio hasta los 6 meses; desde 2001 la OMS recomienda lactancia exclusiva 6 meses y después continuarla con alimentos de diversificación o complementos que aporten hierro. Si la lactancia sigue más allá de 6 meses, completar con carne, huevos y pescado por el zinc (1,2 mg/l a los 6 meses). Vitamina D: actividad muy baja en la leche materna (4-40 UI/l), por lo que en Francia se justifican 25-30 µg (1000-1200 UI) diarios del nacimiento a los 18 meses; la vitamina K también es necesaria. (fuente en francés)"
+      ]
+    },
+    {
+      "source_type": "guideline",
+      "title": "Fer et nutrition",
+      "organization": "Archives de Pédiatrie (groupe de travail sur le fer de la Société française de pédiatrie)",
+      "publication_year": 2017,
+      "url": "https://doi.org/10.1016/S0929-693X(17)24006-8",
+      "specialties": [
+        "pediatrics",
+        "general_medicine",
+        "gastroenterology"
+      ],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "chunks": [
+        "Fer et nutrition (Tounian y Chouraqui, Arch Pediatr 2017;24(5S):5S23-5S31, PMID 28622779, grupo de trabajo multidisciplinar sobre el hierro de la Société française de pédiatrie). Tema: necesidades de hierro y prevención de la carencia según la edad. Hallazgo: la carencia de hierro es la enfermedad nutricional pediátrica más frecuente del mundo. Como la absorción varía según el alimento, el grupo definió las necesidades en hierro absorbido y no ingerido. Alimentos ricos en hierro desde los 4 meses en algunos lactantes exclusivamente amamantados; entre 7 y 11 meses el lactante con fórmula debe beber al menos 700 ml/día de preparación de continuación y el amamantado total o parcialmente debe recibir suplemento oral de hierro; entre 1 y 6 años, al menos 300 ml/día de leche de crecimiento hasta que el niño consuma 100-150 g/día de productos cárnicos, lo que suele ocurrir después de los 3 años; desde los 7 años, un producto cárnico en al menos 2 comidas diarias. (fuente en francés)",
+        "Fer et nutrition (Tounian y Chouraqui, Société française de pédiatrie, 2017). Tema: cuándo tratar y contexto del suplemento sobre carencia marcial. Hallazgo: el tratamiento oral, con más alimentos ricos en hierro o con sales de hierro, está indicado cuando la ingesta no alcanza las necesidades de hierro absorbido o cuando la ferritina es inferior al valor límite propio de cada edad. El artículo forma parte del suplemento Carence martiale (Arch Pediatr 2017;24, supl. 5S), abierto por un artículo introductorio de Tounian con las recomendaciones de la SFP, y con capítulos sobre causas (Olives), diagnóstico biológico (Thuret), infecciones (de Pontual), neurodesarrollo (Vallée), metabolismo del hierro (Vaulont), necesidades en los 6 primeros meses (Lapillonne y Becquet) y prevalencia (Dupont). Aplicación al niño pequeño que come poco o rechaza carne y pescado: la recomendación francesa apoya mantener leche de crecimiento (al menos 300 ml/día de 1 a 6 años) mientras la ingesta de productos cárnicos sea insuficiente. (fuente en francés)"
+      ]
+    },
+    {
+      "source_type": "paper",
+      "title": "Early problematic eating behaviours are associated with lower fruit and vegetable intake and less dietary variety at 4-5 years of age. A prospective analysis of three European birth cohorts",
+      "organization": "British Journal of Nutrition",
+      "publication_year": 2015,
+      "url": "https://doi.org/10.1017/S0007114515002287",
+      "specialties": [
+        "pediatrics",
+        "general_medicine"
+      ],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "chunks": [
+        "Early problematic eating behaviours are associated with lower fruit and vegetable intake and less dietary variety at 4-5 years of age (Oliveira, Jones, de Lauzon-Guillain, Emmett, Moreira, Charles, Lopes; Br J Nutr 2015;114:763-771). Tema: prevalencia de conductas alimentarias problemáticas en tres cohortes, incluida la francesa EDEN. Hallazgo: Generation XXI (Portugal), ALSPAC (Reino Unido) y EDEN (Francia); en EDEN se analizaron 1034 niños a los 4 meses, 1002 a los 12 meses, 953 a los 24 meses y 892 a los 48 meses. La prevalencia de problemas de alimentación osciló entre el 3% y el 66%. Comer poco (pequeñas cantidades o no comer bastante, en Generation XXI y ALSPAC) fue frecuente, del 25% a los 4-6 meses al 66% a los 24 meses; la necesidad de estímulo para comer y la falta de rutina diaria fueron las conductas menos referidas. El rechazo lo referían más los padres de niños mayores: 65% en Generation XXI y 68% en ALSPAC a los 48-54 meses, frente a menos del 35% a los 4-6 meses. En EDEN no se midió el rechazo sino la neofobia, a los 24 y 48 meses, con un índice de 3 preguntas dicotomizado por la mediana. (fuente en inglés)",
+        "Early problematic eating behaviours are associated with lower fruit and vegetable intake and less dietary variety at 4-5 years of age (Oliveira et al., 2015). Tema: neofobia a los 2 años y dieta a los 5 años en la cohorte francesa EDEN. Hallazgo: regresiones ajustadas por edad y educación materna, tabaco, lactancia e IMC. Neofobia alta (igual o mayor que la mediana) a los 24 meses se asoció con menor probabilidad a los 5 años de tomar más de 1 ración diaria de fruta, OR 0,60 (IC95% 0,46-0,79), de verdura, OR 0,61 (0,46-0,80), y de variedad dietética sobre la mediana, OR 0,57 (0,44-0,74). Dificultades de alimentación a los 24 meses: fruta OR 0,67 (0,49-0,93), verdura OR 0,69 (0,49-0,97), variedad OR 0,45 (0,32-0,63). Necesitar estímulo para comer a 4, 12 o 24 meses no se asoció de forma significativa en EDEN (verdura a 24 meses OR 1,16, 0,64-2,10). (fuente en inglés)",
+        "Early problematic eating behaviours are associated with lower fruit and vegetable intake and less dietary variety at 4-5 years of age (Oliveira et al., 2015). Tema: interpretación clínica para el niño pequeño que come poco. Hallazgo: las asociaciones fueron algo más fuertes con las verduras que con las frutas y más claras cuando la conducta problemática se refería a partir de los 12-15 meses; en las tres cohortes, las dificultades de alimentación y el rechazo o neofobia (y, en Generation XXI y ALSPAC, la falta de rutina diaria) referidas a los 12-15, 24 y 48-54 meses se asociaron con menor consumo de frutas y verduras y menor variedad a los 4-5 años. Los autores señalan que entender estas dificultades tempranas puede ayudar a definir estrategias para mejorar la calidad de la dieta, y que el modelado y la exposición repetida a los alimentos mejoran la aceptación de una dieta variada. Para la práctica: que un lactante necesite estímulo para comer a los 4, 12 o 24 meses no predijo peor dieta en EDEN, mientras que la neofobia a los 24 y 48 meses y las dificultades de alimentación a los 24 meses sí. (fuente en inglés)"
+      ]
+    },
+    {
+      "source_type": "paper",
+      "title": "Early determinants of food liking among 5y-old children: a longitudinal study from the EDEN mother-child cohort",
+      "organization": "International Journal of Behavioral Nutrition and Physical Activity",
+      "publication_year": 2016,
+      "url": "https://link.springer.com/article/10.1186/s12966-016-0342-5",
+      "specialties": [
+        "pediatrics",
+        "general_medicine"
+      ],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "chunks": [
+        "Early determinants of food liking among 5y-old children: a longitudinal study from the EDEN mother-child cohort (Yuan, Rigal, Monnery-Patris, Chabanet, Forhan, Charles, de Lauzon-Guillain; IJBNPA 2016;13:20; PMID 26876058). Tema: neofobia entre 1 y 4 años y gusto por los alimentos a los 5 años en la cohorte francesa EDEN. Hallazgo: 1142 niños de 5 años (reclutados en Nancy y Poitiers) hicieron un test de agrado con 36 imágenes de alimentos (escala de 0 a 10 con tres caras de referencia, sin los padres presentes) para frutas y verduras, carne-pescado-huevos, quesos y postres. La neofobia la refirió la madre a 1, 2, 3 y 4 años (a los 2-4 años: no le gusta probar alimentos nuevos, rehúsa probar alimentos nuevos; escala de 1 a 4); puntuación media de unos 2 sobre 4 entre los 2 y los 4 años (2,0; 2,1; 2,1). Una neofobia alta a los 4 años se asoció con menor agrado por todos los grupos a los 5 años (frutas y verduras r = -0,33; carne-pescado-huevos r = -0,13; queso r = -0,14; postres r = -0,17; todas p < 0,001). Lactancia (cualquiera) media 3,3 ± 3,7 meses; inicio de la alimentación complementaria a 4,5 ± 1,6 meses. (fuente en inglés)",
+        "Early determinants of food liking among 5y-old children (Yuan et al., cohorte EDEN, 2016). Tema: factores tempranos que modifican la neofobia y el gusto. Hallazgo: las prácticas maternas a los 2 años se asociaron con el gusto por los postres (negativamente las que dejan al niño controlar su ingesta, positivamente la restricción por motivos de peso); el consumo a los 3 años se asoció con más gusto por frutas y verduras y por el queso; el patrón de lactancia larga, introducción más tardía de los componentes principales de la comida y alimentos caseros se asoció con mayor gusto por carne-pescado-huevos (r = 0,08, p < 0,05). El patrón de introducción más tardía de lácteos y uso de alimentos infantiles preparados se relacionó positivamente con la neofobia al año. Los autores recuerdan que la exposición frecuente a un alimento o sabor reduce la neofobia y aumenta el agrado en estudios experimentales y que la heredabilidad de la neofobia se estima entre 67 y 78 %. (fuente en inglés)"
+      ]
+    },
+    {
+      "source_type": "reference",
+      "title": "Poussée dentaire du bébé : que faut-il faire ?",
+      "organization": "mpedia.fr (Association Française de Pédiatrie Ambulatoire, AFPA)",
+      "publication_year": 2026,
+      "url": "https://www.mpedia.fr/art-poussees-dentaires/",
+      "specialties": [
+        "pediatrics",
+        "general_medicine"
+      ],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "chunks": [
+        "Poussée dentaire du bébé : que faut-il faire ? (mpedia.fr, AFPA; Assathiany, Cahn Sellem, Robert, Sixou; publicado en 2012, actualizado el 24 de julio de 2026). Tema: cronología de la dentición temporal. Hallazgo: entre los 5-6 meses y unos 3 años el niño adquiere sus 20 dientes de leche. El primer diente sale en promedio hacia los 5-6 meses, pero puede aparecer antes o después y es inútil comparar con otros niños; salvo enfermedades genéticas excepcionales, los dientes temporales siempre aparecen. Orden habitual: incisivos centrales inferiores 6-10 meses, incisivos centrales superiores 8-12 meses, incisivos laterales superiores 9-13 meses, incisivos laterales inferiores 10-16 meses, primeros molares 13-19 meses arriba y 18-24 meses abajo, caninos 16-23 meses, segundos molares 23-33 meses; el orden puede variar ligeramente de un niño a otro (esquema tomado de Ameli, Assurance Maladie). Los primeros molares permanentes salen hacia los 6 años. (fuente en francés)",
+        "Poussée dentaire du bébé : que faut-il faire ? (mpedia.fr, AFPA, 2026). Tema: llanto, apetito y síntomas atribuidos a los dientes. Hallazgo: antes de atribuir el llanto únicamente a la dentición, comprobar que el bebé duerme lo suficiente, sigue su ritmo sueño-vigilia, no tiene fiebre ni diarrea y come bien; una vez descartadas las causas físicas, comprobar que no está inquieto, que no se han cambiado bruscamente sus hábitos y que su entorno es tranquilo. La erupción puede hacer sufrir al bebé de forma episódica y algunos periodos de la dentición son dolorosos, pero no puede justificar todos sus llantos; los dientes de leche se hacen responsables a veces de todos los males del niño, incluso de la fiebre, creencia que la propia página presenta como idea preconcebida (idée reçue). En la práctica: fiebre, diarrea o rechazo de la comida deben comprobarse como signos propios antes de darlos por explicados por los dientes. (fuente en francés)",
+        "Poussée dentaire du bébé : que faut-il faire ? (mpedia.fr, AFPA, 2026). Tema: qué hacer y qué evitar ante el dolor de la erupción. Hallazgo: no dar agua azucarada (eficacia dudosa y riesgo de caries) ni remedios caseros como frotar las encías con miel o jarabe, inútiles y que también favorecen las caries; los collares de ámbar son muy peligrosos. Si el niño parece sufrir demasiado, puede darse un analgésico como el paracetamol y ofrecer un anillo de dentición para morder; si no basta, consultar al médico. La succión prolongada del pulgar o del chupete puede influir en la dentición (malposiciones dentarias, espacio entre las arcadas); estas succiones no nutritivas deben cesar pronto y a los 6 años el niño ya no debe chuparse el dedo ni usar chupete. Ante cualquier duda puede pedirse la opinión del dentista. (fuente en francés)"
+      ]
+    },
+    {
+      "source_type": "reference",
+      "title": "Feeding & Nutrition Tips: Your 1-Year-Old (HealthyChildren.org)",
+      "organization": "American Academy of Pediatrics (HealthyChildren.org)",
+      "publication_year": 2020,
+      "url": "https://www.healthychildren.org/English/ages-stages/toddler/nutrition/Pages/Feeding-and-Nutrition-Your-One-Year-Old.aspx",
+      "specialties": [
+        "pediatrics",
+        "general_medicine"
+      ],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "chunks": [
+        "Feeding & Nutrition Tips: Your 1-Year-Old (American Academy of Pediatrics, HealthyChildren.org, actualizado 2020). Tema: caída del apetito tras el primer cumpleaños. Hallazgo: la AAP advierte a los padres de que, después del primer cumpleaños, probablemente notarán una caída brusca del apetito del niño. La explicación es fisiológica: el ritmo de crecimiento se ha ralentizado y el niño realmente no necesita tanta comida como en el primer año. No es una enfermedad ni un rechazo, sino un ajuste normal de las necesidades energéticas a un crecimiento más lento. (fuente en inglés)",
+        "Feeding & Nutrition Tips: Your 1-Year-Old (American Academy of Pediatrics, HealthyChildren.org, actualizado 2020). Tema: necesidades energéticas y patrón de ingesta irregular a los 12 meses. Hallazgo: un niño de 1 año necesita unas 1.000 calorías al día repartidas en tres comidas y dos tentempiés. Los hábitos de comida del niño pequeño son erráticos e impredecibles de un día a otro: puede comer todo lo que encuentra en el desayuno y casi nada el resto del día, o tomar 1.000 calorías un día y notablemente más o menos en los uno o dos días siguientes. La AAP presenta esta variabilidad como esperable y no como motivo de alarma en un niño sano. (fuente en inglés)"
+      ]
+    },
+    {
+      "source_type": "guideline",
+      "title": "Bright Futures: Nutrition, 3rd Edition. Nutrition Supervision: Early Childhood",
+      "organization": "American Academy of Pediatrics (Bright Futures)",
+      "publication_year": 2011,
+      "url": "https://downloads.aap.org/AAP/PDF/Bright%20Futures/BFNutrition3rdEditionSupervision.pdf",
+      "specialties": [
+        "pediatrics",
+        "general_medicine"
+      ],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "chunks": [
+        "Bright Futures: Nutrition, 3rd Edition. Nutrition Supervision: Early Childhood (American Academy of Pediatrics, 2011). Tema: crecimiento y apetito entre 1 y 5 años. Hallazgo: el peso al nacer se cuadruplica a los 2 años; entre los 2 y los 5 años el niño gana de media 4,5 a 6,5 libras (unos 2 a 3 kg) al año y crece 2,5 a 3,5 pulgadas (6 a 9 cm) al año. Al declinar el ritmo de crecimiento, el apetito disminuye y la cantidad ingerida puede volverse impredecible. Los padres suelen alarmarse ante cambios bruscos, pero las necesidades energéticas bajan porque la velocidad de crecimiento baja. Ante un niño de 2 años cuyo apetito ha cambiado, la guía responde que los niños crecen más despacio de 1 a 5 años que en los primeros 12 meses, que los lactantes tienen más apetito que los niños pequeños y que, si el niño está activo y crece, probablemente come suficiente. (fuente en inglés)",
+        "Bright Futures: Nutrition, 3rd Edition. Nutrition Supervision: Early Childhood (American Academy of Pediatrics, 2011). Tema: organización de comidas y manejo del rechazo. Hallazgo: para favorecer el crecimiento óptimo, se deben ofrecer alimentos en horarios programados: 3 comidas y 2 a 3 tentempiés al día (una comida o tentempié cada 2 a 3 horas). Los niños pequeños suelen comer solo 1 o 2 alimentos por comida, y los menores de 2 años comen porciones pequeñas, por lo que la guía aconseja ofrecer raciones reducidas (por ejemplo 1 o 2 cucharadas) y dejar que el niño pida más. Las fijaciones alimentarias (food jags, cuando el niño solo quiere un alimento concreto) son frecuentes y rara vez duran lo bastante para ser dañinas; se recomienda tranquilizar a los padres y ofrecer porciones más pequeñas del alimento favorito junto con otros alimentos para asegurar variedad. Un consumo excesivo de leche (más de unas 2 tazas o 16 onzas al día) puede reducir el apetito para otros alimentos. (fuente en inglés)",
+        "Bright Futures: Nutrition, 3rd Edition. Nutrition Supervision: Early Childhood (American Academy of Pediatrics, 2011). Tema: hierro en la primera infancia. Hallazgo: la ferropenia y la anemia ferropénica son comunes en niños, sobre todo en familias de bajos ingresos, y la anemia ferropénica puede afectar al crecimiento y al desarrollo. Entre las medidas para reducir su prevalencia la guía cita esperar hasta los 12 meses para dar leche de vaca, no ofrecer más de 16 onzas (unos 470 mL) de leche de vaca al día y fomentar alimentos ricos en hierro junto con alimentos con vitamina C. La guía indica que la AAP recomendaba cribado universal de ferropenia y anemia ferropénica hacia los 12 y los 18 meses, y que, en niños de 2 a 5 años, tanto la AAP como los CDC recomendaban cribado anual si hay factores de riesgo (dieta pobre en hierro, acceso limitado a alimentos, necesidades especiales de salud, familias de bajos ingresos, elegibles para WIC, migrantes o refugiados recién llegados). (fuente en inglés)"
+      ]
+    },
+    {
+      "source_type": "reference",
+      "title": "10 Tips for Parents of Picky Eaters (HealthyChildren.org)",
+      "organization": "American Academy of Pediatrics, Committee on Nutrition (HealthyChildren.org)",
+      "publication_year": 2018,
+      "url": "https://www.healthychildren.org/English/ages-stages/toddler/nutrition/Pages/Picky-Eaters.aspx",
+      "specialties": [
+        "pediatrics",
+        "general_medicine"
+      ],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "chunks": [
+        "10 Tips for Parents of Picky Eaters (American Academy of Pediatrics, Committee on Nutrition, HealthyChildren.org, 2018). Tema: rechazo de alimentos en el niño pequeño. Hallazgo: la AAP afirma que comer de forma selectiva es a menudo la norma en los niños pequeños (toddlers), ya que tras el rápido crecimiento del lactante el ritmo de crecimiento y el apetito tienden a disminuir. Un niño pequeño puede necesitar probar un alimento 10 o más veces antes de que su paladar lo acepte, por lo que se aconseja seguir ofreciendo tanto alimentos nuevos como los rechazados en lugar de retirarlos definitivamente. Si el niño rechaza una comida, los padres deben evitar hacer un drama: la responsabilidad del adulto es ofrecer la comida y la decisión de comerla es del niño. (fuente en inglés)",
+        "10 Tips for Parents of Picky Eaters (American Academy of Pediatrics, Committee on Nutrition, HealthyChildren.org, 2018). Tema: estrategias prácticas ante el rechazo. Hallazgo: los diez consejos incluyen comer en familia sin pantallas ni distracciones (TV o móviles), no sobornar con golosinas, volver a ofrecer lo rechazado, ofrecer variedad (sobre todo frutas y verduras, con alimentos proteicos como carne o pescado sin espinas al menos 2 veces por semana), presentar la comida de forma atractiva, implicar al niño en planificar y cocinar con supervisión y según su edad, usar puentes alimentarios (alimentos de color, sabor y textura parecidos a los que ya acepta) y combinar lo nuevo o los sabores que suelen rechazar (ácido, amargo) con sabores preferidos (dulce, salado). La AAP describe esta fase como una etapa normal del desarrollo y recomienda consultar al pediatra si preocupa la dieta o el aporte de nutrientes. (fuente en inglés)"
+      ]
+    },
+    {
+      "source_type": "reference",
+      "title": "Fussy eaters (NHS, Baby: weaning and feeding)",
+      "organization": "NHS (National Health Service, Reino Unido)",
+      "publication_year": 2023,
+      "url": "https://www.nhs.uk/baby/weaning-and-feeding/fussy-eaters/",
+      "specialties": [
+        "pediatrics",
+        "general_medicine"
+      ],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "chunks": [
+        "Fussy eaters (NHS, revisado 13 de noviembre de 2023). Tema: normalidad del rechazo de alimentos en el niño pequeño. Hallazgo: el NHS afirma que es perfectamente normal que los niños pequeños se nieguen a comer o incluso a probar alimentos nuevos. Aconseja valorar lo que come el niño a lo largo de una semana y no día a día: si está activo, gana peso y parece estar bien, está comiendo suficiente. Recomienda ofrecer las mismas comidas que la familia (sin sal añadida) y seguir ofreciendo variedad, porque la aceptación puede requerir muchos intentos y los gustos cambian con el tiempo. (fuente en inglés)",
+        "Fussy eaters (NHS, revisado 13 de noviembre de 2023). Tema: qué hacer en la mesa cuando el niño rechaza la comida. Hallazgo: el NHS recomienda porciones pequeñas y elogiar cualquier cantidad que coma; no forzar al niño a comer lo que rechaza; evitar las comidas cuando está demasiado cansado o con demasiada hambre; tener paciencia con los que comen despacio; hacer de la comida un momento social y agradable; comer juntos siempre que sea posible; limitar los tentempiés a dos al día; no usar la comida como recompensa; invitar a otros niños que coman bien o a adultos de confianza; y variar la presentación (por ejemplo zanahoria cruda rallada en vez de cocida). (fuente en inglés)"
+      ]
+    },
+    {
+      "source_type": "guideline",
+      "title": "Infant and Young Child Feeding: Model Chapter for Textbooks for Medical Students and Allied Health Professionals (Session 3, Complementary feeding)",
+      "organization": "World Health Organization (WHO)",
+      "publication_year": 2009,
+      "url": "https://www.ncbi.nlm.nih.gov/books/NBK148957/",
+      "specialties": [
+        "pediatrics",
+        "general_medicine"
+      ],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "chunks": [
+        "Infant and Young Child Feeding: Model Chapter for Textbooks for Medical Students and Allied Health Professionals (OMS, 2009, Session 3). Tema: alimentación durante y después de la enfermedad. Hallazgo: el capítulo modelo de la OMS indica que durante la enfermedad la necesidad de líquidos suele aumentar, por lo que hay que ofrecer más líquidos, mantener la lactancia materna a demanda con tomas más frecuentes y ofrecer alimentos blandos y favoritos del niño. Como la cantidad que come en cada toma suele ser menor, el cuidador puede necesitar dar comidas más pequeñas y frecuentes. Cuando el niño se recupera y mejora su apetito, hay que dar comida con más frecuencia de lo habitual (una porción extra en cada comida o una comida o tentempié adicional al día) y animarle a comer más. Es el fundamento de la práctica de ofrecer poco y a menudo en el niño enfermo. (fuente en inglés)",
+        "Infant and Young Child Feeding: Model Chapter for Textbooks for Medical Students and Allied Health Professionals (OMS, 2009, Session 3). Tema: lactancia materna continuada y energía en el segundo año. Hallazgo: la OMS recomienda lactancia materna exclusiva desde el nacimiento hasta los 6 meses (180 días), introducir la alimentación complementaria a los 6 meses y continuar la lactancia hasta los 2 años o más. La leche materna puede aportar la mitad o más de las necesidades energéticas entre los 6 y los 12 meses y alrededor de un tercio entre los 12 y los 24 meses. La energía adicional necesaria procedente de la alimentación complementaria es de unas 200 kcal diarias a los 6-8 meses, 300 kcal a los 9-11 meses y 550 kcal a los 12-23 meses. Frecuencia recomendada en el niño amamantado: 2 a 3 comidas al día a los 6-8 meses y 3 a 4 comidas al día a los 9-23 meses, con 1 a 2 tentempiés nutritivos según el apetito del niño. (fuente en inglés)",
+        "Infant and Young Child Feeding: Model Chapter for Textbooks for Medical Students and Allied Health Professionals (OMS, 2009, Session 3). Tema: hierro en la alimentación complementaria. Hallazgo: el hierro es la mayor brecha entre lo que aporta la leche materna y lo que necesita el niño a partir de los 6 meses, por lo que es especialmente importante que los alimentos complementarios contengan hierro, a ser posible de origen animal: carne, vísceras, aves o pescado. Las legumbres (guisantes, judías, lentejas, frutos secos) tomadas con alimentos ricos en vitamina C para favorecer la absorción son una alternativa, pero no pueden sustituir por completo a los alimentos de origen animal. La yema de huevo es buena fuente de proteína y vitamina A, pero no de hierro. Esta prioridad se enmarca en la lactancia materna continuada hasta los 2 años o más y en 3 a 4 comidas diarias a partir de los 9 meses. (fuente en inglés)"
+      ]
+    },
+    {
+      "source_type": "reference",
+      "title": "Infant and young child feeding (WHO fact sheet)",
+      "organization": "World Health Organization (WHO)",
+      "publication_year": 2026,
+      "url": "https://www.who.int/news-room/fact-sheets/detail/infant-and-young-child-feeding",
+      "specialties": [
+        "pediatrics",
+        "general_medicine"
+      ],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "chunks": [
+        "Infant and young child feeding (OMS, hoja informativa, 4 de agosto de 2026). Tema: cifras globales y recomendaciones básicas. Hallazgo: en 2024, 150 millones de menores de 5 años tenían retraso del crecimiento (stunting) y 43 millones emaciación (wasting). Cerca de 400.000 muertes de menores de 5 años al año podrían evitarse si todos los lactantes recibieran lactancia materna exclusiva durante los primeros 6 meses y continuaran con lactancia hasta los 2 años o más. Solo alrededor del 47 % de los lactantes de 0 a 6 meses recibió lactancia exclusiva (datos 2018-2025) y menos de un tercio (30,8 %) de los niños de 6 a 23 meses recibió una dieta nutricionalmente adecuada (datos 2018-2024). La OMS y UNICEF recomiendan iniciar la lactancia en la primera hora de vida, exclusiva durante 6 meses y continuada hasta los 2 años o más, con introducción de alimentos complementarios seguros y adecuados a partir de los 6 meses. (fuente en inglés)",
+        "Infant and young child feeding (OMS, hoja informativa, 4 de agosto de 2026). Tema: frecuencia de comidas, alimentación durante la enfermedad y alimentación perceptiva. Hallazgo: a los 6-8 meses se recomiendan 2 a 3 comidas al día y a los 9-23 meses 3 a 4 comidas al día, más 1 a 2 tentempiés adicionales según necesidad. Durante la enfermedad hay que aumentar la ingesta de líquidos, con lactancia materna más frecuente, y ofrecer alimentos blandos y favoritos del niño. La OMS insiste en la alimentación perceptiva (responsive feeding): reconocer y responder a las señales de hambre y saciedad del niño. (fuente en inglés)"
+      ]
+    },
+    {
+      "source_type": "guideline",
+      "title": "Iron requirements in the first 2 years of life (CPS practice point)",
+      "organization": "Canadian Paediatric Society",
+      "publication_year": 2019,
+      "url": "https://cps.ca/en/documents/position/iron-requirements",
+      "specialties": [
+        "pediatrics",
+        "general_medicine"
+      ],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "chunks": [
+        "Iron requirements in the first 2 years of life (Unger SL, Fenton TR, Jetty R, Critch JN, O'Connor DL; Canadian Paediatric Society, Nutrition and Gastroenterology Committee; Paediatr Child Health 2019;24(8):555-556; publicado en 2019, reafirmado en 2025). Tema: necesidades de hierro y alimentos ricos en hierro. Hallazgo: la ingesta dietética recomendada de hierro elemental es de 11 mg/día entre los 7 y los 12 meses y baja a 7 mg/día entre 1 y 3 años por la menor velocidad de crecimiento. La mayoría de los lactantes a término de peso normal nacen con reservas suficientes hasta los 6 meses; hacia esa edad las reservas se agotan y la leche materna sola ya no cubre los requerimientos, por lo que los primeros alimentos complementarios, introducidos hacia los 6 meses, deben ser ricos en hierro: carne, alternativas a la carne y cereales infantiles fortificados con hierro. Se asume que la absorción del hierro de la leche humana es del 20 al 50 % según la edad y el estado de hierro del lactante, frente al 10 al 20 % de las fórmulas infantiles. (fuente en inglés)",
+        "Iron requirements in the first 2 years of life (Unger SL, Fenton TR, Jetty R, Critch JN, O'Connor DL; Canadian Paediatric Society, Nutrition and Gastroenterology Committee; Paediatr Child Health 2019;24(8):555-556; publicado en 2019, reafirmado en 2025). Tema: leche de vaca, fórmulas de crecimiento y cribado. Hallazgo: el documento recoge la recomendación de Health Canada (Nutrition for Healthy Term Infants: 6 to 24 months) de retrasar la leche de vaca hasta los 9-12 meses, limitarla a 750 mL/día y ofrecer 500 mL/día entre 1 y 2 años para no desplazar alimentos ricos en hierro. En un lactante sano no hace falta fórmula después de los 12 meses, cuando puede introducirse la leche de vaca entera; las fórmulas diseñadas para mayores de 12 meses no son necesarias. La CPS recomienda valorar el riesgo de ferropenia en cada visita de niño sano durante los 2 primeros años y hacer cribado (hemograma, ferritina sérica) cuando proceda; considera que no hay evidencia suficiente para recomendar cribado de laboratorio ni suplementación rutinaria en lactantes a término sanos sin factores de riesgo con lactancia materna exclusiva 6 meses. Prevalencia citada: anemia ferropénica del 4,3 % en lactantes y niños pequeños canadienses de clase media a mediados de los 90; en comunidades indígenas puede ser hasta diez veces mayor, con estimaciones del 36 % (4 a 18 meses) al 58 % (9 a 14 meses). (fuente en inglés)",
+        "Iron requirements in the first 2 years of life (Unger SL, Fenton TR, Jetty R, Critch JN, O'Connor DL; Canadian Paediatric Society, Nutrition and Gastroenterology Committee; Paediatr Child Health 2019;24(8):555-556; publicado en 2019, reafirmado en 2025). Tema: suplementación en bajo peso al nacer. Hallazgo: los lactantes de bajo peso (menos de 2,5 kg) predominantemente amamantados (más del 50 % de la ingesta) requieren suplemento rutinario de hierro: 1-2 mg/kg/día durante los primeros 6 meses si pesaron entre 2,0 y 2,5 kg, y 2-3 mg/kg/día durante el primer año si pesaron menos de 2,0 kg. Si reciben predominantemente fórmula, no necesitan suplemento cuando la fórmula es alta en hierro: 1-2 mg/kg/día aportados por fórmulas con 10 a 12 mg/L (2,0 a 2,5 kg) y 2-3 mg/kg/día por fórmulas con 10 a 14 mg/L, es decir fórmulas para prematuros (menos de 2,0 kg). Para lactantes a término de peso normal no amamantados, la CPS recomienda fórmula con 6,5 a 13 mg/L de hierro los primeros 9-12 meses, y 13 mg/L si hay riesgo elevado de ferropenia. (fuente en inglés)"
+      ]
+    },
+    {
+      "source_type": "guideline",
+      "title": "Faltering growth: recognition and management of faltering growth in children (NICE guideline NG75)",
+      "organization": "National Institute for Health and Care Excellence (NICE)",
+      "publication_year": 2017,
+      "url": "https://www.nice.org.uk/guidance/ng75",
+      "specialties": [
+        "pediatrics",
+        "general_medicine",
+        "gastroenterology"
+      ],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "chunks": [
+        "Faltering growth: recognition and management of faltering growth in children, NG75 (NICE, 2017). Tema: umbrales de preocupación por estancamiento ponderal. Hallazgo: NICE propone considerar como umbrales de preocupación, en las curvas de crecimiento UK-WHO, una caída de 1 o más espacios intercentiles de peso si el peso al nacer estaba por debajo del percentil 9; de 2 o más si estaba entre los percentiles 9 y 91; de 3 o más si estaba por encima del percentil 91; y un peso actual por debajo del percentil 2 para la edad, sea cual sea el peso al nacer. En mayores de 2 años, un IMC por debajo del percentil 2 puede reflejar desnutrición o constitución pequeña, y por debajo del percentil 0,4 sugiere desnutrición probable que requiere valoración e intervención. En los primeros días de vida es frecuente perder algo de peso; esa pérdida suele detenerse hacia el día 3 o 4 y la mayoría de los lactantes recupera el peso al nacer a las 3 semanas. Si la pérdida supera el 10 % del peso al nacer, NICE indica valoración clínica (buscando deshidratación o enfermedad), historia detallada de la alimentación y considerar la observación directa de la toma por personal con formación adecuada; pruebas adicionales solo si la clínica lo indica. (fuente en inglés)",
+        "Faltering growth: recognition and management of faltering growth in children, NG75 (NICE, 2017). Tema: valoración y causas. Hallazgo: ante la sospecha de estancamiento ponderal, NICE recomienda valoración clínica, del desarrollo y social, historia alimentaria detallada, considerar la observación directa de las tomas o comidas (realizada por personal con formación y experiencia adecuadas), y considerar investigar infección urinaria y enfermedad celíaca (si la dieta ya incluye gluten); otras pruebas solo si la valoración clínica lo indica, ya que en un niño con buen aspecto y sin otros datos clínicos de alarma es poco probable que revelen un trastorno subyacente. Factores que pueden asociarse: prematuridad, problemas del neurodesarrollo y depresión o ansiedad materna posparto. Pueden contribuir varios factores y puede no ser posible identificar una causa clara; las dificultades en la interacción entre el niño y sus cuidadores pueden contribuir sin ser la causa principal. Entre los factores a explorar en las comidas están las prácticas y la organización de las comidas, los tipos de alimentos ofrecidos, la aversión y evitación alimentarias, la interacción con los cuidadores y el apetito (por ejemplo, falta de interés por comer). (fuente en inglés)",
+        "Faltering growth: recognition and management of faltering growth in children, NG75 (NICE, 2017). Tema: intervenciones alimentarias y seguimiento. Hallazgo: NICE aconseja comentar con los padres, según el caso, tomas y comidas relajadas y agradables, comer en familia o con otros niños, animar al niño pequeño a comer solo y permitirle ensuciarse, comidas ni demasiado breves ni demasiado largas, límites razonables sin enfoques punitivos, evitar la alimentación coercitiva y horarios regulares (por ejemplo, 3 comidas y 2 tentempiés al día). Advierte de que beber demasiadas bebidas de alta densidad energética, incluida la leche, puede reducir el apetito del niño por otros alimentos. Si hace falta, aconsejar alimentos adecuados a la etapa del desarrollo que optimicen la densidad energética y de nutrientes; si se necesita más, considerar fortificación dietética a corto plazo con alimentos densos en energía o derivación a dietista pediátrico; considerar un ensayo de suplemento nutricional oral líquido si el estancamiento persiste pese a las otras intervenciones, con reevaluación periódica. Pesar habitualmente no más de una vez al día en menores de 1 mes, semanalmente entre 1 y 6 meses, cada 2 semanas entre 6 y 12 meses y mensualmente desde el año; pesar más a menudo de lo necesario puede aumentar la ansiedad de los padres. Longitud o talla no más de cada 3 meses. (fuente en inglés)"
+      ]
+    },
+    {
+      "source_type": "paper",
+      "title": "Symptoms associated with infant teething: a prospective study",
+      "organization": "Pediatrics (American Academy of Pediatrics)",
+      "publication_year": 2000,
+      "url": "https://doi.org/10.1542/peds.105.4.747",
+      "specialties": [
+        "pediatrics",
+        "general_medicine",
+        "gastroenterology"
+      ],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "chunks": [
+        "Symptoms associated with infant teething: a prospective study (Macknin ML, Piedmonte M, Jacobs J, Skibinski C, 2000). Tema: cohorte prospectiva sobre qué síntomas pueden atribuirse a la dentición y durante cuántos días. Hallazgo: 125 lactantes sanos consecutivos (hijos de empleados de la Cleveland Clinic) seguidos desde la revisión de los 4 meses hasta cumplir 1 año; los padres anotaron a diario 2 temperaturas timpánicas, la presencia o ausencia de 18 síntomas y cada erupción dental. Se analizaron 19.422 días-niño y 475 erupciones dentales. Los síntomas solo fueron significativamente más frecuentes en los 4 días previos a la aparición del diente, el día de la erupción y los 3 días posteriores: esta ventana de 8 días se definió como el periodo de dentición. (fuente en inglés)",
+        "Symptoms associated with infant teething: a prospective study (Macknin et al., 2000). Tema: efecto de la dentición sobre la ingesta, sólidos frente a líquidos. Hallazgo: se asociaron estadísticamente a la dentición el aumento de mordisqueo, babeo, frotarse las encías, succión, irritabilidad, vigilia, frotarse las orejas, exantema facial, disminución del apetito por alimentos sólidos y elevación leve de la temperatura. NO se asociaron: congestión, alteración del sueño, heces blandas, aumento del número de deposiciones, disminución del apetito por líquidos, tos, exantemas no faciales, fiebre superior a 102 °F (38,9 °C) ni vómitos. Es decir, la dentición redujo el apetito por sólidos pero no la toma de líquidos (leche o biberón). Ningún síntoma apareció en más del 35 % de los lactantes en dentición y ninguno fue más de un 20 % más frecuente que fuera de la dentición. (fuente en inglés)",
+        "Symptoms associated with infant teething: a prospective study (Macknin et al., 2000). Tema: magnitud del efecto y mensaje de seguridad. Hallazgo: ningún lactante en dentición alcanzó 104 °F (40 °C) ni presentó una enfermedad potencialmente mortal. Aunque muchos síntomas leves resultaron temporalmente asociados a la erupción, ningún conjunto de síntomas permitió predecir de forma fiable la salida inminente de un diente. Los autores concluyen que, antes de atribuir a la dentición cualquier signo o síntoma de una enfermedad potencialmente grave (por ejemplo fiebre alta, vómitos o rechazo de líquidos, que en este estudio no se asociaron a la dentición), deben descartarse otras causas. En la práctica: una bajada leve y breve del apetito por sólidos durante unos 8 días es compatible con la dentición; el rechazo de la leche o la fiebre alta no se explican por ella y obligan a buscar otra causa. (fuente en inglés)"
+      ]
+    },
+    {
+      "source_type": "paper",
+      "title": "Teething and tooth eruption in infants: A cohort study",
+      "organization": "Pediatrics (American Academy of Pediatrics)",
+      "publication_year": 2000,
+      "url": "https://doi.org/10.1542/peds.106.6.1374",
+      "specialties": [
+        "pediatrics",
+        "general_medicine"
+      ],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "chunks": [
+        "Teething and tooth eruption in infants: A cohort study (Wake M, Hesketh K, Lucas J, 2000). Tema: cohorte prospectiva australiana (Royal Children's Hospital, Parkville) que buscó relación entre erupción dental, fiebre y síntomas de dentición. Hallazgo: 21 niños de 6 a 24 meses que acudían al menos 3 días por semana a 3 guarderías suburbanas de jornada completa; se registró la temperatura a diario y un terapeuta dental exploró los rebordes alveolares (encías) para detectar erupciones, y personal y padres rellenaron de forma independiente cuestionarios diarios sobre los síntomas de las 24 h previas. Se definió el día de erupción como el primer día en que el diente se veía o se palpaba; días-diente fueron los 5 días previos a la erupción (236 días-diente) y días sin diente los alejados más de 28 días de cualquier erupción (895 días), para 90 dientes. La temperatura fue similar en días-diente y días sin diente (36,21 frente a 36,18 °C, prueba t pareada). (fuente en inglés)",
+        "Teething and tooth eruption in infants: A cohort study (Wake et al., 2000). Tema: resultados ajustados sobre fiebre y síntomas. Hallazgo: la regresión logística ajustada por edad no mostró asociación entre días-diente y temperatura (OR 1,35; IC 95 % 0,80-2,27 para fiebre alta; OR 1,34; IC 95 % 0,48-3,77 para fiebre baja). Se modelaron, teniendo en cuenta el efecto de agrupamiento por niño y la edad, los informes diarios de personal y padres sobre estado de ánimo, bienestar o enfermedad, babeo, sueño, diarrea, pañales de olor fuerte, mejillas rojas y exantemas o rubor; solo las heces blandas referidas por los padres (no por el personal) se asociaron a la erupción (OR 1,86; IC 95 % 1,26-2,73), y esa única asociación desapareció al cambiar la ventana a los 10 días previos o a los 5 días alrededor de la erupción (OR 1,42; IC 95 % 0,98-2,05 y OR 1,47; IC 95 % 0,97-2,21, respectivamente). Todos los padres afirmaron retrospectivamente que sus hijos habían sufrido diversos síntomas de dentición. (fuente en inglés)",
+        "Teething and tooth eruption in infants: A cohort study (Wake et al., 2000). Tema: conclusiones y límites del estudio. Hallazgo: el estudio no confirmó las asociaciones fuertes esperadas entre erupción dental y una variedad de síntomas de dentición en niños de 6 a 30 meses, aunque los autores no pueden descartar que existan asociaciones débiles (error de tipo II, muestra de 21 niños). Estos resultados contrastan con las creencias firmes de padres y profesionales, creencias que pueden impedir un manejo óptimo de patrones habituales de enfermedad y comportamiento en niños pequeños. Implicación: el estudio no aporta pruebas de que la erupción dental cause fiebre, y la única asociación observada (heces blandas según los padres) no se mantuvo al variar la definición de día-diente. (fuente en inglés)"
+      ]
+    },
+    {
+      "source_type": "paper",
+      "title": "Signs and Symptoms of Primary Tooth Eruption: A Meta-analysis",
+      "organization": "Pediatrics (American Academy of Pediatrics)",
+      "publication_year": 2016,
+      "url": "https://doi.org/10.1542/peds.2015-3501",
+      "specialties": [
+        "pediatrics",
+        "general_medicine",
+        "gastroenterology"
+      ],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "chunks": [
+        "Signs and Symptoms of Primary Tooth Eruption: A Meta-analysis (Massignan C, Cardoso M, Porporatti AL, Aydinoz S, De Luca Canto G, Mezzomo LA, Bolan M; Pediatrics 2016;137(3):e20153501). Tema: revisión sistemática y metaanálisis de estudios observacionales sobre signos y síntomas locales y sistémicos durante la erupción de los dientes temporales en niños de 0 a 36 meses. Hallazgo: se identificaron 1.179 artículos y, tras una selección en dos fases, se incluyeron 16 estudios (búsqueda en LILACS, PubMed, ProQuest, Scopus, Web of Science y literatura gris vía Google Scholar). La prevalencia global de signos y síntomas durante la erupción fue del 70,5 % (muestra total 3.506 niños). Los más frecuentes fueron la irritación gingival (86,81 %), la irritabilidad (68,19 %) y el babeo (55,72 %). (fuente en inglés)",
+        "Signs and Symptoms of Primary Tooth Eruption: A Meta-analysis (Massignan et al., 2016). Tema: proporción de niños con pérdida de apetito y otros síntomas sistémicos. Hallazgo: según el resumen estructurado de este metaanálisis publicado por Esparza Olcina y Orejón de Luna (Evidencias en Pediatría 2016;12:43 y Rev Pediatr Aten Primaria 2016;18:375-7), además de los tres síntomas principales se encontró pérdida de apetito en el 37 %, sueño inquieto en el 34,5 %, mucosidad (rinorrea) en el 31,3 %, aumento de temperatura en el 26,7 % y diarrea en el 19,5 % de los casos; el intervalo de confianza del 95 % de la prevalencia global fue de 54,1 a 84,6 y el metaanálisis de síntomas individuales incluyó 8 estudios (modelo de efectos aleatorios por alta heterogeneidad). Respecto a la temperatura, la erupción podía producir un ligero aumento, pero no se caracterizó como fiebre; el resumen español señala que no fue posible calcular un promedio ponderado de fiebre por falta de datos y que es más apropiado hablar de aumento de temperatura. (fuente en inglés)",
+        "Signs and Symptoms of Primary Tooth Eruption: A Meta-analysis (Massignan et al., 2016). Tema: limitaciones y conclusión. Hallazgo: los estudios consideraron síntomas generales distintos entre sí; algunos carecían de control de factores de confusión, no definían claramente los métodos diagnósticos, usaban medidas subjetivas o dejaban intervalos largos entre exploraciones. Los autores concluyen que existe evidencia de la aparición de signos y síntomas durante la erupción de los dientes temporales, sobre todo irritación gingival, irritabilidad y babeo, y que el aumento de temperatura corporal asociado no se caracterizó como fiebre. La pérdida de apetito se registró en algo más de un tercio de los niños (37 %). Ninguno de estos signos o síntomas es específico de la erupción dentaria, por lo que atribuírselos puede retrasar el diagnóstico de enfermedades coincidentes. (fuente en inglés)"
+      ]
+    },
+    {
+      "source_type": "paper",
+      "title": "Prospective longitudinal study of signs and symptoms associated with primary tooth eruption",
+      "organization": "Pediatrics (American Academy of Pediatrics)",
+      "publication_year": 2011,
+      "url": "https://doi.org/10.1542/peds.2010-2697",
+      "specialties": [
+        "pediatrics",
+        "general_medicine",
+        "gastroenterology"
+      ],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "chunks": [
+        "Prospective longitudinal study of signs and symptoms associated with primary tooth eruption (Ramos-Jorge J, Pordeus IA, Ramos-Jorge ML, Paiva SM, 2011). Tema: estudio longitudinal de 8 meses con exploración diaria para medir la asociación entre erupción de dientes temporales y síntomas de dentición. Hallazgo: 47 lactantes no institucionalizados de 5 a 15 meses de Diamantina (Brasil), con hasta 7 incisivos erupcionados y sin enfermedad crónica. Cada día se midió la temperatura timpánica y axilar, se exploró la boca y se entrevistó a la madre sobre 13 signos y síntomas de las 24 h previas. Las temperaturas máximas registradas fueron 36,8 °C timpánica y 36,6 °C axilar; la dentición se asoció a un aumento de la temperatura timpánica el día de la erupción (P = 0,004), pero sin llegar a fiebre. (fuente en inglés)",
+        "Prospective longitudinal study of signs and symptoms associated with primary tooth eruption (Ramos-Jorge et al., 2011). Tema: pérdida de apetito y otros síntomas asociados. Hallazgo: los signos y síntomas más frecuentemente asociados a la dentición fueron irritabilidad (mediana 0,60; P < 0,001), aumento de salivación (mediana 0,50; P < 0,001), rinorrea (mediana 0,50; P < 0,001) y pérdida de apetito (mediana 0,50; P < 0,001). También se asociaron diarrea, exantema y alteración del sueño. Los autores concluyen que los síntomas graves, como la fiebre, no pueden atribuirse a la dentición. (fuente en inglés)"
+      ]
+    },
+    {
+      "source_type": "paper",
+      "title": "Signs and symptoms associated with primary tooth eruption: a clinical trial of nonpharmacological remedies",
+      "organization": "BMC Oral Health",
+      "publication_year": 2015,
+      "url": "https://doi.org/10.1186/s12903-015-0070-2",
+      "specialties": [
+        "pediatrics",
+        "general_medicine",
+        "gastroenterology"
+      ],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "chunks": [
+        "Signs and symptoms associated with primary tooth eruption: a clinical trial of nonpharmacological remedies (Memarpour M, Soltanimehr E, Eskandarian T, 2015). Tema: ensayo clínico no aleatorizado en Irán sobre síntomas de dentición y su manejo con remedios no farmacológicos. Hallazgo: 270 niños de 8 a 36 meses divididos en 5 grupos de 54 (consuelo o contacto físico, hielo, frotar las encías, mordedores y alimentos para masticar), seguidos durante un periodo de 8 días alrededor de la erupción con exploración oral, temperatura timpánica y cuestionario; 254 completaron el estudio (edad media 16 ± 7,2 meses). Los síntomas más frecuentes fueron babeo (92 %), alteraciones del sueño (82,3 %) e irritabilidad (75,6 %). Registro en Iranian Registry of Clinical Trials IRCT201211127402N3. (fuente en inglés)",
+        "Signs and symptoms associated with primary tooth eruption: a clinical trial of nonpharmacological remedies (Memarpour et al., 2015). Tema: magnitud y evolución temporal de la pérdida de apetito. Hallazgo: en el texto completo, la pérdida de apetito afectó a 187 niños (73,6 %) en los 4 días previos a la erupción, a 152 (53,1 %) el día de la erupción y a 95 (37,4 %) en los 3 días posteriores, es decir, el apetito se recupera de forma progresiva tras la salida del diente. La erupción de caninos produjo más pérdida de apetito que la de incisivos (p = 0,033) o molares (p = 0,014). La fiebre referida por las madres fue del 33,1 % y la diarrea del 24,4 % en los días previos. El estudio no especifica si la pérdida de apetito se refería a la leche o a los sólidos. (fuente en inglés)",
+        "Signs and symptoms associated with primary tooth eruption: a clinical trial of nonpharmacological remedies (Memarpour et al., 2015). Tema: temperatura corporal y remedios eficaces. Hallazgo: solo se observó un aumento leve de la temperatura el día de la erupción (36,70 ± 0,39 °C), significativamente distinta de la de los días previos (36,54 ± 0,40 °C) y posteriores (36,53 ± 0,39 °C), ambos p < 0,001; no hubo correlación entre la fiebre referida por las madres y la temperatura medida por los investigadores. Los autores no hallaron asociación entre dentición y fiebre o diarrea, y señalan que los niños de bajo peso al nacer podrían tener más síntomas. Los mejores resultados en tiempo de recuperación y satisfacción materna se obtuvieron con mordedores, seguidos del consuelo físico y de frotar las encías. (fuente en inglés)"
+      ]
+    },
+    {
+      "source_type": "paper",
+      "title": "Association between Fever and Primary Tooth Eruption: A Systematic Review and Meta-analysis",
+      "organization": "International Journal of Clinical Pediatric Dentistry",
+      "publication_year": 2017,
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC5661046/",
+      "specialties": [
+        "pediatrics",
+        "general_medicine"
+      ],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "chunks": [
+        "Association between Fever and Primary Tooth Eruption: A Systematic Review and Meta-analysis (Nemezio MA, De Oliveira KMH, Romualdo PC, Queiroz AM, Paula-e-Silva FWG, Silva RAB, Küchler EC, 2017). Tema: revisión sistemática y metaanálisis para establecer si la fiebre se asocia a la erupción de los dientes temporales. Hallazgo: búsqueda en PubMed, MEDLINE, Web of Science, Scopus y Cochrane; se identificaron 83 estudios potenciales y solo 6 cumplieron los criterios (estudios en humanos sin enfermedad sistémica ni síndromes, en inglés, sobre fiebre durante el periodo de erupción de los dientes temporales); 4 aportaron datos dicotómicos al metaanálisis de efectos fijos (Review Manager 5.3, test de Cochran-Mantel-Haenszel); los otros 2 (Ramos-Jorge et al. y Wake et al.) se excluyeron del metaanálisis por presentar variables continuas. En el análisis global no se encontró asociación entre fiebre y erupción dental: OR 1,32 (IC 95 % 0,88-1,96). (fuente en inglés)",
+        "Association between Fever and Primary Tooth Eruption: A Systematic Review and Meta-analysis (Nemezio et al., 2017). Tema: subgrupo por método de medida de la temperatura y conclusión. Hallazgo: cuando la temperatura se midió por vía rectal sí apareció asociación entre fiebre y erupción (OR 2,82; IC 95 % 1,55-5,14), lo que sugiere que el método de medición condiciona el resultado. Los autores concluyen que hay pocos estudios adecuados sobre la relación entre erupción dental y fiebre, que solo la encontraron con temperatura rectal, y piden nuevos estudios que usen distintos métodos de medición de la temperatura corporal para aclarar esta relación. La introducción cita la pérdida de apetito entre los síntomas atribuidos a la erupción (junto a irritabilidad, irritación gingival, salivación, sueño inquieto, diarrea y fiebre), pero el trabajo no la analiza: solo estudia la fiebre. Publicado en Int J Clin Pediatr Dent 2017;10(3):293-298 (PMID 29104392, PMC5661046). (fuente en inglés)"
+      ]
+    },
+    {
+      "source_type": "reference",
+      "title": "Les symptômes de la poussée dentaire",
+      "organization": "Assurance Maladie (ameli.fr)",
+      "publication_year": 2024,
+      "url": "https://www.ameli.fr/assure/sante/themes/poussee-dentaire/symptomes-poussee-dentaire",
+      "specialties": [
+        "pediatrics",
+        "general_medicine"
+      ],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "chunks": [
+        "Les symptômes de la poussée dentaire (Assurance Maladie, ameli.fr, actualizado el 20 de junio de 2024). Tema: información oficial francesa para familias sobre los síntomas que puede producir la salida de los dientes en el bebé. Hallazgo: la página indica que durante las poussées dentaires el bebé saliva mucho más, puede tener las encías inflamadas y sensibles a la presión, buscar morder objetos duros, mostrarse irritable o agitado, tener menos apetito, presentar el sueño alterado con dificultades para dormirse, despertares nocturnos y llantos, y tener las mejillas rojas. Se admite una fiebre que no supere los 38 °C. No se cuantifica la magnitud de la pérdida de apetito ni su duración, y no se distingue entre lactancia y sólidos. (fuente en francés)",
+        "Les symptômes de la poussée dentaire (Assurance Maladie, ameli.fr, 2024). Tema: qué NO atribuir a la dentición y cuándo consultar. Hallazgo: la Assurance Maladie afirma que las poussées dentaires no provocan fiebre superior a 38 °C, ni una degradación del estado general, ni diarrea. Aconseja consultar al médico si el niño tiene mucha fiebre y preocupa a los padres, y hablar con el médico o el cirujano dentista si los síntomas parecen inusuales. En la práctica, el mensaje de la página es que la dentición produce molestias leves (menos apetito, más babeo, irritabilidad, sueño alterado), mientras que la fiebre alta, la diarrea o un deterioro del estado general no se explican por los dientes y deben hacer buscar otra causa. (fuente en francés)"
+      ]
+    },
+    {
+      "source_type": "paper",
+      "title": "Effects of common illnesses on infants' energy intakes from breast milk and other foods during longitudinal community-based studies in Huascar (Lima), Peru",
+      "organization": "American Journal of Clinical Nutrition",
+      "publication_year": 1990,
+      "url": "https://doi.org/10.1093/ajcn/52.6.1005",
+      "specialties": [
+        "pediatrics",
+        "general_medicine",
+        "gastroenterology"
+      ],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "chunks": [
+        "Effects of common illnesses on infants' energy intakes from breast milk and other foods during longitudinal community-based studies in Huascar (Lima), Peru (Brown KH, Stallings RY, Creed de Kanashiro H, López de Romaña G, Black RE, 1990). Tema: efecto de las infecciones comunes (diarrea, fiebre) sobre la ingesta energética de lactantes en su domicilio. Hallazgo: se siguió longitudinalmente a 131 lactantes peruanos con vigilancia de síntomas tres veces por semana y 1.615 observaciones de día completo de la ingesta. En días sin síntomas la ingesta media fue de 557 ± 128 kcal/día (92,4 ± 26,5 kcal/kg/día) en menores de 181 días y de 638 ± 193 kcal/día (77,7 ± 25,7 kcal/kg/día) en mayores de 180 días. Ajustando por edad, estación e individuo, la ingesta energética total descendió significativamente un 5-6 % durante los episodios de diarrea o fiebre. (fuente en inglés)",
+        "Effects of common illnesses on infants' energy intakes from breast milk and other foods during longitudinal community-based studies in Huascar (Lima), Peru (Brown KH et al., 1990). Tema: qué parte de la dieta se reduce cuando el lactante está enfermo y papel protector de la lactancia. Hallazgo: durante la enfermedad no cambiaron ni la frecuencia de tomas, ni el tiempo total de succión, ni la energía consumida a partir de la leche materna. En cambio, la energía procedente de alimentos distintos de la leche materna descendió un 20-30 % durante la diarrea y la fiebre, y la pequeña reducción de la ingesta total se explicó por completo por el menor consumo de esos otros alimentos. Implicación: en el lactante enfermo la leche materna actúa como amortiguador de la anorexia por enfermedad, y la caída del apetito se concentra en la alimentación complementaria. (fuente en inglés)"
+      ]
+    },
+    {
+      "source_type": "paper",
+      "title": "The impact of ordinary illnesses on the dietary intakes of malnourished children",
+      "organization": "American Journal of Clinical Nutrition",
+      "publication_year": 1980,
+      "url": "https://doi.org/10.1093/ajcn/33.2.345",
+      "specialties": [
+        "pediatrics",
+        "general_medicine"
+      ],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "chunks": [
+        "The impact of ordinary illnesses on the dietary intakes of malnourished children (Martorell R, Yarbrough C, Yarbrough S, Klein RE, 1980). Tema: cuánto reducen la ingesta las enfermedades corrientes (infecciones respiratorias, diarrea y apatía inducida por la enfermedad) en niños preescolares. Hallazgo: con datos de niños preescolares de la Guatemala rural, la presencia de un conjunto de síntomas comunes se asoció a una reducción media de la ingesta diaria cercana al 20 %, equivalente a 175 kcal y 4,8 g de proteína al día. El efecto fue de magnitud similar para la diarrea y para la apatía, y menor para las infecciones respiratorias, que restaron 61 kcal y 1,0 g de proteína. Los autores concluyen que las enfermedades comunes son una causa importante de ingestas bajas en esa población. (fuente en inglés)",
+        "The impact of ordinary illnesses on the dietary intakes of malnourished children (Martorell R et al., 1980). Tema: la anorexia por enfermedad varía según el tipo de cuadro. Hallazgo: el estudio separa el efecto por síntoma en niños preescolares de la Guatemala rural. La diarrea y la apatía inducida por la enfermedad redujeron la ingesta en una magnitud similar a la del conjunto de síntomas comunes (reducción media cercana al 20 %, equivalente a 175 kcal y 4,8 g de proteína al día), mientras que las infecciones respiratorias solo restaron unas 61 kcal y 1,0 g de proteína diarios. Lectura práctica: la pérdida de apetito con la enfermedad es real y cuantificable, pero de intensidad distinta según el cuadro; los episodios respiratorios tuvieron un impacto claramente menor sobre la ingesta que la diarrea. El contexto es una población infantil desnutrida, por lo que las cifras absolutas no son directamente extrapolables a niños bien nutridos, aunque el patrón sí es orientativo. (fuente en inglés)"
+      ]
+    },
+    {
+      "source_type": "paper",
+      "title": "Population-based study of the impact of childcare attendance on hospitalizations for acute respiratory infections",
+      "organization": "Pediatrics",
+      "publication_year": 2006,
+      "url": "https://doi.org/10.1542/peds.2006-0373",
+      "specialties": [
+        "pediatrics",
+        "general_medicine"
+      ],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "chunks": [
+        "Population-based study of the impact of childcare attendance on hospitalizations for acute respiratory infections (Kamper-Jørgensen M, Wohlfahrt J, Simonsen J, Grønbæk M, Benn CS, 2006). Tema: exceso de infecciones respiratorias al entrar en la guardería según la edad y el tiempo desde la incorporación, en una cohorte danesa de registros. Hallazgo: 138.821 ingresos hospitalarios por infección respiratoria aguda durante 3.982.925 personas-año de seguimiento en niños daneses de 0 a 5 años. En menores de 1 año, los primeros 6 meses tras la incorporación al primer centro se asociaron a una incidencia de hospitalización un 69 % mayor que la de los niños cuidados en casa; en niños de 1, 2 y 3 o más años el exceso fue del 47 %, 41 % y 8 %, respectivamente. (fuente en inglés)",
+        "Population-based study of the impact of childcare attendance on hospitalizations for acute respiratory infections (Kamper-Jørgensen M et al., 2006). Tema: cuánto dura el periodo de mayor riesgo infeccioso tras empezar la guardería y qué lo modula. Hallazgo: la incidencia descendió después de los primeros 6 meses y, tras un año o más en la guardería, fue comparable a la de los niños cuidados en casa; el mismo patrón se repitió tras una segunda incorporación a otro centro. En niños de 0 a 2 años sin otros menores de 5 años en el hogar, el exceso de incidencia durante los primeros 6 meses fue del 100 %, frente al 25 % y el 9 % en los que convivían con 1 o con 2 o más niños pequeños. Los autores sugieren que podría ser óptimo retrasar la entrada en la guardería hasta después del primer año de vida. (fuente en inglés)"
+      ]
+    },
+    {
+      "source_type": "paper",
+      "title": "Toddlers' transition to out-of-home day care: Settling into a new care environment",
+      "organization": "Infant Behavior and Development",
+      "publication_year": 2012,
+      "url": "https://doi.org/10.1016/j.infbeh.2012.02.007",
+      "specialties": [
+        "pediatrics",
+        "general_medicine"
+      ],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "chunks": [
+        "Toddlers' transition to out-of-home day care: Settling into a new care environment (Datler W, Ereky-Stevens K, Hover-Reisner N, Malmberg LE, Infant Behavior and Development 2012;35(3):439-451). Tema: reacción inicial de niños pequeños a la entrada en guardería y cambio de conducta durante los primeros meses, en Viena. Hallazgo: 104 niños de 10 a 33 meses en centros de cuidado infantil vieneses, observados en vídeo durante una hora en tres momentos de los primeros cuatro meses, con un total de 36 segmentos de observación de cinco minutos codificados por niño y modelos multinivel (segmentos anidados en niños) con estructura de error autorregresiva. Dos semanas después de la entrada, los niveles de afecto y de interacción de los niños eran bajos. En conjunto, el cambio en todas las áreas de conducta observadas fue menor de lo esperado, con diferencias individuales considerables en el cambio a lo largo del tiempo, en su mayor parte no relacionadas con las características del niño. (fuente en inglés)",
+        "Toddlers' transition to out-of-home day care: Settling into a new care environment (Datler W et al., 2012). Tema: qué conductas van juntas cuando el niño pequeño se asienta en la guardería. Hallazgo: se encontraron asociaciones significativas entre el afecto positivo de los niños, sus interacciones dinámicas y su interés exploratorio e investigador: el niño que explora e investiga también muestra más afecto positivo e interacción dinámica. El cambio global durante los primeros cuatro meses fue menor de lo esperado y hubo diferencias individuales considerables en la evolución, en su mayor parte no explicadas por las características del niño. Implicación práctica derivada de estos datos (no formulada por los autores): valorar la evolución individual del niño (ánimo, exploración, interacción) durante los primeros meses en lugar de compararlo con otros niños. (fuente en inglés)"
+      ]
+    },
+    {
+      "source_type": "paper",
+      "title": "Dietary intakes in North Carolina child-care centers: are children meeting current recommendations?",
+      "organization": "Journal of the American Dietetic Association",
+      "publication_year": 2008,
+      "url": "https://doi.org/10.1016/j.jada.2008.01.014",
+      "specialties": [
+        "pediatrics",
+        "general_medicine"
+      ],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "chunks": [
+        "Dietary intakes in North Carolina child-care centers: are children meeting current recommendations? (Ball SC, Benjamin SE, Ward DS, 2008). Tema: qué comen realmente los niños pequeños en el comedor de la guardería frente a las recomendaciones (MyPyramid para 2 a 5 años). Hallazgo: observación dietética directa de 117 niños de 20 centros de Carolina del Norte, registrando lo servido y lo consumido y comparándolo con la mitad a dos tercios de las raciones recomendadas (la fracción del día que pasan en el centro a jornada completa). De los cinco grupos principales de alimentos, solo la leche alcanzó esa fracción; los niños consumieron menos del 13 % de la recomendación de cereales integrales y el 7 % de la de verduras de color verde oscuro. (fuente en inglés)",
+        "Dietary intakes in North Carolina child-care centers: are children meeting current recommendations? (Ball SC et al., 2008). Tema: calidad de lo que sí se come en el comedor de la guardería. Hallazgo: el 50 % de la leche consumida era leche entera y el 75 % de la carne consumida era de tipo graso o frita. En conjunto, los niños en guardería a jornada completa no alcanzaban las cantidades recomendadas de cereales integrales, fruta (excluido el zumo 100 %) ni verduras, y consumían cantidades excesivas de grasa saturada y azúcar añadido. Implicación para las familias: el centro alcanza la cantidad de leche recomendada para esa parte del día (aunque la mitad es leche entera), pero la fruta y la verdura del día no quedan garantizadas por la guardería. (fuente en inglés)"
+      ]
+    },
+    {
+      "source_type": "paper",
+      "title": "Young Children's Dietary Quality in Family Child Care and in Their Own Home",
+      "organization": "Journal of the Academy of Nutrition and Dietetics",
+      "publication_year": 2023,
+      "url": "https://doi.org/10.1016/j.jand.2022.10.014",
+      "specialties": [
+        "pediatrics",
+        "general_medicine"
+      ],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "chunks": [
+        "Young Children's Dietary Quality in Family Child Care and in Their Own Home (Zaltz DA, Pate RR, Liu T, McIver KL, Neelon B, Benjamin-Neelon SE, 2023). Tema: comparación directa de la calidad de la dieta del mismo niño en el hogar de cuidado infantil (family child care) y en su propia casa. Hallazgo: análisis transversal de 123 niños (edad media 38,5 ± 13,0 meses; 53 % niñas) atendidos en 52 hogares de cuidado infantil de Carolina del Sur (2018-2019), con observación directa de la ingesta en el cuidado y recuerdo de 24 horas en casa. La puntuación del Healthy Eating Index 2015 fue de 60,3 ± 12,1 en el entorno de cuidado frente a 54,3 ± 12,9 en su propia casa (p < 0,001 sin ajustar); tras ajustar por características del niño, el proveedor, el centro y los padres, la puntuación total fue 5,18 puntos menor en casa (IC 95 % -8,05 a -2,30; p = 0,003). (fuente en inglés)",
+        "Young Children's Dietary Quality in Family Child Care and in Their Own Home (Zaltz DA et al., 2023). Tema: en qué componentes come mejor el niño en el cuidado infantil que en casa. Hallazgo: en las comparaciones sin ajustar, las puntuaciones en el entorno de cuidado fueron mayores en fruta total (4,3 frente a 3,3 sobre 5; p < 0,001), fruta entera (4,5 frente a 3,1 sobre 5; p < 0,001), lácteos (8,2 frente a 7,2 sobre 10; p = 0,004) y grasas saturadas (6,8 frente a 5,7 sobre 10; p = 0,01; en este componente una puntuación mayor indica menor consumo). En el modelo ajustado solo se mantuvieron las diferencias en fruta total (beta -0,89; p = 0,002) y fruta entera (beta -1,39; p = 0,002). Los autores concluyen que los niños tuvieron una ingesta más saludable en el hogar de cuidado infantil que en su propia casa, pero señalan que también en el cuidado infantil queda margen considerable de mejora, en particular en verduras, pescado y proteínas vegetales y ácidos grasos insaturados. (fuente en inglés)"
+      ]
+    },
+    {
+      "source_type": "guideline",
+      "title": "Guía de Algoritmos en Pediatría de Atención Primaria: Diarrea aguda",
+      "organization": "Asociación Española de Pediatría de Atención Primaria (AEPap)",
+      "publication_year": 2021,
+      "url": "https://algoritmos.aepap.org/algoritmo/80/diarrea-aguda",
+      "specialties": [
+        "pediatrics",
+        "general_medicine",
+        "gastroenterology"
+      ],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "chunks": [
+        "Guía de Algoritmos en Pediatría de Atención Primaria: Diarrea aguda (Carbajo Ferreira AJ, Rodríguez Delgado J; AEPap, 2021). Tema: cómo alimentar al lactante y al niño pequeño durante una gastroenteritis aguda. Hallazgo: la alimentación se debe introducir precozmente, una vez que hayan cesado los vómitos; si se precisa rehidratación oral, se reanuda tras una pausa breve no superior a 4-6 horas. Se recomienda una alimentación normal para la edad, restringiendo los alimentos grasos (retrasan el vaciamiento gástrico) y los ricos en azúcares simples, que por su elevada osmolaridad pueden empeorar la diarrea. No se ha demostrado beneficio con las dietas astringentes. Los lactantes seguirán tomando leche materna o fórmula sin diluir.",
+        "Guía de Algoritmos en Pediatría de Atención Primaria: Diarrea aguda (Carbajo Ferreira AJ, Rodríguez Delgado J; AEPap, 2021). Tema: manejo del apetito reducido y de las fórmulas especiales durante la diarrea. Hallazgo: la guía establece que los alimentos se ofrecerán sin forzar, respetando la disminución del apetito, que es habitual en la gastroenteritis aguda. En el tratamiento inicial no están indicadas las fórmulas infantiles sin lactosa en lactantes ni la leche sin lactosa en niños mayores; se reservan para pacientes con diarrea prolongada en los que se sospeche un síndrome posenteritis con intolerancia secundaria a la lactosa. En resumen: mantener las tomas habituales de leche, ofrecer la comida normal para la edad sin presionar, y no aplicar dietas restrictivas ni fórmulas especiales sin indicación."
+      ]
+    },
+    {
+      "source_type": "paper",
+      "title": "Prevalence of picky eaters among infants and toddlers and their caregivers' decisions about offering a new food",
+      "organization": "Journal of the American Dietetic Association",
+      "publication_year": 2004,
+      "url": "https://doi.org/10.1016/j.jada.2003.10.024",
+      "specialties": [
+        "pediatrics",
+        "general_medicine"
+      ],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "chunks": [
+        "Prevalence of picky eaters among infants and toddlers and their caregivers' decisions about offering a new food (Carruth, Ziegler, Gordon y Barr, 2004). Tema: prevalencia del rechazo de alimentos ('picky eating') entre 4 y 24 meses en el estudio FITS (Feeding Infants and Toddlers Study). Hallazgo: encuesta transversal con muestra nacional aleatoria de 3.022 lactantes y niños pequeños de 4 a 24 meses en Estados Unidos, con recuerdo dietético de 24 horas y datos socioeconómicos y demográficos del cuidador. El porcentaje de niños etiquetados como 'comedores selectivos' por sus cuidadores aumentó del 19% al 50% entre los 4 y los 24 meses de edad. Se describieron comedores selectivos en todas las edades, en ambos sexos, en todas las etnias y en todos los rangos de ingresos del hogar. A mayor edad, mayor probabilidad de ser considerado selectivo; los niños con percentiles de peso para la edad más altos tenían menos probabilidad de recibir esa etiqueta. (fuente en inglés)",
+        "Prevalence of picky eaters among infants and toddlers and their caregivers' decisions about offering a new food (Carruth et al., 2004). Tema: ingesta de energía y nutrientes de los niños selectivos y número de exposiciones a un alimento nuevo. Hallazgo: en el día evaluado, tanto los niños selectivos como los no selectivos alcanzaron o superaron las recomendaciones de energía y nutrientes para su edad, es decir, la etiqueta parental de 'mal comedor' no se tradujo en déficit de ingesta en esta muestra de 3.022 niños de 4 a 24 meses. El número máximo de veces que los cuidadores ofrecían un alimento nuevo antes de decidir que al niño no le gustaba era de 3 a 5; los autores concluyen que las madres necesitan ofrecer muchas más exposiciones repetidas (por ejemplo, de 8 a 15 veces) de las que ofrecen en la práctica para mejorar la aceptación. Los profesionales de la dietética deben tener en cuenta que la percepción de selectividad aparece con independencia del sexo, la etnia y los ingresos del hogar. (fuente en inglés)"
+      ]
+    },
+    {
+      "source_type": "paper",
+      "title": "Correlates of picky eating and food neophobia in young children: a systematic review and meta-analysis",
+      "organization": "Nutrition Reviews",
+      "publication_year": 2017,
+      "url": "https://doi.org/10.1093/nutrit/nux024",
+      "specialties": [
+        "pediatrics",
+        "general_medicine"
+      ],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "chunks": [
+        "Correlates of picky eating and food neophobia in young children: a systematic review and meta-analysis (Cole, An, Lee y Donovan, 2017). Tema: prevalencia y factores asociados al rechazo de alimentos y la neofobia alimentaria en niños de 30 meses o menos, analizados con un marco socioecológico de cuatro niveles (célula, niño, familia y comunidad/país). Hallazgo: revisión sistemática de 32 estudios que examinaron 89 correlatos. El metaanálisis (niños de 4 a 30 meses) estimó una prevalencia de 'picky eating' del 22,0% (IC 95%: 11,5% a 32,5%), con una puntuación media de 'food fussiness' del CEBQ de 2,51 (IC 95%: 2,42 a 2,59) en una escala de 1 a 5. Cada mes adicional de edad se asoció a un aumento de 0,06 unidades en la puntuación de selectividad (IC 95%: 0,01 a 0,11). La heterogeneidad entre estudios fue muy alta (I2 de 99,5% y 99,6%) y no hubo indicios de sesgo de publicación (Begg p = 0,47; Egger p = 0,74). (fuente en inglés)",
+        "Correlates of picky eating and food neophobia in young children: a systematic review and meta-analysis (Cole et al., 2017). Tema: factores del niño y de los padres asociados a la selectividad alimentaria hasta los 30 meses de edad. Hallazgo: los correlatos más estudiados fueron características del niño (sexo, peso, ingesta) y creencias y prácticas de alimentación de los padres. En el niño, la evidencia más sólida fue la asociación con menor ingesta de verduras; para la fruta los resultados fueron mixtos (2 estudios con asociación negativa y 3 sin asociación); un estudio transversal halló menor variedad de alimentos consumidos; la selectividad también se asoció a menor apetito, menor disfrute de la comida y menor respuesta a la comida. En la familia, las prácticas receptivas (atención a las señales de hambre y saciedad, supervisión de lo que come el niño y comidas familiares estructuradas) se asociaron inversamente con la selectividad; las prácticas no receptivas (desconfianza en el apetito del niño, restricción manifiesta y recompensas por comer) se asociaron positivamente, mientras que la restricción encubierta no mostró asociación. La presión para comer tuvo resultados mixtos (positiva en 2 estudios, nula en 1). La duración de la lactancia materna mostró evidencia inconsistente. La preocupación materna por que el niño comiera poco se asoció positivamente. Los autores piden estudiar la díada niño-padre y las interacciones bidireccionales de alimentación. (fuente en inglés)"
+      ]
+    },
+    {
+      "source_type": "paper",
+      "title": "A Narrative Review of Childhood Picky Eating and Its Relationship to Food Intakes, Nutritional Status, and Growth",
+      "organization": "Nutrients",
+      "publication_year": 2018,
+      "url": "https://doi.org/10.3390/nu10121992",
+      "specialties": [
+        "pediatrics",
+        "general_medicine",
+        "gastroenterology"
+      ],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "chunks": [
+        "A Narrative Review of Childhood Picky Eating and Its Relationship to Food Intakes, Nutritional Status, and Growth (Samuel, Musa-Veloso, Ho, Venditti y Shahkhalili-Dulloo, Nutrients, 2018). Tema: si el rechazo de alimentos infantil ('picky eating') se asocia a diferencias medibles en la ingesta de alimentos y nutrientes. Hallazgo: revision narrativa de 38 publicaciones; en los 21 estudios con datos de prevalencia, la edad media de los niños fue de 4 meses a 15 años y la prevalencia de 'picky eating' oscilo entre el 5,5% y el 70,1% segun la definicion; no existe una definicion concisa ampliamente adoptada. Los niños selectivos consumieron significativamente menos verduras en 10 de 13 estudios y menos fruta en 7 de 13. La ingesta energetica fue menor en 6 estudios y similar en otros 9; la de proteinas fue menor en 5 estudios y no en otros 5; hidratos de carbono y grasas fueron en general similares (diferencias en grasas solo en 3 estudios). Varios estudios mostraron ingestas menores de hierro, zinc y vitaminas A, C, E, B1, B2 y B3 en los selectivos; para la mayoria de vitaminas y minerales las ingestas superaban las recomendaciones, pero hierro, zinc y vitamina D eran bajos en ambos grupos (en el estudio Avon, entre la mitad y tres cuartas partes de todos los niños estaban por debajo de la recomendacion de hierro y zinc). (fuente en ingles)",
+        "A Narrative Review of Childhood Picky Eating and Its Relationship to Food Intakes, Nutritional Status, and Growth (Samuel et al., Nutrients, 2018). Tema: relacion entre rechazo de alimentos y crecimiento (peso, talla, IMC). Hallazgo: resultados mixtos. En 7 estudios todos los parametros de crecimiento o peso fueron significativamente peores en los niños selectivos, en otros 7 solo algunos parametros, y en varios estudios no hubo diferencias en peso, talla, IMC, z de IMC o proporcion de bajo peso. En un estudio (Ekstein et al., 14 a 91 meses, n = 170) los selectivos tuvieron mayor probabilidad de bajo peso (20,6% frente a 6,6%; OR ajustada 3,6; IC 95%: 1,2 a 10,7), y en 2 estudios eran mas bajos de talla. Conclusion de los autores: no hay una relacion consistente entre rechazo de alimentos y crecimiento; las diferencias de peso o crecimiento se aprecian sobre todo en los estudios que combinan varios criterios para definir la selectividad (de los 7 estudios con todos los parametros peores, 5 usaban criterios multiples). Los autores reclaman una definicion uniforme de 'picky eating' y mas estudios longitudinales. Nota: revision financiada por Nestle Research, con dos autores empleados de Nestle (conflicto de interes declarado). (fuente en ingles)"
+      ]
+    },
+    {
+      "source_type": "paper",
+      "title": "Antecedents of picky eating behaviour in young children",
+      "organization": "Appetite",
+      "publication_year": 2018,
+      "url": "https://doi.org/10.1016/j.appet.2018.07.032",
+      "specialties": [
+        "pediatrics",
+        "general_medicine"
+      ],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "chunks": [
+        "Antecedents of picky eating behaviour in young children (Emmett, Hays y Taylor, 2018). Tema: prevalencia del rechazo de alimentos a los 15 y 38 meses en la cohorte británica ALSPAC y su persistencia. Hallazgo: cohorte prospectiva de 5.758 a 6.608 niños nacidos de embarazo único. A los 15 meses, el 56% de los niños eran considerados 'exigentes' (choosy) por sus madres. A los 38 meses, el 45,2% no era selectivo, el 40,1% era algo selectivo y el 14,7% muy selectivo. Entre los niños exigentes a los 15 meses, el 17% llegó a ser muy selectivo a los 38 meses cuando la madre no estaba preocupada, frente al 50% cuando la madre estaba muy preocupada. La duración de la lactancia materna no mostró asociación independiente con la selectividad posterior. (fuente en inglés)",
+        "Antecedents of picky eating behaviour in young children (Emmett et al., 2018). Tema: factores de los 15 meses que predicen ser muy selectivo a los 38 meses (odds ratio ajustadas del modelo final, n = 5.952, cohorte ALSPAC; referencia: niño no selectivo). Hallazgo: introducción tardía de alimentos con grumos (a los 10 meses o después) OR 1,43 (IC 95%: 1,16 a 1,78); niño exigente a los 15 meses con madre muy preocupada OR 7,41 (3,69 a 14,88), algo preocupada OR 4,40 (3,14 a 6,15), no preocupada OR 3,10 (2,45 a 3,92); rechazo de comida con madre muy preocupada OR 3,14 (1,63 a 6,07) y con madre algo preocupada OR 2,09 (1,54 a 2,83); dificultad para alimentar a los 15 meses OR 1,80 (1,46 a 2,21); alimentación siempre a demanda OR 1,44 (1,10 a 1,88); platos preparados como comida principal la mayoría de las veces OR 2,48 (1,45 a 4,24). Factores protectores: fruta fresca 10 o más veces por semana a los 15 meses OR 0,46 (0,32 a 0,65) y comer la mayoría de las veces la misma comida que la madre OR 0,28 (0,18 a 0,43). El modelo final explica el 21,5% de la varianza. (fuente en inglés)"
+      ]
+    },
+    {
+      "source_type": "paper",
+      "title": "Picky eating during childhood: a longitudinal study to age 11 years",
+      "organization": "Eating Behaviors",
+      "publication_year": 2010,
+      "url": "https://doi.org/10.1016/j.eatbeh.2010.05.006",
+      "specialties": [
+        "pediatrics",
+        "general_medicine"
+      ],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "chunks": [
+        "Picky eating during childhood: a longitudinal study to age 11 years (Mascola, Bryson y Agras, 2010). Tema: incidencia, prevalencia puntual y persistencia del rechazo de alimentos desde los 2 hasta los 11 años. Hallazgo: estudio prospectivo de 120 niños (61 niños y 59 niñas; 56% de seguimiento de una cohorte inicial de 216 recién nacidos, sin diferencias demográficas significativas respecto a la cohorte original) seguidos de los 2 a los 11 años. En cualquier edad entre los 3 y los 11 años, entre el 13% y el 22% de los niños fueron descritos como selectivos por sus padres; el 39% lo fue en algún momento del seguimiento. La incidencia disminuyó con la edad (del 13% al 2%) mientras la prevalencia puntual aumentó, lo que indica cronicidad: alrededor del 40% de los episodios duraron más de 2 años, y la persistencia aumentó hasta los 5 años y se mantuvo estable después. No se observaron efectos significativos sobre el crecimiento (distribuciones de IMC similares en selectivos y no selectivos). (fuente en inglés)",
+        "Picky eating during childhood: a longitudinal study to age 11 years (Mascola et al., 2010). Tema: perfil conductual del niño selectivo y respuesta de los padres. Hallazgo: los niños con selectividad más prolongada tenían gustos y aversiones más marcados (100% en ambos casos frente a 64% y 46% en los de corta duración) y ninguno aceptaba alimentos nuevos (0% frente a 32%). A los 11 años, frente a los no selectivos, los padres de selectivos referían variedad limitada de alimentos (92% frente a 14%), exigencia de preparaciones específicas (64% frente a 16%), aceptación fácil de alimentos nuevos (0% frente a 63%), aversiones fuertes (100% frente a 47%) y rabietas al negarles un alimento (28% frente a 6%). También referían más luchas frecuentes en las comidas (62% frente a 12%) y preparaban comidas separadas con más frecuencia (58% frente a 18%). Los autores interpretan la selectividad como un rasgo relativamente estable que refleja un estilo de comer individual. (fuente en inglés)"
+      ]
+    },
+    {
+      "source_type": "paper",
+      "title": "Food rejections in children: Cognitive and social/environmental factors involved in food neophobia and picky/fussy eating behavior",
+      "organization": "Appetite",
+      "publication_year": 2016,
+      "url": "https://doi.org/10.1016/j.appet.2015.09.008",
+      "specialties": [
+        "pediatrics",
+        "general_medicine"
+      ],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "chunks": [
+        "Food rejections in children: Cognitive and social/environmental factors involved in food neophobia and picky/fussy eating behavior (Lafraire, Rioux, Giboreau y Picard, 2016). Tema: edad típica de inicio y pico de la neofobia alimentaria y del rechazo selectivo. Hallazgo: revisión narrativa que sitúa el 'periodo sensible' de la neofobia entre los 18 meses y los 6 años (Cashdan, 1994). La conducta neofóbica aumenta cuando el niño empieza a desplazarse y alcanza su máximo entre los 2 y los 6 años (Addessi et al., 2005; Cashdan, 1994; Cooke, Wardle y Gibson, 2003). Los rechazos culminan hacia los 2-3 años, justo cuando el sistema de categorización de alimentos del niño cambia con rapidez. Antes de los 2 años los niños son poco discriminativos: entre los 16 y los 29 meses más de la mitad estaban dispuestos a llevarse a la boca ceras, jabón lavavajillas o heces de imitación (Rozin et al., 1986). (fuente en inglés)",
+        "Food rejections in children: Cognitive and social/environmental factors involved in food neophobia and picky/fussy eating behavior (Lafraire et al., 2016). Tema: diferencia entre neofobia y rechazo selectivo ('picky/fussy eating') y su trayectoria en la primera infancia. Hallazgo: la neofobia es el rechazo de alimentos nuevos; la selectividad es el consumo de una variedad limitada rechazando alimentos familiares y nuevos (según Dovey et al., 2008, citados en la revisión). Ambas son conductas ligadas a la edad y transitorias, con trayectorias distintas: la selectividad aumenta durante la lactancia, del 19% de los niños de 4 a 6 meses al 50% de los de 19 a 24 meses (Carruth et al., 2004), se mantiene estable entre 2,5 y 4,5 años (Dubois et al., 2007) y su incidencia máxima se sitúa hacia los 2 años, cayendo a niveles muy bajos a los 6 años (Mascola et al., 2010). (fuente en inglés)"
+      ]
+    },
+    {
+      "source_type": "guideline",
+      "title": "Human energy requirements: Report of a Joint FAO/WHO/UNU Expert Consultation",
+      "organization": "FAO/WHO/UNU",
+      "publication_year": 2004,
+      "url": "https://www.fao.org/4/y5686e/y5686e00.htm",
+      "specialties": [
+        "pediatrics",
+        "general_medicine"
+      ],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "chunks": [
+        "Human energy requirements: Report of a Joint FAO/WHO/UNU Expert Consultation (FAO, OMS y UNU, 2004). Tema: descenso de las necesidades energéticas por kilo durante el primer año y peso de la energía destinada al crecimiento. Hallazgo: el gasto energético total de los lactantes se estimó con agua doblemente marcada a partir de 13 estudios y 417 lactantes, con la ecuación GET (kcal/día) = -99,4 + 88,6 x peso (kg). La energía necesaria para el crecimiento pasa de alrededor del 40% del requerimiento total en el primer mes al 35% en el primer trimestre, 17,5% entre 3 y 6 meses, menos del 6% entre 6 y 12 meses y solo el 3% a los 12 meses. Las necesidades por kilo bajan de unas 110 kcal/kg/día al mes de vida a unas 81 kcal/kg/día a los 6 meses y 80 kcal/kg/día a los 12 meses. Estas cifras son alrededor de un 12% inferiores a las recomendaciones FAO/OMS/UNU de 1985 en los tres primeros meses, un 17% entre 3 y 9 meses y un 20% entre 9 y 12 meses (en lactantes amamantados, 17%, 20% y 22% respectivamente). (fuente en inglés)",
+        "Human energy requirements: Report of a Joint FAO/WHO/UNU Expert Consultation (FAO, OMS y UNU, 2004). Tema: necesidades energéticas de 1 a 3 años comparadas con las recomendaciones de 1985. Hallazgo: las ecuaciones para niños se basan en 801 niños y 808 niñas. Requerimiento de 1 a 2 años: niños 948 kcal/día con 11,5 kg (82,4 kcal/kg/día); niñas 865 kcal/día con 10,8 kg (80,1 kcal/kg/día). De 2 a 3 años: niños 1.129 kcal/día (83,6 kcal/kg/día); niñas 1.047 kcal/día (80,6 kcal/kg/día). De 3 a 4 años bajan a 79,7 y 76,5 kcal/kg/día. Para 1 a 2 años estas cifras son un 21,4% (niños) y un 23,7% (niñas) más bajas que las de 1985, y en menores de 7 años son de media un 18% (niños) y un 20% (niñas) inferiores. La energía depositada en tejidos supone solo el 1% a 2% del requerimiento en la infancia (8,6 kJ o 2 kcal por gramo de peso ganado). (fuente en inglés)"
+      ]
+    },
+    {
+      "source_type": "paper",
+      "title": "Rechazo del alimento en el niño pequeño",
+      "organization": "Anales de Pediatría Continuada",
+      "publication_year": 2010,
+      "url": "https://doi.org/10.1016/S1696-2818(10)70002-0",
+      "specialties": [
+        "pediatrics",
+        "general_medicine",
+        "gastroenterology"
+      ],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "chunks": [
+        "Rechazo del alimento en el niño pequeño (Pérez-García, Alberola y Cano, 2010). Tema: frecuencia del rechazo del alimento en la primera infancia y su peso en las consultas de Atención Primaria en España. Hallazgo: revisión clínica publicada en Anales de Pediatría Continuada (2010;8(1):10-16). Hasta el 25% de todos los niños, el 40% a 70% de los prematuros y hasta el 80% de los niños con alguna discapacidad del desarrollo padecen en algún momento dificultades para alimentarse. En España supone el 12% de las consultas pediátricas de Atención Primaria, y el grupo de edad que más consulta por disminución del apetito es el de 1 a 4 años. Orientan hacia una causa orgánica las anorexias globales, en las que el niño rechaza todo tipo de alimento y se constata un estancamiento o descarrilamiento del desarrollo ponderal; numerosas enfermedades infecciosas y sistémicas (endocrinometabólicas, gastrointestinales, cardiopulmonares, neurológicas o tumorales), agudas o crónicas, pueden cursar con rechazo del alimento como síntoma inespecífico, y el diagnóstico diferencial del fallo de medro abarca toda la pediatría.",
+        "Rechazo del alimento en el niño pequeño (Pérez-García et al., 2010). Tema: anorexia fisiológica del segundo año, aceptación de alimentos nuevos y manejo en consulta. Hallazgo: a los 15 meses empieza una etapa de anorexia fisiológica que coincide con un periodo de crecimiento lento y dura durante la época preescolar; el artículo aconseja anticiparse al problema anunciando a los padres que en el segundo año de vida habrá una etapa de menor ingesta coincidiendo con la desaceleración del ritmo de crecimiento. Ante los alimentos nuevos, la exposición repetida lleva a una aceptación progresiva, aunque puede ser lenta y precisar de 10 a 15 exposiciones antes de lograr modificaciones en su aceptación. Manejo: no usar ninguna treta para que el niño coma (ni fuerza, ni castigo, ni soborno, ni persuasión); los padres son responsables de ofrecer una variedad de alimentos sanos y el niño de la cantidad que consume; la comida debe ser un momento de placer familiar con un ambiente relajado, sin prisas y sin monotonía. La tabla 2 del artículo recoge 13 recomendaciones para los padres: no obligar nunca a comer, no usar chantaje, soborno ni castigo, no premiar por comer bien, presentar los alimentos de forma atractiva, raciones pequeñas en plato grande con opción de repetir, sin distracciones (cuentos ni televisión), no mostrar ansiedad y retirar el plato si rechaza sin ofrecer nada hasta la siguiente comida, respetar gustos razonables sin comer a la carta, evitar alimentos entre horas, dejar que coma solo cuando pueda, limitar la comida a media hora, respetar la inapetencia de una enfermedad aguda y dar ejemplo en la mesa."
+      ]
+    },
+    {
+      "source_type": "paper",
+      "title": "The challenge of meeting nutrient needs of infants and young children during the period of complementary feeding: an evolutionary perspective",
+      "organization": "The Journal of Nutrition (American Society for Nutrition)",
+      "publication_year": 2013,
+      "url": "https://doi.org/10.3945/jn.113.182527",
+      "specialties": [
+        "pediatrics",
+        "general_medicine",
+        "gastroenterology"
+      ],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "chunks": [
+        "The challenge of meeting nutrient needs of infants and young children during the period of complementary feeding: an evolutionary perspective (Dewey KG, J Nutr 2013;143(12):2050-2054). Tema: densidad de nutrientes que necesita la alimentación complementaria del niño amamantado entre 6 y 24 meses. Hallazgo: el hierro y el zinc son los nutrientes más problemáticos porque su concentración en la leche materna es baja respecto a las necesidades. Como la energía esperada de los sólidos es de solo unas 200 kcal/día a los 6-8 meses, unas 300 kcal/día a los 9-11 meses y unas 550 kcal/día a los 12-23 meses, la densidad mínima de hierro exigida a los sólidos es de 4,5 mg/100 kcal a los 6-8 meses, 3,0 mg/100 kcal a los 9-11 meses y 1,0 mg/100 kcal a los 12-23 meses (zinc: 1,14 y 0,46 mg/100 kcal a los 6-8 y 12-23 meses). Un lactante amamantado de 6-8 meses necesita por cada 100 kcal 9 veces más hierro y 4 veces más zinc que un varón adulto. (fuente en inglés)",
+        "The challenge of meeting nutrient needs of infants and young children during the period of complementary feeding (Dewey KG, J Nutr 2013). Tema: brecha de hierro de las dietas de alimentación complementaria reales. Hallazgo: las dietas complementarias no fortificadas típicas tienen una densidad de hierro de solo 0,4-1,3 mg/100 kcal. Con programación lineal sobre datos de Bangladesh, Etiopía y Vietnam, una dieta no fortificada de 5 grupos de alimentos (cereal básico como mínimo el 30 % de la energía de los sólidos, más legumbres, huevo, pescado o pollo y hoja verde a diario) cubría solo el 26-37 % de las necesidades de hierro a los 6-8 meses y el 35-52 % a los 9-11 meses; para el zinc, el 68-82 % y el 83-100 % respectivamente. El mayor reto para cubrir micronutrientes en el niño amamantado se da en el segundo semestre de vida; el lactante con ferropenia (no con deficiencia de zinc) probablemente aumenta la absorción, por lo que puede cubrir sus necesidades con menos cantidad de alimentos ricos en hierro, sobre todo si son ricos en hierro hemo. (fuente en inglés)",
+        "The challenge of meeting nutrient needs of infants and young children during the period of complementary feeding (Dewey KG, J Nutr 2013). Tema: reserva de hierro al nacer y papel de la leche materna después de los 6 meses. Hallazgo: el hierro corporal total al nacer depende sobre todo del peso al nacer, del estado de hierro materno prenatal y del momento del pinzamiento del cordón. Con peso normal, aporte materno de hierro prenatal suficiente y transferencia completa de sangre placentaria (cordón ligado cuando cesa el flujo, escenario probable en sociedades tradicionales), la reserva de hierro más el escaso aporte diario de la leche materna cubre las necesidades durante más de 8 meses aunque los sólidos no aporten hierro; de ahí que hacia los 9 meses los sólidos deban alcanzar la densidad objetivo de hierro (3,0 mg/100 kcal a los 9-11 meses). La dieta preagrícola estimada (2,9 mg de hierro/100 kcal) queda por debajo del objetivo a los 6-8 meses (4,5 mg/100 kcal) pero coincide casi exactamente con el objetivo a los 9-11 meses, frente a las dietas complementarias actuales no fortificadas, dominadas por papillas de cereal, con solo 0,4-1,3 mg/100 kcal. (fuente en inglés)"
+      ]
+    },
+    {
+      "source_type": "paper",
+      "title": "Risk of infant anemia is associated with exclusive breast-feeding and maternal anemia in a Mexican cohort",
+      "organization": "The Journal of Nutrition (American Society for Nutrition)",
+      "publication_year": 2006,
+      "url": "https://doi.org/10.1093/jn/136.2.452",
+      "specialties": [
+        "pediatrics",
+        "general_medicine"
+      ],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "chunks": [
+        "Risk of infant anemia is associated with exclusive breast-feeding and maternal anemia in a Mexican cohort (Meinzen-Derr JK, Guerrero ML, Altaye M, Ortega-Gallegos H, Ruiz-Palacios GM, Morrow AL, J Nutr 2006;136(2):452-458). Tema: duración de la lactancia materna exclusiva y anemia del lactante a los 9 meses. Hallazgo: cohorte de nacimiento en México (marzo 1998 a abril 2003), todos con peso al nacer de al menos 2,2 kg y madres con consejería domiciliaria de pares para promover la lactancia exclusiva; se midió la hemoglobina cada 3 meses y la anemia a los 9 meses se definió como Hb < 100 g/L. A los 9 meses (n = 183) la Hb fue 114 ± 0,9 g/L (media ± EEM) y 23 niños (12,5 %) tenían Hb < 100 g/L. La lactancia exclusiva de más de 6 meses, pero no la de 4-6 meses, se asoció a mayor riesgo de anemia frente a la exclusiva de menos de 4 meses (OR 18,4; IC 95 % 1,9-174,0). (fuente en inglés)",
+        "Risk of infant anemia is associated with exclusive breast-feeding and maternal anemia in a Mexican cohort (Meinzen-Derr JK et al., J Nutr 2006). Tema: anemia materna como modificador del riesgo de anemia en el lactante amamantado. Hallazgo: la anemia materna se asoció de forma independiente (P = 0,03) a un riesgo 3 veces mayor de anemia infantil, sin que lo explicaran otros factores maternos o del niño. Por regresión lineal, una Hb más baja a los 9 meses se asoció a mayor duración de la lactancia exclusiva solo entre madres con antecedente de anemia (beta = -0,07; P = 0,003), no entre madres sin ese antecedente. Los autores concluyen que en países en desarrollo los lactantes amamantados de forma exclusiva más de 6 meses pueden tener mayor riesgo de anemia, especialmente si la madre tiene mal estado de hierro, y que el tema merece mayor atención. (fuente en inglés)"
+      ]
+    },
+    {
+      "source_type": "paper",
+      "title": "Association between total duration of breastfeeding and iron deficiency",
+      "organization": "Pediatrics (American Academy of Pediatrics)",
+      "publication_year": 2013,
+      "url": "https://doi.org/10.1542/peds.2012-2465",
+      "specialties": [
+        "pediatrics",
+        "general_medicine"
+      ],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "chunks": [
+        "Association between total duration of breastfeeding and iron deficiency (Maguire JL, Salehi L, Birken CS, Carsley S, Mamdani M, Thorpe KE, Lebovic G, Khovratovich M, Parkin PC, colaboración TARGet Kids!, Pediatrics 2013;131(5):e1530-7). Tema: duración total de la lactancia materna y depósitos de hierro en niños sanos de 1 a 6 años. Hallazgo: estudio transversal en niños urbanos sanos atendidos en atención primaria dentro de la red de investigación TARGet Kids! (Toronto), entre diciembre de 2008 y julio de 2011, con 1.647 niños (mediana de edad 36 meses). A mayor duración de la lactancia, menor ferritina sérica (P = 0,0015). En regresión logística ajustada, la probabilidad de ferropenia aumentó un 4,8 % por cada mes adicional de lactancia (IC 95 % 2-8 %). (fuente en inglés)",
+        "Association between total duration of breastfeeding and iron deficiency (Maguire JL et al., TARGet Kids!, Pediatrics 2013). Tema: lactancia materna más allá de los 12 meses y ferropenia. Hallazgo: el análisis exploratorio sugirió una probabilidad acumulada creciente de ferropenia con mayor duración total de la lactancia; los niños amamantados más de 12 meses tuvieron una OR ajustada de ferropenia de 1,71 (IC 95 % 1,05-2,79) frente a los amamantados menos de 12 meses. La relación con anemia ferropénica no alcanzó significación estadística. Los autores concluyen que la mayor duración total de la lactancia se asocia a menores depósitos de hierro, una asociación clínicamente relevante que justifica investigación adicional. (fuente en inglés)"
+      ]
+    },
+    {
+      "source_type": "paper",
+      "title": "Consumption of cow's milk as a cause of iron deficiency in infants and toddlers",
+      "organization": "Nutrition Reviews (International Life Sciences Institute)",
+      "publication_year": 2011,
+      "url": "https://doi.org/10.1111/j.1753-4887.2011.00431.x",
+      "specialties": [
+        "pediatrics",
+        "general_medicine",
+        "gastroenterology"
+      ],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "chunks": [
+        "Consumption of cow's milk as a cause of iron deficiency in infants and toddlers (Ziegler EE, 2011). Tema: mecanismos por los que la leche de vaca no modificada favorece la ferropenia en lactantes y niños pequeños. Hallazgo: revisión que documenta el efecto adverso del consumo de leche de vaca sobre los depósitos de hierro de lactantes y niños pequeños, bien documentado en muchas localidades. El mecanismo probablemente más importante es su bajo contenido en hierro, que dificulta que el lactante obtenga el hierro necesario para el crecimiento. Un segundo mecanismo es la pérdida oculta de sangre intestinal asociada al consumo de leche de vaca durante la lactancia, que afecta a alrededor del 40 % de lactantes por lo demás sanos, disminuye con la edad y cesa después del año de edad. Un tercer mecanismo es la inhibición de la absorción del hierro no hemo por el calcio y la caseína, ambos presentes en cantidades altas en la leche de vaca. (fuente en inglés)",
+        "Consumption of cow's milk as a cause of iron deficiency in infants and toddlers (Ziegler EE, 2011). Tema: otros efectos de la leche de vaca y recomendación práctica en lactantes y niños pequeños. Hallazgo: la fortificación de la leche de vaca con hierro, practicada en algunos países, puede proteger a lactantes y niños pequeños de sus efectos negativos sobre el estado del hierro. El consumo de leche de vaca produce además una carga renal de solutos alta, con mayor concentración de solutos en orina que la leche materna o la fórmula, lo que estrecha el margen de seguridad en situaciones de deshidratación como la diarrea. La ingesta proteica alta de la leche de vaca puede aumentar también el riesgo de obesidad en etapas posteriores de la infancia. El autor recomienda no dar a los lactantes leche de vaca sin modificar y sin fortificar, y darla a los niños pequeños (toddlers) solo en cantidades moderadas. (fuente en inglés)"
+      ]
+    },
+    {
+      "source_type": "guideline",
+      "title": "Iron Requirements of Infants and Toddlers (ESPGHAN Committee on Nutrition position paper)",
+      "organization": "Journal of Pediatric Gastroenterology and Nutrition (ESPGHAN)",
+      "publication_year": 2014,
+      "url": "https://doi.org/10.1097/MPG.0000000000000206",
+      "specialties": [
+        "pediatrics",
+        "general_medicine",
+        "gastroenterology"
+      ],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "chunks": [
+        "Iron Requirements of Infants and Toddlers (Domellöf M, Braegger C, Campoy C, Colomb V, Decsi T, Fewtrell M, Hojsak I, Mihatsch W, Mølgaard C, Shamir R, Turck D, van Goudoever J; Comité de Nutrición de ESPGHAN, 2014). Tema: factores de riesgo y suplementación de hierro en lactantes y niños de 1 a 3 años en Europa. Hallazgo: la ferropenia es la carencia de micronutrientes más frecuente del mundo y el niño pequeño es grupo de riesgo por su crecimiento rápido. Se asocian a mayor prevalencia de anemia ferropénica: bajo peso al nacer, ingesta alta de leche de vaca, baja ingesta de alimentos complementarios ricos en hierro, nivel socioeconómico bajo y condición de inmigrante. El pinzamiento tardío del cordón reduce el riesgo de ferropenia. No hay evidencia suficiente para suplementar con hierro de forma general a lactantes y niños pequeños europeos sanos de peso normal al nacer. (fuente en inglés)",
+        "Iron Requirements of Infants and Toddlers (Domellöf M et al., ESPGHAN, 2014). Tema: recomendaciones dietéticas concretas para prevenir la ferropenia. Hallazgo: el lactante con fórmula hasta los 6 meses debe recibir fórmula fortificada con 4-8 mg/L de hierro (0,6-1,2 mg/kg/día); el de bajo peso marginal (2.000-2.500 g), suplementos de 1-2 mg/kg/día; las fórmulas de continuación deben ir fortificadas, sin evidencia para fijar la concentración óptima. Desde los 6 meses todos los lactantes y niños pequeños deben recibir alimentos complementarios ricos en hierro, incluidos productos cárnicos y/o alimentos fortificados. La leche de vaca no modificada no debe ser la bebida láctea principal antes de los 12 meses y de 1 a 3 años debe limitarse a menos de 500 mL/día. El consejo debe llegar sobre todo a familias desfavorecidas e inmigrantes. (fuente en inglés)"
+      ]
+    },
+    {
+      "source_type": "guideline",
+      "title": "Diagnosis and Prevention of Iron Deficiency and Iron-Deficiency Anemia in Infants and Young Children (0-3 Years of Age)",
+      "organization": "Pediatrics (American Academy of Pediatrics, Committee on Nutrition)",
+      "publication_year": 2010,
+      "url": "https://doi.org/10.1542/peds.2010-2576",
+      "specialties": [
+        "pediatrics",
+        "general_medicine"
+      ],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "chunks": [
+        "Diagnosis and Prevention of Iron Deficiency and Iron-Deficiency Anemia in Infants and Young Children (0-3 Years of Age) (Baker RD, Greer FR, Committee on Nutrition de la American Academy of Pediatrics, 2010). Tema: hierro de la leche materna y necesidades por edad. Hallazgo: el Institute of Medicine fijó el contenido medio de hierro de la leche humana en 0,35 mg/L y la ingesta del lactante amamantado en exclusiva en 0,78 L/día, de donde sale la ingesta adecuada de 0,27 mg/día de 0 a 6 meses. De 7 a 12 meses la ingesta recomendada es 11 mg/día (método factorial) y de 1 a 3 años 7 mg/día. La AAP recomienda que el lactante a término amamantado en exclusiva reciba 1 mg/kg/día de hierro desde los 4 meses hasta que tome alimentos complementarios con hierro; la leche entera de vaca no debe usarse antes de los 12 meses cumplidos. (fuente en inglés)",
+        "Diagnosis and Prevention of Iron Deficiency and Iron-Deficiency Anemia in Infants and Young Children (0-3 Years of Age) (Baker RD, Greer FR, AAP, 2010). Tema: prevalencia de ferropenia y cribado a los 12 meses. Hallazgo: según NHANES 1999-2002, en niños de 12 a 35 meses de EE. UU. la ferropenia afecta al 6,6-15,2 % y la anemia ferropénica al 0,9-4,4 % según etnia y nivel socioeconómico; la anemia ferropénica supone solo aproximadamente el 40 % de las anemias a esa edad. En una cohorte noruega de 284 lactantes a término la ferropenia fue del 4 % a los 6 meses y del 12 % a los 12 meses. La AAP recomienda cribado universal de anemia con hemoglobina hacia el año (anemia a los 12 meses = Hb < 11,0 g/dL) y valorar riesgos: prematuridad o bajo peso, plomo, lactancia exclusiva más de 4 meses sin hierro suplementario y destete a leche entera o a sólidos sin cereales fortificados ni alimentos ricos en hierro. (fuente en inglés)",
+        "Diagnosis and Prevention of Iron Deficiency and Iron-Deficiency Anemia in Infants and Young Children (0-3 Years of Age) (Baker RD, Greer FR, AAP, 2010). Tema: confirmar la ferropenia tras un cribado positivo y cubrir el hierro de 1 a 3 años. Hallazgo: como solo el 40 % de las anemias detectadas a los 12 meses son ferropénicas, se aconseja confirmar con ferritina sérica junto con proteína C reactiva (la ferritina es reactante de fase aguda; corte 12 µg/L en adultos y 10 µg/L propuesto en niños) o con hemoglobina reticulocitaria; en anemia leve (Hb 10-11 g/dL) puede comprobarse un ascenso de Hb de 1 g/dL tras 1 mes de hierro. Los 7 mg/día del niño de 1 a 3 años deberían cubrirse con alimentos: carne roja (hierro hemo), legumbres y cereales fortificados (no hemo) y frutas con vitamina C, que mejora la absorción; los fitatos (soja) la reducen. (fuente en inglés)"
+      ]
+    },
+    {
+      "source_type": "guideline",
+      "title": "Prevención y cribado de la ferropenia en lactantes",
+      "organization": "Revista de Pediatría de Atención Primaria (Grupo PrevInfad/PAPPS Infancia y Adolescencia, AEPap)",
+      "publication_year": 2012,
+      "url": "https://doi.org/10.4321/S1139-76322012000100013",
+      "specialties": [
+        "pediatrics",
+        "general_medicine"
+      ],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "chunks": [
+        "Prevención y cribado de la ferropenia en lactantes (Sánchez Ruiz-Cabello FJ y Grupo PrevInfad/PAPPS Infancia y Adolescencia, 2012). Tema: necesidades de hierro en el primer año y contenido de hierro de la leche materna. Hallazgo: los requerimientos pasan de 0,27 mg/día al nacer a 0,78 mg/día desde los 4 meses, y la ingesta recomendada de 6 a 12 meses es de 11 mg/día. En los primeros 6 meses la fuente principal es el hierro fetal almacenado; la disminución progresiva de los depósitos hace que desde el sexto mes las fuentes exógenas sean decisivas. La lactancia materna exclusiva más allá de los 6 meses se ha asociado a mayor riesgo de anemia ferropénica: la leche materna tiene poco hierro (0,2-0,4 mg/l) aunque de alta biodisponibilidad. En Navarra (2002) la ferropenia en lactantes sanos de 12 meses fue del 9,6 % y la anemia ferropénica del 4,3 %.",
+        "Prevención y cribado de la ferropenia en lactantes (PrevInfad/PAPPS, 2012). Tema: recomendaciones de aporte de hierro y leche de vaca en el lactante amamantado. Hallazgo: la lactancia materna exclusiva hasta los 6 meses forma parte de la prevención primaria; si no se amamanta, fórmula con al menos 7 mg/l de hierro. Para PrevInfad, el lactante con lactancia materna exclusiva debe recibir desde los 6 meses aportes totales de 1 mg/kg/día de hierro mediante alimentación complementaria rica en hierro (carnes, aves, pescado, legumbres, con frutas y verduras que mejoran la absorción); si tiene algún factor de riesgo, 2-4 mg/kg/día desde el sexto mes durante un mínimo de 3 meses. Conviene retrasar la leche de vaca hasta después del primer año: aunque contiene algo más de hierro que la leche materna, su biodisponibilidad es muy baja e interfiere con la absorción del hierro de otros alimentos.",
+        "Prevención y cribado de la ferropenia en lactantes (PrevInfad/PAPPS, 2012). Tema: cribado de anemia ferropénica en el lactante. Hallazgo: la anemia ferropénica se define por Hb inferior a 2 desviaciones estándar de la media para edad y sexo acompañada de ferropenia (ferritina < 10 ng/ml, saturación de transferrina y hemoglobina reticulocitaria bajas). No hay una prueba única de cribado y el valor predictivo positivo es bajo si la prevalencia de anemia es inferior al 10 %. Se recomienda cribado en todos los prematuros de menos de 1.500 g; no se recomienda cribado en niños sin factores de riesgo ni repetir el cribado en población de alto riesgo con un primer resultado normal. Las organizaciones discrepan: algunas recomiendan cribar solo a grupos de riesgo y otras proponen cribado universal."
+      ]
+    },
+    {
+      "source_type": "paper",
+      "title": "Responsive feeding is embedded in a theoretical framework of responsive parenting",
+      "organization": "The Journal of Nutrition (American Society for Nutrition)",
+      "publication_year": 2011,
+      "url": "https://doi.org/10.3945/jn.110.129973",
+      "specialties": [
+        "pediatrics",
+        "general_medicine"
+      ],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "chunks": [
+        "Responsive feeding is embedded in a theoretical framework of responsive parenting (Black MM, Aboud FE, 2011, J Nutr 141(3):490-494; PMID 21270366). Tema: base teórica de la alimentación responsiva o perceptiva dentro de la parentalidad responsiva. Hallazgo: los autores describen la parentalidad responsiva como un proceso mutuo de 4 pasos: 1) el cuidador crea una rutina, una estructura, unas expectativas y un contexto emocional que favorecen la interacción; 2) el niño responde y emite señales al cuidador; 3) el cuidador responde con prontitud, de forma emocionalmente de apoyo, contingente y adecuada al nivel de desarrollo; 4) el niño experimenta respuestas predecibles. Trasladado a la comida, el cuidador asegura un contexto agradable con pocas distracciones, con el niño sentado cómodamente, expectativas claras y comida sana, apetecible y adecuada a su edad ofrecida en un horario predecible; atiende a las señales de hambre y saciedad del niño y responde a ellas de forma pronta, de apoyo emocional, contingente y adecuada al desarrollo; y evita las conductas alimentarias restrictivas, que el artículo asocia con una ganancia de peso posterior. (fuente en inglés)",
+        "Responsive feeding is embedded in a theoretical framework of responsive parenting (Black MM, Aboud FE, 2011, J Nutr). Tema: por qué la manera de alimentar importa tanto como lo que se ofrece. Hallazgo: el artículo parte de que los niños de todo el mundo afrontan problemas de crecimiento que van desde el bajo peso y el retraso de talla hasta el sobrepeso y la obesidad, y sostiene que el desarrollo de conductas alimentarias saludables depende a la vez de alimentos saludables y de conductas parentales responsivas. El concepto, con raíces en antropología, psicología y nutrición, refleja la reciprocidad entre niño y cuidador. El artículo examina la evidencia sobre la práctica y los beneficios para el desarrollo de la parentalidad responsiva con el fin de dar una base teórica a la alimentación responsiva. Los autores recomiendan que los programas futuros para promover un crecimiento sano y prevenir tanto el bajo peso como el sobrepeso en niños pequeños incorporen y evalúen la alimentación responsiva. Es un artículo de revisión conceptual, sin cifras propias. (fuente en inglés)"
+      ]
+    },
+    {
+      "source_type": "paper",
+      "title": "A systematic review of responsive feeding and child obesity in high-income countries",
+      "organization": "The Journal of Nutrition (American Society for Nutrition)",
+      "publication_year": 2011,
+      "url": "https://doi.org/10.3945/jn.110.130047",
+      "specialties": [
+        "pediatrics",
+        "general_medicine"
+      ],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "chunks": [
+        "A systematic review of responsive feeding and child obesity in high-income countries (Hurley KM, Cross MB, Hughes SO, 2011, J Nutr 141(3):495-501). Tema: revisión sistemática de la relación entre alimentación responsiva o no responsiva y el peso del niño en países de renta alta. Hallazgo: se identificaron 31 artículos (búsqueda en PubMed y PsycInfo). La mayoría, 24 de 31, comunicaron asociaciones significativas entre prácticas de alimentación no responsivas (controladoras, indulgentes o desatendidas) y el estado ponderal del niño medido como Z de peso para la talla, Z de IMC, sobrepeso u obesidad, o adiposidad. Los autores concluyen que la evidencia actual sugiere que la alimentación no responsiva se asocia con el IMC y el sobrepeso u obesidad infantil. (fuente en inglés)",
+        "A systematic review of responsive feeding and child obesity in high-income countries (Hurley KM, Cross MB, Hughes SO, 2011, J Nutr). Tema: calidad y límites de la evidencia sobre alimentación responsiva y peso infantil. Hallazgo: de los 31 estudios incluidos, 22 se realizaron exclusivamente en Estados Unidos, 25 eran transversales y 28 usaron cuestionarios de autoinforme parental sobre prácticas de alimentación. Se observa una tendencia reciente a estudiar niños más pequeños (lactantes y niños de 1 a 3 años) y poblaciones de bajos ingresos o minorías. Los autores señalan que hace falta más investigación para entender la causalidad, la fiabilidad y validez de las escalas de alimentación existentes, y para probar la eficacia de intervenciones de alimentación responsiva en la prevención y el tratamiento del sobrepeso y la obesidad infantil. (fuente en inglés)"
+      ]
+    },
+    {
+      "source_type": "paper",
+      "title": "A Practical Approach to Classifying and Managing Feeding Difficulties",
+      "organization": "Pediatrics (American Academy of Pediatrics)",
+      "publication_year": 2015,
+      "url": "https://doi.org/10.1542/peds.2014-1630",
+      "specialties": [
+        "pediatrics",
+        "general_medicine",
+        "gastroenterology"
+      ],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "chunks": [
+        "A Practical Approach to Classifying and Managing Feeding Difficulties (Kerzner B, Milano K, MacLean WC, Berall G, Stuart S, Chatoor I, 2015, Pediatrics 135(2):344-353). Tema: clasificación práctica de las dificultades de alimentación en niños pequeños. Hallazgo: más del 50% de las madres afirman que al menos un hijo come mal, lo que implica a un 20-30% de los niños. De ese ~25% de niños con dificultades según sus padres, solo un 1-5% cumple criterios de trastorno de la alimentación; el ~20% restante tiene problemas leves o percepciones erróneas. Se clasifica al niño según la queja parental en 3 categorías: apetito limitado, ingesta selectiva y miedo a comer; cada una va desde lo normal (malinterpretado) hasta lo grave (conductual u orgánico). Se añaden 4 estilos del cuidador: responsivo, controlador, indulgente y negligente. (fuente en inglés)",
+        "A Practical Approach to Classifying and Managing Feeding Difficulties (Kerzner B et al., 2015, Pediatrics). Tema: el niño sano con poco apetito, mal percibido como mal comedor, y normas de alimentación. Hallazgo: la clave del apetito limitado malinterpretado es la preocupación excesiva de los padres pese a un crecimiento normal; suelen ser niños genéticamente pequeños con apetito pequeño. En un estudio citado de más de 400 niños, el 30% fue descrito como mal comedor, pero su ingesta relativa al tamaño corporal era igual a la de los buenos comedores. El crecimiento se frena al final del primer año y en el segundo, y baja el apetito. Manejo: mostrar la curva normal y aplicar las normas: sin distracciones, actitud neutra, comidas de 20-30 minutos máximo, 4-6 comidas o tentempiés al día con solo agua entre ellas, alimentos nuevos hasta 8-15 veces sin presión. (fuente en inglés)",
+        "A Practical Approach to Classifying and Managing Feeding Difficulties (Kerzner B et al., 2015, Pediatrics). Tema: señales de alarma que exigen estudio o derivación en el niño que come mal. Hallazgo: banderas rojas orgánicas: disfagia, aspiración (a veces silente), dolor aparente al comer, vómitos y diarrea, retraso del desarrollo, síntomas cardiorrespiratorios crónicos y fallo de crecimiento. Banderas rojas conductuales: fijación alimentaria con restricciones extremas, alimentación forzada o persecutoria, cese brusco de la alimentación tras un evento desencadenante, arcadas anticipatorias y fallo de medro. Si se sospecha causa orgánica, analítica básica (hemograma, bioquímica, VSG o PCR, orina). El niño enérgico con apetito limitado (anorexia infantil) prefiere jugar a comer y a menudo no gana peso, sin causa orgánica; el sello es el conflicto padres-hijo. (fuente en inglés)"
+      ]
+    },
+    {
+      "source_type": "paper",
+      "title": "Pediatric Feeding Disorder: Consensus Definition and Conceptual Framework",
+      "organization": "Journal of Pediatric Gastroenterology and Nutrition (JPGN)",
+      "publication_year": 2019,
+      "url": "https://doi.org/10.1097/MPG.0000000000002188",
+      "specialties": [
+        "pediatrics",
+        "general_medicine",
+        "gastroenterology"
+      ],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "chunks": [
+        "Pediatric Feeding Disorder: Consensus Definition and Conceptual Framework (Goday PS, Huh SY, Silverman A, Lukens CT, Dodrill P, Cohen SS et al., 2019, JPGN 68(1):124-129; PMID 30358739). Tema: definición de consenso del trastorno de la alimentación pediátrico (PFD), elaborada por un panel multidisciplinar de expertos convocado por la organización sin ánimo de lucro Feeding Matters (reunión de consenso, Phoenix, marzo de 2016). Hallazgo: el panel define el PFD como ingesta oral alterada, inapropiada para la edad, asociada a disfunción médica, nutricional, de habilidades de alimentación y/o psicosocial, sobre el marco CIF de la OMS. Criterio A: alteración de la ingesta oral, inapropiada para la edad, presente a diario durante al menos 2 semanas (excluye problemas transitorios por enfermedad aguda) y asociada a 1 o más de los 4 dominios. Criterio B: ausencia de los procesos cognitivos de los trastornos de la conducta alimentaria; el patrón de ingesta no se debe a falta de comida ni es congruente con normas culturales. Agudo: menos de 3 meses; crónico: 3 meses o más. (fuente en inglés)",
+        "Pediatric Feeding Disorder: Consensus Definition and Conceptual Framework (Goday PS et al., 2019, JPGN). Tema: los 4 dominios de disfunción que definen el PFD (Tabla 1). Hallazgo: 1) disfunción médica: compromiso cardiorrespiratorio durante la toma, aspiración o neumonitis por aspiración recurrente; 2) disfunción nutricional: malnutrición, déficit específico de nutrientes o ingesta muy restringida de uno o más nutrientes por baja diversidad dietética, dependencia de nutrición enteral o suplementos orales para mantener la nutrición; 3) disfunción de habilidades: necesidad de modificar la textura de líquidos o alimentos, uso de posición o utensilios modificados, o estrategias de alimentación modificadas; 4) disfunción psicosocial: conductas de evitación activa o pasiva del niño, manejo inadecuado por el cuidador, alteración de la función social o de la relación cuidador-niño en torno a la comida. Por la interacción entre dominios, la alteración en uno puede generar disfunción en cualquiera de los otros. (fuente en inglés)",
+        "Pediatric Feeding Disorder: Consensus Definition and Conceptual Framework (Goday PS et al., 2019, JPGN). Tema: indicadores de gravedad y prácticas del cuidador que perpetúan el problema. Hallazgo: la malnutrición afecta al 25-50% de los niños con PFD y es más prevalente en los que tienen enfermedad crónica o trastornos del neurodesarrollo. Alimentación oral insegura: atragantamiento, aspiración, eventos cardiorrespiratorios adversos (apnea, bradicardia) durante la toma, u otros eventos adversos durante la comida (arcadas, vómitos, fatiga, rechazo); alimentación ineficiente: comidas prolongadas de más de 30 minutos o ingesta oral inadecuada. Estrategias compensatorias inadecuadas citadas: ofrecer solo alimentos preferidos, dar de comer a un niño que ya tiene habilidades para comer solo, la alimentación forzada y dar líquidos en biberón fuera de la edad recomendada; también un entorno distractor (televisión u otros dispositivos electrónicos), alimentar solo cuando el niño está dormido, horarios de comida inconsistentes (afectan al apetito y a la conducta en la mesa) y el picoteo continuo (grazing: pequeñas cantidades de comida o líquido a lo largo del día), que produce una falsa sensación de saciedad y suele reducir la ingesta. El refuerzo inadvertido de conductas problemáticas por cuidadores bienintencionados (sustituir alimentos rechazados por los preferidos, atender el llanto) también las perpetúa. (fuente en inglés)"
+      ]
+    },
+    {
+      "source_type": "paper",
+      "title": "Failure to Thrive and Cognitive Development in Toddlers With Infantile Anorexia",
+      "organization": "Pediatrics (American Academy of Pediatrics)",
+      "publication_year": 2004,
+      "url": "https://doi.org/10.1542/peds.113.5.e440",
+      "specialties": [
+        "pediatrics",
+        "general_medicine"
+      ],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "chunks": [
+        "Failure to Thrive and Cognitive Development in Toddlers With Infantile Anorexia (Chatoor I, Surles J, Ganiban J, Beker L, Paez LM, Kerzner B, 2004, Pediatrics 113(5):e440-e447). Tema: anorexia infantil (niño pequeño que rechaza comer por falta de interés) y desarrollo cognitivo. Hallazgo: 88 niños de 12 a 33 meses fueron evaluados por 2 psiquiatras infantiles y asignados a 3 grupos emparejados por edad, raza, sexo y nivel socioeconómico: anorexia infantil, comedor selectivo (picky eater) y comedor sano. Se hizo valoración nutricional, escalas Bayley y grabación en vídeo de la comida y el juego madre-hijo. En promedio, los niños con anorexia infantil rindieron dentro de la normalidad, pero el índice de desarrollo mental (MDI) del grupo sano (110) fue significativamente mayor que el de los grupos con anorexia infantil (99) y selectivos (96). (fuente en inglés)",
+        "Failure to Thrive and Cognitive Development in Toddlers With Infantile Anorexia (Chatoor I et al., 2004, Pediatrics). Tema: qué pesa más en el desarrollo del niño que come poco, la nutrición o la relación durante las comidas. Hallazgo: dentro del grupo con anorexia infantil, la correlación entre el MDI y el porcentaje de peso ideal solo rozó la significación (r = 0,32). En todos los grupos, el MDI se asoció con la calidad de la interacción madre-hijo, el nivel socioeconómico y la educación materna; juntas explicaron el 22% de la varianza del MDI. Conclusión de los autores: los factores psicosociales explican más varianza única del desarrollo cognitivo que el estado nutricional en niños con problemas de alimentación. Implicación práctica: cuidar la calidad de la interacción madre-hijo durante las comidas es tan importante como vigilar el peso. (fuente en inglés)"
+      ]
+    },
+    {
+      "source_type": "paper",
+      "title": "Bi-directional associations between child fussy eating and parents' pressure to eat: Who influences whom?",
+      "organization": "Physiology & Behavior (Elsevier)",
+      "publication_year": 2017,
+      "url": "https://doi.org/10.1016/j.physbeh.2017.02.015",
+      "specialties": [
+        "pediatrics",
+        "general_medicine"
+      ],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "chunks": [
+        "Bi-directional associations between child fussy eating and parents' pressure to eat: Who influences whom? (Jansen PW, de Barse LM, Jaddoe VWV, Verhulst FC, Franco OH, Tiemeier H, 2017, Physiol Behav 176:101-106). Tema: presión para comer y niño mal comedor: quién influye en quién. Hallazgo: cohorte poblacional Generation R (Países Bajos), 4.845 díadas madre-hijo. Se midió la conducta de mal comedor (fussy eating, CBCL, 2 ítems) a los 18 meses, 3 y 6 años, y la presión para comer (CFQ, 4 ítems) a los 4 años, con puntuaciones estandarizadas. El mal comer preescolar predijo más presión parental a los 4 años (B ajustada = 0,24; IC 95%: 0,21-0,27). A su vez, la presión a los 4 años predijo más rechazo a los 6 años, independientemente de los factores de confusión y del nivel basal de mal comer (B ajustada = 0,14; IC 95%: 0,11-0,17). (fuente en inglés)",
+        "Bi-directional associations between child fussy eating and parents' pressure to eat: Who influences whom? (Jansen PW et al., 2017, Physiol Behav). Tema: evidencia longitudinal de que presionar para comer es contraproducente. Hallazgo: los análisis de trayectorias mostraron que la relación desde el mal comer a los 3 años hacia la presión parental un año después era más fuerte que la inversa, desde la presión a los 4 años hacia el mal comer a los 6 (p < 0,001). Conclusión: asociación bidireccional; la presión surge como respuesta al rechazo del niño, pero parece tener un efecto contraproducente que aumenta la selectividad. Recomiendan reconsiderar la presión y ofrecer a los padres técnicas alternativas. Contexto: el mal comer alcanza su pico hacia los 3 años, con prevalencia que puede llegar al 50%. Límites: informe materno y muestra relativamente acomodada. (fuente en inglés)"
+      ]
+    },
+    {
+      "source_type": "paper",
+      "title": "Valid and Reliable Measure of Adherence to Satter Division of Responsibility in Feeding",
+      "organization": "Journal of Nutrition Education and Behavior (Society for Nutrition Education and Behavior)",
+      "publication_year": 2021,
+      "url": "https://doi.org/10.1016/j.jneb.2020.11.007",
+      "specialties": [
+        "pediatrics",
+        "general_medicine"
+      ],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "chunks": [
+        "Valid and Reliable Measure of Adherence to Satter Division of Responsibility in Feeding (Lohse B, Mitchell DC, 2021, J Nutr Educ Behav 53(3):211-222). Tema: división de responsabilidades de Satter (sDOR) y su medición. Hallazgo: la sDOR propone que los padres sean responsables de qué se presenta para comer, cuándo y dónde (entorno emocional y físico), y que el niño decida qué, cuánto y si come de lo que se le ofrece. Los autores validaron el sDOR.2-6y, cuestionario de 12 ítems, en una encuesta transversal online a 117 padres (94% mujeres, 77% blancos, 62% en al menos un programa de ayuda por ingresos) de preescolares de 2 a 6 años en Pensilvania central; el 28% de los niños tenía riesgo nutricional moderado o alto según el NutriSTEP. La puntuación osciló entre 16 y 32 (media 25,9 ± 3,3; n = 114). Los padres de niños en riesgo nutricional puntuaron más bajo en adherencia a la sDOR (P = 0,004). (fuente en inglés)",
+        "Valid and Reliable Measure of Adherence to Satter Division of Responsibility in Feeding (Lohse B, Mitchell DC, 2021, J Nutr Educ Behav). Tema: seguir la división de responsabilidades se asocia a menor riesgo nutricional y menos presión. Hallazgo: cada punto adicional en el sDOR.2-6y redujo un 21% las probabilidades de riesgo nutricional del niño (IC 95% de la OR: 0,675-0,918; P = 0,002), controlando por bajos ingresos. Las puntuaciones fueron más altas cuanto menor era la restricción y la presión para comer (ambas P < 0,001) y se asociaron al estilo de alimentación de los padres. Con punto de corte ≥ 24 la especificidad fue del 87%; con ≥ 26 la sensibilidad fue del 66%. El análisis de componentes principales agrupó los 12 ítems en 5 factores (59,2% de la varianza): 3 de liderazgo parental (estructura de las comidas, qué alimentos están disponibles para el niño y cómo se le ofrecen) y 2 de autonomía del niño (respeto a su autonomía al comer y quién controla qué, cuándo y cuánto se come); la fiabilidad test-retest fue r = 0,71 (n = 18). Límites: diseño transversal, muestra pequeña, de bajos ingresos y sin diversidad étnica ni racial, datos autoinformados online y sin medir el peso del niño; los autores piden muestras mayores y más diversas. (fuente en inglés)"
+      ]
+    },
+    {
+      "source_type": "guideline",
+      "title": "Difficultés alimentaires du petit enfant (Pas à Pas en Pédiatrie)",
+      "organization": "Pas à Pas en Pédiatrie, validado por el Comité de Nutrition de la Société Française de Pédiatrie, GFHGNP, AFPA y AFOP",
+      "publication_year": 2025,
+      "url": "https://pap-pediatrie.fr/pap-detail/odam1hubgi",
+      "specialties": [
+        "pediatrics",
+        "general_medicine",
+        "gastroenterology"
+      ],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "chunks": [
+        "Difficultés alimentaires du petit enfant (Pas à Pas en Pédiatrie) (Bellaïche M, Clouzeau H, Jung C, 2025; validado por el Comité de Nutrición de la SFP, GFHGNP, AFPA y AFOP). Tema: enfoque escalonado de las dificultades de alimentación en menores de 6 años. Hallazgo: representan 1 de cada 4 motivos de consulta pediátrica en esa edad. Distinguen al niño que no puede comer, el que no quiere, el que no necesita, el que no sabe y el que no come como sus padres querrían. Anamnesis: duración de la comida (más de 20 min un biberón o más de 30 min una comida es demasiado), forzado y distracción (sobre todo pantallas); selectividad de texturas o de alimentos (panel de 10 a 30 alimentos = selectividad, menos de 10 = hiperselectividad); episodios traumáticos como atragantamiento; trastornos alimentarios parentales. Recomiendan observar una comida real, en consulta o en vídeo. (fuente en francés)",
+        "Difficultés alimentaires du petit enfant (Pas à Pas en Pédiatrie) (Bellaïche M, Clouzeau H, Jung C, 2025). Tema: el pequeño comedor sano (petit mangeur) y la neofobia normal frente a la patológica. Hallazgo: el pequeño comedor es una entidad bien definida, con base familiar. Come de todo pero en muy pequeña cantidad, tiene gran actividad motora, curva de peso regular pero baja, en torno al percentil 3, talla normal e IMC bajo por ello; no está desnutrido, no requiere soporte nutricional y la analítica no está indicada. Sus necesidades calóricas y su ingesta son bajas. Las presiones inadecuadas y las actitudes que ignoran las señales de saciedad del niño pueden generar rechazo a comer. La neofobia es fisiológica entre 1 y 3 años; se vuelve patológica si se prolonga más allá de los 4 años, se rigidiza o empeora, y requiere entonces propuestas repetidas e incitativas. (fuente en francés)",
+        "Difficultés alimentaires du petit enfant (Pas à Pas en Pédiatrie) (Bellaïche M, Clouzeau H, Jung C, 2025). Tema: qué explorar y qué no atribuir erróneamente en el niño que come mal. Hallazgo: valoración auxológica indispensable (cribado de desnutrición según HAS 2019); el IMC tiene sensibilidad cercana al 100% para desnutrición pero valor predictivo positivo mediocre: un IMC bajo no equivale a desnutrición. Se sospecha disfagia ante atragantamientos repetidos o escape de alimento por las comisuras. Disnea, trastorno respiratorio del sueño o enfermedad general pueden causar dificultades; en la celiaquía a veces están en primer plano y desaparecen de forma llamativa con la dieta sin gluten. El reflujo casi nunca es responsable y la esofagitis solo se plantea con pérdida de peso y/o sangrado; la APLV no IgE mediada solo se confirma con exclusión y reintroducción. Tratamiento: detener el forzado y retirar los distractores. (fuente en francés)"
+      ]
+    }
+  ]
+}
