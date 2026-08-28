@@ -16,9 +16,43 @@ from pathlib import Path
 
 from sqlalchemy import select
 
+from mistralai.client.errors import MistralError
+
 from adelia.db import AsyncSessionLocal
 from adelia.models import EvidenceChunk, EvidenceSource
 from adelia.workers.embed import embed_texts
+
+# Boot-time embedding of a whole corpus (100+ chunks) trips Mistral's rate
+# limit (429). Back off and retry instead of losing the file; the delays are
+# module-level so tests can shrink them.
+EMBED_RETRY_DELAYS: tuple[float, ...] = (2.0, 5.0, 10.0, 20.0, 40.0)
+RETRYABLE_STATUS = {429, 500, 502, 503, 504}
+# Small pause between sources so a big file does not burst the API.
+SOURCE_PACING_S = 0.5
+
+
+def _is_retryable(exc: Exception) -> bool:
+    status = getattr(exc, "status_code", None)
+    if status in RETRYABLE_STATUS:
+        return True
+    msg = str(exc)
+    return any(f"Status {s}" in msg or f"status {s}" in msg for s in RETRYABLE_STATUS)
+
+
+async def embed_with_retry(texts: list[str]) -> list[list[float]]:
+    """embed_texts with exponential backoff on 429/5xx; other errors propagate."""
+    last: Exception | None = None
+    for attempt, delay in enumerate((*EMBED_RETRY_DELAYS, None)):
+        try:
+            return await embed_texts(texts)
+        except MistralError as exc:
+            if not _is_retryable(exc) or delay is None:
+                raise
+            last = exc
+            logger.warning("embedding rate-limited/transient (attempt %d), retrying in %.0fs: %s",
+                           attempt + 1, delay, str(exc)[:120])
+            await asyncio.sleep(delay)
+    raise last  # pragma: no cover - loop always returns or raises
 
 logger = logging.getLogger(__name__)
 
@@ -115,12 +149,13 @@ async def load_evidence_file(path: Path) -> tuple[int, int]:
                 license=src_data.get("license"),
                 language=src_data.get("language", "en"),
             )
+            # Embed BEFORE adding the source: if embedding ultimately fails the
+            # source is not left behind without chunks (idempotency is by
+            # title, so a half-loaded source would never get its chunks).
+            embeddings = await embed_with_retry(chunks_text) if chunks_text else []
             session.add(source)
             await session.flush()
             sources_added += 1
-            if not chunks_text:
-                continue
-            embeddings = await embed_texts(chunks_text)
             for idx, (text_chunk, emb) in enumerate(zip(chunks_text, embeddings, strict=True)):
                 session.add(EvidenceChunk(
                     source_id=source.id,
@@ -130,7 +165,12 @@ async def load_evidence_file(path: Path) -> tuple[int, int]:
                     embedding=emb,
                 ))
                 chunks_added += 1
-        await session.commit()
+            # Commit per source: progress survives a later failure and the
+            # next boot resumes from where it stopped.
+            await session.commit()
+            existing_titles.add(src_data["title"])
+            if SOURCE_PACING_S:
+                await asyncio.sleep(SOURCE_PACING_S)
         logger.info("evidence file %s: +%d sources, +%d chunks", path.name, sources_added, chunks_added)
         return sources_added, chunks_added
 
