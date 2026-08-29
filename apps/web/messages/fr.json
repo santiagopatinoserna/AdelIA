@@ -756,13 +756,65 @@
     "cardInsightTitle": "Suggestion",
     "cardDocEntities": "données extraites",
     "profileSwitch": "Profil",
-    "suggestionsTitle": "Pour toi",
-    "quickRecordTitle": "Enregistre une consultation",
-    "quickRecordBody": "Avec l'accord du professionnel, je la transcris dans le carnet et l'audio est supprimé.",
-    "quickUploadTitle": "Ajoute le premier document",
-    "quickUploadBody": "Une analyse, un compte rendu ou une photo du carnet : je le lis et je l'organise.",
-    "quickAskTitle": "Pose-moi une question",
-    "sampleQuestion": "Quels vaccins sont prévus à 12 mois ?"
+    "suggestionsTitle": "Pour toi"
+  },
+  "showcase": {
+    "title": "Ce qu’AdelIA peut faire pour toi",
+    "hide": "Masquer pour l’instant",
+    "collapsed": "Exemples de ce qu’AdelIA peut faire",
+    "show": "Afficher",
+    "cards": {
+      "record": {
+        "title": "Enregistre la consultation",
+        "example": "On continue la crème deux fois par jour et on revient dans 15 jours",
+        "detail": "Avec l’accord du pédiatre : l’essentiel en 3 à 6 points, et l’audio est supprimé au bout de 48 h.",
+        "action": "Enregistrer"
+      },
+      "ask": {
+        "title": "Pose une question, sources à l’appui",
+        "example": "Est-ce normal qu’à 13 mois elle ne veuille que du lait maternel ?",
+        "detail": "Je réponds en citant les documents de ton bébé et des dizaines de guides et études pédiatriques (crèche, alimentation 12-18 mois, reflux).",
+        "action": "Demander",
+        "altLabel": "Autre question :",
+        "altQuestion": "Combien de temps faut-il à un bébé pour s’adapter à la crèche ?"
+      },
+      "diary": {
+        "title": "Journal quotidien sur Telegram à 20 h",
+        "example": "Deux tétées de moins aujourd’hui et un peu de nez qui coule, pas de fièvre",
+        "detail": "Le bot demande comment s’est passée la journée ; tu réponds en texte ou en audio et c’est daté dans le carnet.",
+        "action": "Lier Telegram"
+      },
+      "upload": {
+        "title": "Ajoute un compte rendu ou le carnet",
+        "example": "Une photo du carnet avec le vaccin des 12 mois",
+        "detail": "Je lis le document et j’en extrais médicaments, vaccins et observations datées.",
+        "action": "Ajouter"
+      },
+      "briefing": {
+        "title": "Briefing pour le spécialiste",
+        "example": "Demain on voit l’allergologue et je veux tout avoir résumé",
+        "detail": "Une page par spécialité, avec citations du carnet et des sources, à partager avec le médecin.",
+        "action": "Créer un briefing"
+      },
+      "questionnaire": {
+        "title": "Questionnaire guidé sur le reflux",
+        "example": "Elle régurgite après chaque tétée et cambre le dos",
+        "detail": "Des questions guidées, fondées sur des recommandations cliniques ; chaque item cite sa source.",
+        "action": "Commencer"
+      },
+      "import": {
+        "title": "Importe ce que tu as déjà",
+        "example": "Je veux le dossier complet de la clinique privée",
+        "detail": "Apple Health, CCD, transfert d’e-mails et modèles RGPD pour demander le dossier (ES, FR, US).",
+        "action": "Importer"
+      },
+      "settings": {
+        "title": "Tes données, avec toi",
+        "example": "On change de pédiatre et je veux tout emporter",
+        "detail": "Exporte tout dans un seul fichier FHIR R4 et supprime n’importe quel document depuis sa fiche.",
+        "action": "Voir les réglages"
+      }
+    }
   },
   "professionals": {
     "title": "Informations pour les professionnels de santé",

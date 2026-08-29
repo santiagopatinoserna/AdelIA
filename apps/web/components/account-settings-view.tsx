@@ -5,6 +5,8 @@ import { signOut } from "next-auth/react";
 import { useTranslations } from "next-intl";
 import { AlertTriangle, Download } from "lucide-react";
 
+import { clearShowcaseHidden } from "@/lib/showcase-storage";
+
 export function AccountSettingsView({ email }: { email: string }) {
   const t = useTranslations("settings");
   const [confirmText, setConfirmText] = useState("");
@@ -24,6 +26,8 @@ export function AccountSettingsView({ email }: { email: string }) {
     try {
       const res = await fetch("/api/backend/users/me", { method: "DELETE" });
       if (res.status !== 204) throw new Error(`HTTP ${res.status}`);
+      // Leave nothing of this account behind in the tab, not even a UI flag.
+      clearShowcaseHidden();
       await signOut({ callbackUrl: "/" });
     } catch (e) {
       setError(t("actionError"));

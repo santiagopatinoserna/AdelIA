@@ -44,7 +44,12 @@ export type ChatSessionDetail = ChatSession & {
 export type StreamEvent =
   | { type: "start"; session_id: string }
   | { type: "token"; content: string }
-  | { type: "final"; session_id: string; citations: Citation[] }
+  | {
+      type: "final";
+      session_id: string;
+      citations: Citation[];
+      evidence_citations: EvidenceCitation[];
+    }
   | { type: "error"; content: string };
 
 export function* parseBufferBlocks(
@@ -90,6 +95,7 @@ export function* parseBufferBlocks(
         type: "final",
         session_id: String(payload.session_id ?? ""),
         citations: (payload.citations as Citation[]) ?? [],
+        evidence_citations: (payload.evidence_citations as EvidenceCitation[]) ?? [],
       };
     } else if (eventType === "error") {
       yield { type: "error", content: String(payload.content ?? "unknown error") };
