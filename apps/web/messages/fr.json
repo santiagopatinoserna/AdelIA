@@ -220,7 +220,8 @@
     "mixLegendData": "données de son histoire",
     "mixLegendEv": "études citées",
     "prT1DevTag": "Pour les développeurs",
-    "prT2Trial": "Essai gratuit de 30 jours, tu ne paies rien aujourd’hui"
+    "prT2Trial": "Essai gratuit de 30 jours, tu ne paies rien aujourd’hui",
+    "metaDescription": "AdelIA rassemble le dossier médical de ton bébé (comptes rendus, analyses, vaccins, consultations enregistrées) et répond à tes questions avec des preuves scientifiques citées. Gratuit 30 jours."
   },
   "dashboard": {
     "title": "Mes documents",
@@ -640,7 +641,14 @@
     "ackIrreversible": "Je comprends que ça supprime tout pour toujours, sans retour possible.",
     "exportTitle": "Tes données, avec toi",
     "exportBody": "Télécharge tout ce qu'AdelIA garde sur toi et ton bébé dans un seul fichier : le cœur clinique au format FHIR (le standard que comprennent les systèmes de santé) plus les transcriptions et consentements complets.",
-    "exportCta": "Télécharger toutes mes données"
+    "exportCta": "Télécharger toutes mes données",
+    "installTitle": "Installer l’app",
+    "installBody": "Ajoute AdelIA à ton écran d’accueil : elle s’ouvre en plein écran, sans la barre du navigateur, à portée d’un geste.",
+    "installCta": "Installer l’app",
+    "installGuideCta": "Voir comment l’installer",
+    "installed": "Installée sur cet appareil",
+    "languageTitle": "Langue",
+    "languageBody": "Choisis la langue de l’app. Le changement est immédiat, sans te déconnecter."
   },
   "questionnaire": {
     "title": "Suivi du reflux",
@@ -729,7 +737,18 @@
       "error": "Impossible de traiter l'enregistrement. L'audio reste sauvegardé quelques jours pour réessayer.",
       "uploadError": "Impossible d'envoyer l'enregistrement. Il est toujours sur votre appareil : réessayez maintenant.",
       "retry": "Réessayer",
-      "prepareBriefing": "Préparer un résumé pour le pédiatre"
+      "prepareBriefing": "Préparer un résumé pour le pédiatre",
+      "leaveTitle": "Terminer l’enregistrement ?",
+      "leaveBody": "Tu enregistres la consultation. Si tu termines maintenant, ce qui a été enregistré jusqu’ici est sauvegardé et tu restes sur cet écran pour voir le résumé. Rien n’est perdu.",
+      "leaveStay": "Continuer l’enregistrement",
+      "uploadingNoticeTitle": "Envoi de l’enregistrement",
+      "uploadingNoticeBody": "Patiente quelques secondes : dès que c’est terminé, tu pourras quitter sans rien perdre.",
+      "uploadingNoticeOk": "Compris",
+      "declineConfirm": "Touche encore une fois pour abandonner l’enregistrement",
+      "leaveUnsavedTitle": "Quitter sans sauvegarder la consultation ?",
+      "leaveUnsavedBody": "L’enregistrement n’est que sur cet appareil et n’a pas encore été envoyé. Si tu quittes maintenant, il sera perdu. Réessaie d’abord l’envoi.",
+      "leaveUnsavedStay": "Rester ici",
+      "leaveUnsavedDiscard": "Abandonner l’enregistrement"
     }
   },
   "command": {
@@ -757,11 +776,28 @@
     "offlineBody": "Certaines fonctions nécessitent Internet.",
     "online": "Connexion rétablie"
   },
+  "appUpdate": {
+    "available": "Une nouvelle version d’AdelIA est disponible",
+    "cta": "Mettre à jour",
+    "later": "Plus tard"
+  },
   "install": {
     "title": "Installer AdelIA",
-    "body": "Gardez-la sur votre écran d'accueil, comme une app.",
+    "body": "Garde-la sur ton écran d’accueil, comme une app.",
     "cta": "Installer",
-    "dismiss": "Plus tard"
+    "dismiss": "Plus tard",
+    "howCta": "Comment installer",
+    "guideTitle": "Installer AdelIA sur ton téléphone",
+    "guideIntroIos": "Depuis Safari, en trois étapes :",
+    "guideIntroOther": "Depuis le menu du navigateur, en trois étapes :",
+    "iosStep1": "Touche le bouton Partager de Safari (le carré avec la flèche vers le haut).",
+    "iosStep2": "Fais défiler le menu et choisis « Sur l’écran d’accueil ».",
+    "iosStep3": "Confirme avec « Ajouter ». AdelIA apparaîtra à côté de tes autres apps.",
+    "otherStep1": "Ouvre le menu du navigateur (les trois points, en haut à droite).",
+    "otherStep2": "Choisis « Installer l’application » ou « Ajouter à l’écran d’accueil ».",
+    "otherStep3": "Confirme avec « Installer ».",
+    "guideClose": "Fermer",
+    "guideDone": "Compris"
   },
   "checkin": {
     "dismiss": "Plus tard",
@@ -908,7 +944,8 @@
     "neverBody": "On ne vend jamais tes données ni celles de ton bébé, à personne. On n'utilise pas tes informations pour entraîner des modèles d'IA. On ne te trace pas : il n'y a ni analytics ni publicité dans AdelIA. AdelIA est un logiciel libre (AGPL-3.0) ; si tu préfères l'héberger toi-même, tu peux le faire, et dans ce cas c'est toi qui deviens responsable de ces données, pas Godi.AI.",
     "contactTitle": "Contact",
     "contactBody": "Responsable du traitement : Godi.AI (Santiago Patiño Serna). Pour toute question ou pour exercer tes droits : security@godi.ai.",
-    "back": "Retour"
+    "back": "Retour",
+    "metaDescription": "Quelles données AdelIA conserve sur ton bébé, où elles sont traitées (UE), combien de temps et quels sont tes droits : exporter, corriger ou tout supprimer en un clic."
   },
   "terms": {
     "title": "Conditions d'utilisation",
@@ -929,5 +966,20 @@
     "lawTitle": "Droit espagnol et réclamations",
     "lawBody": "Ces conditions sont régies par le droit espagnol. Pour toute question, réclamation ou pour exercer vos droits sur vos données, écrivez d'abord à security@godi.ai ; nous nous efforcerons d'y répondre dans un délai raisonnable. Pour une réclamation liée à la protection des données en particulier, vous pouvez saisir l'AEPD en Espagne ou la CNIL en France.",
     "back": "Retour"
+  },
+  "manifest": {
+    "name": "AdelIA, ton coffre-fort médical personnel",
+    "description": "Toute la santé de ton bébé au même endroit, avec une IA qui répond preuves à l’appui.",
+    "recordName": "Enregistrer la consultation",
+    "recordShort": "Enregistrer",
+    "recordDesc": "Enregistre la consultation avec le pédiatre et garde-la dans le dossier.",
+    "diaryName": "Journal",
+    "diaryShort": "Journal",
+    "diaryDesc": "Le journal de ton bébé sur Telegram.",
+    "uploadName": "Envoyer un compte rendu",
+    "uploadShort": "Envoyer",
+    "uploadDesc": "Envoie un compte rendu, une analyse ou une photo.",
+    "screenshotAgent": "Pose tes questions à AdelIA sur la santé de ton bébé",
+    "screenshotRecord": "Enregistre la consultation avec le pédiatre"
   }
 }

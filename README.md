@@ -183,6 +183,45 @@ ADELIA_HOST=192.168.1.x ./scripts/deploy-prod.sh   # force the host
 If discovery fails, find the box with `arp -a | grep -i santiago` and pass it
 via `ADELIA_HOST`. See `DEPLOY.md` for first-time server setup (Caddy/TLS).
 
+### PWA: service worker and updates
+
+`next build` mints one build id (`apps/web/next.config.ts`): it becomes Next's
+`BUILD_ID`, `NEXT_PUBLIC_BUILD_ID` in the client bundle and the answer of
+`GET /api/version`. The page registers `/sw.js?v=<id>`
+(`components/sw-register.tsx`) and `public/sw.js` names its cache
+`adelia-<id>`, precaches `offline.html` plus the icons, serves `/_next/static`
+and `/icons` cache-first, answers navigations from the network with
+`offline.html` as the only fallback, and never touches `/api` or dashboard
+data. A worker for a new build waits until the user taps "Actualizar" in the
+notice (no reload under a recording; a page that already runs that build
+activates it silently); on activation it deletes the previous build's cache.
+Open tabs poll `/api/version` when they come back to the foreground (at most
+every 5 min) so an installed app learns about a deploy without a reload.
+`apps/web/e2e/pwa-sw.spec.ts` covers registration, the offline fallback and
+the notice; `scripts/server-verify.sh` runs it.
+
+### Cloudflare Web Analytics (beacon): switch it off
+
+Cloudflare injects its Web Analytics beacon into every HTML response of
+`adelia.godi.ai` (`<script src="https://static.cloudflareinsights.com/beacon.min.js/..." data-cf-beacon=...>`,
+which posts to `https://cloudflareinsights.com/cdn-cgi/rum`). It is not in
+this repository (`grep -r cloudflareinsights apps/` finds nothing). The
+privacy policy promises no tracking, so it has to be disabled in the
+Cloudflare dashboard, zone `godi.ai`:
+
+1. **Analytics & Logs → Web Analytics** → site `adelia.godi.ai` → **Manage
+   site** → disable the automatic setup (JS snippet injection), or remove the
+   site from Web Analytics altogether.
+2. On older dashboards the same toggle lives under **Speed → Optimization →
+   Content Optimization → Cloudflare Web Analytics → Off**.
+3. Check: `curl -s https://adelia.godi.ai/es | grep -c cloudflareinsights`
+   must print `0`.
+
+Until then the CSP in `apps/web/next.config.ts` allows those two origins
+(`script-src https://static.cloudflareinsights.com`,
+`connect-src https://cloudflareinsights.com`) so the console stays free of
+the blocked-script error; remove them once the beacon is off.
+
 ## Roadmap
 
 - **Now (pre-launch ops):** Fly.io deploy, Resend domain verification, Telegram bot + Postmark inbound keys (scaffolding is merged and tested).

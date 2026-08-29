@@ -21,11 +21,12 @@ test("locale switcher: /en dashboard renders English", async ({ browser }) => {
   await context.addCookies([cookie]);
   const page = await context.newPage();
 
+  // The home is the agent canvas: its h1 is the greeting (agent.greeting).
   await page.goto("/en/dashboard");
-  await expect(page.getByRole("heading", { name: "My documents" })).toBeVisible();
+  await expect(page.getByRole("heading", { level: 1 })).toHaveText(/How can I help with your baby's health/);
 
   await page.goto("/fr/dashboard");
-  await expect(page.getByRole("heading", { name: "Mes documents" })).toBeVisible();
+  await expect(page.getByRole("heading", { level: 1 })).toHaveText(/Comment je peux t'aider/);
   await context.close();
 });
 
@@ -64,6 +65,8 @@ test("account deletion: type-to-confirm erases and signs out", async ({ browser 
   const deleteButton = page.getByRole("button", { name: /Eliminar mi cuenta/ });
   await expect(deleteButton).toBeDisabled();
 
+  // Two safeguards arm the button: the "I understand" box AND the typed email.
+  await page.getByRole("checkbox", { name: /Entiendo que esto borra/ }).check();
   await page.getByPlaceholder(email).fill(email);
   await expect(deleteButton).toBeEnabled();
   await deleteButton.click();

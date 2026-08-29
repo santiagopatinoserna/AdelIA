@@ -1,4 +1,6 @@
+import type { Metadata } from "next";
 import { useTranslations, useLocale } from "next-intl";
+import { getTranslations } from "next-intl/server";
 import { Link } from "@/lib/navigation";
 import { LocaleSwitcher } from "@/components/locale-switcher";
 import {
@@ -25,7 +27,22 @@ import {
   Clock,
 } from "lucide-react";
 
+import { publicPageAlternates } from "@/lib/seo";
+
 const GITHUB_URL = "https://github.com/santiagopatinoserna/AdelIA";
+
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ locale: string }>;
+}): Promise<Metadata> {
+  const { locale } = await params;
+  const t = await getTranslations({ locale, namespace: "home" });
+  return {
+    description: t("metaDescription"),
+    alternates: publicPageAlternates(locale, ""),
+  };
+}
 
 // Inline citation markers as they come out of the product: "[ev_N]" is an
 // evidence citation (guideline/study), "[N]" points at the baby's own record.

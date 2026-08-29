@@ -2,13 +2,16 @@
 
 import { useState } from "react";
 import { signOut } from "next-auth/react";
-import { useTranslations } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
 import { AlertTriangle, Download } from "lucide-react";
 
+import { InstallSettingsEntry } from "@/components/install-prompt";
+import { LocaleSwitcher } from "@/components/locale-switcher";
 import { clearShowcaseHidden } from "@/lib/showcase-storage";
 
 export function AccountSettingsView({ email }: { email: string }) {
   const t = useTranslations("settings");
+  const locale = useLocale();
   const [confirmText, setConfirmText] = useState("");
   const [acknowledged, setAcknowledged] = useState(false);
   const [busy, setBusy] = useState(false);
@@ -52,12 +55,26 @@ export function AccountSettingsView({ email }: { email: string }) {
         <a
           href="/api/backend/users/me/export"
           download="adelia-export.json"
-          className="ad-btn ad-btn-ghost mt-3 px-3.5 py-2 text-sm"
+          className="ad-btn ad-btn-ghost mt-3 min-h-[44px] px-3.5 py-2 text-sm"
         >
           <Download className="h-4 w-4" strokeWidth={2} />
           {t("exportCta")}
         </a>
       </section>
+
+      {/* On phones the header has no language pill (it ate 174px of a
+          390px bar): this is where the language lives on mobile. */}
+      <section className="ad-card mt-6 p-4">
+        <div className="ad-eyebrow">{t("languageTitle")}</div>
+        <p className="mt-1.5 text-sm text-ink-soft">{t("languageBody")}</p>
+        <div className="mt-3">
+          <LocaleSwitcher current={locale} variant="group" />
+        </div>
+      </section>
+
+      {/* Permanent way to install the PWA: the browser's own prompt shows
+          once and iOS never shows one, so Settings always offers the path. */}
+      <InstallSettingsEntry />
 
       <section className="mt-8 rounded-2xl border border-clay-100 bg-clay-50 p-5">
         <h2 className="flex items-center gap-2 font-display text-lg font-semibold text-clay-700">

@@ -6,7 +6,7 @@ import fr from "@/messages/fr.json";
 
 // Branded social card, generated at request time — no binary asset to maintain.
 // Mirrors the "calidez clínica" palette: pine authority + honey accent on cream.
-export const alt = "AdelIA — tu vault médico personal con IA y evidencia";
+export const alt = "AdelIA, tu vault médico personal con IA y evidencia";
 export const size = { width: 1200, height: 630 };
 export const contentType = "image/png";
 

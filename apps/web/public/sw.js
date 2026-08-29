@@ -1,56 +1,103 @@
-/* AdelIA service worker — deliberately conservative.
+/* AdelIA service worker, deliberately conservative.
  *
  * Medical data must never be served stale or cached on shared devices, so:
- * - navigations + API calls: network only, with an offline fallback page
- * - static assets (_next/static, icons): cache-first (immutable by design)
+ * - navigations: network (with navigation preload), offline.html as fallback
+ * - /api, auth, dashboard data: untouched, always network
+ * - immutable build assets (/_next/static) and icons: cache-first
+ *
+ * Versioning: the page registers /sw.js?v=<build id> (components/sw-register,
+ * id minted in next.config.ts). The id names the cache, so a deploy installs
+ * a new worker that, once active, deletes every cache of a previous build.
+ * The new worker does NOT skip waiting on its own: it waits for the page to
+ * send SKIP_WAITING (the user tapped "Actualizar", or the page already runs
+ * that build), so a reload never happens under someone's feet, e.g. while a
+ * consult is being recorded.
  */
-const STATIC_CACHE = "adelia-static-v1";
+const VERSION = new URL(self.location.href).searchParams.get("v") || "dev";
+const CACHE = `adelia-${VERSION}`;
 const OFFLINE_URL = "/offline.html";
+const PRECACHE_ICONS = [
+  "/icons/icon-192.png",
+  "/icons/icon-512.png",
+  "/icons/icon-512-maskable.png",
+  "/icons/apple-touch-icon.png",
+];
 
 self.addEventListener("install", (event) => {
   event.waitUntil(
-    caches.open(STATIC_CACHE).then((cache) => cache.add(OFFLINE_URL))
+    (async () => {
+      const cache = await caches.open(CACHE);
+      // The offline page is the one thing this worker is for: a failure here
+      // fails the install (the previous worker keeps serving). Icons are
+      // best-effort so a missing PNG can never brick the worker.
+      await cache.add(new Request(OFFLINE_URL, { cache: "reload" }));
+      await Promise.allSettled(
+        PRECACHE_ICONS.map((url) => cache.add(new Request(url, { cache: "reload" })))
+      );
+    })()
   );
-  self.skipWaiting();
 });
 
 self.addEventListener("activate", (event) => {
   event.waitUntil(
-    caches.keys().then((keys) =>
-      Promise.all(
-        keys.filter((k) => k !== STATIC_CACHE).map((k) => caches.delete(k))
-      )
-    )
+    (async () => {
+      const keys = await caches.keys();
+      await Promise.all(
+        keys
+          .filter((key) => key.startsWith("adelia-") && key !== CACHE)
+          .map((key) => caches.delete(key))
+      );
+      // Navigation preload: the browser starts the navigation request in
+      // parallel with the worker's startup instead of after it.
+      if (self.registration.navigationPreload) {
+        await self.registration.navigationPreload.enable();
+      }
+      await self.clients.claim();
+    })()
   );
-  self.clients.claim();
+});
+
+self.addEventListener("message", (event) => {
+  if (event.data && event.data.type === "SKIP_WAITING") self.skipWaiting();
 });
 
 self.addEventListener("fetch", (event) => {
-  const url = new URL(event.request.url);
+  const { request } = event;
+  if (request.method !== "GET") return;
+  const url = new URL(request.url);
+  if (url.origin !== self.location.origin) return;
 
-  // Immutable build assets + icons: cache-first.
-  if (
-    url.origin === self.location.origin &&
-    (url.pathname.startsWith("/_next/static/") ||
-      url.pathname.startsWith("/icons/"))
-  ) {
+  // Navigations: network, falling back to the offline page (and only there:
+  // a page is never served from cache).
+  if (request.mode === "navigate") {
     event.respondWith(
-      caches.open(STATIC_CACHE).then(async (cache) => {
-        const hit = await cache.match(event.request);
-        if (hit) return hit;
-        const response = await fetch(event.request);
-        if (response.ok) cache.put(event.request, response.clone());
-        return response;
-      })
+      (async () => {
+        try {
+          const preloaded = await event.preloadResponse;
+          if (preloaded) return preloaded;
+          return await fetch(request);
+        } catch {
+          const cache = await caches.open(CACHE);
+          return (await cache.match(OFFLINE_URL)) || Response.error();
+        }
+      })()
     );
     return;
   }
 
-  // Navigations: network, falling back to the offline page.
-  if (event.request.mode === "navigate") {
+  // Immutable build assets + icons: cache-first, in this build's cache.
+  if (url.pathname.startsWith("/_next/static/") || url.pathname.startsWith("/icons/")) {
     event.respondWith(
-      fetch(event.request).catch(() => caches.match(OFFLINE_URL))
+      (async () => {
+        const cache = await caches.open(CACHE);
+        const hit = await cache.match(request);
+        if (hit) return hit;
+        const response = await fetch(request);
+        if (response.ok) cache.put(request, response.clone());
+        return response;
+      })()
     );
   }
-  // Everything else (API, auth): default network behavior — never cached.
+  // Everything else (/api, auth, dashboard data): default network behaviour,
+  // never cached.
 });

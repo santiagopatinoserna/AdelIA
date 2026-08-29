@@ -180,6 +180,54 @@ check_url() {
   curl -s -o /dev/null -w '%{http_code}' --max-time 10 "$1" 2>/dev/null || printf '000'
 }
 
+# "<status> <content-type>" of a URL, e.g. "200 image/png".
+check_url_type() {
+  curl -s -o /dev/null -w '%{http_code} %{content_type}' --max-time 10 "$1" 2>/dev/null || printf '000 -'
+}
+
+# PWA surface. A regression here is silent in the browser (no console error,
+# the app just stops being installable), so it is asserted on every deploy:
+#  - /sw.js must be real JavaScript (a missing public/ made it the HTML home)
+#  - the icons the manifest points to and the iOS startup image must be PNGs
+#  - /offline.html is the page the service worker caches for offline
+#  - the manifest link and the startup images must sit INSIDE <head> (Next
+#    streams `metadata` into the body; Chrome ignores a manifest link that is
+#    not in <head>)
+#  - each locale serves its own manifest (same app: id "/", lang = locale)
+# Prints "FAIL: ..." lines and returns 1 when anything is off.
+check_pwa() {
+  local base="$1" fail=0 res body head_html
+  for path in /sw.js; do
+    res="$(check_url_type "${base}${path}")"
+    [[ "${res}" =~ ^200\ (application|text)/javascript ]] \
+      || { log "FAIL: GET ${path} -> '${res}' (want 200 application/javascript)"; fail=1; }
+  done
+  for path in /icons/icon-192.png /icons/icon-512.png /icons/icon-512-maskable.png /icons/apple-touch-icon.png /icons/splash/393x852@3x.png; do
+    res="$(check_url_type "${base}${path}")"
+    [[ "${res}" == "200 image/png" ]] \
+      || { log "FAIL: GET ${path} -> '${res}' (want 200 image/png)"; fail=1; }
+  done
+  body="$(curl -s --max-time 10 "${base}/offline.html" 2>/dev/null || true)"
+  [[ "${body}" == *"Sin conexión"* ]] \
+    || { log "FAIL: GET /offline.html does not contain 'Sin conexión'"; fail=1; }
+  body="$(curl -s --max-time 15 "${base}/es" 2>/dev/null || true)"
+  head_html="$(printf '%s' "${body}" | tr -d '\n' | sed 's#</head>.*##')"
+  [[ "${head_html}" == *'rel="manifest" href="/es/manifest.webmanifest"'* ]] \
+    || { log "FAIL: GET /es has no <link rel=\"manifest\"> inside <head>"; fail=1; }
+  [[ "${head_html}" == *'apple-touch-startup-image'* ]] \
+    || { log "FAIL: GET /es has no apple-touch-startup-image inside <head>"; fail=1; }
+  local l
+  for l in es en fr; do
+    res="$(check_url_type "${base}/${l}/manifest.webmanifest")"
+    [[ "${res}" =~ ^200\ application/manifest\+json ]] \
+      || { log "FAIL: GET /${l}/manifest.webmanifest -> '${res}'"; fail=1; }
+    body="$(curl -s --max-time 10 "${base}/${l}/manifest.webmanifest" 2>/dev/null || true)"
+    [[ "${body}" == *"\"lang\":\"${l}\""* && "${body}" == *'"id":"/"'* ]] \
+      || { log "FAIL: GET /${l}/manifest.webmanifest lacks lang=${l} or id=/"; fail=1; }
+  done
+  return "${fail}"
+}
+
 # A freshly recreated web container needs a few seconds before Next serves
 # traffic; checking immediately after `up -d` reports a 502 that resolves on
 # its own. Poll instead of crying wolf.
@@ -202,12 +250,16 @@ verify() {
   local host="$1" services="$2"
   log "Verifying deployment..."
 
-  local code_home code_prof code_priv code_terms db_version expected fail=0
+  local code_home code_prof code_priv code_terms code_txt db_version expected fail=0
+  local pwa_status="OK"
 
   code_home=$(wait_for_url "https://adelia.godi.ai/es") || true
   code_prof=$(check_url "https://adelia.godi.ai/es/profesionales")
   code_priv=$(check_url "https://adelia.godi.ai/es/privacidad")
   code_terms=$(check_url "https://adelia.godi.ai/es/terminos")
+  # Locale guard: a dotted path must not render the home as a fake locale.
+  code_txt=$(check_url "https://adelia.godi.ai/foo.txt")
+  check_pwa "https://adelia.godi.ai" || pwa_status="FAIL"
 
   db_version=$(ssh "${SSH_OPTS[@]}" "${REMOTE_USER}@${host}" \
     'docker exec infra-postgres-1 psql -U adelia -d adelia -t -c "select version_num from alembic_version;"' \
@@ -218,6 +270,8 @@ verify() {
   [[ "${code_prof}" == "200" ]] || { log "FAIL: GET /es/profesionales -> ${code_prof}"; fail=1; }
   [[ "${code_priv}" == "200" ]] || { log "FAIL: GET /es/privacidad -> ${code_priv}"; fail=1; }
   [[ "${code_terms}" == "200" ]] || { log "FAIL: GET /es/terminos -> ${code_terms}"; fail=1; }
+  [[ "${code_txt}" == "404" ]] || { log "FAIL: GET /foo.txt -> ${code_txt} (want 404)"; fail=1; }
+  [[ "${pwa_status}" == "OK" ]] || { log "FAIL: PWA checks (sw.js, icons, offline.html, manifest in <head>)"; fail=1; }
   [[ "${db_version}" == "${expected}" ]] || { log "FAIL: alembic_version='${db_version}' expected='${expected}'"; fail=1; }
 
   cat >&2 <<EOF
@@ -229,6 +283,8 @@ GET /es:                ${code_home}
 GET /es/profesionales:  ${code_prof}
 GET /es/privacidad:     ${code_priv}
 GET /es/terminos:       ${code_terms}
+GET /foo.txt:           ${code_txt} (expected: 404)
+PWA (sw/icons/offline): ${pwa_status}
 Alembic version:        ${db_version:-<empty>} (expected: ${expected})
 ===========================================================
 EOF

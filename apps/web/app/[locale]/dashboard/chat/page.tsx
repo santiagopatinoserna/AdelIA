@@ -45,8 +45,10 @@ export default async function ChatPage({
   ]);
   const t = await getTranslations("chat");
 
+  // Mobile: header (3.5rem) plus the tab bar (3.5rem), otherwise the input
+  // row sat exactly behind the fixed bar until the page was scrolled.
   return (
-    <main className="flex h-[calc(100dvh-3.5rem)]">
+    <main className="ad-agent-canvas flex h-[calc(100dvh-7rem)] md:h-[calc(100dvh-3.5rem)]">
       <ChatPageClient
         initialSessions={sessions}
         locale={locale}

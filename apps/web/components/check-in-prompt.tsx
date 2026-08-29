@@ -1,50 +1,26 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useTranslations } from "next-intl";
 import { Sparkles, X } from "lucide-react";
 
+import { CHECKIN_PROMPTS, checkinCookie } from "@/lib/checkin";
 import { Link } from "@/lib/navigation";
 
 // A proactive "panel that asks you things": when a mom comes back after a
 // while, surface one rotating check-in so her baby's record stays current.
-// Time-gated + rotating via localStorage so it never nags on every visit.
-const KEY = "adelia:checkin:v1";
-const INTERVAL_MS = 3 * 24 * 60 * 60 * 1000; // ask again at most every 3 days
-
-// Three high-intent rotations only: each pairs one clear action with its
-// destination. More than three reads as a nag and dilutes the ask.
-const PROMPTS = [
-  { key: "upload", href: "/dashboard/upload" },
-  { key: "weight", href: "/dashboard/questionnaire" },
-  { key: "doubt", href: "/dashboard/chat" },
-] as const;
-
-export function CheckInPrompt() {
+// The page decides `initialIndex` on the server from the cookie (lib/checkin),
+// so the card is already in the HTML: no post-hydration insertion, no layout
+// shift. Acknowledging writes the cookie for the next visit.
+export function CheckInPrompt({ initialIndex }: { initialIndex: number }) {
   const t = useTranslations("checkin");
-  const [idx, setIdx] = useState<number | null>(null);
-
-  useEffect(() => {
-    try {
-      const raw = localStorage.getItem(KEY);
-      const st = raw ? (JSON.parse(raw) as { last?: number; i?: number }) : { last: 0, i: 0 };
-      if (Date.now() - (st.last ?? 0) > INTERVAL_MS) {
-        setIdx((st.i ?? 0) % PROMPTS.length);
-      }
-    } catch {
-      /* no storage (private mode) — just don't show it */
-    }
-  }, []);
+  const [idx, setIdx] = useState<number | null>(initialIndex);
 
   if (idx === null) return null;
-  const prompt = PROMPTS[idx];
+  const prompt = CHECKIN_PROMPTS[idx % CHECKIN_PROMPTS.length];
 
   function ack() {
-    try {
-      localStorage.setItem(KEY, JSON.stringify({ last: Date.now(), i: idx! + 1 }));
-    } catch {
-      /* ignore */
-    }
+    document.cookie = checkinCookie(idx! + 1);
     setIdx(null);
   }
 

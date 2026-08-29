@@ -6,6 +6,8 @@ import { AlertCircle, CheckCircle2, Loader2, Mic, Square, XCircle } from "lucide
 
 import { Link } from "@/lib/navigation";
 import { useActiveProfile } from "@/lib/profile-context";
+import { useRecordingGuard } from "@/lib/recording-guard";
+import { useFocusTrap } from "@/lib/use-focus-trap";
 
 export const CONSENT_POLICY_VERSION = "2026-08-17";
 
@@ -62,6 +64,36 @@ export function ConsultaRecorder() {
   // stream/AudioContext/timer with the mic left open.
   const startingRef = useRef(false);
   const [starting, setStarting] = useState(false);
+  // Kill switch in two taps: the first arms it (the label asks for the
+  // second), the second within 4 s discards. Left alone it disarms itself.
+  const [declineArmed, setDeclineArmed] = useState(false);
+  useEffect(() => {
+    if (!declineArmed) return;
+    const id = setTimeout(() => setDeclineArmed(false), 4000);
+    return () => clearTimeout(id);
+  }, [declineArmed]);
+
+  // Navigation lock (lib/recording-guard): while recording, uploading, or
+  // after a FAILED upload (the audio then exists only in uploadBlobRef, in
+  // memory: unmounting the recorder loses it), any tab, link, language
+  // switch or Back press lands here as `pending` and is answered with the
+  // dialog below instead of dropping the audio.
+  const { setActive: setGuardActive, pending: leaveRequest, clearPending } = useRecordingGuard();
+  const guarded = phase === "recording" || phase === "uploading" || phase === "upload-error";
+  useEffect(() => {
+    setGuardActive(guarded);
+    return () => setGuardActive(false);
+  }, [guarded, setGuardActive]);
+  const leaveDialogRef = useRef<HTMLDivElement>(null);
+  useFocusTrap(leaveDialogRef, leaveRequest !== null && guarded);
+  useEffect(() => {
+    if (leaveRequest === null || !guarded) return;
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") clearPending();
+    };
+    document.addEventListener("keydown", onKey);
+    return () => document.removeEventListener("keydown", onKey);
+  }, [leaveRequest, guarded, clearPending]);
 
   // Screen wake lock: iOS suspends MediaRecorder when the screen locks.
   async function acquireWakeLock() {
@@ -142,6 +174,7 @@ export function ConsultaRecorder() {
     streamRef.current = stream;
     chunksRef.current = [];
     discardRef.current = false;
+    setDeclineArmed(false);
 
     // Everything below can throw mid-setup (unsupported MediaRecorder
     // options, AudioContext construction failing, etc.) — without this
@@ -269,6 +302,21 @@ export function ConsultaRecorder() {
     }
   }
 
+  function retryUpload() {
+    if (uploadBlobRef.current) void upload(uploadBlobRef.current);
+  }
+
+  // Deliberate way out after a failed upload (chosen in the leave dialog,
+  // so it is always a second tap): drop the audio and lift the lock. The
+  // recorder returns to the gate and the next tap navigates freely.
+  function discardUnsaved() {
+    clearPending();
+    uploadBlobRef.current = null;
+    chunksRef.current = [];
+    setError(null);
+    setPhase("gate");
+  }
+
   function poll(id: string) {
     if (pollRef.current) clearInterval(pollRef.current); // guard: never stack two pollers
     // Cap: a stuck pipeline must not spin "Transcribiendo…" forever. The
@@ -309,6 +357,107 @@ export function ConsultaRecorder() {
     locale === "es" ? t("legalNoteEs") : locale === "fr" ? t("legalNoteFr") : t("legalNoteGeneric");
   const mm = String(Math.floor(elapsed / 60)).padStart(2, "0");
   const ss = String(elapsed % 60).padStart(2, "0");
+
+  // "¿Terminar la grabación?": the answer to any attempt to leave while the
+  // mic is open. "Seguir grabando" is the default (focused first) — the tap
+  // was most likely accidental. "Terminar y guardar" is exactly the Stop
+  // button: the audio recorded so far is uploaded, nothing is discarded.
+  // While uploading there is nothing to decide: a short notice, then the
+  // lock lifts by itself the moment the upload lands. After a FAILED upload
+  // the audio is only in memory: "Reintentar" re-posts the same bytes,
+  // "Quedarme aquí" keeps the lock, "Descartar" is the conscious way out.
+  const leaveTitle =
+    phase === "recording"
+      ? t("leaveTitle")
+      : phase === "upload-error"
+        ? t("leaveUnsavedTitle")
+        : t("uploadingNoticeTitle");
+  const leaveBody =
+    phase === "recording"
+      ? t("leaveBody")
+      : phase === "upload-error"
+        ? t("leaveUnsavedBody")
+        : t("uploadingNoticeBody");
+  const leaveDialog =
+    leaveRequest !== null && guarded ? (
+      <div
+        className="fixed inset-0 z-50 flex items-end justify-center bg-pine-900/50 p-4 backdrop-blur-sm sm:items-center"
+        onClick={clearPending}
+      >
+        <div
+          ref={leaveDialogRef}
+          role="dialog"
+          aria-modal="true"
+          aria-labelledby="leave-recording-title"
+          aria-describedby="leave-recording-body"
+          onClick={(e) => e.stopPropagation()}
+          className="ad-card w-full max-w-md space-y-4 p-6 shadow-glow"
+        >
+          <h2 id="leave-recording-title" className="text-lg text-pine-900">
+            {leaveTitle}
+          </h2>
+          <p id="leave-recording-body" className="text-sm leading-relaxed text-ink-soft">
+            {leaveBody}
+          </p>
+          {phase === "recording" ? (
+            <div className="flex flex-col gap-2">
+              <button
+                type="button"
+                className="ad-btn ad-btn-primary min-h-[48px] w-full"
+                onClick={clearPending}
+              >
+                <Mic className="h-5 w-5" /> {t("leaveStay")}
+              </button>
+              <button
+                type="button"
+                className="ad-btn ad-btn-ghost min-h-[48px] w-full"
+                onClick={() => {
+                  clearPending();
+                  stop();
+                }}
+              >
+                <Square className="h-5 w-5" /> {t("stop")}
+              </button>
+            </div>
+          ) : phase === "upload-error" ? (
+            <div className="flex flex-col gap-2">
+              <button
+                type="button"
+                className="ad-btn ad-btn-primary min-h-[48px] w-full"
+                onClick={() => {
+                  clearPending();
+                  retryUpload();
+                }}
+              >
+                {t("retry")}
+              </button>
+              <button
+                type="button"
+                className="ad-btn ad-btn-ghost min-h-[48px] w-full"
+                onClick={clearPending}
+              >
+                {t("leaveUnsavedStay")}
+              </button>
+              <button
+                type="button"
+                className="mx-auto inline-flex min-h-[44px] items-center gap-1.5 px-2 text-sm text-clay-700 underline underline-offset-4"
+                onClick={discardUnsaved}
+              >
+                <XCircle className="h-4 w-4" /> {t("leaveUnsavedDiscard")}
+              </button>
+            </div>
+          ) : (
+            <button
+              type="button"
+              className="ad-btn ad-btn-primary min-h-[48px] w-full"
+              onClick={clearPending}
+            >
+              {t("uploadingNoticeOk")}
+            </button>
+          )}
+        </div>
+      </div>
+    ) : null;
 
   if (phase === "gate") {
     return (
@@ -370,6 +519,7 @@ export function ConsultaRecorder() {
 
   if (phase === "recording") {
     return (
+      <>
       <div className="ad-card space-y-4 p-6">
         <div
           role="status"
@@ -388,10 +538,30 @@ export function ConsultaRecorder() {
         <button type="button" className="ad-btn ad-btn-primary min-h-[48px] w-full" onClick={stop}>
           <Square className="h-5 w-5" /> {t("stop")}
         </button>
-        <button type="button" className="ad-btn ad-btn-danger min-h-[48px] w-full" onClick={decline}>
-          <XCircle className="h-5 w-5" /> {t("decline")}
-        </button>
       </div>
+      {/* Kill switch ("the professional objects"), deliberately NOT a button
+          under Stop: a text link outside the card (card padding + 24px away)
+          that takes two taps. The first arms it (the label asks for the
+          second), the second within 4 s discards the audio and logs
+          recording_declined; otherwise it disarms itself. One slipped finger
+          while stopping used to erase the consult and record an objection
+          that never happened. */}
+      <p className="mt-6 text-center">
+        <button
+          type="button"
+          aria-live="polite"
+          className={
+            declineArmed
+              ? "ad-btn ad-btn-danger min-h-[48px] px-5 text-sm"
+              : "inline-flex min-h-[44px] items-center gap-1.5 px-2 text-sm text-clay-700 underline underline-offset-4"
+          }
+          onClick={() => (declineArmed ? decline() : setDeclineArmed(true))}
+        >
+          <XCircle className="h-4 w-4" /> {declineArmed ? t("declineConfirm") : t("decline")}
+        </button>
+      </p>
+      {leaveDialog}
+      </>
     );
   }
 
@@ -408,11 +578,14 @@ export function ConsultaRecorder() {
 
   if (phase === "uploading" || phase === "transcribing") {
     return (
+      <>
       <div className="ad-card space-y-3 p-6 text-center" role="status">
         <Loader2 className="mx-auto h-8 w-8 animate-spin text-pine-500" />
         <p>{phase === "uploading" ? t("uploading") : t("transcribing")}</p>
         <p className="text-xs opacity-70">{t("audioDeleted")}</p>
       </div>
+      {leaveDialog}
+      </>
     );
   }
 
@@ -462,18 +635,15 @@ export function ConsultaRecorder() {
 
   if (phase === "upload-error") {
     return (
+      <>
       <div className="ad-card space-y-3 p-6 text-center">
         <p role="alert" className="text-clay-600">{error}</p>
-        <button
-          type="button"
-          className="ad-btn ad-btn-ghost"
-          onClick={() => {
-            if (uploadBlobRef.current) void upload(uploadBlobRef.current);
-          }}
-        >
+        <button type="button" className="ad-btn ad-btn-ghost min-h-[44px]" onClick={retryUpload}>
           {t("retry")}
         </button>
       </div>
+      {leaveDialog}
+      </>
     );
   }
 

@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { auth } from "@/lib/auth";
+import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 import { Link } from "@/lib/navigation";
 import { getTranslations } from "next-intl/server";
@@ -7,6 +8,7 @@ import { listDocuments, type DocumentDTO } from "@/lib/api-client";
 import { DocumentCard } from "@/components/document-card";
 import { InstallPrompt } from "@/components/install-prompt";
 import { CheckInPrompt } from "@/components/check-in-prompt";
+import { CHECKIN_COOKIE, checkinIndexFromCookie } from "@/lib/checkin";
 import {
   MessagesSquare,
   ClipboardList,
@@ -86,11 +88,13 @@ export default async function DashboardOverview({
           <p className="mx-auto mt-3 max-w-md text-ink-soft">{t("welcomeSubtitle")}</p>
         </div>
 
-        <ol className="mt-10 grid gap-3 sm:grid-cols-3">
+        {/* grid-cols-1 = minmax(0,1fr): a bare `grid` makes an `auto` track
+            that grows past the viewport when an item's min-content does. */}
+        <ol className="mt-10 grid grid-cols-1 gap-3 sm:grid-cols-3">
           {steps.map((s, i) => (
             <li
               key={s.title}
-              className="ad-card ad-rise flex flex-col p-5"
+              className="ad-card ad-rise flex min-w-0 flex-col p-5"
               style={{ animationDelay: `${120 + i * 90}ms` }}
             >
               <div className="flex items-center gap-2">
@@ -121,11 +125,16 @@ export default async function DashboardOverview({
     );
   }
 
+  // Check-in card: decided here from the cookie (lib/checkin) so it is in
+  // the server HTML; a client-side decision inserted it after hydration and
+  // shifted the whole page (CLS 0.138 on a phone).
+  const checkinIndex = checkinIndexFromCookie((await cookies()).get(CHECKIN_COOKIE)?.value);
+
   // Returning user (has documents): full quick-access nav + document list.
   return (
     <main className="mx-auto max-w-5xl px-6 py-10">
         <InstallPrompt />
-        <CheckInPrompt />
+        {checkinIndex !== null && <CheckInPrompt initialIndex={checkinIndex} />}
 
         {/* Core actions — big and obvious for a first-time mom. */}
         <nav aria-label={t("navPrimaryLabel")} className="grid grid-cols-1 gap-3 sm:grid-cols-3">
@@ -133,13 +142,13 @@ export default async function DashboardOverview({
             <Link
               key={item.href}
               href={item.href}
-              className="ad-card ad-card-hover ad-rise flex items-center gap-3 px-5 py-4"
+              className="ad-card ad-card-hover ad-rise flex min-w-0 items-center gap-3 px-5 py-4"
               style={{ animationDelay: `${i * 60}ms` }}
             >
               <span className="inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-pine-50 text-pine-600 ring-1 ring-pine-100">
                 <item.icon className="h-5 w-5" strokeWidth={2} />
               </span>
-              <span className="text-base font-medium text-ink">{item.label}</span>
+              <span className="min-w-0 truncate text-base font-medium text-ink">{item.label}</span>
             </Link>
           ))}
         </nav>
@@ -155,26 +164,28 @@ export default async function DashboardOverview({
               <Link
                 key={item.href}
                 href={item.href}
-                className="ad-card ad-card-hover ad-rise flex items-center gap-2.5 bg-surface-2/40 px-3.5 py-3"
+                className="ad-card ad-card-hover ad-rise flex min-w-0 items-center gap-2.5 bg-surface-2/40 px-3.5 py-3"
                 style={{ animationDelay: `${(primaryNav.length + i) * 60}ms` }}
               >
                 <item.icon className="h-4 w-4 shrink-0 text-ink-faint" strokeWidth={2} />
-                <span className="text-sm text-ink-soft">{item.label}</span>
+                <span className="min-w-0 text-sm leading-snug text-ink-soft">{item.label}</span>
               </Link>
             ))}
           </nav>
         </div>
 
-        <div className="mt-12 flex items-baseline justify-between">
-          <h1 className="text-2xl text-pine-900">{t("title")}</h1>
-          <span className="font-mono text-xs text-ink-faint">
+        <div className="mt-12 flex min-w-0 items-baseline justify-between gap-3">
+          <h1 className="min-w-0 text-2xl text-pine-900">{t("title")}</h1>
+          <span className="shrink-0 font-mono text-xs text-ink-faint">
             {t("documentsCount", { count: docs.length })}
           </span>
         </div>
 
-        <ul className="mt-6 grid gap-3 sm:grid-cols-2">
+        {/* Same minmax(0,1fr) rule: this list was 404px wide on a 390px
+            phone (a long file name's min-content) and pushed the tab bar. */}
+        <ul className="mt-6 grid grid-cols-1 gap-3 sm:grid-cols-2">
           {docs.map((d) => (
-            <li key={d.id}>
+            <li key={d.id} className="min-w-0">
               <DocumentCard doc={d} locale={locale} />
             </li>
           ))}

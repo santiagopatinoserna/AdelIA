@@ -6,7 +6,8 @@ export default function NotFound() {
   const t = useTranslations("common");
   return (
     <main className="flex min-h-screen items-center justify-center px-6 py-16">
-      <div className="ad-card ad-rise max-w-md p-8 text-center md:p-10">
+      {/* No ad-rise on the root: content starting at opacity 0 never reports FCP. */}
+      <div className="ad-card max-w-md p-8 text-center md:p-10">
         <span className="mx-auto inline-flex h-14 w-14 items-center justify-center rounded-2xl bg-pine-50 text-pine-500 ring-1 ring-pine-100">
           <Compass className="h-7 w-7" strokeWidth={1.8} />
         </span>
