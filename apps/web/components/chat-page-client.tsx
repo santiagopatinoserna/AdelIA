@@ -6,6 +6,7 @@ import { Link } from "@/lib/navigation";
 import {
   type ChatSession,
   type Citation,
+  type EvidenceCitation,
   deleteChatSession,
   getChatSession,
   listChatSessions,
@@ -19,6 +20,7 @@ type LocalMsg = {
   role: "user" | "assistant";
   content: string;
   citations: Citation[];
+  evidence_citations: EvidenceCitation[];
 };
 
 export function ChatPageClient({
@@ -26,11 +28,15 @@ export function ChatPageClient({
   locale,
   titleText,
   hasDocs,
+  initialQuestion,
 }: {
   initialSessions: ChatSession[];
   locale: string;
   titleText: string;
   hasDocs: boolean;
+  // A question handed over in the URL (?q=...), e.g. by the capability
+  // showcase: sent once on mount as if the user had typed it.
+  initialQuestion?: string;
 }) {
   const t = useTranslations("chat");
   const [sessions, setSessions] = useState<ChatSession[]>(initialSessions);
@@ -39,6 +45,9 @@ export function ChatPageClient({
   const [busy, setBusy] = useState(false);
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const scrollRef = useRef<HTMLDivElement | null>(null);
+  // The handed-over question fires exactly once, whatever re-renders or
+  // prop changes follow (strict-mode double effects included).
+  const autoSentRef = useRef(false);
   // Increments whenever the visible conversation changes; in-flight stream
   // events from a previous epoch are dropped instead of appending tokens
   // to another session's history (or crashing on an empty list).
@@ -75,6 +84,7 @@ export function ChatPageClient({
         role: m.role,
         content: m.content,
         citations: m.citations,
+        evidence_citations: m.evidence_citations ?? [],
       }))
     );
   }, []);
@@ -100,8 +110,12 @@ export function ChatPageClient({
     const controller = new AbortController();
     abortRef.current = controller;
     setBusy(true);
-    const userMsg: LocalMsg = { role: "user", content: text, citations: [] };
-    setMessages((prev) => [...prev, userMsg, { role: "assistant", content: "", citations: [] }]);
+    const userMsg: LocalMsg = { role: "user", content: text, citations: [], evidence_citations: [] };
+    setMessages((prev) => [
+      ...prev,
+      userMsg,
+      { role: "assistant", content: "", citations: [], evidence_citations: [] },
+    ]);
     try {
       let createdSessionId: string | null = null;
       for await (const event of streamChat(text, activeId, locale, controller.signal)) {
@@ -123,7 +137,11 @@ export function ChatPageClient({
             const updated = [...prev];
             const last = updated[updated.length - 1];
             if (last?.role === "assistant") {
-              updated[updated.length - 1] = { ...last, citations: event.citations };
+              updated[updated.length - 1] = {
+                ...last,
+                citations: event.citations,
+                evidence_citations: event.evidence_citations,
+              };
             }
             return updated;
           });
@@ -160,6 +178,19 @@ export function ChatPageClient({
   }, [activeId, locale, sessions]);
 
   const stop = useCallback(() => abortRef.current?.abort(), []);
+
+  // Question handed over in the URL: strip it first (a reload or a shared
+  // link must not re-send it and open yet another session), then send it.
+  useEffect(() => {
+    if (!initialQuestion || autoSentRef.current) return;
+    autoSentRef.current = true;
+    try {
+      window.history.replaceState(window.history.state, "", window.location.pathname);
+    } catch {
+      /* history blocked: the question still goes out, the URL just keeps it */
+    }
+    void handleSubmit(initialQuestion);
+  }, [initialQuestion, handleSubmit]);
 
   return (
     <div className="flex w-full">

@@ -8,7 +8,7 @@ from sse_starlette.sse import EventSourceResponse
 
 from adelia.auth import get_current_user_id
 from adelia.schemas import ChatCitation, ChatRequest, ChatSessionDetailOut, ChatSessionOut
-from adelia.services.chat_orchestrator import answer_question_streaming
+from adelia.services.chat_orchestrator import ChatEvent, answer_question_streaming
 from adelia.services.chat_repo import (
     create_session,
     delete_session,
@@ -24,6 +24,21 @@ router = APIRouter(prefix="/chat", tags=["chat"])
 # prompt size; RAG context is re-retrieved fresh per question anyway.
 HISTORY_MAX_MESSAGES = 12
 HISTORY_MAX_CHARS_PER_MESSAGE = 2000
+
+
+def _final_data(session_id: uuid.UUID, event: ChatEvent) -> dict:
+    """Payload of the SSE ``final`` event: both citation namespaces.
+
+    ``citations`` point at the user's own documents, ``evidence_citations``
+    at the clinical guidelines/studies (already JSON-serialisable dicts from
+    evidence_citations_for_response). The web chat renders one block per
+    namespace; without the second key the evidence block never showed.
+    """
+    return {
+        "session_id": str(session_id),
+        "citations": [c.model_dump(mode="json") for c in event.citations],
+        "evidence_citations": event.evidence_citations,
+    }
 
 
 @router.get("/sessions", response_model=list[ChatSessionOut])
@@ -118,12 +133,7 @@ async def post_chat(
                     final_citations = event.citations
                     yield {
                         "event": "final",
-                        "data": json.dumps(
-                            {
-                                "session_id": str(session_id),
-                                "citations": [c.model_dump(mode="json") for c in event.citations],
-                            }
-                        ),
+                        "data": json.dumps(_final_data(session_id, event)),
                     }
                 elif event.type == "error":
                     yield {

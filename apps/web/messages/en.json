@@ -756,13 +756,65 @@
     "cardInsightTitle": "Insight",
     "cardDocEntities": "extracted data",
     "profileSwitch": "Profile",
-    "suggestionsTitle": "For you",
-    "quickRecordTitle": "Record a visit",
-    "quickRecordBody": "With the professional's permission, I transcribe it into the record and the audio is deleted.",
-    "quickUploadTitle": "Upload the first report",
-    "quickUploadBody": "A lab result, a report or a photo of the health booklet: I read it and organize it.",
-    "quickAskTitle": "Ask me something",
-    "sampleQuestion": "Which vaccines are due at 12 months?"
+    "suggestionsTitle": "For you"
+  },
+  "showcase": {
+    "title": "What AdelIA can do for you",
+    "hide": "Hide for now",
+    "collapsed": "Examples of what AdelIA can do",
+    "show": "Show",
+    "cards": {
+      "record": {
+        "title": "Record the visit",
+        "example": "Keep using the cream twice a day and come back in 15 days",
+        "detail": "With the pediatrician's permission: the essentials in 3 to 6 points, and the audio is deleted after 48 h.",
+        "action": "Record"
+      },
+      "ask": {
+        "title": "Ask, with citations",
+        "example": "Is it normal that at 13 months she only wants breast milk?",
+        "detail": "I answer citing your baby's records and dozens of pediatric guidelines and studies (daycare, feeding at 12-18 months, reflux).",
+        "action": "Ask",
+        "altLabel": "Another question:",
+        "altQuestion": "How long does it take a baby to settle into daycare?"
+      },
+      "diary": {
+        "title": "Daily diary on Telegram at 20:00",
+        "example": "Two fewer feeds today and a bit of a runny nose, no fever",
+        "detail": "The bot asks how the day went; you reply in text or audio and it is filed by date in the record.",
+        "action": "Link Telegram"
+      },
+      "upload": {
+        "title": "Upload a report or the health booklet",
+        "example": "A photo of the booklet with the 12-month vaccine",
+        "detail": "I read the document and pull out medications, vaccines and dated observations.",
+        "action": "Upload"
+      },
+      "briefing": {
+        "title": "Briefing for the specialist",
+        "example": "We see the allergist tomorrow and I want everything summed up",
+        "detail": "One page per specialty, citing the record and the evidence, ready to share with the doctor.",
+        "action": "Create briefing"
+      },
+      "questionnaire": {
+        "title": "Guided reflux questionnaire",
+        "example": "She spits up after every feed and arches her back",
+        "detail": "Guided questions grounded in clinical guidelines; every item cites its source.",
+        "action": "Start"
+      },
+      "import": {
+        "title": "Import what you already have",
+        "example": "I want the full record from the private clinic",
+        "detail": "Apple Health, CCD, email forwarding and GDPR templates to request the record (ES, FR, US).",
+        "action": "Import"
+      },
+      "settings": {
+        "title": "Your data, with you",
+        "example": "We are changing pediatrician and I want to take everything with me",
+        "detail": "Export everything as one FHIR R4 file and delete any document from its page.",
+        "action": "See settings"
+      }
+    }
   },
   "professionals": {
     "title": "Information for healthcare professionals",

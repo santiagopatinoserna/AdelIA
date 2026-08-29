@@ -756,13 +756,65 @@
     "cardInsightTitle": "Sugerencia",
     "cardDocEntities": "datos extraídos",
     "profileSwitch": "Perfil",
-    "suggestionsTitle": "Para ti",
-    "quickRecordTitle": "Graba una consulta",
-    "quickRecordBody": "Con permiso del profesional, la transcribo al historial y el audio se borra.",
-    "quickUploadTitle": "Sube el primer informe",
-    "quickUploadBody": "Un análisis, un informe o una foto de la cartilla: yo lo leo y lo organizo.",
-    "quickAskTitle": "Pregúntame algo",
-    "sampleQuestion": "¿Qué vacunas tocan a los 12 meses?"
+    "suggestionsTitle": "Para ti"
+  },
+  "showcase": {
+    "title": "Lo que AdelIA puede hacer por ti",
+    "hide": "Ocultar por ahora",
+    "collapsed": "Ejemplos de lo que AdelIA puede hacer",
+    "show": "Mostrar",
+    "cards": {
+      "record": {
+        "title": "Graba la consulta",
+        "example": "Seguimos con la crema dos veces al día y volvemos en 15 días",
+        "detail": "Con permiso del pediatra: lo esencial en 3-6 puntos y el audio se borra a las 48 h.",
+        "action": "Grabar"
+      },
+      "ask": {
+        "title": "Pregunta con citas",
+        "example": "¿Es normal que con 13 meses solo quiera leche materna?",
+        "detail": "Respondo citando los informes de tu bebé y decenas de guías y estudios pediátricos (guardería, alimentación 12-18 meses, reflujo).",
+        "action": "Preguntar",
+        "altLabel": "Otra pregunta:",
+        "altQuestion": "¿Cuánto tarda un bebé en adaptarse a la guardería?"
+      },
+      "diary": {
+        "title": "Diario a las 20:00 por Telegram",
+        "example": "Hoy dos tomas menos y algo de mocos, sin fiebre",
+        "detail": "El bot pregunta cómo ha ido el día; contestas en texto o audio y queda con fecha en el historial.",
+        "action": "Enlazar Telegram"
+      },
+      "upload": {
+        "title": "Sube un informe o la cartilla",
+        "example": "Foto de la cartilla con la vacuna de los 12 meses",
+        "detail": "Leo el documento y saco medicaciones, vacunas y observaciones con su fecha.",
+        "action": "Subir"
+      },
+      "briefing": {
+        "title": "Briefing para el especialista",
+        "example": "Mañana vamos al alergólogo y quiero llevarlo todo resumido",
+        "detail": "Una página por especialidad, con citas al historial y a la evidencia, para compartir con el médico.",
+        "action": "Crear briefing"
+      },
+      "questionnaire": {
+        "title": "Cuestionario guiado de reflujo",
+        "example": "Regurgita después de cada toma y arquea la espalda",
+        "detail": "Preguntas guiadas y fundamentadas en guías clínicas; cada ítem cita su fuente.",
+        "action": "Empezar"
+      },
+      "import": {
+        "title": "Importa lo que ya tienes",
+        "example": "Quiero el historial completo de la clínica privada",
+        "detail": "Apple Health, CCD, reenvío de emails y plantillas RGPD para pedir el historial (ES, FR, US).",
+        "action": "Importar"
+      },
+      "settings": {
+        "title": "Tus datos, contigo",
+        "example": "Cambiamos de pediatra y quiero llevármelo todo",
+        "detail": "Exporta todo en un solo fichero FHIR R4 y borra cualquier documento desde su ficha.",
+        "action": "Ver ajustes"
+      }
+    }
   },
   "professionals": {
     "title": "Información para profesionales sanitarios",

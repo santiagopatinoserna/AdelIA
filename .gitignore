@@ -20,3 +20,6 @@ htmlcov/
 apps/web/_*.mjs
 apps/web/_*.png
 .env.prod
+
+# QA screenshots produced by e2e/qa tooling
+apps/web/qa-shots/
