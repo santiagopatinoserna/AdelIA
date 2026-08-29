@@ -94,9 +94,9 @@ curl -sf "localhost:${API_PORT}/health" >/dev/null || { log "API never came up";
 for _ in $(seq 1 45); do curl -sf -o /dev/null "localhost:${WEB_PORT}/es" && break; sleep 2; done
 curl -sf -o /dev/null "localhost:${WEB_PORT}/es" || { log "web never came up"; tail -5 /tmp/verify-web.log >&2; exit 1; }
 
-log "E2E (recorder + a11y + diary + showcase)..."
+log "E2E (recorder + a11y + diary + showcase + landing)..."
 (cd apps/web && env "${PG_ENV[@]}" AUTH_SECRET=ci-only-secret \
   E2E_BASE_URL="http://localhost:${WEB_PORT}" \
-  pnpm exec playwright test e2e/consulta-record.spec.ts e2e/a11y.spec.ts e2e/diary.spec.ts e2e/showcase.spec.ts --reporter=line 2>&1 | tail -3)
+  pnpm exec playwright test e2e/consulta-record.spec.ts e2e/a11y.spec.ts e2e/diary.spec.ts e2e/showcase.spec.ts e2e/landing-day.spec.ts --reporter=line 2>&1 | tail -3)
 
 log "ALL GREEN — safe to deploy."
