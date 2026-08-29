@@ -124,7 +124,7 @@ export default function HomePage() {
       className={
         kind === "generated"
           ? "rounded-full border border-pine-100 bg-pine-50 px-2 py-0.5 text-[10px] font-medium text-pine-700"
-          : "rounded-full border border-line-strong bg-surface-2 px-2 py-0.5 text-[10px] font-medium text-ink-faint"
+          : "rounded-full border border-line-strong bg-surface-2 px-2 py-0.5 text-[10px] font-medium text-ink-soft"
       }
     >
       {kind === "generated" ? t("home.day.generatedTag") : t("home.day.exampleTag")}
@@ -169,7 +169,7 @@ export default function HomePage() {
               <span className="block">{t("home.day.s1BotHeard")}</span>
               <span className="block italic text-ink-soft">{t("home.day.s1Snippet")}</span>
               <span className="mt-1.5 block font-medium text-pine-700">{t("home.day.s1BotSaved")}</span>
-              <span className="block text-ink-faint">
+              <span className="block text-ink-soft">
                 {t("home.day.s1BotLink")}{" "}
                 <span className="underline decoration-pine-200 underline-offset-2">{t("home.day.s1BotLinkLabel")}</span>
               </span>
@@ -198,10 +198,10 @@ export default function HomePage() {
                 className="flex flex-wrap items-baseline gap-x-1.5 rounded-lg border border-line bg-surface-2 px-2.5 py-1.5 text-xs"
               >
                 <span className="font-semibold text-ink">{c.name}</span>
-                <span aria-hidden className="text-ink-faint">·</span>
+                <span aria-hidden className="text-ink-soft">·</span>
                 <span className="text-ink">{c.value}</span>
-                <span aria-hidden className="text-ink-faint">·</span>
-                <span className="font-mono text-[11px] text-ink-faint">{c.date}</span>
+                <span aria-hidden className="text-ink-soft">·</span>
+                <span className="font-mono text-[11px] text-ink-soft">{c.date}</span>
               </li>
             ))}
           </ul>
@@ -229,10 +229,10 @@ export default function HomePage() {
               </li>
             ))}
           </ul>
-          <p className="mt-3 border-t border-line pt-2 font-mono text-[11px] leading-snug text-ink-faint">
+          <p className="mt-3 border-t border-line pt-2 font-mono text-[11px] leading-snug text-ink-soft">
             {t("home.day.s3Speakers")}
           </p>
-          <p className="font-mono text-[11px] leading-snug text-ink-faint">{t("home.day.s3Retention")}</p>
+          <p className="font-mono text-[11px] leading-snug text-ink-soft">{t("home.day.s3Retention")}</p>
         </div>
       ),
     },
@@ -253,7 +253,7 @@ export default function HomePage() {
           <div className="flex justify-start">
             <div className="rounded-2xl rounded-bl-md border border-line bg-surface px-3 py-2 text-xs leading-relaxed text-ink shadow-soft">
               {cited(t("home.day.s4A"))}
-              <span className="mt-2 block border-t border-line pt-1.5 font-mono text-[10px] leading-snug text-ink-faint">
+              <span className="mt-2 block border-t border-line pt-1.5 font-mono text-[10px] leading-snug text-ink-soft">
                 {t("home.day.s4Src1")}
               </span>
             </div>
@@ -274,7 +274,7 @@ export default function HomePage() {
             <span className="ad-eyebrow !text-honey-700">{t("home.day.s5Eyebrow")}</span>
             <FileText className="h-4 w-4 text-honey-500" strokeWidth={2} />
           </div>
-          <p className="mt-1 font-mono text-[11px] text-ink-faint">{t("home.day.s5Meta")}</p>
+          <p className="mt-1 font-mono text-[11px] text-ink-soft">{t("home.day.s5Meta")}</p>
           <dl className="mt-2.5 flex flex-col gap-2">
             {dayBriefingRows.map((row) => (
               <div key={row.label} className="border-t border-line pt-2 first:border-t-0 first:pt-0">
@@ -360,7 +360,7 @@ export default function HomePage() {
                 <span className="ad-ev-tag align-middle">ev_1</span>
               </p>
               <div className="mt-5 border-t border-line pt-4">
-                <p className="font-mono text-xs text-ink-faint">
+                <p className="font-mono text-xs text-ink-soft">
                   {t("home.proofSource")}
                 </p>
               </div>
@@ -426,7 +426,7 @@ export default function HomePage() {
               <ArrowRight className="h-4 w-4" strokeWidth={2.4} />
             </Link>
             <p className="text-xs text-ink-soft">{t("home.day.ctaNote")}</p>
-            <p className="mt-4 max-w-xl text-center font-mono text-[11px] leading-relaxed text-ink-faint">
+            <p className="mt-4 max-w-xl text-center font-mono text-[11px] leading-relaxed text-ink-soft">
               {t("home.day.footnote")}
             </p>
           </div>
