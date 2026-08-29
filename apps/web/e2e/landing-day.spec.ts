@@ -39,7 +39,15 @@ test.describe("landing: Un día con AdelIA", () => {
       { width: 1280, height: 800 },
       { width: 390, height: 844 },
     ]) {
-      const context = await browser.newContext({ viewport, isMobile: viewport.width < 500, hasTouch: viewport.width < 500 });
+      // The step cards enter with the ad-rise animation: sampling colors
+      // mid-fade reads lighter text than the stylesheet declares and fails
+      // contrast for the wrong reason. Reduced motion disables it.
+      const context = await browser.newContext({
+        viewport,
+        isMobile: viewport.width < 500,
+        hasTouch: viewport.width < 500,
+        reducedMotion: "reduce",
+      });
       const page = await context.newPage();
       await page.goto("/es");
       await expect(page.locator("section#day")).toBeVisible();
