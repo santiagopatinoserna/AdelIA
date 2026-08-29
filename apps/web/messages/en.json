@@ -220,7 +220,8 @@
     "mixLegendData": "their history",
     "mixLegendEv": "cited studies",
     "prT1DevTag": "For developers",
-    "prT2Trial": "Free for 30 days, nothing to pay today"
+    "prT2Trial": "Free for 30 days, nothing to pay today",
+    "metaDescription": "AdelIA gathers your baby's medical history (reports, lab results, vaccines, recorded visits) and answers your questions with cited scientific evidence. Free for 30 days."
   },
   "dashboard": {
     "title": "My documents",
@@ -640,7 +641,14 @@
     "ackIrreversible": "I understand this deletes everything forever and can't be undone.",
     "exportTitle": "Your data, with you",
     "exportBody": "Download everything AdelIA stores about you and your baby in a single file: the clinical core in FHIR format (the standard health systems understand) plus the full transcripts and consent records.",
-    "exportCta": "Download all my data"
+    "exportCta": "Download all my data",
+    "installTitle": "Install the app",
+    "installBody": "Add AdelIA to your home screen: it opens full screen, without the browser bar, one tap away.",
+    "installCta": "Install the app",
+    "installGuideCta": "See how to install it",
+    "installed": "Installed on this device",
+    "languageTitle": "Language",
+    "languageBody": "Choose the app language. It changes right away, no need to sign out."
   },
   "questionnaire": {
     "title": "Reflux control",
@@ -729,7 +737,18 @@
       "error": "Could not process the recording. The audio stays saved for a few days so you can retry.",
       "uploadError": "Couldn't upload the recording. It's still on your device: retry now.",
       "retry": "Retry",
-      "prepareBriefing": "Prepare a summary for the doctor"
+      "prepareBriefing": "Prepare a summary for the doctor",
+      "leaveTitle": "Finish the recording?",
+      "leaveBody": "You are recording the visit. If you finish now, what has been recorded so far is saved and you stay on this screen to see the summary. Nothing is lost.",
+      "leaveStay": "Keep recording",
+      "uploadingNoticeTitle": "Uploading the recording",
+      "uploadingNoticeBody": "Give it a few seconds: as soon as it finishes you can leave without losing anything.",
+      "uploadingNoticeOk": "Got it",
+      "declineConfirm": "Tap again to discard the recording",
+      "leaveUnsavedTitle": "Leave without saving the visit?",
+      "leaveUnsavedBody": "The recording is only on this device and has not been uploaded yet. If you leave now it will be lost. Retry the upload first.",
+      "leaveUnsavedStay": "Stay here",
+      "leaveUnsavedDiscard": "Discard the recording"
     }
   },
   "command": {
@@ -757,11 +776,28 @@
     "offlineBody": "Some features need an internet connection.",
     "online": "Back online"
   },
+  "appUpdate": {
+    "available": "A new version of AdelIA is available",
+    "cta": "Update",
+    "later": "Later"
+  },
   "install": {
     "title": "Install AdelIA",
     "body": "Keep it on your home screen, like an app.",
     "cta": "Install",
-    "dismiss": "Not now"
+    "dismiss": "Not now",
+    "howCta": "How to install",
+    "guideTitle": "Install AdelIA on your phone",
+    "guideIntroIos": "From Safari, in three steps:",
+    "guideIntroOther": "From the browser menu, in three steps:",
+    "iosStep1": "Tap Safari's Share button (the square with the arrow pointing up).",
+    "iosStep2": "Scroll down the menu and choose “Add to Home Screen”.",
+    "iosStep3": "Confirm with “Add”. AdelIA will appear next to your other apps.",
+    "otherStep1": "Open the browser menu (the three dots, top right).",
+    "otherStep2": "Choose “Install app” or “Add to Home screen”.",
+    "otherStep3": "Confirm with “Install”.",
+    "guideClose": "Close",
+    "guideDone": "Got it"
   },
   "checkin": {
     "dismiss": "Not now",
@@ -908,7 +944,8 @@
     "neverBody": "We never sell your data or your baby's, to anyone, ever. We don't use your information to train AI models. We don't track you: there's no analytics and no advertising in AdelIA. AdelIA is open-source software (AGPL-3.0); if you'd rather host it yourself, you can, and in that case whoever runs the deployment is responsible for that data, not Godi.AI.",
     "contactTitle": "Contact",
     "contactBody": "Data controller: Godi.AI (Santiago Patiño Serna). For any question, or to exercise your rights: security@godi.ai.",
-    "back": "Back"
+    "back": "Back",
+    "metaDescription": "What data AdelIA keeps about your baby, where it is processed (EU), for how long and what your rights are: export, correct or delete everything in one click."
   },
   "terms": {
     "title": "Terms of use",
@@ -929,5 +966,20 @@
     "lawTitle": "Governing law and complaints",
     "lawBody": "These terms are governed by Spanish law. For any question, complaint, or to exercise your data rights, write to security@godi.ai first; we'll try to resolve it within a reasonable time. For data-protection complaints specifically, you can turn to the AEPD in Spain or the CNIL in France.",
     "back": "Back"
+  },
+  "manifest": {
+    "name": "AdelIA, your personal medical vault",
+    "description": "All of your baby's health in one place, with an AI that answers with the evidence in hand.",
+    "recordName": "Record visit",
+    "recordShort": "Record",
+    "recordDesc": "Record the visit with the pediatrician and save it to the health record.",
+    "diaryName": "Diary",
+    "diaryShort": "Diary",
+    "diaryDesc": "Your baby's diary on Telegram.",
+    "uploadName": "Upload report",
+    "uploadShort": "Upload",
+    "uploadDesc": "Upload a report, a lab result or a photo.",
+    "screenshotAgent": "Ask AdelIA about your baby's health",
+    "screenshotRecord": "Record the visit with the pediatrician"
   }
 }

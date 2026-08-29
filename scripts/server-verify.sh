@@ -94,9 +94,49 @@ curl -sf "localhost:${API_PORT}/health" >/dev/null || { log "API never came up";
 for _ in $(seq 1 45); do curl -sf -o /dev/null "localhost:${WEB_PORT}/es" && break; sleep 2; done
 curl -sf -o /dev/null "localhost:${WEB_PORT}/es" || { log "web never came up"; tail -5 /tmp/verify-web.log >&2; exit 1; }
 
-log "E2E (recorder + a11y + diary + showcase + landing)..."
+# PWA surface (same assertions as deploy-prod.sh verify(), against the dev
+# pair): sw.js is JavaScript, the manifest icons and the iOS startup image are
+# PNGs, offline.html is the cached offline page, the manifest link and the
+# startup images sit inside <head>, each locale serves its own manifest, and a
+# dotted path does not render the home as a bogus locale.
+log "PWA checks on :${WEB_PORT}..."
+pwa_fail=0
+check_type() { curl -s -o /dev/null -w '%{http_code} %{content_type}' --max-time 10 "$1" 2>/dev/null || printf '000 -'; }
+res="$(check_type "localhost:${WEB_PORT}/sw.js")"
+[[ "${res}" =~ ^200\ (application|text)/javascript ]] || { log "FAIL: /sw.js -> '${res}'"; pwa_fail=1; }
+for path in /icons/icon-192.png /icons/icon-512.png /icons/icon-512-maskable.png /icons/apple-touch-icon.png /icons/splash/393x852@3x.png; do
+  res="$(check_type "localhost:${WEB_PORT}${path}")"
+  [[ "${res}" == "200 image/png" ]] || { log "FAIL: ${path} -> '${res}'"; pwa_fail=1; }
+done
+body="$(curl -s --max-time 10 "localhost:${WEB_PORT}/offline.html" || true)"
+[[ "${body}" == *"Sin conexión"* ]] || { log "FAIL: /offline.html lacks 'Sin conexión'"; pwa_fail=1; }
+body="$(curl -s --max-time 15 "localhost:${WEB_PORT}/es" || true)"
+head_html="$(printf '%s' "${body}" | tr -d '\n' | sed 's#</head>.*##')"
+[[ "${head_html}" == *'rel="manifest" href="/es/manifest.webmanifest"'* ]] || { log "FAIL: /es has no manifest link inside <head>"; pwa_fail=1; }
+[[ "${head_html}" == *'apple-touch-startup-image'* ]] || { log "FAIL: /es has no apple-touch-startup-image inside <head>"; pwa_fail=1; }
+# One manifest per language (app/[locale]/manifest.webmanifest/route.ts), the
+# same installed app in the three (id "/"), texts in the page's language.
+for l in es en fr; do
+  res="$(check_type "localhost:${WEB_PORT}/${l}/manifest.webmanifest")"
+  [[ "${res}" =~ ^200\ application/manifest\+json ]] || { log "FAIL: /${l}/manifest.webmanifest -> '${res}'"; pwa_fail=1; }
+  body="$(curl -s --max-time 10 "localhost:${WEB_PORT}/${l}/manifest.webmanifest" || true)"
+  [[ "${body}" == *"\"lang\":\"${l}\""* && "${body}" == *'"id":"/"'* ]] \
+    || { log "FAIL: /${l}/manifest.webmanifest lacks lang=${l} or id=/"; pwa_fail=1; }
+done
+res="$(curl -s -o /dev/null -w '%{http_code}' --max-time 10 "localhost:${WEB_PORT}/foo.txt" || true)"
+[[ "${res}" == "404" ]] || { log "FAIL: /foo.txt -> ${res} (want 404)"; pwa_fail=1; }
+# Build-id plumbing (next.config.ts): /api/version must report the id of the
+# build that is being served, which is what the service worker is versioned by.
+build_id="$(cat apps/web/.next/BUILD_ID 2>/dev/null || true)"
+body="$(curl -s --max-time 10 "localhost:${WEB_PORT}/api/version" || true)"
+[[ -n "${build_id}" && "${body}" == *"\"buildId\":\"${build_id}\""* ]] \
+  || { log "FAIL: /api/version -> '${body}' (want buildId ${build_id:-<none>})"; pwa_fail=1; }
+[[ "${pwa_fail}" -eq 0 ]] || { log "PWA checks FAILED"; exit 1; }
+log "PWA checks OK."
+
+log "E2E (recorder + a11y + diary + showcase + landing + pwa service worker)..."
 (cd apps/web && env "${PG_ENV[@]}" AUTH_SECRET=ci-only-secret \
   E2E_BASE_URL="http://localhost:${WEB_PORT}" \
-  pnpm exec playwright test e2e/consulta-record.spec.ts e2e/a11y.spec.ts e2e/diary.spec.ts e2e/showcase.spec.ts e2e/landing-day.spec.ts --reporter=line 2>&1 | tail -3)
+  pnpm exec playwright test e2e/consulta-record.spec.ts e2e/a11y.spec.ts e2e/diary.spec.ts e2e/showcase.spec.ts e2e/landing-day.spec.ts e2e/pwa-sw.spec.ts --reporter=line 2>&1 | tail -3)
 
 log "ALL GREEN — safe to deploy."

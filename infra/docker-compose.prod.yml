@@ -98,6 +98,7 @@ services:
       dockerfile: apps/web/Dockerfile
       args:
         NEXT_PUBLIC_API_URL: ${NEXT_PUBLIC_API_URL:-http://localhost:8000}
+        ADELIA_BUILD_ID: ${ADELIA_BUILD_ID:-}
     restart: unless-stopped
     depends_on:
       api:

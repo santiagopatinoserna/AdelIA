@@ -2,6 +2,7 @@
 
 import { useEffect, useMemo, useRef, useState } from "react";
 import { useRouter } from "@/lib/navigation";
+import { useRecordingGuard } from "@/lib/recording-guard";
 import { useTranslations } from "next-intl";
 import { useFocusTrap } from "@/lib/use-focus-trap";
 import {
@@ -31,6 +32,7 @@ export function CommandPalette() {
   const t = useTranslations();
   const tc = useTranslations("command");
   const router = useRouter();
+  const guard = useRecordingGuard();
   const [open, setOpen] = useState(false);
   const [query, setQuery] = useState("");
   const [sel, setSel] = useState(0);
@@ -101,6 +103,8 @@ export function CommandPalette() {
 
   function run(c: Cmd) {
     setOpen(false);
+    // Mid-recording the recorder asks before leaving; never navigate blind.
+    if (guard.requestLeave({ kind: "link", href: c.href })) return;
     router.push(c.href);
   }
 

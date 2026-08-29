@@ -16,15 +16,18 @@ async function settle(page: import("@playwright/test").Page) {
 }
 
 // A real-browser walkthrough AS Santiago, proving each screen works end to end.
+// A demo tool, not a regression test: it needs the seeded demo account (with
+// the reflux document) and a live Mistral key for the chat step.
 test("recorrido completo: garantía de éxito en navegador", async ({ browser }) => {
+  test.skip(!process.env.DEMO_VERIFY, "Demo tool: run with DEMO_VERIFY=1 against a full stack with a Mistral key");
   // Reuse the seeded account that already has the reflux document.
   const { cookie } = await seedUserAndSessionCookie("santiago@demo.local");
   const ctx = await browser.newContext({ viewport: { width: 1280, height: 900 } });
   await ctx.addCookies([cookie]);
   const page = await ctx.newPage();
 
-  // 1. Dashboard — must show the seeded document
-  await page.goto("/es/dashboard");
+  // 1. Overview (the document list; /dashboard itself is the agent canvas)
+  await page.goto("/es/dashboard/overview");
   await expect(page.getByRole("heading", { name: "Mis documentos" })).toBeVisible();
   await settle(page);
   await page.screenshot({ path: `${SHOTS}/1-dashboard.png`, fullPage: true });

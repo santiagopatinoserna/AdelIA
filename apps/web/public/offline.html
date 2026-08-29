@@ -2,21 +2,75 @@
 <html lang="es">
 <head>
   <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>AdelIA — Sin conexión</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#0a2820">
+  <title>AdelIA · Sin conexión</title>
   <style>
-    body { font-family: system-ui, sans-serif; background: #f8fafc; color: #0f172a;
-           display: flex; align-items: center; justify-content: center; height: 100vh; margin: 0; }
-    main { text-align: center; padding: 2rem; }
-    h1 { font-size: 1.5rem; }
-    p { color: #475569; }
+    :root { color-scheme: light; }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0; min-height: 100vh; min-height: 100dvh; padding: 1.5rem;
+      display: flex; align-items: center; justify-content: center;
+      font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+      background: #f4f1e9 radial-gradient(58rem 40rem at 8% -8%, rgb(26 108 85 / 0.07), transparent 60%);
+      color: #18201b; -webkit-font-smoothing: antialiased;
+    }
+    main {
+      width: 100%; max-width: 24rem; padding: 1.75rem 1.5rem; text-align: center;
+      background: #fffefb; border: 1px solid #e7e0d3; border-radius: 1.25rem;
+      box-shadow: 0 1px 2px rgb(24 32 27 / 0.04), 0 6px 16px -8px rgb(24 32 27 / 0.10);
+    }
+    .brand { font-family: Georgia, "Times New Roman", serif; font-size: 1.5rem; font-weight: 600; color: #0a2820; letter-spacing: -0.01em; }
+    .brand b { color: #c4862b; font-weight: inherit; }
+    h1 { font-family: Georgia, "Times New Roman", serif; font-size: 1.375rem; font-weight: 600; color: #0a2820; margin: 1.25rem 0 0.5rem; }
+    p { margin: 0; color: #586059; font-size: 0.9375rem; line-height: 1.5; }
+    button {
+      margin-top: 1.25rem; min-height: 44px; padding: 0.625rem 1.25rem; border: 0; border-radius: 0.75rem;
+      font: inherit; font-weight: 600; color: #f3f7f3; cursor: pointer;
+      background: linear-gradient(180deg, #1a6c55, #0d4234);
+    }
+    button:focus-visible { outline: 2px solid #2f8268; outline-offset: 2px; }
+    [hidden] { display: none !important; }
   </style>
 </head>
 <body>
   <main>
-    <h1>Sin conexión / Offline / Hors ligne</h1>
-    <p>AdelIA necesita conexión para acceder a tu vault médico.<br>
-       Tus datos no se almacenan en este dispositivo.</p>
+    <div class="brand" aria-hidden="true">Adel<b>IA</b></div>
+    <section data-lang="es">
+      <h1>Sin conexión</h1>
+      <p>AdelIA necesita internet para abrir tu espacio. Tus datos de salud no se guardan en este dispositivo.</p>
+      <button type="button" data-retry>Reintentar</button>
+    </section>
+    <section data-lang="en" hidden>
+      <h1>You’re offline</h1>
+      <p>AdelIA needs an internet connection to open your space. Your health data is not stored on this device.</p>
+      <button type="button" data-retry>Try again</button>
+    </section>
+    <section data-lang="fr" hidden>
+      <h1>Hors ligne</h1>
+      <p>AdelIA a besoin d’Internet pour ouvrir votre espace. Vos données de santé ne sont pas stockées sur cet appareil.</p>
+      <button type="button" data-retry>Réessayer</button>
+    </section>
   </main>
+  <script>
+    // Served by the service worker in place of any page, so the URL still
+    // says which language the user was in (/es/..., /en/..., /fr/...).
+    (function () {
+      var m = /^\/(es|en|fr)(\/|$)/.exec(location.pathname);
+      var lang = m ? m[1] : (navigator.language || "es").slice(0, 2);
+      if (!/^(es|en|fr)$/.test(lang)) lang = "es";
+      document.documentElement.lang = lang;
+      document.title = { es: "AdelIA · Sin conexión", en: "AdelIA · Offline", fr: "AdelIA · Hors ligne" }[lang];
+      var sections = document.querySelectorAll("[data-lang]");
+      for (var i = 0; i < sections.length; i++) {
+        sections[i].hidden = sections[i].getAttribute("data-lang") !== lang;
+      }
+      var buttons = document.querySelectorAll("[data-retry]");
+      for (var j = 0; j < buttons.length; j++) {
+        buttons[j].addEventListener("click", function () { location.reload(); });
+      }
+      window.addEventListener("online", function () { location.reload(); });
+    })();
+  </script>
 </body>
 </html>

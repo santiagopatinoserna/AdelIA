@@ -1,8 +1,26 @@
-"use client";
-
+import type { Metadata } from "next";
 import { useTranslations } from "next-intl";
+import { getTranslations } from "next-intl/server";
 import { Link } from "@/lib/navigation";
 import { ArrowLeft } from "lucide-react";
+
+import { publicPageAlternates } from "@/lib/seo";
+
+// Server component (only translations + links): no client bundle for a
+// static legal page, and generateMetadata can live in the same file.
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ locale: string }>;
+}): Promise<Metadata> {
+  const { locale } = await params;
+  const t = await getTranslations({ locale, namespace: "terms" });
+  return {
+    title: t("title"),
+    description: t("intro"),
+    alternates: publicPageAlternates(locale, "/terminos"),
+  };
+}
 
 export default function TermsPage() {
   const t = useTranslations("terms");

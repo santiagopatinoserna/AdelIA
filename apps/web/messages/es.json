@@ -220,7 +220,8 @@
     "mixLegendData": "datos de su historia",
     "mixLegendEv": "estudios citados",
     "prT1DevTag": "Para desarrolladores",
-    "prT2Trial": "Prueba gratis 30 días, sin pagar hoy"
+    "prT2Trial": "Prueba gratis 30 días, sin pagar hoy",
+    "metaDescription": "AdelIA reúne el historial médico de tu bebé (informes, analíticas, vacunas, consultas grabadas) y responde a tus dudas con evidencia científica citada. Gratis 30 días."
   },
   "dashboard": {
     "title": "Mis documentos",
@@ -640,7 +641,14 @@
     "ackIrreversible": "Entiendo que esto borra todo para siempre y no se puede deshacer.",
     "exportTitle": "Tus datos, contigo",
     "exportBody": "Descarga todo lo que AdelIA guarda de ti y de tu bebé en un solo fichero: el núcleo clínico en formato FHIR (el estándar que entienden los sistemas de salud) más las transcripciones y consentimientos completos.",
-    "exportCta": "Descargar todos mis datos"
+    "exportCta": "Descargar todos mis datos",
+    "installTitle": "Instalar la app",
+    "installBody": "Añade AdelIA a tu pantalla de inicio: se abre a pantalla completa, sin la barra del navegador, y la tienes a un toque.",
+    "installCta": "Instalar la app",
+    "installGuideCta": "Ver cómo instalarla",
+    "installed": "Instalada en este dispositivo",
+    "languageTitle": "Idioma",
+    "languageBody": "Elige el idioma de la app. Cambia al momento, sin cerrar sesión."
   },
   "questionnaire": {
     "title": "Control del reflujo",
@@ -729,7 +737,18 @@
       "error": "No se pudo procesar la grabación. El audio queda guardado unos días para reintentar.",
       "uploadError": "No se pudo subir la grabación. Sigue en tu dispositivo: reintenta ahora.",
       "retry": "Reintentar",
-      "prepareBriefing": "Preparar resumen para el pediatra"
+      "prepareBriefing": "Preparar resumen para el pediatra",
+      "leaveTitle": "¿Terminar la grabación?",
+      "leaveBody": "Estás grabando la consulta. Si terminas ahora, se guarda lo grabado hasta este momento y te quedas en esta pantalla para ver el resumen. No se pierde nada.",
+      "leaveStay": "Seguir grabando",
+      "uploadingNoticeTitle": "Subiendo la grabación",
+      "uploadingNoticeBody": "Espera unos segundos: en cuanto termine podrás salir sin perder nada.",
+      "uploadingNoticeOk": "Entendido",
+      "declineConfirm": "Toca otra vez para descartar la grabación",
+      "leaveUnsavedTitle": "¿Salir sin guardar la consulta?",
+      "leaveUnsavedBody": "La grabación solo está en este dispositivo y aún no se ha subido. Si sales ahora se perderá. Reintenta la subida primero.",
+      "leaveUnsavedStay": "Quedarme aquí",
+      "leaveUnsavedDiscard": "Descartar la grabación"
     }
   },
   "command": {
@@ -757,11 +776,28 @@
     "offlineBody": "Algunas funciones necesitan internet.",
     "online": "Conexión restablecida"
   },
+  "appUpdate": {
+    "available": "Hay una versión nueva de AdelIA",
+    "cta": "Actualizar",
+    "later": "Más tarde"
+  },
   "install": {
     "title": "Instala AdelIA",
     "body": "Tenla a mano en tu pantalla de inicio, como una app.",
     "cta": "Instalar",
-    "dismiss": "Ahora no"
+    "dismiss": "Ahora no",
+    "howCta": "Cómo instalar",
+    "guideTitle": "Instala AdelIA en tu móvil",
+    "guideIntroIos": "Desde Safari, en tres pasos:",
+    "guideIntroOther": "Desde el menú del navegador, en tres pasos:",
+    "iosStep1": "Toca el botón Compartir de Safari (el cuadrado con la flecha hacia arriba).",
+    "iosStep2": "Baja en el menú y elige «Añadir a pantalla de inicio».",
+    "iosStep3": "Confirma con «Añadir». AdelIA aparecerá junto a tus otras apps.",
+    "otherStep1": "Abre el menú del navegador (los tres puntos, arriba a la derecha).",
+    "otherStep2": "Elige «Instalar aplicación» o «Añadir a pantalla de inicio».",
+    "otherStep3": "Confirma con «Instalar».",
+    "guideClose": "Cerrar",
+    "guideDone": "Entendido"
   },
   "checkin": {
     "dismiss": "Ahora no",
@@ -908,7 +944,8 @@
     "neverBody": "No vendemos tus datos ni los de tu bebé, a nadie, nunca. No usamos tu información para entrenar modelos de IA. No te rastreamos: no hay analítica ni publicidad en AdelIA. AdelIA es software libre (AGPL-3.0); si prefieres alojarlo tú mismo o tú misma, puedes hacerlo, y en ese caso quien lo despliega es responsable de esos datos, no Godi.AI.",
     "contactTitle": "Contacto",
     "contactBody": "Responsable del tratamiento: Godi.AI (Santiago Patiño Serna). Para cualquier duda o para ejercer tus derechos: security@godi.ai.",
-    "back": "Atrás"
+    "back": "Atrás",
+    "metaDescription": "Qué datos guarda AdelIA de tu bebé, dónde se procesan (UE), cuánto tiempo y qué derechos tienes: exportar, rectificar o borrar todo en un clic."
   },
   "terms": {
     "title": "Condiciones de uso",
@@ -929,5 +966,20 @@
     "lawTitle": "Ley española y reclamaciones",
     "lawBody": "Estas condiciones se rigen por la ley española. Para cualquier duda, reclamación o para ejercer tus derechos sobre tus datos, escribe primero a security@godi.ai; intentaremos resolverlo en un plazo razonable. Si se trata de una reclamación de protección de datos, puedes acudir a la AEPD en España o a la CNIL en Francia.",
     "back": "Atrás"
+  },
+  "manifest": {
+    "name": "AdelIA, tu vault médico personal",
+    "description": "Toda la salud de tu bebé en un solo sitio, con una IA que responde con la evidencia en la mano.",
+    "recordName": "Grabar consulta",
+    "recordShort": "Grabar",
+    "recordDesc": "Graba la consulta con el pediatra y guárdala en el historial.",
+    "diaryName": "Diario",
+    "diaryShort": "Diario",
+    "diaryDesc": "El diario de tu bebé por Telegram.",
+    "uploadName": "Subir informe",
+    "uploadShort": "Subir",
+    "uploadDesc": "Sube un informe, una analítica o una foto.",
+    "screenshotAgent": "Pregunta a AdelIA sobre la salud de tu bebé",
+    "screenshotRecord": "Graba la consulta con el pediatra"
   }
 }

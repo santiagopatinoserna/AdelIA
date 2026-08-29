@@ -101,7 +101,7 @@ export function AgentCanvas({ locale, userId }: { locale: string; userId: string
   return (
     <div
       data-testid="agent-canvas"
-      className="flex h-[calc(100dvh-7rem)] flex-col md:h-[calc(100dvh-3.5rem)] md:flex-row"
+      className="ad-agent-canvas flex h-[calc(100dvh-7rem)] flex-col md:h-[calc(100dvh-3.5rem)] md:flex-row"
     >
       {/* Chat column — the page's main landmark */}
       <main className="flex min-h-0 flex-1 flex-col">

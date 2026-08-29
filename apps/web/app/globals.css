@@ -225,6 +225,29 @@
   .ad-typing-dot { animation: ad-typing 1.2s var(--ease-out-soft) infinite; }
 }
 
+/* Consult recorder lock (lib/recording-guard): the shell's nav reads as
+   unavailable while html[data-recording] is set. Taps still land, on purpose:
+   each one opens the "¿Terminar la grabación?" dialog instead of navigating. */
+html[data-recording] [data-nav-lock] {
+  opacity: 0.45;
+}
+
+/* The "new version" notice (components/sw-register.tsx) stays out of the way
+   while a consult is being recorded: taking the update reloads the page. */
+html[data-recording] .ad-update-toast {
+  display: none;
+}
+
+/* On-screen keyboard up (html.kb-open, set by MobileBottomNav while a text
+   field has focus): the bar is hidden, so drop the space reserved for it and
+   let the chat canvases use the shrunken viewport in full. */
+html.kb-open .ad-mobile-shell {
+  padding-bottom: 0;
+}
+html.kb-open .ad-agent-canvas {
+  height: calc(100dvh - 3.5rem);
+}
+
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after {
     animation-duration: 0.001ms !important;

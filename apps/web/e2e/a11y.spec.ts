@@ -69,3 +69,55 @@ test("a11y: authenticated surfaces", async ({ browser }) => {
   }
   await context.close();
 });
+
+// Phone shell (390x844, mobile emulation): the header is icon-only ("Subir"
+// needs its accessible name, 44px box), the language pill lives in Settings,
+// and the tab bar is the navigation. Same rule as above: serious/critical fail.
+test("a11y: phone shell", async ({ browser }) => {
+  const { cookie } = await seedUserAndSessionCookie(
+    `e2e-a11y-phone-${Date.now()}@adelia.test`,
+  );
+  const context = await browser.newContext({
+    viewport: { width: 390, height: 844 },
+    isMobile: true,
+    hasTouch: true,
+  });
+  await context.addCookies([cookie]);
+  const page = await context.newPage();
+
+  for (const [path, label] of [
+    ["/es/dashboard", "phone/dashboard"],
+    ["/es/dashboard/overview", "phone/overview"],
+    ["/es/dashboard/settings", "phone/settings"],
+    ["/es/dashboard/consulta/grabar", "phone/consulta/grabar"],
+  ] as const) {
+    await page.goto(path);
+    await scan(page, label);
+  }
+  // 44px touch targets on the phone shell: the icon-only "Subir" (named),
+  // the wordmark, the language pill in Settings, the data export link and
+  // the "Cerrar" of the install guide.
+  async function atLeast44(locator: import("@playwright/test").Locator, what: string) {
+    await expect(locator, what).toBeVisible();
+    const box = await locator.boundingBox();
+    expect(box, what).not.toBeNull();
+    expect(box!.width, `${what}: width`).toBeGreaterThanOrEqual(44);
+    expect(box!.height, `${what}: height`).toBeGreaterThanOrEqual(44);
+  }
+  const banner = page.getByRole("banner");
+  await atLeast44(banner.getByRole("link", { name: "Subir archivo" }), "Subir");
+  await atLeast44(banner.getByRole("link", { name: /Adel\s*IA/ }), "wordmark");
+  await page.goto("/es/dashboard/settings");
+  for (const button of await page.getByRole("group", { name: "Idioma" }).getByRole("button").all()) {
+    await atLeast44(button, "language button");
+  }
+  await atLeast44(page.getByRole("link", { name: "Descargar todos mis datos" }), "export link");
+  // Headless Chromium offers no native install prompt, so Settings shows the
+  // guide entry; guard it anyway in case a browser does fire beforeinstallprompt.
+  const guideCta = page.getByRole("button", { name: "Ver cómo instalarla" });
+  if (await guideCta.isVisible()) {
+    await guideCta.click();
+    await atLeast44(page.getByRole("dialog").getByRole("button", { name: "Cerrar" }), "guide close");
+  }
+  await context.close();
+});

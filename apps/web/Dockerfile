@@ -14,6 +14,9 @@ COPY apps/web apps/web
 # NEXT_PUBLIC_ vars are inlined at build time.
 ARG NEXT_PUBLIC_API_URL=http://localhost:8000
 ENV NEXT_PUBLIC_API_URL=$NEXT_PUBLIC_API_URL
+# Optional build id override (next.config.ts); empty = UTC timestamp default.
+ARG ADELIA_BUILD_ID=
+ENV ADELIA_BUILD_ID=$ADELIA_BUILD_ID
 RUN pnpm --filter @adelia/web build
 
 FROM node:20-bookworm-slim AS runner
