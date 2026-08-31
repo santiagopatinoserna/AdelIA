@@ -81,6 +81,10 @@ async function openHome(
 // is the payload of the card. Only meaningful in the card layout (1264+); the
 // row list below it does not render the detail at all.
 async function clampedParagraphs(page: Page) {
+  // Measure only once the webfonts are in: Hanken Grotesk is wider than the
+  // fallback, so a measurement taken mid-swap reports a clamp that the reader
+  // never sees (this test flaked exactly once, under parallel load).
+  await page.evaluate(() => document.fonts.ready);
   return page.evaluate(() =>
     [...document.querySelectorAll<HTMLElement>('[data-testid="showcase-card"] p.ad-clamp-2')]
       .filter((el) => el.getClientRects().length > 0 && el.scrollHeight > el.clientHeight + 1)
@@ -127,6 +131,7 @@ async function mockChat(page: Page, captured: { bodies: { question?: string; loc
 // Nothing inside a row or a chip may be clipped horizontally, and no title may
 // be ellipsised: a cut has to land on the edge of a row, never inside a word.
 async function textClipping(page: Page) {
+  await page.evaluate(() => document.fonts.ready);
   return page.evaluate(() => {
     const out: string[] = [];
     const items = document.querySelectorAll<HTMLElement>(
