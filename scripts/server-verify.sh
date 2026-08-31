@@ -141,8 +141,21 @@ body="$(curl -s --max-time 10 "localhost:${WEB_PORT}/api/version" || true)"
 log "PWA checks OK."
 
 log "E2E (recorder + a11y light&dark + theme + diary + showcase + landing + pwa service worker)..."
-(cd apps/web && env "${PG_ENV[@]}" AUTH_SECRET=ci-only-secret \
+# One retry: a layout or focus assertion can lose a race under the full
+# suite's parallel load, and a single flake must not block a deploy. A test
+# that fails twice is a real failure and stops the script; flaky ones are
+# named so they get fixed instead of tolerated. On failure the tail is long
+# enough to carry the actual assertion (`tail -3` hid it, twice).
+E2E_LOG=/tmp/verify-e2e.log
+if (cd apps/web && env "${PG_ENV[@]}" AUTH_SECRET=ci-only-secret \
   E2E_BASE_URL="http://localhost:${WEB_PORT}" \
-  pnpm exec playwright test e2e/consulta-record.spec.ts e2e/a11y.spec.ts e2e/theme.spec.ts e2e/diary.spec.ts e2e/showcase.spec.ts e2e/landing-day.spec.ts e2e/pwa-sw.spec.ts --reporter=line 2>&1 | tail -3)
+  pnpm exec playwright test e2e/consulta-record.spec.ts e2e/a11y.spec.ts e2e/theme.spec.ts e2e/diary.spec.ts e2e/showcase.spec.ts e2e/landing-day.spec.ts e2e/pwa-sw.spec.ts --retries=1 --reporter=line >"${E2E_LOG}" 2>&1); then
+  tail -3 "${E2E_LOG}"
+  grep -E "^\s+.\s+\[?flaky|flaky\b" "${E2E_LOG}" | head -5 || true
+else
+  log "E2E FAILED (full output in ${E2E_LOG} on the server):"
+  tail -60 "${E2E_LOG}" >&2
+  exit 1
+fi
 
 log "ALL GREEN — safe to deploy."
