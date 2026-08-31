@@ -163,7 +163,12 @@ async def link_user_by_chat_id(
         existing.locale = locale
         existing.linked_at = datetime.now(UTC)
         return existing, previous_chat
-    link = TelegramLink(user_id=user_id, chat_id=chat_id, username=username, locale=locale)
+    # linked_at explicitly, not the column default: server_default=now() is the
+    # TRANSACTION timestamp, so a link created in a transaction that opened
+    # before the token was minted looked older than the token and the
+    # single-use check let a replay through.
+    link = TelegramLink(user_id=user_id, chat_id=chat_id, username=username, locale=locale,
+                        linked_at=datetime.now(UTC))
     session.add(link)
     await session.flush()
     return link, None
