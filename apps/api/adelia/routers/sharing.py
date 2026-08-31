@@ -19,12 +19,18 @@ from fastapi.responses import HTMLResponse
 from pydantic import BaseModel, Field
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from adelia.auth import get_current_user_id
+from adelia.auth import get_current_user_id, require_active_subscription
 from adelia.db import AsyncSessionLocal, get_db
 from adelia.services import sharing as sharing_svc
 from adelia.services import briefing_repo
 
 logger = logging.getLogger(__name__)
+# The paywall goes per route, never on the APIRouter: /s/{token} and
+# /s/{token}/pdf must stay public and Bearer-free, which a router-level
+# dependency would break. Creating a public link and rendering a PDF are the
+# acts a lapsed account should not get; LISTING and REVOKING stay open on
+# purpose, or a mother behind on a payment could not pull back a leaked link
+# to her baby's history.
 router = APIRouter(tags=["sharing"])
 
 
@@ -65,7 +71,7 @@ def _app_url() -> str:
 @router.post("/shares", status_code=status.HTTP_201_CREATED, response_model=ShareLinkOut)
 async def create_share(
     payload: CreateShareRequest,
-    user_id: UUID = Depends(get_current_user_id),
+    user_id: UUID = Depends(require_active_subscription),
     db: AsyncSession = Depends(get_db),
 ):
     # Verify briefing belongs to user
@@ -166,7 +172,7 @@ async def public_pdf(token: str):
 @router.get("/briefings/{briefing_id}/pdf")
 async def owner_pdf(
     briefing_id: UUID,
-    user_id: UUID = Depends(get_current_user_id),
+    user_id: UUID = Depends(require_active_subscription),
     db: AsyncSession = Depends(get_db),
 ):
     briefing = await briefing_repo.get_by_id(db, briefing_id=briefing_id, user_id=user_id)

@@ -19,12 +19,14 @@ _CCD_FIXTURE = Path(__file__).parent / "fixtures" / "ingestion" / "ccd_sample.xm
 
 
 def _override_auth(user_id: UUID):
-    from adelia.auth import get_current_user_id
+    from adelia.auth import get_current_user_id, require_active_subscription
 
     async def fake_user_id():
         return user_id
 
     app.dependency_overrides[get_current_user_id] = fake_user_id
+    # /ingestion is behind the paywall; this fake user has no DB row.
+    app.dependency_overrides[require_active_subscription] = fake_user_id
 
 
 def _override_db():

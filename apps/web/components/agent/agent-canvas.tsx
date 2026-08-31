@@ -13,6 +13,15 @@ import { useRouter } from "@/lib/navigation";
 
 type Msg = { role: "user" | "assistant"; content: string };
 
+// Must track routers/agent.py (HISTORY_MAX_MESSAGES / HISTORY_MAX_CHARS_PER_MESSAGE).
+// The transcript was sent whole, growing by two entries per turn, so it used
+// to cross the API's cap on the 13th exchange and every later request failed.
+// The router trims now instead of refusing, but sending 12 turns rather than
+// the whole session also stops paying for bandwidth nobody reads: the model
+// never sees more than this either way.
+const HISTORY_MAX_MESSAGES = 12;
+const HISTORY_MAX_CHARS_PER_MESSAGE = 2000;
+
 // Telegram-first daily diary: the bot lives outside the app on purpose.
 const TELEGRAM_BOT_URL = `https://t.me/${process.env.NEXT_PUBLIC_TELEGRAM_BOT ?? "Adelia_godiai_bot"}`;
 
@@ -43,7 +52,11 @@ export function AgentCanvas({ locale, userId }: { locale: string; userId: string
     const history = body.message
       ? messages
           .filter((m) => !(m.role === "assistant" && m.content === ""))
-          .map((m) => ({ role: m.role, content: m.content }))
+          .slice(-HISTORY_MAX_MESSAGES)
+          .map((m) => ({
+            role: m.role,
+            content: m.content.slice(0, HISTORY_MAX_CHARS_PER_MESSAGE),
+          }))
       : undefined;
     if (body.message) setMessages((p) => [...p, { role: "user", content: body.message! }, { role: "assistant", content: "" }]);
     try {
@@ -62,7 +75,19 @@ export function AgentCanvas({ locale, userId }: { locale: string; userId: string
             if (last?.role === "assistant") n[n.length - 1] = { ...last, content: t("errorAnswer") }; return n; });
         }
       }
-    } catch { /* aborted */ } finally { if (!stale()) setBusy(false); }
+    } catch (err) {
+      // Only a real abort is silent. Swallowing everything is what turned the
+      // API's 422 into an empty assistant bubble with no error, no toast and
+      // no way to tell the session had died; same shape chat-page-client.tsx
+      // already uses.
+      const aborted =
+        controller.signal.aborted ||
+        (err instanceof DOMException && err.name === "AbortError");
+      if (!stale() && !aborted) {
+        setMessages((p) => { const n = [...p]; const last = n[n.length - 1];
+          if (last?.role === "assistant" && !last.content) n[n.length - 1] = { ...last, content: t("errorAnswer") }; return n; });
+      }
+    } finally { if (!stale()) setBusy(false); }
   }
 
   const onCardAction: CardActionHandler = (intent, card, value) => {

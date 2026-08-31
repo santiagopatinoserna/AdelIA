@@ -18,8 +18,10 @@ from tests.pg_gate import PG_AVAILABLE
 
 
 async def _seed_user(email: str):
+    # subscription_status="active": /documents is behind the paywall
+    # (adelia.auth.require_active_subscription).
     async with AsyncSessionLocal() as session:
-        user = User(email=email)
+        user = User(email=email, subscription_status="active")
         session.add(user)
         await session.commit()
         await session.refresh(user)

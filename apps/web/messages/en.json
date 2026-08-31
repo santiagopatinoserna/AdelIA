@@ -831,6 +831,7 @@
     "trialUntil": "Your free month is active. First charge: {date}.",
     "manageCta": "Manage subscription or card",
     "goDashboard": "Go to my dashboard",
+    "manageData": "Export or delete my data",
     "successNote": "Done! Your free month has started. Enjoy AdelIA.",
     "canceledNote": "No worries: nothing was charged. You can start whenever you like."
   },

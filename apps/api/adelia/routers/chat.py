@@ -6,7 +6,7 @@ from typing import Annotated
 from fastapi import APIRouter, Depends, HTTPException, status
 from sse_starlette.sse import EventSourceResponse
 
-from adelia.auth import get_current_user_id
+from adelia.auth import get_current_user_id, require_active_subscription
 from adelia.schemas import ChatCitation, ChatRequest, ChatSessionDetailOut, ChatSessionOut
 from adelia.services.chat_orchestrator import ChatEvent, answer_question_streaming
 from adelia.services.chat_repo import (
@@ -19,6 +19,14 @@ from adelia.services.chat_repo import (
 
 
 router = APIRouter(prefix="/chat", tags=["chat"])
+# A turn is an LLM call; reading or deleting her own transcripts is not.
+# The paywall (adelia/auth.require_active_subscription) is applied PER ROUTE,
+# not on the APIRouter, so it covers what spends money and nothing else.
+# Router-level it also covered the reads and the deletes: a mother who
+# cancelled saw her baby's records, transcripts and briefings answer 402 and
+# could not erase a single document. GDPR art. 15 (access), 17 (erasure) and
+# 20 (portability) are not features one stops paying for.
+PAID = Depends(require_active_subscription)
 
 # Conversation memory passed to the LLM: last N turns, each truncated. Bounds
 # prompt size; RAG context is re-retrieved fresh per question anyway.
@@ -70,7 +78,7 @@ async def delete_chat_session(
     return None
 
 
-@router.post("")
+@router.post("", dependencies=[PAID])
 async def post_chat(
     payload: ChatRequest,
     user_id: Annotated[uuid.UUID, Depends(get_current_user_id)],

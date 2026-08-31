@@ -132,20 +132,68 @@ services:
       BACKUP_RETENTION_DAYS: ${BACKUP_RETENTION_DAYS:-14}
     volumes:
       - pgbackups:/backups
-    entrypoint: >
-      sh -c '
-        echo "backup sidecar: every $${BACKUP_INTERVAL_SECONDS}s, retention $${BACKUP_RETENTION_DAYS}d";
+    # A dump that is not restorable is worse than no dump: it looks like a
+    # backup in `ls`. Measured on 2026-08-30 with the old entrypoint: this
+    # sidecar started 27 ms BEFORE postgres (the Docker daemon does not honour
+    # depends_on: service_healthy when it restarts containers after a reboot),
+    # pg_dump died with "Connection refused", --file had already created the
+    # file, and the retention prune ran anyway. Result: 7 of 16 dumps at
+    # 0 bytes and a real RPO of 43 h behind a listing that showed 16 "copies".
+    #
+    # So: wait for pg_isready, verify the dump is non-empty AND readable by
+    # pg_restore, delete it when it is not, prune only after a success, and
+    # write /backups/LAST_GOOD_BACKUP so freshness can be checked from outside
+    # without trusting the filenames.
+    entrypoint:
+      - /bin/sh
+      - -c
+      - |
+        set -u
+        BACKUP_DIR=/backups
+        MARKER="$$BACKUP_DIR/LAST_GOOD_BACKUP"
+        RETRY_SECONDS=300
+        echo "backup sidecar: every $${BACKUP_INTERVAL_SECONDS}s, retention $${BACKUP_RETENTION_DAYS}d"
         while true; do
-          STAMP=$$(date +%Y%m%d-%H%M%S);
-          if pg_dump --format=custom --compress=6 --file="/backups/adelia-$${STAMP}.dump"; then
-            echo "backup ok: adelia-$${STAMP}.dump ($$(du -h /backups/adelia-$${STAMP}.dump | cut -f1))";
+          # 1. Postgres has to actually be accepting connections.
+          ready=0
+          i=1
+          while [ "$$i" -le 60 ]; do
+            if pg_isready -q; then ready=1; break; fi
+            sleep 5
+            i=$$((i + 1))
+          done
+          if [ "$$ready" -ne 1 ]; then
+            echo "backup FAILED: postgres not ready after 300s" >&2
+            sleep "$$RETRY_SECONDS"
+            continue
+          fi
+
+          # 2. Dump, then prove the file is a real dump before believing it.
+          STAMP=$$(date +%Y%m%d-%H%M%S)
+          FILE="$$BACKUP_DIR/adelia-$$STAMP.dump"
+          if pg_dump --format=custom --compress=6 --file="$$FILE" \
+             && [ -s "$$FILE" ] \
+             && pg_restore --list "$$FILE" >/dev/null 2>&1; then
+            echo "backup ok: adelia-$$STAMP.dump ($$(du -h "$$FILE" | cut -f1))"
+            # 3. Marker with the date of the last VALID dump. An external
+            #    check reads this one file instead of guessing from `ls`.
+            printf '%s adelia-%s.dump %s\n' \
+              "$$(date -u +%Y-%m-%dT%H:%M:%SZ)" "$$STAMP" "$$(wc -c < "$$FILE" | tr -d ' ')" \
+              > "$$MARKER.tmp" && mv "$$MARKER.tmp" "$$MARKER"
+            # 4. Prune ONLY after a success, and only real dumps. Clean up any
+            #    0-byte leftovers from before this fix in the same pass.
+            find "$$BACKUP_DIR" -name 'adelia-*.dump' -type f -size 0 -delete
+            find "$$BACKUP_DIR" -name 'adelia-*.dump' -type f -size +0c \
+              -mtime +"$${BACKUP_RETENTION_DAYS}" -delete
           else
-            echo "backup FAILED at $${STAMP}" >&2;
-          fi;
-          find /backups -name "adelia-*.dump" -mtime +$${BACKUP_RETENTION_DAYS} -delete;
-          sleep "$${BACKUP_INTERVAL_SECONDS}";
+            # 5. A failed dump leaves no file behind to be mistaken for one.
+            echo "backup FAILED at $$STAMP (dump removed, retention NOT pruned)" >&2
+            rm -f "$$FILE"
+            sleep "$$RETRY_SECONDS"
+            continue
+          fi
+          sleep "$${BACKUP_INTERVAL_SECONDS}"
         done
-      '
 
 volumes:
   pgdata:

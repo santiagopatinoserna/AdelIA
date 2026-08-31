@@ -16,12 +16,18 @@ from adelia.services import sharing as sharing_svc
 
 
 def _override_auth(user_id: UUID):
-    from adelia.auth import get_current_user_id
+    # BOTH dependencies: POST /shares and GET /briefings/{id}/pdf sit behind
+    # require_active_subscription (creating a public link to a baby's history
+    # and rendering a PDF are what a lapsed account should not get), while
+    # listing and revoking stay on get_current_user_id so she can always pull
+    # a leaked link back. Same pattern as tests/test_briefings_router.py.
+    from adelia.auth import get_current_user_id, require_active_subscription
 
     async def fake_user_id():
         return user_id
 
     app.dependency_overrides[get_current_user_id] = fake_user_id
+    app.dependency_overrides[require_active_subscription] = fake_user_id
 
 
 def _override_db():

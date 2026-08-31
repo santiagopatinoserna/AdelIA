@@ -28,7 +28,7 @@ from fastapi import APIRouter, Depends, File, HTTPException, UploadFile, status
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from adelia.auth import get_current_user_id
+from adelia.auth import get_current_user_id, require_active_subscription
 from adelia.db import get_db
 from adelia.ingestion.apple_health_parser import parse_health_records
 from adelia.ingestion.ccd_parser import parse_ccd
@@ -49,7 +49,15 @@ from adelia.schemas import (
 )
 
 logger = logging.getLogger(__name__)
-router = APIRouter(prefix="/ingestion", tags=["ingestion"])
+router = APIRouter(
+    prefix="/ingestion",
+    tags=["ingestion"],
+    # Paywall (adelia/auth.py). The Telegram/Postmark webhooks live in
+    # routers/ingestion_webhooks.py and stay unguarded on purpose: the
+    # caller there is Telegram/Postmark, not the parent (the bot checks the
+    # subscription itself in ingestion/telegram_bot.handle_update).
+    dependencies=[Depends(require_active_subscription)],
+)
 
 
 _MAX_IMPORT_FILE_SIZE = 200 * 1024 * 1024  # 200MB safety cap (matches M1 limit)

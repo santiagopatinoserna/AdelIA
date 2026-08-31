@@ -16,6 +16,7 @@ from uuid import UUID
 
 from sqlalchemy import select
 
+from adelia.config import settings
 from adelia.db import AsyncSessionLocal
 from adelia.enrichment.evidence_retrieval import (
     evidence_citations_for_response,
@@ -145,9 +146,30 @@ async def _retrieve_specialty_evidence(
 ) -> tuple[str, list[EvidenceCitation]]:
     """Retrieve evidence relevant to the specialty.
 
-    Embeds a synthetic query from specialty + recent entities, runs evidence
-    retrieval filtered by specialty tag. Returns (formatted_prompt_block, citations).
-    Gracefully degrades to empty on error.
+    Embeds a synthetic query from specialty + recent entities and runs evidence
+    retrieval over the pediatric corpus. Returns (formatted_prompt_block,
+    citations). Gracefully degrades to empty on error.
+
+    Two things this used to get wrong, both of them invisible because the
+    `except` below turns any failure into ("", []):
+
+    * `max_distance=0.55` was a hand-written literal, "slightly more lenient
+      for briefings". 0.55 sits above the corpus's own diameter (0.3386
+      measured over 33.153 pairs), so it could not reject anything: the
+      pipeline always attached the nearest fragments as specialty evidence.
+      The briefing is the artifact a parent prints and hands to a specialist,
+      and it is published without auth at /s/{token} and /s/{token}/pdf, so it
+      is the surface with the least margin to be laxer than the chat, not the
+      most. The cut-off is now the same calibrated one the chat uses, still
+      tunable through EVIDENCE_MAX_DISTANCE without touching code.
+    * The filter was `specialties=[target_specialty.value]`. Now that the
+      binding works (enrichment/evidence_retrieval), that tag would let the
+      ADULT sources of the same table into a baby's briefing: a
+      gastroenterology briefing would match "Colorectal cancer screening —
+      USPSTF 2021", a cardiology one "Atrial fibrillation — ESC 2024". The
+      specialty steers the embedded query, which is where it belongs; the tag
+      filter now does the one job a tag can do safely here, keeping the search
+      inside the 110 pediatric sources.
     """
     try:
         query_text = f"{target_specialty.value} clinical guidelines for: {entities_text[:1500]}"
@@ -158,9 +180,9 @@ async def _retrieve_specialty_evidence(
             matches = await retrieve_evidence(
                 session,
                 query_embedding=embeds[0],
-                specialties=[target_specialty.value],
+                specialties=["pediatrics"],
                 top_k=top_k,
-                max_distance=0.55,  # slightly more lenient for briefings
+                max_distance=settings.evidence_max_distance,
             )
         prompt_block = format_evidence_for_prompt(matches)
         citation_dicts = evidence_citations_for_response(matches)

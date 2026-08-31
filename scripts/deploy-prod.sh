@@ -12,12 +12,21 @@
 #   ./scripts/deploy-prod.sh api          # rebuild only api
 #   ADELIA_HOST=192.168.1.x ./scripts/deploy-prod.sh   # force the host
 #   ./scripts/deploy-prod.sh --discover-only   # just find the host, no
-#                                               # sync/build/deploy — safe
+#                                               # sync/build/deploy - safe
 #                                               # to run standalone to test
 #                                               # discovery in isolation
+#   ./scripts/deploy-prod.sh --allow-dirty      # EMERGENCY ONLY: skip the
+#                                               # clean-tree/pushed-HEAD gate
 #
-# Steps: discover host -> rsync code (no --delete) -> docker compose
-# up -d --build -> verify (HTTP 200s + alembic version) -> summary.
+# Steps: check working tree -> discover host -> rsync code (no --delete) ->
+# docker compose up -d --build -> verify (HTTP 200s + alembic version) ->
+# summary.
+#
+# What rsync sends is the WORKING TREE, not a commit. So the gate below
+# refuses to deploy unless `git status --porcelain` is empty and HEAD is the
+# same commit as origin/main: otherwise production runs code that exists on
+# no branch, that nobody can review, and that no CI run ever tested. Use
+# --allow-dirty only for a fire, and write down afterwards what was shipped.
 #
 # Must be run via `./scripts/deploy-prod.sh` (or `bash scripts/deploy-prod.sh`)
 # so the shebang starts a real bash process — do NOT `source` this file from
@@ -117,6 +126,67 @@ Then force it for this run (and optionally export it in your shell so
 future deploys skip discovery entirely):
   ADELIA_HOST=x.x.x.x ./scripts/deploy-prod.sh
 EOF
+  exit 1
+}
+
+# --- 1b. Refuse to deploy anything that is not exactly origin/main --------
+
+# rsync ships the working tree. A dirty tree or an unpushed HEAD means the
+# bytes about to run in production are not the bytes anyone reviewed or
+# tested. Bypass with --allow-dirty, deliberately and out loud.
+check_tree_is_deployable() {
+  local allow_dirty="$1"
+  local dirty head remote fetch_ok=1
+
+  # `|| true`: outside a git checkout this must reach the explicit error
+  # below, not die on set -e with no explanation.
+  dirty="$(git -C "${REPO_ROOT}" status --porcelain 2>/dev/null || true)"
+
+  # A stale origin/main would make the comparison meaningless, so refresh it.
+  # A failed fetch (no network, no credentials) is not fatal: it downgrades
+  # the check to the last known origin/main and says so.
+  if ! git -C "${REPO_ROOT}" fetch --quiet origin main 2>/dev/null; then
+    fetch_ok=0
+  fi
+
+  head="$(git -C "${REPO_ROOT}" rev-parse HEAD 2>/dev/null || true)"
+  remote="$(git -C "${REPO_ROOT}" rev-parse refs/remotes/origin/main 2>/dev/null || true)"
+
+  if [[ "${fetch_ok}" -eq 0 ]]; then
+    log "WARNING: could not fetch origin/main; comparing against the local copy of it."
+  fi
+
+  if [[ -z "${dirty}" && -n "${head}" && "${head}" == "${remote}" ]]; then
+    log "Working tree clean and HEAD == origin/main (${head:0:8})."
+    return 0
+  fi
+
+  if [[ "${allow_dirty}" -eq 1 ]]; then
+    log "WARNING: --allow-dirty. Deploying a tree that is NOT origin/main."
+    [[ -n "${dirty}" ]] && log "WARNING:   uncommitted changes: $(printf '%s\n' "${dirty}" | wc -l | tr -d ' ') file(s)"
+    [[ "${head}" != "${remote}" ]] && log "WARNING:   HEAD ${head:0:8} != origin/main ${remote:0:8}"
+    log "WARNING: write down what you shipped, and push it as soon as the fire is out."
+    return 0
+  fi
+
+  {
+    printf '[deploy] ERROR: refusing to deploy: the working tree is not origin/main.\n\n'
+    if [[ -n "${dirty}" ]]; then
+      printf '  Uncommitted changes (git status --porcelain):\n'
+      printf '%s\n' "${dirty}" | sed 's/^/    /' | head -20
+      printf '\n'
+    fi
+    if [[ -z "${remote}" ]]; then
+      printf '  origin/main is unknown locally (no refs/remotes/origin/main).\n\n'
+    elif [[ "${head}" != "${remote}" ]]; then
+      printf '  HEAD        %s\n' "${head:-<none>}"
+      printf '  origin/main %s\n\n' "${remote}"
+    fi
+    printf '  rsync sends the working tree, so this would put code in production\n'
+    printf '  that no commit contains and no CI run ever tested.\n\n'
+    printf '  Fix it:      git add -A && git commit && git push origin main\n'
+    printf '  Emergency:   ./scripts/deploy-prod.sh --allow-dirty\n'
+  } >&2
   exit 1
 }
 
@@ -297,18 +367,50 @@ EOF
 
 # --- main -------------------------------------------------------------
 
-main() {
-  local discover_only=0
-  if [[ "${1:-}" == "--discover-only" ]]; then
-    discover_only=1
+# Argument parsing, extracted so scripts/test-deploy-args.sh can source this
+# file and exercise it without deploying anything. Sets three globals:
+# DISCOVER_ONLY, ALLOW_DIRTY and REQUESTED_SERVICES.
+#
+# Flags are accepted ANYWHERE, before or after the service list. The loop used
+# to stop at the first non-flag, so `deploy-prod.sh api --allow-dirty` silently
+# became a compose service literally named "--allow-dirty": with a clean tree
+# it passed the gate, rsynced the tree to /opt/adelia and only then failed on
+# the server, leaving new code beside stale containers; with a dirty tree it
+# refused, so the operator reaching for the emergency flag in a fire got the
+# abort message instead of the deploy.
+parse_args() {
+  DISCOVER_ONLY=0
+  ALLOW_DIRTY=0
+  local -a service_args=()
+
+  while [[ $# -gt 0 ]]; do
+    case "$1" in
+      --discover-only) DISCOVER_ONLY=1 ;;
+      --allow-dirty) ALLOW_DIRTY=1 ;;
+      --*) die "unknown flag: $1 (known: --discover-only, --allow-dirty)" ;;
+      *) service_args+=("$1") ;;
+    esac
     shift
-  fi
+  done
 
   # Accept both `deploy-prod.sh "api web"` and `deploy-prod.sh api web`.
-  local requested_services="${*:-api web}"
+  REQUESTED_SERVICES="${service_args[*]:-api web}"
+}
+
+main() {
+  parse_args "$@"
+  local discover_only="${DISCOVER_ONLY}"
+  local allow_dirty="${ALLOW_DIRTY}"
+  local requested_services="${REQUESTED_SERVICES}"
   local host
 
   log "==> AdelIA prod deploy"
+
+  # Before anything reaches the server, and before the LAN scan wastes a
+  # minute: is this tree even deployable?
+  if [[ "${discover_only}" -eq 0 ]]; then
+    check_tree_is_deployable "${allow_dirty}"
+  fi
 
   if host="$(discover_host)"; then
     log "Server: ${REMOTE_USER}@${host}"
@@ -327,4 +429,8 @@ main() {
   verify "${host}" "${requested_services}"
 }
 
-main "$@"
+# Sourced by scripts/test-deploy-args.sh, which wants parse_args and nothing
+# else to happen.
+if [[ "${BASH_SOURCE[0]}" == "${0}" ]]; then
+  main "$@"
+fi

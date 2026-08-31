@@ -50,6 +50,11 @@ def fake_bot(monkeypatch):
     monkeypatch.setattr("adelia.routers.documents.process_document", _noop_process)
     monkeypatch.setattr(diary.settings, "telegram_bot_token", TOKEN)
     monkeypatch.setattr(settings, "auth_secret", "test-secret-32bytes-min")
+    # A deployment that actually sells: with STRIPE_SECRET_KEY empty the gate
+    # short-circuits to "allowed", because an instance whose checkout answers
+    # 503 can never move an account out of "none" (adelia/auth.py). The
+    # subscription cases below are about the SaaS, so the key has to exist.
+    monkeypatch.setattr(settings, "stripe_secret_key", "sk_test_diary")
     return sent
 
 
@@ -60,9 +65,13 @@ async def linked_user():
     ids: list[uuid.UUID] = []
 
     async def _make(chat_id: int | None, *, locale: str = "es", profiles=(("Adel", "child", True),),
-                    linked_at: datetime | None = None) -> uuid.UUID:
+                    linked_at: datetime | None = None,
+                    subscription_status: str = "active") -> uuid.UUID:
         async with AsyncSessionLocal() as session:
-            user = User(id=uuid.uuid4(), email=f"tg-{uuid.uuid4().hex[:8]}@adelia.test")
+            # active by default: handle_update refuses to ingest without a
+            # live subscription (adelia.auth.has_active_subscription).
+            user = User(id=uuid.uuid4(), email=f"tg-{uuid.uuid4().hex[:8]}@adelia.test",
+                        subscription_status=subscription_status)
             session.add(user)
             await session.flush()
             for name, rel, is_default in profiles:
@@ -233,6 +242,39 @@ async def test_reminder_skips_chats_with_todays_entry(fake_bot, linked_user):
     assert chat_done not in reminded
     assert sent >= 1
     assert any(c == chat_pending and "¿Cómo ha ido hoy?" in m for c, m in fake_bot)
+
+
+async def test_reminder_skips_chats_without_a_live_subscription(fake_bot, linked_user):
+    """The paywall went on the way IN (handle_update) and not on the way out:
+    send_daily_reminders selected every TelegramLink with no join against
+    users, so a mother who cancelled months ago was still asked "¿Cómo ha ido
+    hoy?" at 20:00 every night, and answering earned her the payment refusal.
+    Measured on dev before the fix: 207 chats nudged, 6 of them paying."""
+    chat_paying, chat_lapsed = _chat(), _chat()
+    await linked_user(chat_paying, subscription_status="active")
+    await linked_user(chat_lapsed, subscription_status="none")
+    fake_bot.clear()
+
+    await diary.send_daily_reminders()
+
+    reminded = {c for c, _ in fake_bot}
+    assert chat_paying in reminded
+    assert chat_lapsed not in reminded
+
+
+async def test_a_self_hosted_instance_still_nudges_everyone(fake_bot, linked_user,
+                                                            monkeypatch):
+    """No Stripe key = nothing is sold and nobody can leave "none"; filtering
+    on the status there would silence the bot for the whole instance. Same
+    rule the HTTP gate follows."""
+    monkeypatch.setattr(settings, "stripe_secret_key", "")
+    chat_id = _chat()
+    await linked_user(chat_id, subscription_status="none")
+    fake_bot.clear()
+
+    await diary.send_daily_reminders()
+
+    assert chat_id in {c for c, _ in fake_bot}
 
 
 def test_bot_url_uses_configured_username(monkeypatch):
@@ -878,3 +920,74 @@ async def test_daily_card_clears_when_active_profile_is_the_parent(fake_bot, lin
     assert not has_card(await build_suggestions(user_id=user_id, profile_id=profs["Mi perfil"].id))
     assert not has_card(await build_suggestions(user_id=user_id, profile_id=profs["Adel"].id))
     assert has_card(await build_suggestions(user_id=user_id, profile_id=profs["Nora"].id))
+
+
+# --- Paywall (audit 4.1) ----------------------------------------------------
+
+
+async def test_inactive_subscription_stops_ingestion_and_links_to_billing(fake_bot, linked_user):
+    """A trial that expired kept transcribing with Voxtral forever: Telegram
+    never passes through the web layout that held the only check. The bot now
+    answers with the way back in instead of ingesting."""
+    chat_id = _chat()
+    user_id = await linked_user(chat_id, subscription_status="none")
+
+    out = await telegram_bot.handle_update(
+        _msg(chat_id, text="Hoy ha dormido fatal y ha comido poco"))
+
+    assert out["action"] == "subscription_inactive"
+    assert out["status"] == "payment_required"
+    assert "/es/billing" in out["reply"]
+    assert fake_bot and "/es/billing" in fake_bot[-1][1]
+    assert await _docs_for(user_id) == []
+
+
+async def test_inactive_subscription_stops_voice_notes_too(fake_bot, linked_user, monkeypatch):
+    """The expensive path: a voice note would otherwise download from Telegram
+    and go straight into Voxtral."""
+    chat_id = _chat()
+    user_id = await linked_user(chat_id, subscription_status="none")
+    downloads: list[str] = []
+
+    async def _download(file_id, mime_hint=None):
+        downloads.append(file_id)
+        return b"OggS", "audio/ogg"
+
+    monkeypatch.setattr(diary, "tg_download", _download)
+
+    out = await telegram_bot.handle_update(
+        _msg(chat_id, voice={"file_id": "f-voice", "mime_type": "audio/ogg"}))
+
+    assert out["action"] == "subscription_inactive"
+    assert downloads == []
+    assert await _docs_for(user_id) == []
+
+
+async def test_linking_stays_open_without_a_subscription(fake_bot, linked_user):
+    """/start is how a parent who just paid gets back in: the gate sits in
+    front of ingestion, never in front of linking."""
+    chat_id = _chat()
+    user_id = await linked_user(None, subscription_status="none")
+    token = telegram_bot.mint_link_token(user_id, "es")
+
+    out = await telegram_bot.handle_update(_msg(chat_id, text=f"/start {token}"))
+
+    assert out["action"] == "linked"
+
+
+async def test_active_subscription_still_ingests(fake_bot, linked_user):
+    """Control: the default linked_user is subscribed and nothing changed."""
+    chat_id = _chat()
+    user_id = await linked_user(chat_id)
+
+    out = await telegram_bot.handle_update(_msg(chat_id, text="Ha comido puré de calabaza"))
+
+    assert out["action"] == "diary_text"
+    assert len(await _docs_for(user_id)) == 1
+
+
+@pytest.mark.parametrize("locale", ["es", "en", "fr"])
+def test_subscription_message_has_locale_parity(locale):
+    assert "subscription_inactive" in diary.MSG[locale]
+    body = diary.t(locale, "subscription_inactive", link=diary.billing_link(locale))
+    assert f"/{locale}/billing" in body

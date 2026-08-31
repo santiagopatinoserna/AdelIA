@@ -13,7 +13,7 @@ from uuid import UUID
 from fastapi import APIRouter, BackgroundTasks, Depends, HTTPException, Response, status
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from adelia.auth import get_current_user_id
+from adelia.auth import get_current_user_id, require_active_subscription
 from adelia.db import get_db
 from adelia.schemas import (
     BriefingCreate,
@@ -26,6 +26,15 @@ from adelia.schemas import (
 from adelia.services import briefing_orchestrator, briefing_repo
 
 router = APIRouter(prefix="/briefings", tags=["briefings"])
+# Generating a briefing is a 5-stage LLM pipeline; re-reading one she already
+# generated, or deleting it, is not.
+# The paywall (adelia/auth.require_active_subscription) is applied PER ROUTE,
+# not on the APIRouter, so it covers what spends money and nothing else.
+# Router-level it also covered the reads and the deletes: a mother who
+# cancelled saw her baby's records, transcripts and briefings answer 402 and
+# could not erase a single document. GDPR art. 15 (access), 17 (erasure) and
+# 20 (portability) are not features one stops paying for.
+PAID = Depends(require_active_subscription)
 
 
 def _to_out(briefing) -> BriefingOut:
@@ -74,7 +83,12 @@ def _enqueue(
     )
 
 
-@router.post("", status_code=status.HTTP_202_ACCEPTED, response_model=BriefingOut)
+@router.post(
+    "",
+    status_code=status.HTTP_202_ACCEPTED,
+    response_model=BriefingOut,
+    dependencies=[PAID],
+)
 async def create_briefing(
     payload: BriefingCreate,
     background_tasks: BackgroundTasks,
@@ -110,7 +124,12 @@ async def get_briefing(
     return _to_detail(briefing)
 
 
-@router.post("/{briefing_id}/regenerate", status_code=status.HTTP_202_ACCEPTED, response_model=BriefingOut)
+@router.post(
+    "/{briefing_id}/regenerate",
+    status_code=status.HTTP_202_ACCEPTED,
+    response_model=BriefingOut,
+    dependencies=[PAID],
+)
 async def regenerate_briefing(
     briefing_id: UUID,
     background_tasks: BackgroundTasks,

@@ -17,12 +17,14 @@ _GENOMICS_FIXTURE = Path(__file__).parent / "fixtures" / "genomics_sample.txt"
 
 
 def _override_auth(user_id: UUID):
-    from adelia.auth import get_current_user_id
+    from adelia.auth import get_current_user_id, require_active_subscription
 
     async def fake_user_id():
         return user_id
 
     app.dependency_overrides[get_current_user_id] = fake_user_id
+    # /enrichment is behind the paywall; this fake user has no DB row.
+    app.dependency_overrides[require_active_subscription] = fake_user_id
 
 
 def _override_db():

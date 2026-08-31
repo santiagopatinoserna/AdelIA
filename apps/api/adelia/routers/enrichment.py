@@ -25,7 +25,7 @@ from fastapi import APIRouter, Depends, File, HTTPException, Query, Response, Up
 from pydantic import BaseModel, Field
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from adelia.auth import get_current_user_id
+from adelia.auth import get_current_user_id, require_active_subscription
 from adelia.db import get_db
 from adelia.models import GenomicVariant
 from adelia.enrichment import (
@@ -38,7 +38,12 @@ from adelia.enrichment import (
 )
 
 logger = logging.getLogger(__name__)
-router = APIRouter(prefix="/enrichment", tags=["enrichment"])
+router = APIRouter(
+    prefix="/enrichment",
+    tags=["enrichment"],
+    # Paywall (adelia/auth.py).
+    dependencies=[Depends(require_active_subscription)],
+)
 
 
 # ============================================================================

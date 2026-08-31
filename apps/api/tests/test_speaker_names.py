@@ -43,7 +43,14 @@ async def _seed_consulta(user_id: uuid.UUID) -> uuid.UUID:
 
 
 def _client_as(user_id: uuid.UUID) -> AsyncClient:
+    # PATCH /documents/{id}/speakers is one of the two document routes still
+    # behind the paywall, so the gate has to be overridden too: it no longer
+    # depends on get_current_user_id (adelia/auth.py loads the row once and
+    # both dependencies read it).
+    from adelia.auth import require_active_subscription
+
     app.dependency_overrides[get_current_user_id] = lambda: user_id
+    app.dependency_overrides[require_active_subscription] = lambda: user_id
     return AsyncClient(transport=ASGITransport(app=app), base_url="http://test")
 
 

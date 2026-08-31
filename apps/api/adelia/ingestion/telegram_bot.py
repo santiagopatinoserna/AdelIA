@@ -303,6 +303,20 @@ async def handle_update(update_data: dict) -> dict:
     if user_id is None:
         return await reply("no_link", "error", t(locale, "no_link"))
 
+    # Paywall before ANY ingestion (audit 4.1): a linked chat whose trial
+    # expired kept transcribing with Voxtral and OCRing with Mistral for
+    # free, invisibly, because the only subscription check in the product
+    # lived in the web layout. Linking (/start) stays open — it is how a
+    # parent who just paid gets back in.
+    from adelia.auth import has_active_subscription
+
+    if not await has_active_subscription(user_id):
+        return await reply(
+            "subscription_inactive",
+            "payment_required",
+            t(locale, "subscription_inactive", link=diary.billing_link(locale)),
+        )
+
     if text and not text.startswith("/"):
         if is_ack(text):
             return await reply("diary_ack", "instructions", t(locale, "diary_ack"))
