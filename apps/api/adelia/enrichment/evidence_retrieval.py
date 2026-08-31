@@ -15,8 +15,11 @@ from dataclasses import dataclass
 from typing import Iterable
 from uuid import UUID
 
-from sqlalchemy import text
+from sqlalchemy import String, bindparam, text
+from sqlalchemy.dialects.postgresql import ARRAY
 from sqlalchemy.ext.asyncio import AsyncSession
+
+from adelia.config import settings
 
 
 
@@ -39,19 +42,28 @@ async def retrieve_evidence(
     query_embedding: list[float],
     specialties: Iterable[str] | None = None,
     top_k: int = 5,
-    max_distance: float = 0.45,
+    max_distance: float | None = None,
 ) -> list[EvidenceMatch]:
     """Retrieve top-K evidence chunks ranked by cosine distance.
 
     Args:
         query_embedding: 1024-dim vector from mistral-embed
         specialties: optional filter — only evidence tagged with at least one
-            of these specialties is returned (e.g. ['cardiology'])
+            of these specialties is returned (e.g. ['pediatrics']). The
+            answering path passes ['pediatrics'] so a question about a baby
+            can never be answered with the adult sources the same table
+            holds (atrial fibrillation, cancer screening, SBAR).
         top_k: max results
-        max_distance: cosine distance cutoff (0.45 ≈ 0.55 similarity, reasonable threshold)
+        max_distance: cosine distance cut-off. Defaults to
+            settings.evidence_max_distance, calibrated against the real corpus
+            (see apps/api/docs/CALIBRACION_UMBRAL_EVIDENCIA.md). The previous
+            default, 0.45, was above the corpus's own diameter (0.3386), so it
+            rejected nothing and every question came back "evidence-backed".
 
     Returns: sorted list, most relevant first.
     """
+    if max_distance is None:
+        max_distance = settings.evidence_max_distance
     # pgvector cosine distance via `<=>` operator
     # We do a join to evidence_sources to filter by specialty + return metadata
     stmt_text = """
@@ -71,16 +83,26 @@ async def retrieve_evidence(
     """
     params: dict = {"emb": str(query_embedding), "max_distance": max_distance}
 
-    if specialties:
-        spec_list = list(specialties)
-        # JSONB array contains-any check via the ?| operator
-        stmt_text += " AND es.specialties ?| array[:spec_list]"
+    # JSONB array contains-any check via the ?| operator, whose right-hand
+    # side is a text[]. `array[:spec_list]` built an array OF the parameter,
+    # so asyncpg was handed a list where it expected a str and raised
+    # DataError: invalid input for query argument $3: ['pediatrics'] (expected
+    # str, got list). Every call that passed `specialties` therefore blew up —
+    # silently, because both call sites swallow the exception and return []
+    # (briefing_orchestrator._retrieve_specialty_evidence never returned a
+    # single fragment). Bind the list itself, typed as text[].
+    spec_list = list(specialties) if specialties else None
+    if spec_list:
+        stmt_text += " AND es.specialties ?| :spec_list"
         params["spec_list"] = spec_list
 
     stmt_text += " ORDER BY distance ASC LIMIT :k"
     params["k"] = top_k
 
-    result = await session.execute(text(stmt_text), params)
+    stmt = text(stmt_text)
+    if spec_list:
+        stmt = stmt.bindparams(bindparam("spec_list", type_=ARRAY(String)))
+    result = await session.execute(stmt, params)
     rows = result.mappings().all()
 
     return [

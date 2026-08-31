@@ -67,6 +67,8 @@ MSG: dict[str, dict[str, str]] = {
                             "enlazado. Si no has sido tú, genera un token nuevo desde tu panel (Importar → Telegram)."),
         "no_link": ("Aún no has enlazado tu cuenta. En AdelIA: Importar → Telegram → copia el token "
                     "y envíame: /start TOKEN"),
+        "subscription_inactive": ("Tu suscripción a AdelIA no está activa, así que de momento no puedo "
+                                  "guardar nada nuevo en el historial. Reactívala aquí y seguimos: {link}"),
         "diary_ack": ("Cuéntame cómo ha ido el día (guardería, comida, sueño, cómo estaba) "
                       "y lo anoto en el diario."),
         "diary_saved": "Anotado en el diario de {name} ({date}) ✓\n{link}",
@@ -109,6 +111,8 @@ MSG: dict[str, dict[str, str]] = {
                             "linked. If that was not you, generate a new token from your dashboard (Import → Telegram)."),
         "no_link": ("Your account is not linked yet. In AdelIA: Import → Telegram → copy the token "
                     "and send me: /start TOKEN"),
+        "subscription_inactive": ("Your AdelIA subscription is not active, so I cannot save anything "
+                                  "new to the history right now. Reactivate it here and we carry on: {link}"),
         "diary_ack": ("Tell me how the day went (daycare, food, sleep, mood) "
                       "and I will write it in the diary."),
         "diary_saved": "Saved in {name}'s diary ({date}) ✓\n{link}",
@@ -151,6 +155,8 @@ MSG: dict[str, dict[str, str]] = {
                             "Si ce n'était pas toi, génère un nouveau jeton depuis ton espace (Importer → Telegram)."),
         "no_link": ("Ton compte n'est pas encore lié. Dans AdelIA : Importer → Telegram → copie le jeton "
                     "et envoie-moi : /start JETON"),
+        "subscription_inactive": ("Ton abonnement AdelIA n’est pas actif, je ne peux donc rien enregistrer "
+                                  "de nouveau dans l’historique pour le moment. Réactive-le ici et on continue : {link}"),
         "diary_ack": ("Raconte-moi la journée (crèche, repas, sommeil, humeur) "
                       "et je la note dans le journal."),
         "diary_saved": "Noté dans le journal de {name} ({date}) ✓\n{link}",
@@ -400,6 +406,11 @@ def doc_link(document_id: uuid.UUID | str, locale: str | None = DEFAULT_LOCALE) 
     return f"{settings.adelia_app_url.rstrip('/')}/{normalize_locale(locale)}/dashboard/documents/{document_id}"
 
 
+def billing_link(locale: str | None = DEFAULT_LOCALE) -> str:
+    """Where a parent with an inactive subscription is sent from Telegram."""
+    return f"{settings.adelia_app_url.rstrip('/')}/{normalize_locale(locale)}/billing"
+
+
 # --- Profiles --------------------------------------------------------------
 
 def _fold(s: str) -> str:
@@ -517,7 +528,11 @@ async def ingest_bytes(
 ) -> Document:
     """Store a blob + Document and schedule the pipeline (no request context,
     so asyncio.create_task instead of FastAPI BackgroundTasks)."""
-    from adelia.routers.documents import process_document
+    from adelia.routers.documents import (
+        AUDIO_GRACE_UNPROCESSED,
+        process_document,
+        schedule_audio_deletion,
+    )
 
     safe = "".join(c if c.isalnum() or c in "._-" else "_" for c in filename)[:80]
     s3_key = f"users/{user_id}/{uuid.uuid4()}-{safe}"
@@ -536,6 +551,13 @@ async def ingest_bytes(
         )
         session.add(doc)
         try:
+            if mime.startswith("audio/"):
+                # Same rule as the web upload: a voice note gets its deletion
+                # date in the same transaction that records it, so an
+                # interrupted pipeline cannot leave the parent's voice in
+                # MinIO with nothing scheduled to remove it. The pipeline
+                # brings it forward to 48h once the transcript exists.
+                await schedule_audio_deletion(session, s3_key, AUDIO_GRACE_UNPROCESSED)
             await session.commit()
         except Exception:
             try:
@@ -692,11 +714,33 @@ def _html(s: str) -> str:
 
 
 async def send_daily_reminders() -> int:
-    """Nudge every linked chat that has no diary entry for today."""
+    """Nudge every linked chat of a PAYING parent with no diary entry today.
+
+    The paywall was put on the way in (ingestion/telegram_bot.handle_update)
+    and not on the way out: this select had no join against users, so the
+    20:00 job kept asking a mother who cancelled months ago "¿Cómo ha ido hoy?"
+    every single night, and answering it earned her the payment refusal. One
+    statement, not a per-link has_active_subscription call, which would open a
+    session per chat. ACTIVE_STATUSES is a set, hence sorted() for .in_();
+    both imports are local because routers.billing imports back into this
+    graph, the same reason adelia/auth.py defers them.
+    """
+    from adelia.auth import billing_is_enabled
+    from adelia.models import User
+    from adelia.routers.billing import ACTIVE_STATUSES
+
     diary_date = today_iso()
     sent = 0
     async with AsyncSessionLocal() as session:
-        links = (await session.execute(sa.select(TelegramLink))).scalars().all()
+        stmt = sa.select(TelegramLink)
+        if billing_is_enabled():
+            # No Stripe key = nothing is sold on this instance and no account
+            # can ever leave "none"; filtering would silence the bot entirely
+            # on a self-hosted install. Same rule as the HTTP gate.
+            stmt = stmt.join(User, User.id == TelegramLink.user_id).where(
+                User.subscription_status.in_(sorted(ACTIVE_STATUSES))
+            )
+        links = (await session.execute(stmt)).scalars().all()
         targets = [
             (link.chat_id, link.locale)
             for link in links

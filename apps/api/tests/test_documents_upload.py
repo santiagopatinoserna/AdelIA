@@ -25,7 +25,7 @@ from tests.test_auth import make_token
 
 
 def _override_auth():
-    from adelia.auth import get_current_user_id
+    from adelia.auth import get_current_user_id, require_active_subscription
 
     user_id = uuid.uuid4()
 
@@ -33,6 +33,8 @@ def _override_auth():
         return user_id
 
     app.dependency_overrides[get_current_user_id] = fake_user_id
+    # /documents is behind the paywall; this fake user has no DB row.
+    app.dependency_overrides[require_active_subscription] = fake_user_id
     return user_id
 
 
@@ -53,7 +55,7 @@ def auth_headers():
 
 async def _seed_user(email: str) -> uuid.UUID:
     async with AsyncSessionLocal() as session:
-        user = User(email=email)
+        user = User(email=email, subscription_status="active")
         session.add(user)
         await session.commit()
         await session.refresh(user)

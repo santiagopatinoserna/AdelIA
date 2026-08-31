@@ -17,7 +17,7 @@ from pydantic import BaseModel, field_validator
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from adelia.auth import get_current_user_id
+from adelia.auth import get_current_user_id, require_active_subscription
 from adelia.config import settings
 from adelia.db import AsyncSessionLocal, get_db
 from adelia.enrichment import profile_service
@@ -35,6 +35,15 @@ from adelia.workers.transcribe import transcribe_audio
 logger = logging.getLogger(__name__)
 
 router = APIRouter(prefix="/documents", tags=["documents"])
+# Uploading is what costs: it runs Mistral OCR / Voxtral on our key. Listing,
+# reading and deleting cost nothing and are the parent's own data.
+# The paywall (adelia/auth.require_active_subscription) is applied PER ROUTE,
+# not on the APIRouter, so it covers what spends money and nothing else.
+# Router-level it also covered the reads and the deletes: a mother who
+# cancelled saw her baby's records, transcripts and briefings answer 402 and
+# could not erase a single document. GDPR art. 15 (access), 17 (erasure) and
+# 20 (portability) are not features one stops paying for.
+PAID = Depends(require_active_subscription)
 storage = S3Storage()
 
 ALLOWED_MIME = {
@@ -63,6 +72,38 @@ AUDIO_MIME_PREFIXES = ("audio/",)
 
 def _is_audio(mime_type: str) -> bool:
     return any(mime_type.startswith(prefix) for prefix in AUDIO_MIME_PREFIXES)
+
+
+# ---------------------------------------------------------------------------
+# Audio retention (DPIA: the recording is a means to a transcript, never an
+# archive). Two windows, and the tombstone is now written AT UPLOAD, not at
+# the end of the pipeline:
+#
+#   AUDIO_GRACE_UNPROCESSED  the upload-time value. If the container dies
+#                            mid-pipeline the blob still expires; before
+#                            this, an interrupted consulta left the audio of
+#                            a real appointment in MinIO forever, with no
+#                            row anywhere recording that it existed.
+#   AUDIO_GRACE_PROCESSED    brought forward once transcription succeeds:
+#                            the text is stored, the audio is redundant.
+#
+# The 7-day figure is the one the DPIA already justifies ("gracia de 7 días
+# solo para permitir un reintento manual"), so the worst case goes from
+# "forever" to a window the approved assessment covers.
+# ---------------------------------------------------------------------------
+AUDIO_GRACE_UNPROCESSED = timedelta(days=7)
+AUDIO_GRACE_PROCESSED = timedelta(hours=48)
+
+
+async def schedule_audio_deletion(session, s3_key: str, grace: timedelta) -> None:
+    """Upsert the blob's tombstone at now + grace.
+
+    merge(), never add(): the row already exists from upload time, and the
+    end of the pipeline only ever brings the date forward.
+    """
+    await session.merge(
+        BlobTombstone(s3_key=s3_key, not_before=datetime.now(timezone.utc) + grace)
+    )
 
 
 # Transient-failure retry for external API stages (Mistral OCR/extract/embed,
@@ -305,22 +346,37 @@ async def _process_document_inner(document_id: uuid.UUID, mime_type: str, is_con
             session, user_id=user_id, since=datetime.now(timezone.utc)
         )
         doc.processed_at = datetime.now(timezone.utc)
-        if is_consulta:
-            # Transcription succeeded (raw_text non-empty): 48h grace para
-            # reintentos/soporte antes de que el blob de audio desaparezca
-            # (no hay UI de reproducción — el acceso es al texto transcrito).
-            # Transcription failed (raw_text empty): 7 days — enough time to
-            # retry/inspect before we lose the source audio entirely.
-            grace = timedelta(hours=48) if raw_text else timedelta(days=7)
-            session.add(BlobTombstone(
-                s3_key=s3_key,
-                not_before=datetime.now(timezone.utc) + grace,
-            ))
+        # ONLY brings an existing tombstone forward, never creates one, which
+        # is exactly what schedule_audio_deletion's docstring promises. The
+        # ingestion paths that must expire wrote theirs already: the consulta
+        # recording at upload, the Telegram voice note in
+        # telegram_diary.ingest_bytes. An audio a parent filed through the
+        # ordinary upload zone (upload-zone.tsx accepts audio/*, and its
+        # FormData sends no `source`, so it lands as "web") has none, and
+        # deleting it would be more retention than /privacidad and the DPIA
+        # announce, which say the exception is the consultation audio.
+        # `not_before is not None` also stops a +48h from resurrecting the
+        # NULL that routers/users.py writes when the account is erased.
+        existing_tombstone = (
+            await session.get(BlobTombstone, s3_key) if _is_audio(mime_type) else None
+        )
+        if existing_tombstone is not None and existing_tombstone.not_before is not None:
+            # Transcription succeeded (raw_text non-empty): bring the deletion
+            # forward to 48h, the window the privacy policy promises (there is
+            # no playback UI, the access is to the transcript).
+            # Transcription failed (raw_text empty): leave the upload-time 7
+            # days, enough to retry/inspect before the source audio is gone.
+            grace = AUDIO_GRACE_PROCESSED if raw_text else AUDIO_GRACE_UNPROCESSED
+            await schedule_audio_deletion(session, s3_key, grace)
             doc.document_metadata = {
                 **(doc.document_metadata or {}),
                 "audio_deleted_scheduled": True,
-                **({"summary": summary} if summary else {}),
             }
+        if summary:
+            # Written whatever the retention branch decided: the consultation
+            # summary is the parent's takeaway from the appointment, not an
+            # attribute of the blob's expiry.
+            doc.document_metadata = {**(doc.document_metadata or {}), "summary": summary}
         await session.commit()
 
     if notify_telegram:
@@ -331,7 +387,12 @@ async def _process_document_inner(document_id: uuid.UUID, mime_type: str, is_con
             logger.exception("telegram notify failed for document_id=%s", document_id)
 
 
-@router.post("", response_model=DocumentOut, status_code=status.HTTP_201_CREATED)
+@router.post(
+    "",
+    response_model=DocumentOut,
+    status_code=status.HTTP_201_CREATED,
+    dependencies=[PAID],
+)
 async def upload_document(
     background: BackgroundTasks,
     user_id: Annotated[uuid.UUID, Depends(get_current_user_id)],
@@ -396,6 +457,16 @@ async def upload_document(
     async with AsyncSessionLocal() as db:
         db.add(doc)
         try:
+            if is_consulta:
+                # Same transaction as the Document: the recording's expiry
+                # exists from the second it lands, so a crash mid-pipeline
+                # cannot leave an appointment recording without a deletion
+                # date (audit 1.9). `is_consulta` implies audio, validated
+                # above. Deliberately NOT every audio: the upload zone accepts
+                # audio/* with source="web", and an audio a parent filed as a
+                # document of hers is a document, not a recording on a
+                # retention clock.
+                await schedule_audio_deletion(db, s3_key, AUDIO_GRACE_UNPROCESSED)
             if is_consulta:
                 # Flush the Document INSERT before adding the ConsentEvent: there
                 # is no ORM relationship() between them (only a bare FK column),
@@ -553,7 +624,7 @@ class SpeakerNamesIn(BaseModel):
         return cleaned
 
 
-@router.patch("/{doc_id}/speakers", response_model=DocumentOut)
+@router.patch("/{doc_id}/speakers", response_model=DocumentOut, dependencies=[PAID])
 async def set_speaker_names(
     doc_id: uuid.UUID,
     payload: SpeakerNamesIn,

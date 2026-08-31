@@ -19,6 +19,7 @@ from adelia.enrichment.evidence_retrieval import (
     retrieve_evidence,
 )
 from adelia.schemas import ChatCitation
+from adelia.services.answer_contract import chat_system_prompt, no_evidence_reply
 from adelia.services.retrieval import retrieve_relevant_chunks
 from adelia.services.structured_query import query_observations_by_name_and_date_range
 from adelia.services.temporal import detect_temporal_intent
@@ -42,44 +43,14 @@ class ChatEvent:
     evidence_citations: list[dict] = field(default_factory=list)
 
 
-# Per-locale response-language + mandatory closing disclaimer (v0.1.1 i18n).
-_LOCALE_RULES = {
-    "es": (
-        "Responde en español, en uno o dos párrafos cortos.",
-        'Termina con "Verifica con tu médico antes de tomar decisiones clínicas."',
-        '"No tengo información suficiente"',
-    ),
-    "en": (
-        "Answer in English, in one or two short paragraphs.",
-        'End with "Verify with your doctor before making clinical decisions."',
-        '"I don\'t have enough information"',
-    ),
-    "fr": (
-        "Réponds en français, en un ou deux paragraphes courts.",
-        'Termine par "Vérifiez avec votre médecin avant toute décision clinique."',
-        '"Je n\'ai pas assez d\'informations"',
-    ),
-}
+# The response language, the citation obligation and the closing disclaimer
+# now live in services/answer_contract, shared verbatim with the /dashboard
+# agent (agent/orchestrator). Before 2026-08-31 they existed only here, so the
+# default screen answered clinical questions with none of them.
 
 
 def _system_prompt(locale: str) -> str:
-    lang_rule, disclaimer_rule, no_info = _LOCALE_RULES.get(locale, _LOCALE_RULES["es"])
-    return f"""Eres el asistente de salud de AdelIA, enfocado en el seguimiento de
-la salud de bebés y niños. Respondes sobre los datos del bebé proporcionados,
-pero TODA interpretación o afirmación clínica debe SUSTENTARSE EXCLUSIVAMENTE en
-los estudios de investigación / guías clínicas provistos en la sección
-"Clinical evidence". No respondes desde tu conocimiento general.
-
-Reglas estrictas:
-- Toda interpretación, valoración o recomendación clínica DEBE apoyarse en al menos una cita de evidencia [ev_1], [ev_2], ... Si NO hay un estudio o guía en el contexto que respalde la respuesta clínica, di {no_info} y explica que no hay evidencia de investigación que la sustente. NO interpretes ni aconsejes sin respaldo de investigación.
-- Puedes reportar los datos del bebé como hechos (valores, fechas, qué dijo cada médico) citándolos con marcadores numéricos [1], [2], ... del orden de los fragmentos del paciente — pero NO los interpretes clínicamente sin una cita [ev_N].
-- El historial de la conversación ES contexto válido: resuelve referencias ("ese valor", "¿y a los 6 meses?") usando los datos ya citados en turnos anteriores, manteniendo sus marcadores originales.
-- Cita los estudios/guías con marcadores [ev_1], [ev_2], ... de la sección "Clinical evidence".
-- Separa claramente el dato del bebé de la evidencia (e.g. "regurgita tras cada toma [1]; según NASPGHAN-ESPGHAN es habitual y mejora hacia los 12 meses [ev_1]").
-- {lang_rule}
-- NUNCA inventes datos médicos ni estudios. NUNCA des consejos médicos definitivos.
-- {disclaimer_rule}
-"""
+    return chat_system_prompt(locale)
 
 
 def _format_rag_context(chunks: list) -> str:
@@ -180,7 +151,18 @@ async def _retrieve_evidence_for_query(
 ) -> list[EvidenceMatch]:
     """Best-effort evidence retrieval. Returns [] on any error (graceful degradation).
 
-    Dual-RAG: complements patient retrieval with clinical guidelines.
+    Dual-RAG: complements patient retrieval with clinical guidelines. The
+    cut-off comes from settings.evidence_max_distance (calibrated, see
+    docs/CALIBRACION_UMBRAL_EVIDENCIA.md), not from a literal: the literal it
+    replaces (0.45) was above the corpus's own diameter and filtered nothing.
+
+    `specialties=["pediatrics"]` is what makes the calibration describe the
+    code. evidence_chunks also holds 8 adult sources (atrial fibrillation,
+    hypertension, cholesterol, breast and colorectal cancer screening,
+    endometriosis, adult diabetes, SBAR); without the tag filter an unfiltered
+    search over all of them returned anticoagulation or cancer-screening
+    fragments labelled "Clinical evidence" in an app about a baby. All 110
+    pediatric sources carry the tag; the 8 adult ones do not.
     """
     if query_embedding is None:
         return []
@@ -189,8 +171,9 @@ async def _retrieve_evidence_for_query(
             return await retrieve_evidence(
                 session,
                 query_embedding=query_embedding,
+                specialties=["pediatrics"],
                 top_k=top_k,
-                max_distance=0.45,
+                max_distance=settings.evidence_max_distance,
             )
     except Exception as e:
         logger.warning("evidence retrieval failed (continuing without): %s", e)
@@ -258,6 +241,7 @@ async def answer_question_streaming(
                 user_id=user_id,
                 query_embedding=query_embedding,
                 top_k=8,
+                max_distance=settings.patient_max_distance,
             )
             patient_context = _format_rag_context(chunks)
             for c in chunks:
@@ -274,6 +258,21 @@ async def answer_question_streaming(
         evidence_matches = await _retrieve_evidence_for_query(query_embedding)
         evidence_block = format_evidence_for_prompt(evidence_matches)
         evidence_citations = evidence_citations_for_response(evidence_matches)
+
+        # Hard refusal, in code, before any generative call. Nothing survived
+        # the retrieval cut-offs on either side: no clinical evidence AND no
+        # fragment of this user's own history. Handing that to the LLM is
+        # exactly how a confident, sourceless, wrong answer about a baby gets
+        # produced, and no prompt clause can be trusted to prevent it. So the
+        # model is never called: the refusal is returned by the code itself.
+        if not evidence_matches and not patient_context:
+            logger.info(
+                "chat: no grounding (0 evidence chunks, 0 patient chunks), "
+                "returning the refusal without calling the generative model"
+            )
+            yield ChatEvent(type="token", content=no_evidence_reply(locale))
+            yield ChatEvent(type="final", citations=[], evidence_citations=[])
+            return
 
         # Compose final user message with both contexts
         sections = [f"Pregunta del usuario: {question}\n"]

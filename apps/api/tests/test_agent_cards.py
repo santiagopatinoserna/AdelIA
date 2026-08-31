@@ -1,4 +1,4 @@
-from adelia.agent.cards import card_confirm, card_lab, card_action
+from adelia.agent.cards import card_confirm, card_lab
 from adelia.agent.events import AgentEvent
 
 def test_confirm_card_shape():

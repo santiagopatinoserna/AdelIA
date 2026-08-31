@@ -7,7 +7,14 @@ services:
       POSTGRES_PASSWORD: adelia_dev
       POSTGRES_DB: adelia
     ports:
-      - "5434:5432"  # host 5434 because 5432 already used by intravel-db + factory-db + local Homebrew Postgres
+      # Loopback only. This dev stack runs on the same machine as production
+      # and its credentials are published in this repo, so a LAN bind is an
+      # open door to the box: measured 2026-08-31, `ss -ltnp` showed
+      # 0.0.0.0:5434. Nothing needs it from outside; server-verify.sh and
+      # pytest reach it as localhost, and the API container reaches it over
+      # the compose network on 5432.
+      # host 5434 because 5432 is already used by intravel-db + factory-db + local Homebrew Postgres
+      - "127.0.0.1:5434:5432"
     volumes:
       - ../postgres-data:/var/lib/postgresql/data
     healthcheck:
@@ -24,8 +31,10 @@ services:
       MINIO_ROOT_PASSWORD: minioadmin
       MC_HOST_local: http://minioadmin:minioadmin@localhost:9000
     ports:
-      - "9000:9000"
-      - "9001:9001"
+      # Loopback only, same reason as postgres above: minioadmin/minioadmin is
+      # in this file, and 9001 is the console that those credentials open.
+      - "127.0.0.1:9000:9000"
+      - "127.0.0.1:9001:9001"
     volumes:
       - ../minio-data:/data
     command: server /data --console-address ":9001"

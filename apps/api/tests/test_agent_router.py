@@ -1,5 +1,3 @@
-from unittest.mock import patch
-from uuid import uuid4
 from adelia.routers.agent import _map_event
 from adelia.agent.events import AgentEvent
 

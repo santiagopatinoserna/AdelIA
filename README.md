@@ -144,6 +144,8 @@ docker compose -f infra/docker-compose.prod.yml --env-file .env.prod up -d --bui
 
 Web on `:3000`, API on `:8000` (override with `WEB_PORT`/`API_PORT`). The API container runs `alembic upgrade head` on boot. Put a TLS proxy (Caddy/Traefik) in front for anything beyond a LAN.
 
+**Billing is optional and off by default.** Leaving `STRIPE_SECRET_KEY` empty runs the instance with no subscription check at all: `/billing/checkout` answers 503, nothing ever writes `users.subscription_status`, and every product route stays open. Set `STRIPE_SECRET_KEY` (plus `STRIPE_WEBHOOK_SECRET` and `STRIPE_PRICE_ID`) and the paywall turns on for the routes that spend money: uploads, chat and agent turns, briefing generation, share links, PDFs, enrichment and ingestion. Reads, deletes and the data export are never behind it, on any configuration.
+
 ### Data controller (GDPR)
 
 Self-hosting AdelIA makes **you** the data controller (*responsable del tratamiento*) for whatever your instance processes — on the hosted SaaS at `adelia.godi.ai`, that role is Godi.AI. This matters in particular for the **Grabar consulta** (record consultation) feature: it ships with a mandatory consent gate that requires informing the attending healthcare professional, and an audio-deletion window (48h after successful transcription, 7 days on failure) as the data-minimization safeguard the feature's DPIA (`docs/legal/dpia-grabacion-consulta.md`) relies on. If you self-host, keep both active — disabling either changes your instance's legal footing, not just its UX.

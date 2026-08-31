@@ -74,14 +74,18 @@ jobs:
               pass
           PY
 
-      - name: Lint (ruff)
-        run: uv run ruff check .
-
       - name: Migrations
         run: uv run alembic upgrade head
 
       - name: Tests
         run: uv run pytest -q
+
+      # Lint runs LAST on purpose. When it ran first, three unused-import
+      # errors kept Migrations and Tests permanently "skipped" and the whole
+      # backend suite stopped running in CI on 2026-07-02. A style error must
+      # never be able to hide the test results.
+      - name: Lint (ruff)
+        run: uv run ruff check .
 
   web:
     runs-on: ubuntu-latest
@@ -150,6 +154,10 @@ jobs:
       NEXTAUTH_URL: http://localhost:3001
       NEXT_PUBLIC_API_URL: http://localhost:8000
       E2E_BASE_URL: http://localhost:3001
+      # Dummy token: nothing here talks to Telegram, but the API refuses to
+      # boot the diary surface without it and the specs that exercise the
+      # diary cards were failing on config, not on product, since 2026-06-12.
+      TELEGRAM_BOT_TOKEN: e2e-dummy
       # No MISTRAL_API_KEY: the upload spec self-skips; auth/locale/a11y/GDPR run.
     steps:
       - uses: actions/checkout@v6

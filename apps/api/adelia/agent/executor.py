@@ -1,10 +1,10 @@
 from __future__ import annotations
+import re
 from dataclasses import dataclass
 from uuid import UUID, uuid4
 
 from adelia.agent import cards
 from adelia.agent.pediatrics import growth_percentile, due_vaccines
-from adelia.enrichment.lab_ranges import evaluate as lab_evaluate
 from adelia.enrichment.drug_interactions import check_interactions
 from adelia.enrichment.trial_matcher import match_for_patient
 from adelia.services.chat_orchestrator import answer_question_streaming
@@ -21,29 +21,49 @@ async def execute_tool(name: str, args: dict, *, user_id: UUID, profile_id: UUID
                        locale: str = "es") -> ToolOutcome:
     if name == "buscar_en_expediente":
         parts: list[str] = []
+        sources: list[str] = []
         async for ev in answer_question_streaming(user_id=user_id, question=args["query"], locale=locale):
             if ev.type == "token":
                 parts.append(ev.content)
-        return ToolOutcome(text="".join(parts) or "No encontré datos relevantes.")
+            elif ev.type == "final":
+                # The terminal event was being discarded, citations included.
+                sources = [
+                    " ".join(
+                        str(x)
+                        for x in (c.get("organization"), c.get("title"), c.get("year"))
+                        if x
+                    )
+                    for c in ev.evidence_citations
+                ]
+        # /dashboard paints m.content as plain text: agent-canvas has no
+        # citation card and AgentEvent carries no citation field, so a [ev_1]
+        # arriving here is an orphan marker on the screen the parent lands on.
+        # The answer contract demands markers because the CHAT renders them;
+        # on this surface the source is named in prose instead, from the line
+        # below (answer_contract.agent_system_prompt says so explicitly).
+        # Propagating the citations properly is audit item 3.7, week 3.
+        text = re.sub(r"\[(?:ev_)?\d+\]", "", "".join(parts)).strip()
+        if sources:
+            text += "\n\nFuentes citables (nómbralas en el texto): " + "; ".join(sources)
+        return ToolOutcome(text=text or "No encontré datos relevantes.")
 
     if name == "evaluar_labs":
-        sex: str | None = None
-        if profile_id is not None:
-            from adelia.db import AsyncSessionLocal
-            from adelia.enrichment import profile_service
-            async with AsyncSessionLocal() as session:
-                prof = await profile_service.get_profile(session, profile_id=profile_id, user_id=user_id)
-            sex = prof.sex if prof and prof.sex in ("M", "F") else None
-            r = lab_evaluate(args["name"], args["value"], sex=sex)
-        else:
-            r = lab_evaluate(args["name"], args["value"])
-        if r is None:
-            return ToolOutcome(text=f"No tengo rango de referencia para {args['name']}.")
-        # r.range is a ReferenceRange dataclass (not JSON-serializable) — format to a string
-        # so the card survives json.dumps in the /agent router.
-        range_str = f"{r.range.low}-{r.range.high}"
-        card = cards.card_lab(_cid(), r.canonical_name, r.value, r.unit, r.flag, range_str, r.interpretation)
-        return ToolOutcome(text=f"{r.canonical_name}: {r.value} {r.unit} ({r.interpretation}).", card=card)
+        # lab_ranges v0.1 are ADULT ranges (enrichment/lab_ranges.py:5-7 says
+        # so) and evaluate() takes no age, so on a baby the card was wrong in
+        # both directions: false alarm (140 bpm -> "tachycardia" against
+        # 60-100, normal in an infant; Hb 10,5 -> "low" against 12,0-17,5,
+        # normal at 6 months) and false reassurance (38,0 C -> "low_grade
+        # fever", when in an infant under 3 months that is same-day
+        # assessment). The card is emitted straight to the screen without
+        # passing the model (agent/orchestrator.py, the `outcome.card` yield),
+        # so no clause of answer_contract can correct it, and it carries
+        # neither [ev_N] nor a disclaimer. No card until the reference bands
+        # are stratified by age (audit 3.5).
+        return ToolOutcome(text=(
+            f"No puedo interpretar {args['name']} = {args['value']}: mis rangos de "
+            "referencia son de adulto y no sirven para un bebé. Coméntalo con su "
+            "pediatra, que valora el dato con su edad y su peso."
+        ))
 
     if name == "revisar_interacciones":
         found = check_interactions(args["medicamentos"])

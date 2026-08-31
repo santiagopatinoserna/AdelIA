@@ -11,13 +11,19 @@ from adelia.main import app
 
 
 def _override_auth(monkeypatch, user_id: UUID):
-    """Override the get_current_user_id dependency via FastAPI's app overrides."""
-    from adelia.auth import get_current_user_id
+    """Override the auth dependencies via FastAPI's app overrides.
+
+    require_active_subscription is overridden too: /briefings is behind the
+    paywall (adelia/auth.py) and this user_id has no row to read a status
+    from, so without it every route here answers 402.
+    """
+    from adelia.auth import get_current_user_id, require_active_subscription
 
     async def fake_user_id():
         return user_id
 
     app.dependency_overrides[get_current_user_id] = fake_user_id
+    app.dependency_overrides[require_active_subscription] = fake_user_id
 
 
 def _override_db(monkeypatch):

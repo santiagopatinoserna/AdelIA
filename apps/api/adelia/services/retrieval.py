@@ -4,6 +4,7 @@ from uuid import UUID
 
 import sqlalchemy as sa
 
+from adelia.config import settings
 from adelia.db import AsyncSessionLocal
 from adelia.models import Chunk, Document
 
@@ -32,6 +33,7 @@ async def retrieve_relevant_chunks(
     user_id: UUID,
     query_embedding: list[float],
     top_k: int = 8,
+    max_distance: float | None = None,
 ) -> list[RetrievedChunk]:
     """Vector-similarity search over chunks (pgvector cosine), filtered to
     user's documents that are not soft-deleted. Returns up to top_k results
@@ -41,6 +43,12 @@ async def retrieve_relevant_chunks(
         user_id: tenant filter.
         query_embedding: 1024-dim vector from mistral-embed.
         top_k: number of small chunks to retrieve.
+        max_distance: cosine-distance cut-off; anything farther is not
+            returned. Defaults to settings.patient_max_distance. Before
+            2026-08-31 there was no cut-off at all here: the query returned
+            the closest top_k chunks whatever their distance, so a user with
+            three unrelated documents always got three "relevant" chunks.
+            Pass float("inf") to disable (tests that seed synthetic vectors).
 
     Returns:
         Ordered list (most similar first) of RetrievedChunk. parent_content
@@ -48,10 +56,17 @@ async def retrieve_relevant_chunks(
         document raw_text via sibling chunk offsets (None when offsets or
         raw_text are unavailable). Citations keep the small-chunk content.
     """
+    cutoff = settings.patient_max_distance if max_distance is None else max_distance
     async with AsyncSessionLocal() as session:
         # Join chunks → documents to enforce soft-delete filter at the SQL layer.
         # Use pgvector cosine distance — lower is more similar.
         distance_expr = Chunk.embedding.cosine_distance(query_embedding)
+        where = [
+            Chunk.user_id == user_id,
+            Document.deleted_at.is_(None),
+        ]
+        if cutoff != float("inf"):
+            where.append(distance_expr < cutoff)
         stmt = (
             sa.select(
                 Chunk.id.label("chunk_id"),
@@ -63,10 +78,7 @@ async def retrieve_relevant_chunks(
                 Document.deleted_at.label("doc_deleted_at"),
             )
             .join(Document, Document.id == Chunk.document_id)
-            .where(
-                Chunk.user_id == user_id,
-                Document.deleted_at.is_(None),
-            )
+            .where(*where)
             .order_by(distance_expr.asc())
             .limit(top_k)
         )

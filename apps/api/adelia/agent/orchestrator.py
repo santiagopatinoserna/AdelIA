@@ -7,28 +7,59 @@ from adelia.agent import cards
 from adelia.agent.tools import TOOLS, is_write_tool
 from adelia.agent.executor import execute_tool
 from adelia.agent.provider import get_provider
+from adelia.services.answer_contract import agent_system_prompt
 
 MAX_STEPS = 5
 
-_RULES = {
-    "es": "Eres AdelIA, una asistente de salud cálida y clara para madres ocupadas. "
-          "Responde corto y sin jerga. Usa las herramientas para consultar datos; nunca inventes. "
-          "Para acciones que escriben o comparten, propón y espera confirmación.",
-    "en": "You are AdelIA, a warm, clear health assistant for busy moms. Be brief, no jargon. "
-          "Use tools to look up data; never make things up. For write/share actions, propose and wait for confirmation.",
-    "fr": "Tu es AdelIA, une assistante santé chaleureuse et claire pour les mamans occupées. "
-          "Sois brève, sans jargon. Utilise les outils pour consulter les données ; n'invente jamais. "
-          "Pour les actions d'écriture/partage, propose et attends la confirmation.",
-}
+# Bounds for a history that arrives from a browser. routers/agent.py trims to
+# these same numbers at the door and rejects only a `system` role; this is the
+# second line of defence, because run_agent_turn is also called directly
+# (tests, future surfaces) and because a `system` turn smuggled into the
+# transcript would override the guardrails below. Now genuinely the pair
+# routers/chat.py:30-31 uses, which the comment always claimed.
+HISTORY_MAX_MESSAGES = 12
+HISTORY_MAX_CHARS_PER_MESSAGE = 2000
+ALLOWED_HISTORY_ROLES = ("user", "assistant")
+
+
+def sanitize_history(history: list[dict] | None) -> list[dict]:
+    """Keep only user/assistant turns, capped in count and length.
+
+    The system prompt is NEVER taken from the caller: _system_prompt(locale)
+    rebuilds it on every turn from services/answer_contract.
+    """
+    clean: list[dict] = []
+    for item in history or []:
+        if not isinstance(item, dict):
+            continue
+        role = item.get("role")
+        if role not in ALLOWED_HISTORY_ROLES:
+            continue  # 'system' and anything else: dropped, not trusted
+        content = item.get("content")
+        if isinstance(content, str):
+            content = content[:HISTORY_MAX_CHARS_PER_MESSAGE]
+        elif not isinstance(content, list):
+            continue  # tool_result/tool_use blocks are lists; scalars are not
+        clean.append({"role": role, "content": content})
+    return clean[-HISTORY_MAX_MESSAGES:]
+
+# The agent's whole system prompt used to be the three persona sentences now
+# kept in services/answer_contract._AGENT_PERSONA: no citation obligation, no
+# disclaimer, no "say you don't know". /dashboard renders this agent, not the
+# chat, so the parent's first question was answered with none of the clinical
+# safeguards the chat has carried since v0.1.1. Both surfaces now compose the
+# same contract from the same module.
+
 
 def _system_prompt(locale: str) -> str:
-    return _RULES.get(locale, _RULES["es"])
+    return agent_system_prompt(locale)
+
 
 async def run_agent_turn(*, user_id: UUID, profile_id: UUID | None, message: str,
                          history: list[dict] | None = None, card_action: dict | None = None,
                          locale: str = "es") -> AsyncIterator[AgentEvent]:
     provider = get_provider()
-    messages: list[dict] = list(history or [])
+    messages: list[dict] = sanitize_history(history)
 
     # A confirm action arriving from the UI = execute the previously-proposed write tool now.
     if card_action and card_action.get("intent") == "confirm":

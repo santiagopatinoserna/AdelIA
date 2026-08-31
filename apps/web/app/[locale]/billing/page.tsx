@@ -39,7 +39,9 @@ export default async function BillingPage({
     active = b.active;
     trialEnd = b.trial_end;
   } catch {
-    // API hiccup — show the offer; the gate fails open elsewhere.
+    // API hiccup: show the offer. This page is the ONLY one that stays
+    // reachable when the status cannot be read, because the dashboard gate
+    // now fails closed and sends her here.
   }
 
   const fmtDate = (iso: string | null) =>
@@ -82,6 +84,12 @@ export default async function BillingPage({
                 {t("goDashboard")}
               </Link>
               <ManageButton />
+              <Link
+                href="/dashboard/settings"
+                className="ad-btn ad-btn-ghost py-3 text-sm"
+              >
+                {t("manageData")}
+              </Link>
             </div>
           </div>
         ) : (
@@ -118,6 +126,18 @@ export default async function BillingPage({
               <ShieldCheck className="h-3.5 w-3.5 shrink-0" strokeWidth={2} />
               {t("secure")}
             </p>
+
+            {/* This is where the dashboard gate deposits a mother whose
+                subscription lapsed, and it used to be a dead end: no link
+                anywhere back to the screen holding "export my data" and
+                "delete my account". Those are GDPR art. 20 and art. 17, so
+                they cannot depend on paying. */}
+            <Link
+              href="/dashboard/settings"
+              className="ad-btn ad-btn-ghost mt-5 w-full py-3 text-sm"
+            >
+              {t("manageData")}
+            </Link>
           </div>
         )}
       </div>

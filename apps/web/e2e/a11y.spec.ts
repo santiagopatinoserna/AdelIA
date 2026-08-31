@@ -5,9 +5,20 @@ import { seedUserAndSessionCookie } from "./utils/session";
 
 // Serious/critical violations fail; minor/moderate get logged for later.
 async function scan(page: import("@playwright/test").Page, label: string) {
-  // Audit the SETTLED UI: wait for entrance animations (ad-rise fade/slide) to
-  // finish so contrast is measured at final opacity, not mid-fade. Capped so a
-  // looping animation can never hang the scan.
+  // Audit the SETTLED UI, and settled means TWO things.
+  //
+  // First, the content is actually there. The dashboard shell streams ahead of
+  // its children, so `goto` can resolve on the skeleton and a scan started
+  // then measures whatever lands next, mid-render. Waiting for the network to
+  // go quiet is what makes goto() mean "the page is here". Without it the
+  // authenticated scans read the showcase mid-entrance and reported a
+  // contrast failure nobody can see.
+  await page.waitForLoadState("networkidle").catch(() => {});
+  // Second, the entrance animations (ad-rise fade/slide) have finished, so
+  // contrast is measured at final opacity: axe reads a fading .text-ink as
+  // #797c76 on #faf8f3, which is 3.99:1 (the lesson of commit a664166, until
+  // now applied only to the dark scan through reducedMotion). Capped so a
+  // looping animation, such as the skeleton's animate-pulse, cannot hang it.
   await page.evaluate(() =>
     Promise.race([
       Promise.allSettled(document.getAnimations().map((a) => a.finished)),

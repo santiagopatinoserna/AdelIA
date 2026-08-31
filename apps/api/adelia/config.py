@@ -37,6 +37,41 @@ class Settings(BaseSettings):
     mistral_chat_model: str = "mistral-medium-latest"
     openai_chat_model: str = "gpt-5.1"
 
+    # ---- Dual-RAG retrieval cut-offs (cosine distance, lower = closer) ----
+    # Calibrated 2026-08-31 against the production corpus (118 sources, 258
+    # chunks, mistral-embed 1024d) loaded in the dev stack. Full method and
+    # raw numbers: docs/CALIBRACION_UMBRAL_EVIDENCIA.md.
+    #
+    # Two measured populations, best-fragment distance, measured against the
+    # index the code actually searches (the 110 pediatric-tagged sources; see
+    # chat_orchestrator, which passes specialties=["pediatrics"]):
+    #   in-corpus  (240 probes: reflujo, alimentación 6-24 m, guardería,
+    #               lactancia, hierro)   p50 0.0663  p95 0.1110  max 0.1715
+    #               worst case cross-topic                        max 0.1821
+    #   out-of-corpus (14 probes: fibrilación auricular ESC, hipertensión,
+    #               colesterol, cribado de cáncer de mama y colorrectal,
+    #               endometriosis, diabetes del adulto, SBAR)
+    #                                    min 0.1989  p50 0.2127  max 0.2309
+    # The valley is [0.1821, 0.1989]. 0.19 keeps 240/240 in-corpus probes and
+    # rejects 14/14 out-of-corpus ones.
+    #
+    # It was 0.20, from a first measurement whose OUT population was scored
+    # against the three baby FILES (min 0.2094) while the code searched all
+    # 258 chunks. Re-measured against the searched index, the nearest
+    # off-corpus probe is 0.1989 (the USPSTF colorectal-screening text
+    # reaching the CDC immunization schedule), so 0.20 sat 0.0011 OUTSIDE the
+    # valley and leaked 1 of the 14. The previous value before that, 0.45, sat
+    # above the corpus's own diameter (max pairwise distance 0.3386) and
+    # filtered nothing at all: every question got four "clinical evidence"
+    # fragments whether or not they were about the question.
+    evidence_max_distance: float = 0.19
+    # Patient chunks are the user's OWN documents and carry facts, not clinical
+    # claims (the answer contract forbids interpreting them without an [ev_N]
+    # citation), so this cut is deliberately looser: its job is to drop noise,
+    # not to gate the clinical promise. Not empirically calibrated because
+    # production holds 0 patient documents; re-measure once real ones exist.
+    patient_max_distance: float = 0.45
+
     # STT (speech-to-text). "mistral" = Voxtral (UE por defecto, diarización);
     # "openai" = whisper-1 (sin diarización). Voxtral reusa mistral_api_key.
     stt_provider: str = "mistral"  # "mistral" | "openai"

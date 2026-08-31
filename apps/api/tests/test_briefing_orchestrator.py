@@ -119,3 +119,67 @@ async def test_orchestrator_payload_includes_qa_items():
         assert payload is not None
         assert len(payload.sections.open_questions) == 1
         assert payload.sections.open_questions[0].question == "Q1"
+
+
+# --- The briefing's evidence cut-off (audit follow-up, 2026-08-31) ----------
+#
+# _retrieve_specialty_evidence passed a hand-written `max_distance=0.55`,
+# "slightly more lenient for briefings". 0.55 sits above the corpus's own
+# diameter (0.3386 over 33.153 pairs), so on that path the cut-off could not
+# reject anything: the 5-stage pipeline always attached the nearest fragments
+# as specialty evidence, there is no refusal branch like the chat's, and the
+# result is the one artifact a parent prints and hands to a specialist, also
+# published without auth at /s/{token} and /s/{token}/pdf.
+
+
+@pytest.mark.asyncio
+async def test_briefing_evidence_uses_the_calibrated_cutoff():
+    from adelia.config import settings
+    from adelia.services import briefing_orchestrator
+
+    with patch.object(
+        briefing_orchestrator, "embed_texts", new_callable=AsyncMock
+    ) as embed, patch.object(
+        briefing_orchestrator, "retrieve_evidence", new_callable=AsyncMock
+    ) as retrieve, patch.object(
+        briefing_orchestrator, "AsyncSessionLocal"
+    ):
+        embed.return_value = [[0.1] * 1024]
+        retrieve.return_value = []
+
+        await briefing_orchestrator._retrieve_specialty_evidence(
+            target_specialty=Specialty.DEFAULT, entities_text="Hb 10.5"
+        )
+
+    kwargs = retrieve.call_args.kwargs
+    assert kwargs["max_distance"] == settings.evidence_max_distance
+    assert settings.evidence_max_distance < 0.3386, (
+        "a briefing cut-off above the corpus diameter cannot reject anything"
+    )
+
+
+@pytest.mark.asyncio
+async def test_briefing_evidence_never_leaves_the_pediatric_corpus():
+    """It used to filter by the TARGET specialty tag. Now that the array bind
+    works (it used to raise DataError and this whole function returned "" and
+    []), that tag would let the adult sources in: a gastroenterology briefing
+    would match "Colorectal cancer screening — USPSTF 2021", a cardiology one
+    "Atrial fibrillation — ESC 2024". The specialty steers the embedded query;
+    the tag filter keeps the search inside the pediatric corpus."""
+    from adelia.services import briefing_orchestrator
+
+    with patch.object(
+        briefing_orchestrator, "embed_texts", new_callable=AsyncMock
+    ) as embed, patch.object(
+        briefing_orchestrator, "retrieve_evidence", new_callable=AsyncMock
+    ) as retrieve, patch.object(
+        briefing_orchestrator, "AsyncSessionLocal"
+    ):
+        embed.return_value = [[0.1] * 1024]
+        retrieve.return_value = []
+
+        await briefing_orchestrator._retrieve_specialty_evidence(
+            target_specialty=Specialty.GASTROENTEROLOGY, entities_text="reflujo"
+        )
+
+    assert retrieve.call_args.kwargs["specialties"] == ["pediatrics"]

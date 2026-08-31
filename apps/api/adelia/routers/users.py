@@ -41,8 +41,15 @@ async def delete_my_account(
     # Tombstones ride the SAME transaction as the erase: if blob deletion
     # fails afterwards, the keys survive for the startup sweep to retry —
     # no orphaned medical files with zero record of them.
+    #
+    # not_before=None EXPLICITLY, never omitted: merge() only copies the
+    # attributes that were set on the given instance, so a bare
+    # BlobTombstone(s3_key=key) leaves a future date in place. Audio blobs now
+    # carry one from the moment they are uploaded (documents.upload_document),
+    # so omitting it would keep a recording alive for up to 7 days AFTER the
+    # account was erased. Erasure means now.
     for key in s3_keys:
-        await db.merge(BlobTombstone(s3_key=key))
+        await db.merge(BlobTombstone(s3_key=key, not_before=None))
     await db.execute(sa.delete(User).where(User.id == user_id))
     await db.commit()
 

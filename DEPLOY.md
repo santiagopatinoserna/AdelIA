@@ -134,6 +134,43 @@ Abre `https://adelia.godi.ai`, mete **tu email real**, y debe llegarte el magic
 link desde `noreply@adelia.godi.ai`. Inicia sesión → sube un PDF → genera un
 briefing. Eres el primer usuario real.
 
+## Desplegar en el servidor de casa: `scripts/deploy-prod.sh`
+
+El servidor doméstico no se despliega con `git pull`, sino con
+`./scripts/deploy-prod.sh`, que descubre la IP (DHCP), hace `rsync` del
+**árbol de trabajo** y reconstruye los contenedores.
+
+Como lo que viaja es el árbol de trabajo y no un commit, el script se niega a
+desplegar si el árbol no es exactamente `origin/main`:
+
+- `git status --porcelain` tiene que estar vacío, y
+- `HEAD` tiene que ser el mismo commit que `origin/main` (hace `git fetch
+  origin main` antes de comparar; si el fetch falla, avisa y compara contra la
+  última copia local de la referencia).
+
+Si alguna de las dos cosas falla, aborta **antes** de tocar el servidor y dice
+qué ficheros están sucios o qué dos sha no coinciden. El motivo: sin esta
+puerta, un despliegue publica código que no existe en ninguna rama, que nadie
+ha revisado y que ninguna ejecución de CI ha probado.
+
+```bash
+# Camino normal: commitea, empuja, despliega.
+git add -A && git commit -m "..." && git push origin main
+./scripts/deploy-prod.sh              # api + web
+./scripts/deploy-prod.sh api          # solo api
+
+# Solo para un incendio: salta la puerta.
+./scripts/deploy-prod.sh --allow-dirty
+```
+
+`--allow-dirty` imprime en cada línea de aviso qué se está saltando (cuántos
+ficheros sucios, qué sha frente a qué sha). Después de usarlo, apunta qué
+desplegaste y empuja el commit en cuanto se apague el fuego: el servidor queda
+con código que no está en ninguna rama.
+
+`--discover-only` no pasa por la puerta, porque no despliega nada: solo
+imprime la IP del servidor.
+
 ## Operación
 
 - **Logs**: `docker compose -f infra/docker-compose.prod.yml logs -f api`

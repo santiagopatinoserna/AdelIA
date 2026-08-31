@@ -17,6 +17,13 @@ import time
 ROUTE_BUDGETS: list[tuple[str, str, int]] = [
     # (method, path-prefix, per-minute budget)
     ("POST", "/chat", 20),           # LLM cost
+    # Half of /chat's: one turn is up to MAX_STEPS model calls, each of which
+    # can run a whole RAG answer through `buscar_en_expediente`, so a turn is
+    # up to ~10 provider calls where a /chat request is one. A confirm that
+    # triggers generar_briefing additionally charges the "POST /briefings"
+    # bucket below (routers/agent.post_turn), or the 6/min of the 5-stage
+    # pipeline would be bypassable by entering through /agent.
+    ("POST", "/agent", 10),
     ("POST", "/documents", 10),      # upload + OCR pipeline
     ("POST", "/briefings", 6),       # 5-stage LLM pipeline
     ("POST", "/enrichment/genomics", 5),

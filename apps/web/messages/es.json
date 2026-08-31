@@ -831,6 +831,7 @@
     "trialUntil": "Tu mes gratis sigue activo. Primer cobro: {date}.",
     "manageCta": "Gestionar suscripción o tarjeta",
     "goDashboard": "Ir a mi panel",
+    "manageData": "Exportar o borrar mis datos",
     "successNote": "¡Listo! Tu mes gratis ha empezado. Disfruta AdelIA.",
     "canceledNote": "No pasa nada: no se ha cobrado nada. Puedes empezar cuando quieras."
   },

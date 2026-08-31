@@ -831,6 +831,7 @@
     "trialUntil": "Ton mois gratuit est actif. Premier débit : {date}.",
     "manageCta": "Gérer l'abonnement ou la carte",
     "goDashboard": "Aller à mon espace",
+    "manageData": "Exporter ou supprimer mes données",
     "successNote": "C'est parti ! Ton mois gratuit a commencé. Profite d'AdelIA.",
     "canceledNote": "Pas de souci: rien n'a été débité. Tu peux commencer quand tu veux."
   },
