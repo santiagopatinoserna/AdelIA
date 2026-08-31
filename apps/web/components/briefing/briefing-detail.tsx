@@ -21,7 +21,7 @@ export function BriefingDetail({ briefing }: Props) {
       const target = e.target as HTMLElement;
       const ent = target.closest<HTMLElement>("[data-citation-id]");
       if (!ent) return;
-      ent.classList.toggle("bg-honey-100");
+      ent.classList.toggle("bg-accent-tint");
       ent.classList.toggle("rounded");
     };
     root.addEventListener("click", handler);

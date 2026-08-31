@@ -47,7 +47,7 @@ export function LocaleSwitcher({
       className="inline-flex items-center gap-0.5 rounded-lg border border-line bg-surface p-0.5 text-xs"
     >
       {pending ? (
-        <Loader2 className="ml-1 mr-0.5 h-4 w-4 shrink-0 animate-spin text-pine-500" strokeWidth={2} aria-hidden="true" />
+        <Loader2 className="ml-1 mr-0.5 h-4 w-4 shrink-0 animate-spin text-primary-text" strokeWidth={2} aria-hidden="true" />
       ) : (
         <Globe className="ml-1 mr-0.5 h-4 w-4 shrink-0 text-ink-faint" strokeWidth={2} aria-hidden="true" />
       )}
@@ -65,8 +65,8 @@ export function LocaleSwitcher({
           title={t(`lang_${l}`)}
           className={
             l === current
-              ? "inline-flex min-h-[44px] min-w-[44px] items-center justify-center rounded-md bg-pine-600 px-3 py-2 font-semibold text-white"
-              : "inline-flex min-h-[44px] min-w-[44px] items-center justify-center rounded-md px-3 py-2 font-medium text-ink-soft transition-colors hover:bg-pine-50 hover:text-pine-700 disabled:opacity-60"
+              ? "inline-flex min-h-[44px] min-w-[44px] items-center justify-center rounded-md bg-primary px-3 py-2 font-semibold text-on-primary"
+              : "inline-flex min-h-[44px] min-w-[44px] items-center justify-center rounded-md px-3 py-2 font-medium text-ink-soft transition-colors hover:bg-primary-tint hover:text-primary-text-hover disabled:opacity-60"
           }
         >
           {LABELS[l]}

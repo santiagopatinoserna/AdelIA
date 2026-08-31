@@ -56,7 +56,7 @@
       "s3Lead": "Transcription à deux voix et l’essentiel en quelques points.",
       "s3Essentials": "L’essentiel",
       "s3B1": "Température de 38,2 °C.",
-      "s3B2": "Donner du paracétamol 2,5 ml toutes les 6 heures si elle dépasse 38 °C.",
+      "s3B2": "Du paracétamol si elle dépasse 38 °C, à la dose qui correspond à son poids.",
       "s3B3": "Proposer le sein et des liquides.",
       "s3B4": "Si pas d’amélioration sous 48 heures, revenir en consultation.",
       "s3Speakers": "Intervenants : Pédiatre · Moi",
@@ -134,11 +134,11 @@
     "evEyebrow": "D’où vient chaque réponse",
     "evTitle": "Chaque réponse naît d’une étude. Littéralement.",
     "evBody": "AdelIA ne répond pas depuis une boîte noire. Elle récupère et cite des études pédiatriques évaluées par les pairs, et si aucune n’appuie votre question, elle le dit au lieu d’inventer.",
-    "evStat1V": "1 936",
+    "evStat1V": "118",
     "evStat1L": "études et recommandations indexées",
-    "evStat2V": "1 951",
+    "evStat2V": "258",
     "evStat2L": "passages citables",
-    "evStat3V": "1974–2026",
+    "evStat3V": "1980–2026",
     "evStat3L": "plage de publication",
     "evStat4V": "100%",
     "evStat4L": "affirmations cliniques sourcées",
@@ -169,7 +169,7 @@
     "vsR4A": "Le dit et s’arrête",
     "vsR5L": "Corpus",
     "vsR5G": "Boîte noire, date de coupure",
-    "vsR5A": "1 936 études (1974–2026)",
+    "vsR5A": "118 recommandations et études (1980–2026)",
     "prEyebrow": "Comment vous l’utilisez",
     "prTitle": "Choisis ton niveau d’accompagnement.",
     "prT1Name": "Open Source",
@@ -203,7 +203,7 @@
     "prFootnote": "Prix indicatifs, en validation. La revue du spécialiste est asynchrone ; les téléconsultations en direct arriveront dans un plan supérieur.",
     "mixEyebrow": "Votre bébé × la science",
     "mixTitle": "Son histoire complète, depuis la naissance: croisée avec la recherche.",
-    "mixBody": "AdelIA ne répond pas dans l’abstrait. Elle combine chaque donnée de votre bébé, dès le premier jour, avec 1 936 études pour vous donner une réponse faite pour lui: pas pour « un bébé quelconque ».",
+    "mixBody": "AdelIA ne répond pas dans l’abstrait. Elle combine chaque donnée de votre bébé, dès le premier jour, avec 118 recommandations et études pour vous donner une réponse faite pour lui: pas pour « un bébé quelconque ».",
     "mixTimelineLabel": "Son histoire · depuis la naissance",
     "mixT1Age": "Naissance",
     "mixT1": "3,2 kg · 49 cm · à terme",
@@ -215,7 +215,7 @@
     "mixT4": "7,4 kg · début de la diversification",
     "mixT5Age": "9 mois",
     "mixT5": "Visite · tout dans les normes",
-    "mixAnswerLabel": "Son histoire × 1 936 études",
+    "mixAnswerLabel": "Son histoire × 118 sources",
     "mixAnswer": "Votre bébé est passé de 3,2 kg à la naissance à 7,4 kg à 6 mois [2] : une prise de poids dans la norme selon les courbes de croissance de l’OMS [ev_1]. La régurgitation notée à 4 mois correspond au pic physiologique décrit par NASPGHAN-ESPGHAN, qui s’améliore vers un an [ev_2].",
     "mixLegendData": "données de son histoire",
     "mixLegendEv": "études citées",
@@ -327,6 +327,7 @@
     "example1": "Mon bébé régurgite beaucoup, c'est normal ?",
     "example2": "Quand faut-il s'inquiéter d'une fièvre ?",
     "example3": "Résume sa courbe de croissance.",
+    "example4": "Combien de temps faut-il à un bébé pour s’adapter à la crèche ?",
     "stop": "Arrêter",
     "copy": "Copier",
     "copied": "Copié",
@@ -669,7 +670,7 @@
     "medResponse": "Réponse",
     "loadError": "Impossible de charger le questionnaire.",
     "valoracionTitle": "Évaluation fondée sur des preuves",
-    "valoracionLead": "Générez une évaluation en croisant vos réponses avec les preuves du corpus (1 936 articles), citées.",
+    "valoracionLead": "Générez une évaluation en croisant vos réponses avec les preuves du corpus (118 sources), citées.",
     "generating": "Analyse avec les preuves…",
     "generateBtn": "Générer l'évaluation",
     "valoracionDisclaimer": "À titre indicatif, avec preuves citées. Ne remplace pas l'avis de votre pédiatre.",
@@ -851,33 +852,34 @@
     "cardInsightTitle": "Suggestion",
     "cardDocEntities": "données extraites",
     "profileSwitch": "Profil",
-    "suggestionsTitle": "Pour toi"
+    "suggestionsTitle": "Pour toi",
+    "growthMarkMonths": "{name} · {months, plural, =1 {# mois} other {# mois}}",
+    "growthMarkDays": "{name} · {days, plural, =1 {# jour} other {# jours}}"
   },
   "showcase": {
-    "title": "Ce qu’AdelIA peut faire pour toi",
+    "primaryEyebrow": "Premiers pas",
+    "secondaryEyebrow": "Et aussi",
     "hide": "Masquer pour l’instant",
     "collapsed": "Exemples de ce qu’AdelIA peut faire",
     "show": "Afficher",
     "cards": {
-      "record": {
-        "title": "Enregistre la consultation",
-        "example": "On continue la crème deux fois par jour et on revient dans 15 jours",
-        "detail": "Avec l’accord du pédiatre : l’essentiel en 3 à 6 points, et l’audio est supprimé au bout de 48 h.",
-        "action": "Enregistrer"
-      },
       "ask": {
         "title": "Pose une question, sources à l’appui",
         "example": "Est-ce normal qu’à 13 mois elle ne veuille que du lait maternel ?",
-        "detail": "Je réponds en citant les documents de ton bébé et des dizaines de guides et études pédiatriques (crèche, alimentation 12-18 mois, reflux).",
-        "action": "Demander",
-        "altLabel": "Autre question :",
-        "altQuestion": "Combien de temps faut-il à un bébé pour s’adapter à la crèche ?"
+        "detail": "Je réponds en citant les documents de ton bébé et des dizaines de guides pédiatriques.",
+        "action": "Demander"
       },
       "diary": {
         "title": "Journal quotidien sur Telegram à 20 h",
         "example": "Deux tétées de moins aujourd’hui et un peu de nez qui coule, pas de fièvre",
-        "detail": "Le bot demande comment s’est passée la journée ; tu réponds en texte ou en audio et c’est daté dans le carnet.",
+        "detail": "Le bot demande comment s’est passée la journée ; ta réponse, texte ou audio, est datée.",
         "action": "Lier Telegram"
+      },
+      "record": {
+        "title": "Enregistre la consultation",
+        "example": "On continue la crème deux fois par jour et on revient dans 15 jours",
+        "detail": "Avec l’accord du pédiatre : l’essentiel en 3 à 6 points ; l’audio est supprimé après 48 h.",
+        "action": "Enregistrer"
       },
       "upload": {
         "title": "Ajoute un compte rendu ou le carnet",
@@ -888,7 +890,7 @@
       "briefing": {
         "title": "Briefing pour le spécialiste",
         "example": "Demain on voit l’allergologue et je veux tout avoir résumé",
-        "detail": "Une page par spécialité, avec citations du carnet et des sources, à partager avec le médecin.",
+        "detail": "Une page par spécialité, avec citations du carnet et des sources.",
         "action": "Créer un briefing"
       },
       "questionnaire": {
@@ -900,15 +902,15 @@
       "import": {
         "title": "Importe ce que tu as déjà",
         "example": "Je veux le dossier complet de la clinique privée",
-        "detail": "Apple Health, CCD, transfert d’e-mails et modèles RGPD pour demander le dossier (ES, FR, US).",
+        "detail": "Apple Health, CCD, transfert d’e-mails et modèles RGPD pour demander le dossier.",
         "action": "Importer"
-      },
-      "settings": {
-        "title": "Tes données, avec toi",
-        "example": "On change de pédiatre et je veux tout emporter",
-        "detail": "Exporte tout dans un seul fichier FHIR R4 et supprime n’importe quel document depuis sa fiche.",
-        "action": "Voir les réglages"
       }
+    },
+    "chips": {
+      "upload": "Ajouter un compte rendu",
+      "briefing": "Briefing",
+      "questionnaire": "Questionnaire",
+      "import": "Importer"
     }
   },
   "professionals": {

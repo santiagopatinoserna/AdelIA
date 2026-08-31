@@ -71,7 +71,13 @@ export async function generateMetadata({
 }
 
 export const viewport: Viewport = {
-  themeColor: "#0a2820",
+  // One entry per scheme, so the browser chrome (iOS status bar, Android task
+  // switcher) follows the page instead of painting deep pine over a cream
+  // daytime UI. Values are --color-canvas in each scheme (globals.css).
+  themeColor: [
+    { media: "(prefers-color-scheme: light)", color: "#f4f1e9" },
+    { media: "(prefers-color-scheme: dark)", color: "#071813" },
+  ],
   width: "device-width",
   initialScale: 1,
   viewportFit: "cover",
@@ -99,6 +105,19 @@ export default async function LocaleLayout({
   return (
     <html lang={locale} className={`${fraunces.variable} ${hanken.variable}`}>
       <head>
+        {/* Anti-flash, before any paint: if the reader has explicitly chosen a
+            scheme (the switcher stores "light" | "dark" under `adelia-theme`;
+            absent = follow the system), stamp it on <html> so the dark tokens
+            win from the first frame and opening the app at 3 a.m. never fires
+            a white flash. No dependency, no library. If localStorage throws
+            (private mode, storage blocked) the catch leaves the system
+            scheme, which is the correct fallback. */}
+        <script
+          dangerouslySetInnerHTML={{
+            __html:
+              "try{var t=localStorage.getItem('adelia-theme');if(t==='dark'||t==='light')document.documentElement.dataset.theme=t}catch(e){}",
+          }}
+        />
         {/* Explicit on purpose. Next 15.5 streams `metadata` into the <body>
             for regular user agents (React hoists it later), but Chrome only
             honours a manifest link that is inside <head> at parse time and
@@ -120,6 +139,9 @@ export default async function LocaleLayout({
           />
         ))}
         <meta name="apple-mobile-web-app-capable" content="yes" />
+        {/* "default" keeps the iOS status bar legible in BOTH schemes: it
+            follows themeColor above. "black-translucent" would paint the
+            status bar over the header. */}
         <meta name="apple-mobile-web-app-status-bar-style" content="default" />
         <meta name="apple-mobile-web-app-title" content="AdelIA" />
       </head>

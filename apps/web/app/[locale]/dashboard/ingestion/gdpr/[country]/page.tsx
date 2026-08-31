@@ -37,9 +37,9 @@ export default function GdprTemplateViewerPage() {
 
   return (
     <main className="mx-auto max-w-3xl px-6 py-10">
-      <h1 className="flex items-center gap-2 text-2xl text-pine-900">
-        <FileText className="h-5 w-5 text-pine-500" strokeWidth={2} />
-        {tpl.country} — {tpl.authority}
+      <h1 className="flex items-center gap-2 text-2xl text-ink">
+        <FileText className="h-5 w-5 text-primary-text" strokeWidth={2} />
+        {tpl.country} · {tpl.authority}
       </h1>
       <p className="mt-1 text-sm text-ink-soft">
         {t("meta", {

@@ -4,7 +4,7 @@ import type { AgentCard } from "@/lib/agent-types";
 import type { CardActionHandler } from "./card-renderer";
 
 const FLAG_CLASS: Record<string, string> = {
-  low: "text-clay-600", high: "text-clay-600", normal: "text-pine-600",
+  low: "text-error-text", high: "text-error-text", normal: "text-primary-text",
 };
 
 export function LabCard({ card }: { card: AgentCard; onAction: CardActionHandler }) {

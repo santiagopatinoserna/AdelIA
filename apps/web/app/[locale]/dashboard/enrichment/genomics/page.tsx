@@ -8,9 +8,9 @@ import { enrichment } from "@/lib/api-client-browser";
 import type { VariantHit } from "@/lib/enrichment-types";
 
 const CATEGORY_STYLE: Record<string, string> = {
-  pharmacogenomics: "border-pine-400 bg-pine-50",
-  carrier_status: "border-honey-400 bg-honey-100/60",
-  disease_risk: "border-clay-500 bg-clay-50",
+  pharmacogenomics: "border-primary-text bg-primary-tint",
+  carrier_status: "border-accent-line bg-accent-tint/60",
+  disease_risk: "border-error bg-error-tint",
 };
 
 export default function GenomicsPage() {
@@ -52,8 +52,8 @@ export default function GenomicsPage() {
 
   return (
     <main className="mx-auto max-w-3xl px-6 py-10">
-      <h1 className="flex items-center gap-2 text-2xl text-pine-900">
-        <Dna className="h-5 w-5 text-pine-500" strokeWidth={2} />
+      <h1 className="flex items-center gap-2 text-2xl text-ink">
+        <Dna className="h-5 w-5 text-primary-text" strokeWidth={2} />
         {t("enrichment.tabs.genomics")}
       </h1>
       <p className="mt-1 text-sm text-ink-soft">{t("enrichment.genomics.disclaimer")}</p>
@@ -70,7 +70,7 @@ export default function GenomicsPage() {
           accept=".txt,.tsv,.csv,text/plain,text/tab-separated-values"
           onChange={(e) => setFile(e.target.files?.[0] ?? null)}
           aria-label={t("enrichment.genomics.upload")}
-          className="block w-full text-sm text-ink-soft file:mr-3 file:rounded-lg file:border-0 file:bg-pine-50 file:px-3 file:py-1.5 file:text-sm file:font-medium file:text-pine-700 hover:file:bg-pine-100"
+          className="block w-full text-sm text-ink-soft file:mr-3 file:rounded-lg file:border-0 file:bg-primary-tint file:px-3 file:py-1.5 file:text-sm file:font-medium file:text-primary-text hover:file:bg-primary-tint"
         />
         {file && <div className="mt-2 text-sm text-ink-soft">{file.name}</div>}
         <button
@@ -84,7 +84,7 @@ export default function GenomicsPage() {
       </div>
 
       {error && (
-        <div role="alert" className="mt-4 rounded-lg border border-clay-100 bg-clay-50 p-3 text-sm text-clay-700">
+        <div role="alert" className="mt-4 rounded-lg border border-error-tint-line bg-error-tint p-3 text-sm text-error-text">
           {error}
         </div>
       )}
@@ -118,7 +118,7 @@ export default function GenomicsPage() {
               {h.url && (
                 <>
                   {" · "}
-                  <a href={h.url} target="_blank" rel="noopener" className="text-pine-600 hover:text-pine-700 underline decoration-pine-200 underline-offset-2">
+                  <a href={h.url} target="_blank" rel="noopener" className="text-primary-text hover:text-primary-text-hover underline decoration-primary-tint-line underline-offset-2">
                     {t("enrichment.genomics.source")}
                   </a>
                 </>

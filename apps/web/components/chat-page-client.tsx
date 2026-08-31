@@ -209,20 +209,20 @@ export function ChatPageClient({
             type="button"
             onClick={() => setSidebarOpen(true)}
             aria-label={t("openSessions")}
-            className="ad-btn ad-btn-ghost h-9 w-9 p-0 md:hidden"
+            className="ad-btn ad-btn-ghost ad-btn-icon md:hidden"
           >
             <Menu className="h-4 w-4" strokeWidth={2.2} />
           </button>
-          <h1 className="text-lg text-pine-900">{titleText}</h1>
+          <h1 className="text-lg text-ink">{titleText}</h1>
         </header>
         <div ref={scrollRef} onScroll={onScroll} className="flex-1 overflow-y-auto px-4 py-6 md:px-6">
           <div className="mx-auto max-w-3xl">
             {messages.length === 0 && !hasDocs ? (
               <div className="ad-rise mx-auto mt-10 max-w-md text-center md:mt-16">
-                <span className="mx-auto inline-flex h-14 w-14 items-center justify-center rounded-2xl bg-pine-50 text-pine-500 ring-1 ring-pine-100">
+                <span className="mx-auto inline-flex h-14 w-14 items-center justify-center rounded-2xl bg-primary-tint text-primary-text ring-1 ring-primary-tint-line">
                   <FileText className="h-7 w-7" strokeWidth={1.8} />
                 </span>
-                <h2 className="mt-5 font-display text-2xl text-pine-900">{t("noDocTitle")}</h2>
+                <h2 className="mt-5 font-display text-2xl text-ink">{t("noDocTitle")}</h2>
                 <p className="mx-auto mt-2 max-w-sm text-sm text-ink-soft">{t("noDocBody")}</p>
                 <Link
                   href="/dashboard/upload"
@@ -234,13 +234,16 @@ export function ChatPageClient({
               </div>
             ) : messages.length === 0 ? (
               <div className="ad-rise mx-auto mt-10 max-w-xl text-center md:mt-16">
-                <span className="mx-auto inline-flex h-14 w-14 items-center justify-center rounded-2xl bg-pine-50 text-pine-500 ring-1 ring-pine-100">
+                <span className="mx-auto inline-flex h-14 w-14 items-center justify-center rounded-2xl bg-primary-tint text-primary-text ring-1 ring-primary-tint-line">
                   <Stethoscope className="h-7 w-7" strokeWidth={1.8} />
                 </span>
-                <h2 className="mt-5 font-display text-2xl text-pine-900">{t("emptyTitle")}</h2>
+                <h2 className="mt-5 font-display text-2xl text-ink">{t("emptyTitle")}</h2>
                 <p className="mx-auto mt-2 max-w-sm text-sm text-ink-soft">{t("emptySubtitle")}</p>
                 <div className="mt-7 flex flex-col gap-2">
-                  {[t("example1"), t("example2"), t("example3")].map((ex) => (
+                  {/* example4 is the showcase's old secondary question:
+                      it lived under the "ask" card, where it overflowed the
+                      card on a phone, and belongs with the other suggestions. */}
+                  {[t("example1"), t("example2"), t("example3"), t("example4")].map((ex) => (
                     <button
                       key={ex}
                       type="button"
@@ -248,9 +251,9 @@ export function ChatPageClient({
                       disabled={busy}
                       className="ad-card ad-card-hover group flex items-center gap-3 px-4 py-3 text-left text-sm text-ink disabled:opacity-60"
                     >
-                      <Sparkles className="h-4 w-4 shrink-0 text-honey-500" strokeWidth={2} />
+                      <Sparkles className="h-4 w-4 shrink-0 text-accent-text" strokeWidth={2} />
                       <span className="flex-1">{ex}</span>
-                      <ArrowUpRight className="h-4 w-4 shrink-0 text-ink-faint transition-colors group-hover:text-pine-500" strokeWidth={2} />
+                      <ArrowUpRight className="h-4 w-4 shrink-0 text-ink-faint transition-colors group-hover:text-primary-text" strokeWidth={2} />
                     </button>
                   ))}
                 </div>
@@ -269,7 +272,7 @@ export function ChatPageClient({
             type="button"
             onClick={scrollToBottom}
             aria-label={t("scrollToLatest")}
-            className="absolute bottom-24 right-4 z-10 flex h-9 w-9 items-center justify-center rounded-full border border-line bg-surface text-pine-600 shadow-lift transition-colors hover:bg-pine-50 md:right-8"
+            className="absolute bottom-24 right-4 z-10 flex h-11 w-11 items-center justify-center rounded-full border border-line bg-surface text-primary-text shadow-lift transition-colors hover:bg-primary-tint md:right-8"
           >
             <ArrowDown className="h-4 w-4" strokeWidth={2.2} />
           </button>

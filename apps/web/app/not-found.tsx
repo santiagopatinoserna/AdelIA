@@ -15,8 +15,8 @@ export default function RootNotFound() {
       <body className="antialiased">
         <main className="flex min-h-screen items-center justify-center px-6 py-16">
           <div className="ad-card max-w-md p-8 text-center md:p-10">
-            <p className="font-display text-5xl font-semibold text-pine-900">404</p>
-            <h1 className="mt-3 text-xl text-pine-900">Página no encontrada</h1>
+            <p className="font-display text-5xl font-semibold text-ink">404</p>
+            <h1 className="mt-3 text-xl text-ink">Página no encontrada</h1>
             <p className="mx-auto mt-2 max-w-sm text-sm text-ink-soft">
               La página que buscas no existe o se ha movido.
             </p>

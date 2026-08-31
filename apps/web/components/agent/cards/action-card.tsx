@@ -6,7 +6,10 @@ export function ActionCard({ card, onAction }: { card: AgentCard; onAction: Card
   const p = card.payload as { title: string; body: string };
   return (
     <div className="ad-card ad-rise p-4">
-      <p className="font-display text-lg">{p.title}</p>
+      {/* font-sans, not the display serif: this card is on the panel home for
+          every account that has not linked Telegram yet, and the greeting is
+          the ONE Fraunces headline of that screen (spec 7.1). */}
+      <p className="font-sans text-lg font-semibold text-ink">{p.title}</p>
       <p className="text-ink-soft text-sm">{p.body}</p>
       <div className="mt-3 flex gap-2">
         {card.actions.map((a) => (

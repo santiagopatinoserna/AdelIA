@@ -72,13 +72,13 @@ export default function ProfilesPage() {
 
   return (
     <main className="mx-auto max-w-3xl px-6 py-10">
-      <h1 className="flex items-center gap-2 text-2xl text-pine-900">
-        <Users className="h-5 w-5 text-pine-500" strokeWidth={2} />
+      <h1 className="flex items-center gap-2 text-2xl text-ink">
+        <Users className="h-5 w-5 text-primary-text" strokeWidth={2} />
         {t("enrichment.tabs.profiles")}
       </h1>
 
       {error && (
-        <div role="alert" className="mt-4 rounded-lg border border-clay-100 bg-clay-50 p-3 text-sm text-clay-700">
+        <div role="alert" className="mt-4 rounded-lg border border-error-tint-line bg-error-tint p-3 text-sm text-error-text">
           {error}
         </div>
       )}
@@ -93,7 +93,7 @@ export default function ProfilesPage() {
               <div className="font-medium text-ink">
                 {p.display_name}
                 {p.is_default && (
-                  <span className="ml-2 rounded bg-pine-50 px-1.5 py-0.5 text-xs text-pine-700 ring-1 ring-pine-100">
+                  <span className="ml-2 rounded bg-primary-tint px-1.5 py-0.5 text-xs text-primary-text ring-1 ring-primary-tint-line">
                     {t("enrichment.profiles.default")}
                   </span>
                 )}
@@ -109,7 +109,7 @@ export default function ProfilesPage() {
                 <button
                   type="button"
                   onClick={() => handleSetDefault(p.id)}
-                  className="text-xs text-pine-600 hover:text-pine-700 hover:underline"
+                  className="text-xs text-primary-text hover:text-primary-text-hover hover:underline"
                 >
                   {t("enrichment.profiles.setDefault")}
                 </button>
@@ -117,7 +117,7 @@ export default function ProfilesPage() {
               <button
                 type="button"
                 onClick={() => handleDelete(p.id)}
-                className="text-xs text-clay-600 hover:text-clay-700 hover:underline"
+                className="text-xs text-error-text hover:underline"
               >
                 {t("enrichment.profiles.delete")}
               </button>
@@ -134,13 +134,13 @@ export default function ProfilesPage() {
             aria-label={t("enrichment.profiles.displayName")}
             value={newName}
             onChange={(e) => setNewName(e.target.value)}
-            className="w-full rounded-xl border border-line-strong bg-surface px-3 py-2 text-sm text-ink placeholder:text-ink-faint focus:border-pine-400 focus:outline-none focus:ring-2 focus:ring-pine-100"
+            className="w-full rounded-xl border border-line-control bg-surface px-3 py-2 text-sm text-ink placeholder:text-ink-faint focus:border-primary-text"
           />
           <select
             value={newRel}
             onChange={(e) => setNewRel(e.target.value as Relationship)}
             aria-label={t("enrichment.profiles.relationship")}
-            className="w-full rounded-xl border border-line-strong bg-surface px-3 py-2 text-sm text-ink focus:border-pine-400 focus:outline-none focus:ring-2 focus:ring-pine-100"
+            className="w-full rounded-xl border border-line-control bg-surface px-3 py-2 text-sm text-ink focus:border-primary-text"
           >
             {RELATIONSHIPS.map((r) => (
               <option key={r} value={r}>
@@ -154,15 +154,15 @@ export default function ProfilesPage() {
             aria-label={t("enrichment.profiles.dob")}
             value={newDob}
             onChange={(e) => setNewDob(e.target.value)}
-            className="w-full rounded-xl border border-line-strong bg-surface px-3 py-2 text-sm text-ink placeholder:text-ink-faint focus:border-pine-400 focus:outline-none focus:ring-2 focus:ring-pine-100"
+            className="w-full rounded-xl border border-line-control bg-surface px-3 py-2 text-sm text-ink placeholder:text-ink-faint focus:border-primary-text"
           />
           <select
             value={newSex}
             onChange={(e) => setNewSex(e.target.value)}
             aria-label={t("enrichment.profiles.sex")}
-            className="w-full rounded-xl border border-line-strong bg-surface px-3 py-2 text-sm text-ink focus:border-pine-400 focus:outline-none focus:ring-2 focus:ring-pine-100"
+            className="w-full rounded-xl border border-line-control bg-surface px-3 py-2 text-sm text-ink focus:border-primary-text"
           >
-            <option value="">—</option>
+            <option value="">·</option>
             <option value="M">M</option>
             <option value="F">F</option>
             <option value="other">{t("enrichment.profiles.other")}</option>

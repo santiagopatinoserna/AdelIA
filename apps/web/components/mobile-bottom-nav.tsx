@@ -90,7 +90,7 @@ export function MobileBottomNav() {
       data-nav-lock
       data-locked={recording ? "" : undefined}
       hidden={keyboard}
-      className="fixed inset-x-0 bottom-0 z-30 border-t border-line/70 bg-canvas/95 pb-[env(safe-area-inset-bottom)] backdrop-blur-md md:hidden"
+      className="fixed inset-x-0 bottom-0 z-30 border-t border-line bg-surface-3/95 pb-[env(safe-area-inset-bottom)] backdrop-blur-md md:hidden"
     >
       <div className="flex h-14 items-stretch justify-around">
         {items.map((it) => {
@@ -101,7 +101,7 @@ export function MobileBottomNav() {
               href={it.href}
               aria-current={active ? "page" : undefined}
               className={`flex min-w-0 flex-1 flex-col items-center justify-center gap-0.5 ${
-                active ? "text-pine-700" : "text-ink-faint"
+                active ? "text-primary-text" : "text-ink-faint"
               }`}
             >
               <it.icon className="h-5 w-5" strokeWidth={active ? 2.2 : 2} />

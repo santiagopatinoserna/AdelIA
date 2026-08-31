@@ -7,6 +7,7 @@ import { CardRenderer, type CardActionHandler } from "./cards/card-renderer";
 import { AgentInput } from "./agent-input";
 import { ProfileSwitcher } from "./profile-switcher";
 import { CapabilityShowcase } from "@/components/capability-showcase";
+import { GrowthMark, useGrowthMarkLabel } from "./growth-mark";
 import { useActiveProfile } from "@/lib/profile-context";
 import { useRouter } from "@/lib/navigation";
 
@@ -19,6 +20,7 @@ export function AgentCanvas({ locale, userId }: { locale: string; userId: string
   const t = useTranslations("agent");
   const router = useRouter();
   const { activeId } = useActiveProfile();
+  const growthMark = useGrowthMarkLabel();
   const [messages, setMessages] = useState<Msg[]>([]);
   const [cards, setCards] = useState<AgentCard[]>([]);
   const [busy, setBusy] = useState(false);
@@ -106,17 +108,44 @@ export function AgentCanvas({ locale, userId }: { locale: string; userId: string
       {/* Chat column — the page's main landmark */}
       <main className="flex min-h-0 flex-1 flex-col">
         <ProfileSwitcher />
-        <div className="min-h-0 flex-1 overflow-y-auto p-3">
-          {messages.length === 0 && <h1 className="ad-rise font-display text-lg font-normal text-ink-soft">{t("greeting")}</h1>}
+        {/* Empty state on md+: the greeting, the mark and the showcase are
+            the only children, so `justify-content` centres the block instead
+            of leaving 44 % of the column blank under it with nothing to
+            scroll. `safe center` and not `center`: once the content DOES
+            overflow (a short viewport), plain centring pushes the top of the
+            block out of reach, while `safe` falls back to flex-start.
+            The phone keeps the top alignment it already had. */}
+        <div
+          className={`min-h-0 flex-1 overflow-y-auto p-3 ${
+            messages.length === 0
+              ? "md:flex md:flex-col md:[justify-content:safe_center]"
+              : ""
+          }`}
+        >
+          {/* The one headline of this screen. Everything below it (the
+              showcase section title included) is mono, small caps and amber:
+              two serif headlines competing was the reason nothing led. */}
+          {messages.length === 0 && (
+            <h1 className="ad-rise font-display text-[1.375rem] leading-[1.25] text-ink">{t("greeting")}</h1>
+          )}
+          {/* The height mark: the only warm signal of the panel, a real name
+              and a real age, so it cannot read as stock. It is a mark beside
+              the label, NOT a section rule (the full-width hairline it used to
+              draw doubled the header's own rule and separated the greeting
+              from the content it introduces). Nothing to render when the
+              profile has no date of birth. */}
+          {messages.length === 0 && growthMark && <GrowthMark label={growthMark} />}
           {/* Capability showcase: an empty canvas tells a new mom nothing.
-              Eight concrete doors into the product (one per real capability),
-              shown on every login; "hide for now" lasts one session for this
-              user on this tab. The "ask" card opens /dashboard/chat (the
-              path that answers with citations), not this canvas. */}
+              Seven concrete doors into the product with three visual weights
+              (three first-day rows, four second-week chips; "Ajustes" stays a
+              tab of the bottom bar instead of being repeated here), shown on
+              every login; "hide for now" lasts one session for this user on
+              this tab. The "ask" row opens /dashboard/chat (the path that
+              answers with citations), not this canvas. */}
           {messages.length === 0 && <CapabilityShowcase locale={locale} userId={userId} />}
           {messages.map((m, i) => (
             <div key={i} data-testid="agent-message" data-role={m.role} className={`my-2 ${m.role === "user" ? "text-right" : ""}`}>
-              <span className={`inline-block rounded-lg px-3 py-2 ${m.role === "user" ? "bg-pine-100" : "bg-surface-2"}`}>
+              <span className={`inline-block rounded-lg px-3 py-2 ${m.role === "user" ? "bg-primary-tint" : "bg-surface-2"}`}>
                 {m.content || (busy && m.role === "assistant" ? t("thinking") : "")}
               </span>
             </div>
@@ -129,7 +158,11 @@ export function AgentCanvas({ locale, userId }: { locale: string; userId: string
         <AgentInput locale={locale} disabled={busy} onStop={() => abortRef.current?.abort()}
                     onSubmit={(text) => void drive({ message: text })} />
       </main>
-      {/* Desktop: card rail beside the chat */}
+      {/* Desktop: card rail beside the chat. It is rendered unconditionally on
+          purpose: gating it on `cards.length` moves 320 px of layout the
+          moment getSuggestions resolves (measured: the same card 373 px wide
+          before the answer, 266 px after), and the API always returns at least
+          one card, so the gate would only ever be a flicker. */}
       <aside
         aria-label={t("suggestionsTitle")}
         className="hidden w-80 border-l border-line md:flex md:flex-col"

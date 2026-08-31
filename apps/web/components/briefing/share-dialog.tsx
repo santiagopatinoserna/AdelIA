@@ -72,7 +72,7 @@ export function ShareDialog({ briefingId, onClose }: Props) {
 
   return (
     <div
-      className="fixed inset-0 z-50 flex items-center justify-center bg-pine-900/50 p-4 backdrop-blur-sm"
+      className="fixed inset-0 z-50 flex items-center justify-center bg-scrim p-4 backdrop-blur-sm"
       onClick={onClose}
     >
       <div
@@ -80,11 +80,11 @@ export function ShareDialog({ briefingId, onClose }: Props) {
         role="dialog"
         aria-modal="true"
         onClick={(e) => e.stopPropagation()}
-        className="ad-card w-full max-w-lg p-6 shadow-glow"
+        className="ad-card ad-elevated w-full max-w-lg p-6 shadow-glow"
       >
         <div className="mb-4 flex items-center justify-between">
-          <h2 className="flex items-center gap-2 text-lg text-pine-900">
-            <Share2 className="h-4 w-4 text-pine-500" strokeWidth={2} />
+          <h2 className="flex items-center gap-2 text-lg text-ink">
+            <Share2 className="h-4 w-4 text-primary-text" strokeWidth={2} />
             {t("share.title")}
           </h2>
           <button
@@ -98,14 +98,14 @@ export function ShareDialog({ briefingId, onClose }: Props) {
         </div>
 
         {error && (
-          <div className="mb-3 rounded-lg border border-clay-100 bg-clay-50 p-2 text-sm text-clay-700">
+          <div className="mb-3 rounded-lg border border-error-tint-line bg-error-tint p-2 text-sm text-error-text">
             {error}
           </div>
         )}
 
         {!link ? (
           <>
-            <p className="mb-4 rounded-xl border border-honey-200 bg-honey-100/50 p-3 text-sm font-medium leading-relaxed text-ink">
+            <p className="mb-4 rounded-xl border border-accent-tint-line bg-accent-tint/50 p-3 text-sm font-medium leading-relaxed text-ink">
               {t("share.privacyNotice")}
             </p>
             <div className="mb-4">
@@ -113,7 +113,7 @@ export function ShareDialog({ briefingId, onClose }: Props) {
               <select
                 value={ttl}
                 onChange={(e) => setTtl(Number(e.target.value))}
-                className="mt-1.5 w-full rounded-xl border border-line-strong bg-surface px-3 py-2 text-sm text-ink focus:border-pine-400 focus:outline-none focus:ring-2 focus:ring-pine-100"
+                className="mt-1.5 w-full rounded-xl border border-line-control bg-surface px-3 py-2 text-sm text-ink focus:border-primary-text"
               >
                 {TTL_PRESETS.map((p) => (
                   <option key={p.hours} value={p.hours}>
@@ -128,7 +128,7 @@ export function ShareDialog({ briefingId, onClose }: Props) {
                 type="checkbox"
                 checked={ack}
                 onChange={(e) => setAck(e.target.checked)}
-                className="mt-0.5 h-4 w-4 shrink-0 accent-pine-600"
+                className="mt-0.5 h-4 w-4 shrink-0 accent-primary"
               />
               <span>{t("share.privacyAck")}</span>
             </label>
@@ -143,7 +143,7 @@ export function ShareDialog({ briefingId, onClose }: Props) {
           </>
         ) : (
           <>
-            <div className="mb-4 rounded-xl border border-pine-100 bg-pine-50 p-3">
+            <div className="mb-4 rounded-xl border border-primary-tint-line bg-primary-tint p-3">
               <div className="ad-eyebrow">
                 {t("share.activeUntil", {
                   date: new Date(link.expires_at).toLocaleString(),
@@ -177,7 +177,7 @@ export function ShareDialog({ briefingId, onClose }: Props) {
               <button
                 type="button"
                 onClick={handleRevoke}
-                className="ad-btn flex-1 border border-clay-100 px-3 py-2 text-sm text-clay-600 hover:bg-clay-50"
+                className="ad-btn flex-1 border border-error-tint-line px-3 py-2 text-sm text-error-text hover:bg-error-tint"
               >
                 <Ban className="h-4 w-4" strokeWidth={2} />
                 {t("share.revoke")}

@@ -140,7 +140,7 @@ export function CommandPalette() {
 
       {open && (
         <div
-          className="fixed inset-0 z-50 flex items-start justify-center bg-pine-900/40 p-4 pt-[16vh] backdrop-blur-sm"
+          className="fixed inset-0 z-50 flex items-start justify-center bg-scrim p-4 pt-[16vh] backdrop-blur-sm"
           onClick={() => setOpen(false)}
         >
           <div
@@ -149,7 +149,7 @@ export function CommandPalette() {
             aria-modal="true"
             aria-label={tc("label")}
             onClick={(e) => e.stopPropagation()}
-            className="ad-card w-full max-w-sm overflow-hidden p-0 shadow-glow sm:max-w-lg"
+            className="ad-card ad-elevated w-full max-w-sm overflow-hidden p-0 shadow-glow sm:max-w-lg"
           >
             <div className="flex items-center gap-2 border-b border-line px-4">
               <Search className="h-4 w-4 shrink-0 text-ink-faint" strokeWidth={2} />
@@ -160,7 +160,7 @@ export function CommandPalette() {
                 onKeyDown={onKeyDown}
                 placeholder={tc("placeholder")}
                 aria-label={tc("placeholder")}
-                className="w-full bg-transparent py-3.5 text-sm text-ink placeholder:text-ink-faint focus:outline-none"
+                className="w-full bg-transparent py-3.5 text-sm text-ink placeholder:text-ink-faint"
               />
             </div>
             <ul className="max-h-80 overflow-y-auto p-2">
@@ -177,23 +177,22 @@ export function CommandPalette() {
                             type="button"
                             onClick={() => run(c)}
                             onMouseMove={() => setSel(idx)}
-                            aria-selected={idx === sel}
                             className={`flex min-h-[44px] w-full items-center gap-3 rounded-lg px-3 py-2 text-left text-sm ${
-                              idx === sel ? "bg-pine-50 text-pine-800" : "text-ink"
+                              idx === sel ? "bg-primary-tint text-ink" : "text-ink"
                             }`}
                           >
                             <c.icon
-                              className={`h-4 w-4 shrink-0 ${idx === sel ? "text-pine-500" : "text-ink-soft"}`}
+                              className={`h-4 w-4 shrink-0 ${idx === sel ? "text-primary-text" : "text-ink-soft"}`}
                               strokeWidth={2}
                             />
                             <span className="flex-1 leading-tight">
                               <span className="block font-medium">{c.label}</span>
-                              <span className={`block text-xs ${idx === sel ? "text-pine-700" : "text-ink-soft"}`}>
+                              <span className={`block text-xs ${idx === sel ? "text-primary-text" : "text-ink-soft"}`}>
                                 {c.desc}
                               </span>
                             </span>
                             {idx === sel && (
-                              <CornerDownLeft className="h-3.5 w-3.5 shrink-0 text-pine-400" strokeWidth={2} />
+                              <CornerDownLeft className="h-3.5 w-3.5 shrink-0 text-primary-text" strokeWidth={2} />
                             )}
                           </button>
                         </li>

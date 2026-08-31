@@ -159,9 +159,9 @@ export function ServiceWorkerRegister() {
       role="status"
       aria-live="polite"
       data-testid="app-update"
-      className="ad-update-toast fixed inset-x-3 bottom-[calc(4.25rem+env(safe-area-inset-bottom))] z-40 mx-auto flex max-w-md items-center gap-2 rounded-2xl border border-line bg-surface p-2 pl-3.5 shadow-lift md:inset-x-auto md:bottom-6 md:right-6"
+      className="ad-update-toast fixed inset-x-3 bottom-[calc(4.25rem+env(safe-area-inset-bottom))] z-40 mx-auto flex max-w-md items-center gap-2 rounded-2xl border border-line-strong bg-surface-3 p-2 pl-3.5 shadow-lift md:inset-x-auto md:bottom-6 md:right-6"
     >
-      <RefreshCw className="h-4 w-4 shrink-0 text-pine-600" strokeWidth={2} />
+      <RefreshCw className="h-4 w-4 shrink-0 text-primary-text" strokeWidth={2} />
       <p className="min-w-0 flex-1 text-sm text-ink">{t("available")}</p>
       <button
         type="button"
@@ -174,7 +174,7 @@ export function ServiceWorkerRegister() {
         type="button"
         onClick={() => setDismissed(true)}
         aria-label={t("later")}
-        className="ad-btn ad-btn-ghost h-9 w-9 shrink-0 p-0"
+        className="ad-btn ad-btn-ghost ad-btn-icon shrink-0"
       >
         <X className="h-4 w-4" strokeWidth={2} />
       </button>

@@ -4,9 +4,12 @@ import { RefreshCw } from "lucide-react";
 import type { DocumentStatus } from "@/lib/api-client-browser";
 
 const styles: Record<DocumentStatus, { badge: string; dot: string }> = {
-  processing: { badge: "bg-honey-100 text-honey-700 ring-honey-200", dot: "bg-honey-500" },
-  ready: { badge: "bg-pine-50 text-pine-700 ring-pine-100", dot: "bg-pine-500" },
-  failed: { badge: "bg-clay-50 text-clay-600 ring-clay-100", dot: "bg-clay-500" },
+// "Processing" is the system working, so it takes the info role (harbor)
+// rather than borrowing amber, which now means "discover". The DOT carries
+// no text, so it uses the *-text token (3:1 on its own tint), never *-line.
+  processing: { badge: "bg-info-tint text-info-text ring-info-line", dot: "bg-info-text" },
+  ready: { badge: "bg-success-tint text-success-text ring-success-line", dot: "bg-success-text" },
+  failed: { badge: "bg-error-tint text-error-text ring-error-line", dot: "bg-error-text" },
 };
 
 export function StatusBadge({ status }: { status: DocumentStatus }) {
@@ -25,7 +28,7 @@ export function StatusBadge({ status }: { status: DocumentStatus }) {
         {label}
       </span>
       {status === "failed" && (
-        <span className="flex items-center gap-1 text-[11px] font-medium text-clay-600" role="alert">
+        <span className="flex items-center gap-1 text-[11px] font-medium text-error-text" role="alert">
           <RefreshCw className="h-3 w-3" strokeWidth={2.2} />
           {t("failedHint")}
         </span>

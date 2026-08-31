@@ -9,7 +9,7 @@ export default async function DashboardLoading() {
   return (
     <main className="mx-auto max-w-5xl px-6 py-10" aria-busy="true">
       <div className="ad-rise flex flex-col items-center pt-6 text-center">
-        <span className="inline-flex h-14 w-14 items-center justify-center rounded-2xl bg-pine-50 text-pine-500 ring-1 ring-pine-100">
+        <span className="inline-flex h-14 w-14 items-center justify-center rounded-2xl bg-primary-tint text-primary-text ring-1 ring-primary-tint-line">
           <Baby className="h-7 w-7 animate-pulse" strokeWidth={1.8} aria-hidden="true" />
         </span>
         <p className="mt-4 text-sm text-ink-soft">{t("loadingSpace")}</p>

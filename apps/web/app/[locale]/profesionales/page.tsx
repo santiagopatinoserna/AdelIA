@@ -37,12 +37,12 @@ export default function ProfessionalsPage() {
     <div className="min-h-screen">
       {/* Top bar */}
       <header className="mx-auto flex max-w-6xl items-center justify-between border-b border-line px-6 py-6">
-        <span className="font-display text-2xl font-semibold tracking-tight text-pine-900">
-          Adel<span className="text-honey-500">IA</span>
+        <span className="font-display text-2xl font-semibold tracking-tight text-ink">
+          Adel<span className="text-accent-text">IA</span>
         </span>
         <Link
           href="/"
-          className="inline-flex items-center gap-1.5 text-sm text-ink-soft transition-colors hover:text-pine-700"
+          className="inline-flex items-center gap-1.5 text-sm text-ink-soft transition-colors hover:text-primary-text-hover"
         >
           <ArrowLeft className="h-4 w-4" strokeWidth={2} />
           {t("back")}
@@ -52,7 +52,7 @@ export default function ProfessionalsPage() {
       {/* Main content */}
       <main className="mx-auto max-w-2xl space-y-8 px-6 py-12 md:py-16">
         <div>
-          <h1 className="text-balance font-display text-4xl leading-tight tracking-tight text-pine-900">
+          <h1 className="text-balance font-display text-4xl leading-tight tracking-tight text-ink">
             {t("title")}
           </h1>
           <p className="mt-6 text-lg leading-relaxed text-ink-soft">
@@ -63,7 +63,7 @@ export default function ProfessionalsPage() {
         <div className="space-y-8">
           {sections.map(([titleKey, bodyKey]) => (
             <section key={titleKey} className="ad-card p-6">
-              <h2 className="font-display text-xl font-semibold text-pine-900">
+              <h2 className="font-display text-xl font-semibold text-ink">
                 {t(titleKey)}
               </h2>
               <p className="mt-3 text-[15px] leading-relaxed text-ink">

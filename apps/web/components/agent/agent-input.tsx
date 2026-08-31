@@ -56,7 +56,7 @@ export function AgentInput({ onSubmit, onStop, disabled, locale }: {
       <textarea value={input} onChange={(e) => setInput(e.target.value)} rows={1}
         placeholder={t("placeholder")} aria-label={t("placeholder")}
         onKeyDown={(e) => { if (e.key === "Enter" && !e.shiftKey) { e.preventDefault(); submit(); } }}
-        className="ad-card max-h-32 min-h-[44px] flex-1 resize-none px-3 py-2" />
+        className="ad-field max-h-32 min-h-[44px] flex-1 resize-none px-3 py-2" />
       {micSupported && (
         <button type="button" onClick={toggleMic} aria-pressed={listening} aria-label={t("listen")}
           className={`ad-btn min-h-[44px] w-11 justify-center ${listening ? "ad-btn-accent" : "ad-btn-ghost"}`}>

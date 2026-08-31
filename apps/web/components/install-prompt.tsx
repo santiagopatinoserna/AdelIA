@@ -51,7 +51,7 @@ export function InstallGuide({ ios, onClose }: { ios: boolean; onClose: () => vo
 
   return (
     <div
-      className="fixed inset-0 z-50 flex items-end justify-center bg-pine-900/50 p-4 backdrop-blur-sm sm:items-center"
+      className="fixed inset-0 z-50 flex items-end justify-center bg-scrim p-4 backdrop-blur-sm sm:items-center"
       onClick={onClose}
     >
       <div
@@ -60,11 +60,11 @@ export function InstallGuide({ ios, onClose }: { ios: boolean; onClose: () => vo
         aria-modal="true"
         aria-labelledby="install-guide-title"
         onClick={(e) => e.stopPropagation()}
-        className="ad-card w-full max-w-md p-6 shadow-glow"
+        className="ad-card ad-elevated w-full max-w-md p-6 shadow-glow"
       >
         <div className="mb-3 flex items-start justify-between gap-3">
-          <h2 id="install-guide-title" className="flex items-center gap-2 text-lg text-pine-900">
-            <Smartphone className="h-4 w-4 shrink-0 text-pine-500" strokeWidth={2} />
+          <h2 id="install-guide-title" className="flex items-center gap-2 text-lg text-ink">
+            <Smartphone className="h-4 w-4 shrink-0 text-primary-text" strokeWidth={2} />
             {t("guideTitle")}
           </h2>
           <button
@@ -80,10 +80,10 @@ export function InstallGuide({ ios, onClose }: { ios: boolean; onClose: () => vo
         <ol className="mt-4 space-y-3">
           {steps.map((s, i) => (
             <li key={i} className="flex items-start gap-3">
-              <span className="inline-flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-pine-600 font-mono text-xs font-semibold text-[#f3f7f3]">
+              <span className="inline-flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-primary font-mono text-xs font-semibold text-on-primary">
                 {i + 1}
               </span>
-              <span className="mt-0.5 inline-flex h-6 w-6 shrink-0 items-center justify-center text-pine-600">
+              <span className="mt-0.5 inline-flex h-6 w-6 shrink-0 items-center justify-center text-primary-text">
                 <s.icon className="h-4.5 w-4.5" strokeWidth={2} />
               </span>
               <span className="text-sm leading-relaxed text-ink">{s.text}</span>
@@ -142,7 +142,7 @@ export function InstallPrompt() {
   return (
     <>
       <div className="ad-card ad-rise mb-6 flex items-center gap-3 p-4">
-        <span className="inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-pine-50 text-pine-600 ring-1 ring-pine-100">
+        <span className="inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-primary-tint text-primary-text ring-1 ring-primary-tint-line">
           <Smartphone className="h-5 w-5" strokeWidth={2} />
         </span>
         <div className="min-w-0 flex-1">
@@ -195,7 +195,7 @@ export function InstallSettingsEntry() {
       <div className="ad-eyebrow">{t("installTitle")}</div>
       <p className="mt-1.5 text-sm text-ink-soft">{t("installBody")}</p>
       {installed ? (
-        <p className="mt-3 inline-flex items-center gap-2 text-sm font-medium text-pine-700">
+        <p className="mt-3 inline-flex items-center gap-2 text-sm font-medium text-primary-text">
           <CheckCircle2 className="h-4 w-4" strokeWidth={2.2} />
           {t("installed")}
         </p>

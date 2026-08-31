@@ -34,8 +34,8 @@ function parseDiarized(text: string): Turn[] | null {
 }
 
 const SPEAKER_STYLES = [
-  "bg-pine-50 text-pine-700 ring-pine-100",
-  "bg-honey-100 text-honey-700 ring-honey-200",
+  "bg-primary-tint text-primary-text ring-primary-tint-line",
+  "bg-accent-tint text-accent-text ring-accent-tint-line",
 ];
 
 export function DocumentDetailView({
@@ -130,13 +130,13 @@ export function DocumentDetailView({
     <main className="mx-auto max-w-3xl px-6 py-12">
       <Link
         href="/dashboard"
-        className="mb-5 inline-flex items-center gap-1.5 text-sm text-ink-soft transition-colors hover:text-pine-700"
+        className="mb-5 inline-flex items-center gap-1.5 text-sm text-ink-soft transition-colors hover:text-primary-text-hover"
       >
         <ArrowLeft className="h-4 w-4" strokeWidth={2} />
         {t("title")}
       </Link>
       <div className="flex items-start justify-between gap-3">
-        <h1 className="min-w-0 truncate text-2xl text-pine-900">{title}</h1>
+        <h1 className="min-w-0 truncate text-2xl text-ink">{title}</h1>
         <StatusBadge status={doc.status} />
       </div>
       {isConsulta && (
@@ -152,8 +152,8 @@ export function DocumentDetailView({
       {/* Post-recording essence: the takeaway before the full conversation.
           Bullets come as "- " lines from the backend, rendered as a list. */}
       {isConsulta && doc.summary && (
-        <section className="mt-8 rounded-2xl border border-pine-100 bg-pine-50 p-5">
-          <h2 className="ad-eyebrow text-pine-700">{t("summaryTitle")}</h2>
+        <section className="mt-8 rounded-2xl border border-primary-tint-line bg-primary-tint p-5">
+          <h2 className="ad-eyebrow text-primary-text">{t("summaryTitle")}</h2>
           <ul className="mt-2 space-y-1.5">
             {doc.summary
               .split("\n")
@@ -161,7 +161,7 @@ export function DocumentDetailView({
               .filter(Boolean)
               .map((line, i) => (
                 <li key={i} className="flex gap-2 text-sm leading-relaxed text-ink">
-                  <span aria-hidden className="mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full bg-pine-400" />
+                  <span aria-hidden className="mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full bg-primary-text" />
                   {line}
                 </li>
               ))}
@@ -278,14 +278,14 @@ export function DocumentDetailView({
           <button
             type="button"
             onClick={() => setConfirmingDelete(true)}
-            className="ad-btn ad-btn-ghost px-3.5 py-2 text-sm text-clay-700"
+            className="ad-btn ad-btn-ghost px-3.5 py-2 text-sm text-error-text"
           >
             <Trash2 className="h-3.5 w-3.5" strokeWidth={2} />
             {t("deleteDoc")}
           </button>
         )}
         {deleteError && (
-          <p role="alert" className="text-sm text-clay-700">
+          <p role="alert" className="text-sm text-error-text">
             {t("deleteDocError")}
           </p>
         )}

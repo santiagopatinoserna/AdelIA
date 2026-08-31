@@ -31,8 +31,8 @@ export default function TrialsPage() {
 
   return (
     <main className="mx-auto max-w-3xl px-6 py-10">
-      <h1 className="flex items-center gap-2 text-2xl text-pine-900">
-        <TestTube className="h-5 w-5 text-pine-500" strokeWidth={2} />
+      <h1 className="flex items-center gap-2 text-2xl text-ink">
+        <TestTube className="h-5 w-5 text-primary-text" strokeWidth={2} />
         {t("enrichment.tabs.trials")}
       </h1>
 
@@ -43,7 +43,7 @@ export default function TrialsPage() {
           onChange={(e) => setCondition(e.target.value)}
           placeholder={t("enrichment.trials.condition")}
           aria-label={t("enrichment.trials.condition")}
-          className="flex-1 rounded-xl border border-line-strong bg-surface px-3 py-2 text-sm text-ink placeholder:text-ink-faint focus:border-pine-400 focus:outline-none focus:ring-2 focus:ring-pine-100"
+          className="flex-1 rounded-xl border border-line-control bg-surface px-3 py-2 text-sm text-ink placeholder:text-ink-faint focus:border-primary-text"
         />
         <input
           type="text"
@@ -51,7 +51,7 @@ export default function TrialsPage() {
           onChange={(e) => setCountry(e.target.value)}
           placeholder={t("enrichment.trials.country")}
           aria-label={t("enrichment.trials.country")}
-          className="w-32 rounded-xl border border-line-strong bg-surface px-3 py-2 text-sm text-ink placeholder:text-ink-faint focus:border-pine-400 focus:outline-none focus:ring-2 focus:ring-pine-100"
+          className="w-32 rounded-xl border border-line-control bg-surface px-3 py-2 text-sm text-ink placeholder:text-ink-faint focus:border-primary-text"
         />
         <button
           type="button"
@@ -70,7 +70,7 @@ export default function TrialsPage() {
       )}
 
       {error && (
-        <div role="alert" className="mt-4 rounded-xl border border-clay-100 bg-clay-50 p-3 text-sm text-clay-700">
+        <div role="alert" className="mt-4 rounded-xl border border-error-tint-line bg-error-tint p-3 text-sm text-error-text">
           {error}
         </div>
       )}
@@ -87,11 +87,11 @@ export default function TrialsPage() {
                 href={trial.url}
                 target="_blank"
                 rel="noopener"
-                className="font-medium text-pine-600 hover:text-pine-700 underline decoration-pine-200 underline-offset-2"
+                className="font-medium text-primary-text hover:text-primary-text-hover underline decoration-primary-tint-line underline-offset-2"
               >
                 {trial.title}
               </a>
-              <span className="rounded bg-pine-50 px-2 py-0.5 text-xs text-pine-700 ring-1 ring-pine-100">
+              <span className="rounded bg-primary-tint px-2 py-0.5 text-xs text-primary-text ring-1 ring-primary-tint-line">
                 {trial.status}
               </span>
             </div>
@@ -106,14 +106,14 @@ export default function TrialsPage() {
             {(trial.eligibility_age_min ||
               trial.eligibility_age_max ||
               trial.eligibility_sex) && (
-              <div className="mt-2 inline-flex flex-wrap items-center gap-2 rounded-lg bg-pine-50 px-2.5 py-1.5 text-xs text-pine-800 ring-1 ring-pine-100">
+              <div className="mt-2 inline-flex flex-wrap items-center gap-2 rounded-lg bg-primary-tint px-2.5 py-1.5 text-xs text-ink ring-1 ring-primary-tint-line">
                 <span className="font-medium">{t("enrichment.trials.whoCanJoin")}:</span>
                 {(trial.eligibility_age_min || trial.eligibility_age_max) && (
                   <span>
                     {t("enrichment.trials.ageLabel")}{" "}
-                    {trial.eligibility_age_min ?? "—"}
+                    {trial.eligibility_age_min ?? "·"}
                     {" – "}
-                    {trial.eligibility_age_max ?? "—"}
+                    {trial.eligibility_age_max ?? "·"}
                   </span>
                 )}
                 {trial.eligibility_sex && (
@@ -129,7 +129,7 @@ export default function TrialsPage() {
                 {trial.locations.slice(0, 5).map((loc, i) => (
                   <li
                     key={i}
-                    className="rounded-full bg-pine-50 px-2 py-0.5 text-xs text-pine-700 ring-1 ring-pine-100"
+                    className="rounded-full bg-primary-tint px-2 py-0.5 text-xs text-primary-text ring-1 ring-primary-tint-line"
                   >
                     {loc.city}, {loc.country}
                   </li>
