@@ -190,11 +190,22 @@ check_tree_is_deployable() {
   exit 1
 }
 
-# --- 2. Sync code (rsync, never --delete: server has its own .env.prod etc.)
+# --- 2. Sync code
+#
+# Two passes on purpose. The root pass never deletes, because /opt/adelia
+# holds files that are not in the repo and must survive (.env.prod, the
+# legacy Caddy files, deploy logs). The source directories, which have to
+# mirror the commit exactly, are synced WITH --delete: without it a file
+# deleted or moved in git lived on forever on the server, and on 31-ago-2026
+# that shipped a build failure (the dashboard sections moved into a (paid)
+# route group and Next found both the old and the new path). Excluded paths
+# are protected from --delete by rsync unless --delete-excluded is passed,
+# so node_modules and .next stay put.
+MIRRORED_DIRS=(apps scripts infra docs)
 
 sync_code() {
   local host="$1"
-  log "Syncing repo -> ${REMOTE_USER}@${host}:${REMOTE_DIR}/ (rsync, no --delete)"
+  log "Syncing repo -> ${REMOTE_USER}@${host}:${REMOTE_DIR}/ (root: no --delete)"
   rsync -az --human-readable \
     -e "ssh ${SSH_OPTS[*]}" \
     --exclude='.git' \
@@ -208,6 +219,21 @@ sync_code() {
     --exclude='.pytest_cache' \
     --exclude='.env.prod' \
     "${REPO_ROOT}/" "${REMOTE_USER}@${host}:${REMOTE_DIR}/"
+
+  local dir
+  for dir in "${MIRRORED_DIRS[@]}"; do
+    [[ -d "${REPO_ROOT}/${dir}" ]] || continue
+    log "Mirroring ${dir}/ (--delete: removals in git reach the server)"
+    rsync -az --human-readable --delete \
+      -e "ssh ${SSH_OPTS[*]}" \
+      --exclude='node_modules' \
+      --exclude='.next' \
+      --exclude='__pycache__' \
+      --exclude='.venv' \
+      --exclude='.pytest_cache' \
+      --exclude='qa-shots' \
+      "${REPO_ROOT}/${dir}/" "${REMOTE_USER}@${host}:${REMOTE_DIR}/${dir}/"
+  done
   log "Sync done."
 }
 
