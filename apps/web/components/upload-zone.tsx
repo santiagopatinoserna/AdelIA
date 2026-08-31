@@ -86,11 +86,11 @@ export function UploadZone({ locale }: { locale: string }) {
         aria-busy={busy}
         className={`ad-card rounded-2xl border-2 border-dashed px-6 py-12 text-center transition-colors sm:py-16 ${
           dragging
-            ? "border-pine-400 bg-pine-50/60"
-            : "border-line-strong bg-surface-2/60 hover:border-pine-200"
+            ? "border-primary-text bg-primary-tint/60"
+            : "border-line-control bg-surface-2/60 hover:border-primary-tint-line"
         }`}
       >
-        <span className="mx-auto inline-flex h-14 w-14 items-center justify-center rounded-2xl bg-pine-50 text-pine-400 ring-1 ring-pine-100">
+        <span className="mx-auto inline-flex h-14 w-14 items-center justify-center rounded-2xl bg-primary-tint text-primary-text ring-1 ring-primary-tint-line">
           <UploadCloud className="h-7 w-7" strokeWidth={1.8} />
         </span>
         <p className="mt-5 text-ink-soft">{dragging ? t("dropActive") : t("drop")}</p>
@@ -112,20 +112,20 @@ export function UploadZone({ locale }: { locale: string }) {
         </label>
         <p className="mt-4 text-xs text-ink-faint">{t("hint")}</p>
         <details className="mx-auto mt-3 max-w-sm text-left">
-          <summary className="cursor-pointer text-center text-xs text-pine-600 hover:text-pine-700">
+          <summary className="cursor-pointer text-center text-xs text-primary-text hover:text-primary-text-hover">
             {t("examplesToggle")}
           </summary>
           <p className="mt-2 text-center text-xs leading-relaxed text-ink-faint">{t("examples")}</p>
         </details>
         {busy && (
-          <p className="mt-4 flex items-center justify-center gap-1.5 text-honey-600" role="status">
+          <p className="mt-4 flex items-center justify-center gap-1.5 text-accent-text" role="status">
             <Loader2 className="h-4 w-4 animate-spin" strokeWidth={2.2} />
             {fileName ? `${t("uploading")} ${fileName}` : t("uploading")}
           </p>
         )}
         {done && (
           <div className="mt-4 flex flex-col items-center gap-3" role="status">
-            <p className="flex items-center gap-1.5 text-pine-600">
+            <p className="flex items-center gap-1.5 text-primary-text">
               <CheckCircle2 className="h-4 w-4" strokeWidth={2.2} />
               {t("successToast")}
             </p>
@@ -141,7 +141,7 @@ export function UploadZone({ locale }: { locale: string }) {
         {error && (
           <p
             role="alert"
-            className="mx-auto mt-4 flex max-w-sm items-start justify-center gap-1.5 text-sm text-clay-600"
+            className="mx-auto mt-4 flex max-w-sm items-start justify-center gap-1.5 text-sm text-error-text"
           >
             <AlertCircle className="mt-0.5 h-4 w-4 shrink-0" strokeWidth={2.2} />
             {error}

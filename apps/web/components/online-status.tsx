@@ -42,8 +42,8 @@ export function OnlineStatus() {
     <div
       role={online ? "status" : "alert"}
       aria-live={online ? "polite" : "assertive"}
-      className={`fixed left-1/2 top-[4.25rem] z-40 flex max-w-[92vw] -translate-x-1/2 items-center gap-2 rounded-full px-4 py-2 text-sm font-medium text-white shadow-lift ${
-        online ? "bg-pine-600" : "bg-clay-600"
+      className={`fixed left-1/2 top-[4.25rem] z-40 flex max-w-[92vw] -translate-x-1/2 items-center gap-2 rounded-full px-4 py-2 text-sm font-medium shadow-lift ${
+        online ? "bg-primary text-on-primary" : "bg-error text-on-error"
       }`}
     >
       {online ? (
@@ -56,7 +56,9 @@ export function OnlineStatus() {
           <WifiOff className="h-4 w-4 shrink-0" strokeWidth={2.2} />
           <span>
             {t("offline")}
-            <span className="font-normal text-white/85"> — {t("offlineBody")}</span>
+            {/* The label/body step is the weight, not a tone: text-on-error/85
+                measures 3,96:1 on the dark error ground. */}
+            <span className="font-normal"> · {t("offlineBody")}</span>
           </span>
         </>
       )}

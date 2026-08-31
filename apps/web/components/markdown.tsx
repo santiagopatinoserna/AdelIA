@@ -19,27 +19,27 @@ export function Markdown({ children }: { children: string }) {
           em: ({ node, ...p }) => <em className="italic" {...p} />,
           a: ({ node, ...p }) => (
             <a
-              className="font-medium text-pine-600 underline decoration-pine-200 underline-offset-2 hover:text-pine-700"
+              className="font-medium text-primary-text underline decoration-primary-tint-line underline-offset-2 hover:text-primary-text-hover"
               target="_blank"
               rel="noopener noreferrer"
               {...p}
             />
           ),
-          ul: ({ node, ...p }) => <ul className="list-disc space-y-1 pl-5 marker:text-pine-400" {...p} />,
-          ol: ({ node, ...p }) => <ol className="list-decimal space-y-1 pl-5 marker:text-pine-400 marker:font-medium" {...p} />,
+          ul: ({ node, ...p }) => <ul className="list-disc space-y-1 pl-5 marker:text-primary-text" {...p} />,
+          ol: ({ node, ...p }) => <ol className="list-decimal space-y-1 pl-5 marker:text-primary-text marker:font-medium" {...p} />,
           li: ({ node, ...p }) => <li className="leading-relaxed [&>p]:my-0" {...p} />,
-          h1: ({ node, ...p }) => <h1 className="text-[1.05rem] font-semibold text-pine-900" {...p} />,
-          h2: ({ node, ...p }) => <h2 className="text-[1rem] font-semibold text-pine-900" {...p} />,
-          h3: ({ node, ...p }) => <h3 className="text-[0.95rem] font-semibold text-pine-800" {...p} />,
+          h1: ({ node, ...p }) => <h1 className="text-[1.05rem] font-semibold text-ink" {...p} />,
+          h2: ({ node, ...p }) => <h2 className="text-[1rem] font-semibold text-ink" {...p} />,
+          h3: ({ node, ...p }) => <h3 className="text-[0.95rem] font-semibold text-ink" {...p} />,
           blockquote: ({ node, ...p }) => (
-            <blockquote className="border-l-2 border-pine-200 pl-3 italic text-ink-soft" {...p} />
+            <blockquote className="border-l-2 border-primary-tint-line pl-3 italic text-ink-soft" {...p} />
           ),
           code: ({ node, ...p }) => (
-            <code className="rounded bg-pine-50 px-1 py-0.5 font-mono text-[0.85em] text-pine-700" {...p} />
+            <code className="rounded bg-primary-tint px-1 py-0.5 font-mono text-[0.85em] text-primary-text" {...p} />
           ),
           pre: ({ node, ...p }) => (
             <pre
-              className="overflow-x-auto rounded-lg bg-pine-900 p-3 text-xs text-pine-50 [&_code]:bg-transparent [&_code]:p-0 [&_code]:text-pine-50"
+              className="overflow-x-auto rounded-lg bg-brand-band p-3 text-xs text-on-brand-band [&_code]:bg-transparent [&_code]:p-0 [&_code]:text-on-brand-band"
               {...p}
             />
           ),

@@ -24,10 +24,10 @@ export default function LocaleError({
     <main className="flex min-h-screen items-center justify-center px-6 py-16">
       {/* No ad-rise on the root: content starting at opacity 0 never reports FCP. */}
       <div className="ad-card max-w-md p-8 text-center md:p-10">
-        <span className="mx-auto inline-flex h-14 w-14 items-center justify-center rounded-2xl bg-clay-50 text-clay-600 ring-1 ring-clay-100">
+        <span className="mx-auto inline-flex h-14 w-14 items-center justify-center rounded-2xl bg-error-tint text-error-text ring-1 ring-error-tint-line">
           <AlertTriangle className="h-7 w-7" strokeWidth={1.8} />
         </span>
-        <h1 className="mt-5 text-2xl text-pine-900">{t("errorTitle")}</h1>
+        <h1 className="mt-5 text-2xl text-ink">{t("errorTitle")}</h1>
         <p className="mx-auto mt-2 max-w-sm text-sm text-ink-soft">{t("errorBody")}</p>
         <div className="mt-6 flex flex-col items-center justify-center gap-2.5 sm:flex-row">
           <button

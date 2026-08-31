@@ -44,7 +44,7 @@ export function StartTrialButton() {
         {t("startCta")}
       </button>
       {err && (
-        <p role="alert" className="mt-3 flex items-center justify-center gap-1.5 text-sm text-clay-600">
+        <p role="alert" className="mt-3 flex items-center justify-center gap-1.5 text-sm text-error-text">
           <AlertCircle className="h-4 w-4 shrink-0" strokeWidth={2.2} />
           {t("errorMsg")}
         </p>

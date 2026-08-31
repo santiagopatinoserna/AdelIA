@@ -64,7 +64,7 @@ export function ChatInput({
           placeholder={t("placeholder")}
           disabled={disabled}
           aria-label={t("placeholder")}
-          className="max-h-40 flex-1 resize-none rounded-xl border border-line-strong bg-surface px-4 py-2.5 text-base leading-relaxed text-ink placeholder:text-ink-faint focus:border-pine-400 focus:outline-none focus:ring-2 focus:ring-pine-300 disabled:bg-surface-2"
+          className="max-h-40 flex-1 resize-none rounded-xl border border-line-control bg-surface px-4 py-2.5 text-base leading-relaxed text-ink placeholder:text-ink-faint focus:border-primary-text disabled:bg-surface-2"
         />
         {disabled ? (
           <button

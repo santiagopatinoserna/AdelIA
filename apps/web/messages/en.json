@@ -56,7 +56,7 @@
       "s3Lead": "A two-voice transcript and the key points.",
       "s3Essentials": "Key points",
       "s3B1": "Temperature of 38.2 °C.",
-      "s3B2": "Give paracetamol 2.5 ml every 6 hours if above 38 °C.",
+      "s3B2": "Paracetamol if she goes above 38 °C, at the dose for her weight.",
       "s3B3": "Offer the breast and fluids.",
       "s3B4": "If no better in 48 hours, come back.",
       "s3Speakers": "Speakers: Pediatrician · Me",
@@ -134,11 +134,11 @@
     "evEyebrow": "Where every answer comes from",
     "evTitle": "Every answer is born from a study. Literally.",
     "evBody": "AdelIA doesn't answer from a black box. It retrieves and cites peer-reviewed pediatric research, and if none backs your question, it says so instead of making it up.",
-    "evStat1V": "1,936",
+    "evStat1V": "118",
     "evStat1L": "studies & guidelines indexed",
-    "evStat2V": "1,951",
+    "evStat2V": "258",
     "evStat2L": "citable passages",
-    "evStat3V": "1974–2026",
+    "evStat3V": "1980–2026",
     "evStat3L": "publication range",
     "evStat4V": "100%",
     "evStat4L": "clinical claims with a citation",
@@ -169,7 +169,7 @@
     "vsR4A": "Says so and stops",
     "vsR5L": "Corpus",
     "vsR5G": "Black box, cutoff date",
-    "vsR5A": "1,936 studies (1974–2026)",
+    "vsR5A": "118 guidelines and studies (1980–2026)",
     "prEyebrow": "How you use it",
     "prTitle": "You pick how much we handle.",
     "prT1Name": "Open Source",
@@ -203,7 +203,7 @@
     "prFootnote": "Indicative prices, in validation. The specialist review is async; live teleconsults will arrive in a higher plan.",
     "mixEyebrow": "Your baby × the science",
     "mixTitle": "Their full history, from birth: cross-checked with research.",
-    "mixBody": "AdelIA doesn't answer in the abstract. It combines every data point about your baby, from day one, with 1,936 studies to give you an answer made for them: not for “some baby”.",
+    "mixBody": "AdelIA doesn't answer in the abstract. It combines every data point about your baby, from day one, with 118 guidelines and studies to give you an answer made for them: not for “some baby”.",
     "mixTimelineLabel": "Their history · from birth",
     "mixT1Age": "At birth",
     "mixT1": "3.2 kg · 49 cm · full-term",
@@ -215,7 +215,7 @@
     "mixT4": "7.4 kg · started solids",
     "mixT5Age": "9 months",
     "mixT5": "Check-up · on track",
-    "mixAnswerLabel": "Their history × 1,936 studies",
+    "mixAnswerLabel": "Their history × 118 sources",
     "mixAnswer": "Your baby went from 3.2 kg at birth to 7.4 kg at 6 months [2]: a gain within the expected range per WHO growth curves [ev_1]. The reflux you logged at 4 months matches the physiological peak described by NASPGHAN-ESPGHAN, which improves toward the first year [ev_2].",
     "mixLegendData": "their history",
     "mixLegendEv": "cited studies",
@@ -327,6 +327,7 @@
     "example1": "My baby spits up a lot: is that normal?",
     "example2": "When should I worry about a fever?",
     "example3": "Summarize their growth curve.",
+    "example4": "How long does it take a baby to settle into daycare?",
     "stop": "Stop",
     "copy": "Copy",
     "copied": "Copied",
@@ -669,7 +670,7 @@
     "medResponse": "Response",
     "loadError": "Could not load the questionnaire.",
     "valoracionTitle": "Evidence-based assessment",
-    "valoracionLead": "Generate an assessment by cross-referencing your answers with the corpus evidence (1,936 articles), cited.",
+    "valoracionLead": "Generate an assessment by cross-referencing your answers with the corpus evidence (118 sources), cited.",
     "generateBtn": "Generate assessment",
     "generating": "Analyzing with the evidence…",
     "valoracionDisclaimer": "Indicative, with cited evidence. Not a substitute for your pediatrician's judgment.",
@@ -851,33 +852,34 @@
     "cardInsightTitle": "Insight",
     "cardDocEntities": "extracted data",
     "profileSwitch": "Profile",
-    "suggestionsTitle": "For you"
+    "suggestionsTitle": "For you",
+    "growthMarkMonths": "{name} · {months, plural, =1 {# month} other {# months}}",
+    "growthMarkDays": "{name} · {days, plural, =1 {# day} other {# days}}"
   },
   "showcase": {
-    "title": "What AdelIA can do for you",
+    "primaryEyebrow": "First steps",
+    "secondaryEyebrow": "Also",
     "hide": "Hide for now",
     "collapsed": "Examples of what AdelIA can do",
     "show": "Show",
     "cards": {
-      "record": {
-        "title": "Record the visit",
-        "example": "Keep using the cream twice a day and come back in 15 days",
-        "detail": "With the pediatrician's permission: the essentials in 3 to 6 points, and the audio is deleted after 48 h.",
-        "action": "Record"
-      },
       "ask": {
         "title": "Ask, with citations",
         "example": "Is it normal that at 13 months she only wants breast milk?",
-        "detail": "I answer citing your baby's records and dozens of pediatric guidelines and studies (daycare, feeding at 12-18 months, reflux).",
-        "action": "Ask",
-        "altLabel": "Another question:",
-        "altQuestion": "How long does it take a baby to settle into daycare?"
+        "detail": "I answer citing your baby's records and dozens of pediatric guidelines and studies.",
+        "action": "Ask"
       },
       "diary": {
         "title": "Daily diary on Telegram at 20:00",
         "example": "Two fewer feeds today and a bit of a runny nose, no fever",
-        "detail": "The bot asks how the day went; you reply in text or audio and it is filed by date in the record.",
+        "detail": "The bot asks how the day went; you reply in text or audio and it is filed by date.",
         "action": "Link Telegram"
+      },
+      "record": {
+        "title": "Record the visit",
+        "example": "Keep using the cream twice a day and come back in 15 days",
+        "detail": "With the pediatrician's consent: the essentials in 3-6 points, audio deleted after 48 h.",
+        "action": "Record"
       },
       "upload": {
         "title": "Upload a report or the health booklet",
@@ -888,7 +890,7 @@
       "briefing": {
         "title": "Briefing for the specialist",
         "example": "We see the allergist tomorrow and I want everything summed up",
-        "detail": "One page per specialty, citing the record and the evidence, ready to share with the doctor.",
+        "detail": "One page per specialty, citing the record and the evidence.",
         "action": "Create briefing"
       },
       "questionnaire": {
@@ -900,15 +902,15 @@
       "import": {
         "title": "Import what you already have",
         "example": "I want the full record from the private clinic",
-        "detail": "Apple Health, CCD, email forwarding and GDPR templates to request the record (ES, FR, US).",
+        "detail": "Apple Health, CCD, email forwarding and GDPR templates to request the record.",
         "action": "Import"
-      },
-      "settings": {
-        "title": "Your data, with you",
-        "example": "We are changing pediatrician and I want to take everything with me",
-        "detail": "Export everything as one FHIR R4 file and delete any document from its page.",
-        "action": "See settings"
       }
+    },
+    "chips": {
+      "upload": "Upload a report",
+      "briefing": "Briefing",
+      "questionnaire": "Questionnaire",
+      "import": "Import"
     }
   },
   "professionals": {

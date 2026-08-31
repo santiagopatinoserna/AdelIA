@@ -25,8 +25,8 @@ export default function SignInPage() {
     <main className="flex min-h-screen items-center justify-center px-6 py-16">
       <div className="w-full max-w-md">
         <div className="ad-card p-8 md:p-10">
-          <span className="font-display text-2xl font-semibold tracking-tight text-pine-900">
-            Adel<span className="text-honey-500">IA</span>
+          <span className="font-display text-2xl font-semibold tracking-tight text-ink">
+            Adel<span className="text-accent-text">IA</span>
           </span>
 
           {/* The entrance fade lives on the form, not on the card: the wordmark
@@ -36,10 +36,10 @@ export default function SignInPage() {
           <div className="ad-rise">
             {state.status === "sent" ? (
               <div className="mt-6">
-                <span className="inline-flex h-12 w-12 items-center justify-center rounded-2xl bg-pine-50 text-pine-600 ring-1 ring-pine-100">
+                <span className="inline-flex h-12 w-12 items-center justify-center rounded-2xl bg-primary-tint text-primary-text ring-1 ring-primary-tint-line">
                   <MailCheck className="h-6 w-6" strokeWidth={1.8} />
                 </span>
-                <h1 className="mt-4 text-2xl text-pine-900">{t("sentTitle")}</h1>
+                <h1 className="mt-4 text-2xl text-ink">{t("sentTitle")}</h1>
                 <p className="mt-2 text-sm leading-relaxed text-ink-soft">
                   {t("sentBody", { email: state.email ?? "" })}
                 </p>
@@ -60,11 +60,11 @@ export default function SignInPage() {
               </div>
             ) : (
               <>
-                <h1 className="mt-6 text-2xl text-pine-900">{t("heading")}</h1>
+                <h1 className="mt-6 text-2xl text-ink">{t("heading")}</h1>
                 <p className="mt-2 text-sm leading-relaxed text-ink-soft">{t("instr")}</p>
 
-                <p className="mt-4 flex items-center gap-1.5 text-xs text-pine-600">
-                  <ShieldCheck className="h-3.5 w-3.5 shrink-0 text-pine-500" strokeWidth={2} />
+                <p className="mt-4 flex items-center gap-1.5 text-xs text-primary-text">
+                  <ShieldCheck className="h-3.5 w-3.5 shrink-0 text-primary-text" strokeWidth={2} />
                   {t("secure")}
                 </p>
 
@@ -85,7 +85,7 @@ export default function SignInPage() {
                       autoCapitalize="off"
                       spellCheck={false}
                       placeholder={t("emailPlaceholder")}
-                      className="w-full rounded-xl border border-line-strong bg-surface py-2.5 pl-9 pr-3 text-base text-ink placeholder:text-ink-faint focus:border-pine-400 focus:outline-none focus:ring-2 focus:ring-pine-200"
+                      className="w-full rounded-xl border border-line-control bg-surface py-2.5 pl-9 pr-3 text-base text-ink placeholder:text-ink-faint focus:border-primary-text"
                     />
                   </div>
                   <button
@@ -107,7 +107,7 @@ export default function SignInPage() {
                 {state.status === "error" && (
                   <p
                     role="alert"
-                    className="mt-4 flex items-start gap-1.5 rounded-xl border border-clay-100 bg-clay-50 p-3 text-sm text-clay-700"
+                    className="mt-4 flex items-start gap-1.5 rounded-xl border border-error-tint-line bg-error-tint p-3 text-sm text-error-text"
                   >
                     <AlertCircle className="mt-0.5 h-4 w-4 shrink-0" strokeWidth={2.2} />
                     {t("errorMsg")}

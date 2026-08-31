@@ -34,7 +34,7 @@ export default async function UploadPage({
       </div>
       <Link
         href="/dashboard/consulta/grabar"
-        className="mt-6 flex items-center justify-center gap-2 text-sm text-pine-600 underline decoration-pine-200 underline-offset-2 hover:text-pine-700"
+        className="mt-6 flex items-center justify-center gap-2 text-sm text-primary-text underline decoration-primary-tint-line underline-offset-2 hover:text-primary-text-hover"
       >
         <Mic className="h-4 w-4" strokeWidth={2} />
         {tr("entryTitle")}

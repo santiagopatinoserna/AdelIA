@@ -39,8 +39,13 @@ export async function GET(_req: Request, { params }: { params: Promise<{ locale:
     start_url: "/dashboard?source=pwa",
     display: "standalone",
     orientation: "portrait",
+    // A manifest colour cannot be per scheme (there is no media syntax here),
+    // and it is only read for the Android splash and the task-switcher tile
+    // BEFORE the page paints. Both stay on the light canvas, which is also
+    // what the light `themeColor` in the locale layout declares; once the page
+    // is up, the per-scheme <meta name="theme-color"> takes over.
     background_color: "#f4f1e9",
-    theme_color: "#0a2820",
+    theme_color: "#f4f1e9",
     categories: ["health", "medical", "productivity"],
     icons: [
       { src: "/icons/icon-192.png", sizes: "192x192", type: "image/png", purpose: "any" },

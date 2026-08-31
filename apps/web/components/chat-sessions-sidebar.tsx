@@ -29,7 +29,7 @@ export function ChatSessionsSidebar({
           type="button"
           aria-label={t("closeSessions")}
           onClick={onClose}
-          className="fixed inset-0 z-20 bg-pine-900/40 backdrop-blur-sm md:hidden"
+          className="fixed inset-0 z-20 bg-scrim backdrop-blur-sm md:hidden"
         />
       )}
       <aside
@@ -55,7 +55,7 @@ export function ChatSessionsSidebar({
                   <div
                     className={`group flex items-center justify-between gap-1 rounded-lg px-3 py-2 text-sm transition-colors ${
                       activeId === s.id
-                        ? "bg-pine-50 text-pine-800 ring-1 ring-pine-100"
+                        ? "bg-primary-tint text-ink ring-1 ring-primary-tint-line"
                         : "text-ink-soft hover:bg-surface"
                     }`}
                   >
@@ -65,7 +65,7 @@ export function ChatSessionsSidebar({
                       className="flex min-w-0 flex-1 items-center gap-2 text-left"
                     >
                       <MessageSquare
-                        className={`h-3.5 w-3.5 shrink-0 ${activeId === s.id ? "text-pine-500" : "text-ink-faint"}`}
+                        className={`h-3.5 w-3.5 shrink-0 ${activeId === s.id ? "text-primary-text" : "text-ink-faint"}`}
                         strokeWidth={2}
                       />
                       <span className="truncate">{s.title}</span>
@@ -73,7 +73,7 @@ export function ChatSessionsSidebar({
                     <button
                       type="button"
                       onClick={() => onDelete(s.id)}
-                      className="ml-1 inline-flex shrink-0 rounded p-1 text-clay-500 hover:bg-clay-50 hover:text-clay-600 md:hidden md:group-hover:inline-flex"
+                      className="ml-1 inline-flex shrink-0 rounded p-1 text-error-text hover:bg-error-tint md:hidden md:group-hover:inline-flex"
                       aria-label={t("deleteSession")}
                     >
                       <Trash2 className="h-3.5 w-3.5" strokeWidth={2} />

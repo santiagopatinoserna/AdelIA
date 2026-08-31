@@ -56,32 +56,32 @@ export default async function EnrichmentDashboardPage({ params }: Props) {
 
   return (
     <main className="mx-auto max-w-5xl px-6 py-10">
-      <h1 className="text-2xl text-pine-900">{t("enrichment.title")}</h1>
+      <h1 className="text-2xl text-ink">{t("enrichment.title")}</h1>
       <p className="mt-1 text-sm text-ink-soft">{t("enrichment.subtitle")}</p>
 
       {!stats && (
-        <div role="alert" className="mt-6 rounded-xl border border-clay-100 bg-clay-50 p-3 text-sm text-clay-700">
+        <div role="alert" className="mt-6 rounded-xl border border-error-tint-line bg-error-tint p-3 text-sm text-error-text">
           {t("enrichment.coverageUnavailable")}
         </div>
       )}
 
       {/* Friendly intro — explain what this section is for, in mom language, before showing data */}
       <section className="ad-card ad-rise mt-8 p-5">
-        <p className="ad-eyebrow text-pine-600">{t("enrichment.intro.eyebrow")}</p>
-        <h2 className="mt-1 text-lg text-pine-900">{t("enrichment.intro.title")}</h2>
+        <p className="ad-eyebrow text-primary-text">{t("enrichment.intro.eyebrow")}</p>
+        <h2 className="mt-1 text-lg text-ink">{t("enrichment.intro.title")}</h2>
         <p className="mt-2 text-sm text-ink-soft">{t("enrichment.intro.body")}</p>
         <p className="mt-3 text-xs text-ink-faint">{t("enrichment.intro.reassurance")}</p>
       </section>
 
       {coverage.length > 0 && (
         <details className="mt-6 text-sm text-ink-soft">
-          <summary className="cursor-pointer text-pine-600 hover:text-pine-700">
+          <summary className="cursor-pointer text-primary-text hover:text-primary-text-hover">
             {t("enrichment.intro.coverageToggle")}
           </summary>
           <div className="mt-3 grid grid-cols-2 gap-3 md:grid-cols-5">
             {coverage.map((c) => (
               <div key={c.label} className="ad-card p-4">
-                <div className="font-display text-2xl font-semibold text-pine-700">{c.value}</div>
+                <div className="font-display text-2xl font-semibold text-primary-text">{c.value}</div>
                 <div className="mt-0.5 text-xs text-ink-soft">{c.label}</div>
               </div>
             ))}
@@ -96,10 +96,10 @@ export default async function EnrichmentDashboardPage({ params }: Props) {
             href={`/dashboard/enrichment/${tab.slug}`}
             className="ad-card ad-card-hover flex items-center gap-3 p-4"
           >
-            <span className="inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-pine-50 text-pine-600 ring-1 ring-pine-100">
+            <span className="inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-primary-tint text-primary-text ring-1 ring-primary-tint-line">
               <tab.Icon className="h-5 w-5" strokeWidth={2} />
             </span>
-            <h2 className="text-base text-pine-900">{t(`enrichment.tabs.${tab.slug}`)}</h2>
+            <h2 className="text-base text-ink">{t(`enrichment.tabs.${tab.slug}`)}</h2>
           </Link>
         ))}
       </section>

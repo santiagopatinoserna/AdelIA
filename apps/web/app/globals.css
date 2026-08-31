@@ -1,30 +1,34 @@
 @import "tailwindcss";
 
 /* ============================================================================
-   AdelIA — design system: "calidez clínica" (warm clinical / editorial health)
-   Pine-green authority + honey warmth on a warm-cream canvas. Trust, not cold.
-   Differentiator: evidence/citation treatment rendered as a first-class object.
+   AdelIA — colour system "calidez clínica", two layers.
+   Layer 1: brand ramp (pine / honey / clay / harbor). Fixed hex, identical in
+            both schemes. A colour is a colour.
+   Layer 2: roles. The ONLY scheme-aware layer. Components may only name roles;
+            naming a ramp step in a component is a dark-mode bug.
+   Dark is a scheme of its own, built on the deep pine of the brand, not a
+   filter and not black: canvas #071813, strong ink #edf3ee, never #ffffff.
+   Verified: 72 text/background pairs, 72 pass (AA 4.5 / 3.0).
+   Source of truth: 08_adelia/SPEC_DISENO_ACENTO_VIVO.md (sections 3, 4, 5).
+
+   `@theme static`: Tailwind v4 tree-shakes unused theme variables out of
+   :root. The dark blocks below only OVERRIDE, they never declare a fallback,
+   so a shaken-out light value would leave the token undefined in light mode.
+   `static` pins every role token to :root.
    ========================================================================== */
 
-@theme {
+@theme static {
   --font-display: var(--font-fraunces), Georgia, "Times New Roman", serif;
   --font-sans: var(--font-hanken), ui-sans-serif, system-ui, sans-serif;
   --font-mono: ui-monospace, "SF Mono", "Cascadia Code", monospace;
 
-  /* Canvas & ink */
-  --color-canvas: #f4f1e9;
-  --color-surface: #fffefb;
-  --color-surface-2: #faf7f0;
-  --color-ink: #18201b;
-  --color-ink-soft: #586059;
-  --color-ink-faint: #646b64;
-  --color-line: #e7e0d3;
-  --color-line-strong: #d8cfbd;
+  /* ---------- Layer 1: brand ramp (identical in light and dark) ---------- */
 
-  /* Pine (primary) */
+  /* Pine */
   --color-pine-50: #e9f1ec;
   --color-pine-100: #cfe3d9;
   --color-pine-200: #a9cdbd;
+  --color-pine-300: #7ecfae;   /* pine that stays legible on a dark ground */
   --color-pine-400: #2f8268;
   --color-pine-500: #1a6c55;
   --color-pine-600: #115443;
@@ -35,17 +39,113 @@
   /* Honey (accent) */
   --color-honey-100: #f6e9cf;
   --color-honey-200: #eed6a6;
+  --color-honey-300: #eec27a;  /* amber on a dark tint */
   --color-honey-400: #d99f43;
+  --color-honey-450: #e2b25f;  /* amber as text in dark */
   --color-honey-500: #c4862b;
   --color-honey-600: #a36e1f;
-  --color-honey-700: #7e5214; /* AA text on cream (≥4.5:1) — honey-600 is decorative only */
+  --color-honey-700: #7e5214;
 
-  /* Clay (alarm / red-flag) */
+  /* Clay (alarm) */
   --color-clay-50: #f8e9e4;
   --color-clay-100: #f1d3c9;
+  --color-clay-300: #f0a48d;   /* error text that reads on a dark ground */
+  --color-clay-400: #b25a41;
   --color-clay-500: #b8402a;
   --color-clay-600: #973020;
   --color-clay-700: #7a2616;
+
+  /* Harbor (info). Muted blue-green: exists so "the system is working" never
+     has to borrow pine's "done" nor honey's "discover". */
+  --color-harbor-100: #e6eff2;
+  --color-harbor-300: #8ecadd;
+  --color-harbor-500: #3f7c8f;
+  --color-harbor-600: #2f6a7c;
+  --color-harbor-700: #17505f;
+  --color-harbor-900: #153d49;
+
+  /* ---------- Layer 2: roles. LIGHT scheme values ------------------------ */
+
+  /* Surfaces */
+  --color-canvas: #f4f1e9;
+  --color-surface: #fffefb;
+  --color-surface-2: #faf7f0;
+  --color-surface-3: #ffffff;
+  --color-scrim: rgb(24 32 27 / 0.45);
+
+  /* Ink */
+  --color-ink: #18201b;
+  --color-ink-soft: #586059;
+  --color-ink-faint: #646b64;
+  --color-on-primary: #eef3ef;
+  --color-on-accent: #231a08;
+  --color-on-error: #fdf1ee;
+
+  /* Lines */
+  --color-line: #e7e0d3;
+  --color-line-strong: #cfc4ae;
+  --color-line-control: #6b8478;
+
+  /* Primary, pine: the colour of ACTING */
+  --color-primary: #115443;
+  --color-primary-hover: #0d4234;
+  --color-primary-active: #0b3429;
+  --color-primary-line: #0b3429;
+  --color-primary-text: #115443;
+  --color-primary-text-hover: #0d4234;
+  --color-primary-tint: #e9f1ec;
+  --color-primary-tint-line: #cfe3d9;
+  --color-on-primary-tint: #115443;
+
+  /* Accent, honey: the colour of DISCOVERING */
+  --color-accent: #d99f43;
+  --color-accent-hover: #c4862b;
+  --color-accent-line: #a36e1f;
+  --color-accent-text: #7e5214;
+  /* One step darker than accent-text, so the amber action of the panel gets
+     the same hover step its two pine siblings have (--color-primary-text ->
+     --color-primary-text-hover). #7e5214 is already the darkest honey of the
+     ramp, so this one is not a ramp step. */
+  --color-accent-text-hover: #5f3d0f;
+  --color-accent-tint: #f6e9cf;
+  --color-accent-tint-line: #eed6a6;
+  --color-on-accent-tint: #7e5214;
+
+  /* Focus: two-tone ring */
+  --color-focus: #a36e1f;
+  --color-focus-contrast: #0b1a14;
+  --color-focus-halo: rgb(163 110 31 / 0.26);
+
+  /* Semantics */
+  --color-success-text: #115443;
+  --color-success-tint: #e9f1ec;
+  --color-success-line: #cfe3d9;
+  --color-warning-text: #7e5214;
+  --color-warning-tint: #f6e9cf;
+  --color-warning-line: #a36e1f;
+  --color-error: #973020;
+  --color-error-text: #7a2616;
+  --color-error-tint: #f8e9e4;
+  --color-error-line: #973020;
+  /* Decorative hairline of an error/alert box: it sits ON the error tint and
+     identifies nothing on its own (the tint does), so no 1.4.11 threshold. */
+  --color-error-tint-line: #f1d3c9;
+  --color-info-text: #17505f;
+  --color-info-tint: #e6eff2;
+  --color-info-line: #2f6a7c;
+
+  /* The landing's deep pine band. Dark in BOTH schemes: in dark it steps down
+     to surface-2 so it stays a band and never becomes the brightest thing. */
+  --color-brand-band: #0a2820;
+  --color-brand-band-line: #0b3429;
+  --color-on-brand-band: #eef3ef;
+  --color-on-brand-band-soft: #cfe3d9;
+  --color-on-brand-band-accent: #d99f43;
+
+  /* Body atmosphere, per scheme */
+  --ad-wash-1: rgb(26 108 85 / 0.07);
+  --ad-wash-2: rgb(196 134 43 / 0.08);
+  --ad-wash-3: rgb(17 84 67 / 0.06);
 
   --radius-sm: 0.5rem;
   --radius: 0.875rem;
@@ -57,23 +157,197 @@
   --shadow-glow: 0 0 0 1px rgb(17 84 67 / 0.08), 0 24px 60px -24px rgb(11 52 41 / 0.30);
 
   --ease-out-soft: cubic-bezier(0.16, 1, 0.3, 1);
+
+  /* Touch height. One value, and no control below it: a hierarchy of three
+     sizes was declared here and never applied to anything, which is worse
+     than not having one (.ad-btn-sm / .ad-btn-lg had zero call sites). */
+  --tap-md: 2.75rem;  /* 44 px. Every control. */
+}
+
+/* ============================== DARK SCHEME ================================
+   Applied on system preference unless the reader has explicitly chosen light,
+   and always when they have chosen dark. The switcher itself is not shipped
+   yet: the tokens are ready for it (localStorage key `adelia-theme`, read by
+   the inline script in app/[locale]/layout.tsx).
+   ========================================================================= */
+
+:root { color-scheme: light; }
+:root[data-theme="light"] { color-scheme: light; }
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) { color-scheme: dark; }
+}
+:root[data-theme="dark"] { color-scheme: dark; }
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --color-canvas: #071813;
+    --color-surface: #102821;
+    --color-surface-2: #17332b;
+    --color-surface-3: #1f4036;
+    --color-scrim: rgb(2 8 6 / 0.72);
+
+    --color-ink: #edf3ee;
+    --color-ink-soft: #b6c7bd;
+    --color-ink-faint: #9dafa4;
+    --color-on-primary: #edf3ee;
+    --color-on-accent: #1b1205;
+    --color-on-error: #edf3ee;
+
+    --color-line: #2b5145;
+    --color-line-strong: #3d6a5c;
+    /* Spec section 4.3 proposed #477768; measured, it only reaches 2,23:1
+       against the elevated surface (#1f4036), and inputs DO live inside
+       dialogs. #5f8f80 gives 3,10:1 there, 4,25:1 on a card, 4,98:1 on the
+       canvas. See scripts/check-contrast.mjs. */
+    --color-line-control: #5f8f80;
+
+    --color-primary: #1a6c55;
+    /* Spec section 4.4 proposed #2f8268; measured, the on-primary label on it
+       is 4,13:1, below AA. #2a7a60 gives 4,61:1 and still reads as a lift. */
+    --color-primary-hover: #2a7a60;
+    --color-primary-active: #115443;
+    --color-primary-line: #2f8268;
+    --color-primary-text: #7ecfae;
+    --color-primary-text-hover: #a9cdbd;
+    --color-primary-tint: #1b4a3b;
+    --color-primary-tint-line: #2f8268;
+    --color-on-primary-tint: #7ecfae;
+
+    --color-accent: #d99f43;
+    --color-accent-hover: #e2b25f;
+    --color-accent-line: #8a6a2a;
+    --color-accent-text: #e2b25f;
+    --color-accent-text-hover: #eec27a;
+    --color-accent-tint: #4d3813;
+    --color-accent-tint-line: #8a6a2a;
+    --color-on-accent-tint: #eec27a;
+
+    --color-focus: #e2b25f;
+    --color-focus-contrast: #06140f;
+    --color-focus-halo: rgb(226 178 95 / 0.30);
+
+    --color-success-text: #7ecfae;
+    --color-success-tint: #1b4a3b;
+    --color-success-line: #2f8268;
+    --color-warning-text: #eec27a;
+    --color-warning-tint: #4d3813;
+    --color-warning-line: #8a6a2a;
+    --color-error: #b8402a;
+    --color-error-text: #f0a48d;
+    --color-error-tint: #43201a;
+    --color-error-line: #b25a41;
+    --color-error-tint-line: #6d3226;
+    --color-info-text: #8ecadd;
+    --color-info-tint: #153d49;
+    --color-info-line: #3f7c8f;
+
+    --color-brand-band: #17332b;
+    --color-brand-band-line: #2b5145;
+    --color-on-brand-band: #edf3ee;
+    --color-on-brand-band-soft: #b6c7bd;
+    --color-on-brand-band-accent: #e2b25f;
+
+    --ad-wash-1: rgb(15 58 46 / 0.55);
+    --ad-wash-2: rgb(90 65 20 / 0.28);
+    --ad-wash-3: rgb(11 52 41 / 0.45);
+
+    --shadow-soft: 0 1px 2px rgb(0 0 0 / 0.35), 0 6px 16px -8px rgb(0 0 0 / 0.45);
+    --shadow-lift: 0 2px 4px rgb(0 0 0 / 0.40), 0 18px 40px -16px rgb(0 0 0 / 0.55);
+    --shadow-glow: 0 0 0 1px rgb(71 119 104 / 0.35), 0 24px 60px -24px rgb(0 0 0 / 0.60);
+  }
+}
+
+/* Same list, for the explicit switcher. The two blocks MUST declare exactly
+   the same tokens: scripts/check-dark-tokens.mjs compares them and fails the
+   build if they drift. */
+:root[data-theme="dark"] {
+  --color-canvas: #071813;
+  --color-surface: #102821;
+  --color-surface-2: #17332b;
+  --color-surface-3: #1f4036;
+  --color-scrim: rgb(2 8 6 / 0.72);
+
+  --color-ink: #edf3ee;
+  --color-ink-soft: #b6c7bd;
+  --color-ink-faint: #9dafa4;
+  --color-on-primary: #edf3ee;
+  --color-on-accent: #1b1205;
+  --color-on-error: #edf3ee;
+
+  --color-line: #2b5145;
+  --color-line-strong: #3d6a5c;
+  --color-line-control: #5f8f80;
+
+  --color-primary: #1a6c55;
+  --color-primary-hover: #2a7a60;
+  --color-primary-active: #115443;
+  --color-primary-line: #2f8268;
+  --color-primary-text: #7ecfae;
+  --color-primary-text-hover: #a9cdbd;
+  --color-primary-tint: #1b4a3b;
+  --color-primary-tint-line: #2f8268;
+  --color-on-primary-tint: #7ecfae;
+
+  --color-accent: #d99f43;
+  --color-accent-hover: #e2b25f;
+  --color-accent-line: #8a6a2a;
+  --color-accent-text: #e2b25f;
+  --color-accent-text-hover: #eec27a;
+  --color-accent-tint: #4d3813;
+  --color-accent-tint-line: #8a6a2a;
+  --color-on-accent-tint: #eec27a;
+
+  --color-focus: #e2b25f;
+  --color-focus-contrast: #06140f;
+  --color-focus-halo: rgb(226 178 95 / 0.30);
+
+  --color-success-text: #7ecfae;
+  --color-success-tint: #1b4a3b;
+  --color-success-line: #2f8268;
+  --color-warning-text: #eec27a;
+  --color-warning-tint: #4d3813;
+  --color-warning-line: #8a6a2a;
+  --color-error: #b8402a;
+  --color-error-text: #f0a48d;
+  --color-error-tint: #43201a;
+  --color-error-line: #b25a41;
+  --color-error-tint-line: #6d3226;
+  --color-info-text: #8ecadd;
+  --color-info-tint: #153d49;
+  --color-info-line: #3f7c8f;
+
+  --color-brand-band: #17332b;
+  --color-brand-band-line: #2b5145;
+  --color-on-brand-band: #edf3ee;
+  --color-on-brand-band-soft: #b6c7bd;
+  --color-on-brand-band-accent: #e2b25f;
+
+  --ad-wash-1: rgb(15 58 46 / 0.55);
+  --ad-wash-2: rgb(90 65 20 / 0.28);
+  --ad-wash-3: rgb(11 52 41 / 0.45);
+
+  --shadow-soft: 0 1px 2px rgb(0 0 0 / 0.35), 0 6px 16px -8px rgb(0 0 0 / 0.45);
+  --shadow-lift: 0 2px 4px rgb(0 0 0 / 0.40), 0 18px 40px -16px rgb(0 0 0 / 0.55);
+  --shadow-glow: 0 0 0 1px rgb(71 119 104 / 0.35), 0 24px 60px -24px rgb(0 0 0 / 0.60);
 }
 
 @layer base {
   html {
     -webkit-text-size-adjust: 100%;
     scrollbar-gutter: stable;
+    background-color: var(--color-canvas);
   }
 
   body {
     background-color: var(--color-canvas);
     color: var(--color-ink);
     font-family: var(--font-sans);
-    /* Atmospheric depth: soft pine + honey light-washes over warm cream */
+    /* Atmospheric depth. In dark the washes are deep pine and deep honey, so
+       the ground breathes without lifting the real black level. */
     background-image:
-      radial-gradient(58rem 40rem at 8% -8%, rgb(26 108 85 / 0.07), transparent 60%),
-      radial-gradient(48rem 36rem at 102% 4%, rgb(196 134 43 / 0.08), transparent 55%),
-      radial-gradient(60rem 50rem at 50% 116%, rgb(17 84 67 / 0.06), transparent 60%);
+      radial-gradient(58rem 40rem at 8% -8%, var(--ad-wash-1), transparent 60%),
+      radial-gradient(48rem 36rem at 102% 4%, var(--ad-wash-2), transparent 55%),
+      radial-gradient(60rem 50rem at 50% 116%, var(--ad-wash-3), transparent 60%);
     background-attachment: fixed;
     min-height: 100vh;
     -webkit-font-smoothing: antialiased;
@@ -84,20 +358,69 @@
     font-family: var(--font-display);
     font-weight: 540;
     letter-spacing: -0.012em;
-    color: var(--color-pine-900);
+    color: var(--color-ink);
   }
 
+  /* Selection is a discovery signal: amber, and in dark it is immediate. */
   ::selection {
-    background: var(--color-pine-100);
-    color: var(--color-pine-900);
+    background: var(--color-accent-tint);
+    color: var(--color-on-accent-tint);
   }
 
+  /* Two-tone focus ring: 2 px of the dark companion hugging the element (it
+     fills the gap outline-offset opens) and 2 px of amber outside it. That is
+     what guarantees 3:1 over ANY ground in the system, the landing's deep pine
+     band and the amber fill itself included. */
   :focus-visible {
-    outline: 2px solid var(--color-pine-400);
+    outline: 2px solid var(--color-focus);
     outline-offset: 2px;
-    box-shadow: 0 0 0 4px rgb(47 130 104 / 0.25);
+    box-shadow:
+      0 0 0 2px var(--color-focus-contrast),
+      0 0 0 6px var(--color-focus-halo);
     border-radius: 4px;
   }
+
+  /* Native controls (radio, range, progress) paint themselves with the
+     browser's accent, a blue this product does not own. color-scheme already
+     makes their chrome dark; this makes the checked state pine. */
+  input[type="radio"], input[type="range"], progress {
+    accent-color: var(--color-primary);
+  }
+
+  /* The checkbox is drawn here instead, because accent-color only reaches the
+     CHECKED state: unchecked kept appearance:auto and the UA neutral grey, the
+     one chroma-0 object on an all-pine screen, and it is the gate that keeps
+     "Grabar" disabled on the consultation recorder. No width/height on
+     purpose: every call site sizes its own box (h-5/h-4/sr-only) and a
+     utility beats this base rule. `flex: none` because it is a flex item
+     inside its <label> and was being squeezed to 17,6 px. */
+  input[type="checkbox"] {
+    appearance: none;
+    -webkit-appearance: none;
+    flex: none;
+    border: 1.5px solid var(--color-line-control);
+    border-radius: 0.375rem;
+    background: var(--color-surface-2);
+    display: inline-grid;
+    place-content: center;
+  }
+  /* Absolute size, not a percentage: as a grid item inside an auto-sized
+     implicit track a percentage width is cyclic and resolves to zero, which
+     is why the first attempt painted a pine square with no tick at all.
+     0,625rem reads on both boxes in use (h-4 = 16 px, h-5 = 20 px). */
+  input[type="checkbox"]::before {
+    content: "";
+    width: 0.625rem;
+    height: 0.625rem;
+    transform: scale(0);
+    background: var(--color-on-primary);
+    clip-path: polygon(14% 44%, 0 65%, 50% 100%, 100% 16%, 80% 0, 43% 62%);
+  }
+  input[type="checkbox"]:checked {
+    background: var(--color-primary);
+    border-color: var(--color-primary-line);
+  }
+  input[type="checkbox"]:checked::before { transform: scale(1); }
 
   ::-webkit-scrollbar { width: 11px; height: 11px; }
   ::-webkit-scrollbar-thumb {
@@ -106,11 +429,15 @@
     background-clip: content-box;
     border-radius: 99px;
   }
-  ::-webkit-scrollbar-thumb:hover { background: var(--color-pine-200); background-clip: content-box; }
+  ::-webkit-scrollbar-thumb:hover {
+    background: var(--color-line-control);
+    background-clip: content-box;
+  }
 }
 
 @layer components {
-  /* Frosted card — the workhorse surface */
+  /* The workhorse surface. In dark the 1 px border is what separates it from
+     the canvas (1,76:1); the shadow does nothing there. */
   .ad-card {
     background: var(--color-surface);
     border: 1px solid var(--color-line);
@@ -124,84 +451,218 @@
   .ad-card-hover:hover {
     transform: translateY(-2px);
     box-shadow: var(--shadow-lift);
-    border-color: var(--color-pine-200);
+    border-color: var(--color-primary-tint-line);
   }
 
-  /* Buttons */
+  /* Elevated: dialogs, sheets, the bottom bar, the profile menu. In DARK,
+     elevation goes UP in luminance (surface-3 is the lightest ground in the
+     system) because a shadow over #071813 communicates nothing. Declared after
+     .ad-card so `class="ad-card ad-elevated"` resolves to surface-3. */
+  .ad-elevated {
+    background: var(--color-surface-3);
+    border-color: var(--color-line-strong);
+  }
+
+  /* ---- Buttons. Touch height and padding fixed HERE, not at each use ---- */
   .ad-btn {
     display: inline-flex;
     align-items: center;
     justify-content: center;
     gap: 0.5rem;
+    min-height: var(--tap-md);          /* 44 px */
+    padding-inline: 1rem;               /* 16 px: the label never touches the edge */
+    padding-block: 0.5rem;
     font-weight: 560;
+    line-height: 1.2;
     border-radius: 0.75rem;
+    border: 1px solid transparent;
     transition: transform 0.18s var(--ease-out-soft), box-shadow 0.18s var(--ease-out-soft),
       background-color 0.18s var(--ease-out-soft), color 0.18s var(--ease-out-soft),
       border-color 0.18s var(--ease-out-soft);
   }
+  /* Icon-only control: same 44 px floor in BOTH axes. `.ad-btn` alone only
+     rescues the height, which is how the drawer toggle and the settings link
+     shipped at 36x44. */
+  .ad-btn-icon { min-height: var(--tap-md); min-width: var(--tap-md); padding-inline: 0; }
   .ad-btn:active { transform: translateY(1px) scale(0.99); }
-  .ad-btn:disabled {
-    cursor: not-allowed;
-    opacity: 0.5;
-    box-shadow: none;
-  }
+  .ad-btn:disabled { cursor: not-allowed; opacity: 0.5; box-shadow: none; }
   .ad-btn:disabled:active { transform: none; }
 
+  /* Primary: flat pine with a hairline. No gradient. */
   .ad-btn-primary {
-    background: linear-gradient(180deg, var(--color-pine-500), var(--color-pine-700));
-    color: #f3f7f3;
-    box-shadow: 0 1px 0 rgb(255 255 255 / 0.12) inset, var(--shadow-soft);
+    background: var(--color-primary);
+    border-color: var(--color-primary-line);
+    color: var(--color-on-primary);
+    box-shadow: var(--shadow-soft);
   }
-  .ad-btn-primary:hover { box-shadow: 0 1px 0 rgb(255 255 255 / 0.14) inset, var(--shadow-lift); }
+  .ad-btn-primary:hover { background: var(--color-primary-hover); box-shadow: var(--shadow-lift); }
+  .ad-btn-primary:active { background: var(--color-primary-active); }
 
   .ad-btn-ghost {
     background: var(--color-surface);
     color: var(--color-ink);
-    border: 1px solid var(--color-line-strong);
+    border-color: var(--color-line-control);
   }
-  .ad-btn-ghost:hover { background: var(--color-surface-2); border-color: var(--color-pine-200); }
+  .ad-btn-ghost:hover { background: var(--color-surface-2); border-color: var(--color-primary-text); }
 
-  /* Accent (honey) — secondary affordances like regenerate / stale actions */
+  /* Accent: the button of DISCOVERING ("Preguntar"). Dark ink on amber, never
+     white: white on honey-400 measured 2,30:1. The accent-line hairline is
+     mandatory, it is what satisfies 1.4.11 over cream. */
   .ad-btn-accent {
-    background: linear-gradient(180deg, var(--color-honey-400), var(--color-honey-600));
-    color: #fffdf8;
-    box-shadow: 0 1px 0 rgb(255 255 255 / 0.18) inset, var(--shadow-soft);
+    background: var(--color-accent);
+    border-color: var(--color-accent-line);
+    color: var(--color-on-accent);
+    box-shadow: var(--shadow-soft);
   }
-  .ad-btn-accent:hover { box-shadow: 0 1px 0 rgb(255 255 255 / 0.22) inset, var(--shadow-lift); }
+  .ad-btn-accent:hover { background: var(--color-accent-hover); box-shadow: var(--shadow-lift); }
 
-  /* Danger (clay) — destructive actions like delete account */
   .ad-btn-danger {
-    background: linear-gradient(180deg, var(--color-clay-500), var(--color-clay-700));
-    color: #fdf1ee;
-    box-shadow: 0 1px 0 rgb(255 255 255 / 0.10) inset, var(--shadow-soft);
+    background: var(--color-error);
+    border-color: var(--color-error-line);
+    color: var(--color-on-error);
+    box-shadow: var(--shadow-soft);
   }
-  .ad-btn-danger:hover { box-shadow: 0 1px 0 rgb(255 255 255 / 0.12) inset, var(--shadow-lift); }
+  .ad-btn-danger:hover { box-shadow: var(--shadow-lift); }
 
-  /* Evidence tag — the trust differentiator: [ev_1] */
+  /* The CTA that sits ON the deep pine band of the landing. The band is dark
+     in both schemes, so this pair is inverted in both. */
+  .ad-btn-on-band {
+    background: var(--color-on-brand-band);
+    border-color: var(--color-on-brand-band);
+    color: var(--color-brand-band);
+    box-shadow: var(--shadow-soft);
+  }
+  .ad-btn-on-band:hover { box-shadow: var(--shadow-lift); }
+
+  /* Text field. A control, so its boundary is line-control (3:1), not the
+     decorative hairline of a card. */
+  .ad-field {
+    background: var(--color-surface);
+    color: var(--color-ink);
+    border: 1px solid var(--color-line-control);
+    border-radius: var(--radius);
+  }
+  .ad-field::placeholder { color: var(--color-ink-faint); }
+  .ad-field:focus { border-color: var(--color-primary-text); }
+
+  /* Citation chip: the trust differentiator, now carrying the colour of
+     discovering. */
   .ad-ev-tag {
     font-family: var(--font-mono);
     font-size: 0.7rem;
     font-weight: 600;
     letter-spacing: 0.02em;
-    color: var(--color-pine-600);
-    background: var(--color-pine-50);
-    border: 1px solid var(--color-pine-100);
+    color: var(--color-on-accent-tint);
+    background: var(--color-accent-tint);
+    border: 1px solid var(--color-accent-line);
     border-radius: 0.4rem;
     padding: 0.05rem 0.34rem;
   }
 
+  /* Section marker. Amber, and by construction it commands less than a
+     Fraunces headline: mono, 11 px, small caps. */
   .ad-eyebrow {
     font-family: var(--font-mono);
-    font-size: 0.7rem;
+    font-size: 0.6875rem;
     font-weight: 600;
     letter-spacing: 0.16em;
     text-transform: uppercase;
-    color: var(--color-pine-600);
+    color: var(--color-accent-text);
+  }
+
+  /* Capability row of the panel home on mobile (spec section 7.2). */
+  .ad-cap-row {
+    position: relative;
+    display: grid;
+    grid-template-columns: 2.5rem 1fr 1.25rem;
+    column-gap: 0.75rem;
+    align-items: center;
+    min-height: 4.5rem;              /* 72 px, well above the 44 */
+    padding: 0.75rem;
+    border-radius: var(--radius);
+    background: var(--color-surface);
+    border: 1px solid var(--color-line);
+  }
+  .ad-cap-row:hover { border-color: var(--color-primary-tint-line); background: var(--color-surface-2); }
+
+  /* 1264 px and up (spec 7.4): the same row becomes a card. Equal heights come
+     from the CONTENT (title 1 line, example 2, detail 2), not from stretching
+     the shortest card to the tallest and pushing its action to the bottom
+     with mt-auto: that is what left a 150 px hole in card 1.
+     NOT at lg (1024): the card is 215 px wide there, where the two-line clamp
+     cuts the parent's own sentence mid-word in every locale and the title
+     overflows the card in fr. 1264 and not 1280 because `scrollbar-gutter:
+     stable` costs 11 px, so a 1280 px window is a 1269 px layout viewport.
+     Below it the full-width row list is the legible layout, and a row cannot
+     cut a word in half. The `min-[1264px]:` variants in
+     components/capability-showcase.tsx MUST match this number. */
+  @media (min-width: 1264px) {
+    .ad-cap-row {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      min-height: 0;
+      padding: 1rem;
+      border-radius: var(--radius-lg);
+      box-shadow: var(--shadow-soft);
+    }
+  }
+
+  /* Secondary capability chip (spec section 7.2). */
+  .ad-cap-chip {
+    position: relative;
+    display: grid;
+    grid-template-columns: 1.125rem 1fr;
+    column-gap: 0.5rem;
+    align-items: center;
+    min-height: var(--tap-md);       /* 44 px */
+    padding: 0.625rem 0.75rem;
+    border-radius: 0.75rem;
+    background: var(--color-surface-2);
+    border: 1px solid var(--color-line);
+    font-size: 0.8125rem;
+    line-height: 1.15;
+    font-weight: 550;
+    color: var(--color-ink);
+  }
+  .ad-cap-chip:hover { border-color: var(--color-line-control); }
+
+  /* The WHOLE chip is the click target (the link's ::after covers it), so the
+     keyboard indicator belongs to the chip, not to the 173x15 label box: on
+     the label it painted a black rectangle inside a rounded cream chip and
+     pointed at something narrower and shorter than what gets activated. No
+     border-radius here on purpose: inheriting the chip's own 0.75rem is what
+     stops the ring reading as an input field. */
+  .ad-cap-chip:has(> a:focus-visible) {
+    outline: 2px solid var(--color-focus);
+    outline-offset: 2px;
+    box-shadow:
+      0 0 0 2px var(--color-focus-contrast),
+      0 0 0 6px var(--color-focus-halo);
+  }
+  .ad-cap-chip > a:focus-visible { outline: none; box-shadow: none; }
+
+  /* Layer order is theme < base < components, so every filled variant's own
+     `box-shadow: var(--shadow-soft)` outranks the :focus-visible ring declared
+     in @layer base whatever the specificity, and the companion tone was simply
+     never painted on .ad-btn-primary / -accent / -danger / -on-band. Restate
+     the two tones here, after the :hover rules, so the ring survives
+     hover+focus too. The outline stays in base: nothing overrides it. */
+  .ad-btn:focus-visible {
+    box-shadow:
+      0 0 0 2px var(--color-focus-contrast),
+      0 0 0 6px var(--color-focus-halo);
   }
 }
 
 @layer utilities {
   .text-balance { text-wrap: balance; }
+  .ad-clamp-2 {
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+    overflow: hidden;
+  }
   .ad-grain { position: relative; }
   .ad-grain::after {
     content: "";
@@ -212,6 +673,12 @@
     mix-blend-mode: multiply;
     background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.05'/%3E%3C/svg%3E");
   }
+  /* The grain multiplies: over the dark canvas it adds nothing and dirties. */
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) .ad-grain::after { display: none; }
+  }
+  :root[data-theme="dark"] .ad-grain::after { display: none; }
+
   @keyframes ad-rise {
     from { opacity: 0; transform: translateY(14px); }
     to { opacity: 1; transform: translateY(0); }
@@ -227,9 +694,17 @@
 
 /* Consult recorder lock (lib/recording-guard): the shell's nav reads as
    unavailable while html[data-recording] is set. Taps still land, on purpose:
-   each one opens the "¿Terminar la grabación?" dialog instead of navigating. */
-html[data-recording] [data-nav-lock] {
-  opacity: 0.45;
+   each one opens the "¿Terminar la grabación?" dialog instead of navigating.
+   Because the items stay OPERABLE they are not inactive components, so 1.4.3
+   applies in full and the 10 px labels must hold 4.5:1. A composited opacity
+   on the whole bar took them to 1,87:1 (light) / 2,47:1 (dark), and holding
+   AA would need alpha 0,92, i.e. no visible dim at all. So the dim is scoped
+   to the icons, whose meaning the label beside them repeats; 0,75 keeps them
+   over 3:1 for 1.4.11 in both schemes (3,27:1 light / 3,54:1 dark) and leaves
+   every label at full contrast. scripts/check-contrast.mjs is token-level and
+   cannot see a composited alpha: these are computed by hand. */
+html[data-recording] [data-nav-lock] svg {
+  opacity: 0.75;
 }
 
 /* The "new version" notice (components/sw-register.tsx) stays out of the way

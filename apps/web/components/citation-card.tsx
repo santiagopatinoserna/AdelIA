@@ -17,7 +17,7 @@ export function CitationCard({
   return (
     <Link
       href={`/dashboard/documents/${citation.document_id}`}
-      className="inline-flex min-h-[28px] items-center gap-1 rounded-md border border-pine-200 bg-pine-50 px-2 py-1 text-xs text-pine-700 underline decoration-pine-200 underline-offset-2 transition-colors hover:border-pine-300 hover:bg-pine-100 hover:decoration-pine-400"
+      className="inline-flex min-h-[28px] items-center gap-1 rounded-md border border-primary-tint-line bg-primary-tint px-2 py-1 text-xs text-primary-text underline decoration-primary-tint-line underline-offset-2 transition-colors hover:border-line-control hover:bg-primary-tint-line hover:decoration-primary-text"
       title={citation.raw_quote.slice(0, 200)}
     >
       <span className="font-mono font-semibold no-underline">[{index}]</span>

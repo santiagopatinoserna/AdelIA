@@ -40,7 +40,7 @@ export function ChatMessageBubble({
       <div
         className={`max-w-[80%] px-4 py-3 text-sm shadow-soft ${
           isUser
-            ? "rounded-2xl rounded-br-md bg-gradient-to-b from-pine-600 to-pine-700 text-[#eef3ee]"
+            ? "rounded-2xl rounded-br-md bg-primary text-on-primary"
             : "rounded-2xl rounded-bl-md border border-line bg-surface text-ink"
         }`}
       >
@@ -50,9 +50,9 @@ export function ChatMessageBubble({
           <Markdown>{message.content}</Markdown>
         ) : (
           <span className="flex items-center gap-1 py-1" role="status" aria-label="…">
-            <span className="ad-typing-dot h-1.5 w-1.5 rounded-full bg-pine-400" />
-            <span className="ad-typing-dot h-1.5 w-1.5 rounded-full bg-pine-400" style={{ animationDelay: "150ms" }} />
-            <span className="ad-typing-dot h-1.5 w-1.5 rounded-full bg-pine-400" style={{ animationDelay: "300ms" }} />
+            <span className="ad-typing-dot h-1.5 w-1.5 rounded-full bg-primary-text" />
+            <span className="ad-typing-dot h-1.5 w-1.5 rounded-full bg-primary-text" style={{ animationDelay: "150ms" }} />
+            <span className="ad-typing-dot h-1.5 w-1.5 rounded-full bg-primary-text" style={{ animationDelay: "300ms" }} />
           </span>
         )}
         {!isUser && message.citations.length > 0 && (
@@ -70,7 +70,7 @@ export function ChatMessageBubble({
         )}
         {!isUser && evidence.length > 0 && (
           <div className="mt-3 border-t border-line pt-3">
-            <div className="ad-eyebrow flex items-center gap-1.5 !text-honey-600">
+            <div className="ad-eyebrow flex items-center gap-1.5 !text-accent-text">
               <BookMarked className="h-3 w-3" strokeWidth={2.4} />
               {t("citationSourceEvidence")}
             </div>
@@ -85,10 +85,10 @@ export function ChatMessageBubble({
           <button
             type="button"
             onClick={copy}
-            className="mt-3 inline-flex items-center gap-1 text-xs text-ink-faint transition-colors hover:text-pine-600"
+            className="mt-3 inline-flex items-center gap-1 text-xs text-ink-faint transition-colors hover:text-primary-text-hover"
           >
             {copied ? (
-              <Check className="h-3 w-3 text-pine-500" strokeWidth={2.4} />
+              <Check className="h-3 w-3 text-primary-text" strokeWidth={2.4} />
             ) : (
               <Copy className="h-3 w-3" strokeWidth={2} />
             )}

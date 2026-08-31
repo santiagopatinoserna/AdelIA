@@ -27,7 +27,7 @@ export function BriefingList({ briefings, locale }: Props) {
               <div className="flex items-center gap-2 font-medium text-ink">
                 {t(`briefing.specialty.${b.target_specialty}`)}
                 {b.is_stale && (
-                  <span className="rounded-md bg-honey-100 px-1.5 py-0.5 text-[10px] font-semibold uppercase tracking-wide text-honey-600">
+                  <span className="rounded-md bg-accent-tint px-1.5 py-0.5 text-[10px] font-semibold uppercase tracking-wide text-accent-text">
                     {t("briefing.staleBadge")}
                   </span>
                 )}

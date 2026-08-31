@@ -25,8 +25,8 @@ export function CheckInPrompt({ initialIndex }: { initialIndex: number }) {
   }
 
   return (
-    <div className="ad-card ad-rise mb-6 flex items-center gap-3 border-honey-200 bg-honey-100/40 p-4">
-      <span className="inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-honey-100 text-honey-600 ring-1 ring-honey-200">
+    <div className="ad-card ad-rise mb-6 flex items-center gap-3 border-accent-tint-line bg-accent-tint/40 p-4">
+      <span className="inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-accent-tint text-accent-text ring-1 ring-accent-tint-line">
         <Sparkles className="h-4.5 w-4.5" strokeWidth={2} />
       </span>
       <p className="flex-1 text-sm leading-relaxed text-ink">{t(prompt.key)}</p>

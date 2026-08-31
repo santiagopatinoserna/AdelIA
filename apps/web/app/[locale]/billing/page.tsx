@@ -52,28 +52,28 @@ export default async function BillingPage({
       <div className="w-full max-w-md">
         <Link
           href="/dashboard"
-          className="font-display text-2xl font-semibold tracking-tight text-pine-900"
+          className="font-display text-2xl font-semibold tracking-tight text-ink"
         >
-          Adel<span className="text-honey-500">IA</span>
+          Adel<span className="text-accent-text">IA</span>
         </Link>
 
         {checkout === "success" && (
-          <p className="ad-card ad-rise mt-5 border-pine-200 bg-pine-50/60 p-3 text-sm text-pine-800">
+          <p className="ad-card ad-rise mt-5 border-primary-tint-line bg-primary-tint/60 p-3 text-sm text-ink">
             {t("successNote")}
           </p>
         )}
         {checkout === "cancel" && !active && (
-          <p className="ad-card mt-5 border-honey-200 bg-honey-100/40 p-3 text-sm text-ink">
+          <p className="ad-card mt-5 border-accent-tint-line bg-accent-tint/40 p-3 text-sm text-ink">
             {t("canceledNote")}
           </p>
         )}
 
         {active ? (
           <div className="ad-card ad-rise mt-5 p-8">
-            <span className="inline-flex h-12 w-12 items-center justify-center rounded-2xl bg-pine-50 text-pine-600 ring-1 ring-pine-100">
+            <span className="inline-flex h-12 w-12 items-center justify-center rounded-2xl bg-primary-tint text-primary-text ring-1 ring-primary-tint-line">
               <Sparkles className="h-6 w-6" strokeWidth={1.8} />
             </span>
-            <h1 className="mt-4 text-2xl text-pine-900">{t("activeTitle")}</h1>
+            <h1 className="mt-4 text-2xl text-ink">{t("activeTitle")}</h1>
             <p className="mt-2 text-sm text-ink-soft">
               {trialEnd ? t("trialUntil", { date: fmtDate(trialEnd) }) : t("activeBody")}
             </p>
@@ -86,16 +86,16 @@ export default async function BillingPage({
           </div>
         ) : (
           <div className="ad-card ad-rise mt-5 p-8">
-            <span className="inline-flex h-12 w-12 items-center justify-center rounded-2xl bg-honey-100 text-honey-600 ring-1 ring-honey-200">
+            <span className="inline-flex h-12 w-12 items-center justify-center rounded-2xl bg-accent-tint text-accent-text ring-1 ring-accent-tint-line">
               <Baby className="h-6 w-6" strokeWidth={1.8} />
             </span>
-            <h1 className="mt-4 text-balance font-display text-3xl text-pine-900">
+            <h1 className="mt-4 text-balance font-display text-3xl text-ink">
               {t("title")}
             </h1>
             <p className="mt-2 text-sm leading-relaxed text-ink-soft">{t("subtitle")}</p>
 
             <div className="mt-5 flex items-baseline gap-2">
-              <span className="text-lg font-semibold text-pine-700">{t("priceFree")}</span>
+              <span className="text-lg font-semibold text-primary-text">{t("priceFree")}</span>
               <span className="text-sm text-ink-faint">·</span>
               <span className="text-sm text-ink-soft">{t("priceThen")}</span>
             </div>
@@ -103,7 +103,7 @@ export default async function BillingPage({
             <ul className="mt-5 space-y-2.5">
               {[t("f1"), t("f2"), t("f3"), t("f4")].map((f) => (
                 <li key={f} className="flex items-start gap-2.5 text-sm text-ink">
-                  <Check className="mt-0.5 h-4 w-4 shrink-0 text-pine-500" strokeWidth={2.4} />
+                  <Check className="mt-0.5 h-4 w-4 shrink-0 text-primary-text" strokeWidth={2.4} />
                   <span>{f}</span>
                 </li>
               ))}
@@ -114,7 +114,7 @@ export default async function BillingPage({
             </div>
 
             <p className="mt-4 text-xs leading-relaxed text-ink-faint">{t("cardNote")}</p>
-            <p className="mt-3 flex items-center gap-1.5 text-xs text-pine-600">
+            <p className="mt-3 flex items-center gap-1.5 text-xs text-primary-text">
               <ShieldCheck className="h-3.5 w-3.5 shrink-0" strokeWidth={2} />
               {t("secure")}
             </p>

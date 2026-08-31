@@ -26,7 +26,7 @@ export default function GuideViewerPage() {
   if (error) {
     return (
       <main className="mx-auto max-w-3xl px-6 py-10">
-        <div className="rounded-lg border border-clay-100 bg-clay-50 p-4 text-clay-700">{error}</div>
+        <div className="rounded-lg border border-error-tint-line bg-error-tint p-4 text-error-text">{error}</div>
       </main>
     );
   }
@@ -37,8 +37,8 @@ export default function GuideViewerPage() {
 
   return (
     <main className="mx-auto max-w-3xl px-6 py-10">
-      <h1 className="flex items-center gap-2 text-2xl text-pine-900">
-        <BookOpen className="h-5 w-5 text-pine-500" strokeWidth={2} />
+      <h1 className="flex items-center gap-2 text-2xl text-ink">
+        <BookOpen className="h-5 w-5 text-primary-text" strokeWidth={2} />
         {guide.title}
       </h1>
       <p className="mt-1 text-sm text-ink-soft">{guide.description}</p>

@@ -131,7 +131,7 @@ export function RefluxQuestionnaire() {
   if (error) {
     return (
       <div className="mx-auto max-w-2xl px-6 py-10">
-        <div role="alert" className="rounded-xl border border-clay-100 bg-clay-50 p-4 text-sm text-clay-700">
+        <div role="alert" className="rounded-xl border border-error-tint-line bg-error-tint p-4 text-sm text-error-text">
           {t("loadError")}
         </div>
       </div>
@@ -140,7 +140,7 @@ export function RefluxQuestionnaire() {
   if (!data) {
     return (
       <div className="flex min-h-[60vh] items-center justify-center">
-        <Loader2 className="h-8 w-8 animate-spin text-pine-400" strokeWidth={2} aria-label={tc("loading")} />
+        <Loader2 className="h-8 w-8 animate-spin text-primary-text" strokeWidth={2} aria-label={tc("loading")} />
       </div>
     );
   }
@@ -149,11 +149,11 @@ export function RefluxQuestionnaire() {
     <main className="mx-auto max-w-2xl px-6 py-10">
       {/* Header */}
       <div className="flex items-start gap-3">
-        <span className="inline-flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-pine-50 text-pine-600 ring-1 ring-pine-100">
+        <span className="inline-flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-primary-tint text-primary-text ring-1 ring-primary-tint-line">
           <Baby className="h-6 w-6" strokeWidth={1.9} />
         </span>
         <div>
-          <h1 className="text-2xl text-pine-900">{t("title")}</h1>
+          <h1 className="text-2xl text-ink">{t("title")}</h1>
           <p className="mt-1 text-sm text-ink-soft">{t("subtitle")}</p>
         </div>
       </div>
@@ -169,9 +169,9 @@ export function RefluxQuestionnaire() {
             type="button"
             onClick={() => setShowSummary((v) => !v)}
             aria-expanded={showSummary}
-            className="inline-flex items-center gap-1.5 text-ink-soft transition-colors hover:text-pine-700"
+            className="inline-flex items-center gap-1.5 text-ink-soft transition-colors hover:text-primary-text-hover"
           >
-            <Clock className="h-3.5 w-3.5 text-pine-400" strokeWidth={2.2} />
+            <Clock className="h-3.5 w-3.5 text-primary-text" strokeWidth={2.2} />
             <span className="font-medium">{t("progressContext")}</span>
             <span className="text-ink-faint">· {t("progress", { done, total })}</span>
             <ChevronDown
@@ -182,7 +182,7 @@ export function RefluxQuestionnaire() {
         </div>
         <div className="mt-2 h-1.5 overflow-hidden rounded-full bg-line">
           <div
-            className="h-full rounded-full bg-gradient-to-r from-pine-500 to-pine-600 transition-[width] duration-500"
+            className="h-full rounded-full bg-primary transition-[width] duration-500"
             style={{ width: `${pct}%` }}
           />
         </div>
@@ -198,9 +198,9 @@ export function RefluxQuestionnaire() {
                 className="flex w-full items-center gap-2 rounded-lg px-2 py-1.5 text-left text-xs text-ink-soft transition-colors hover:bg-surface-2"
               >
                 {s.status === "alarm" ? (
-                  <AlertTriangle className="h-3.5 w-3.5 shrink-0 text-clay-600" strokeWidth={2.4} />
+                  <AlertTriangle className="h-3.5 w-3.5 shrink-0 text-error-text" strokeWidth={2.4} />
                 ) : s.status === "done" ? (
-                  <CheckCircle2 className="h-3.5 w-3.5 shrink-0 text-pine-500" strokeWidth={2.4} />
+                  <CheckCircle2 className="h-3.5 w-3.5 shrink-0 text-primary-text" strokeWidth={2.4} />
                 ) : (
                   <Circle className="h-3.5 w-3.5 shrink-0 text-ink-faint" strokeWidth={2} />
                 )}
@@ -213,7 +213,7 @@ export function RefluxQuestionnaire() {
             <button
               type="button"
               onClick={reset}
-              className="mt-1 inline-flex items-center gap-1.5 rounded-lg border border-clay-100 bg-clay-50 px-2.5 py-1.5 text-[11px] font-medium text-clay-700 transition-colors hover:bg-clay-100"
+              className="mt-1 inline-flex items-center gap-1.5 rounded-lg border border-error-tint-line bg-error-tint px-2.5 py-1.5 text-[11px] font-medium text-error-text transition-colors hover:bg-error-tint-line"
             >
               <Trash2 className="h-3 w-3" strokeWidth={2.2} />
               {t("reset")}
@@ -230,16 +230,16 @@ export function RefluxQuestionnaire() {
             <section
               key={section.id}
               id={`section-${section.id}`}
-              className={`scroll-mt-28 ${isAlarm ? "rounded-2xl bg-clay-50/50 p-4 ring-1 ring-clay-100 sm:p-5" : ""}`}
+              className={`scroll-mt-28 ${isAlarm ? "rounded-2xl bg-error-tint/50 p-4 ring-1 ring-error-tint-line sm:p-5" : ""}`}
             >
               <h2
-                className={`flex items-center gap-2 text-lg ${isAlarm ? "text-clay-700" : "text-pine-900"}`}
+                className={`flex items-center gap-2 text-lg ${isAlarm ? "text-error-text" : "text-ink"}`}
               >
                 {isAlarm && <AlertTriangle className="h-4 w-4" strokeWidth={2.2} />}
                 {section.title}
               </h2>
               {isAlarm && (
-                <p className="mt-2 flex items-start gap-1.5 rounded-lg bg-clay-100/60 px-3 py-2 text-xs font-medium leading-relaxed text-clay-700">
+                <p className="mt-2 flex items-start gap-1.5 rounded-lg bg-error-tint/60 px-3 py-2 text-xs font-medium leading-relaxed text-error-text">
                   {t("redFlagsBanner")}
                 </p>
               )}
@@ -265,7 +265,7 @@ export function RefluxQuestionnaire() {
 
       {/* Footer: save indicator */}
       <p className="mt-10 flex items-center justify-center gap-1.5 text-xs text-ink-faint">
-        <Check className="h-3.5 w-3.5 text-pine-500" strokeWidth={2.4} />
+        <Check className="h-3.5 w-3.5 text-primary-text" strokeWidth={2.4} />
         {t("saved")}
       </p>
     </main>
@@ -288,12 +288,12 @@ function QuestionCard({
   const answered = isAnswered(value);
   return (
     <div
-      className={`ad-card p-4 transition-colors ${q.alarm ? "border-clay-100" : ""} ${answered ? "ring-1 ring-pine-100" : ""}`}
+      className={`ad-card p-4 transition-colors ${q.alarm ? "border-error-tint-line" : ""} ${answered ? "ring-1 ring-primary-tint-line" : ""}`}
     >
       <div className="flex items-start justify-between gap-3">
         <p className="font-medium text-ink">{q.text}</p>
         {q.alarm && (
-          <span className="inline-flex shrink-0 items-center gap-1 rounded-md bg-clay-50 px-1.5 py-0.5 text-[10px] font-semibold uppercase tracking-wide text-clay-600 ring-1 ring-clay-100">
+          <span className="inline-flex shrink-0 items-center gap-1 rounded-md bg-error-tint px-1.5 py-0.5 text-[10px] font-semibold uppercase tracking-wide text-error-text ring-1 ring-error-tint-line">
             <AlertTriangle className="h-2.5 w-2.5" strokeWidth={2.4} />
             {t("alarm")}
           </span>
@@ -312,7 +312,7 @@ function QuestionCard({
               value={(value as string) ?? ""}
               onChange={(e) => onChange(e.target.value)}
               aria-label={q.text}
-              className="w-full max-w-[12rem] rounded-xl border border-line-strong bg-surface px-3 py-2 text-base text-ink focus:border-pine-400 focus:outline-none focus:ring-2 focus:ring-pine-100 sm:w-40"
+              className="w-full max-w-[12rem] rounded-xl border border-line-control bg-surface px-3 py-2 text-base text-ink focus:border-primary-text sm:w-40"
             />
             {q.unit && <span className="text-sm text-ink-faint">{q.unit}</span>}
           </div>
@@ -325,7 +325,7 @@ function QuestionCard({
             onChange={(e) => onChange(e.target.value)}
             placeholder={t("answerPlaceholder")}
             aria-label={q.text}
-            className="w-full rounded-xl border border-line-strong bg-surface px-3 py-2 text-base text-ink placeholder:text-ink-faint focus:border-pine-400 focus:outline-none focus:ring-2 focus:ring-pine-100"
+            className="w-full rounded-xl border border-line-control bg-surface px-3 py-2 text-base text-ink placeholder:text-ink-faint focus:border-primary-text"
           />
         )}
 
@@ -341,7 +341,7 @@ function QuestionCard({
                   aria-label={`${q.text}: ${opt}`}
                   className="peer sr-only"
                 />
-                <span className="inline-block rounded-full border border-line-strong px-3 py-1.5 text-sm text-ink-soft transition-colors hover:border-pine-200 peer-checked:border-pine-400 peer-checked:bg-pine-50 peer-checked:font-medium peer-checked:text-pine-700 peer-focus-visible:ring-2 peer-focus-visible:ring-pine-100">
+                <span className="inline-block rounded-full border border-line-control px-3 py-1.5 text-sm text-ink-soft transition-colors hover:border-primary-tint-line peer-checked:border-primary-text peer-checked:bg-primary-tint peer-checked:font-medium peer-checked:text-primary-text peer-focus-visible:ring-2 peer-focus-visible:ring-primary-tint-line">
                   {opt}
                 </span>
               </label>
@@ -365,7 +365,7 @@ function QuestionCard({
                     aria-label={`${q.text}: ${opt}`}
                     className="peer sr-only"
                   />
-                  <span className="inline-flex items-center gap-1 rounded-full border border-line-strong px-3 py-1.5 text-sm text-ink-soft transition-colors hover:border-pine-200 peer-checked:border-pine-400 peer-checked:bg-pine-50 peer-checked:font-medium peer-checked:text-pine-700 peer-focus-visible:ring-2 peer-focus-visible:ring-pine-100">
+                  <span className="inline-flex items-center gap-1 rounded-full border border-line-control px-3 py-1.5 text-sm text-ink-soft transition-colors hover:border-primary-tint-line peer-checked:border-primary-text peer-checked:bg-primary-tint peer-checked:font-medium peer-checked:text-primary-text peer-focus-visible:ring-2 peer-focus-visible:ring-primary-tint-line">
                     {on && <Check className="h-3 w-3" strokeWidth={3} />}
                     {opt}
                   </span>
@@ -386,8 +386,8 @@ function QuestionCard({
                     type="text"
                     value={obj[f] ?? ""}
                     onChange={(e) => onChange({ ...obj, [f]: e.target.value })}
-                    aria-label={`${q.text} — ${medLabel[f] ?? f}`}
-                    className="mt-1 w-full rounded-lg border border-line-strong bg-surface px-2.5 py-1.5 text-sm text-ink focus:border-pine-400 focus:outline-none focus:ring-2 focus:ring-pine-100"
+                    aria-label={`${q.text} · ${medLabel[f] ?? f}`}
+                    className="mt-1 w-full rounded-lg border border-line-control bg-surface px-2.5 py-1.5 text-sm text-ink focus:border-primary-text"
                   />
                 </label>
               );
@@ -399,7 +399,7 @@ function QuestionCard({
       {/* Justification — the trazabilidad differentiator: every question grounded */}
       <div className="mt-3 rounded-lg bg-surface-2 px-3 py-2">
         <p className="flex gap-1.5 text-xs leading-relaxed text-ink-soft">
-          <HelpCircle className="mt-px h-3.5 w-3.5 shrink-0 text-pine-400" strokeWidth={2} />
+          <HelpCircle className="mt-px h-3.5 w-3.5 shrink-0 text-primary-text" strokeWidth={2} />
           <span>
             <span className="font-medium text-ink">{t("whyLabel")}: </span>
             {q.why}

@@ -60,7 +60,7 @@ function cited(text: string) {
       return (
         <span
           key={i}
-          className="rounded-[0.4rem] border border-pine-100 bg-pine-50 px-1.5 font-mono text-[0.7rem] font-semibold text-pine-600 align-middle"
+          className="rounded-[0.4rem] border border-primary-tint-line bg-primary-tint px-1.5 font-mono text-[0.7rem] font-semibold text-primary-text align-middle"
         >
           {part}
         </span>
@@ -140,7 +140,7 @@ export default function HomePage() {
     <span
       className={
         kind === "generated"
-          ? "rounded-full border border-pine-100 bg-pine-50 px-2 py-0.5 text-[10px] font-medium text-pine-700"
+          ? "rounded-full border border-primary-tint-line bg-primary-tint px-2 py-0.5 text-[10px] font-medium text-primary-text"
           : "rounded-full border border-line-strong bg-surface-2 px-2 py-0.5 text-[10px] font-medium text-ink-soft"
       }
     >
@@ -169,26 +169,26 @@ export default function HomePage() {
       artifact: (
         <div className="flex flex-col gap-2">
           <div className="flex justify-end">
-            <div className="inline-flex max-w-[92%] flex-col gap-1 rounded-2xl rounded-br-md bg-gradient-to-b from-pine-600 to-pine-700 px-3 py-2 text-xs text-[#eef3ee]">
+            <div className="inline-flex max-w-[92%] flex-col gap-1 rounded-2xl rounded-br-md bg-primary px-3 py-2 text-xs text-on-primary">
               <span className="flex items-center gap-2">
                 <Mic className="h-3.5 w-3.5 shrink-0" strokeWidth={2.2} />
                 <span aria-hidden className="flex items-end gap-[2px]">
                   {[3, 6, 4, 8, 5, 7, 3, 5, 6, 4, 3, 5].map((h, k) => (
-                    <span key={k} className="w-[2px] rounded-full bg-[#eef3ee]/80" style={{ height: h * 2 }} />
+                    <span key={k} className="w-[2px] rounded-full bg-on-primary/80" style={{ height: h * 2 }} />
                   ))}
                 </span>
               </span>
-              <span className="font-mono text-[10px] text-pine-100">{t("home.day.s1Voice")}</span>
+              <span className="font-mono text-[10px] text-on-primary/85">{t("home.day.s1Voice")}</span>
             </div>
           </div>
           <div className="flex justify-start">
             <div className="max-w-[95%] rounded-2xl rounded-bl-md border border-line bg-surface px-3 py-2 text-xs leading-relaxed text-ink shadow-soft">
               <span className="block">{t("home.day.s1BotHeard")}</span>
               <span className="block italic text-ink-soft">{t("home.day.s1Snippet")}</span>
-              <span className="mt-1.5 block font-medium text-pine-700">{t("home.day.s1BotSaved")}</span>
+              <span className="mt-1.5 block font-medium text-primary-text">{t("home.day.s1BotSaved")}</span>
               <span className="block text-ink-soft">
                 {t("home.day.s1BotLink")}{" "}
-                <span className="underline decoration-pine-200 underline-offset-2">{t("home.day.s1BotLinkLabel")}</span>
+                <span className="underline decoration-primary-tint-line underline-offset-2">{t("home.day.s1BotLinkLabel")}</span>
               </span>
             </div>
           </div>
@@ -205,7 +205,7 @@ export default function HomePage() {
       artifact: (
         <div>
           <div className="flex items-center gap-2 text-xs font-medium text-ink-soft">
-            <UploadCloud className="h-3.5 w-3.5 text-pine-600" strokeWidth={2.2} />
+            <UploadCloud className="h-3.5 w-3.5 text-primary-text" strokeWidth={2.2} />
             {t("home.day.s2Count")}
           </div>
           <ul className="mt-2.5 flex flex-col gap-1.5">
@@ -236,12 +236,12 @@ export default function HomePage() {
         <div>
           <div className="flex items-center justify-between gap-2">
             <span className="ad-eyebrow">{t("home.day.s3Essentials")}</span>
-            <Mic className="h-4 w-4 text-pine-500" strokeWidth={2} />
+            <Mic className="h-4 w-4 text-primary-text" strokeWidth={2} />
           </div>
           <ul className="mt-2.5 flex flex-col gap-1.5 text-xs leading-snug text-ink">
             {dayBullets.map((b) => (
               <li key={b} className="flex gap-2">
-                <span aria-hidden className="mt-[0.45em] h-1.5 w-1.5 shrink-0 rounded-full bg-pine-400" />
+                <span aria-hidden className="mt-[0.45em] h-1.5 w-1.5 shrink-0 rounded-full bg-primary-text" />
                 {b}
               </li>
             ))}
@@ -263,7 +263,7 @@ export default function HomePage() {
       artifact: (
         <div className="flex flex-col gap-2">
           <div className="flex justify-end">
-            <div className="max-w-[92%] rounded-2xl rounded-br-md bg-gradient-to-b from-pine-600 to-pine-700 px-3 py-2 text-xs leading-relaxed text-[#eef3ee]">
+            <div className="max-w-[92%] rounded-2xl rounded-br-md bg-primary px-3 py-2 text-xs leading-relaxed text-on-primary">
               {t("home.day.s4Q")}
             </div>
           </div>
@@ -288,14 +288,14 @@ export default function HomePage() {
       artifact: (
         <div>
           <div className="flex items-center justify-between gap-2">
-            <span className="ad-eyebrow !text-honey-700">{t("home.day.s5Eyebrow")}</span>
-            <FileText className="h-4 w-4 text-honey-500" strokeWidth={2} />
+            <span className="ad-eyebrow !text-accent-text">{t("home.day.s5Eyebrow")}</span>
+            <FileText className="h-4 w-4 text-accent-text" strokeWidth={2} />
           </div>
           <p className="mt-1 font-mono text-[11px] text-ink-soft">{t("home.day.s5Meta")}</p>
           <dl className="mt-2.5 flex flex-col gap-2">
             {dayBriefingRows.map((row) => (
               <div key={row.label} className="border-t border-line pt-2 first:border-t-0 first:pt-0">
-                <dt className="text-[10px] font-semibold uppercase tracking-wide text-pine-600">{row.label}</dt>
+                <dt className="text-[10px] font-semibold uppercase tracking-wide text-primary-text">{row.label}</dt>
                 <dd className="mt-0.5 text-xs leading-snug text-ink">{cited(row.body)}</dd>
               </div>
             ))}
@@ -309,8 +309,8 @@ export default function HomePage() {
     <div className="relative min-h-screen overflow-hidden">
       {/* Top bar */}
       <header className="mx-auto flex max-w-6xl items-center justify-between px-6 py-6">
-        <span className="font-display text-2xl font-semibold tracking-tight text-pine-900">
-          Adel<span className="text-honey-500">IA</span>
+        <span className="font-display text-2xl font-semibold tracking-tight text-ink">
+          Adel<span className="text-accent-text">IA</span>
         </span>
         <div className="flex items-center gap-4">
           <a
@@ -318,7 +318,7 @@ export default function HomePage() {
             target="_blank"
             rel="noreferrer"
             aria-label={t("home.footerGithub")}
-            className="hidden text-ink-soft transition-colors hover:text-pine-700 sm:inline-flex"
+            className="hidden text-ink-soft transition-colors hover:text-primary-text-hover sm:inline-flex"
           >
             <Code2 className="h-5 w-5" strokeWidth={1.9} />
           </a>
@@ -341,7 +341,7 @@ export default function HomePage() {
               <Stethoscope className="h-3.5 w-3.5" strokeWidth={2.2} />
               {t("home.eyebrow")}
             </p>
-            <h1 className="mt-5 text-balance font-display text-5xl leading-[1.04] tracking-tight text-pine-900 md:text-6xl">
+            <h1 className="mt-5 text-balance font-display text-5xl leading-[1.04] tracking-tight text-ink md:text-6xl">
               {t("home.hero")}
             </h1>
             <p className="mt-6 max-w-xl text-lg leading-relaxed text-ink-soft">
@@ -363,7 +363,7 @@ export default function HomePage() {
             <figure className="ad-card relative overflow-hidden p-6 md:p-7">
               <div
                 aria-hidden
-                className="pointer-events-none absolute -right-16 -top-16 h-48 w-48 rounded-full bg-pine-100/50 blur-2xl"
+                className="pointer-events-none absolute -right-16 -top-16 h-48 w-48 rounded-full bg-primary-tint/50 blur-2xl"
               />
               <figcaption className="ad-eyebrow flex items-center gap-2">
                 <Quote className="h-3.5 w-3.5" strokeWidth={2.2} />
@@ -392,7 +392,7 @@ export default function HomePage() {
               <Clock className="h-3.5 w-3.5" strokeWidth={2.2} />
               {t("home.day.eyebrow")}
             </p>
-            <h2 className="mt-3 text-balance font-display text-3xl leading-tight text-pine-900 md:text-4xl">
+            <h2 className="mt-3 text-balance font-display text-3xl leading-tight text-ink md:text-4xl">
               {t("home.day.title")}
             </h2>
             <p className="mt-4 text-[15px] leading-relaxed text-ink-soft">{t("home.day.intro")}</p>
@@ -409,24 +409,24 @@ export default function HomePage() {
                 <span
                   aria-hidden
                   className={`absolute -left-[1.86rem] top-1.5 h-2.5 w-2.5 rounded-full ring-2 ring-surface lg:left-0 lg:-top-[2.07rem] ${
-                    step.tone === "honey" ? "bg-honey-500" : "bg-pine-400"
+                    step.tone === "honey" ? "bg-accent-text" : "bg-primary-text"
                   }`}
                 />
                 {/* Header floor on lg keeps the five cards starting on one line even when a title wraps */}
                 <div className="lg:min-h-[11rem]">
                   <div className="flex items-center gap-2">
-                    <span className="font-mono text-xs font-semibold text-pine-700">{step.time}</span>
+                    <span className="font-mono text-xs font-semibold text-primary-text">{step.time}</span>
                     <span
                       className={`inline-flex h-6 w-6 items-center justify-center rounded-md ring-1 ${
                         step.tone === "honey"
-                          ? "bg-honey-100 text-honey-700 ring-honey-200"
-                          : "bg-pine-50 text-pine-600 ring-pine-100"
+                          ? "bg-accent-tint text-accent-text ring-accent-tint-line"
+                          : "bg-primary-tint text-primary-text ring-primary-tint-line"
                       }`}
                     >
                       <step.icon className="h-3.5 w-3.5" strokeWidth={2.2} />
                     </span>
                   </div>
-                  <h3 className="mt-2 font-display text-lg leading-snug text-pine-900">{step.title}</h3>
+                  <h3 className="mt-2 font-display text-lg leading-snug text-ink">{step.title}</h3>
                   <p className="mt-1 text-sm leading-snug text-ink-soft">{step.lead}</p>
                 </div>
                 <div className="ad-card mt-4 p-3.5">
@@ -458,10 +458,10 @@ export default function HomePage() {
                 className="ad-card ad-card-hover ad-rise p-6"
                 style={{ animationDelay: `${260 + i * 90}ms` }}
               >
-                <span className="inline-flex h-11 w-11 items-center justify-center rounded-xl bg-pine-50 text-pine-600 ring-1 ring-pine-100">
+                <span className="inline-flex h-11 w-11 items-center justify-center rounded-xl bg-primary-tint text-primary-text ring-1 ring-primary-tint-line">
                   <f.icon className="h-5 w-5" strokeWidth={2} />
                 </span>
-                <h2 className="mt-4 text-lg text-pine-900">{f.title}</h2>
+                <h2 className="mt-4 text-lg text-ink">{f.title}</h2>
                 <p className="mt-2 text-sm leading-relaxed text-ink-soft">{f.body}</p>
               </div>
             ))}
@@ -472,7 +472,7 @@ export default function HomePage() {
         <section id="how" className="mt-28 scroll-mt-24">
           <div className="mx-auto max-w-2xl text-center">
             <p className="ad-eyebrow">{t("home.modesEyebrow")}</p>
-            <h2 className="mt-3 text-balance font-display text-3xl leading-tight text-pine-900 md:text-4xl">
+            <h2 className="mt-3 text-balance font-display text-3xl leading-tight text-ink md:text-4xl">
               {t("home.modesTitle")}
             </h2>
           </div>
@@ -482,22 +482,22 @@ export default function HomePage() {
             <article className="ad-card relative overflow-hidden p-7 md:p-8">
               <span
                 aria-hidden
-                className="absolute right-6 top-6 font-display text-5xl font-semibold text-pine-50 select-none"
+                className="absolute right-6 top-6 font-display text-5xl font-semibold text-primary-tint select-none"
               >
                 A
               </span>
               <p className="ad-eyebrow">{t("home.modeALabel")}</p>
               <div className="mt-3 flex items-center gap-3">
-                <span className="inline-flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-pine-50 text-pine-600 ring-1 ring-pine-100">
+                <span className="inline-flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-primary-tint text-primary-text ring-1 ring-primary-tint-line">
                   <MessagesSquare className="h-5 w-5" strokeWidth={2} />
                 </span>
-                <h3 className="font-display text-xl text-pine-900">{t("home.modeATitle")}</h3>
+                <h3 className="font-display text-xl text-ink">{t("home.modeATitle")}</h3>
               </div>
               <p className="mt-4 text-[15px] leading-relaxed text-ink-soft">{t("home.modeABody")}</p>
               {/* Realistic chat preview — mirrors the actual product UI */}
               <div className="mt-5 flex flex-col gap-2.5">
                 <div className="flex justify-end">
-                  <div className="max-w-[85%] rounded-2xl rounded-br-md bg-gradient-to-b from-pine-600 to-pine-700 px-3.5 py-2 text-sm leading-relaxed text-[#eef3ee]">
+                  <div className="max-w-[85%] rounded-2xl rounded-br-md bg-primary px-3.5 py-2 text-sm leading-relaxed text-on-primary">
                     {t("home.modeADemoQ")}
                   </div>
                 </div>
@@ -516,29 +516,29 @@ export default function HomePage() {
             <article className="ad-card relative overflow-hidden p-7 md:p-8">
               <span
                 aria-hidden
-                className="absolute right-6 top-6 font-display text-5xl font-semibold text-honey-100 select-none"
+                className="absolute right-6 top-6 font-display text-5xl font-semibold text-accent-tint select-none"
               >
                 B
               </span>
-              <p className="ad-eyebrow !text-honey-700">{t("home.modeBLabel")}</p>
+              <p className="ad-eyebrow !text-accent-text">{t("home.modeBLabel")}</p>
               <div className="mt-3 flex items-center gap-3">
-                <span className="inline-flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-honey-100 text-honey-600 ring-1 ring-honey-200">
+                <span className="inline-flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-accent-tint text-accent-text ring-1 ring-accent-tint-line">
                   <Stethoscope className="h-5 w-5" strokeWidth={2} />
                 </span>
-                <h3 className="font-display text-xl text-pine-900">{t("home.modeBTitle")}</h3>
+                <h3 className="font-display text-xl text-ink">{t("home.modeBTitle")}</h3>
               </div>
               <p className="mt-4 text-[15px] leading-relaxed text-ink-soft">{t("home.modeBBody")}</p>
               {/* Realistic one-page briefing preview */}
               <div className="mt-5 rounded-xl border border-line bg-surface-2 p-4">
                 <div className="flex items-center justify-between gap-2">
-                  <span className="ad-eyebrow !text-honey-700">{t("home.modeBDemoTitle")}</span>
-                  <FileText className="h-4 w-4 text-honey-500" strokeWidth={2} />
+                  <span className="ad-eyebrow !text-accent-text">{t("home.modeBDemoTitle")}</span>
+                  <FileText className="h-4 w-4 text-accent-text" strokeWidth={2} />
                 </div>
                 <p className="mt-1 font-mono text-[11px] text-ink-faint">{t("home.modeBDemoMeta")}</p>
                 <dl className="mt-3 flex flex-col gap-2.5">
                   {briefingRows.map((row, i) => (
                     <div key={row.label} className="border-t border-line pt-2.5 first:border-t-0 first:pt-0">
-                      <dt className="text-[11px] font-semibold uppercase tracking-wide text-pine-600">
+                      <dt className="text-[11px] font-semibold uppercase tracking-wide text-primary-text">
                         {row.label}
                       </dt>
                       <dd className="mt-0.5 text-sm leading-snug text-ink">
@@ -560,7 +560,7 @@ export default function HomePage() {
               <Baby className="h-3.5 w-3.5" strokeWidth={2.2} />
               {t("home.mixEyebrow")}
             </p>
-            <h2 className="mt-3 text-balance font-display text-3xl leading-tight text-pine-900 md:text-4xl">
+            <h2 className="mt-3 text-balance font-display text-3xl leading-tight text-ink md:text-4xl">
               {t("home.mixTitle")}
             </h2>
             <p className="mt-4 text-[15px] leading-relaxed text-ink-soft">{t("home.mixBody")}</p>
@@ -578,9 +578,9 @@ export default function HomePage() {
                   <li key={item.age} className="relative">
                     <span
                       aria-hidden
-                      className="absolute -left-[1.43rem] top-1 h-2.5 w-2.5 rounded-full bg-pine-400 ring-2 ring-surface"
+                      className="absolute -left-[1.43rem] top-1 h-2.5 w-2.5 rounded-full bg-primary-text ring-2 ring-surface"
                     />
-                    <div className="font-mono text-xs font-semibold text-pine-700">{item.age}</div>
+                    <div className="font-mono text-xs font-semibold text-primary-text">{item.age}</div>
                     <div className="text-sm leading-snug text-ink">{item.event}</div>
                   </li>
                 ))}
@@ -588,8 +588,8 @@ export default function HomePage() {
             </div>
 
             {/* Right: history × science = personalized, cited answer */}
-            <div className="ad-card flex flex-col p-6 ring-1 ring-pine-200 md:p-7">
-              <div className="ad-eyebrow flex items-center gap-2 !text-honey-700">
+            <div className="ad-card flex flex-col p-6 ring-1 ring-primary-tint-line md:p-7">
+              <div className="ad-eyebrow flex items-center gap-2 !text-accent-text">
                 <Sparkles className="h-3.5 w-3.5" strokeWidth={2.2} />
                 {t("home.mixAnswerLabel")}
               </div>
@@ -598,7 +598,7 @@ export default function HomePage() {
               </div>
               <div className="mt-auto flex flex-wrap gap-x-5 gap-y-2 pt-5 text-xs text-ink-faint">
                 <span className="inline-flex items-center gap-1.5">
-                  <span className="rounded-[0.4rem] border border-pine-100 bg-pine-50 px-1.5 font-mono text-[0.7rem] font-semibold text-pine-600">
+                  <span className="rounded-[0.4rem] border border-primary-tint-line bg-primary-tint px-1.5 font-mono text-[0.7rem] font-semibold text-primary-text">
                     [N]
                   </span>
                   {t("home.mixLegendData")}
@@ -619,7 +619,7 @@ export default function HomePage() {
               <BookMarked className="h-3.5 w-3.5" strokeWidth={2.2} />
               {t("home.evEyebrow")}
             </p>
-            <h2 className="mt-3 text-balance font-display text-3xl leading-tight text-pine-900 md:text-4xl">
+            <h2 className="mt-3 text-balance font-display text-3xl leading-tight text-ink md:text-4xl">
               {t("home.evTitle")}
             </h2>
             <p className="mt-4 text-[15px] leading-relaxed text-ink-soft">{t("home.evBody")}</p>
@@ -627,7 +627,7 @@ export default function HomePage() {
           <div className="mt-10 grid grid-cols-2 gap-4 sm:gap-3 md:grid-cols-4">
             {evStats.map((s) => (
               <div key={s.label} className="ad-card px-4 py-5 text-center sm:px-5">
-                <div className="font-display text-2xl font-semibold text-pine-700 sm:text-3xl">{s.value}</div>
+                <div className="font-display text-2xl font-semibold text-primary-text sm:text-3xl">{s.value}</div>
                 <div className="mt-1.5 text-xs leading-snug text-ink-soft">{s.label}</div>
               </div>
             ))}
@@ -638,7 +638,7 @@ export default function HomePage() {
               {evOrgs.map((o) => (
                 <span
                   key={o}
-                  className="rounded-full border border-line-strong bg-surface px-3 py-1 font-mono text-xs text-ink-soft"
+                  className="rounded-full border border-line-control bg-surface px-3 py-1 font-mono text-xs text-ink-soft"
                 >
                   {o}
                 </span>
@@ -651,7 +651,7 @@ export default function HomePage() {
         <section className="mt-28">
           <div className="mx-auto max-w-2xl text-center">
             <p className="ad-eyebrow">{t("home.vsEyebrow")}</p>
-            <h2 className="mt-3 text-balance font-display text-3xl leading-tight text-pine-900 md:text-4xl">
+            <h2 className="mt-3 text-balance font-display text-3xl leading-tight text-ink md:text-4xl">
               {t("home.vsTitle")}
             </h2>
             <p className="mt-4 text-lg font-medium italic text-ink-soft">{t("home.vsQuestion")}</p>
@@ -659,7 +659,7 @@ export default function HomePage() {
           <div className="mt-10 grid gap-5 md:grid-cols-2">
             <div className="ad-card p-6">
               <div className="flex items-center gap-2">
-                <span className="inline-flex h-8 w-8 items-center justify-center rounded-lg bg-clay-50 text-clay-500 ring-1 ring-clay-100">
+                <span className="inline-flex h-8 w-8 items-center justify-center rounded-lg bg-error-tint text-error-text ring-1 ring-error-tint-line">
                   <X className="h-4 w-4" strokeWidth={2.4} />
                 </span>
                 <span className="text-sm font-semibold text-ink">{t("home.vsGptLabel")}</span>
@@ -667,23 +667,23 @@ export default function HomePage() {
               <p className="mt-4 rounded-2xl rounded-bl-md border border-line bg-surface-2 px-3.5 py-2.5 text-sm leading-relaxed text-ink-soft">
                 {t("home.vsGptAnswer")}
               </p>
-              <p className="mt-3 flex items-start gap-1.5 text-xs text-clay-600">
+              <p className="mt-3 flex items-start gap-1.5 text-xs text-error-text">
                 <X className="mt-0.5 h-3.5 w-3.5 shrink-0" strokeWidth={2.4} />
                 {t("home.vsGptNote")}
               </p>
             </div>
-            <div className="ad-card p-6 ring-1 ring-pine-200">
+            <div className="ad-card p-6 ring-1 ring-primary-tint-line">
               <div className="flex items-center gap-2">
-                <span className="inline-flex h-8 w-8 items-center justify-center rounded-lg bg-pine-50 text-pine-600 ring-1 ring-pine-100">
+                <span className="inline-flex h-8 w-8 items-center justify-center rounded-lg bg-primary-tint text-primary-text ring-1 ring-primary-tint-line">
                   <Check className="h-4 w-4" strokeWidth={2.4} />
                 </span>
-                <span className="text-sm font-semibold text-pine-900">{t("home.vsColAdelia")}</span>
+                <span className="text-sm font-semibold text-ink">{t("home.vsColAdelia")}</span>
               </div>
               <div className="mt-4 rounded-2xl rounded-bl-md border border-line bg-surface px-3.5 py-2.5 text-sm leading-relaxed text-ink shadow-soft">
                 {t("home.vsAdeliaAnswer")} <span className="ad-ev-tag align-middle">ev_1</span>
                 <span className="mt-2 block font-mono text-[11px] text-ink-faint">{t("home.vsAdeliaSource")}</span>
               </div>
-              <p className="mt-3 flex items-start gap-1.5 text-xs text-pine-600">
+              <p className="mt-3 flex items-start gap-1.5 text-xs text-primary-text">
                 <Check className="mt-0.5 h-3.5 w-3.5 shrink-0" strokeWidth={2.4} />
                 {t("home.vsAdeliaNote")}
               </p>
@@ -694,7 +694,7 @@ export default function HomePage() {
             <div className="hidden grid-cols-[1.4fr_1fr_1fr] border-b border-line bg-surface-2 text-[11px] font-semibold uppercase tracking-wide text-ink-faint sm:grid">
               <div className="px-4 py-2.5" />
               <div className="px-4 py-2.5 text-center">{t("home.vsColGpt")}</div>
-              <div className="px-4 py-2.5 text-center text-pine-700">{t("home.vsColAdelia")}</div>
+              <div className="px-4 py-2.5 text-center text-primary-text">{t("home.vsColAdelia")}</div>
             </div>
             {vsRows.map((r) => (
               <div
@@ -708,8 +708,8 @@ export default function HomePage() {
                   </span>
                   <span>{r.g}</span>
                 </div>
-                <div className="flex items-baseline justify-between gap-3 font-medium text-pine-700 sm:block sm:px-4 sm:py-2.5 sm:text-center">
-                  <span className="text-[11px] font-semibold uppercase tracking-wide text-pine-700 sm:hidden">
+                <div className="flex items-baseline justify-between gap-3 font-medium text-primary-text sm:block sm:px-4 sm:py-2.5 sm:text-center">
+                  <span className="text-[11px] font-semibold uppercase tracking-wide text-primary-text sm:hidden">
                     {t("home.vsColAdelia")}
                   </span>
                   <span>{r.a}</span>
@@ -721,21 +721,21 @@ export default function HomePage() {
 
         {/* Open-source / data sovereignty band */}
         <section className="mt-28">
-          <div className="ad-grain ad-card relative overflow-hidden border-pine-800 bg-pine-900 p-8 md:p-12">
+          <div className="ad-grain ad-card relative overflow-hidden border-brand-band-line bg-brand-band p-8 md:p-12">
             <div
               aria-hidden
-              className="pointer-events-none absolute -left-20 -top-24 h-64 w-64 rounded-full bg-pine-600/30 blur-3xl"
+              className="pointer-events-none absolute -left-20 -top-24 h-64 w-64 rounded-full bg-primary/30 blur-3xl"
             />
             <div
               aria-hidden
-              className="pointer-events-none absolute -bottom-28 right-0 h-64 w-64 rounded-full bg-honey-500/15 blur-3xl"
+              className="pointer-events-none absolute -bottom-28 right-0 h-64 w-64 rounded-full bg-on-brand-band-accent/15 blur-3xl"
             />
             <div className="relative max-w-2xl">
-              <p className="ad-eyebrow !text-honey-400">{t("home.ossEyebrow")}</p>
-              <h2 className="mt-3 text-balance font-display text-3xl text-[#f3f7f3] md:text-4xl">
+              <p className="ad-eyebrow !text-on-brand-band-accent">{t("home.ossEyebrow")}</p>
+              <h2 className="mt-3 text-balance font-display text-3xl text-on-brand-band md:text-4xl">
                 {t("home.ossTitle")}
               </h2>
-              <p className="mt-4 text-[15px] leading-relaxed text-pine-100">
+              <p className="mt-4 text-[15px] leading-relaxed text-on-brand-band-soft">
                 {t("home.ossBody")}
               </p>
               <div className="mt-7 flex flex-wrap items-center gap-3">
@@ -743,7 +743,7 @@ export default function HomePage() {
                   href={GITHUB_URL}
                   target="_blank"
                   rel="noreferrer"
-                  className="ad-btn bg-[#f3f7f3] px-5 py-2.5 text-sm font-semibold text-pine-900 hover:bg-white"
+                  className="ad-btn ad-btn-on-band px-5 text-sm font-semibold"
                 >
                   <Code2 className="h-4 w-4" strokeWidth={2} />
                   {t("home.ossCta")}
@@ -752,9 +752,9 @@ export default function HomePage() {
                 {ossChips.map((chip) => (
                   <span
                     key={chip.label}
-                    className="inline-flex items-center gap-1.5 rounded-full border border-pine-600/60 bg-pine-800/60 px-3 py-1.5 text-xs font-medium text-pine-100"
+                    className="inline-flex items-center gap-1.5 rounded-full border border-on-brand-band/20 bg-on-brand-band/10 px-3 py-1.5 text-xs font-medium text-on-brand-band-soft"
                   >
-                    <chip.icon className="h-3.5 w-3.5 text-honey-400" strokeWidth={2} />
+                    <chip.icon className="h-3.5 w-3.5 text-on-brand-band-accent" strokeWidth={2} />
                     {chip.label}
                   </span>
                 ))}
@@ -769,7 +769,7 @@ export default function HomePage() {
               <Sparkles className="h-3.5 w-3.5" strokeWidth={2.2} />
               {t("home.prEyebrow")}
             </p>
-            <h2 className="mt-3 text-balance font-display text-3xl leading-tight text-pine-900 md:text-4xl">
+            <h2 className="mt-3 text-balance font-display text-3xl leading-tight text-ink md:text-4xl">
               {t("home.prTitle")}
             </h2>
           </div>
@@ -778,16 +778,16 @@ export default function HomePage() {
               <div
                 key={tier.name}
                 className={`ad-card relative flex flex-col p-7 ${
-                  tier.highlight ? "ring-2 ring-pine-500 md:-mt-3 md:mb-3" : ""
+                  tier.highlight ? "ring-2 ring-primary-text md:-mt-3 md:mb-3" : ""
                 }`}
               >
                 {tier.badge && (
-                  <span className="absolute -top-3 left-1/2 -translate-x-1/2 whitespace-nowrap rounded-full bg-pine-600 px-3 py-1 text-[11px] font-semibold text-[#f3f7f3]">
+                  <span className="absolute -top-3 left-1/2 -translate-x-1/2 whitespace-nowrap rounded-full bg-primary px-3 py-1 text-[11px] font-semibold text-on-primary">
                     {tier.badge}
                   </span>
                 )}
                 <div className="flex flex-wrap items-center gap-x-2 gap-y-1">
-                  <h3 className="font-display text-xl text-pine-900">{tier.name}</h3>
+                  <h3 className="font-display text-xl text-ink">{tier.name}</h3>
                   {tier.devTag && (
                     <span className="rounded-full border border-line-strong bg-surface-2 px-2 py-0.5 text-[11px] font-medium text-ink-soft">
                       {tier.devTag}
@@ -795,14 +795,14 @@ export default function HomePage() {
                   )}
                 </div>
                 <div className="mt-2 flex items-baseline gap-1">
-                  <span className="font-display text-4xl font-semibold text-pine-900">{tier.price}</span>
+                  <span className="font-display text-4xl font-semibold text-ink">{tier.price}</span>
                   <span className="text-sm text-ink-faint">{tier.cadence}</span>
                 </div>
                 <p className="mt-3 text-sm leading-relaxed text-ink-soft">{tier.desc}</p>
                 <ul className="mt-5 flex flex-1 flex-col gap-2.5">
                   {tier.features.map((f) => (
                     <li key={f} className="flex items-start gap-2 text-sm text-ink">
-                      <Check className="mt-0.5 h-4 w-4 shrink-0 text-pine-500" strokeWidth={2.4} />
+                      <Check className="mt-0.5 h-4 w-4 shrink-0 text-primary-text" strokeWidth={2.4} />
                       {f}
                     </li>
                   ))}
@@ -844,8 +844,8 @@ export default function HomePage() {
       <footer className="border-t border-line">
         <div className="mx-auto flex max-w-6xl flex-col gap-8 px-6 py-12 md:flex-row md:items-start md:justify-between">
           <div className="max-w-sm">
-            <span className="font-display text-xl font-semibold tracking-tight text-pine-900">
-              Adel<span className="text-honey-500">IA</span>
+            <span className="font-display text-xl font-semibold tracking-tight text-ink">
+              Adel<span className="text-accent-text">IA</span>
             </span>
             <p className="mt-2 text-sm text-ink-soft">{t("home.footerTagline")}</p>
             <p className="mt-4 text-xs leading-relaxed text-ink-faint">
@@ -857,27 +857,27 @@ export default function HomePage() {
               href={GITHUB_URL}
               target="_blank"
               rel="noreferrer"
-              className="inline-flex items-center gap-1.5 py-1.5 text-ink-soft transition-colors hover:text-pine-700"
+              className="inline-flex items-center gap-1.5 py-1.5 text-ink-soft transition-colors hover:text-primary-text-hover"
             >
               <Code2 className="h-4 w-4" strokeWidth={2} />
               {t("home.footerGithub")}
             </a>
             <Link
               href="/dashboard"
-              className="inline-flex items-center gap-1.5 py-1.5 text-ink-soft transition-colors hover:text-pine-700"
+              className="inline-flex items-center gap-1.5 py-1.5 text-ink-soft transition-colors hover:text-primary-text-hover"
             >
               <ArrowRight className="h-4 w-4" strokeWidth={2} />
               {t("home.footerDashboard")}
             </Link>
             <Link
               href="/privacidad"
-              className="py-1.5 text-ink-soft transition-colors hover:text-pine-700"
+              className="py-1.5 text-ink-soft transition-colors hover:text-primary-text-hover"
             >
               {t("home.footerPrivacy")}
             </Link>
             <Link
               href="/terminos"
-              className="py-1.5 text-ink-soft transition-colors hover:text-pine-700"
+              className="py-1.5 text-ink-soft transition-colors hover:text-primary-text-hover"
             >
               {t("home.footerTerms")}
             </Link>

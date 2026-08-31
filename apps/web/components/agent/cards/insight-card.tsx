@@ -4,7 +4,7 @@ import type { AgentCard } from "@/lib/agent-types";
 import type { CardActionHandler } from "./card-renderer";
 
 const TONE_CLASS: Record<string, string> = {
-  positive: "text-pine-600", warn: "text-clay-600",
+  positive: "text-primary-text", warn: "text-error-text",
 };
 
 export function InsightCard({ card }: { card: AgentCard; onAction: CardActionHandler }) {
@@ -13,7 +13,11 @@ export function InsightCard({ card }: { card: AgentCard; onAction: CardActionHan
   return (
     <div className="ad-card ad-rise p-4">
       <div className="ad-eyebrow">{t("cardInsightTitle")}</div>
-      <p className={`font-display text-lg ${TONE_CLASS[p.tone] ?? ""}`}>{p.title}</p>
+      {/* font-sans: same screen, same rule as action-card. This is the card
+          the panel home shows when there is nothing to suggest. */}
+      <p className={`font-sans text-lg font-semibold ${TONE_CLASS[p.tone] ?? "text-ink"}`}>
+        {p.title}
+      </p>
       <p className="text-ink-soft text-sm">{p.body}</p>
     </div>
   );

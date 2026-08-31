@@ -30,8 +30,8 @@ export default function CodesLookupPage() {
 
   return (
     <main className="mx-auto max-w-3xl px-6 py-10">
-      <h1 className="flex items-center gap-2 text-2xl text-pine-900">
-        <ClipboardList className="h-5 w-5 text-pine-500" strokeWidth={2} />
+      <h1 className="flex items-center gap-2 text-2xl text-ink">
+        <ClipboardList className="h-5 w-5 text-primary-text" strokeWidth={2} />
         {t("enrichment.tabs.codes")}
       </h1>
 
@@ -43,7 +43,7 @@ export default function CodesLookupPage() {
           onKeyDown={(e) => e.key === "Enter" && lookup()}
           placeholder={t("enrichment.codes.placeholder")}
           aria-label={t("enrichment.codes.placeholder")}
-          className="flex-1 rounded-xl border border-line-strong bg-surface px-3 py-2 text-sm text-ink placeholder:text-ink-faint focus:border-pine-400 focus:outline-none focus:ring-2 focus:ring-pine-100"
+          className="flex-1 rounded-xl border border-line-control bg-surface px-3 py-2 text-sm text-ink placeholder:text-ink-faint focus:border-primary-text"
         />
         <button
           type="button"
@@ -62,7 +62,7 @@ export default function CodesLookupPage() {
       )}
 
       {error && (
-        <div role="alert" className="mt-4 rounded-xl border border-clay-100 bg-clay-50 p-3 text-sm text-clay-700">
+        <div role="alert" className="mt-4 rounded-xl border border-error-tint-line bg-error-tint p-3 text-sm text-error-text">
           {error}
         </div>
       )}
@@ -71,7 +71,7 @@ export default function CodesLookupPage() {
         <div className="ad-card mt-6 p-4">
           {result.canonical_name ? (
             <>
-              <h3 className="font-medium text-pine-900">{result.canonical_name}</h3>
+              <h3 className="font-medium text-ink">{result.canonical_name}</h3>
               <dl className="mt-3 grid grid-cols-2 gap-y-2 text-sm">
                 <dt className="text-ink-soft">{t("enrichment.codes.icd10")}:</dt>
                 <dd className="font-mono text-ink">{result.icd10}</dd>

@@ -184,11 +184,11 @@ export function ConsultaMode() {
   return (
     <main className="mx-auto max-w-2xl px-6 py-10">
       <div className="flex items-start gap-3">
-        <span className="inline-flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-pine-50 text-pine-600 ring-1 ring-pine-100">
+        <span className="inline-flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-primary-tint text-primary-text ring-1 ring-primary-tint-line">
           <Stethoscope className="h-6 w-6" strokeWidth={1.9} />
         </span>
         <div>
-          <h1 className="text-2xl text-pine-900">{t("title")}</h1>
+          <h1 className="text-2xl text-ink">{t("title")}</h1>
           <p className="mt-1 text-sm text-ink-soft">{t("subtitle")}</p>
         </div>
       </div>
@@ -200,11 +200,11 @@ export function ConsultaMode() {
         className="ad-card ad-card-hover ad-rise mt-6 block p-4"
       >
         <div className="flex items-center gap-3">
-          <span className="inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-honey-100 text-honey-600 ring-1 ring-honey-200">
+          <span className="inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-accent-tint text-accent-text ring-1 ring-accent-tint-line">
             <Mic className="h-5 w-5" strokeWidth={1.9} />
           </span>
           <div className="min-w-0 flex-1">
-            <p className="font-medium text-pine-900">{t("record.entryTitle")}</p>
+            <p className="font-medium text-ink">{t("record.entryTitle")}</p>
             <p className="text-sm text-ink-soft">{t("record.entryBody")}</p>
           </div>
           <span className="ad-btn ad-btn-accent shrink-0 px-4 py-2 text-sm" aria-hidden="true">
@@ -223,7 +223,7 @@ export function ConsultaMode() {
           placeholder={t("placeholder")}
           aria-label={t("placeholder")}
           disabled={busy}
-          className="mt-2 w-full resize-y rounded-xl border border-line-strong bg-surface px-3 py-2.5 text-base leading-relaxed text-ink placeholder:text-ink-faint focus:border-pine-400 focus:outline-none focus:ring-2 focus:ring-pine-300 disabled:opacity-60"
+          className="mt-2 w-full resize-y rounded-xl border border-line-control bg-surface px-3 py-2.5 text-base leading-relaxed text-ink placeholder:text-ink-faint focus:border-primary-text disabled:opacity-60"
         />
         {!input.trim() && !answer && (
           <p className="mt-2 rounded-lg bg-surface-2 px-3 py-2 text-xs leading-relaxed text-ink-soft">
@@ -239,7 +239,7 @@ export function ConsultaMode() {
               aria-label={listening ? t("listeningTap") : t("listenIn", { lang: MIC_LABEL[locale] ?? MIC_LABEL.es })}
               className={`ad-btn min-h-[44px] px-3 py-2 text-sm ${
                 listening
-                  ? "bg-honey-100 text-honey-700 ring-1 ring-honey-200 hover:bg-honey-200"
+                  ? "bg-accent-tint text-accent-text ring-1 ring-accent-tint-line hover:bg-accent-tint-line"
                   : "ad-btn-ghost"
               }`}
             >
@@ -274,9 +274,9 @@ export function ConsultaMode() {
         <div ref={outputRef} className="ad-card ad-rise mt-4 scroll-mt-28 p-5">
           {busy && !answer && (
             <div className="flex items-center gap-3 py-2">
-              <Loader2 className="h-6 w-6 shrink-0 animate-spin text-pine-500" strokeWidth={2} />
+              <Loader2 className="h-6 w-6 shrink-0 animate-spin text-primary-text" strokeWidth={2} />
               <div>
-                <p className="text-base font-medium text-pine-900">{t("generating")}</p>
+                <p className="text-base font-medium text-ink">{t("generating")}</p>
                 <p className="mt-0.5 text-sm text-ink-soft">{t("generatingHint")}</p>
               </div>
             </div>
@@ -299,7 +299,7 @@ export function ConsultaMode() {
           {!busy && answer && (
             <div className="mt-4 flex items-center justify-between gap-3 border-t border-line pt-3">
               <p className="flex items-center gap-1.5 text-xs text-ink-faint">
-                <ShieldCheck className="h-3.5 w-3.5 text-pine-400" strokeWidth={2} />
+                <ShieldCheck className="h-3.5 w-3.5 text-primary-text" strokeWidth={2} />
                 {t("disclaimer")}
               </p>
               <div className="flex shrink-0 gap-2">
@@ -309,7 +309,7 @@ export function ConsultaMode() {
                   className="ad-btn ad-btn-ghost px-3 py-1.5 text-xs"
                 >
                   {copied ? (
-                    <Check className="h-3.5 w-3.5 text-pine-500" strokeWidth={2.4} />
+                    <Check className="h-3.5 w-3.5 text-primary-text" strokeWidth={2.4} />
                   ) : (
                     <Copy className="h-3.5 w-3.5" strokeWidth={2} />
                   )}
@@ -330,7 +330,7 @@ export function ConsultaMode() {
       )}
 
       {error && (
-        <div role="alert" className="mt-4 rounded-xl border border-clay-100 bg-clay-50 p-3 text-sm text-clay-700">
+        <div role="alert" className="mt-4 rounded-xl border border-error-tint-line bg-error-tint p-3 text-sm text-error-text">
           {t("error")}
         </div>
       )}

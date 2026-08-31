@@ -169,8 +169,8 @@ export function RefluxValoracion({
 
   return (
     <section className="mt-12 border-t border-line pt-8">
-      <h2 className="flex items-center gap-2 text-lg text-pine-900">
-        <Sparkles className="h-4.5 w-4.5 text-honey-500" strokeWidth={2} />
+      <h2 className="flex items-center gap-2 text-lg text-ink">
+        <Sparkles className="h-4.5 w-4.5 text-accent-text" strokeWidth={2} />
         {t("valoracionTitle")}
       </h2>
       <p className="mt-1 text-sm text-ink-soft">{t("valoracionLead")}</p>
@@ -188,7 +188,7 @@ export function RefluxValoracion({
           </button>
           {answeredCount === 0 && (
             <p className="mt-2 flex items-center gap-1.5 rounded-lg bg-surface-2 px-3 py-2 text-xs font-medium text-ink-soft">
-              <Info className="h-3.5 w-3.5 shrink-0 text-honey-600" strokeWidth={2.2} />
+              <Info className="h-3.5 w-3.5 shrink-0 text-accent-text" strokeWidth={2.2} />
               {t("needMoreAnswers")}
             </p>
           )}
@@ -197,13 +197,13 @@ export function RefluxValoracion({
 
       {(busy || text) && (
         <div ref={outputRef} className="ad-card mt-4 scroll-mt-28 p-5">
-          <div className="mb-3 flex items-start gap-2 rounded-lg border border-honey-200 bg-honey-100/50 p-2.5 text-xs leading-relaxed text-ink">
-            <ShieldCheck className="mt-px h-3.5 w-3.5 shrink-0 text-honey-600" strokeWidth={2.2} />
+          <div className="mb-3 flex items-start gap-2 rounded-lg border border-accent-tint-line bg-accent-tint/50 p-2.5 text-xs leading-relaxed text-ink">
+            <ShieldCheck className="mt-px h-3.5 w-3.5 shrink-0 text-accent-text" strokeWidth={2.2} />
             {t("valoracionDisclaimerTop")}
           </div>
           {isStale && (
-            <div className="mb-3 flex flex-wrap items-center gap-2 rounded-lg border border-clay-100 bg-clay-50 p-2.5 text-xs text-clay-700">
-              <AlertTriangle className="h-3.5 w-3.5 shrink-0 text-clay-600" strokeWidth={2.2} />
+            <div className="mb-3 flex flex-wrap items-center gap-2 rounded-lg border border-error-tint-line bg-error-tint p-2.5 text-xs text-error-text">
+              <AlertTriangle className="h-3.5 w-3.5 shrink-0 text-error-text" strokeWidth={2.2} />
               <span className="flex-1">{t("valoracionStale")}</span>
               <button
                 type="button"
@@ -217,9 +217,9 @@ export function RefluxValoracion({
           )}
           {busy && !text && (
             <div className="flex items-center gap-3 py-2">
-              <Loader2 className="h-6 w-6 shrink-0 animate-spin text-pine-500" strokeWidth={2} />
+              <Loader2 className="h-6 w-6 shrink-0 animate-spin text-primary-text" strokeWidth={2} />
               <div>
-                <p className="text-base font-medium text-pine-900">{t("generating")}</p>
+                <p className="text-base font-medium text-ink">{t("generating")}</p>
                 <p className="mt-0.5 text-sm text-ink-soft">{t("generatingHint")}</p>
               </div>
             </div>
@@ -242,7 +242,7 @@ export function RefluxValoracion({
           {!busy && text && (
             <div className="mt-4 flex items-center justify-between gap-3 border-t border-line pt-3">
               <p className="flex items-center gap-1.5 text-xs text-ink-faint">
-                <ShieldCheck className="h-3.5 w-3.5 text-pine-400" strokeWidth={2} />
+                <ShieldCheck className="h-3.5 w-3.5 text-primary-text" strokeWidth={2} />
                 {t("valoracionDisclaimer")}
               </p>
               <div className="flex shrink-0 gap-2">
@@ -252,7 +252,7 @@ export function RefluxValoracion({
                   className="ad-btn ad-btn-ghost px-3 py-1.5 text-xs"
                 >
                   {copied ? (
-                    <Check className="h-3.5 w-3.5 text-pine-500" strokeWidth={2.4} />
+                    <Check className="h-3.5 w-3.5 text-primary-text" strokeWidth={2.4} />
                   ) : (
                     <Copy className="h-3.5 w-3.5" strokeWidth={2} />
                   )}
@@ -273,7 +273,7 @@ export function RefluxValoracion({
       )}
 
       {error && (
-        <div role="alert" className="mt-4 rounded-xl border border-clay-100 bg-clay-50 p-3 text-sm text-clay-700">
+        <div role="alert" className="mt-4 rounded-xl border border-error-tint-line bg-error-tint p-3 text-sm text-error-text">
           {t("valoracionError")}
         </div>
       )}

@@ -1,14 +1,14 @@
 "use client";
 
-import { useEffect, useState, type FocusEvent } from "react";
+import { useEffect, useState } from "react";
 import { useTranslations } from "next-intl";
 import {
+  ChevronRight,
   ClipboardList,
   Download,
   ListChecks,
   Mic,
   Send,
-  Settings,
   Sparkles,
   UploadCloud,
   type LucideIcon,
@@ -17,11 +17,30 @@ import {
 import { Link } from "@/lib/navigation";
 import { readShowcaseHidden, writeShowcaseHidden } from "@/lib/showcase-storage";
 
-// The capability showcase everyone sees on the agent home while the thread
-// is empty: one card per real capability, each with a concrete example from
-// a parent's day and a visible action (a route). It comes back on every
-// login on purpose: "hide for now" lives in sessionStorage, keyed to the
-// signed-in user and cleared by the sign-in page (lib/showcase-storage).
+// The capability showcase everyone sees on the agent home while the thread is
+// empty: the real doors into the product, in the order a parent needs them,
+// with three visual weights instead of eight identical cards.
+//
+//   1. three PRIMARY rows, the capabilities of the first day (spec 7.3);
+//   2. four SECONDARY chips, the second-week tools;
+//   3. "Ajustes", which is already a tab of the bottom bar and is deliberately
+//      NOT repeated here (the same door twice is what made everything weigh
+//      the same).
+//
+// On a phone there is no carousel any more: a full-width list cannot cut a
+// word in half, and the titles WRAP there instead of being ellipsised (fr is
+// the long locale: "Journal quotidien sur Telegram à 20 h" was cut inside the
+// "20 h" the feature is named after). The rows become three cards only at
+// 1264 px, not at md and not at lg: at md the 320 px card rail is already
+// beside the chat column, and at lg the card is 215 px wide, where the
+// two-line clamp cuts the parent's own sentence mid-word in every locale. As
+// cards they carry a fixed number of lines (title 1, example 2, detail 2), so
+// their heights match by CONTENT and no card ends in dead space.
+// The 1264 of every `min-[1264px]:` below MUST stay in step with the
+// `@media (min-width: 1264px)` block of .ad-cap-row in app/globals.css.
+// It comes back on every login on purpose: "hide for now" lives in
+// sessionStorage, keyed to the signed-in user and cleared by the sign-in page
+// (lib/showcase-storage).
 const TITLE_ID = "capability-showcase-title";
 const GRID_ID = "capability-showcase-grid";
 
@@ -32,48 +51,42 @@ const GRID_ID = "capability-showcase-grid";
 // sent once on arrival and then stripped from the URL (chat-page-client).
 const CHAT_PATH = "/dashboard/chat";
 
-type Tone = "pine" | "honey";
+type PrimaryKey = "ask" | "diary" | "record";
+type ChipKey = "upload" | "briefing" | "questionnaire" | "import";
 
-type ShowcaseCard =
-  | { key: "record" | "diary" | "upload" | "briefing" | "questionnaire" | "import" | "settings";
-      icon: LucideIcon; tone: Tone; href: string }
-  | { key: "ask"; icon: LucideIcon; tone: Tone; href?: undefined };
+type PrimaryCard = { key: PrimaryKey; icon: LucideIcon; accent: boolean; href?: string };
 
-// Order = the order a new parent meets the product: record the visit, ask,
-// keep the diary, feed the record, then the "later" tools.
-const CARDS: readonly ShowcaseCard[] = [
-  { key: "record", icon: Mic, tone: "pine", href: "/dashboard/consulta/grabar" },
-  { key: "ask", icon: Sparkles, tone: "honey" },
-  { key: "diary", icon: Send, tone: "pine", href: "/dashboard/ingestion/telegram" },
-  { key: "upload", icon: UploadCloud, tone: "pine", href: "/dashboard/upload" },
-  { key: "briefing", icon: ClipboardList, tone: "pine", href: "/dashboard/briefings/new" },
-  { key: "questionnaire", icon: ListChecks, tone: "pine", href: "/dashboard/questionnaire" },
-  { key: "import", icon: Download, tone: "pine", href: "/dashboard/ingestion" },
-  { key: "settings", icon: Settings, tone: "pine", href: "/dashboard/settings" },
+// Order (spec 7.3): first what bears fruit today with an empty account, then
+// what has to be set up today to exist tomorrow, then the strongest promise,
+// which needs an appointment and rarely happens on day one.
+const PRIMARY: readonly PrimaryCard[] = [
+  { key: "ask", icon: Sparkles, accent: true },
+  { key: "diary", icon: Send, accent: false, href: "/dashboard/ingestion/telegram" },
+  { key: "record", icon: Mic, accent: false, href: "/dashboard/consulta/grabar" },
 ];
 
-const ICON_BOX: Record<Tone, string> = {
-  pine: "inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-pine-50 text-pine-600 ring-1 ring-pine-100",
-  honey: "inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-honey-100 text-honey-700 ring-1 ring-honey-200",
-};
+const CHIPS: readonly { key: ChipKey; icon: LucideIcon; href: string }[] = [
+  { key: "upload", icon: UploadCloud, href: "/dashboard/upload" },
+  { key: "briefing", icon: ClipboardList, href: "/dashboard/briefings/new" },
+  { key: "questionnaire", icon: ListChecks, href: "/dashboard/questionnaire" },
+  { key: "import", icon: Download, href: "/dashboard/ingestion" },
+];
 
-// Primary action: the visible label is the accessible name; the pseudo
-// element stretches the hit area over the whole card (no nested controls).
+// Amber is the colour of discovering, and "Pregunta con citas" is the only
+// capability that answers on an empty account. It is the one amber row.
+const ICON_BOX =
+  "inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-[0.625rem] ring-1 " +
+  "min-[1264px]:h-9 min-[1264px]:w-9 min-[1264px]:rounded-lg";
+const ICON_PINE = "bg-primary-tint text-on-primary-tint ring-primary-tint-line";
+const ICON_ACCENT = "bg-accent-tint text-on-accent-tint ring-accent-tint-line";
+
+// The action link: the visible label is the accessible name and the pseudo
+// element stretches the hit area over the whole row (no nested controls). On a
+// phone the label collapses to a chevron; the name stays for the screen
+// reader and for the keyboard.
 const ACTION =
-  "inline-flex items-center gap-1 text-sm font-semibold text-pine-600 hover:text-pine-700 " +
-  "after:absolute after:inset-0 after:rounded-[inherit]";
-
-// Phone carousel only: when a control inside a card receives focus (Tab),
-// align its card with the snap point so the focused control is fully on
-// screen. Without this, the browser's minimal reveal scroll is undone by
-// scroll-snap and the focus ring lands half off the right edge. Guarded on
-// real horizontal overflow so the md+ grid is never touched.
-function alignFocusedCard(e: FocusEvent<HTMLLIElement>) {
-  const list = e.currentTarget.parentElement;
-  if (list && list.scrollWidth > list.clientWidth) {
-    e.currentTarget.scrollIntoView({ inline: "start", block: "nearest" });
-  }
-}
+  "inline-flex items-center gap-1 self-center text-sm font-semibold " +
+  "after:absolute after:inset-0 after:rounded-[inherit] min-[1264px]:mt-3 min-[1264px]:self-start";
 
 export function CapabilityShowcase({ locale, userId }: { locale: string; userId: string }) {
   const t = useTranslations("showcase");
@@ -101,20 +114,22 @@ export function CapabilityShowcase({ locale, userId }: { locale: string; userId:
     <section
       aria-labelledby={TITLE_ID}
       data-testid="capability-showcase"
-      className={hidden ? "mt-4" : "ad-rise mt-4"}
+      className={hidden ? "mt-3" : "ad-rise mt-3"}
     >
       {/* One persistent toggle (APG disclosure pattern): the same <button>
           node in both states, so keyboard and screen-reader focus stays on
           it and the aria-expanded change is announced on the focused
-          control instead of the button vanishing under the user. */}
+          control instead of the button vanishing under the user.
+          The section title is still an h2 in the DOM, but it is painted as an
+          eyebrow: the greeting is the only headline of this screen. */}
       <div className="flex items-center justify-between gap-3">
         {hidden ? (
           <p id={TITLE_ID} className="text-sm text-ink-soft">
             {t("collapsed")}
           </p>
         ) : (
-          <h2 id={TITLE_ID} className="font-display text-base font-semibold text-pine-900">
-            {t("title")}
+          <h2 id={TITLE_ID} className="ad-eyebrow">
+            {t("primaryEyebrow")}
           </h2>
         )}
         <button
@@ -123,72 +138,134 @@ export function CapabilityShowcase({ locale, userId }: { locale: string; userId:
           aria-controls={hidden ? undefined : GRID_ID}
           onClick={() => toggle(!hidden)}
           className={
-            hidden
-              ? "shrink-0 text-sm font-medium text-pine-600 underline underline-offset-2 hover:text-pine-700"
-              : "shrink-0 text-xs text-ink-soft underline underline-offset-2 hover:text-pine-700"
+            "-mr-1 inline-flex min-h-[var(--tap-md)] shrink-0 items-center px-1 text-sm underline underline-offset-2 hover:text-primary-text-hover " +
+            (hidden ? "font-medium text-primary-text" : "text-ink-soft")
           }
         >
           {hidden ? t("show") : t("hide")}
         </button>
       </div>
+
       {!hidden && (
-        /* Phone: a horizontal, snapping carousel (78vw cards, next one
-           peeking in as the scroll hint); the list scrolls, the body never
-           does. md (768-1023): 2 columns, because the 320 px card rail sits
-           beside the chat column and 4 columns would squash the cards.
-           lg+: 4 columns, two rows. */
-        <ul
-          id={GRID_ID}
-          data-testid="showcase-grid"
-          className="-mx-3 mt-3 flex snap-x scroll-pl-3 gap-3 overflow-x-auto px-3 pb-2 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden md:mx-0 md:grid md:grid-cols-2 md:scroll-pl-0 md:overflow-visible md:px-0 md:pb-0 lg:grid-cols-4"
-        >
-          {CARDS.map((card) => {
-            const Icon = card.icon;
-            const titleId = `capability-showcase-${card.key}`;
-            const href =
-              card.key === "ask"
-                ? { pathname: CHAT_PATH, query: { q: t("cards.ask.example") } }
-                : card.href;
-            return (
-              <li
-                key={card.key}
-                data-testid="showcase-card"
-                onFocus={alignFocusedCard}
-                className="ad-card ad-card-hover relative flex w-[78vw] max-w-xs shrink-0 snap-start flex-col p-4 md:w-auto md:max-w-none"
-              >
-                <span className={ICON_BOX[card.tone]} aria-hidden="true">
-                  <Icon className="h-4 w-4" strokeWidth={2} />
-                </span>
-                <h3 id={titleId} className="mt-2.5 text-sm font-semibold text-ink">
-                  {t(`cards.${card.key}.title`)}
-                </h3>
-                <p className="mt-1.5 text-sm italic leading-snug text-ink">
-                  {qOpen}
-                  {t(`cards.${card.key}.example`)}
-                  {qClose}
-                </p>
-                <p className="mt-1.5 text-xs leading-relaxed text-ink-soft">
-                  {t(`cards.${card.key}.detail`)}
-                </p>
-                <div className="mt-auto pt-3">
-                  <Link href={href} aria-describedby={titleId} className={ACTION}>
-                    {t(`cards.${card.key}.action`)}
-                    <span aria-hidden="true">→</span>
-                  </Link>
-                  {card.key === "ask" && (
-                    /* Above the stretched primary action, so it stays clickable. */
-                    <Link
-                      href={{ pathname: CHAT_PATH, query: { q: t("cards.ask.altQuestion") } }}
-                      className="relative z-10 mt-1.5 block text-left text-xs leading-snug text-ink-soft underline underline-offset-2 hover:text-pine-700"
+        <>
+          {/* Phone, tablet and laptop up to 1264: three full-width rows,
+              72 px each, titles that wrap, nothing to cut. 1264+: three cards
+              of equal content (title 1 line, example 2, detail 2), so no card
+              ends in a hole. */}
+          <ul
+            id={GRID_ID}
+            data-testid="showcase-grid"
+            className="mt-2 grid gap-2 min-[1264px]:mt-3 min-[1264px]:grid-cols-3 min-[1264px]:gap-3"
+          >
+            {PRIMARY.map((card) => {
+              const Icon = card.icon;
+              const titleId = `capability-showcase-${card.key}`;
+              const href =
+                card.key === "ask"
+                  ? { pathname: CHAT_PATH, query: { q: t("cards.ask.example") } }
+                  : card.href!;
+              return (
+                <li
+                  key={card.key}
+                  data-testid="showcase-card"
+                  data-key={card.key}
+                  className="ad-cap-row"
+                >
+                  <span
+                    className={`${ICON_BOX} ${card.accent ? ICON_ACCENT : ICON_PINE}`}
+                    aria-hidden="true"
+                  >
+                    <Icon className="h-[1.125rem] w-[1.125rem]" strokeWidth={2} />
+                  </span>
+                  {/* `w-full` is load-bearing at 1264+: the card is a column
+                      flex container with `align-items: flex-start`, which
+                      sizes this div to max-content, so without it the text
+                      column grows past the card padding and the h3 is clipped
+                      by the card border instead of by `truncate`. */}
+                  <div className="min-w-0 min-[1264px]:w-full">
+                    {/* `font-sans` is load-bearing, not decoration: the base
+                        layer paints every h1..h4 in the display serif, so
+                        without it these three titles come out in Fraunces and
+                        the greeting stops being the one headline of the
+                        screen (spec 7.1: one display face per panel screen). */}
+                    <h3
+                      id={titleId}
+                      className="font-sans text-[0.9375rem] font-semibold leading-5 text-ink min-[1264px]:truncate"
                     >
-                      {t("cards.ask.altLabel")} {t("cards.ask.altQuestion")}
-                    </Link>
-                  )}
-                </div>
-              </li>
-            );
-          })}
-        </ul>
+                      {t(`cards.${card.key}.title`)}
+                    </h3>
+                    <p className="ad-clamp-2 mt-0.5 text-[0.8125rem] italic leading-[1.125rem] text-ink-soft min-[1264px]:mt-1.5 min-[1264px]:min-h-9 min-[1264px]:text-sm min-[1264px]:leading-[1.125rem] min-[1264px]:text-ink">
+                      {qOpen}
+                      {t(`cards.${card.key}.example`)}
+                      {qClose}
+                    </p>
+                    {/* The wrapper carries the hiding, not the paragraph:
+                        `.ad-clamp-2` sets display:-webkit-box and, being a
+                        later rule of the same utilities layer, it would beat
+                        `hidden` and print the detail on the phone too, where
+                        the row has no room for it. */}
+                    <div className="hidden min-[1264px]:block">
+                      <p className="ad-clamp-2 mt-1.5 min-h-9 text-xs leading-[1.125rem] text-ink-soft">
+                        {t(`cards.${card.key}.detail`)}
+                      </p>
+                    </div>
+                  </div>
+                  <Link
+                    href={href}
+                    aria-describedby={titleId}
+                    className={`${ACTION} ${
+                      card.accent
+                        ? "text-accent-text hover:text-accent-text-hover"
+                        : "text-primary-text hover:text-primary-text-hover"
+                    }`}
+                  >
+                    <span className="sr-only min-[1264px]:not-sr-only">
+                      {t(`cards.${card.key}.action`)}
+                    </span>
+                    <ChevronRight
+                      className="h-5 w-5 min-[1264px]:hidden"
+                      strokeWidth={2.2}
+                      aria-hidden="true"
+                    />
+                    <span aria-hidden="true" className="hidden min-[1264px]:inline">
+                      →
+                    </span>
+                  </Link>
+                </li>
+              );
+            })}
+          </ul>
+
+          <p className="ad-eyebrow mt-4">{t("secondaryEyebrow")}</p>
+          <ul
+            data-testid="showcase-chips"
+            className="mt-2 grid grid-cols-2 gap-2 min-[1264px]:grid-cols-4"
+          >
+            {CHIPS.map((chip) => {
+              const Icon = chip.icon;
+              return (
+                <li
+                  key={chip.key}
+                  data-testid="showcase-chip"
+                  data-key={chip.key}
+                  className="ad-cap-chip"
+                >
+                  <Icon
+                    className="h-[1.125rem] w-[1.125rem] text-primary-text"
+                    strokeWidth={2}
+                    aria-hidden="true"
+                  />
+                  <Link
+                    href={chip.href}
+                    className="min-w-0 after:absolute after:inset-0 after:rounded-[inherit]"
+                  >
+                    {t(`chips.${chip.key}`)}
+                  </Link>
+                </li>
+              );
+            })}
+          </ul>
+        </>
       )}
     </section>
   );

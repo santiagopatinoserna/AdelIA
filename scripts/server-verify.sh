@@ -77,6 +77,12 @@ fi
 (cd apps/api && env "${PG_ENV[@]}" "${S3_ENV[@]}" "${PYTEST_LIVE_ENV[@]}" AUTH_SECRET=ci-only-secret \
   uv run pytest -q -rs 2>&1 | grep -E "^SKIPPED|passed|failed|error" | tail -20)
 
+# Colour system guards (cheap, text-only): the two dark blocks in globals.css
+# must declare the same tokens, and every role pair must clear its WCAG
+# threshold in BOTH schemes. Both fail in under a second, before the build.
+log "Colour system (dark token sync + contrast in both schemes)..."
+(cd apps/web && node scripts/check-dark-tokens.mjs && node scripts/check-contrast.mjs)
+
 log "Web build..."
 pnpm --filter @adelia/web build 2>&1 | grep -E "✓ Compiled|Error" | head -1
 
@@ -134,9 +140,9 @@ body="$(curl -s --max-time 10 "localhost:${WEB_PORT}/api/version" || true)"
 [[ "${pwa_fail}" -eq 0 ]] || { log "PWA checks FAILED"; exit 1; }
 log "PWA checks OK."
 
-log "E2E (recorder + a11y + diary + showcase + landing + pwa service worker)..."
+log "E2E (recorder + a11y light&dark + theme + diary + showcase + landing + pwa service worker)..."
 (cd apps/web && env "${PG_ENV[@]}" AUTH_SECRET=ci-only-secret \
   E2E_BASE_URL="http://localhost:${WEB_PORT}" \
-  pnpm exec playwright test e2e/consulta-record.spec.ts e2e/a11y.spec.ts e2e/diary.spec.ts e2e/showcase.spec.ts e2e/landing-day.spec.ts e2e/pwa-sw.spec.ts --reporter=line 2>&1 | tail -3)
+  pnpm exec playwright test e2e/consulta-record.spec.ts e2e/a11y.spec.ts e2e/theme.spec.ts e2e/diary.spec.ts e2e/showcase.spec.ts e2e/landing-day.spec.ts e2e/pwa-sw.spec.ts --reporter=line 2>&1 | tail -3)
 
 log "ALL GREEN — safe to deploy."

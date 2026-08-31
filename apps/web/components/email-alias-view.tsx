@@ -25,14 +25,14 @@ export function EmailAliasView({
 
   return (
     <main className="mx-auto max-w-2xl px-6 py-10">
-      <h1 className="flex items-center gap-2 text-2xl text-pine-900">
-        <Mail className="h-5 w-5 text-pine-500" strokeWidth={2} />
+      <h1 className="flex items-center gap-2 text-2xl text-ink">
+        <Mail className="h-5 w-5 text-primary-text" strokeWidth={2} />
         {t("title")}
       </h1>
       <p className="mt-1 text-sm text-ink-soft">{t("subtitleFriendly")}</p>
 
       {error && (
-        <div className="mt-4 rounded-lg border border-clay-100 bg-clay-50 p-3 text-sm text-clay-700">
+        <div className="mt-4 rounded-lg border border-error-tint-line bg-error-tint p-3 text-sm text-error-text">
           {error}
         </div>
       )}
@@ -58,7 +58,7 @@ export function EmailAliasView({
 
           <section className="ad-card p-4">
             <h3 className="font-medium text-ink">{t("gmailTitle")}</h3>
-            <ol className="mt-2 list-decimal space-y-1 pl-5 text-sm text-ink-soft marker:text-pine-400">
+            <ol className="mt-2 list-decimal space-y-1 pl-5 text-sm text-ink-soft marker:text-primary-text">
               <li>{t("gmailStep1")}</li>
               <li>{t("gmailStep2")}</li>
               <li>{t("forwardStep", { alias: data.alias })}</li>
@@ -68,15 +68,15 @@ export function EmailAliasView({
 
           <section className="ad-card p-4">
             <h3 className="font-medium text-ink">{t("outlookTitle")}</h3>
-            <ol className="mt-2 list-decimal space-y-1 pl-5 text-sm text-ink-soft marker:text-pine-400">
+            <ol className="mt-2 list-decimal space-y-1 pl-5 text-sm text-ink-soft marker:text-primary-text">
               <li>{t("outlookStep1")}</li>
               <li>{t("outlookStep2")}</li>
               <li>{t("forwardStep", { alias: data.alias })}</li>
             </ol>
           </section>
 
-          <div className="flex items-start gap-2 rounded-lg border border-honey-200 bg-honey-100/60 p-3 text-xs text-ink">
-            <AlertTriangle className="mt-px h-3.5 w-3.5 shrink-0 text-honey-700" strokeWidth={2.2} />
+          <div className="flex items-start gap-2 rounded-lg border border-accent-tint-line bg-accent-tint/60 p-3 text-xs text-ink">
+            <AlertTriangle className="mt-px h-3.5 w-3.5 shrink-0 text-accent-text" strokeWidth={2.2} />
             {t("warningFriendly")}
           </div>
         </div>

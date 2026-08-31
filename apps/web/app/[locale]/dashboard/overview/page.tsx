@@ -79,10 +79,10 @@ export default async function DashboardOverview({
       <main className="mx-auto max-w-2xl px-6 py-12">
         <InstallPrompt />
         <div className="ad-rise text-center">
-          <span className="mx-auto inline-flex h-16 w-16 items-center justify-center rounded-2xl bg-pine-50 text-pine-600 ring-1 ring-pine-100">
+          <span className="mx-auto inline-flex h-16 w-16 items-center justify-center rounded-2xl bg-primary-tint text-primary-text ring-1 ring-primary-tint-line">
             <Baby className="h-8 w-8" strokeWidth={1.8} />
           </span>
-          <h1 className="mt-5 text-balance font-display text-3xl text-pine-900">
+          <h1 className="mt-5 text-balance font-display text-3xl text-ink">
             {t("welcomeTitle")}
           </h1>
           <p className="mx-auto mt-3 max-w-md text-ink-soft">{t("welcomeSubtitle")}</p>
@@ -98,12 +98,12 @@ export default async function DashboardOverview({
               style={{ animationDelay: `${120 + i * 90}ms` }}
             >
               <div className="flex items-center gap-2">
-                <span className="inline-flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-pine-600 font-mono text-xs font-semibold text-[#f3f7f3]">
+                <span className="inline-flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-primary font-mono text-xs font-semibold text-on-primary">
                   {i + 1}
                 </span>
-                <s.icon className="h-4.5 w-4.5 text-pine-500" strokeWidth={2} />
+                <s.icon className="h-4.5 w-4.5 text-primary-text" strokeWidth={2} />
               </div>
-              <h2 className="mt-3 text-base text-pine-900">{s.title}</h2>
+              <h2 className="mt-3 text-base text-ink">{s.title}</h2>
               <p className="mt-1 text-sm leading-relaxed text-ink-soft">{s.body}</p>
             </li>
           ))}
@@ -116,7 +116,7 @@ export default async function DashboardOverview({
           </Link>
           <Link
             href="/dashboard/questionnaire"
-            className="text-sm text-pine-600 underline decoration-pine-200 underline-offset-2 hover:text-pine-700"
+            className="text-sm text-primary-text underline decoration-primary-tint-line underline-offset-2 hover:text-primary-text-hover"
           >
             {t("orQuestionnaire")}
           </Link>
@@ -145,7 +145,7 @@ export default async function DashboardOverview({
               className="ad-card ad-card-hover ad-rise flex min-w-0 items-center gap-3 px-5 py-4"
               style={{ animationDelay: `${i * 60}ms` }}
             >
-              <span className="inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-pine-50 text-pine-600 ring-1 ring-pine-100">
+              <span className="inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-primary-tint text-primary-text ring-1 ring-primary-tint-line">
                 <item.icon className="h-5 w-5" strokeWidth={2} />
               </span>
               <span className="min-w-0 truncate text-base font-medium text-ink">{item.label}</span>
@@ -175,7 +175,7 @@ export default async function DashboardOverview({
         </div>
 
         <div className="mt-12 flex min-w-0 items-baseline justify-between gap-3">
-          <h1 className="min-w-0 text-2xl text-pine-900">{t("title")}</h1>
+          <h1 className="min-w-0 text-2xl text-ink">{t("title")}</h1>
           <span className="shrink-0 font-mono text-xs text-ink-faint">
             {t("documentsCount", { count: docs.length })}
           </span>

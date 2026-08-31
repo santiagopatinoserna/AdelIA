@@ -381,7 +381,7 @@ export function ConsultaRecorder() {
   const leaveDialog =
     leaveRequest !== null && guarded ? (
       <div
-        className="fixed inset-0 z-50 flex items-end justify-center bg-pine-900/50 p-4 backdrop-blur-sm sm:items-center"
+        className="fixed inset-0 z-50 flex items-end justify-center bg-scrim p-4 backdrop-blur-sm sm:items-center"
         onClick={clearPending}
       >
         <div
@@ -391,9 +391,9 @@ export function ConsultaRecorder() {
           aria-labelledby="leave-recording-title"
           aria-describedby="leave-recording-body"
           onClick={(e) => e.stopPropagation()}
-          className="ad-card w-full max-w-md space-y-4 p-6 shadow-glow"
+          className="ad-card ad-elevated w-full max-w-md space-y-4 p-6 shadow-glow"
         >
-          <h2 id="leave-recording-title" className="text-lg text-pine-900">
+          <h2 id="leave-recording-title" className="text-lg text-ink">
             {leaveTitle}
           </h2>
           <p id="leave-recording-body" className="text-sm leading-relaxed text-ink-soft">
@@ -440,7 +440,7 @@ export function ConsultaRecorder() {
               </button>
               <button
                 type="button"
-                className="mx-auto inline-flex min-h-[44px] items-center gap-1.5 px-2 text-sm text-clay-700 underline underline-offset-4"
+                className="mx-auto inline-flex min-h-[44px] items-center gap-1.5 px-2 text-sm text-error-text underline underline-offset-4"
                 onClick={discardUnsaved}
               >
                 <XCircle className="h-4 w-4" /> {t("leaveUnsavedDiscard")}
@@ -462,12 +462,12 @@ export function ConsultaRecorder() {
   if (phase === "gate") {
     return (
       <div className="ad-card space-y-4 p-6">
-        <h1 className="text-xl font-semibold text-pine-900">{t("title")}</h1>
+        <h1 className="text-xl font-semibold text-ink">{t("title")}</h1>
         {profiles.length > 1 && (
           <label className="block space-y-1">
             <span className="text-sm font-medium">{t("profileLabel")}</span>
             <select
-              className="w-full rounded-lg border border-line-strong bg-surface p-2"
+              className="w-full rounded-lg border border-line-control bg-surface p-2"
               value={activeId ?? ""}
               onChange={(e) => setActiveId(e.target.value)}
             >
@@ -495,7 +495,7 @@ export function ConsultaRecorder() {
         </Link>
         <p className="text-xs opacity-70">{legalNote}</p>
         {error && (
-          <p role="alert" className="flex items-center gap-2 text-sm text-clay-600">
+          <p role="alert" className="flex items-center gap-2 text-sm text-error-text">
             <AlertCircle className="h-4 w-4" /> {error}
           </p>
         )}
@@ -523,14 +523,17 @@ export function ConsultaRecorder() {
       <div className="ad-card space-y-4 p-6">
         <div
           role="status"
-          className="flex items-center justify-between rounded-lg bg-clay-600 px-4 py-3 text-white"
+          className="flex items-center justify-between rounded-lg bg-error px-4 py-3 text-on-error"
         >
           <span className="flex items-center gap-2 font-semibold">
-            <span className="h-3 w-3 animate-pulse rounded-full bg-white" />
+            <span className="h-3 w-3 animate-pulse rounded-full bg-on-error" />
             {t("recording")} {mm}:{ss}
           </span>
-          <span className="h-2 w-24 overflow-hidden rounded bg-clay-700">
-            <span className="block h-full bg-white transition-all" style={{ width: `${level}%` }} />
+          {/* The groove needs its own value: `bg-error` here is the banner's
+              own colour, so the empty part of the meter was invisible and the
+              parent could not see its extent. */}
+          <span className="h-2 w-24 overflow-hidden rounded bg-on-error/30">
+            <span className="block h-full bg-on-error transition-all" style={{ width: `${level}%` }} />
           </span>
         </div>
         {elapsed < 15 && <p className="text-sm">{t("askNow")}</p>}
@@ -553,7 +556,7 @@ export function ConsultaRecorder() {
           className={
             declineArmed
               ? "ad-btn ad-btn-danger min-h-[48px] px-5 text-sm"
-              : "inline-flex min-h-[44px] items-center gap-1.5 px-2 text-sm text-clay-700 underline underline-offset-4"
+              : "inline-flex min-h-[44px] items-center gap-1.5 px-2 text-sm text-error-text underline underline-offset-4"
           }
           onClick={() => (declineArmed ? decline() : setDeclineArmed(true))}
         >
@@ -580,7 +583,7 @@ export function ConsultaRecorder() {
     return (
       <>
       <div className="ad-card space-y-3 p-6 text-center" role="status">
-        <Loader2 className="mx-auto h-8 w-8 animate-spin text-pine-500" />
+        <Loader2 className="mx-auto h-8 w-8 animate-spin text-primary-text" />
         <p>{phase === "uploading" ? t("uploading") : t("transcribing")}</p>
         <p className="text-xs opacity-70">{t("audioDeleted")}</p>
       </div>
@@ -592,14 +595,14 @@ export function ConsultaRecorder() {
   if (phase === "done") {
     return (
       <div className="ad-card space-y-3 p-6 text-center">
-        <CheckCircle2 className="mx-auto h-8 w-8 text-pine-600" />
+        <CheckCircle2 className="mx-auto h-8 w-8 text-primary-text" />
         <p className="font-medium">{t("done")}</p>
         <p className="text-sm opacity-80">{t("audioDeleted")}</p>
         {/* The essence, right here: the takeaway a mom wants the second the
             visit is saved, without a trip to the document page. */}
         {doneSummary && (
-          <div className="rounded-2xl border border-pine-100 bg-pine-50 p-4 text-left">
-            <h2 className="ad-eyebrow text-pine-700">{tDash("summaryTitle")}</h2>
+          <div className="rounded-2xl border border-primary-tint-line bg-primary-tint p-4 text-left">
+            <h2 className="ad-eyebrow text-primary-text">{tDash("summaryTitle")}</h2>
             <ul className="mt-2 space-y-1.5">
               {doneSummary
                 .split("\n")
@@ -609,7 +612,7 @@ export function ConsultaRecorder() {
                   <li key={i} className="flex gap-2 text-sm leading-relaxed text-ink">
                     <span
                       aria-hidden
-                      className="mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full bg-pine-400"
+                      className="mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full bg-primary-text"
                     />
                     {line}
                   </li>
@@ -637,7 +640,7 @@ export function ConsultaRecorder() {
     return (
       <>
       <div className="ad-card space-y-3 p-6 text-center">
-        <p role="alert" className="text-clay-600">{error}</p>
+        <p role="alert" className="text-error-text">{error}</p>
         <button type="button" className="ad-btn ad-btn-ghost min-h-[44px]" onClick={retryUpload}>
           {t("retry")}
         </button>
@@ -649,7 +652,7 @@ export function ConsultaRecorder() {
 
   return (
     <div className="ad-card space-y-3 p-6 text-center">
-      <p role="alert" className="text-clay-600">{error}</p>
+      <p role="alert" className="text-error-text">{error}</p>
       <button type="button" className="ad-btn ad-btn-ghost" onClick={() => setPhase("gate")}>
         {t("retry")}
       </button>

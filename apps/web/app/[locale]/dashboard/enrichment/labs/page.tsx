@@ -13,9 +13,9 @@ interface LabInput {
 }
 
 const FLAG_STYLE: Record<string, string> = {
-  low: "border-honey-400 bg-honey-100/60 text-ink",
-  normal: "border-pine-400 bg-pine-50 text-ink",
-  high: "border-clay-500 bg-clay-50 text-clay-700",
+  low: "border-accent-line bg-accent-tint/60 text-ink",
+  normal: "border-primary-text bg-primary-tint text-ink",
+  high: "border-error bg-error-tint text-error-text",
 };
 
 export default function LabRangesPage() {
@@ -61,8 +61,8 @@ export default function LabRangesPage() {
 
   return (
     <main className="mx-auto max-w-3xl px-6 py-10">
-      <h1 className="flex items-center gap-2 text-2xl text-pine-900">
-        <FlaskConical className="h-5 w-5 text-pine-500" strokeWidth={2} />
+      <h1 className="flex items-center gap-2 text-2xl text-ink">
+        <FlaskConical className="h-5 w-5 text-primary-text" strokeWidth={2} />
         {t("enrichment.tabs.labs")}
       </h1>
 
@@ -73,7 +73,7 @@ export default function LabRangesPage() {
           value={sex}
           onChange={(e) => setSex(e.target.value as "M" | "F" | "")}
           aria-label={t("enrichment.labs.sexLabel")}
-          className="rounded-lg border border-line-strong bg-surface px-2 py-1 text-ink focus:border-pine-400 focus:outline-none focus:ring-2 focus:ring-pine-300"
+          className="rounded-lg border border-line-control bg-surface px-2 py-1 text-ink focus:border-primary-text"
         >
           <option value="">{t("enrichment.labs.sexChoose")}</option>
           <option value="M">{t("enrichment.labs.sexBoy")}</option>
@@ -91,7 +91,7 @@ export default function LabRangesPage() {
               onChange={(e) => update(i, "name", e.target.value)}
               placeholder={t("enrichment.labs.namePlaceholder")}
               aria-label={t("enrichment.labs.namePlaceholder")}
-              className="flex-1 rounded-xl border border-line-strong bg-surface px-3 py-2 text-sm text-ink placeholder:text-ink-faint focus:border-pine-400 focus:outline-none focus:ring-2 focus:ring-pine-100"
+              className="flex-1 rounded-xl border border-line-control bg-surface px-3 py-2 text-sm text-ink placeholder:text-ink-faint focus:border-primary-text"
             />
             <input
               type="text"
@@ -99,13 +99,13 @@ export default function LabRangesPage() {
               onChange={(e) => update(i, "value", e.target.value)}
               placeholder={t("enrichment.labs.valuePlaceholder")}
               aria-label={t("enrichment.labs.valuePlaceholder")}
-              className="w-24 rounded-xl border border-line-strong bg-surface px-3 py-2 text-sm text-ink placeholder:text-ink-faint focus:border-pine-400 focus:outline-none focus:ring-2 focus:ring-pine-100"
+              className="w-24 rounded-xl border border-line-control bg-surface px-3 py-2 text-sm text-ink placeholder:text-ink-faint focus:border-primary-text"
             />
             <button
               type="button"
               onClick={() => removeRow(i)}
               aria-label={t("common.remove")}
-              className="rounded-lg px-2 py-1.5 text-ink-faint transition-colors hover:text-clay-600"
+              className="rounded-lg px-2 py-1.5 text-ink-faint transition-colors hover:text-error-text"
             >
               <X className="h-4 w-4" strokeWidth={2} />
             </button>
@@ -114,7 +114,7 @@ export default function LabRangesPage() {
         <button
           type="button"
           onClick={addRow}
-          className="text-sm font-medium text-pine-600 hover:text-pine-700 hover:underline"
+          className="text-sm font-medium text-primary-text hover:text-primary-text-hover hover:underline"
         >
           + {t("enrichment.labs.addLab")}
         </button>
@@ -141,7 +141,7 @@ export default function LabRangesPage() {
       </div>
 
       {error && (
-        <div role="alert" className="mt-4 rounded-xl border border-clay-100 bg-clay-50 p-3 text-sm text-clay-700">
+        <div role="alert" className="mt-4 rounded-xl border border-error-tint-line bg-error-tint p-3 text-sm text-error-text">
           {error}
         </div>
       )}
@@ -156,10 +156,10 @@ export default function LabRangesPage() {
               <span
                 className={`ad-eyebrow rounded px-2 py-0.5 ${
                   r.flag === "high"
-                    ? "bg-clay-100 text-clay-700"
+                    ? "bg-error-tint text-error-text"
                     : r.flag === "low"
-                      ? "bg-honey-100 text-ink"
-                      : "bg-pine-100 text-pine-800"
+                      ? "bg-accent-tint text-ink"
+                      : "bg-primary-tint text-ink"
                 }`}
               >
                 {r.flag ? t(`enrichment.labs.${r.flag}`) : t("enrichment.labs.normal")}

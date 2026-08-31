@@ -75,7 +75,7 @@ export default function BriefingDetailPage() {
   if (error) {
     return (
       <main className="mx-auto max-w-3xl px-6 py-10">
-        <div className="rounded-xl border border-clay-100 bg-clay-50 p-4 text-clay-700">{error}</div>
+        <div className="rounded-xl border border-error-tint-line bg-error-tint p-4 text-error-text">{error}</div>
       </main>
     );
   }
@@ -92,7 +92,7 @@ export default function BriefingDetailPage() {
     <main className="mx-auto max-w-4xl px-6 py-10">
       <div className="mb-4 flex items-center justify-between gap-3 text-sm text-ink-soft">
         <div>
-          {t("briefing.statusLabel")} <strong className="text-pine-800">{t(`briefing.status.${briefing.status}`)}</strong>
+          {t("briefing.statusLabel")} <strong className="text-ink">{t(`briefing.status.${briefing.status}`)}</strong>
           {briefing.status === "processing" && (
             <span className="ml-2 font-mono text-xs">
               {String(Math.floor(elapsed / 60)).padStart(2, "0")}:
@@ -132,9 +132,9 @@ export default function BriefingDetailPage() {
       )}
 
       {briefing.status === "processing" && timedOut && (
-        <div className="mb-4 rounded-xl border border-clay-100 bg-clay-50 p-4 text-sm text-clay-700">
+        <div className="mb-4 rounded-xl border border-error-tint-line bg-error-tint p-4 text-sm text-error-text">
           <p className="font-medium">{t("briefing.timeout.title")}</p>
-          <p className="mt-1 text-clay-700/90">{t("briefing.timeout.body")}</p>
+          <p className="mt-1 text-error-text/90">{t("briefing.timeout.body")}</p>
           <button
             type="button"
             onClick={handleRegenerate}
@@ -148,9 +148,9 @@ export default function BriefingDetailPage() {
       )}
 
       {briefing.status === "failed" && (
-        <div className="mb-4 rounded-xl border border-clay-100 bg-clay-50 p-4 text-sm text-clay-700">
+        <div className="mb-4 rounded-xl border border-error-tint-line bg-error-tint p-4 text-sm text-error-text">
           <p className="font-medium">{t("briefing.failure.title")}</p>
-          <p className="mt-1 text-clay-700/90">{t("briefing.failure.body")}</p>
+          <p className="mt-1 text-error-text/90">{t("briefing.failure.body")}</p>
           <div className="mt-3 flex flex-wrap gap-2">
             <button
               type="button"
@@ -196,7 +196,7 @@ function BriefingLoading({ title }: { title: string }) {
     <div className="ad-card space-y-4 p-5" aria-live="polite">
       <div className="flex items-center gap-3">
         <span
-          className="h-6 w-6 shrink-0 animate-spin rounded-full border-2 border-pine-200 border-t-pine-600"
+          className="h-6 w-6 shrink-0 animate-spin rounded-full border-2 border-primary-tint-line border-t-pine-600"
           role="status"
           aria-label={title}
         />

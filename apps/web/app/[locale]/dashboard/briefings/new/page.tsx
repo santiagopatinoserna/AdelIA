@@ -34,11 +34,11 @@ export default function NewBriefingPage() {
 
   return (
     <main className="mx-auto max-w-2xl px-6 py-10">
-      <h1 className="mb-6 text-2xl text-pine-900">{t("briefing.newButton")}</h1>
+      <h1 className="mb-6 text-2xl text-ink">{t("briefing.newButton")}</h1>
       <div className="space-y-6">
         <SpecialtySelect value={specialty} onChange={setSpecialty} disabled={submitting} />
         {error && (
-          <div className="rounded-lg border border-clay-100 bg-clay-50 p-3 text-sm text-clay-700">
+          <div className="rounded-lg border border-error-tint-line bg-error-tint p-3 text-sm text-error-text">
             {error}
           </div>
         )}
@@ -46,7 +46,7 @@ export default function NewBriefingPage() {
           <div className="ad-card space-y-3 p-4" aria-live="polite">
             <div className="flex items-center gap-3">
               <span
-                className="h-5 w-5 shrink-0 animate-spin rounded-full border-2 border-pine-200 border-t-pine-600"
+                className="h-5 w-5 shrink-0 animate-spin rounded-full border-2 border-primary-tint-line border-t-pine-600"
                 role="status"
                 aria-label={t("briefing.generatingTitle")}
               />

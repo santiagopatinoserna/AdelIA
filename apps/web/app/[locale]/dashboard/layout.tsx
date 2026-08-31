@@ -57,9 +57,9 @@ export default async function DashboardLayout({
           {/* min-h 44px: a touch target like every other control of the shell. */}
           <Link
             href="/dashboard"
-            className="inline-flex min-h-[44px] items-center font-display text-xl font-semibold tracking-tight text-pine-900"
+            className="inline-flex min-h-[44px] items-center font-display text-xl font-semibold tracking-tight text-ink"
           >
-            Adel<span className="text-honey-500">IA</span>
+            Adel<span className="text-accent-text">IA</span>
           </Link>
           <DashboardSectionNav />
         </div>
@@ -77,7 +77,7 @@ export default async function DashboardLayout({
           <Link
             href="/dashboard/settings"
             aria-label={t("settingsLink")}
-            className="ad-btn ad-btn-ghost hidden h-9 w-9 p-0 md:inline-flex"
+            className="ad-btn ad-btn-ghost ad-btn-icon hidden md:inline-flex"
           >
             <Settings className="h-4 w-4" strokeWidth={2} />
           </Link>

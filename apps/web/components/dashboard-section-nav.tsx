@@ -44,8 +44,8 @@ export function DashboardSectionNav() {
             title={it.label}
             className={
               active
-                ? "flex shrink-0 items-center gap-1.5 rounded-lg bg-pine-50 px-2.5 py-1.5 text-pine-700 ring-1 ring-pine-100"
-                : "flex shrink-0 items-center gap-1.5 rounded-lg p-1.5 text-ink-faint transition-colors hover:bg-pine-50 hover:text-pine-600 lg:px-2.5 lg:py-1.5"
+                ? "flex shrink-0 items-center gap-1.5 rounded-lg bg-primary-tint px-2.5 py-1.5 text-primary-text ring-1 ring-primary-tint-line"
+                : "flex shrink-0 items-center gap-1.5 rounded-lg p-1.5 text-ink-faint transition-colors hover:bg-primary-tint hover:text-primary-text-hover lg:px-2.5 lg:py-1.5"
             }
           >
             <it.icon className="h-4 w-4 shrink-0" strokeWidth={2} />

@@ -31,8 +31,8 @@ export default function AppleHealthImportPage() {
 
   return (
     <main className="mx-auto max-w-2xl px-6 py-10">
-      <h1 className="flex items-center gap-2 text-2xl text-pine-900">
-        <Activity className="h-5 w-5 text-pine-500" strokeWidth={2} />
+      <h1 className="flex items-center gap-2 text-2xl text-ink">
+        <Activity className="h-5 w-5 text-primary-text" strokeWidth={2} />
         {t("ingestion.appleHealth.title")}
       </h1>
       <p className="mt-1 text-sm text-ink-soft">
@@ -45,7 +45,7 @@ export default function AppleHealthImportPage() {
           accept=".zip,application/zip"
           onChange={(e) => setFile(e.target.files?.[0] ?? null)}
           aria-label={t("ingestion.uploadAppleHealth")}
-          className="mb-3 block w-full text-sm text-ink-soft file:mr-3 file:rounded-lg file:border-0 file:bg-pine-50 file:px-3 file:py-1.5 file:text-sm file:font-medium file:text-pine-700 hover:file:bg-pine-100"
+          className="mb-3 block w-full text-sm text-ink-soft file:mr-3 file:rounded-lg file:border-0 file:bg-primary-tint file:px-3 file:py-1.5 file:text-sm file:font-medium file:text-primary-text hover:file:bg-primary-tint"
         />
         {file && <div className="text-sm text-ink-soft">{file.name}</div>}
         <button
@@ -59,15 +59,15 @@ export default function AppleHealthImportPage() {
       </div>
 
       {error && (
-        <div className="mt-4 rounded-lg border border-clay-100 bg-clay-50 p-3 text-sm text-clay-700">
+        <div className="mt-4 rounded-lg border border-error-tint-line bg-error-tint p-3 text-sm text-error-text">
           {error}
         </div>
       )}
 
       {result && (
-        <div className="mt-6 rounded-xl border border-pine-100 bg-pine-50 p-4">
-          <h3 className="flex items-center gap-2 font-semibold text-pine-800">
-            <CheckCircle2 className="h-4 w-4 text-pine-500" strokeWidth={2.2} />
+        <div className="mt-6 rounded-xl border border-primary-tint-line bg-primary-tint p-4">
+          <h3 className="flex items-center gap-2 font-semibold text-ink">
+            <CheckCircle2 className="h-4 w-4 text-primary-text" strokeWidth={2.2} />
             {t("ingestion.imported")}
           </h3>
           <ul className="mt-2 space-y-1 text-sm text-ink">
