@@ -177,3 +177,30 @@ imprime la IP del servidor.
 - **Backups**: dumps cada 24 h en el volumen `pgbackups` (restore en el README).
   Los blobs (PDFs originales) están en `miniodata` — snapshot del volumen aparte.
 - **Actualizar**: `git pull && docker compose ... up -d --build`
+
+## Vigilancia desde fuera
+
+`/healthz` responde el estado real: atraviesa hasta la base de datos y
+devuelve la revisión de esquema y la latencia. nginx lo enruta directo a la
+API (`location = /healthz`), porque sin esa regla el middleware de idiomas
+contesta 307 y cualquier comprobación externa vería un sitio sano sobre una
+API muerta.
+
+`scripts/monitor-adelia.sh` lo comprueba desde FUERA del servidor, junto con
+`/es`, y avisa por el bot de Telegram al segundo fallo seguido y otra vez al
+recuperarse, con la duración. Un monitor que vive en la máquina no puede
+avisar de que la máquina no está: el 31-ago-2026 el servidor estuvo caído
+2 h 14 min y nadie se enteró.
+
+Instalación en macOS (cada 5 minutos):
+
+    cp scripts/com.godi.adelia-monitor.plist ~/Library/LaunchAgents/
+    # ajusta las dos rutas del fichero si el repo no está en ~/dev/AdelIA
+    launchctl load ~/Library/LaunchAgents/com.godi.adelia-monitor.plist
+
+En Linux, con cron:
+
+    */5 * * * * /ruta/al/repo/scripts/monitor-adelia.sh >/dev/null 2>&1
+
+Credenciales en `~/.config/godi/telegram.env`. Estado en
+`~/.local/state/adelia-monitor/`. Silencio significa que está sano.
