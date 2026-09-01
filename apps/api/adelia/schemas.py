@@ -111,6 +111,10 @@ class ChatRequest(BaseModel):
     session_id: UUID | None = None  # if None → create new session
     question: str = Field(min_length=1, max_length=4000)
     locale: Literal["es", "en", "fr"] = "es"  # answer language
+    # Whose record the question is about. None resolves to the user's default
+    # profile. The router reads the age off it, which is what lets the
+    # red-flag detector apply "under 3 months" (audit 3.3).
+    profile_id: UUID | None = None
 
 
 # ============================================================================
@@ -218,9 +222,36 @@ class BriefingSections(BaseModel):
 
 
 class PatientHeader(BaseModel):
+    """Who the briefing is about, as the specialist reads it first.
+
+    `age` was an `int` fixed at 0 for every patient (audit 3.10). In
+    pediatrics the age is the first determinant of every interpretation, so
+    "0 años" on an 18-month-old invalidates percentiles, doses and the
+    vaccination schedule at a glance, and costs the document its credibility
+    in front of the professional. It is now the age in months and it is
+    nullable: `age_label` renders "edad no registrada" rather than a number
+    nobody entered.
+    """
+
     name: str
-    age: int
-    sex: str
+    #: Age in MONTHS, or None when the profile has no date of birth.
+    age_months: int | None = None
+    #: "M", "F", or None when unknown. Never "?" in the payload.
+    sex: str | None = None
+
+    @property
+    def age_label(self) -> str:
+        if self.age_months is None:
+            return "edad no registrada"
+        if self.age_months < 24:
+            unit = "mes" if self.age_months == 1 else "meses"
+            return f"{self.age_months} {unit}"
+        years = self.age_months // 12
+        return f"{years} año" if years == 1 else f"{years} años"
+
+    @property
+    def sex_label(self) -> str:
+        return {"M": "niño", "F": "niña"}.get(self.sex or "", "sexo no registrado")
 
 
 class AppliedFilter(BaseModel):
@@ -261,6 +292,10 @@ class BriefingPayload(BaseModel):
 class BriefingCreate(BaseModel):
     target_specialty: Specialty
     locale: Literal["es", "en", "fr"] = "es"
+    # Which child the briefing is about. None resolves to the account's
+    # default profile, the same fallback the chat uses. The router checks
+    # ownership before anything is written (audit 4.1).
+    profile_id: UUID | None = None
 
 
 class BriefingOut(BaseModel):

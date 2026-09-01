@@ -1,3 +1,4 @@
+from datetime import datetime, timedelta, timezone
 from typing import Annotated, Any
 from uuid import UUID
 
@@ -67,6 +68,28 @@ async def get_current_user(
         user = await session.get(User, user_id)
     if user is None:
         raise HTTPException(status_code=401, detail="Unknown user")
+
+    # Sign-out invalidation. The bridge token the web mints carries the
+    # users.token_version it was signed under; signing out increments that
+    # column, so every token handed out before the click stops validating
+    # here (audit 4: a 7-day bearer with no jti and no way to revoke it).
+    #
+    # A MISSING claim reads as 0, which is what a brand-new row holds. That
+    # is deliberate and it is the whole migration path: a token minted before
+    # 0020 has no `tv`, and it keeps working until its owner signs out once.
+    # After the first bump the account can never accept a claimless token
+    # again, so the window closes by itself and closes for good.
+    claimed = payload.get("tv", 0)
+    try:
+        claimed_version = int(claimed if claimed is not None else 0)
+    except (TypeError, ValueError):
+        raise HTTPException(status_code=401, detail="Invalid token version")
+    if claimed_version != int(user.token_version or 0):
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Token revoked",
+            headers={"WWW-Authenticate": "Bearer"},
+        )
     return user
 
 
@@ -128,6 +151,66 @@ def _status_is_active(value: str | None) -> bool:
     return (value or "none") in ACTIVE_STATUSES
 
 
+# ---------------------------------------------------------------------------
+# The card-free trial (audit 4.7)
+#
+# Until 2026-09-01 the first thing a mother met after her magic link was
+# Stripe Checkout with payment_method_collection="always": a credit card
+# before the first useful pixel, on a brand she had never heard of, for a
+# product she could not see. That is the funnel's number-one drop-off and it
+# sat before any value at all.
+#
+# The trial is now granted by the code, and it is DERIVED, not stored. An
+# account whose subscription_status is still "none" (Stripe has never said
+# anything about it) counts as trialing for free_trial_days from
+# users.created_at. Nothing is written at signup, so:
+#
+#   * there is no migration, no backfill and no first-login write to race;
+#   * the moment Stripe DOES say something the derived trial disappears,
+#     because the status is no longer "none" — a "canceled" subscription can
+#     never be resurrected by an account that happens to be under 30 days old;
+#   * a self-hosted install with no Stripe key is unaffected: billing_is_
+#     enabled() already lets everything through.
+#
+# users.trial_end stays what it always was: Stripe's trial end, mirrored by
+# the webhook. The local one is computed, and /billing/status reports it under
+# the same key so the interface needs no second concept.
+# ---------------------------------------------------------------------------
+
+
+def local_trial_end(
+    subscription_status: str | None, created_at: datetime | None
+) -> datetime | None:
+    """End of the card-free trial, or None when the account has none.
+
+    None means one of three things: the trial is switched off
+    (free_trial_days = 0), the account has been through Stripe (its status is
+    no longer "none"), or the row has no created_at yet (an object built in
+    memory and never flushed).
+    """
+    if settings.free_trial_days <= 0:
+        return None
+    if (subscription_status or "none") != "none":
+        return None
+    if created_at is None:
+        return None
+    if created_at.tzinfo is None:
+        created_at = created_at.replace(tzinfo=timezone.utc)
+    return created_at + timedelta(days=settings.free_trial_days)
+
+
+def in_local_trial(subscription_status: str | None, created_at: datetime | None) -> bool:
+    end = local_trial_end(subscription_status, created_at)
+    return end is not None and datetime.now(timezone.utc) < end
+
+
+def user_has_access(user: Any) -> bool:
+    """The one rule: a live Stripe status, or a live card-free trial."""
+    return _status_is_active(user.subscription_status) or in_local_trial(
+        user.subscription_status, user.created_at
+    )
+
+
 async def subscription_status_for(user_id: UUID) -> str:
     """The user's mirrored Stripe status ("none" when never subscribed).
 
@@ -147,8 +230,27 @@ async def subscription_status_for(user_id: UUID) -> str:
 
 
 async def has_active_subscription(user_id: UUID) -> bool:
-    """True when the user may use the product (trialing or active)."""
-    return _status_is_active(await subscription_status_for(user_id))
+    """True when the user may use the product (Stripe status or free trial).
+
+    Reads created_at as well as the status: without it the Telegram bot would
+    turn away exactly the accounts the card-free trial exists for, while the
+    web let them in (audit 4.7).
+    """
+    from adelia.db import AsyncSessionLocal
+    from adelia.models import User
+
+    async with AsyncSessionLocal() as session:
+        row = (
+            await session.execute(
+                sa.select(User.subscription_status, User.created_at).where(
+                    User.id == user_id
+                )
+            )
+        ).first()
+    if row is None:
+        return False
+    status_value, created_at = row
+    return _status_is_active(status_value) or in_local_trial(status_value, created_at)
 
 
 async def require_active_subscription(
@@ -165,7 +267,7 @@ async def require_active_subscription(
     or billing (the way out of a 402), nor to the unauthenticated webhooks
     Stripe and Telegram call.
     """
-    if not _status_is_active(user.subscription_status):
+    if not user_has_access(user):
         raise HTTPException(
             status_code=status.HTTP_402_PAYMENT_REQUIRED,
             detail=SUBSCRIPTION_REQUIRED_DETAIL,

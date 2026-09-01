@@ -1,7 +1,6 @@
 import { getLocale, getTranslations } from "next-intl/server";
 import { auth } from "@/lib/auth";
 import { Link } from "@/lib/navigation";
-import { ProfileProvider } from "@/lib/profile-context";
 import { AgentCanvas } from "@/components/agent/agent-canvas";
 
 export default async function DashboardHome() {
@@ -11,8 +10,12 @@ export default async function DashboardHome() {
   // scopes the showcase's "hide for now" flag to this user.
   const session = await auth();
   const userId = (session?.user as { id?: string } | undefined)?.id ?? "";
+  // No ProfileProvider here any more: it moved up to (paid)/layout.tsx so the
+  // recorder, the upload zone, the chat and the briefing form share this
+  // page's active child instead of each falling back to an empty context
+  // (audit 4.2). Nesting a second one here would give the canvas its own
+  // switcher again, unheard by every other surface.
   return (
-    <ProfileProvider>
       <div className="relative">
         <AgentCanvas locale={locale} userId={userId} />
         {/* Desktop only: on mobile it overlapped the greeting, and the
@@ -26,6 +29,5 @@ export default async function DashboardHome() {
           </Link>
         </nav>
       </div>
-    </ProfileProvider>
   );
 }

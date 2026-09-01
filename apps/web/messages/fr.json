@@ -15,7 +15,9 @@
     "lang_es": "Espagnol",
     "lang_en": "Anglais",
     "lang_fr": "Français",
-    "errorId": "ID : {id} (copie-le si tu contactes le support)"
+    "errorId": "ID : {id} (copie-le si tu contactes le support)",
+    "clinicalDisclaimer": "AdelIA ne remplace pas votre pédiatre. Vérifiez avec votre médecin avant toute décision clinique.",
+    "clinicalDisclaimerShort": "AdelIA ne remplace pas votre pédiatre."
   },
   "home": {
     "hero": "Toute la santé de ton bébé, au même endroit. Et une IA qui répond, preuves à l’appui.",
@@ -191,16 +193,7 @@
     "prT2F3": "Coffre chiffré + sauvegardes",
     "prT2F4": "Briefings et PDF illimités",
     "prT2Cta": "Commencer",
-    "prT3Name": "Avec spécialiste",
-    "prT3Price": "16€",
-    "prT3Cad": "/mois",
-    "prT3Desc": "Tout le plan Clé en main, plus une revue mensuelle d’un spécialiste pédiatrique selon les besoins de ton bébé.",
-    "prT3F1": "Tout le plan Géré",
-    "prT3F2": "1 revue/mois d’un spécialiste",
-    "prT3F3": "Spécialiste selon le sujet (reflux, sommeil, alimentation…)",
-    "prT3F4": "Répond avec le briefing de ton bébé sous les yeux",
-    "prT3Cta": "Commencer",
-    "prFootnote": "Prix indicatifs, en validation. La revue du spécialiste est asynchrone ; les téléconsultations en direct arriveront dans un plan supérieur.",
+    "prFootnote": "Prix indicatifs, en cours de validation. Ce sont les deux seuls plans qu’on peut souscrire aujourd’hui.",
     "mixEyebrow": "Votre bébé × la science",
     "mixTitle": "Son histoire complète, depuis la naissance: croisée avec la recherche.",
     "mixBody": "AdelIA ne répond pas dans l’abstrait. Elle combine chaque donnée de votre bébé, dès le premier jour, avec 118 recommandations et études pour vous donner une réponse faite pour lui: pas pour « un bébé quelconque ».",
@@ -220,8 +213,9 @@
     "mixLegendData": "données de son histoire",
     "mixLegendEv": "études citées",
     "prT1DevTag": "Pour les développeurs",
-    "prT2Trial": "Essai gratuit de 30 jours, tu ne paies rien aujourd’hui",
-    "metaDescription": "AdelIA rassemble le dossier médical de ton bébé (comptes rendus, analyses, vaccins, consultations enregistrées) et répond à tes questions avec des preuves scientifiques citées. Gratuit 30 jours."
+    "prT2Trial": "Gratuit 30 jours, sans carte",
+    "metaDescription": "AdelIA rassemble le dossier médical de ton bébé (comptes rendus, analyses, vaccins, consultations enregistrées) et répond à tes questions avec des preuves scientifiques citées. Gratuit 30 jours.",
+    "demoLink": "Voir la démo, sans compte"
   },
   "dashboard": {
     "title": "Mes documents",
@@ -275,7 +269,32 @@
     "speakerSuggestDoctor": "Pédiatre",
     "speakerSuggestMe": "Moi",
     "speakerCustomPlaceholder": "Autre nom…",
-    "summaryTitle": "L'essentiel de la consultation"
+    "summaryTitle": "L'essentiel de la consultation",
+    "docFailedTitle": "Nous n’avons pas pu lire ce document.",
+    "docFailedBody": "La transcription ou la lecture du fichier a peut-être échoué. Le fichier d’origine est toujours conservé, tu peux donc réessayer.",
+    "retryDoc": "Réessayer",
+    "retryDocRunning": "Nouvelle tentative…",
+    "retryDocError": "Cela n’a pas fonctionné. Réessaie."
+  },
+  "onboarding": {
+    "title": "De qui allons-nous prendre soin ?",
+    "subtitle": "Avec un prénom et une date de naissance, AdelIA applique les repères de son âge. Tu peux passer cette étape et la compléter quand tu veux.",
+    "nameLabel": "Prénom du bébé",
+    "namePlaceholder": "Adel",
+    "dobLabel": "Date de naissance",
+    "dobHint": "Elle sert à calculer l’âge en mois. Sans elle, les règles liées à l’âge ne s’appliquent pas.",
+    "sexLabel": "Sexe",
+    "sexUnset": "Je préfère ne pas le dire",
+    "sexMale": "Garçon",
+    "sexFemale": "Fille",
+    "sexOther": "Autre",
+    "submit": "Enregistrer et continuer",
+    "saving": "Enregistrement…",
+    "skip": "Pas maintenant",
+    "errorName": "Écris un prénom pour continuer.",
+    "errorFutureDob": "La date ne peut pas être dans le futur.",
+    "errorGeneric": "L’enregistrement n’a pas fonctionné. Réessaie.",
+    "privacy": "Conservé uniquement dans ton compte. Tu peux le modifier ou le supprimer quand tu veux."
   },
   "upload": {
     "title": "Importer un document",
@@ -314,18 +333,18 @@
     "title": "Demander à AdelIA",
     "newSession": "Nouvelle conversation",
     "emptyHistory": "Pas encore de conversations",
-    "placeholder": "Ex : Mon bébé dort mal et régurgite après les repas.",
+    "placeholder": "Ex : Mon bébé dort mal et régurgite après les repas.",
     "send": "Envoyer",
     "thinking": "Réflexion…",
-    "noContext": "Je n'ai pas assez d'informations.",
+    "noContext": "Je n’ai pas assez d’informations.",
     "citationLabel": "Voir la source",
     "deleteSession": "Supprimer",
     "openSessions": "Voir les conversations",
     "closeSessions": "Fermer",
     "emptyTitle": "Pose ta question à AdelIA",
-    "emptySubtitle": "Pose ta question normalement. Chaque réponse s'appuie sur l'historique de ton bébé et des études médicales citées.",
-    "example1": "Mon bébé régurgite beaucoup, c'est normal ?",
-    "example2": "Quand faut-il s'inquiéter d'une fièvre ?",
+    "emptySubtitle": "Pose ta question normalement. Chaque réponse s’appuie sur l’historique de ton bébé et des études médicales citées.",
+    "example1": "Mon bébé régurgite beaucoup, c’est normal ?",
+    "example2": "Quand faut-il s’inquiéter d’une fièvre ?",
     "example3": "Résume sa courbe de croissance.",
     "example4": "Combien de temps faut-il à un bébé pour s’adapter à la crèche ?",
     "stop": "Arrêter",
@@ -334,10 +353,10 @@
     "scrollToLatest": "Aller au dernier",
     "citationSourceUserData": "Vos données",
     "citationSourceEvidence": "Preuves cliniques",
-    "noDocTitle": "Ajoute d'abord un document",
-    "noDocBody": "Pour répondre sur ton bébé, AdelIA a besoin d'au moins un document : le carnet, une analyse ou le compte-rendu du pédiatre.",
+    "noDocTitle": "Ajoute d’abord un document",
+    "noDocBody": "Pour répondre sur ton bébé, AdelIA a besoin d’au moins un document : le carnet, une analyse ou le compte-rendu du pédiatre.",
     "noDocCta": "Ajouter un document",
-    "errorAnswer": "Je n'ai pas pu traiter ta question. Vérifie ta connexion et réessaie.",
+    "errorAnswer": "Je n’ai pas pu traiter ta question. Vérifie ta connexion et réessaie.",
     "keyboardHint": "Entrée pour envoyer · Maj+Entrée pour un saut de ligne"
   },
   "ingestion": {
@@ -492,7 +511,11 @@
       "sexBoy": "Garçon",
       "sexGirl": "Fille",
       "sexHint": "Les valeurs normales varient selon le sexe du bébé.",
-      "sexRequired": "Choisis le sexe du bébé pour évaluer."
+      "sexRequired": "Choisis le sexe du bébé pour évaluer.",
+      "notEvaluated": "Je ne l’interprète pas",
+      "reasonUnknownAge": "J’ai besoin de la date de naissance du profil : en pédiatrie, l’intervalle de référence change tous les quelques mois.",
+      "reasonNoPediatricBand": "Je n’ai pas d’intervalle pédiatrique pour cette valeur à cet âge. Utiliser celui d’un adulte donnerait un résultat faux, je préfère donc ne rien dire. Parlez-en à votre pédiatre.",
+      "ageBand": "Tranche d’âge"
     },
     "trials": {
       "search": "Rechercher des essais",
@@ -649,7 +672,13 @@
     "installGuideCta": "Voir comment l’installer",
     "installed": "Installée sur cet appareil",
     "languageTitle": "Langue",
-    "languageBody": "Choisis la langue de l’app. Le changement est immédiat, sans te déconnecter."
+    "languageBody": "Choisis la langue de l’app. Le changement est immédiat, sans te déconnecter.",
+    "subscriptionTitle": "Abonnement",
+    "subscriptionTrialBody": "Tu es dans ton essai gratuit. Il se termine le {date}.",
+    "subscriptionActiveBody": "Ton abonnement est actif.",
+    "subscriptionNoneBody": "Ton essai gratuit est terminé. Abonne-toi pour continuer à ajouter des documents et à poser des questions.",
+    "subscriptionUnknownBody": "On n’a pas pu lire l’état de ton abonnement pour le moment.",
+    "subscriptionSubscribeCta": "Voir les offres et m’abonner"
   },
   "questionnaire": {
     "title": "Suivi du reflux",
@@ -833,10 +862,13 @@
     "goDashboard": "Aller à mon espace",
     "manageData": "Exporter ou supprimer mes données",
     "successNote": "C'est parti ! Ton mois gratuit a commencé. Profite d'AdelIA.",
-    "canceledNote": "Pas de souci: rien n'a été débité. Tu peux commencer quand tu veux."
+    "canceledNote": "Pas de souci: rien n'a été débité. Tu peux commencer quand tu veux.",
+    "localTrialTitle": "Ton essai gratuit est en cours",
+    "localTrialBody": "Tu as tout AdelIA jusqu’au {date}, sans avoir donné de carte. Tu peux t’abonner quand tu veux : tu ne paies que les jours qui suivent l’essai.",
+    "subscribeNowCta": "M’abonner maintenant"
   },
   "agent": {
-    "greeting": "Coucou 👋 Comment je peux t'aider pour la santé de ton bébé ?",
+    "greeting": "Coucou 👋 Comment je peux t’aider pour la santé de ton bébé ?",
     "placeholder": "Écris ou touche le micro…",
     "send": "Envoyer",
     "stop": "Stop",
@@ -855,7 +887,9 @@
     "profileSwitch": "Profil",
     "suggestionsTitle": "Pour toi",
     "growthMarkMonths": "{name} · {months, plural, =1 {# mois} other {# mois}}",
-    "growthMarkDays": "{name} · {days, plural, =1 {# jour} other {# jours}}"
+    "growthMarkDays": "{name} · {days, plural, =1 {# jour} other {# jours}}",
+    "citationSourceEvidence": "Preuves cliniques",
+    "citationSourceUserData": "Vos données"
   },
   "showcase": {
     "primaryEyebrow": "Premiers pas",
@@ -931,12 +965,12 @@
   },
   "privacy": {
     "title": "Politique de confidentialité",
-    "updated": "Dernière mise à jour : 27 août 2026",
+    "updated": "Dernière mise à jour : 1er septembre 2026",
     "intro": "Chez AdelIA, on garde l'historique de santé de ton bébé pour que tu l'aies toujours sous la main, avec l'aide de l'IA. Voici, en langage clair, quelles données on garde, où elles sont traitées et quels droits tu as.",
     "whatTitle": "Ce qu'on garde, et pourquoi",
     "whatBody": "Ton compte (l'email utilisé pour ton lien de connexion magique, sans mot de passe), les profils de tes bébés (prénom, date de naissance, sexe, ton lien avec eux), les documents que tu envoies (comptes rendus en PDF, photos ou audio), le texte et les données cliniques que l'IA en extrait, l'historique de tes échanges avec l'assistant, les briefings que tu génères, les événements de consentement de chaque enregistrement, et l'état de ton abonnement. Tout ça n'existe que pour une seule chose : construire l'historique de santé de ton bébé et t'aider à le comprendre. Base légale : l'exécution de notre contrat avec toi et, pour les données de santé de ton bébé, ton consentement explicite en tant que titulaire de l'autorité parentale (art. 9.2.a du RGPD).",
     "whereTitle": "Où c'est traité, et qui d'autre y touche",
-    "whereBody": "Nos serveurs nous appartiennent, basés en Espagne. Sous-traitants actuels : Mistral AI (France) traite les documents, le texte et l'audio (OCR, embeddings, chat, transcription), toujours dans l'UE. Stripe gère le paiement de ton abonnement. Resend envoie l'email avec ton lien d'accès. Si tu choisis le journal par Telegram (optionnel), tes messages et tes audios transitent par les serveurs de Telegram (Telegram FZ-LLC, Dubaï) comme n’importe quelle conversation de cette appli ; notre serveur les télécharge, les stocke en Espagne et la transcription reste chez Mistral (UE). Telegram ne conserve que la conversation que tu vois, que tu peux effacer depuis l’appli elle-même. Aucune donnée ne va plus loin que ces quatre-là. On pourra changer de prestataire de transcription à l'avenir (par exemple vers un autre service européen) ; si on le fait, on te préviendra. On n'utilise aucun outil d'analytics ni de traçage : pas de Google Analytics, pas de pixel, pas de cookie publicitaire. On ne pose que deux cookies techniques : celui de session, pour te garder connecté ou connectée, et un qui retient la langue que tu choisis.",
+    "whereBody": "Nos serveurs nous appartiennent, basés en Espagne. Sous-traitants actuels : Mistral AI (France) traite les documents, le texte et l'audio (OCR, embeddings, chat, transcription), toujours dans l'UE. Stripe gère le paiement de ton abonnement. Resend envoie l'email avec ton lien d'accès. Si tu choisis le journal par Telegram (optionnel), tes messages et tes audios transitent par les serveurs de Telegram (Telegram FZ-LLC, Dubaï) comme n’importe quelle conversation de cette appli ; notre serveur les télécharge, les stocke en Espagne et la transcription reste chez Mistral (UE). Telegram ne conserve que la conversation que tu vois, que tu peux effacer depuis l’appli elle-même. Aucune donnée ne va plus loin que ces quatre-là. On pourra changer de prestataire de transcription à l'avenir (par exemple vers un autre service européen) ; si on le fait, on te préviendra. On n’utilise aucun outil d’analytics ni de traçage tiers : pas de Google Analytics, pas de pixel, pas de cookie publicitaire (tout ce qu’on compte, ce sont quatre chiffres agrégés sur notre propre serveur, expliqués plus bas). On ne pose que deux cookies techniques : celui de session, pour te garder connecté ou connectée, et un qui retient la langue que tu choisis.",
     "retentionTitle": "Combien de temps on la garde",
     "retentionBody": "Tant que ton compte existe, on garde tes données pour que l'historique reste disponible. La seule exception, c'est l'audio des consultations : il est supprimé automatiquement dès qu'il est transcrit, en 48 heures maximum (7 jours si la transcription échoue). Une vérification automatique tourne toutes les heures, donc rien ne traîne. Si tu supprimes ton compte, tout disparaît en cascade : profils, documents, texte extrait, briefings et conversations.",
     "recordingsTitle": "Enregistrements de consultation",
@@ -944,11 +978,13 @@
     "rightsTitle": "Tes droits, et comment les exercer",
     "rightsBody": "Accès : toutes tes données sont visibles dans l'app, à tout moment. Rectification : tu peux corriger les profils et informations depuis ton compte. Suppression : tu peux supprimer ton compte entier, avec tout ce qu'il contient, depuis les réglages (tu peux aussi supprimer un document isolé depuis sa propre page, et télécharger toutes tes données en un clic depuis les réglages, avec le cœur clinique au format FHIR). Opposition : le professionnel enregistré peut s'opposer au traitement de sa voix. Pour exercer l'un de ces droits, ou pour toute autre question, écris à security@godi.ai. Si la réponse ne te satisfait pas, tu peux saisir l'AEPD en Espagne ou la CNIL en France.",
     "neverTitle": "Ce qu'on ne fait jamais",
-    "neverBody": "On ne vend jamais tes données ni celles de ton bébé, à personne. On n'utilise pas tes informations pour entraîner des modèles d'IA. On ne te trace pas : il n'y a ni analytics ni publicité dans AdelIA. AdelIA est un logiciel libre (AGPL-3.0) ; si tu préfères l'héberger toi-même, tu peux le faire, et dans ce cas c'est toi qui deviens responsable de ces données, pas Godi.AI.",
+    "neverBody": "On ne vend jamais tes données ni celles de ton bébé, à personne. On n'utilise pas tes informations pour entraîner des modèles d'IA. On ne te trace pas : il n’y a ni analytics tiers ni publicité dans AdelIA, et les compteurs agrégés qu’on garde ne peuvent pas dire qui tu es ni si tu es revenue. AdelIA est un logiciel libre (AGPL-3.0) ; si tu préfères l'héberger toi-même, tu peux le faire, et dans ce cas c'est toi qui deviens responsable de ces données, pas Godi.AI.",
     "contactTitle": "Contact",
     "contactBody": "Responsable du traitement : Godi.AI (Santiago Patiño Serna). Pour toute question ou pour exercer tes droits : security@godi.ai.",
     "back": "Retour",
-    "metaDescription": "Quelles données AdelIA conserve sur ton bébé, où elles sont traitées (UE), combien de temps et quels sont tes droits : exporter, corriger ou tout supprimer en un clic."
+    "metaDescription": "Quelles données AdelIA conserve sur ton bébé, où elles sont traitées (UE), combien de temps et quels sont tes droits : exporter, corriger ou tout supprimer en un clic.",
+    "countersTitle": "Compteurs agrégés, sans cookies",
+    "countersBody": "Pour savoir si AdelIA sert à quelqu’un, on compte quatre chiffres par jour sur notre propre serveur : combien de fois une page publique a été vue, combien de fois on a appuyé sur « Commencer », combien de comptes ont été créés et combien sont arrivés dans l’espace. C’est littéralement ça : une date, un nom d’événement et un nombre entier qui monte de un en un. On ne garde ni ton IP, ni ton navigateur, ni ta provenance, ni aucun identifiant, et on ne pose ni ne lit aucun cookie pour compter. Deux personnes et une personne deux fois donnent le même « 2 », donc même nous, on ne peut pas savoir si tu es revenue. Ces chiffres ne sortent pas de notre serveur et seul le responsable d’AdelIA les lit. Base légale : notre intérêt légitime à savoir si le produit est utilisé, avec un impact nul sur toi puisque rien de ce compte ne parle de toi."
   },
   "terms": {
     "title": "Conditions d'utilisation",
@@ -984,5 +1020,33 @@
     "uploadDesc": "Envoie un compte rendu, une analyse ou une photo.",
     "screenshotAgent": "Pose tes questions à AdelIA sur la santé de ton bébé",
     "screenshotRecord": "Enregistre la consultation avec le pédiatre"
+  },
+  "demo": {
+    "metaTitle": "Démo AdelIA, sans compte",
+    "metaDescription": "Pose tes questions à AdelIA sur un bébé d’exemple et vois les recommandations cliniques derrière chaque réponse. Sans inscription, sans carte.",
+    "eyebrow": "Démo publique",
+    "badge": "Démo",
+    "title": "Pose la question que tu poserais à ton pédiatre",
+    "subtitle": "Lucía est un bébé inventé avec un dossier d’exemple. Pose ce que tu veux : la réponse s’appuie sur les recommandations et les études qu’AdelIA a indexées, et chaque source s’affiche en dessous.",
+    "noStore": "Sans compte et sans carte. Rien de ce que tu écris ici n’est conservé.",
+    "recordUnavailable": "On n’a pas pu charger le dossier d’exemple. Tu peux quand même poser ta question.",
+    "askTitle": "Ta question",
+    "askLabel": "Écris ta question à propos de Lucía",
+    "askPlaceholder": "Est-ce normal qu’elle régurgite après presque chaque tétée ?",
+    "askCta": "Poser la question",
+    "askBusy": "Réflexion…",
+    "suggestedTitle": "Ou commence par l’une de celles-ci",
+    "answerTitle": "Réponse",
+    "sourcesTitle": "Sources citées",
+    "evidenceOnlyNote": "On n’a pas pu rédiger la réponse pour le moment. Voici les sources trouvées pour ta question.",
+    "redFlagNote": "Cette question déclenche une règle d’urgence : AdelIA n’y répond pas, elle t’envoie faire examiner le bébé.",
+    "errorGeneric": "Quelque chose a échoué. Réessaie dans un instant.",
+    "errorBudget": "La démo a atteint sa limite de questions pour aujourd’hui. Reviens demain, ou ouvre ton compte gratuit.",
+    "errorUnavailable": "La démo n’est pas disponible pour le moment. Reviens un peu plus tard.",
+    "signupTitle": "Et avec le dossier de ton bébé ?",
+    "signupBody": "La même chose, avec ses comptes rendus, ses analyses et ses consultations enregistrées.",
+    "signupCta": "Commencer avec mon bébé",
+    "signupNote": "30 jours gratuits, sans carte.",
+    "back": "Retour à l’accueil"
   }
 }

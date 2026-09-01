@@ -15,7 +15,9 @@
     "lang_es": "Spanish",
     "lang_en": "English",
     "lang_fr": "French",
-    "errorId": "ID: {id} (copy it if you contact support)"
+    "errorId": "ID: {id} (copy it if you contact support)",
+    "clinicalDisclaimer": "AdelIA does not replace your pediatrician. Verify with your doctor before making clinical decisions.",
+    "clinicalDisclaimerShort": "AdelIA does not replace your pediatrician."
   },
   "home": {
     "hero": "All your baby's health, in one place. And an AI that answers: with the evidence to back it.",
@@ -191,16 +193,7 @@
     "prT2F3": "Encrypted vault + backups",
     "prT2F4": "Unlimited briefings and PDFs",
     "prT2Cta": "Get started",
-    "prT3Name": "With a specialist",
-    "prT3Price": "€16",
-    "prT3Cad": "/mo",
-    "prT3Desc": "Everything in Managed, plus a monthly review by a pediatric specialist based on what your baby needs.",
-    "prT3F1": "Everything in Managed",
-    "prT3F2": "1 specialist review/month",
-    "prT3F3": "Specialist matched to the topic (reflux, sleep, feeding…)",
-    "prT3F4": "Answers with your briefing in hand",
-    "prT3Cta": "Get started",
-    "prFootnote": "Indicative prices, in validation. The specialist review is async; live teleconsults will arrive in a higher plan.",
+    "prFootnote": "Indicative prices, still being validated. These two plans are the only ones you can buy today.",
     "mixEyebrow": "Your baby × the science",
     "mixTitle": "Their full history, from birth: cross-checked with research.",
     "mixBody": "AdelIA doesn't answer in the abstract. It combines every data point about your baby, from day one, with 118 guidelines and studies to give you an answer made for them: not for “some baby”.",
@@ -220,8 +213,9 @@
     "mixLegendData": "their history",
     "mixLegendEv": "cited studies",
     "prT1DevTag": "For developers",
-    "prT2Trial": "Free for 30 days, nothing to pay today",
-    "metaDescription": "AdelIA gathers your baby's medical history (reports, lab results, vaccines, recorded visits) and answers your questions with cited scientific evidence. Free for 30 days."
+    "prT2Trial": "Free for 30 days, no card",
+    "metaDescription": "AdelIA gathers your baby's medical history (reports, lab results, vaccines, recorded visits) and answers your questions with cited scientific evidence. Free for 30 days.",
+    "demoLink": "See the demo, no account"
   },
   "dashboard": {
     "title": "My documents",
@@ -275,7 +269,32 @@
     "speakerSuggestDoctor": "Doctor",
     "speakerSuggestMe": "Me",
     "speakerCustomPlaceholder": "Other name…",
-    "summaryTitle": "The visit, in short"
+    "summaryTitle": "The visit, in short",
+    "docFailedTitle": "We could not read this document.",
+    "docFailedBody": "The transcription or the file reading may have failed. The original file is still stored, so you can try again.",
+    "retryDoc": "Try again",
+    "retryDocRunning": "Trying again…",
+    "retryDocError": "That did not work. Please try again."
+  },
+  "onboarding": {
+    "title": "Who are we looking after?",
+    "subtitle": "With a name and a date of birth, AdelIA applies the guidance for that age. You can skip this step and fill it in whenever you like.",
+    "nameLabel": "Baby's name",
+    "namePlaceholder": "Adel",
+    "dobLabel": "Date of birth",
+    "dobHint": "Used to work out the age in months. Without it, the age-based rules do not apply.",
+    "sexLabel": "Sex",
+    "sexUnset": "Prefer not to say",
+    "sexMale": "Boy",
+    "sexFemale": "Girl",
+    "sexOther": "Other",
+    "submit": "Save and continue",
+    "saving": "Saving…",
+    "skip": "Not now",
+    "errorName": "Type a name to continue.",
+    "errorFutureDob": "The date cannot be in the future.",
+    "errorGeneric": "That did not save. Please try again.",
+    "privacy": "Kept in your account only. You can change or delete it whenever you like."
   },
   "upload": {
     "title": "Upload document",
@@ -492,7 +511,11 @@
       "sexBoy": "Boy",
       "sexGirl": "Girl",
       "sexHint": "Normal values vary by the baby's sex.",
-      "sexRequired": "Choose the baby's sex to evaluate."
+      "sexRequired": "Choose the baby's sex to evaluate.",
+      "notEvaluated": "Not interpreted",
+      "reasonUnknownAge": "I need the profile's date of birth: in paediatrics the reference range changes every few months.",
+      "reasonNoPediatricBand": "I have no paediatric range for this value at this age. Using an adult one would give the wrong answer, so I would rather say nothing. Raise it with your pediatrician.",
+      "ageBand": "Age band"
     },
     "trials": {
       "search": "Search trials",
@@ -649,7 +672,13 @@
     "installGuideCta": "See how to install it",
     "installed": "Installed on this device",
     "languageTitle": "Language",
-    "languageBody": "Choose the app language. It changes right away, no need to sign out."
+    "languageBody": "Choose the app language. It changes right away, no need to sign out.",
+    "subscriptionTitle": "Subscription",
+    "subscriptionTrialBody": "You are on your free trial. It ends on {date}.",
+    "subscriptionActiveBody": "Your subscription is active.",
+    "subscriptionNoneBody": "Your free trial has ended. Subscribe to keep uploading documents and asking questions.",
+    "subscriptionUnknownBody": "We could not read your subscription status right now.",
+    "subscriptionSubscribeCta": "See plans and subscribe"
   },
   "questionnaire": {
     "title": "Reflux control",
@@ -833,7 +862,10 @@
     "goDashboard": "Go to my dashboard",
     "manageData": "Export or delete my data",
     "successNote": "Done! Your free month has started. Enjoy AdelIA.",
-    "canceledNote": "No worries: nothing was charged. You can start whenever you like."
+    "canceledNote": "No worries: nothing was charged. You can start whenever you like.",
+    "localTrialTitle": "Your free trial is running",
+    "localTrialBody": "You have all of AdelIA until {date}, with no card on file. You can subscribe whenever you like: you are only charged for the days after the trial.",
+    "subscribeNowCta": "Subscribe now"
   },
   "agent": {
     "greeting": "Hi 👋 How can I help with your baby's health?",
@@ -855,7 +887,9 @@
     "profileSwitch": "Profile",
     "suggestionsTitle": "For you",
     "growthMarkMonths": "{name} · {months, plural, =1 {# month} other {# months}}",
-    "growthMarkDays": "{name} · {days, plural, =1 {# day} other {# days}}"
+    "growthMarkDays": "{name} · {days, plural, =1 {# day} other {# days}}",
+    "citationSourceEvidence": "Clinical evidence",
+    "citationSourceUserData": "Your data"
   },
   "showcase": {
     "primaryEyebrow": "First steps",
@@ -931,12 +965,12 @@
   },
   "privacy": {
     "title": "Privacy policy",
-    "updated": "Last updated: August 27, 2026",
+    "updated": "Last updated: September 1, 2026",
     "intro": "At AdelIA we keep your baby's health history so you always have it on hand, with help from AI. Here's what data we keep, where it's processed, and what rights you have, in plain language.",
     "whatTitle": "What we keep, and why",
     "whatBody": "Your account (the email we use for your passwordless magic-link sign-in), your baby's profiles (name, date of birth, sex, your relationship to them), the documents you upload (PDF reports, photos, or audio), the text and clinical data our AI extracts from them, your chat history with the assistant, the briefings you generate, the consent events logged for each recording, and your subscription status. All of it exists for one purpose: building your baby's health history and helping you understand it. Legal basis: performance of our contract with you, and for your baby's health data, your explicit consent as the holder of parental authority (GDPR Art. 9.2.a).",
     "whereTitle": "Where it's processed, and who else touches it",
-    "whereBody": "Our servers are our own, based in Spain. Current processors: Mistral AI (France) handles documents, text, and audio (OCR, embeddings, chat, transcription), all within the EU. Stripe processes your subscription payment. Resend sends the email with your access link. If you choose the optional Telegram diary, your messages and voice notes travel through Telegram's servers (Telegram FZ-LLC, Dubai) like any chat in that app; our server downloads them, stores them in Spain, and transcription still runs on Mistral (EU). Telegram only keeps the conversation you can see, which you can delete from the app itself. Nothing goes further than these four. We may switch transcription providers in the future (for example, to another EU-based service); if we do, we'll let you know. We don't use analytics or tracking tools: no Google Analytics, no pixels, no advertising cookies. We set only two technical cookies: the session one that keeps you signed in, and one that remembers the language you pick.",
+    "whereBody": "Our servers are our own, based in Spain. Current processors: Mistral AI (France) handles documents, text, and audio (OCR, embeddings, chat, transcription), all within the EU. Stripe processes your subscription payment. Resend sends the email with your access link. If you choose the optional Telegram diary, your messages and voice notes travel through Telegram's servers (Telegram FZ-LLC, Dubai) like any chat in that app; our server downloads them, stores them in Spain, and transcription still runs on Mistral (EU). Telegram only keeps the conversation you can see, which you can delete from the app itself. Nothing goes further than these four. We may switch transcription providers in the future (for example, to another EU-based service); if we do, we'll let you know. We don't use third-party analytics or tracking tools: no Google Analytics, no pixels, no advertising cookies (all we count is four aggregate numbers on our own server, explained further down). We set only two technical cookies: the session one that keeps you signed in, and one that remembers the language you pick.",
     "retentionTitle": "How long we keep it",
     "retentionBody": "As long as your account exists, we keep your data so your baby's history stays available. The one exception is consultation audio: it's deleted automatically once it's transcribed, within 48 hours at most (7 days if transcription fails). An automated check runs every hour, so nothing sits around waiting. If you delete your account, everything cascades away with it: profiles, documents, extracted text, briefings, and conversations.",
     "recordingsTitle": "Consultation recordings",
@@ -944,11 +978,13 @@
     "rightsTitle": "Your rights, and how to use them",
     "rightsBody": "Access: all your data is visible inside the app, any time. Rectification: you can correct profiles and details from your account. Erasure: you can delete your entire account, and everything in it, from settings (you can also delete a single document from its own page, and download all your data in one click from Settings, with the clinical core in FHIR format). Objection: a recorded professional can object to how we process their voice. To exercise any of these rights, or for any other question, write to security@godi.ai. If you're not satisfied, you can file a complaint with the AEPD in Spain or the CNIL in France.",
     "neverTitle": "What we never do",
-    "neverBody": "We never sell your data or your baby's, to anyone, ever. We don't use your information to train AI models. We don't track you: there's no analytics and no advertising in AdelIA. AdelIA is open-source software (AGPL-3.0); if you'd rather host it yourself, you can, and in that case whoever runs the deployment is responsible for that data, not Godi.AI.",
+    "neverBody": "We never sell your data or your baby's, to anyone, ever. We don't use your information to train AI models. We don't track you: there is no third-party analytics and no advertising in AdelIA, and the aggregate counters we do keep cannot say who you are or whether you came back. AdelIA is open-source software (AGPL-3.0); if you'd rather host it yourself, you can, and in that case whoever runs the deployment is responsible for that data, not Godi.AI.",
     "contactTitle": "Contact",
     "contactBody": "Data controller: Godi.AI (Santiago Patiño Serna). For any question, or to exercise your rights: security@godi.ai.",
     "back": "Back",
-    "metaDescription": "What data AdelIA keeps about your baby, where it is processed (EU), for how long and what your rights are: export, correct or delete everything in one click."
+    "metaDescription": "What data AdelIA keeps about your baby, where it is processed (EU), for how long and what your rights are: export, correct or delete everything in one click.",
+    "countersTitle": "Aggregate counters, no cookies",
+    "countersBody": "To find out whether AdelIA is any use to anyone, we count four numbers a day on our own server: how many times a public page was viewed, how many times “Get started” was pressed, how many accounts were created, and how many reached the dashboard. That is literally all it is: a date, an event name and an integer that goes up by one. We store no IP, no browser, no referrer and no identifier, and we set and read no cookie to count it. Two people and one person twice are the same “2”, so not even we can tell whether you came back. These numbers never leave our server and only the person running AdelIA reads them. Legal basis: our legitimate interest in knowing whether the product is used, with no impact on you because none of the count is about you."
   },
   "terms": {
     "title": "Terms of use",
@@ -984,5 +1020,33 @@
     "uploadDesc": "Upload a report, a lab result or a photo.",
     "screenshotAgent": "Ask AdelIA about your baby's health",
     "screenshotRecord": "Record the visit with the pediatrician"
+  },
+  "demo": {
+    "metaTitle": "AdelIA demo, no account",
+    "metaDescription": "Ask AdelIA about a sample baby and see the clinical guidelines behind every answer. No signup, no card.",
+    "eyebrow": "Public demo",
+    "badge": "Demo",
+    "title": "Ask what you would ask your pediatrician",
+    "subtitle": "Lucía is a made-up baby with a sample record. Ask anything: the answer rests on the guidelines and studies AdelIA has indexed, and you will see every source below.",
+    "noStore": "No account, no card. Nothing you type here is saved.",
+    "recordUnavailable": "We could not load the sample record. You can still ask a question.",
+    "askTitle": "Your question",
+    "askLabel": "Type your question about Lucía",
+    "askPlaceholder": "Is it normal for her to spit up after almost every feed?",
+    "askCta": "Ask",
+    "askBusy": "Thinking…",
+    "suggestedTitle": "Or start with one of these",
+    "answerTitle": "Answer",
+    "sourcesTitle": "Sources cited",
+    "evidenceOnlyNote": "We could not compose the answer right now. These are the sources we found for your question.",
+    "redFlagNote": "This question triggers an urgent-care rule: AdelIA does not answer it, it sends you to have the baby seen.",
+    "errorGeneric": "Something went wrong. Please try again in a moment.",
+    "errorBudget": "The demo has hit its question limit for today. Come back tomorrow, or open your free account.",
+    "errorUnavailable": "The demo is not available right now. Please come back later.",
+    "signupTitle": "Now with your own baby's record?",
+    "signupBody": "The same thing, with their reports, their lab results and their recorded appointments.",
+    "signupCta": "Start with my baby",
+    "signupNote": "30 days free, no card.",
+    "back": "Back to the home page"
   }
 }

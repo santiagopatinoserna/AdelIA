@@ -341,3 +341,103 @@ async def test_stalled_stream_yields_error_event(
     assert types[0] == "token"
     assert types[-1] == "error"
     assert "stalled" in events[-1].content or "budget" in events[-1].content
+
+
+# ---------------------------------------------------------------------------
+# Red flags come first, in code (audit 3.3)
+#
+# The dangerous question is not the one retrieval fails on. It is the one
+# retrieval answers beautifully: there IS a paracetamol fragment, the model
+# WILL dose it, and the answer will carry a citation. So the check runs before
+# the embedding, and the mocks below are set to explode if it does not.
+# ---------------------------------------------------------------------------
+
+
+def _explode(*args, **kwargs):
+    raise AssertionError("nothing downstream of the red-flag check may run")
+
+
+@patch("adelia.services.chat_orchestrator._stream_llm_tokens", _explode)
+@patch("adelia.services.chat_orchestrator.embed_texts", _explode)
+@patch("adelia.services.chat_orchestrator.retrieve_relevant_chunks", _explode)
+async def test_red_flag_returns_the_referral_without_retrieval_or_the_model():
+    events = await _collect_events(
+        answer_question_streaming(
+            user_id=uuid4(),
+            question="Mi bebé de 2 meses tiene 38,2, ¿le doy paracetamol?",
+        )
+    )
+    text = "".join(e.content for e in events if e.type == "token")
+    assert "112" in text
+    assert "urgencias" in text.lower()
+    assert "mg/kg" not in text
+    assert "paracetamol" not in text.lower()
+    assert [e.type for e in events] == ["token", "final"]
+
+
+@patch("adelia.services.chat_orchestrator._stream_llm_tokens", _explode)
+@patch("adelia.services.chat_orchestrator.embed_texts", _explode)
+async def test_red_flag_cites_the_guideline_it_applied():
+    events = await _collect_events(
+        answer_question_streaming(user_id=uuid4(), question="le salieron manchas que no blanquean")
+    )
+    final = events[-1]
+    assert final.type == "final"
+    assert len(final.evidence_citations) == 1
+    assert "NG240" in final.evidence_citations[0]["title"]
+    assert final.evidence_citations[0]["url"].startswith("https://www.nice.org.uk/")
+
+
+@patch("adelia.services.chat_orchestrator._stream_llm_tokens", _explode)
+@patch("adelia.services.chat_orchestrator.embed_texts", _explode)
+async def test_the_profile_age_is_what_makes_the_fever_rule_fire():
+    """The parent wrote no age. Without the profile the rule cannot apply, and
+    that is exactly the hole item 3.3 closes."""
+    events = await _collect_events(
+        answer_question_streaming(
+            user_id=uuid4(), question="tiene fiebre desde anoche", age_months=2
+        )
+    )
+    assert "112" in "".join(e.content for e in events if e.type == "token")
+
+
+@patch("adelia.services.chat_orchestrator.detect_temporal_intent", return_value=None)
+@patch("adelia.services.chat_orchestrator.retrieve_relevant_chunks", return_value=[])
+@patch("adelia.services.chat_orchestrator.embed_texts")
+@patch("adelia.services.chat_orchestrator._retrieve_evidence_for_query")
+@patch("adelia.services.chat_orchestrator._stream_llm_tokens")
+async def test_an_ordinary_question_from_the_same_baby_still_goes_through_the_pipeline(
+    mock_stream, mock_evidence, mock_embed, mock_retrieve, mock_temporal,
+):
+    mock_embed.return_value = [[0.1] * 1024]
+    mock_evidence.return_value = [_evidence_match()]
+
+    async def fake_stream(*args, **kwargs):
+        yield "La leche materna sigue siendo el alimento principal [ev_1]."
+    mock_stream.side_effect = fake_stream
+
+    events = await _collect_events(
+        answer_question_streaming(
+            user_id=uuid4(),
+            question="¿cuándo empiezo con la alimentación complementaria?",
+            age_months=2,
+        )
+    )
+    assert mock_stream.called
+    assert events[-1].type == "final"
+
+
+@pytest.mark.parametrize("locale,needle", [
+    ("es", "urgencias pediátricas"),
+    ("en", "paediatric emergency"),
+    ("fr", "urgences pédiatriques"),
+])
+@patch("adelia.services.chat_orchestrator._stream_llm_tokens", _explode)
+@patch("adelia.services.chat_orchestrator.embed_texts", _explode)
+async def test_the_referral_speaks_the_parents_language(locale, needle):
+    events = await _collect_events(
+        answer_question_streaming(
+            user_id=uuid4(), question="se atragantó con un trozo de manzana", locale=locale
+        )
+    )
+    assert needle in "".join(e.content for e in events if e.type == "token")

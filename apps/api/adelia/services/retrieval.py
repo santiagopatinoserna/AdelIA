@@ -7,6 +7,7 @@ import sqlalchemy as sa
 from adelia.config import settings
 from adelia.db import AsyncSessionLocal
 from adelia.models import Chunk, Document
+from adelia.services.scope import Scope
 
 # Parent expansion: rebuild the ~1500-token parent window around each hit
 # from document raw_text using sibling chunk offsets. Capped so 8 expanded
@@ -30,17 +31,22 @@ class RetrievedChunk:
 
 async def retrieve_relevant_chunks(
     *,
-    user_id: UUID,
+    scope: Scope,
     query_embedding: list[float],
     top_k: int = 8,
     max_distance: float | None = None,
 ) -> list[RetrievedChunk]:
     """Vector-similarity search over chunks (pgvector cosine), filtered to
-    user's documents that are not soft-deleted. Returns up to top_k results
-    with their parent-chunk content expanded for context.
+    the scope's documents that are not soft-deleted. Returns up to top_k
+    results with their parent-chunk content expanded for context.
 
     Args:
-        user_id: tenant filter.
+        scope: whose record to search (user, and optionally one profile).
+            Before 2026-08-31 this was a bare `user_id`, so a mother with two
+            children had her newborn's question answered out of her
+            four-year-old's chunks: `chunks.profile_id` was written on every
+            row and read by nothing. `Scope.where` keeps rows with a NULL
+            profile_id, which is every row written before profiles existed.
         query_embedding: 1024-dim vector from mistral-embed.
         top_k: number of small chunks to retrieve.
         max_distance: cosine-distance cut-off; anything farther is not
@@ -62,7 +68,7 @@ async def retrieve_relevant_chunks(
         # Use pgvector cosine distance — lower is more similar.
         distance_expr = Chunk.embedding.cosine_distance(query_embedding)
         where = [
-            Chunk.user_id == user_id,
+            *scope.where(Chunk),
             Document.deleted_at.is_(None),
         ]
         if cutoff != float("inf"):

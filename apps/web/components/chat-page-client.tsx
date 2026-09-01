@@ -12,6 +12,7 @@ import {
   listChatSessions,
   streamChat,
 } from "@/lib/chat-client-browser";
+import { useActiveProfile } from "@/lib/profile-context";
 import { ChatSessionsSidebar } from "./chat-sessions-sidebar";
 import { ChatMessageBubble } from "./chat-message";
 import { ChatInput } from "./chat-input";
@@ -39,6 +40,10 @@ export function ChatPageClient({
   initialQuestion?: string;
 }) {
   const t = useTranslations("chat");
+  // `activeProfileId` is which CHILD the question is about; `activeId` below
+  // is which CONVERSATION is on screen. Two different "active" things, and
+  // only the first one travels to the API (audit 4.2).
+  const { activeId: activeProfileId } = useActiveProfile();
   const [sessions, setSessions] = useState<ChatSession[]>(initialSessions);
   const [activeId, setActiveId] = useState<string | null>(null);
   const [messages, setMessages] = useState<LocalMsg[]>([]);
@@ -118,7 +123,7 @@ export function ChatPageClient({
     ]);
     try {
       let createdSessionId: string | null = null;
-      for await (const event of streamChat(text, activeId, locale, controller.signal)) {
+      for await (const event of streamChat(text, activeId, locale, controller.signal, activeProfileId)) {
         if (stale()) break;
         if (event.type === "start") {
           createdSessionId = event.session_id;
@@ -175,7 +180,7 @@ export function ChatPageClient({
     } finally {
       setBusy(false);
     }
-  }, [activeId, locale, sessions]);
+  }, [activeId, activeProfileId, locale, sessions]);
 
   const stop = useCallback(() => abortRef.current?.abort(), []);
 

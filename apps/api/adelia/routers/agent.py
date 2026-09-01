@@ -84,7 +84,18 @@ def _map_event(event: AgentEvent) -> dict:
         return {"event": "card", "data": json.dumps({"card": event.card})}
     if event.type == "error":
         return {"event": "error", "data": json.dumps({"content": event.content})}
-    return {"event": "final", "data": json.dumps({})}
+    # The terminal frame carries both citation namespaces (audit 3.7): the
+    # canvas needs them to draw the source card under the answer, and until
+    # it had them every [ev_N] the model wrote was an orphan marker.
+    return {
+        "event": "final",
+        "data": json.dumps(
+            {
+                "citations": event.citations,
+                "evidence_citations": event.evidence_citations,
+            }
+        ),
+    }
 
 @router.post("/turn", dependencies=[PAID])
 async def post_turn(payload: AgentTurnRequest,

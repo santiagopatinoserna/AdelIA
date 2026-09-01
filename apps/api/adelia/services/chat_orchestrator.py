@@ -18,9 +18,15 @@ from adelia.enrichment.evidence_retrieval import (
     format_evidence_for_prompt,
     retrieve_evidence,
 )
+from adelia.clinical import red_flags
 from adelia.schemas import ChatCitation
-from adelia.services.answer_contract import chat_system_prompt, no_evidence_reply
+from adelia.services.answer_contract import (
+    chat_system_prompt,
+    no_evidence_reply,
+    red_flag_reply,
+)
 from adelia.services.retrieval import retrieve_relevant_chunks
+from adelia.services.scope import Scope
 from adelia.services.structured_query import query_observations_by_name_and_date_range
 from adelia.services.temporal import detect_temporal_intent
 from adelia.workers.embed import embed_texts
@@ -144,6 +150,49 @@ async def _stream_openai_tokens(messages: list[dict]) -> AsyncIterator[str]:
                 yield piece
 
 
+async def generate_answer(
+    system_prompt: str,
+    user_message: str,
+    *,
+    timeout_s: float = STREAM_TOTAL_TIMEOUT_S,
+) -> str:
+    """One complete answer from the configured provider, no streaming.
+
+    Same provider selection, same prompts and the same total budget as the
+    chat, collected into a string. It exists for the public demo
+    (routers/demo), whose answer is delivered in a single JSON response: a
+    demo page has no session to stream into and no transcript to persist, so
+    SSE would buy it nothing and cost it a second transport to get wrong.
+
+    The generator is always closed. Abandoning it leaves the HTTP stream to
+    the provider open until GC, which is the leak the chat's own timeouts
+    exist to prevent.
+    """
+    token_iter = _stream_llm_tokens(system_prompt, user_message).__aiter__()
+    pieces: list[str] = []
+    start = time.monotonic()
+    try:
+        while True:
+            remaining = timeout_s - (time.monotonic() - start)
+            if remaining <= 0:
+                raise TimeoutError(f"answer exceeded {timeout_s:.0f}s total budget")
+            try:
+                pieces.append(
+                    await asyncio.wait_for(
+                        token_iter.__anext__(), timeout=min(TOKEN_GAP_TIMEOUT_S, remaining)
+                    )
+                )
+            except StopAsyncIteration:
+                break
+            except asyncio.TimeoutError:
+                raise TimeoutError(
+                    f"answer stalled >{TOKEN_GAP_TIMEOUT_S:.0f}s between tokens"
+                )
+    finally:
+        await token_iter.aclose()
+    return "".join(pieces).strip()
+
+
 async def _retrieve_evidence_for_query(
     query_embedding: list[float] | None,
     *,
@@ -181,18 +230,65 @@ async def _retrieve_evidence_for_query(
 
 
 async def answer_question_streaming(
-    *, user_id: UUID, question: str, history: list[dict] | None = None, locale: str = "es"
+    *,
+    user_id: UUID,
+    question: str,
+    history: list[dict] | None = None,
+    locale: str = "es",
+    age_months: int | None = None,
+    country: str | None = None,
+    profile_id: UUID | None = None,
 ) -> AsyncIterator[ChatEvent]:
-    """Main orchestrator: detect temporal intent → retrieve patient + evidence context → stream LLM.
+    """Main orchestrator: red flags → temporal intent → retrieve → stream LLM.
 
     Dual-RAG: patient chunks (or temporal observations) PLUS clinical guidelines
     (from evidence_chunks). Citations returned in separate namespaces:
-    - citations: list[ChatCitation] (patient data — linkable to /dashboard/documents)
-    - evidence_citations: list[dict] (guidelines — linkable to source URLs)
+    - citations: list[ChatCitation] (patient data, linkable to /dashboard/documents)
+    - evidence_citations: list[dict] (guidelines, linkable to source URLs)
+
+    `age_months` is the active profile's age, resolved by the caller (the
+    router and the agent both have a session; this function must not open
+    one mid-stream). It gates the age-dependent red flags, above all "under
+    3 months with a fever of 38 C or more" (NICE NG143 1.2.12). When it is
+    None the detector still runs on any age the parent wrote in the question
+    itself.
+
+    `profile_id` is the SAME resolved profile the age came from, and it is
+    what keeps the two children of one account apart: retrieval and the
+    temporal query are both scoped to it (audit 4.1). The caller resolves it
+    once (ProfileFacts.profile_id) rather than each read resolving its own,
+    so the answer, its citations and the age all describe one child. None
+    means "the whole account", which is what an account with no profile at
+    all still gets.
     """
+    scope = Scope(user_id=user_id, profile_id=profile_id)
     citations: list[ChatCitation] = []
     evidence_citations: list[dict] = []
     query_embedding: list[float] | None = None
+
+    # Red flags first, ahead of retrieval and of any model call (audit 3.3).
+    #
+    # This is deliberately the FIRST statement of the answering path, before
+    # the embedding, before the vector search, before the prompt. The
+    # question that makes this necessary ("my 2-month-old is at 38.2, do I
+    # give her paracetamol?") is one retrieval answers beautifully and
+    # wrongly: there is a paracetamol fragment, the model will dose it, and
+    # the answer will carry a citation. Nothing downstream of here can undo
+    # that, so nothing downstream of here runs.
+    flag = red_flags.detect(question, locale=locale, age_months=age_months)
+    if flag is not None:
+        logger.warning(
+            "chat: red flag %s fired (matched=%r, age_months=%s); returning the "
+            "urgent referral without retrieval and without the generative model",
+            flag.code, flag.matched, flag.age_months,
+        )
+        yield ChatEvent(type="token", content=red_flag_reply(flag.code, locale, country=country))
+        yield ChatEvent(
+            type="final",
+            citations=[],
+            evidence_citations=[red_flags.citation_for(flag)],
+        )
+        return
 
     # Elliptical follow-ups ("¿y ese valor?") embed poorly on their own —
     # augment the retrieval query with the tail of the conversation. Temporal
@@ -206,7 +302,7 @@ async def answer_question_streaming(
         temporal = detect_temporal_intent(question)
         if temporal is not None:
             rows = await query_observations_by_name_and_date_range(
-                user_id=user_id,
+                scope=scope,
                 name_substring=temporal.entity_name,
                 from_date=temporal.from_date,
                 to_date=temporal.to_date,
@@ -238,7 +334,7 @@ async def answer_question_streaming(
                 )
             query_embedding = query_embeds[0]
             chunks = await retrieve_relevant_chunks(
-                user_id=user_id,
+                scope=scope,
                 query_embedding=query_embedding,
                 top_k=8,
                 max_distance=settings.patient_max_distance,

@@ -88,11 +88,16 @@ class LabEvalRequest(BaseModel):
     name: str
     value: float | str
     sex: str | None = None  # "M" | "F"
+    age_months: int | None = Field(default=None, ge=0, le=1500)
 
 
 class LabEvalBulkRequest(BaseModel):
     observations: list[LabEvalRequest] = Field(default_factory=list, max_length=200)
     sex: str | None = None  # default sex applied when item lacks one
+    #: Age of the patient in months. When absent, the active profile's age is
+    #: used; when there is no profile either, nothing is evaluated (audit 3.5).
+    age_months: int | None = Field(default=None, ge=0, le=1500)
+    profile_id: UUID | None = None
 
 
 class LabEvalResult(BaseModel):
@@ -105,6 +110,12 @@ class LabEvalResult(BaseModel):
     interpretation: str | None = None
     range_low: float | None = None
     range_high: float | None = None
+    #: Which age band produced the range, e.g. "1-12m" or "adulto".
+    age_band: str | None = None
+    #: Why nothing was evaluated, when that is the case. "unknown_age" and
+    #: "no_pediatric_band" are answers, not errors: applying an adult range to
+    #: a baby is what the audit calls false reassurance.
+    reason: str | None = None
 
 
 @router.post("/lab-evaluate", response_model=list[LabEvalResult])
@@ -112,13 +123,24 @@ async def lab_evaluate(
     payload: LabEvalBulkRequest,
     _user_id: UUID = Depends(get_current_user_id),
 ):
+    # An age is required to pick a reference band (audit 3.5). Explicit wins;
+    # otherwise the active profile answers; otherwise nothing is evaluated.
+    default_age = payload.age_months
+    if default_age is None:
+        facts = await profile_service.load_profile_facts(user_id=_user_id, profile_id=payload.profile_id)
+        default_age = facts.age_months
+
     out: list[LabEvalResult] = []
     for obs in payload.observations:
         sex = obs.sex or payload.sex
+        age = obs.age_months if obs.age_months is not None else default_age
+        if age is None:
+            out.append(LabEvalResult(name=obs.name, reason="unknown_age"))
+            continue
         # mypy-friendly cast — service does its own validation
-        status_obj = lab_svc.evaluate(obs.name, obs.value, sex=sex)  # type: ignore[arg-type]
+        status_obj = lab_svc.evaluate(obs.name, obs.value, age_months=age, sex=sex)  # type: ignore[arg-type]
         if status_obj is None:
-            out.append(LabEvalResult(name=obs.name))
+            out.append(LabEvalResult(name=obs.name, reason="no_pediatric_band"))
             continue
         out.append(
             LabEvalResult(
@@ -131,6 +153,7 @@ async def lab_evaluate(
                 interpretation=status_obj.interpretation,
                 range_low=status_obj.range.low,
                 range_high=status_obj.range.high,
+                age_band=status_obj.range.age_band,
             )
         )
     return out

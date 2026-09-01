@@ -4,6 +4,8 @@ import { useRouter } from "next/navigation";
 import { useTranslations } from "next-intl";
 import { UploadCloud, Loader2, AlertCircle, CheckCircle2 } from "lucide-react";
 
+import { useActiveProfile } from "@/lib/profile-context";
+
 const MAX_BYTES = 25 * 1024 * 1024; // 25 MB — comfortable for photos, PDFs, voice notes
 const ACCEPT = "application/pdf,image/png,image/jpeg,audio/*";
 
@@ -28,6 +30,11 @@ export function UploadZone({ locale }: { locale: string }) {
   const [fileName, setFileName] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [done, setDone] = useState(false);
+  // Which child this document belongs to. Without it every upload landed with
+  // profile_id NULL, so a mother of two filed both children's reports into one
+  // undivided pile and the chat answered one child's question out of the
+  // other's lab results (audit 4.1, 4.2).
+  const { activeId } = useActiveProfile();
 
   async function upload(file: File) {
     if (busy || done) return; // guard against rapid double drops/clicks
@@ -42,6 +49,7 @@ export function UploadZone({ locale }: { locale: string }) {
     try {
       const fd = new FormData();
       fd.append("file", file);
+      if (activeId) fd.append("profile_id", activeId);
       // Same-origin proxy signs the request server-side — the JWT never
       // reaches the browser (invariant since the api split).
       const res = await fetch("/api/backend/documents", {

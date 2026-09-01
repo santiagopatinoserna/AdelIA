@@ -1,7 +1,8 @@
 import { redirect } from "next/navigation";
 import { getLocale } from "next-intl/server";
 
-import { billingStatus } from "@/lib/api-client";
+import { billingStatus, onboarding } from "@/lib/api-client";
+import { ProfileProvider } from "@/lib/profile-context";
 
 // The paywall gate, and nothing else. It lives in a route group so it covers
 // the product screens WITHOUT covering /dashboard/settings, which holds
@@ -20,6 +21,17 @@ import { billingStatus } from "@/lib/api-client";
 // (adelia/auth.require_active_subscription); this redirect is a courtesy that
 // spares her a screen full of failed requests, not a security boundary, and a
 // courtesy must not lock the door when it cannot read the lock.
+function isRedirect(err: unknown): boolean {
+  // Next's redirect() throws a NEXT_REDIRECT signal — never swallow it.
+  return (
+    typeof err === "object" &&
+    err !== null &&
+    "digest" in err &&
+    typeof (err as { digest?: unknown }).digest === "string" &&
+    (err as { digest: string }).digest.startsWith("NEXT_REDIRECT")
+  );
+}
+
 export default async function PaidDashboardLayout({
   children,
 }: {
@@ -30,18 +42,40 @@ export default async function PaidDashboardLayout({
     const billing = await billingStatus();
     if (!billing.active) redirect(`/${locale}/billing`);
   } catch (err) {
-    // Next's redirect() throws a NEXT_REDIRECT signal — never swallow it.
-    if (
-      typeof err === "object" &&
-      err !== null &&
-      "digest" in err &&
-      typeof (err as { digest?: unknown }).digest === "string" &&
-      (err as { digest: string }).digest.startsWith("NEXT_REDIRECT")
-    ) {
-      throw err;
-    }
+    if (isRedirect(err)) throw err;
     // Status unreadable: let her through and let the API decide.
   }
 
-  return <>{children}</>;
+  // The baby screen, once, before the panel (audit 4.3). It sits in the same
+  // pass-through layout as the paywall, and NOT in dashboard/layout.tsx, for
+  // two reasons. The product one: /dashboard/settings holds "export my data"
+  // and "delete my account", and no question stands between a parent and
+  // those. The mechanical one: dashboard/layout.tsx renders the whole shell,
+  // and adding either an await or a client provider to THAT layout makes Next
+  // stream the shell and its children separately, so for a few milliseconds
+  // after every navigation the page exists twice in the DOM. Harmless to a
+  // human, fatal to any test that asserts on a unique element, and measured:
+  // diary.spec.ts failed 3 runs out of 3 with the gate up there and passes 3
+  // out of 3 with it here. This layout renders no markup of its own, so it
+  // has neither effect.
+  //
+  // The screen itself lives at /{locale}/onboarding, outside every dashboard
+  // layout: a page under this one would redirect to itself for ever.
+  //
+  // Fail-OPEN, like the paywall above: a transient API error must not stand
+  // between a mother and her baby's records.
+  try {
+    const status = await onboarding.status();
+    if (status.needed) redirect(`/${locale}/onboarding`);
+  } catch (err) {
+    if (isRedirect(err)) throw err;
+  }
+
+  // ProfileProvider: ONE active child for every paid surface — the consult
+  // recorder, the upload zone, the chat, the briefing form and the agent
+  // canvas all read it (audit 4.2). It used to wrap only the agent home, so
+  // the recorder, which renders a profile selector from this very context,
+  // read the empty default: no profiles, activeId null, and an appointment
+  // recording filed under no child at all.
+  return <ProfileProvider>{children}</ProfileProvider>;
 }

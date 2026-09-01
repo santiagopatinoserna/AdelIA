@@ -30,12 +30,12 @@ def _entities_text() -> str:
     not settings.mistral_api_key,
     reason="MISTRAL_API_KEY not set — live test skipped",
 )
-def test_bake_questions_live_returns_qa_items():
+async def test_bake_questions_live_returns_qa_items():
     source_texts = {
         "doc_1": "patient allergic to penicillin since 2018. HbA1c 6.2% on 2025-12-10.",
         "doc_2": "metformin 500mg twice daily",
     }
-    items, meta = bake_questions(
+    items, meta = await bake_questions(
         specialty=Specialty.ENDOCRINOLOGY,
         entities_text=_entities_text(),
         specialty_hints="Endocrinologist focus: HbA1c, diabetes meds, family history.",
@@ -53,7 +53,7 @@ def test_bake_questions_live_returns_qa_items():
     assert meta.tokens_used > 0
 
 
-def test_bake_questions_raises_on_client_error(monkeypatch):
+async def test_bake_questions_raises_on_client_error(monkeypatch):
     from adelia.services import qa_pre_baker as module
 
     class BoomClient:
@@ -67,7 +67,7 @@ def test_bake_questions_raises_on_client_error(monkeypatch):
     monkeypatch.setattr(module, "_build_client", lambda: BoomClient())
 
     with pytest.raises(QAPrebakerError):
-        bake_questions(
+        await bake_questions(
             specialty=Specialty.DEFAULT,
             entities_text="x",
             specialty_hints="x",
@@ -75,7 +75,7 @@ def test_bake_questions_raises_on_client_error(monkeypatch):
         )
 
 
-def test_anti_hallucination_filter_drops_quotes_not_in_source(monkeypatch):
+async def test_anti_hallucination_filter_drops_quotes_not_in_source(monkeypatch):
     """Quotes not present verbatim in any source doc are silently dropped."""
     from adelia.services import qa_pre_baker as module
 
@@ -106,13 +106,13 @@ def test_anti_hallucination_filter_drops_quotes_not_in_source(monkeypatch):
         ]
     }
 
-    def _fake_llm_call(*args, **kwargs):
+    async def _fake_llm_call(*args, **kwargs):
         return fake_response, 100
 
     monkeypatch.setattr(module, "_llm_structured_call", _fake_llm_call)
     monkeypatch.setattr(module, "_build_client", lambda: object())
 
-    items, meta = bake_questions(
+    items, meta = await bake_questions(
         specialty=Specialty.DEFAULT,
         entities_text="...",
         specialty_hints="...",

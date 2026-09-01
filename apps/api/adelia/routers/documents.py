@@ -24,6 +24,7 @@ from adelia.enrichment import profile_service
 from adelia.models import BlobTombstone, Chunk, ConsentEvent, Document, Entity, Profile
 from adelia.schemas import DocumentOut, ExtractedEntity, derive_status
 from adelia.services import briefing_repo
+from adelia.services.scope import Scope
 from adelia.storage import S3Storage
 from adelia.workers.chunker import ChunkConfig, chunk_hierarchical
 from adelia.workers.embed import embed_texts
@@ -173,6 +174,90 @@ def _get_processing_semaphore() -> asyncio.Semaphore:
     if _processing_semaphore is None:
         _processing_semaphore = asyncio.Semaphore(settings.doc_processing_concurrency)
     return _processing_semaphore
+
+
+# Strong references to in-flight reconciliation tasks. The event loop only
+# holds a weak one, so a bare create_task() can be garbage-collected
+# mid-pipeline (asyncio docs) — the same trap telegram_diary documents.
+_BACKGROUND_TASKS: set[asyncio.Task] = set()
+
+
+async def _clear_derived_rows(session: AsyncSession, document_id: uuid.UUID) -> None:
+    """Drop the entities and chunks a previous attempt left behind.
+
+    Reprocessing without this duplicates every entity and every chunk of a
+    document that failed halfway: the second run re-extracts the same
+    findings, and the chat then retrieves the same quote three times and
+    cites it three times. Entities are HARD-deleted rather than tombstoned
+    because they are derived data, not the parent's record: the document and
+    its raw_text (which is what she wrote or what was said) are untouched.
+    """
+    await session.execute(sa.delete(Entity).where(Entity.document_id == document_id))
+    await session.execute(sa.delete(Chunk).where(Chunk.document_id == document_id))
+
+
+def _spawn_pipeline(document_id: uuid.UUID, mime_type: str, is_consulta: bool) -> asyncio.Task:
+    task = asyncio.create_task(process_document(document_id, mime_type, is_consulta))
+    _BACKGROUND_TASKS.add(task)
+    task.add_done_callback(_BACKGROUND_TASKS.discard)
+    return task
+
+
+async def requeue_stuck_documents(limit: int | None = None) -> list[uuid.UUID]:
+    """Re-enqueue documents a dead worker left mid-pipeline. Called at boot.
+
+    The audit's finding (4.2 "no hay cola durable"): all heavy work is
+    `background.add_task(process_document, ...)` in this process. A deploy, an
+    OOM or a power cut in the middle kills the task, and nothing anywhere
+    retried it — `grep -i "requeue|reprocess|stuck"` over the API returned
+    zero. A mother recorded a 20-minute appointment, got her 201 and
+    "procesando", and the screen said "procesando" for ever while the audio
+    sat in MinIO with no transcript, no entities and no retry button.
+
+    This is the minimum viable durability until a real queue exists: at every
+    boot, anything created more than `document_stuck_after_minutes` ago and
+    still unprocessed is cleaned of its half-written derivatives and run
+    again. `_process_document_inner` always writes `processed_at` in its final
+    transaction, failure included, so a requeued document ends either "ready"
+    or "failed" — never "processing" for ever.
+
+    Returns the ids requeued (empty list when there is nothing to do).
+    """
+    cap = settings.document_requeue_limit if limit is None else limit
+    cutoff = datetime.now(timezone.utc) - timedelta(
+        minutes=settings.document_stuck_after_minutes
+    )
+    async with AsyncSessionLocal() as session:
+        rows = (
+            await session.execute(
+                select(Document.id, Document.mime_type, Document.source)
+                .where(
+                    Document.processed_at.is_(None),
+                    Document.deleted_at.is_(None),
+                    Document.created_at < cutoff,
+                )
+                # NEWEST first, not oldest. With a cap, oldest-first
+                # starves exactly the rows this exists for: a dev or prod
+                # database accumulates permanently unprocessable relics (a
+                # blob deleted, a format never supported), and they would eat
+                # the whole budget at every boot while the upload a parent is
+                # staring at right now is never reached.
+                .order_by(Document.created_at.desc())
+                .limit(cap)
+            )
+        ).all()
+        for doc_id, _mime, _source in rows:
+            await _clear_derived_rows(session, doc_id)
+        if rows:
+            await session.commit()
+
+    for doc_id, mime, source in rows:
+        logger.warning(
+            "requeueing document %s stuck since before %s (source=%s)",
+            doc_id, cutoff.isoformat(), source,
+        )
+        _spawn_pipeline(doc_id, mime, source == "consulta")
+    return [row[0] for row in rows]
 
 
 async def process_document(document_id: uuid.UUID, mime_type: str, is_consulta: bool = False) -> None:
@@ -506,7 +591,23 @@ async def list_documents(
     db: Annotated[AsyncSession, Depends(get_db)],
     limit: Annotated[int, Query(ge=1, le=200)] = 50,
     offset: Annotated[int, Query(ge=0)] = 0,
+    profile_id: Annotated[uuid.UUID | None, Query()] = None,
 ):
+    """The account's documents, optionally narrowed to one child.
+
+    `profile_id` is opt-in rather than resolved from the default profile: the
+    list is also the GDPR-facing view of everything the account holds, and a
+    silent default would hide a second child's records from the only screen
+    that shows them. The web app sends the active profile explicitly (audit
+    4.1, 4.2). Documents filed before profiles existed (profile_id IS NULL)
+    stay visible under every profile.
+    """
+    if profile_id is not None:
+        owned = await profile_service.get_profile(
+            db, profile_id=profile_id, user_id=user_id
+        )
+        if owned is None:
+            raise HTTPException(status_code=404, detail="Not found")
     # Correlated scalar counts: 2 index lookups per returned row (≤limit),
     # O(page) instead of O(total table) — the previous GROUP BY subqueries
     # seq-scanned entities+chunks across ALL users on every dashboard load.
@@ -522,9 +623,10 @@ async def list_documents(
         .correlate(Document)
         .scalar_subquery()
     )
+    scope = Scope(user_id=user_id, profile_id=profile_id)
     result = await db.execute(
         select(Document, entity_count, chunk_count)
-        .where(Document.user_id == user_id, Document.deleted_at.is_(None))
+        .where(*scope.where(Document), Document.deleted_at.is_(None))
         .order_by(Document.created_at.desc())
         .limit(limit)
         .offset(offset)
@@ -644,4 +746,40 @@ async def set_speaker_names(
     }
     await db.commit()
     await db.refresh(doc)
+    return _doc_to_out(doc)
+
+
+@router.post(
+    "/{doc_id}/reprocess",
+    response_model=DocumentOut,
+    status_code=status.HTTP_202_ACCEPTED,
+    dependencies=[PAID],
+)
+async def reprocess_document(
+    doc_id: uuid.UUID,
+    background: BackgroundTasks,
+    user_id: Annotated[uuid.UUID, Depends(get_current_user_id)],
+    db: Annotated[AsyncSession, Depends(get_db)],
+):
+    """Run the pipeline again on a document that failed or hung (audit 4.4).
+
+    Until now a failed transcription was terminal from the UI: the blob was in
+    MinIO, the row said "failed" or "processing" for ever, and the only way to
+    try again was to re-record an appointment that cannot be re-recorded.
+
+    `raw_text` is deliberately NOT cleared: for a diary entry it holds what
+    the parent typed, and that text is hers, not a derivative. Entities and
+    chunks ARE cleared, because they are re-extracted and would otherwise be
+    duplicated. Opaque 404 across users, like every other route here.
+    """
+    doc = await db.get(Document, doc_id)
+    if doc is None or doc.user_id != user_id or doc.deleted_at is not None:
+        raise HTTPException(status_code=404, detail="Not found")
+
+    await _clear_derived_rows(db, doc.id)
+    doc.processed_at = None
+    await db.commit()
+    await db.refresh(doc)
+
+    background.add_task(process_document, doc.id, doc.mime_type, doc.source == "consulta")
     return _doc_to_out(doc)

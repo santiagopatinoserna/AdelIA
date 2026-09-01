@@ -17,8 +17,10 @@ from adelia.routers import (
     briefings,
     chat,
     consent,
+    demo,
     documents,
     enrichment,
+    funnel,
     health,
     ingestion,
     ingestion_webhooks,
@@ -103,6 +105,19 @@ async def lifespan(app: FastAPI):
         await sweep_blob_tombstones()
     except Exception:  # noqa: BLE001 — sweep must never block boot
         logger.exception("startup blob tombstone sweep failed")
+    # Reconciliation (audit 4.4): whatever a crash, an OOM or the last deploy
+    # left half-processed gets cleaned of its partial derivatives and run
+    # again. This is the only retry the in-process pipeline has until a
+    # durable queue exists, and it is why a document can no longer sit at
+    # "procesando" for ever.
+    try:
+        from adelia.routers.documents import requeue_stuck_documents
+
+        requeued = await requeue_stuck_documents()
+        if requeued:
+            logger.warning("boot reconciliation requeued %d document(s)", len(requeued))
+    except Exception:  # noqa: BLE001 — reconciliation must never block boot
+        logger.exception("startup document reconciliation failed")
     # Load clinical evidence corpora (seed + per-topic files). Idempotent by
     # title, so re-running on every boot is safe; new topics drop in as JSON.
     if settings.mistral_api_key:
@@ -240,3 +255,7 @@ app.include_router(users.router)
 app.include_router(clinical.router)
 app.include_router(billing.router)
 app.include_router(agent.router)
+# Public, unauthenticated, and deliberately last so the list reads as
+# "everything above needs a session; these two do not" (audit 4.6, 4.8).
+app.include_router(demo.router)
+app.include_router(funnel.router)

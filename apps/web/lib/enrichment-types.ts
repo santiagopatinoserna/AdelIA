@@ -30,6 +30,14 @@ export interface LabEvalResult {
   interpretation?: string | null;
   range_low?: number | null;
   range_high?: number | null;
+  /** Which age band produced the range, e.g. "1-12m" or "adulto". */
+  age_band?: string | null;
+  /**
+   * Why nothing was evaluated. "unknown_age" and "no_pediatric_band" are
+   * answers, not errors (audit 3.5): comparing a baby against an adult range
+   * is how 38 C at 2 months became a "low grade fever".
+   */
+  reason?: "unknown_age" | "no_pediatric_band" | null;
 }
 
 export interface DrugCheckRequest {

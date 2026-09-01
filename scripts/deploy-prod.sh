@@ -17,8 +17,11 @@
 #                                               # discovery in isolation
 #   ./scripts/deploy-prod.sh --allow-dirty      # EMERGENCY ONLY: skip the
 #                                               # clean-tree/pushed-HEAD gate
+#   ./scripts/deploy-prod.sh --skip-golden      # EMERGENCY ONLY: skip the
+#                                               # clinical golden-set gate
 #
-# Steps: check working tree -> discover host -> rsync code (no --delete) ->
+# Steps: check working tree -> golden set (clinical gate) -> discover host ->
+# rsync code (no --delete) ->
 # docker compose up -d --build -> verify (HTTP 200s + alembic version) ->
 # summary.
 #
@@ -190,6 +193,45 @@ check_tree_is_deployable() {
   exit 1
 }
 
+# --- 1c. The clinical gate: the golden set (audit 3.2) --------------------
+#
+# Fifteen questions in three groups (adelia/clinical/golden.py). The deploy
+# stops if recall@4 in group A is below 0.8, if the refusal rate in group B
+# is not 1.0, if any orphan citation appears, or if a single red flag of
+# group C fails to fire.
+#
+# Group C needs neither a key nor a database, so this gate always has teeth:
+# it is the part that protects against the audit's risk 1 (a baby harmed by
+# an answer that looks sourced and is not). Groups A and B need embeddings
+# and a loaded corpus; when they cannot run, the test says so, the report
+# records "no ejecutado", and the deploy continues with a warning rather than
+# a green tick that means nothing. Bypass with --skip-golden, out loud.
+run_golden_gate() {
+  local skip="$1"
+  if [[ "${skip}" -eq 1 ]]; then
+    log "WARNING: --skip-golden. Deploying without the clinical gate."
+    return 0
+  fi
+  if ! command -v uv >/dev/null 2>&1; then
+    log "WARNING: uv not found; the golden set did not run."
+    return 0
+  fi
+  log "Golden set (clinical gate)..."
+  if ( cd "${REPO_ROOT}/apps/api" && uv run pytest -q tests/test_rag_golden.py -rs ); then
+    if [[ -f "${REPO_ROOT}/apps/api/golden_report.json" ]]; then
+      sed 's/^/[deploy]   /' "${REPO_ROOT}/apps/api/golden_report.json"
+    fi
+    return 0
+  fi
+  {
+    printf '[deploy] ERROR: the golden set failed. Not deploying.\n\n'
+    printf '  See apps/api/golden_report.json for recall@4, the refusal rate,\n'
+    printf '  orphan citations and which questions missed.\n\n'
+    printf '  Bypass (deliberately, and write down why): ./scripts/deploy-prod.sh --skip-golden\n'
+  } >&2
+  exit 1
+}
+
 # --- 2. Sync code
 #
 # Two passes on purpose. The root pass never deletes, because /opt/adelia
@@ -346,10 +388,14 @@ verify() {
   local host="$1" services="$2"
   log "Verifying deployment..."
 
-  local code_home code_prof code_priv code_terms code_txt db_version expected fail=0
+  local code_home code_demo code_prof code_priv code_terms code_txt db_version expected fail=0
   local pwa_status="OK"
 
   code_home=$(wait_for_url "https://adelia.godi.ai/es") || true
+  # The public demo (audit 4.6) is the only page that shows the product
+  # working without an account, and it is the one public page that needs the
+  # API to render: a 200 here also proves web->api is wired.
+  code_demo=$(check_url "https://adelia.godi.ai/es/demo")
   code_prof=$(check_url "https://adelia.godi.ai/es/profesionales")
   code_priv=$(check_url "https://adelia.godi.ai/es/privacidad")
   code_terms=$(check_url "https://adelia.godi.ai/es/terminos")
@@ -363,6 +409,7 @@ verify() {
   expected=$(expected_alembic_head)
 
   [[ "${code_home}" == "200" ]] || { log "FAIL: GET /es -> ${code_home}"; fail=1; }
+  [[ "${code_demo}" == "200" ]] || { log "FAIL: GET /es/demo -> ${code_demo}"; fail=1; }
   [[ "${code_prof}" == "200" ]] || { log "FAIL: GET /es/profesionales -> ${code_prof}"; fail=1; }
   [[ "${code_priv}" == "200" ]] || { log "FAIL: GET /es/privacidad -> ${code_priv}"; fail=1; }
   [[ "${code_terms}" == "200" ]] || { log "FAIL: GET /es/terminos -> ${code_terms}"; fail=1; }
@@ -376,6 +423,7 @@ verify() {
 Server:                 ${REMOTE_USER}@${host}
 Services rebuilt:       ${services}
 GET /es:                ${code_home}
+GET /es/demo:           ${code_demo}
 GET /es/profesionales:  ${code_prof}
 GET /es/privacidad:     ${code_priv}
 GET /es/terminos:       ${code_terms}
@@ -407,13 +455,15 @@ EOF
 parse_args() {
   DISCOVER_ONLY=0
   ALLOW_DIRTY=0
+  SKIP_GOLDEN=0
   local -a service_args=()
 
   while [[ $# -gt 0 ]]; do
     case "$1" in
       --discover-only) DISCOVER_ONLY=1 ;;
       --allow-dirty) ALLOW_DIRTY=1 ;;
-      --*) die "unknown flag: $1 (known: --discover-only, --allow-dirty)" ;;
+      --skip-golden) SKIP_GOLDEN=1 ;;
+      --*) die "unknown flag: $1 (known: --discover-only, --allow-dirty, --skip-golden)" ;;
       *) service_args+=("$1") ;;
     esac
     shift
@@ -427,6 +477,7 @@ main() {
   parse_args "$@"
   local discover_only="${DISCOVER_ONLY}"
   local allow_dirty="${ALLOW_DIRTY}"
+  local skip_golden="${SKIP_GOLDEN}"
   local requested_services="${REQUESTED_SERVICES}"
   local host
 
@@ -436,6 +487,7 @@ main() {
   # minute: is this tree even deployable?
   if [[ "${discover_only}" -eq 0 ]]; then
     check_tree_is_deployable "${allow_dirty}"
+    run_golden_gate "${skip_golden}"
   fi
 
   if host="$(discover_host)"; then

@@ -59,6 +59,15 @@ export type EmailAliasDTO = {
 
 export type Fetcher = (path: string, init?: RequestInit) => Promise<Response>;
 
+/** Whether the baby screen still has to be shown (audit 4.3). */
+export type OnboardingStatus = { needed: boolean };
+
+export type BabyOnboarding = {
+  display_name: string;
+  date_of_birth?: string | null;
+  sex?: "M" | "F" | "other" | null;
+};
+
 export type BillingStatus = {
   status: string;
   active: boolean;
@@ -66,6 +75,13 @@ export type BillingStatus = {
   trial_end: string | null;
   current_period_end: string | null;
   trial_days: number;
+  /** "stripe" | "local" | null. "local" is the card-free trial this server
+   *  grants a brand-new account (audit 4.7); Stripe has never heard of it. */
+  trial_source?: "stripe" | "local" | null;
+  /** Whether a Stripe customer exists, i.e. whether POST /billing/portal has
+   *  anything to open. Settings shows "manage" when true and "subscribe" when
+   *  false, instead of a one-click button that answers 400. */
+  can_manage?: boolean;
 };
 
 export function makeApi(fetcher: Fetcher) {
@@ -76,8 +92,33 @@ export function makeApi(fetcher: Fetcher) {
       return res.json();
     },
 
-    async listDocuments(): Promise<DocumentDTO[]> {
-      const res = await fetcher("/documents");
+    onboarding: {
+      async status(): Promise<OnboardingStatus> {
+        const res = await fetcher("/users/me/onboarding");
+        if (!res.ok) throw new Error(`onboarding.status: ${res.status}`);
+        return res.json();
+      },
+
+      async complete(payload: BabyOnboarding): Promise<void> {
+        const res = await fetcher("/users/me/onboarding", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(payload),
+        });
+        if (!res.ok) throw new Error(`onboarding.complete: ${res.status}`);
+      },
+
+      async skip(): Promise<void> {
+        const res = await fetcher("/users/me/onboarding/skip", { method: "POST" });
+        if (!res.ok && res.status !== 204) {
+          throw new Error(`onboarding.skip: ${res.status}`);
+        }
+      },
+    },
+
+    async listDocuments(profileId?: string | null): Promise<DocumentDTO[]> {
+      const qs = profileId ? `?profile_id=${encodeURIComponent(profileId)}` : "";
+      const res = await fetcher(`/documents${qs}`);
       if (!res.ok) throw new Error(`listDocuments: ${res.status}`);
       return res.json();
     },
@@ -85,6 +126,14 @@ export function makeApi(fetcher: Fetcher) {
     async getDocument(id: string): Promise<DocumentDTO> {
       const res = await fetcher(`/documents/${id}`);
       if (!res.ok) throw new Error(`getDocument: ${res.status}`);
+      return res.json();
+    },
+
+    /** Run the pipeline again on a document that failed or hung (audit 4.4).
+     *  Returns the row reset to "processing"; the caller resumes polling. */
+    async reprocessDocument(id: string): Promise<DocumentDTO> {
+      const res = await fetcher(`/documents/${id}/reprocess`, { method: "POST" });
+      if (!res.ok) throw new Error(`reprocessDocument: ${res.status}`);
       return res.json();
     },
 

@@ -22,6 +22,7 @@ users.subscription_status row.
 from __future__ import annotations
 
 import uuid
+from datetime import datetime, timedelta, timezone
 from unittest.mock import patch
 
 import pytest
@@ -69,8 +70,20 @@ def _billing_configured(monkeypatch):
     monkeypatch.setattr(settings, "stripe_secret_key", "sk_test_gate")
 
 
-async def _headers(status_value: str = "none") -> dict[str, str]:
-    user_id = await make_user(subscription_status=status_value)
+# Old enough that the card-free trial (audit 4.7) has run out. That trial is
+# derived from users.created_at, so "not paying" is no longer a status alone:
+# an account created a minute ago with status "none" is INSIDE its free trial
+# and must reach the product. Every case below that expects a 402 is about an
+# account whose trial is over, which is what this age means.
+TRIAL_IS_OVER_DAYS = 365
+
+
+async def _headers(
+    status_value: str = "none", *, created_days_ago: int | None = TRIAL_IS_OVER_DAYS
+) -> dict[str, str]:
+    user_id = await make_user(
+        subscription_status=status_value, created_days_ago=created_days_ago
+    )
     return {"Authorization": f"Bearer {make_token(str(user_id))}"}
 
 
@@ -249,8 +262,8 @@ async def test_the_public_share_viewer_is_never_paywalled(client):
 
 
 async def test_subscription_status_defaults_to_none_for_a_fresh_user():
-    """The column's server_default is what the gate reads on a brand-new
-    account, so a signup with no checkout is refused by default."""
+    """The column's server_default is still "none": nothing writes it at
+    signup, and the card-free trial adds no second source of truth."""
     async with AsyncSessionLocal() as session:
         user = User(email=f"fresh-{uuid.uuid4()}@adelia.test")
         session.add(user)
@@ -258,10 +271,98 @@ async def test_subscription_status_defaults_to_none_for_a_fresh_user():
         await session.refresh(user)
         user_id = user.id
 
-    from adelia.auth import has_active_subscription, subscription_status_for
+    from adelia.auth import subscription_status_for
 
     assert await subscription_status_for(user_id) == "none"
-    assert await has_active_subscription(user_id) is False
+
+
+# --- The card-free trial (audit 4.7) ----------------------------------------
+#
+# The wall used to be the very first screen: magic link, then Stripe Checkout
+# with payment_method_collection="always". A brand-new account now reaches the
+# product without a card, for settings.free_trial_days, and the trial is
+# DERIVED from users.created_at rather than written at signup, so it cannot
+# resurrect an account Stripe has already cancelled.
+
+
+async def test_a_brand_new_account_reaches_the_product_without_stripe(client):
+    """The acceptance criterion of 4.7, on the API side."""
+    resp = await client.get(
+        "/enrichment/coverage", headers=await _headers("none", created_days_ago=0)
+    )
+
+    assert resp.status_code == 200, resp.text
+
+
+async def test_the_free_trial_expires(client):
+    resp = await client.get(
+        "/enrichment/coverage",
+        headers=await _headers("none", created_days_ago=settings.free_trial_days + 1),
+    )
+
+    assert resp.status_code == 402, resp.text
+
+
+async def test_a_cancelled_account_is_not_rescued_by_its_age(client):
+    """A "canceled" status is Stripe speaking, and it always wins: without
+    this rule an account cancelled on day 3 would keep the product for the
+    remaining 27 days of a trial it no longer has."""
+    resp = await client.get(
+        "/enrichment/coverage",
+        headers=await _headers("canceled", created_days_ago=0),
+    )
+
+    assert resp.status_code == 402, resp.text
+
+
+async def test_billing_status_reports_the_free_trial_like_any_other(client):
+    """One vocabulary for the interface: the local trial is reported as
+    status "trialing" with an end date, and trial_source says where it came
+    from so Settings can offer the right button."""
+    resp = await client.get(
+        "/billing/status", headers=await _headers("none", created_days_ago=0)
+    )
+
+    assert resp.status_code == 200, resp.text
+    body = resp.json()
+    assert body["active"] is True
+    assert body["status"] == "trialing"
+    assert body["trial_source"] == "local"
+    assert body["trial_end"] is not None
+    assert body["can_manage"] is False
+
+
+async def test_the_free_trial_can_be_switched_off(client, monkeypatch):
+    """FREE_TRIAL_DAYS=0 restores the behaviour of before 2026-09-01, which
+    is what a deployment that wants the card up front sets."""
+    monkeypatch.setattr(settings, "free_trial_days", 0)
+
+    resp = await client.get(
+        "/enrichment/coverage", headers=await _headers("none", created_days_ago=0)
+    )
+
+    assert resp.status_code == 402, resp.text
+
+
+async def test_checkout_does_not_grant_a_second_trial():
+    """Stacking the two trials would put the first invoice on day 60: the
+    Stripe subscription is opened with only the days she has left."""
+    from adelia.models import User as UserModel
+    from adelia.routers.billing import _remaining_trial_days
+
+    fresh = UserModel(
+        email="x@adelia.test",
+        subscription_status="none",
+        created_at=datetime.now(timezone.utc) - timedelta(days=25),
+    )
+    assert _remaining_trial_days(fresh) == 5
+
+    used_up = UserModel(
+        email="y@adelia.test",
+        subscription_status="none",
+        created_at=datetime.now(timezone.utc) - timedelta(days=90),
+    )
+    assert _remaining_trial_days(used_up) == 0
 
 
 # --- Self-hosting (audit follow-up) -----------------------------------------

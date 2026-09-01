@@ -95,10 +95,13 @@ def test_lab_evaluate_bulk():
             resp = client.post(
                 "/enrichment/lab-evaluate",
                 json={
+                    # An age is now mandatory to pick a band (audit 3.5); the
+                    # bulk field stands in for the profile's date of birth.
+                    "age_months": 420,
                     "observations": [
                         {"name": "HbA1c", "value": 6.0},
                         {"name": "glucose", "value": 110},
-                    ]
+                    ],
                 },
                 headers={"Authorization": "Bearer dummy"},
             )
@@ -300,5 +303,41 @@ def test_coverage_endpoint_returns_summary():
         assert body["lab_ranges_count"] >= 25
         assert body["drugs"]["interactions_total"] >= 25
         assert body["variants"]["variants_total"] >= 15
+    finally:
+        _clear()
+
+
+def test_lab_evaluate_refuses_the_adult_range_for_a_baby():
+    """The endpoint must answer "I cannot judge this" rather than compare a
+    9-month-old against an adult HbA1c range (audit 3.5)."""
+    _override_auth(uuid4())
+    try:
+        with TestClient(app) as client:
+            resp = client.post(
+                "/enrichment/lab-evaluate",
+                json={"age_months": 9, "observations": [{"name": "HbA1c", "value": 6.0}]},
+                headers={"Authorization": "Bearer dummy"},
+            )
+        assert resp.status_code == 200
+        body = resp.json()
+        assert body[0]["zone_label"] is None
+        assert body[0]["reason"] == "no_pediatric_band"
+    finally:
+        _clear()
+
+
+def test_lab_evaluate_uses_the_pediatric_band_when_there_is_one():
+    _override_auth(uuid4())
+    try:
+        with TestClient(app) as client:
+            resp = client.post(
+                "/enrichment/lab-evaluate",
+                json={"age_months": 6, "observations": [{"name": "frecuencia cardíaca", "value": 130}]},
+                headers={"Authorization": "Bearer dummy"},
+            )
+        assert resp.status_code == 200
+        body = resp.json()
+        assert body[0]["flag"] == "normal"
+        assert body[0]["age_band"] == "1-12m"
     finally:
         _clear()

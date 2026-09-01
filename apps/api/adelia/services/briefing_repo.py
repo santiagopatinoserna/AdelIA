@@ -19,10 +19,17 @@ async def create_briefing(
     *,
     user_id: UUID,
     target_specialty: Specialty,
+    profile_id: UUID | None = None,
 ) -> Briefing:
-    """Insert a new briefing row with status='processing'."""
+    """Insert a new briefing row with status='processing'.
+
+    `profile_id` records which child the briefing is about, so a regenerate
+    six weeks later rebuilds the SAME child's briefing instead of whichever
+    profile happens to be the default that day (audit 4.1).
+    """
     b = Briefing(
         user_id=user_id,
+        profile_id=profile_id,
         target_specialty=target_specialty.value,
         status="processing",
         is_stale=False,

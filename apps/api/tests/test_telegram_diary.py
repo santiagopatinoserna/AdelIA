@@ -66,12 +66,18 @@ async def linked_user():
 
     async def _make(chat_id: int | None, *, locale: str = "es", profiles=(("Adel", "child", True),),
                     linked_at: datetime | None = None,
-                    subscription_status: str = "active") -> uuid.UUID:
+                    subscription_status: str = "active",
+                    created_days_ago: int | None = None) -> uuid.UUID:
         async with AsyncSessionLocal() as session:
             # active by default: handle_update refuses to ingest without a
             # live subscription (adelia.auth.has_active_subscription).
+            # created_days_ago ages the row: the card-free trial (audit 4.7)
+            # is derived from users.created_at, so status "none" alone no
+            # longer means "not allowed in" — a fresh account is trialing.
             user = User(id=uuid.uuid4(), email=f"tg-{uuid.uuid4().hex[:8]}@adelia.test",
                         subscription_status=subscription_status)
+            if created_days_ago is not None:
+                user.created_at = datetime.now(UTC) - timedelta(days=created_days_ago)
             session.add(user)
             await session.flush()
             for name, rel, is_default in profiles:
@@ -252,7 +258,7 @@ async def test_reminder_skips_chats_without_a_live_subscription(fake_bot, linked
     Measured on dev before the fix: 207 chats nudged, 6 of them paying."""
     chat_paying, chat_lapsed = _chat(), _chat()
     await linked_user(chat_paying, subscription_status="active")
-    await linked_user(chat_lapsed, subscription_status="none")
+    await linked_user(chat_lapsed, subscription_status="none", created_days_ago=400)
     fake_bot.clear()
 
     await diary.send_daily_reminders()
@@ -260,6 +266,23 @@ async def test_reminder_skips_chats_without_a_live_subscription(fake_bot, linked
     reminded = {c for c, _ in fake_bot}
     assert chat_paying in reminded
     assert chat_lapsed not in reminded
+
+
+async def test_the_nightly_nudge_reaches_an_account_inside_its_free_trial(
+        fake_bot, linked_user):
+    """The card-free trial (audit 4.7) leaves subscription_status at "none",
+    so a status-only filter here would silence the bot for every account that
+    has not yet paid, which after 4.7 is every new account there is."""
+    chat_trialing, chat_expired = _chat(), _chat()
+    await linked_user(chat_trialing, subscription_status="none", created_days_ago=1)
+    await linked_user(chat_expired, subscription_status="none", created_days_ago=400)
+    fake_bot.clear()
+
+    await diary.send_daily_reminders()
+
+    reminded = {c for c, _ in fake_bot}
+    assert chat_trialing in reminded
+    assert chat_expired not in reminded
 
 
 async def test_a_self_hosted_instance_still_nudges_everyone(fake_bot, linked_user,
@@ -930,7 +953,7 @@ async def test_inactive_subscription_stops_ingestion_and_links_to_billing(fake_b
     never passes through the web layout that held the only check. The bot now
     answers with the way back in instead of ingesting."""
     chat_id = _chat()
-    user_id = await linked_user(chat_id, subscription_status="none")
+    user_id = await linked_user(chat_id, subscription_status="none", created_days_ago=400)
 
     out = await telegram_bot.handle_update(
         _msg(chat_id, text="Hoy ha dormido fatal y ha comido poco"))
@@ -946,7 +969,7 @@ async def test_inactive_subscription_stops_voice_notes_too(fake_bot, linked_user
     """The expensive path: a voice note would otherwise download from Telegram
     and go straight into Voxtral."""
     chat_id = _chat()
-    user_id = await linked_user(chat_id, subscription_status="none")
+    user_id = await linked_user(chat_id, subscription_status="none", created_days_ago=400)
     downloads: list[str] = []
 
     async def _download(file_id, mime_hint=None):

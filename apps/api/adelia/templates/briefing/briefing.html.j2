@@ -2,12 +2,32 @@
 <html lang="{{ labels.lang }}">
 <head>
   <meta charset="utf-8">
-  <title>AdelIA Briefing — {{ payload.patient.name }} — {{ payload.target_specialty.value }}</title>
+  <title>AdelIA Briefing · {{ payload.patient.name }} · {{ payload.target_specialty.value }}</title>
   <link rel="stylesheet" href="/static/briefing/briefing.css">
 </head>
 <body class="briefing">
   <header class="briefing-header">
-    <h1>AdelIA Briefing · {{ payload.patient.name }} · {{ payload.patient.age }} {{ payload.patient.sex }}</h1>
+    {#- Age and sex come from Profile now (audit 3.10). The header used to
+        read "0 años ?" for every patient, whatever their real age, because it
+        was built from the User row. A missing date of birth prints
+        "edad no registrada" rather than a zero a pediatrician would act on. -#}
+    {%- set p = payload.patient -%}
+    {%- if p.age_months is none -%}
+      {%- set age_text = labels.age_unknown -%}
+    {%- elif p.age_months < 24 -%}
+      {%- set age_text = p.age_months ~ " " ~ (labels.month if p.age_months == 1 else labels.months) -%}
+    {%- else -%}
+      {%- set years = (p.age_months // 12) -%}
+      {%- set age_text = years ~ " " ~ (labels.year if years == 1 else labels.years) -%}
+    {%- endif -%}
+    {%- if p.sex == "M" -%}
+      {%- set sex_text = labels.sex_m -%}
+    {%- elif p.sex == "F" -%}
+      {%- set sex_text = labels.sex_f -%}
+    {%- else -%}
+      {%- set sex_text = labels.sex_unknown -%}
+    {%- endif -%}
+    <h1>AdelIA Briefing · {{ p.name }} · {{ age_text }} · {{ sex_text }}</h1>
     <div class="meta">
       {{ labels.generated }}: {{ payload.generated_at.strftime("%Y-%m-%d %H:%M UTC") }}
       · {{ labels.target_specialty }}: <strong>{{ payload.target_specialty.value | replace("_", " ") }}</strong>

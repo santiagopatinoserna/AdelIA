@@ -7,6 +7,7 @@ from sqlalchemy import or_
 
 from adelia.db import AsyncSessionLocal
 from adelia.models import Entity
+from adelia.services.scope import Scope
 
 
 class ObservationRow(TypedDict):
@@ -20,7 +21,7 @@ class ObservationRow(TypedDict):
 
 async def query_observations_by_name_and_date_range(
     *,
-    user_id: UUID,
+    scope: Scope,
     name_substring: str,
     from_date: date | None,
     to_date: date | None,
@@ -29,7 +30,12 @@ async def query_observations_by_name_and_date_range(
     substring (case-insensitive), within the date window.
 
     Args:
-        user_id: filter to the calling user's entities.
+        scope: whose entities to read (user, and optionally one profile). The
+            temporal path ("¿y el peso de los últimos 6 meses?") is the one
+            that most obviously mixed two children: it returned every
+            observation of the account, so two babies' weight curves came back
+            as one series. Rows with a NULL profile_id stay in (pre-profile
+            data).
         name_substring: case-insensitive substring of entity.name.
         from_date / to_date: inclusive bounds on event_date. None = unbounded.
 
@@ -51,7 +57,7 @@ async def query_observations_by_name_and_date_range(
                 Entity.document_id,
             )
             .where(
-                Entity.user_id == user_id,
+                *scope.where(Entity),
                 Entity.entity_type == "observation",
                 Entity.deleted_at.is_(None),
                 or_(

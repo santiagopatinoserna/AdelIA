@@ -7,6 +7,7 @@ from fastapi import APIRouter, Depends, HTTPException, status
 from sse_starlette.sse import EventSourceResponse
 
 from adelia.auth import get_current_user_id, require_active_subscription
+from adelia.enrichment.profile_service import load_profile_facts
 from adelia.schemas import ChatCitation, ChatRequest, ChatSessionDetailOut, ChatSessionOut
 from adelia.services.chat_orchestrator import ChatEvent, answer_question_streaming
 from adelia.services.chat_repo import (
@@ -107,6 +108,12 @@ async def post_chat(
             if m.content
         ]
 
+    # How old the baby is, resolved once per turn. The answering path must not
+    # open a session mid-stream, and without this the red-flag rule that
+    # depends on age (under 3 months with a fever) can only fire when the
+    # parent happens to write the age in the question itself.
+    facts = await load_profile_facts(user_id=user_id, profile_id=payload.profile_id)
+
     # Persist user message before streaming begins
     await persist_message(
         session_id=session_id,
@@ -130,6 +137,12 @@ async def post_chat(
                 question=payload.question,
                 history=history,
                 locale=payload.locale,
+                age_months=facts.age_months,
+                # The RESOLVED profile, not payload.profile_id: when the
+                # client sends none, `facts` already fell back to the default
+                # profile, and the answer must be scoped to the same child
+                # whose age gated the red flags (audit 4.1).
+                profile_id=facts.profile_id,
             ):
                 if event.type == "token":
                     assistant_content_parts.append(event.content)

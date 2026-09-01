@@ -1,0 +1,281 @@
+{
+  "_meta": {
+    "country": "FR",
+    "calendar": "Calendrier des vaccinations et recommandations vaccinales 2026",
+    "authority": "Ministère chargé de la Santé (France)",
+    "url": "https://www.ameli.fr/sites/default/files/Documents/calendrier-vaccination-simplifiee-2026.pdf",
+    "updated": "2026-08-31",
+    "note": "Onze vaccinations sont obligatoires pour les nourrissons nés depuis 2018 ; les vaccinations contre le méningocoque B et le méningocoque ACWY sont obligatoires pour les nourrissons depuis le 1er janvier 2025."
+  },
+  "vaccines": [
+    {
+      "key": "hexa_1",
+      "group": "hexavalent",
+      "name": "Hexavalent DTCaP-Hib-HepB, 1re dose",
+      "due_month": 2,
+      "dose": 1,
+      "routine": true,
+      "match": [
+        "hexavalent",
+        "hexavalente",
+        "dtcap",
+        "dtp",
+        "diphterie",
+        "tetanos",
+        "coqueluche",
+        "poliomyelite",
+        "polio",
+        "hib",
+        "haemophilus",
+        "hepatite b",
+        "infanrix",
+        "vaxelis",
+        "hexyon"
+      ]
+    },
+    {
+      "key": "pneumo_1",
+      "group": "pneumocoque",
+      "name": "Pneumocoque conjugué, 1re dose",
+      "due_month": 2,
+      "dose": 1,
+      "routine": true,
+      "match": [
+        "pneumocoque",
+        "prevenar",
+        "synflorix",
+        "apexxnar",
+        "vaxneuvance",
+        "pcv"
+      ]
+    },
+    {
+      "key": "rv_1",
+      "group": "rotavirus",
+      "name": "Rotavirus, 1re dose",
+      "due_month": 2,
+      "dose": 1,
+      "routine": false,
+      "match": [
+        "rotavirus",
+        "rotateq",
+        "rotarix"
+      ],
+      "note": "Recommandé à tous les nourrissons à partir de 2 mois ; 2 à 3 doses par voie orale selon le vaccin"
+    },
+    {
+      "key": "menb_1",
+      "group": "meningocoque_b",
+      "name": "Méningocoque B, 1re dose",
+      "due_month": 3,
+      "dose": 1,
+      "routine": true,
+      "match": [
+        "meningocoque b",
+        "menb",
+        "bexsero",
+        "trumenba"
+      ]
+    },
+    {
+      "key": "hexa_2",
+      "group": "hexavalent",
+      "name": "Hexavalent DTCaP-Hib-HepB, 2e dose",
+      "due_month": 4,
+      "dose": 2,
+      "routine": true,
+      "match": [
+        "hexavalent",
+        "hexavalente",
+        "dtcap",
+        "dtp",
+        "diphterie",
+        "tetanos",
+        "coqueluche",
+        "poliomyelite",
+        "polio",
+        "hib",
+        "haemophilus",
+        "hepatite b",
+        "infanrix",
+        "vaxelis",
+        "hexyon"
+      ]
+    },
+    {
+      "key": "pneumo_2",
+      "group": "pneumocoque",
+      "name": "Pneumocoque conjugué, 2e dose",
+      "due_month": 4,
+      "dose": 2,
+      "routine": true,
+      "match": [
+        "pneumocoque",
+        "prevenar",
+        "synflorix",
+        "apexxnar",
+        "vaxneuvance",
+        "pcv"
+      ]
+    },
+    {
+      "key": "menb_2",
+      "group": "meningocoque_b",
+      "name": "Méningocoque B, 2e dose",
+      "due_month": 5,
+      "dose": 2,
+      "routine": true,
+      "match": [
+        "meningocoque b",
+        "menb",
+        "bexsero",
+        "trumenba"
+      ]
+    },
+    {
+      "key": "menacwy_1",
+      "group": "meningocoque_acwy",
+      "name": "Méningocoque ACWY, 1re dose",
+      "due_month": 6,
+      "dose": 1,
+      "routine": true,
+      "match": [
+        "meningocoque acwy",
+        "menacwy",
+        "nimenrix",
+        "menveo",
+        "menquadfi",
+        "acwy"
+      ]
+    },
+    {
+      "key": "hexa_3",
+      "group": "hexavalent",
+      "name": "Hexavalent DTCaP-Hib-HepB, rappel",
+      "due_month": 11,
+      "dose": 3,
+      "routine": true,
+      "match": [
+        "hexavalent",
+        "hexavalente",
+        "dtcap",
+        "dtp",
+        "diphterie",
+        "tetanos",
+        "coqueluche",
+        "poliomyelite",
+        "polio",
+        "hib",
+        "haemophilus",
+        "hepatite b",
+        "infanrix",
+        "vaxelis",
+        "hexyon"
+      ]
+    },
+    {
+      "key": "pneumo_3",
+      "group": "pneumocoque",
+      "name": "Pneumocoque conjugué, rappel",
+      "due_month": 11,
+      "dose": 3,
+      "routine": true,
+      "match": [
+        "pneumocoque",
+        "prevenar",
+        "synflorix",
+        "apexxnar",
+        "vaxneuvance",
+        "pcv"
+      ]
+    },
+    {
+      "key": "ror_1",
+      "group": "ror",
+      "name": "ROR (rougeole, oreillons, rubéole), 1re dose",
+      "due_month": 12,
+      "dose": 1,
+      "routine": true,
+      "match": [
+        "ror",
+        "rougeole",
+        "oreillons",
+        "rubeole",
+        "priorix",
+        "mmrvaxpro"
+      ]
+    },
+    {
+      "key": "menb_3",
+      "group": "meningocoque_b",
+      "name": "Méningocoque B, rappel",
+      "due_month": 12,
+      "dose": 3,
+      "routine": true,
+      "match": [
+        "meningocoque b",
+        "menb",
+        "bexsero",
+        "trumenba"
+      ]
+    },
+    {
+      "key": "menacwy_2",
+      "group": "meningocoque_acwy",
+      "name": "Méningocoque ACWY, rappel",
+      "due_month": 12,
+      "dose": 2,
+      "routine": true,
+      "match": [
+        "meningocoque acwy",
+        "menacwy",
+        "nimenrix",
+        "menveo",
+        "menquadfi",
+        "acwy"
+      ]
+    },
+    {
+      "key": "ror_2",
+      "group": "ror",
+      "name": "ROR, 2e dose",
+      "due_month": 16,
+      "dose": 2,
+      "routine": true,
+      "match": [
+        "ror",
+        "rougeole",
+        "oreillons",
+        "rubeole",
+        "priorix",
+        "mmrvaxpro"
+      ],
+      "note": "Entre 16 et 18 mois"
+    },
+    {
+      "key": "dtcap_6a",
+      "group": "rappel_dtcap",
+      "name": "dTcaP de rappel (6 ans)",
+      "due_month": 72,
+      "dose": 4,
+      "routine": true,
+      "match": [
+        "hexavalent",
+        "hexavalente",
+        "dtcap",
+        "dtp",
+        "diphterie",
+        "tetanos",
+        "coqueluche",
+        "poliomyelite",
+        "polio",
+        "hib",
+        "haemophilus",
+        "hepatite b",
+        "infanrix",
+        "vaxelis",
+        "hexyon"
+      ]
+    }
+  ]
+}

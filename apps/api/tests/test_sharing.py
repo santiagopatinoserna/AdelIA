@@ -270,7 +270,7 @@ def test_render_pdf_with_minimal_payload():
         schema_version="1.0",
         generated_at=datetime.now(UTC),
         target_specialty=Specialty.DEFAULT,
-        patient=PatientHeader(name="Test", age=42, sex="?"),
+        patient=PatientHeader(name="Test", age_months=18, sex="F"),
         sections=BriefingSections(
             reason_for_consult="Annual checkup",
             active_problems=[],

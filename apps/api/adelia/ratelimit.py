@@ -24,11 +24,31 @@ ROUTE_BUDGETS: list[tuple[str, str, int]] = [
     # bucket below (routers/agent.post_turn), or the 6/min of the 5-stage
     # pipeline would be bypassable by entering through /agent.
     ("POST", "/agent", 10),
+    # Public and unauthenticated: one embedding plus one generation per call,
+    # bought with nobody's consent. The REAL brake is the hard daily ceiling
+    # in routers/demo (a Postgres counter, so it survives a restart); this is
+    # only the burst brake.
+    #
+    # It is deliberately not tighter, because the bucket may not be one
+    # visitor. Depending on the reverse proxy, /api/demo/ask either reaches
+    # the API directly (bucket = the visitor's IP) or through the Next route
+    # handler (bucket = the web container, i.e. ONE bucket for the whole
+    # internet). A value tuned for the first case makes the demo unusable in
+    # the second, which is the shape of outage nobody would notice until a
+    # launch day.
+    ("POST", "/demo", 20),
+    ("GET", "/demo", 600),           # the fixture: no spend, page-view rate
     ("POST", "/documents", 10),      # upload + OCR pipeline
     ("POST", "/briefings", 6),       # 5-stage LLM pipeline
     ("POST", "/enrichment/genomics", 5),
     ("POST", "/shares", 20),
     ("GET", "/s/", 60),              # public links — token enumeration brake
+    # One upsert per call and no identity attached, so the only thing to
+    # protect is the write rate itself (audit 4.8). Same caveat as /demo: the
+    # bucket may be the whole internet, and a counter that starts 429ing
+    # under normal traffic is worse than no counter, because it under-reports
+    # silently and exactly when the numbers matter.
+    ("POST", "/funnel", 600),
 ]
 DEFAULT_BUDGET = 240  # everything else, per identity
 

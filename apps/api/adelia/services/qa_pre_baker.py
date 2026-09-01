@@ -1,6 +1,7 @@
 """LLM-driven top-5 Q&A pre-baker with anti-hallucination guard.
 
-One Mistral chat.complete call with structured output (response_format=json_schema).
+One Mistral chat.complete_async call with structured output
+(response_format=json_schema).
 Post-LLM filter: every citation's raw_quote MUST appear verbatim in one of the
 source documents' raw_text. Quotes that fail this check are dropped silently
 with logger.warning. Minimum 3 items returned; never pad with synthetic content.
@@ -85,17 +86,28 @@ def _build_client():
     return get_mistral_client()
 
 
-def _llm_structured_call(
+async def _llm_structured_call(
     client: Any,
     system_prompt: str,
     user_content: str,
     model: str,
 ) -> tuple[dict, int]:
-    """Call Mistral chat.complete with structured output. Returns (parsed_dict, tokens_used)."""
+    """Call Mistral chat.complete_async with structured output.
+
+    Returns (parsed_dict, tokens_used).
+
+    `complete_async`, not `complete`: this is a single 10-30 s LLM call and it
+    used to be the SYNCHRONOUS one, made from inside the event loop by a
+    FastAPI BackgroundTask. While a briefing was baking, the whole worker was
+    blocked — every other request on that process, /health included, waited
+    for Mistral to finish writing five questions about someone else's baby
+    (audit 4.5). Nothing else about the call changes; the anti-hallucination
+    filter below still runs on the parsed result.
+    """
     from mistralai.client.errors import MistralError
 
     try:
-        resp = client.chat.complete(
+        resp = await client.chat.complete_async(
             model=model,
             messages=[
                 {"role": "system", "content": system_prompt},
@@ -175,7 +187,7 @@ def _enforce_raw_quote(items: list[dict], source_raw_texts: dict[str, str]) -> l
     return kept
 
 
-def bake_questions(
+async def bake_questions(
     specialty: Specialty,
     entities_text: str,
     specialty_hints: str,
@@ -186,6 +198,9 @@ def bake_questions(
     """Generate top-5 Q&A from patient context, with anti-hallucination filter.
 
     Returns (items, meta). Items may be 0-5 after filter; LLMMeta records cost/tokens.
+
+    Async since 2026-08-31: the awaited call inside is the one that used to
+    stall the event loop for the length of a briefing (audit 4.5).
     """
     client = _build_client()
     system_prompt = _system_prompt(specialty, specialty_hints, locale)
@@ -196,7 +211,7 @@ def bake_questions(
         + "\n\n".join(f"--- {doc_id} ---\n{text[:4000]}" for doc_id, text in source_raw_texts.items())
     )
 
-    parsed, tokens_used = _llm_structured_call(client, system_prompt, user_content, model)
+    parsed, tokens_used = await _llm_structured_call(client, system_prompt, user_content, model)
     items_raw = parsed.get("items", [])
     items = _enforce_raw_quote(items_raw, source_raw_texts)
 
