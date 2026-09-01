@@ -3,6 +3,7 @@ from uuid import uuid4
 
 import pytest
 
+from adelia.services.scope import Scope
 from adelia.services.structured_query import query_observations_by_name_and_date_range
 
 from tests.pg_gate import PG_AVAILABLE
@@ -16,7 +17,7 @@ async def test_query_observations_filters_by_name_substring_and_date_range():
     """Skipped in sandbox; runs green with PG up + seeded data."""
     user_id = uuid4()
     results = await query_observations_by_name_and_date_range(
-        user_id=user_id,
+        scope=Scope(user_id=user_id),
         name_substring="glucosa",
         from_date=date(2020, 1, 1),
         to_date=date(2024, 12, 31),
@@ -33,7 +34,7 @@ async def test_query_observations_empty_user_returns_empty_list():
     """Smoke test: querying for a user with no data returns []."""
     user_id = uuid4()
     results = await query_observations_by_name_and_date_range(
-        user_id=user_id,
+        scope=Scope(user_id=user_id),
         name_substring="nonexistent_glucosa_term_xyz",
         from_date=None,
         to_date=None,

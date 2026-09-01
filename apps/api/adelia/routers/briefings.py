@@ -15,6 +15,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 from adelia.auth import get_current_user_id, require_active_subscription
 from adelia.db import get_db
+from adelia.enrichment import profile_service
 from adelia.schemas import (
     BriefingCreate,
     BriefingDetailOut,
@@ -72,6 +73,7 @@ def _enqueue(
     user_id: UUID,
     target_specialty: Specialty,
     locale: str = "es",
+    profile_id: UUID | None = None,
 ) -> None:
     """Wrap orchestrator.run in BackgroundTasks. Override in tests."""
     background_tasks.add_task(
@@ -80,6 +82,7 @@ def _enqueue(
         user_id=user_id,
         target_specialty=target_specialty,
         locale=locale,
+        profile_id=profile_id,
     )
 
 
@@ -95,11 +98,27 @@ async def create_briefing(
     user_id: UUID = Depends(get_current_user_id),
     db: AsyncSession = Depends(get_db),
 ):
+    # Ownership check before the row is written, same idiom as the upload
+    # path: a client-supplied profile_id must never scope a briefing to
+    # someone else's child, and an unknown id gets the opaque 404 every other
+    # route returns.
+    if payload.profile_id is not None:
+        owned = await profile_service.get_profile(
+            db, profile_id=payload.profile_id, user_id=user_id
+        )
+        if owned is None:
+            raise HTTPException(status_code=404, detail="Not found")
     briefing = await briefing_repo.create_briefing(
-        db, user_id=user_id, target_specialty=payload.target_specialty
+        db,
+        user_id=user_id,
+        target_specialty=payload.target_specialty,
+        profile_id=payload.profile_id,
     )
     await db.commit()
-    _enqueue(background_tasks, briefing.id, user_id, payload.target_specialty, payload.locale)
+    _enqueue(
+        background_tasks, briefing.id, user_id, payload.target_specialty,
+        payload.locale, payload.profile_id,
+    )
     return _to_out(briefing)
 
 
@@ -143,12 +162,14 @@ async def regenerate_briefing(
         db,
         user_id=user_id,
         target_specialty=Specialty(original.target_specialty),
+        profile_id=original.profile_id,
     )
     await db.commit()
     original_locale = (original.payload or {}).get("locale", "es")
     _enqueue(
         background_tasks, new.id, user_id,
         Specialty(original.target_specialty), original_locale,
+        original.profile_id,
     )
     return _to_out(new)
 

@@ -5,6 +5,7 @@ import { useRouter, useParams } from "next/navigation";
 import { useTranslations } from "next-intl";
 
 import { briefings as briefingsApi } from "@/lib/api-client-browser";
+import { useActiveProfile } from "@/lib/profile-context";
 import type { Specialty } from "@/lib/briefing-types";
 import { SpecialtySelect } from "@/components/briefing/specialty-select";
 
@@ -13,6 +14,10 @@ export default function NewBriefingPage() {
   const router = useRouter();
   const params = useParams<{ locale: string }>();
   const locale = params?.locale ?? "es";
+  // The briefing is the artefact a parent prints and hands to a specialist,
+  // so it has to be about ONE child. Without this it was assembled from the
+  // whole account (audit 4.1).
+  const { activeId: activeProfileId } = useActiveProfile();
   const [specialty, setSpecialty] = useState<Specialty | "">("pediatrics");
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -24,7 +29,11 @@ export default function NewBriefingPage() {
     setSubmitting(true);
     setError(null);
     try {
-      const created = await briefingsApi.create({ target_specialty: specialty as Specialty, locale: locale as "es" | "en" | "fr" });
+      const created = await briefingsApi.create({
+        target_specialty: specialty as Specialty,
+        locale: locale as "es" | "en" | "fr",
+        profile_id: activeProfileId,
+      });
       router.push(`/${locale}/dashboard/briefings/${created.id}`);
     } catch (e) {
       setError(t("common.actionError"));

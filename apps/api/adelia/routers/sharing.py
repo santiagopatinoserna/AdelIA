@@ -10,6 +10,7 @@ Routes:
 """
 from __future__ import annotations
 
+import asyncio
 import logging
 from datetime import timedelta
 from uuid import UUID
@@ -146,7 +147,13 @@ async def public_pdf(token: str):
         raise HTTPException(status_code=404, detail="Invalid or expired link")
 
     try:
-        pdf_bytes = sharing_svc.render_pdf(resolved.briefing_payload)
+        # WeasyPrint is synchronous CPU work (HTML → layout → PDF) and takes
+        # hundreds of ms to seconds on a briefing. Called inline it froze the
+        # whole worker, and /s/{token}/pdf is PUBLIC, so anyone with a link
+        # could stall the API for every other request (audit 4.5).
+        pdf_bytes = await asyncio.to_thread(
+            sharing_svc.render_pdf, resolved.briefing_payload
+        )
     except ImportError:
         raise HTTPException(
             status_code=503,
@@ -185,7 +192,7 @@ async def owner_pdf(
     payload = BriefingPayload.model_validate(briefing.payload)
 
     try:
-        pdf_bytes = sharing_svc.render_pdf(payload)
+        pdf_bytes = await asyncio.to_thread(sharing_svc.render_pdf, payload)
     except ImportError:
         raise HTTPException(status_code=503, detail="WeasyPrint not installed")
     except Exception as e:

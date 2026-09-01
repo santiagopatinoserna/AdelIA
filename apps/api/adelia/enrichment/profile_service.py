@@ -9,6 +9,7 @@ NULL → user's default profile transparently.
 """
 from __future__ import annotations
 
+import logging
 from dataclasses import dataclass
 from datetime import date
 from typing import Literal
@@ -19,6 +20,8 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 from adelia.models import Profile
 
+
+logger = logging.getLogger(__name__)
 
 Relationship = Literal["self", "child", "parent", "spouse", "sibling", "other"]
 
@@ -246,3 +249,104 @@ async def resolve_profile_id(
     result = await session.execute(stmt)
     row = result.scalar_one_or_none()
     return row
+
+
+# ---------------------------------------------------------------------------
+# Who the answer is about (audit 3.3, 3.5, 3.9 and 3.10)
+#
+# Four separate defects in the audit came from the same hole: nothing read
+# the baby's age. The red-flag detector could not apply the "<3 months"
+# rule, `evaluar_labs` compared an infant against adult ranges,
+# `proximas_vacunas` took the age from whatever the model typed, and every
+# briefing header said "0 años". Profile has held `date_of_birth` and `sex`
+# all along.
+# ---------------------------------------------------------------------------
+
+
+@dataclass(frozen=True)
+class ProfileFacts:
+    """The three facts every clinical surface needs about the patient."""
+
+    profile_id: UUID | None
+    display_name: str | None
+    date_of_birth: date | None
+    sex: str | None
+    age_months: int | None
+
+    @property
+    def has_age(self) -> bool:
+        return self.age_months is not None
+
+
+#: What a surface gets when there is no profile at all (a v0.1 legacy user, a
+#: test, a Telegram message before onboarding). Every field is None on
+#: purpose: "unknown" must never be renderable as 0.
+UNKNOWN_PROFILE = ProfileFacts(None, None, None, None, None)
+
+
+def age_in_months(date_of_birth: date | None, *, today: date | None = None) -> int | None:
+    """Whole months lived, or None when the date of birth is unknown.
+
+    None is the point: `briefing_orchestrator` printed `age=0` for every
+    patient because 0 was easier to type than a missing value, and a
+    pediatrician reading "0 años" on an 18-month-old stops reading. A future
+    date of birth (a typo, or a pregnancy) also returns None rather than a
+    negative age.
+    """
+    if date_of_birth is None:
+        return None
+    today = today or date.today()
+    if date_of_birth > today:
+        return None
+    months = (today.year - date_of_birth.year) * 12 + (today.month - date_of_birth.month)
+    if today.day < date_of_birth.day:
+        months -= 1
+    return max(months, 0)
+
+
+async def get_profile_facts(
+    session: AsyncSession,
+    *,
+    user_id: UUID,
+    profile_id: UUID | None = None,
+) -> ProfileFacts:
+    """Resolve the active profile and read the facts off it.
+
+    Never raises for a missing profile: returns UNKNOWN_PROFILE, so a caller
+    can always render something honest.
+    """
+    resolved = await resolve_profile_id(session, user_id=user_id, profile_id=profile_id)
+    if resolved is None:
+        return UNKNOWN_PROFILE
+    profile = await get_profile(session, profile_id=resolved, user_id=user_id)
+    if profile is None:
+        return UNKNOWN_PROFILE
+    return ProfileFacts(
+        profile_id=profile.id,
+        display_name=profile.display_name,
+        date_of_birth=profile.date_of_birth,
+        sex=profile.sex,
+        age_months=age_in_months(profile.date_of_birth),
+    )
+
+
+async def load_profile_facts(
+    *, user_id: UUID, profile_id: UUID | None = None
+) -> ProfileFacts:
+    """`get_profile_facts` with its own session, best effort.
+
+    Used by the answering surfaces, which run outside a request session and
+    must not fail an answer because a profile lookup failed. A DB error here
+    degrades the answer (no age-gated rules) and is logged; it never turns
+    into a 500 in the middle of a stream.
+    """
+    from adelia.db import AsyncSessionLocal
+
+    try:
+        async with AsyncSessionLocal() as session:
+            return await get_profile_facts(
+                session, user_id=user_id, profile_id=profile_id
+            )
+    except Exception as exc:  # noqa: BLE001 - degrade, never break the stream
+        logger.warning("profile facts unavailable (continuing without age): %s", exc)
+        return UNKNOWN_PROFILE

@@ -14,7 +14,15 @@ async function redirectToStripe(path: "checkout" | "portal") {
   window.location.href = data.url;
 }
 
-export function StartTrialButton() {
+/**
+ * Opens Stripe Checkout.
+ *
+ * `label` overrides the default "start my free month" wording, because after
+ * audit 4.7 the free month no longer starts here: a brand-new account is
+ * already inside a card-free trial this server granted, and the same button
+ * then means "subscribe now", charging only the days that follow.
+ */
+export function StartTrialButton({ label }: { label?: string } = {}) {
   const t = useTranslations("billing");
   const [busy, setBusy] = useState(false);
   const [err, setErr] = useState(false);
@@ -41,7 +49,7 @@ export function StartTrialButton() {
         ) : (
           <CreditCard className="h-5 w-5" strokeWidth={2.2} />
         )}
-        {t("startCta")}
+        {label ?? t("startCta")}
       </button>
       {err && (
         <p role="alert" className="mt-3 flex items-center justify-center gap-1.5 text-sm text-error-text">

@@ -38,11 +38,17 @@ export async function deleteChatSession(id: string): Promise<void> {
   if (!res.ok && res.status !== 204) throw new Error(`deleteChatSession: ${res.status}`);
 }
 
+/**
+ * `profileId` is which child the question is about. The API resolves null to
+ * the account's default profile, and the answer, the age that gates the red
+ * flags and the citations are then all about the same child (audit 4.1, 4.2).
+ */
 export async function* streamChat(
   question: string,
   sessionId: string | null,
   locale: string = "es",
   signal?: AbortSignal,
+  profileId?: string | null,
 ): AsyncGenerator<StreamEvent> {
   const res = await fetch("/api/backend/chat", {
     method: "POST",
@@ -50,7 +56,12 @@ export async function* streamChat(
       "Content-Type": "application/json",
       Accept: "text/event-stream",
     },
-    body: JSON.stringify({ session_id: sessionId, question, locale }),
+    body: JSON.stringify({
+      session_id: sessionId,
+      question,
+      locale,
+      profile_id: profileId ?? null,
+    }),
     signal,
   });
   if (!res.ok || !res.body) {

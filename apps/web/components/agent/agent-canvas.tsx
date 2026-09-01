@@ -3,6 +3,10 @@ import { useEffect, useRef, useState } from "react";
 import { useTranslations } from "next-intl";
 import { streamAgent, getSuggestions } from "@/lib/agent-client-browser";
 import type { AgentCard } from "@/lib/agent-types";
+import type { Citation, EvidenceCitation } from "@/lib/chat-types";
+import { CitationCard } from "@/components/citation-card";
+import { EvidenceCard } from "@/components/evidence-card";
+import { Database, BookMarked } from "lucide-react";
 import { CardRenderer, type CardActionHandler } from "./cards/card-renderer";
 import { AgentInput } from "./agent-input";
 import { ProfileSwitcher } from "./profile-switcher";
@@ -11,7 +15,14 @@ import { GrowthMark, useGrowthMarkLabel } from "./growth-mark";
 import { useActiveProfile } from "@/lib/profile-context";
 import { useRouter } from "@/lib/navigation";
 
-type Msg = { role: "user" | "assistant"; content: string };
+// An assistant turn now carries what it cited (audit 3.7). Empty arrays on a
+// user turn and on any answer that cited nothing, which is most of them.
+type Msg = {
+  role: "user" | "assistant";
+  content: string;
+  citations: Citation[];
+  evidence_citations: EvidenceCitation[];
+};
 
 // Must track routers/agent.py (HISTORY_MAX_MESSAGES / HISTORY_MAX_CHARS_PER_MESSAGE).
 // The transcript was sent whole, growing by two entries per turn, so it used
@@ -58,7 +69,12 @@ export function AgentCanvas({ locale, userId }: { locale: string; userId: string
             content: m.content.slice(0, HISTORY_MAX_CHARS_PER_MESSAGE),
           }))
       : undefined;
-    if (body.message) setMessages((p) => [...p, { role: "user", content: body.message! }, { role: "assistant", content: "" }]);
+    if (body.message)
+      setMessages((p) => [
+        ...p,
+        { role: "user", content: body.message!, citations: [], evidence_citations: [] },
+        { role: "assistant", content: "", citations: [], evidence_citations: [] },
+      ]);
     try {
       for await (const ev of streamAgent(
         { ...body, profile_id: activeId, locale, ...(history ? { history } : {}) },
@@ -70,6 +86,11 @@ export function AgentCanvas({ locale, userId }: { locale: string; userId: string
             if (last?.role === "assistant") n[n.length - 1] = { ...last, content: last.content + ev.content }; return n; });
         } else if (ev.type === "card") {
           setCards((p) => [ev.card, ...p]);
+        } else if (ev.type === "final") {
+          setMessages((p) => { const n = [...p]; const last = n[n.length - 1];
+            if (last?.role === "assistant")
+              n[n.length - 1] = { ...last, citations: ev.citations, evidence_citations: ev.evidence_citations };
+            return n; });
         } else if (ev.type === "error") {
           setMessages((p) => { const n = [...p]; const last = n[n.length - 1];
             if (last?.role === "assistant") n[n.length - 1] = { ...last, content: t("errorAnswer") }; return n; });
@@ -170,8 +191,37 @@ export function AgentCanvas({ locale, userId }: { locale: string; userId: string
           {messages.length === 0 && <CapabilityShowcase locale={locale} userId={userId} />}
           {messages.map((m, i) => (
             <div key={i} data-testid="agent-message" data-role={m.role} className={`my-2 ${m.role === "user" ? "text-right" : ""}`}>
-              <span className={`inline-block rounded-lg px-3 py-2 ${m.role === "user" ? "bg-primary-tint" : "bg-surface-2"}`}>
+              <span className={`inline-block max-w-full rounded-lg px-3 py-2 ${m.role === "user" ? "bg-primary-tint" : "bg-surface-2"}`}>
                 {m.content || (busy && m.role === "assistant" ? t("thinking") : "")}
+                {/* The source behind the [ev_N] markers in the text above.
+                    Same cards the chat renders, from the same payload: one
+                    citation renderer, two surfaces (audit 3.7). */}
+                {m.role === "assistant" && m.citations.length > 0 && (
+                  <span className="mt-3 block border-t border-line pt-3">
+                    <span className="ad-eyebrow flex items-center gap-1.5">
+                      <Database className="h-3 w-3" strokeWidth={2.4} />
+                      {t("citationSourceUserData")}
+                    </span>
+                    <span className="mt-1.5 flex flex-wrap gap-1">
+                      {m.citations.map((c, n) => (
+                        <CitationCard key={c.chunk_id} citation={c} index={n + 1} locale={locale} />
+                      ))}
+                    </span>
+                  </span>
+                )}
+                {m.role === "assistant" && m.evidence_citations.length > 0 && (
+                  <span className="mt-3 block border-t border-line pt-3">
+                    <span className="ad-eyebrow flex items-center gap-1.5 !text-accent-text">
+                      <BookMarked className="h-3 w-3" strokeWidth={2.4} />
+                      {t("citationSourceEvidence")}
+                    </span>
+                    <span className="mt-1.5 flex flex-col gap-1.5">
+                      {m.evidence_citations.map((ev) => (
+                        <EvidenceCard key={ev.tag} citation={ev} />
+                      ))}
+                    </span>
+                  </span>
+                )}
               </span>
             </div>
           ))}

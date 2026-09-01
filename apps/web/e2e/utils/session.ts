@@ -27,13 +27,20 @@ export async function seedUserAndSessionCookie(email: string) {
   // apps/api/adelia/routers/billing.py ACTIVE_STATUSES). Without this, every
   // dashboard-gated e2e test hits the Stripe paywall screen instead of the
   // page under test.
+  // onboarded_at is stamped on purpose: a seeded e2e user stands for an
+  // EXISTING account, and dashboard/layout.tsx sends an account that has
+  // never been asked about the baby to /{locale}/onboarding before the panel
+  // (audit 4.3). Without this every dashboard spec would land on the
+  // onboarding screen instead of the page under test. The onboarding e2e
+  // seeds its own user with onboarded_at NULL.
   const { rows } = await pool.query(
-    `INSERT INTO users (email, subscription_status, trial_end)
-     VALUES ($1, 'trialing', now() + interval '30 days')
+    `INSERT INTO users (email, subscription_status, trial_end, onboarded_at)
+     VALUES ($1, 'trialing', now() + interval '30 days', now())
      ON CONFLICT (email) DO UPDATE
        SET email = EXCLUDED.email,
            subscription_status = EXCLUDED.subscription_status,
-           trial_end = EXCLUDED.trial_end
+           trial_end = EXCLUDED.trial_end,
+           onboarded_at = EXCLUDED.onboarded_at
      RETURNING id`,
     [email],
   );

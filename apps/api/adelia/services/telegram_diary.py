@@ -737,9 +737,23 @@ async def send_daily_reminders() -> int:
             # No Stripe key = nothing is sold on this instance and no account
             # can ever leave "none"; filtering would silence the bot entirely
             # on a self-hosted install. Same rule as the HTTP gate.
-            stmt = stmt.join(User, User.id == TelegramLink.user_id).where(
-                User.subscription_status.in_(sorted(ACTIVE_STATUSES))
-            )
+            # The card-free trial (audit 4.7) is derived, not stored, so an
+            # account inside it still reads "none" in this column. Expressing
+            # it in SQL keeps this ONE statement: without the second branch
+            # the nightly nudge would go silent for exactly the accounts the
+            # trial exists to keep, which are every new account there is.
+            eligible = User.subscription_status.in_(sorted(ACTIVE_STATUSES))
+            if settings.free_trial_days > 0:
+                eligible = sa.or_(
+                    eligible,
+                    sa.and_(
+                        User.subscription_status == "none",
+                        User.created_at
+                        > sa.func.now()
+                        - sa.text(f"interval '{int(settings.free_trial_days)} days'"),
+                    ),
+                )
+            stmt = stmt.join(User, User.id == TelegramLink.user_id).where(eligible)
         links = (await session.execute(stmt)).scalars().all()
         targets = [
             (link.chat_id, link.locale)

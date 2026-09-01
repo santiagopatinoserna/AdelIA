@@ -3,13 +3,22 @@
 import { useState } from "react";
 import { signOut } from "next-auth/react";
 import { useLocale, useTranslations } from "next-intl";
-import { AlertTriangle, Download } from "lucide-react";
+import { AlertTriangle, CreditCard, Download } from "lucide-react";
 
+import { ManageButton } from "@/components/billing-actions";
 import { InstallSettingsEntry } from "@/components/install-prompt";
 import { LocaleSwitcher } from "@/components/locale-switcher";
+import { Link } from "@/lib/navigation";
+import type { BillingStatus } from "@/lib/api-endpoints";
 import { clearShowcaseHidden } from "@/lib/showcase-storage";
 
-export function AccountSettingsView({ email }: { email: string }) {
+export function AccountSettingsView({
+  email,
+  billing = null,
+}: {
+  email: string;
+  billing?: BillingStatus | null;
+}) {
   const t = useTranslations("settings");
   const locale = useLocale();
   const [confirmText, setConfirmText] = useState("");
@@ -38,6 +47,23 @@ export function AccountSettingsView({ email }: { email: string }) {
     }
   }
 
+  // One sentence describing where the account stands. The card-free trial is
+  // reported by the API through the same keys as a Stripe one (status
+  // "trialing" plus trial_end), so this needs no second concept.
+  const trialDate =
+    billing?.trial_end
+      ? new Intl.DateTimeFormat(locale, { dateStyle: "long" }).format(
+          new Date(billing.trial_end),
+        )
+      : null;
+  const subscriptionBody = !billing
+    ? t("subscriptionUnknownBody")
+    : billing.status === "trialing" && trialDate
+      ? t("subscriptionTrialBody", { date: trialDate })
+      : billing.active
+        ? t("subscriptionActiveBody")
+        : t("subscriptionNoneBody");
+
   return (
     <main className="mx-auto max-w-2xl px-6 py-12">
       <h1 className="text-2xl text-ink">{t("title")}</h1>
@@ -60,6 +86,34 @@ export function AccountSettingsView({ email }: { email: string }) {
           <Download className="h-4 w-4" strokeWidth={2} />
           {t("exportCta")}
         </a>
+      </section>
+
+      {/* Subscription (audit 4.7). The product had no exit towards billing
+          from anywhere inside it: /billing existed and nothing linked to it,
+          so changing a card or cancelling meant an email to support, which is
+          also the opposite of the European rule that unsubscribing be as easy
+          as subscribing.
+
+          Two states, one click each. With a Stripe customer behind the
+          account the button opens the Stripe portal (card, invoices, cancel);
+          without one there is nothing for the portal to show, so the link
+          goes to /billing instead of a button that would answer 400. */}
+      <section className="ad-card mt-6 p-4">
+        <div className="ad-eyebrow">{t("subscriptionTitle")}</div>
+        <p className="mt-1.5 text-sm text-ink-soft">{subscriptionBody}</p>
+        <div className="mt-3">
+          {billing?.can_manage ? (
+            <ManageButton />
+          ) : (
+            <Link
+              href="/billing"
+              className="ad-btn ad-btn-ghost min-h-[44px] px-3.5 py-2 text-sm"
+            >
+              <CreditCard className="h-4 w-4" strokeWidth={2} />
+              {t("subscriptionSubscribeCta")}
+            </Link>
+          )}
+        </div>
       </section>
 
       {/* On phones the header has no language pill (it ate 174px of a

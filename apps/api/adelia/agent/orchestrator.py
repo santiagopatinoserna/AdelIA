@@ -7,7 +7,10 @@ from adelia.agent import cards
 from adelia.agent.tools import TOOLS, is_write_tool
 from adelia.agent.executor import execute_tool
 from adelia.agent.provider import get_provider
-from adelia.services.answer_contract import agent_system_prompt
+from adelia.clinical import red_flags
+from adelia.enrichment.profile_service import load_profile_facts
+from adelia.services.answer_contract import agent_system_prompt, red_flag_reply
+from adelia.services.citations import prune_and_renumber
 
 MAX_STEPS = 5
 
@@ -58,8 +61,29 @@ def _system_prompt(locale: str) -> str:
 async def run_agent_turn(*, user_id: UUID, profile_id: UUID | None, message: str,
                          history: list[dict] | None = None, card_action: dict | None = None,
                          locale: str = "es") -> AsyncIterator[AgentEvent]:
-    provider = get_provider()
+    # The provider is resolved LATE, right before the model loop. It used to
+    # be the first statement of the turn, which meant a missing or broken LLM
+    # key killed the whole stream, red-flag referral included: the one answer
+    # that needs no model was the one a missing model prevented. Verified on
+    # 2026-08-31 against a stack with no key, where "des taches qui ne
+    # s'effacent pas" returned an empty stream instead of the referral.
     messages: list[dict] = sanitize_history(history)
+    # Who the turn is about, once. Every clinical tool needs the age and the
+    # sex, and none of them should open a session to ask (audit 3.5, 3.9).
+    facts = await load_profile_facts(user_id=user_id, profile_id=profile_id)
+
+    # Red flags before the model, exactly as in the chat (audit 3.3). This is
+    # the screen a parent lands on, so it is the screen where "my 2-month-old
+    # is at 38.2, do I give her paracetamol?" actually gets typed.
+    if message and not card_action:
+        flag = red_flags.detect(message, locale=locale, age_months=facts.age_months)
+        if flag is not None:
+            yield AgentEvent(type="token", content=red_flag_reply(flag.code, locale))
+            yield AgentEvent(
+                type="final",
+                evidence_citations=[red_flags.citation_for(flag)],
+            )
+            return
 
     # A confirm action arriving from the UI = execute the previously-proposed write tool now.
     if card_action and card_action.get("intent") == "confirm":
@@ -76,7 +100,12 @@ async def run_agent_turn(*, user_id: UUID, profile_id: UUID | None, message: str
         return
 
     messages.append({"role": "user", "content": message})
+    # Citations accumulated across every tool call of the turn, so the final
+    # SSE frame carries one contiguous numbering (services/citations).
+    turn_citations: list[dict] = []
+    turn_evidence: list[dict] = []
     try:
+        provider = get_provider()
         for _ in range(MAX_STEPS):
             assistant_text = ""
             tool_calls: list[dict] = []
@@ -89,7 +118,8 @@ async def run_agent_turn(*, user_id: UUID, profile_id: UUID | None, message: str
                 elif ev["type"] == "stop":
                     pass
             if not tool_calls:
-                yield AgentEvent(type="final")
+                yield AgentEvent(type="final", citations=turn_citations,
+                                 evidence_citations=turn_evidence)
                 return
             # record the assistant turn (text + tool_use) for the next model call
             messages.append({"role": "assistant", "content": _assistant_blocks(assistant_text, tool_calls)})
@@ -103,12 +133,24 @@ async def run_agent_turn(*, user_id: UUID, profile_id: UUID | None, message: str
                     yield AgentEvent(type="final")  # pause: wait for the user's confirm action
                     return
                 outcome = await execute_tool(tc["name"], tc["args"], user_id=user_id,
-                                             profile_id=profile_id, locale=locale)
+                                             profile_id=profile_id, locale=locale,
+                                             facts=facts)
                 if outcome.card:
                     yield AgentEvent(type="card", card=outcome.card)
-                tool_results.append({"type": "tool_result", "tool_use_id": tc["id"], "content": outcome.text})
+                # Drop the citations the tool's answer never referenced and
+                # continue the turn's numbering, so the markers the model
+                # copies into its reply point at the cards the parent sees.
+                text, kept_citations, kept_evidence = prune_and_renumber(
+                    outcome.text, outcome.citations, outcome.evidence_citations,
+                    citation_offset=len(turn_citations),
+                    evidence_offset=len(turn_evidence),
+                )
+                turn_citations.extend(kept_citations)
+                turn_evidence.extend(kept_evidence)
+                tool_results.append({"type": "tool_result", "tool_use_id": tc["id"], "content": text})
             messages.append({"role": "user", "content": tool_results})
-        yield AgentEvent(type="final")
+        yield AgentEvent(type="final", citations=turn_citations,
+                         evidence_citations=turn_evidence)
     except Exception as exc:  # noqa: BLE001
         yield AgentEvent(type="error", content=str(exc))
 
@@ -146,11 +188,19 @@ async def _run_write_tool(name: str, args: dict, *, user_id: UUID, profile_id: U
         from adelia.services.briefing_repo import create_briefing
         specialty = _to_specialty(args["specialty"])
         async with AsyncSessionLocal() as session:
-            briefing = await create_briefing(session, user_id=user_id, target_specialty=specialty)
+            # Same child the turn is about: the agent's briefing used to be
+            # built from the whole account, so a mother of two got a briefing
+            # for her newborn carrying her four-year-old's history (audit 4.1).
+            pid = await profile_service.resolve_profile_id(
+                session, user_id=user_id, profile_id=profile_id
+            )
+            briefing = await create_briefing(session, user_id=user_id,
+                                             target_specialty=specialty, profile_id=pid)
             await session.commit()
             bid = briefing.id
         await briefing_orchestrator.run(briefing_id=bid, user_id=user_id,
-                                        target_specialty=specialty, locale=locale)
+                                        target_specialty=specialty, locale=locale,
+                                        profile_id=pid)
         from adelia.agent import cards
         return ToolOutcome(text="Briefing generado.",
                            card=cards.card_briefing(bid.hex[:12], str(bid), specialty.value, "ready", ""))

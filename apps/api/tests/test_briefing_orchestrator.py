@@ -1,6 +1,8 @@
-"""briefing_orchestrator — 3 mocked tests using AsyncMock pattern from M3."""
+"""briefing_orchestrator: mocked pipeline tests, plus the header (audit 3.10)."""
+
 from __future__ import annotations
 
+from datetime import date as _date
 from unittest.mock import AsyncMock, patch
 from uuid import uuid4
 
@@ -23,12 +25,12 @@ async def test_orchestrator_happy_path_transitions_to_ready():
     ) as load, patch.object(
         briefing_orchestrator, "_load_user_patient_header", new_callable=AsyncMock
     ) as patient_load, patch(
-        "adelia.services.briefing_orchestrator.bake_questions"
+        "adelia.services.briefing_orchestrator.bake_questions", new_callable=AsyncMock
     ) as bake, patch.object(
         briefing_orchestrator, "_persist_briefing_status", new_callable=AsyncMock
     ) as persist:
         load.return_value = ([], {})
-        patient_load.return_value = PatientHeader(name="J. Doe", age=42, sex="F")
+        patient_load.return_value = PatientHeader(name="J. Doe", age_months=18, sex="F")
         bake.return_value = ([], LLMMeta(model="m", tokens_used=10, cost_estimate_usd=0.001))
 
         await briefing_orchestrator.run(
@@ -58,12 +60,12 @@ async def test_orchestrator_failure_transitions_to_failed_with_message():
     ) as load, patch.object(
         briefing_orchestrator, "_load_user_patient_header", new_callable=AsyncMock
     ) as patient_load, patch(
-        "adelia.services.briefing_orchestrator.bake_questions"
+        "adelia.services.briefing_orchestrator.bake_questions", new_callable=AsyncMock
     ) as bake, patch.object(
         briefing_orchestrator, "_persist_briefing_status", new_callable=AsyncMock
     ) as persist:
         load.return_value = ([], {})
-        patient_load.return_value = PatientHeader(name="J. Doe", age=42, sex="F")
+        patient_load.return_value = PatientHeader(name="J. Doe", age_months=18, sex="F")
         bake.side_effect = QAPrebakerError("simulated LLM failure")
 
         await briefing_orchestrator.run(
@@ -100,12 +102,12 @@ async def test_orchestrator_payload_includes_qa_items():
     ) as load, patch.object(
         briefing_orchestrator, "_load_user_patient_header", new_callable=AsyncMock
     ) as patient_load, patch(
-        "adelia.services.briefing_orchestrator.bake_questions"
+        "adelia.services.briefing_orchestrator.bake_questions", new_callable=AsyncMock
     ) as bake, patch.object(
         briefing_orchestrator, "_persist_briefing_status", new_callable=AsyncMock
     ) as persist:
         load.return_value = ([], {str(doc_id): "q"})
-        patient_load.return_value = PatientHeader(name="J. Doe", age=42, sex="F")
+        patient_load.return_value = PatientHeader(name="J. Doe", age_months=18, sex="F")
         bake.return_value = (qa_items, LLMMeta(model="m", tokens_used=5, cost_estimate_usd=0.0))
 
         await briefing_orchestrator.run(
@@ -183,3 +185,92 @@ async def test_briefing_evidence_never_leaves_the_pediatric_corpus():
         )
 
     assert retrieve.call_args.kwargs["specialties"] == ["pediatrics"]
+
+
+# ---------------------------------------------------------------------------
+# The header comes from Profile (audit 3.10)
+#
+# Every briefing used to say the patient was 0 years old, of unknown sex, and
+# named after the local part of the mother's email, from an "M5 placeholder"
+# comment. In pediatrics the age is the first determinant of every
+# interpretation: "0 años" on an 18-month-old invalidates percentiles, doses
+# and the vaccination schedule, and costs the document its credibility in
+# front of the professional reading it.
+# ---------------------------------------------------------------------------
+
+
+
+async def test_header_reads_name_age_and_sex_from_the_profile():
+    """The facts are now resolved once by run() and handed in, so the header
+    and the entities it describes are the same child (audit 4.1); the header
+    itself no longer opens a session when the profile has a name."""
+    from uuid import uuid4
+
+    from adelia.enrichment.profile_service import ProfileFacts
+    from adelia.services import briefing_orchestrator
+
+    facts = ProfileFacts(profile_id=uuid4(), display_name="Adel",
+                         date_of_birth=_date(2025, 3, 1), sex="M", age_months=18)
+    header = await briefing_orchestrator._load_user_patient_header(uuid4(), facts)
+
+    assert header.name == "Adel"
+    assert header.age_months == 18
+    assert header.sex == "M"
+    assert header.age_label == "18 meses"
+
+
+async def test_header_says_the_age_is_not_recorded_instead_of_printing_zero():
+    from uuid import uuid4
+
+    from adelia.enrichment.profile_service import ProfileFacts
+    from adelia.services import briefing_orchestrator
+
+    facts = ProfileFacts(profile_id=uuid4(), display_name="Adel",
+                         date_of_birth=None, sex=None, age_months=None)
+    header = await briefing_orchestrator._load_user_patient_header(uuid4(), facts)
+
+    assert header.age_months is None
+    assert header.age_label == "edad no registrada"
+    assert "0" not in header.age_label
+
+
+def test_age_label_uses_months_under_two_years_and_years_above():
+    from adelia.schemas import PatientHeader
+
+    assert PatientHeader(name="x", age_months=1).age_label == "1 mes"
+    assert PatientHeader(name="x", age_months=18).age_label == "18 meses"
+    assert PatientHeader(name="x", age_months=23).age_label == "23 meses"
+    assert PatientHeader(name="x", age_months=24).age_label == "2 años"
+    assert PatientHeader(name="x", age_months=12 * 42).age_label == "42 años"
+
+
+def test_the_rendered_header_never_prints_a_zero_age():
+    from datetime import datetime, UTC
+
+    from adelia.schemas import (
+        AppliedFilter, BriefingPayload, BriefingSections, LLMMeta, PatientHeader, Specialty,
+    )
+    from adelia.services.briefing_html_renderer import render_briefing_html
+
+    sections = BriefingSections(
+        reason_for_consult=None, active_problems=[], medications=[], allergies=[],
+        immunizations=[], procedures=[], family_history=[], relevant_observations=[],
+        open_questions=[],
+    )
+    for locale, needle in (("es", "edad no registrada"),
+                           ("en", "age not recorded"),
+                           ("fr", "âge non renseigné")):
+        payload = BriefingPayload(
+            schema_version="1.0",
+            patient=PatientHeader(name="Adel", age_months=None, sex=None),
+            target_specialty=Specialty.PEDIATRICS,
+            generated_at=datetime.now(UTC),
+            sections=sections,
+            citations=[],
+            applied_filter=AppliedFilter(specialty="pediatrics", rules_version="1"),
+            llm_meta=LLMMeta(model="test", tokens_used=0, cost_estimate_usd=0.0),
+            locale=locale,
+        )
+        html = render_briefing_html(payload)
+        assert needle in html, locale
+        assert "0 años" not in html and "0 years" not in html

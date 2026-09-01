@@ -1,12 +1,371 @@
-[
-  {"name": "Hepatitis B", "due_month": 0},
-  {"name": "Hexavalente (DTPa-VPI-Hib-HB) 1ª", "due_month": 2},
-  {"name": "Neumococo 1ª", "due_month": 2},
-  {"name": "Rotavirus 1ª", "due_month": 2},
-  {"name": "Hexavalente 2ª", "due_month": 4},
-  {"name": "Neumococo 2ª", "due_month": 4},
-  {"name": "Meningococo B 1ª", "due_month": 4},
-  {"name": "Hexavalente 3ª", "due_month": 11},
-  {"name": "Triple vírica (SRP) 1ª", "due_month": 12},
-  {"name": "Meningococo C", "due_month": 12}
-]
+{
+  "_meta": {
+    "country": "ES",
+    "calendar": "Calendario común de vacunación e inmunización a lo largo de toda la vida, calendario recomendado año 2026",
+    "authority": "Consejo Interterritorial del Sistema Nacional de Salud (Ministerio de Sanidad)",
+    "approved": "2025-12-12",
+    "url": "https://www.sanidad.gob.es/areas/promocionPrevencion/vacunaciones/calendario/home.htm",
+    "updated": "2026-08-31",
+    "note": "Las comunidades autónomas desarrollan este calendario común y pueden adelantar o añadir dosis, así que una pauta que no coincida exactamente no significa que falte una vacuna. Solo se listan las inmunizaciones sistemáticas de la infancia."
+  },
+  "vaccines": [
+    {
+      "key": "hb_0",
+      "group": "hepatitis_b",
+      "name": "Hepatitis B, dosis del nacimiento",
+      "due_month": 0,
+      "dose": 1,
+      "routine": false,
+      "match": [
+        "hepatitis b",
+        "hb",
+        "engerix",
+        "hbvaxpro",
+        "fendrix"
+      ],
+      "note": "Solo en hijos de madre con AgHBs positivo o sin cribado prenatal, en las primeras 24 horas de vida"
+    },
+    {
+      "key": "hexa_1",
+      "group": "hexavalente",
+      "name": "Hexavalente DTPa-VPI-Hib-HB, 1.ª dosis",
+      "due_month": 2,
+      "dose": 1,
+      "routine": true,
+      "match": [
+        "hexavalente",
+        "hexavalent",
+        "dtpa",
+        "dtp",
+        "difteria",
+        "tetanos",
+        "tosferina",
+        "vpi",
+        "polio",
+        "hib",
+        "haemophilus",
+        "infanrix",
+        "vaxelis",
+        "pentaxim",
+        "hexyon"
+      ]
+    },
+    {
+      "key": "vnc_1",
+      "group": "neumococo",
+      "name": "Neumococo conjugada, 1.ª dosis",
+      "due_month": 2,
+      "dose": 1,
+      "routine": true,
+      "match": [
+        "neumococo",
+        "neumococica",
+        "vnc",
+        "prevenar",
+        "synflorix",
+        "apexxnar",
+        "vaxneuvance",
+        "pneumo",
+        "pcv"
+      ]
+    },
+    {
+      "key": "menb_1",
+      "group": "meningococo_b",
+      "name": "Meningococo B, 1.ª dosis",
+      "due_month": 2,
+      "dose": 1,
+      "routine": true,
+      "match": [
+        "meningococo b",
+        "meningococica b",
+        "menb",
+        "bexsero",
+        "trumenba"
+      ]
+    },
+    {
+      "key": "rv_1",
+      "group": "rotavirus",
+      "name": "Rotavirus, 1.ª dosis",
+      "due_month": 2,
+      "dose": 1,
+      "routine": false,
+      "match": [
+        "rotavirus",
+        "rotateq",
+        "rotarix",
+        "rv"
+      ],
+      "note": "A partir de las 6 semanas de vida; el número de dosis depende de la vacuna utilizada"
+    },
+    {
+      "key": "hexa_2",
+      "group": "hexavalente",
+      "name": "Hexavalente DTPa-VPI-Hib-HB, 2.ª dosis",
+      "due_month": 4,
+      "dose": 2,
+      "routine": true,
+      "match": [
+        "hexavalente",
+        "hexavalent",
+        "dtpa",
+        "dtp",
+        "difteria",
+        "tetanos",
+        "tosferina",
+        "vpi",
+        "polio",
+        "hib",
+        "haemophilus",
+        "infanrix",
+        "vaxelis",
+        "pentaxim",
+        "hexyon"
+      ]
+    },
+    {
+      "key": "vnc_2",
+      "group": "neumococo",
+      "name": "Neumococo conjugada, 2.ª dosis",
+      "due_month": 4,
+      "dose": 2,
+      "routine": true,
+      "match": [
+        "neumococo",
+        "neumococica",
+        "vnc",
+        "prevenar",
+        "synflorix",
+        "apexxnar",
+        "vaxneuvance",
+        "pneumo",
+        "pcv"
+      ]
+    },
+    {
+      "key": "menb_2",
+      "group": "meningococo_b",
+      "name": "Meningococo B, 2.ª dosis",
+      "due_month": 4,
+      "dose": 2,
+      "routine": true,
+      "match": [
+        "meningococo b",
+        "meningococica b",
+        "menb",
+        "bexsero",
+        "trumenba"
+      ]
+    },
+    {
+      "key": "menc_1",
+      "group": "meningococo_c",
+      "name": "Meningococo C, 1.ª dosis",
+      "due_month": 4,
+      "dose": 1,
+      "routine": true,
+      "match": [
+        "meningococo c",
+        "menc",
+        "neisvac",
+        "menjugate"
+      ]
+    },
+    {
+      "key": "hexa_3",
+      "group": "hexavalente",
+      "name": "Hexavalente DTPa-VPI-Hib-HB, 3.ª dosis",
+      "due_month": 11,
+      "dose": 3,
+      "routine": true,
+      "match": [
+        "hexavalente",
+        "hexavalent",
+        "dtpa",
+        "dtp",
+        "difteria",
+        "tetanos",
+        "tosferina",
+        "vpi",
+        "polio",
+        "hib",
+        "haemophilus",
+        "infanrix",
+        "vaxelis",
+        "pentaxim",
+        "hexyon"
+      ]
+    },
+    {
+      "key": "vnc_3",
+      "group": "neumococo",
+      "name": "Neumococo conjugada, 3.ª dosis",
+      "due_month": 11,
+      "dose": 3,
+      "routine": true,
+      "match": [
+        "neumococo",
+        "neumococica",
+        "vnc",
+        "prevenar",
+        "synflorix",
+        "apexxnar",
+        "vaxneuvance",
+        "pneumo",
+        "pcv"
+      ]
+    },
+    {
+      "key": "menb_3",
+      "group": "meningococo_b",
+      "name": "Meningococo B, 3.ª dosis",
+      "due_month": 12,
+      "dose": 3,
+      "routine": true,
+      "match": [
+        "meningococo b",
+        "meningococica b",
+        "menb",
+        "bexsero",
+        "trumenba"
+      ]
+    },
+    {
+      "key": "menc_2",
+      "group": "meningococo_c",
+      "name": "Meningococo C, 2.ª dosis",
+      "due_month": 12,
+      "dose": 2,
+      "routine": true,
+      "match": [
+        "meningococo c",
+        "menc",
+        "neisvac",
+        "menjugate"
+      ]
+    },
+    {
+      "key": "tv_1",
+      "group": "triple_virica",
+      "name": "Triple vírica (sarampión, rubeola, parotiditis), 1.ª dosis",
+      "due_month": 12,
+      "dose": 1,
+      "routine": true,
+      "match": [
+        "triple virica",
+        "srp",
+        "sarampion",
+        "rubeola",
+        "parotiditis",
+        "priorix",
+        "mmrvaxpro",
+        "ror"
+      ]
+    },
+    {
+      "key": "vvz_1",
+      "group": "varicela",
+      "name": "Varicela, 1.ª dosis",
+      "due_month": 15,
+      "dose": 1,
+      "routine": true,
+      "match": [
+        "varicela",
+        "varivax",
+        "varilrix",
+        "vvz"
+      ]
+    },
+    {
+      "key": "tv_2",
+      "group": "triple_virica",
+      "name": "Triple vírica, 2.ª dosis",
+      "due_month": 36,
+      "dose": 2,
+      "routine": true,
+      "match": [
+        "triple virica",
+        "srp",
+        "sarampion",
+        "rubeola",
+        "parotiditis",
+        "priorix",
+        "mmrvaxpro",
+        "ror"
+      ],
+      "note": "Se administra entre los 3 y los 4 años"
+    },
+    {
+      "key": "vvz_2",
+      "group": "varicela",
+      "name": "Varicela, 2.ª dosis",
+      "due_month": 36,
+      "dose": 2,
+      "routine": true,
+      "match": [
+        "varicela",
+        "varivax",
+        "varilrix",
+        "vvz"
+      ],
+      "note": "Se administra entre los 3 y los 4 años"
+    },
+    {
+      "key": "dtpa_6a",
+      "group": "refuerzo_dtpa",
+      "name": "DTPa-VPI de refuerzo (6 años)",
+      "due_month": 72,
+      "dose": 4,
+      "routine": true,
+      "match": [
+        "hexavalente",
+        "hexavalent",
+        "dtpa",
+        "dtp",
+        "difteria",
+        "tetanos",
+        "tosferina",
+        "vpi",
+        "polio",
+        "hib",
+        "haemophilus",
+        "infanrix",
+        "vaxelis",
+        "pentaxim",
+        "hexyon"
+      ]
+    },
+    {
+      "key": "menacwy_12a",
+      "group": "meningococo_acwy",
+      "name": "Meningococo ACWY (12 años)",
+      "due_month": 144,
+      "dose": 1,
+      "routine": true,
+      "match": [
+        "meningococo acwy",
+        "menacwy",
+        "nimenrix",
+        "menveo",
+        "menquadfi",
+        "acwy"
+      ]
+    },
+    {
+      "key": "vph_12a",
+      "group": "vph",
+      "name": "Virus del papiloma humano (12 años)",
+      "due_month": 144,
+      "dose": 1,
+      "routine": true,
+      "match": [
+        "vph",
+        "papiloma",
+        "gardasil",
+        "cervarix",
+        "hpv"
+      ]
+    }
+  ]
+}

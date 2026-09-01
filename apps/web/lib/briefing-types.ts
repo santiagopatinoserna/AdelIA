@@ -124,6 +124,9 @@ export interface BriefingDetailOut extends BriefingOut {
 export interface BriefingCreate {
   locale?: "es" | "en" | "fr";
   target_specialty: Specialty;
+  /** Which child the briefing is about. Null resolves to the default profile
+   *  server-side; the API rejects a profile that is not the caller's. */
+  profile_id?: string | null;
 }
 
 export const SPECIALTIES: { value: Specialty; labelKey: string }[] = [

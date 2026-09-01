@@ -84,6 +84,17 @@ services:
       TELEGRAM_BOT_USERNAME: ${TELEGRAM_BOT_USERNAME:-Adelia_godiai_bot}
       DIARY_REMINDER_HOUR: ${DIARY_REMINDER_HOUR:-20}
       DIARY_REMINDER_TZ: ${DIARY_REMINDER_TZ:-Europe/Madrid}
+      # Card-free trial (audit 4.7): days a brand-new account may use the
+      # product before Stripe is involved at all. 0 restores the old
+      # behaviour, where checkout was the first screen after the magic link.
+      FREE_TRIAL_DAYS: ${FREE_TRIAL_DAYS:-30}
+      # Public demo (audit 4.6) and the aggregate funnel (audit 4.8).
+      # OWNER_EMAIL is the ONLY account that may read GET /funnel/summary;
+      # empty means nobody can. DEMO_DAILY_BUDGET caps how many answers the
+      # public demo will pay for in a day (it also has a per-IP rate limit).
+      OWNER_EMAIL: ${OWNER_EMAIL:-}
+      DEMO_ENABLED: ${DEMO_ENABLED:-true}
+      DEMO_DAILY_BUDGET: ${DEMO_DAILY_BUDGET:-300}
     ports:
       - "${API_PORT:-8000}:8000"
     healthcheck:

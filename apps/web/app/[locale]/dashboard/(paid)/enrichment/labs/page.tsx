@@ -150,30 +150,48 @@ export default function LabRangesPage() {
         {results.map((r, idx) => (
           <li
             key={idx}
-            className={`rounded-xl border-l-4 p-3 ${r.flag ? FLAG_STYLE[r.flag] : "border-line bg-surface"}`}
+            className={`rounded-xl border-l-4 p-3 ${r.flag ? FLAG_STYLE[r.flag] : "border-line-strong bg-surface-2"}`}
           >
             <div className="flex items-center gap-2">
+              {/* A result with no flag is a value the API REFUSED to judge
+                  (no age, or no paediatric band for that age). Painting it
+                  with the green "normal" badge, as this page used to, is the
+                  false reassurance audit 3.5 exists to remove. */}
               <span
                 className={`ad-eyebrow rounded px-2 py-0.5 ${
-                  r.flag === "high"
-                    ? "bg-error-tint text-error-text"
-                    : r.flag === "low"
-                      ? "bg-accent-tint text-ink"
-                      : "bg-primary-tint text-ink"
+                  !r.flag
+                    ? "bg-surface-2 text-ink-soft"
+                    : r.flag === "high"
+                      ? "bg-error-tint text-error-text"
+                      : r.flag === "low"
+                        ? "bg-accent-tint text-ink"
+                        : "bg-primary-tint text-ink"
                 }`}
               >
-                {r.flag ? t(`enrichment.labs.${r.flag}`) : t("enrichment.labs.normal")}
+                {r.flag ? t(`enrichment.labs.${r.flag}`) : t("enrichment.labs.notEvaluated")}
               </span>
               <span className="font-medium text-ink">
                 {r.canonical_name || r.name} = {r.value ?? "?"}{r.unit ? ` ${r.unit}` : ""}
               </span>
             </div>
+            {r.reason && (
+              <div className="mt-1 text-xs text-ink-soft">
+                {r.reason === "unknown_age"
+                  ? t("enrichment.labs.reasonUnknownAge")
+                  : t("enrichment.labs.reasonNoPediatricBand")}
+              </div>
+            )}
             {r.zone_label && (
               <div className="mt-1 text-xs text-ink-soft">{r.zone_label}</div>
             )}
-            {r.range_low != null && r.range_high != null && (
+            {(r.range_low != null || r.range_high != null) && (
               <div className="mt-0.5 text-xs text-ink-faint">
-                {t("enrichment.labs.reference")}: {r.range_low} - {r.range_high} {r.unit ?? ""}
+                {t("enrichment.labs.reference")}:{" "}
+                {r.range_low != null && r.range_high != null
+                  ? `${r.range_low} - ${r.range_high}`
+                  : (r.range_low ?? r.range_high)}{" "}
+                {r.unit ?? ""}
+                {r.age_band ? ` · ${t("enrichment.labs.ageBand")} ${r.age_band}` : ""}
               </div>
             )}
           </li>

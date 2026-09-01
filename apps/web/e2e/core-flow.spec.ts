@@ -26,7 +26,9 @@ test("locale switcher: /en dashboard renders English", async ({ browser }) => {
   await expect(page.getByRole("heading", { level: 1 })).toHaveText(/How can I help with your baby's health/);
 
   await page.goto("/fr/dashboard");
-  await expect(page.getByRole("heading", { level: 1 })).toHaveText(/Comment je peux t'aider/);
+  // Typographic apostrophe, not the straight one: French of France, and the
+  // catalogue was corrected to match (audit week 3, typography rule).
+  await expect(page.getByRole("heading", { level: 1 })).toHaveText(/Comment je peux t\u2019aider/);
   await context.close();
 });
 

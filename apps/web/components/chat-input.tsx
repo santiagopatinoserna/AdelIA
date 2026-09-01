@@ -2,6 +2,7 @@
 import { useRef, useState } from "react";
 import { useTranslations } from "next-intl";
 import { Send, Square } from "lucide-react";
+import { ClinicalDisclaimer } from "@/components/clinical-disclaimer";
 
 export function ChatInput({
   onSubmit,
@@ -88,6 +89,10 @@ export function ChatInput({
           </button>
         )}
       </div>
+      {/* Fixed clinical disclaimer (audit 3.8). It sits in the composer, not
+          in the page footer, because the composer is the part of the column
+          that never scrolls away. */}
+      <ClinicalDisclaimer className="mt-2" />
       {/* Make the Enter / Shift+Enter convention discoverable. */}
       <p className="mt-1.5 hidden px-1 text-xs text-ink-faint sm:block">
         {t("keyboardHint")}

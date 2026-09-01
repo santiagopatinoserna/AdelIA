@@ -10,6 +10,7 @@ Stages:
 """
 from __future__ import annotations
 
+import asyncio
 import logging
 from datetime import datetime, UTC
 from uuid import UUID
@@ -31,10 +32,12 @@ from adelia.schemas import (
     PatientHeader,
     Specialty,
 )
+from adelia.enrichment import profile_service
 from adelia.services import briefing_repo
 from adelia.services.briefing_html_renderer import render_briefing_html
 from adelia.services.qa_pre_baker import bake_questions, QAPrebakerError
 from adelia.services.sbar_formatter import EntityInput, format_sections
+from adelia.services.scope import Scope
 from adelia.specialty_templates import load_template
 from adelia.workers.embed import embed_texts
 
@@ -42,9 +45,16 @@ logger = logging.getLogger(__name__)
 
 
 async def _load_user_entities_and_sources(
-    user_id: UUID,
+    scope: Scope,
 ) -> tuple[list[EntityInput], dict[str, str]]:
-    """Load entities + source raw_texts for user, filtered by deleted_at IS NULL.
+    """Load entities + source raw_texts for the scope, deleted_at IS NULL.
+
+    Scoped, not user-wide: this is the function that fed the SBAR sections and
+    the Q&A pre-baker, and it read `Entity.user_id` alone. A mother with two
+    children printed one briefing that listed both children's conditions,
+    medications and lab values under one name, and handed it to a
+    paediatrician (audit 4.1). Rows with a NULL profile_id are kept, so a
+    v0.1 account still gets its whole history.
 
     Opens its own session so tests can mock this function without needing
     to mock AsyncSessionLocal too.
@@ -52,7 +62,7 @@ async def _load_user_entities_and_sources(
     async with AsyncSessionLocal() as session:
         entity_stmt = (
             select(Entity)
-            .where(Entity.user_id == user_id)
+            .where(*scope.where(Entity))
             .where(Entity.deleted_at.is_(None))
             .limit(500)
         )
@@ -77,7 +87,12 @@ async def _load_user_entities_and_sources(
 
         doc_ids = {e.document_id for e in entities}
         if doc_ids:
-            doc_stmt = select(Document).where(Document.id.in_(doc_ids))
+            # Belt and braces: the ids already come from scoped entities, and
+            # the source texts are quoted verbatim into the briefing, so the
+            # scope is repeated here rather than trusted transitively.
+            doc_stmt = select(Document).where(
+                Document.id.in_(doc_ids), *scope.where(Document)
+            )
             doc_result = await session.execute(doc_stmt)
             sources = {str(d.id): (d.raw_text or "") for d in doc_result.scalars().all()}
         else:
@@ -86,23 +101,35 @@ async def _load_user_entities_and_sources(
         return entities, sources
 
 
-async def _load_user_patient_header(user_id: UUID) -> PatientHeader:
-    """Build a minimal PatientHeader from the User row.
+async def _load_user_patient_header(
+    user_id: UUID, facts: profile_service.ProfileFacts | None = None
+) -> PatientHeader:
+    """Build the PatientHeader from the active Profile (audit 3.10).
 
-    M5 placeholder until UserSettings (age, sex, full_name) is wired. v0.1.1 enhancement.
-    Opens its own session for testability.
+    Before this, every briefing said the patient was 0 years old, of unknown
+    sex, and named after the local part of the mother's email address, from
+    a comment that called it an "M5 placeholder until UserSettings is wired".
+    `Profile` has held `display_name`, `date_of_birth` and `sex` all along,
+    and the agent has a tool that writes them.
+
+    When the date of birth is genuinely missing the header says so; it does
+    not print a zero. Falling back to the email local part still happens when
+    there is no profile at all, because a briefing has to carry some name,
+    but the age never invents itself.
     """
-    async with AsyncSessionLocal() as session:
-        stmt = select(User).where(User.id == user_id)
-        result = await session.execute(stmt)
-        user = result.scalar_one_or_none()
-        if user is None:
-            return PatientHeader(name="Unknown", age=0, sex="?")
-        return PatientHeader(
-            name=(user.email or "Unknown").split("@", 1)[0],
-            age=0,
-            sex="?",
-        )
+    facts = facts or profile_service.UNKNOWN_PROFILE
+    name = facts.display_name
+    if not name:
+        async with AsyncSessionLocal() as session:
+            stmt = select(User).where(User.id == user_id)
+            result = await session.execute(stmt)
+            user = result.scalar_one_or_none()
+        name = (user.email or "Unknown").split("@", 1)[0] if user else "Unknown"
+    return PatientHeader(
+        name=name,
+        age_months=facts.age_months,
+        sex=facts.sex if facts.sex in ("M", "F") else None,
+    )
 
 
 async def _persist_briefing_status(
@@ -199,6 +226,7 @@ async def run(
     user_id: UUID,
     target_specialty: Specialty,
     locale: str = "es",
+    profile_id: UUID | None = None,
 ) -> None:
     """Execute the 5-stage pipeline for a single briefing_id.
 
@@ -215,8 +243,17 @@ async def run(
     html: str | None = None
 
     try:
-        entities, sources = await _load_user_entities_and_sources(user_id)
-        patient = await _load_user_patient_header(user_id)
+        # Resolved ONCE: the header, the entities, the source quotes and the
+        # Q&A all describe the same child. When the caller sends no
+        # profile_id, this falls back to the account's default profile, which
+        # is the same profile the header has been naming since audit 3.10 —
+        # before, the header named one child and the body merged two.
+        facts = await profile_service.load_profile_facts(
+            user_id=user_id, profile_id=profile_id
+        )
+        scope = Scope(user_id=user_id, profile_id=facts.profile_id)
+        entities, sources = await _load_user_entities_and_sources(scope)
+        patient = await _load_user_patient_header(user_id, facts)
 
         sections = format_sections(
             entities=entities,
@@ -242,7 +279,7 @@ async def run(
                 f"(but still ground each answer in patient citations):\n\n{evidence_block}"
             )
 
-        qa_items, llm_meta = bake_questions(
+        qa_items, llm_meta = await bake_questions(
             specialty=target_specialty,
             entities_text=entities_text,
             specialty_hints=enriched_hints,
@@ -265,7 +302,10 @@ async def run(
             evidence_citations=evidence_citations,
         )
 
-        html = render_briefing_html(payload)
+        # WeasyPrint is not in this path, but Jinja rendering plus the HTML
+        # assembly is still CPU work inside the loop; a thread keeps the
+        # briefing off the request path entirely (audit 4.5).
+        html = await asyncio.to_thread(render_briefing_html, payload)
         status = "ready"
 
     except QAPrebakerError as e:

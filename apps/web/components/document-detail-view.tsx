@@ -8,6 +8,7 @@ import { Link, useRouter } from "@/lib/navigation";
 import {
   deleteDocument,
   getDocument,
+  reprocessDocument,
   setSpeakerNames,
   type DocumentDTO,
 } from "@/lib/api-client-browser";
@@ -50,6 +51,8 @@ export function DocumentDetailView({
   const [confirmingDelete, setConfirmingDelete] = useState(false);
   const [deleting, setDeleting] = useState(false);
   const [deleteError, setDeleteError] = useState(false);
+  const [retrying, setRetrying] = useState(false);
+  const [retryError, setRetryError] = useState(false);
   const pollsRef = useRef(0);
   const router = useRouter();
   const t = useTranslations("dashboard");
@@ -90,7 +93,27 @@ export function DocumentDetailView({
     }
   }
 
+  // A failed document used to render the "procesando" pulse for ever: the
+  // spinner only gave up after 120 polls, and even then it offered a page
+  // reload, which changes nothing. The pipeline can now be run again on the
+  // stored blob (audit 4.4), which is the difference between a lost
+  // appointment recording and a second attempt.
+  async function onRetry() {
+    setRetrying(true);
+    setRetryError(false);
+    try {
+      const fresh = await reprocessDocument(doc.id);
+      setDoc(fresh);
+      setTimedOut(false);
+    } catch {
+      setRetryError(true);
+    } finally {
+      setRetrying(false);
+    }
+  }
+
   const processing = doc.status === "processing";
+  const failed = doc.status === "failed";
 
   useEffect(() => {
     if (!processing) return;
@@ -224,17 +247,44 @@ export function DocumentDetailView({
           </div>
         ) : doc.raw_text ? (
           <pre className="whitespace-pre-wrap font-sans text-sm leading-relaxed text-ink">{doc.raw_text}</pre>
+        ) : failed ? (
+          <div className="text-center">
+            <p className="text-sm font-medium text-ink">{t("docFailedTitle")}</p>
+            <p className="mx-auto mt-1.5 max-w-md text-sm text-ink-soft">
+              {t("docFailedBody")}
+            </p>
+            <button
+              type="button"
+              onClick={onRetry}
+              disabled={retrying}
+              className="ad-btn ad-btn-primary mt-4 min-h-[44px] px-4 py-2 text-sm disabled:opacity-60"
+            >
+              <RotateCcw className="h-3.5 w-3.5" strokeWidth={2} />
+              {retrying ? t("retryDocRunning") : t("retryDoc")}
+            </button>
+            {retryError && (
+              <p role="alert" className="mt-3 text-sm text-error-text">
+                {t("retryDocError")}
+              </p>
+            )}
+          </div>
         ) : timedOut ? (
           <div className="text-center">
             <p className="text-sm text-ink-soft">{t("ocrTimeout")}</p>
             <button
               type="button"
-              onClick={() => window.location.reload()}
-              className="ad-btn ad-btn-ghost mt-3 px-4 py-2 text-sm"
+              onClick={onRetry}
+              disabled={retrying}
+              className="ad-btn ad-btn-ghost mt-3 px-4 py-2 text-sm disabled:opacity-60"
             >
               <RotateCcw className="h-3.5 w-3.5" strokeWidth={2} />
-              {t("ocrReload")}
+              {retrying ? t("retryDocRunning") : t("retryDoc")}
             </button>
+            {retryError && (
+              <p role="alert" className="mt-3 text-sm text-error-text">
+                {t("retryDocError")}
+              </p>
+            )}
           </div>
         ) : (
           <p className="animate-pulse text-ink-faint">{t("ocrProcessing")}</p>

@@ -58,7 +58,7 @@ def test_briefing_payload_minimal_valid():
         schema_version="1.0",
         generated_at=datetime.now(UTC),
         target_specialty=Specialty.ENDOCRINOLOGY,
-        patient=PatientHeader(name="J. Doe", age=42, sex="F"),
+        patient=PatientHeader(name="J. Doe", age_months=18, sex="F"),
         sections=BriefingSections(
             reason_for_consult=None,
             active_problems=[],

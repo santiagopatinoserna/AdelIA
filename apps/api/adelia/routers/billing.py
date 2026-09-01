@@ -17,7 +17,7 @@ from uuid import UUID
 import stripe
 from fastapi import APIRouter, Depends, HTTPException, Request, status
 
-from adelia.auth import get_current_user_id
+from adelia.auth import get_current_user_id, local_trial_end
 from adelia.config import settings
 from adelia.db import AsyncSessionLocal
 from adelia.models import User
@@ -42,6 +42,22 @@ def _ts(epoch: int | None) -> datetime | None:
     return datetime.fromtimestamp(epoch, tz=timezone.utc) if epoch else None
 
 
+def _remaining_trial_days(user: User) -> int:
+    """Whole days left of the card-free trial, rounded up, 0 when none.
+
+    Rounded UP so a mother who subscribes with 4 hours left is not charged
+    those 4 hours; the cost of the rounding is at most one day of a 8 EUR
+    plan, and the alternative reads as a penalty for converting early.
+    """
+    end = local_trial_end(user.subscription_status or "none", user.created_at)
+    if end is None:
+        return 0
+    seconds = (end - datetime.now(timezone.utc)).total_seconds()
+    if seconds <= 0:
+        return 0
+    return max(1, -(-int(seconds) // 86400))
+
+
 async def _load_user(user_id: UUID) -> User:
     async with AsyncSessionLocal() as session:
         user = await session.get(User, user_id)
@@ -51,15 +67,47 @@ async def _load_user(user_id: UUID) -> User:
 
 
 def _status_payload(user: User) -> dict[str, Any]:
+    """What the paywall, the billing page and the Settings section all read.
+
+    The card-free trial (audit 4.7) is reported through the SAME keys as a
+    Stripe trial — status "trialing", active true, trial_end the day it runs
+    out — so no screen needs to know which of the two it is looking at. Two
+    keys carry what does differ:
+
+      trial_source  "stripe" | "local" | null. "local" is a trial this server
+                    granted, which Stripe has never heard of.
+      can_manage    whether there is a Stripe customer behind this account,
+                    i.e. whether POST /billing/portal has anything to open.
+                    Settings shows "Manage subscription" when true and
+                    "Subscribe" when false, instead of a button that 400s.
+    """
+    stored = user.subscription_status or "none"
+    local_end = local_trial_end(stored, user.created_at)
+    local_active = local_end is not None and local_end > datetime.now(timezone.utc)
+
+    if stored in ACTIVE_STATUSES:
+        status_value, active, trial_source = stored, True, (
+            "stripe" if user.trial_end else None
+        )
+        trial_end = user.trial_end
+    elif local_active:
+        status_value, active, trial_source = "trialing", True, "local"
+        trial_end = local_end
+    else:
+        status_value, active, trial_source = stored, False, None
+        trial_end = user.trial_end
+
     return {
-        "status": user.subscription_status or "none",
-        "active": (user.subscription_status or "none") in ACTIVE_STATUSES,
+        "status": status_value,
+        "active": active,
         "plan": user.subscription_plan,
-        "trial_end": user.trial_end.isoformat() if user.trial_end else None,
+        "trial_end": trial_end.isoformat() if trial_end else None,
         "current_period_end": (
             user.current_period_end.isoformat() if user.current_period_end else None
         ),
         "trial_days": settings.stripe_trial_days,
+        "trial_source": trial_source,
+        "can_manage": bool(user.stripe_customer_id),
     }
 
 
@@ -81,7 +129,10 @@ async def create_checkout(
 
     user = await _load_user(user_id)
 
-    # Already covered → nothing to buy; send them to manage instead.
+    # Already covered by STRIPE → nothing to buy; send them to manage instead.
+    # An account inside its card-free trial is deliberately NOT blocked here:
+    # the whole point of that trial is that she can subscribe whenever she
+    # decides to, without waiting for it to run out (audit 4.7).
     if (user.subscription_status or "none") in ACTIVE_STATUSES:
         raise HTTPException(status_code=409, detail="Subscription already active")
 
@@ -99,16 +150,22 @@ async def create_checkout(
             await session.commit()
 
     base = settings.adelia_app_url.rstrip("/")
+    # Days of the card-free trial she has NOT used yet. Without this the two
+    # trials stack: 30 free days on this server, then Stripe grants another 30
+    # at checkout, and the first invoice lands on day 60 (audit 4.7). Stripe
+    # rejects trial_period_days below 1, so 0 means "omit the key".
+    subscription_data: dict[str, Any] = {"metadata": {"user_id": str(user_id)}}
+    remaining = _remaining_trial_days(user)
+    if remaining > 0:
+        subscription_data["trial_period_days"] = remaining
     session = stripe.checkout.Session.create(
         mode="subscription",
         customer=customer_id,
         client_reference_id=str(user_id),
         line_items=[{"price": settings.stripe_price_id, "quantity": 1}],
-        subscription_data={
-            "trial_period_days": settings.stripe_trial_days,
-            "metadata": {"user_id": str(user_id)},
-        },
-        # Require a card during the free trial so it converts automatically.
+        subscription_data=subscription_data,
+        # A card at THIS point is not the wall the audit found: she is here
+        # because she pressed "subscribe", after using the product for free.
         payment_method_collection="always",
         allow_promotion_codes=True,
         success_url=f"{base}/billing?checkout=success",

@@ -2,6 +2,7 @@
 import { useEffect, useRef, useState } from "react";
 import { useTranslations } from "next-intl";
 import { Mic, Send, Square } from "lucide-react";
+import { ClinicalDisclaimer } from "@/components/clinical-disclaimer";
 
 // Minimal shape of the Web Speech API (no DOM lib types ship for it).
 type SpeechResultList = ArrayLike<ArrayLike<{ transcript: string }>>;
@@ -52,7 +53,8 @@ export function AgentInput({ onSubmit, onStop, disabled, locale }: {
   function submit() { const text = input.trim(); if (!text) return; onSubmit(text); setInput(""); }
 
   return (
-    <div className="flex items-end gap-2 border-t border-line bg-surface p-3">
+    <div className="border-t border-line bg-surface p-3">
+    <div className="flex items-end gap-2">
       <textarea value={input} onChange={(e) => setInput(e.target.value)} rows={1}
         placeholder={t("placeholder")} aria-label={t("placeholder")}
         onKeyDown={(e) => { if (e.key === "Enter" && !e.shiftKey) { e.preventDefault(); submit(); } }}
@@ -73,6 +75,10 @@ export function AgentInput({ onSubmit, onStop, disabled, locale }: {
           <Send className="h-5 w-5" />
         </button>
       )}
+    </div>
+    {/* Same fixed disclaimer as the chat (audit 3.8): /dashboard is the screen
+        a parent lands on, and it carried none before. */}
+    <ClinicalDisclaimer className="mt-2" />
     </div>
   );
 }

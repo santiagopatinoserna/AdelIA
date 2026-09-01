@@ -1,0 +1,197 @@
+{
+  "_meta": {
+    "topic": "Urgencias del lactante y del niño pequeño: fiebre en menores de 3 meses, deshidratación, dificultad respiratoria, exantema que no blanquea, convulsión febril, anafilaxia, sueño seguro, atragantamiento e ictericia neonatal",
+    "compiled": "2026-08-31",
+    "method": "Lectura directa del texto completo de cada fuente primaria (PDF o texto oficial) el 2026-08-31; cada cifra procede del apartado citado en el propio fragmento",
+    "caveat": "Resúmenes en español de fuentes primarias en inglés o en español; los chunks son paráfrasis con las cifras del original, no texto literal. Material de orientación para familias, no sustituye la valoración de un profesional.",
+    "purpose": "Corpus de urgencias de la auditoría 3.4: respalda el detector de banderas rojas de adelia/clinical/red_flags.py"
+  },
+  "sources": [
+    {
+      "source_type": "guideline",
+      "title": "Fiebre en menores de 5 años: valoración y manejo inicial (NICE NG143)",
+      "organization": "National Institute for Health and Care Excellence (NICE)",
+      "publication_year": 2021,
+      "url": "https://www.nice.org.uk/guidance/ng143",
+      "specialties": [
+        "pediatrics",
+        "general_medicine",
+        "emergency_medicine"
+      ],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "chunks": [
+        "Fiebre en menores de 5 años: valoración y manejo inicial (NICE, guía NG143, publicada en 2019 y vigente en su versión de 2021). Tema: edad del lactante y umbral de temperatura. Hallazgo: la recomendación 1.2.12 sitúa a los menores de 3 meses con una temperatura de 38 °C o más en el grupo de alto riesgo de enfermedad grave. La recomendación 1.2.13 coloca a los niños de 3 a 6 meses con 39 °C o más al menos en riesgo intermedio. A partir de los 6 meses, la recomendación 1.2.11 dice que la altura de la temperatura por sí sola no sirve para identificar a los niños con enfermedad grave. La guía advierte de que algunas vacunas inducen fiebre en menores de 3 meses.",
+        "Fiebre en menores de 5 años: valoración y manejo inicial (NICE NG143, 2021). Tema: signos de alto riesgo, columna roja del semáforo. Hallazgo: la recomendación 1.2.5 reconoce como alto riesgo la piel, los labios o la lengua pálidos, moteados, cenicientos o azulados; la ausencia de respuesta a estímulos sociales; el aspecto de enfermedad para un profesional sanitario; que no se despierte o que, si se le despierta, no se mantenga despierto; el llanto débil, agudo o continuo; el quejido; una frecuencia respiratoria mayor de 60 respiraciones por minuto; el tiraje torácico moderado o grave; la disminución del turgor cutáneo, y la fontanela abombada. La tabla 2 añade a la misma columna roja el exantema que no blanquea, la rigidez de nuca, el estatus epiléptico, los signos neurológicos focales y las crisis focales.",
+        "Fiebre en menores de 5 años: valoración y manejo inicial (NICE NG143, 2021). Tema: signos de riesgo intermedio, columna ámbar. Hallazgo: la recomendación 1.2.6 sitúa al menos en riesgo intermedio la palidez de piel, labios o lengua referida por los padres o cuidadores; no responder con normalidad a estímulos sociales; no sonreír; despertarse solo con estimulación prolongada; la disminución de la actividad; el aleteo nasal; las mucosas secas; la mala alimentación en lactantes; la disminución de la diuresis, y los escalofríos intensos. La recomendación 1.2.9 añade que un tiempo de relleno capilar de 3 segundos o más es un marcador ámbar.",
+        "Fiebre en menores de 5 años: valoración y manejo inicial (NICE NG143, 2021). Tema: taquicardia y taquipnea por edad. Hallazgo: la recomendación 1.2.15 considera que los niños con taquicardia están al menos en riesgo intermedio y usa los criterios del Advanced Paediatric Life Support de la tabla 1: más de 160 latidos por minuto por debajo de los 12 meses, más de 150 entre los 12 y los 24 meses y más de 140 entre los 2 y los 5 años. Para la frecuencia respiratoria, la recomendación 1.2.22 define taquipnea como más de 60 respiraciones por minuto de 0 a 5 meses, más de 50 de 6 a 12 meses y más de 40 por encima de los 12 meses.",
+        "Fiebre en menores de 5 años: valoración y manejo inicial (NICE NG143, 2021). Tema: qué hacer según el color del semáforo en una valoración a distancia. Hallazgo: la recomendación 1.3.2 indica derivar de inmediato para atención urgente, normalmente en ambulancia, a los niños cuyos síntomas sugieran una enfermedad que amenaza la vida. La recomendación 1.3.3 pide que los niños con cualquier signo rojo que no tengan una enfermedad inmediatamente amenazante sean valorados en persona por un profesional en un plazo de 2 horas. La 1.3.4 deja la urgencia de la valoración presencial de los casos ámbar al juicio clínico, y la 1.3.5 permite el cuidado en casa solo cuando todos los signos son verdes.",
+        "Fiebre en menores de 5 años: valoración y manejo inicial (NICE NG143, 2021). Tema: cuándo volver a consultar desde casa. Hallazgo: la recomendación 1.7.3 dice que, tras haber contactado con un profesional, los padres deben volver a pedir consejo si el niño tiene una convulsión, si aparece un exantema que no blanquea, si el cuidador percibe que el niño está peor que cuando consultó, si está más preocupado que entonces, si la fiebre dura 5 días o más, o si se siente incapaz de cuidarlo. La recomendación 1.7.2 enseña a detectar la deshidratación por la fontanela hundida, la boca seca, los ojos hundidos, la ausencia de lágrimas y el mal aspecto general.",
+        "Fiebre en menores de 5 años: valoración y manejo inicial (NICE NG143, 2021). Tema: antitérmicos. Hallazgo: la recomendación 1.6.1 establece que los antitérmicos no previenen las convulsiones febriles y no deben usarse con ese fin. La 1.6.2 desaconseja las esponjas tibias y la 1.6.3 pide no desabrigar ni sobreabrigar al niño. La 1.6.4 plantea usar paracetamol o ibuprofeno solo en niños con fiebre que estén molestos, y la 1.6.5 prohíbe usarlos con el único objetivo de bajar la temperatura. La 1.6.6 añade que no deben darse ambos a la vez y que solo se alternan si el malestar reaparece antes de la siguiente dosis.",
+        "Fiebre en menores de 5 años (NICE NG143, 2021), recomendación 1.2.18, en el mismo terreno que la guía NG240 de 2024. Tema: qué acompaña al exantema que no blanquea. Hallazgo: la guía indica considerar enfermedad meningocócica en cualquier niño con fiebre y un exantema que no blanquea, y muy especialmente si además el niño tiene mal aspecto, si las lesiones miden más de 2 mm de diámetro, es decir púrpura, si el relleno capilar es de 3 segundos o más, o si hay rigidez de nuca. La recomendación 1.2.20 recuerda que los signos clásicos de meningitis, la rigidez de nuca, la fontanela abombada y el llanto agudo, faltan a menudo en el lactante."
+      ]
+    },
+    {
+      "source_type": "guideline",
+      "title": "Diarrea y vómitos por gastroenteritis en menores de 5 años: diagnóstico y manejo (NICE CG84)",
+      "organization": "National Institute for Health and Care Excellence (NICE)",
+      "publication_year": 2009,
+      "url": "https://www.nice.org.uk/guidance/cg84",
+      "specialties": [
+        "pediatrics",
+        "general_medicine",
+        "gastroenterology"
+      ],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "chunks": [
+        "Diarrea y vómitos por gastroenteritis en menores de 5 años (NICE, guía CG84, publicada el 22 de abril de 2009). Tema: quién tiene más riesgo de deshidratarse. Hallazgo: la recomendación 1.2.1.2 identifica como de mayor riesgo a los menores de 1 año, y en particular a los menores de 6 meses; a los lactantes de bajo peso al nacer; a los niños que han hecho más de cinco deposiciones diarreicas en las últimas 24 horas; a los que han vomitado más de dos veces en las últimas 24 horas; a los que no han recibido o no han tolerado líquidos suplementarios antes de consultar; a los lactantes que han dejado de mamar durante la enfermedad, y a los niños con signos de malnutrición.",
+        "Diarrea y vómitos por gastroenteritis en menores de 5 años (NICE CG84, 2009). Tema: síntomas de deshidratación clínica, valorables también por teléfono. Hallazgo: la tabla 1 marca como banderas rojas que el niño parezca enfermo o esté empeorando y que tenga una respuesta alterada, por ejemplo irritabilidad o letargia. Sin bandera roja, la tabla recoge además la disminución de la diuresis, el color de piel sin cambios y las extremidades calientes. La columna de shock clínico corresponde a la disminución del nivel de conciencia, la piel pálida o moteada y las extremidades frías. La guía pide que, en caso de duda, se maneje como si hubiera signos con bandera roja.",
+        "Diarrea y vómitos por gastroenteritis en menores de 5 años (NICE CG84, 2009). Tema: signos de deshidratación en la exploración presencial. Hallazgo: la tabla 1 marca con bandera roja la respuesta alterada, los ojos hundidos, la taquicardia, la taquipnea y la disminución del turgor cutáneo. Sin bandera roja aparecen las mucosas secas, salvo en el niño que respira por la boca. La columna de shock clínico incluye la disminución del nivel de conciencia, la piel pálida o moteada, las extremidades frías, los pulsos periféricos débiles, el relleno capilar prolongado y la hipotensión, esta última como shock descompensado.",
+        "Diarrea y vómitos por gastroenteritis en menores de 5 años (NICE CG84, 2009). Tema: rehidratación oral. Hallazgo: la recomendación 1.3.2.2 indica usar una solución de rehidratación oral de baja osmolaridad, de 240 a 250 mOsm/l, y administrar 50 ml/kg para reponer el déficit a lo largo de 4 horas, además del aporte de mantenimiento. La solución se da con frecuencia y en pequeñas cantidades. La recomendación 1.3.3.1 reserva la fluidoterapia intravenosa para los casos con shock sospechado o confirmado, para el niño con signos de bandera roja que empeora pese a la rehidratación oral y para el que vomita la solución de forma persistente.",
+        "Diarrea y vómitos por gastroenteritis en menores de 5 años (NICE CG84, 2009). Tema: deshidratación hipernatrémica. Hallazgo: la recomendación 1.2.1.4 pide sospecharla ante movimientos bruscos o temblorosos, aumento del tono muscular, hiperreflexia, convulsiones o somnolencia y coma. La recomendación 1.3.1.1 añade que, en el niño con gastroenteritis pero sin deshidratación clínica, se mantiene la lactancia materna y el resto de tomas de leche, se anima a beber, se desaconsejan los zumos de fruta y las bebidas carbonatadas, y se ofrece solución de rehidratación oral como suplemento a los niños de mayor riesgo."
+      ]
+    },
+    {
+      "source_type": "guideline",
+      "title": "Bronquiolitis en niños: diagnóstico y manejo (NICE NG9)",
+      "organization": "National Institute for Health and Care Excellence (NICE)",
+      "publication_year": 2021,
+      "url": "https://www.nice.org.uk/guidance/ng9",
+      "specialties": [
+        "pediatrics",
+        "general_medicine",
+        "pulmonology"
+      ],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "chunks": [
+        "Bronquiolitis en niños: diagnóstico y manejo (NICE, guía NG9, publicada en 2015 y actualizada en 2021). Tema: cuándo derivar de inmediato a urgencias. Hallazgo: la recomendación 1.2.1 pide derivar de inmediato para atención hospitalaria urgente, normalmente en ambulancia, a los bebés y niños con bronquiolitis que presenten apnea, observada o referida por los padres; aspecto de gravedad para el profesional sanitario; dificultad respiratoria grave, por ejemplo quejido, tiraje torácico marcado o una frecuencia respiratoria superior a 70 respiraciones por minuto, o cianosis central.",
+        "Bronquiolitis en niños: diagnóstico y manejo (NICE NG9, 2021). Tema: cuándo plantearse la derivación al hospital. Hallazgo: la recomendación 1.2.2 propone valorar la derivación hospitalaria de los bebés y niños con bronquiolitis que tengan una frecuencia respiratoria superior a 60 respiraciones por minuto, dificultad para mamar o una ingesta oral insuficiente, entre el 50 % y el 75 % del volumen habitual, deshidratación clínica, o una saturación de oxígeno mantenida por debajo del 92 % respirando aire ambiente.",
+        "Bronquiolitis en niños: diagnóstico y manejo (NICE NG9, 2021). Tema: qué signos deben hacer volver a consultar desde casa. Hallazgo: la recomendación 1.6.1 lista como señales de alarma que los padres deben vigilar el empeoramiento del trabajo respiratorio, por ejemplo quejido, aleteo nasal o tiraje torácico marcado; una ingesta de líquidos entre el 50 % y el 75 % de lo normal o ningún pañal mojado durante 12 horas; la aparición de apnea o cianosis, y el agotamiento, por ejemplo no responder con normalidad a los estímulos sociales o no despertarse al estimularlo.",
+        "Bronquiolitis en niños: diagnóstico y manejo (NICE NG9, 2021). Tema: qué lactantes tienen más riesgo de bronquiolitis grave. Hallazgo: las recomendaciones 1.2.3 y 1.3.3 señalan como factores de riesgo la enfermedad pulmonar crónica, incluida la displasia broncopulmonar; la cardiopatía congénita con repercusión hemodinámica; la edad temprana, por debajo de los 3 meses; la prematuridad, en particular por debajo de las 32 semanas; los trastornos neuromusculares, y la inmunodeficiencia. En estos lactantes el umbral para derivar es más bajo."
+      ]
+    },
+    {
+      "source_type": "guideline",
+      "title": "Meningitis bacteriana y enfermedad meningocócica: reconocimiento, diagnóstico y manejo (NICE NG240)",
+      "organization": "National Institute for Health and Care Excellence (NICE)",
+      "publication_year": 2024,
+      "url": "https://www.nice.org.uk/guidance/ng240",
+      "specialties": [
+        "pediatrics",
+        "general_medicine",
+        "emergency_medicine"
+      ],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "chunks": [
+        "Meningitis bacteriana y enfermedad meningocócica: reconocimiento, diagnóstico y manejo (NICE, guía NG240, publicada el 19 de marzo de 2024). Tema: el exantema que no blanquea. Hallazgo: la guía pide sospechar enfermedad meningocócica ante un exantema petequial o purpúrico que no blanquea, y sospecharla con fuerza cuando el exantema es hemorrágico y no blanquea con lesiones mayores de 2 mm, es decir púrpura, o cuando el exantema petequial o purpúrico progresa o se extiende con rapidez, o cuando se combina con cualquier síntoma o signo de meningitis bacteriana.",
+        "Meningitis bacteriana y enfermedad meningocócica (NICE NG240, 2024). Tema: cómo buscar el exantema. Hallazgo: la guía indica revisar todo el cuerpo, incluida la zona del pañal, y buscar petequias en las conjuntivas, porque el exantema puede ser difícil de detectar en piel morena, negra o bronceada. Pide además avisar a la familia de que vigile los cambios del exantema, ya que puede pasar de blanquear a no blanquear. Y advierte de forma explícita de que no se descarte la enfermedad meningocócica solo porque no haya exantema.",
+        "Meningitis bacteriana y enfermedad meningocócica (NICE NG240, 2024). Tema: qué hacer ante la sospecha. Hallazgo: la guía indica trasladar a la persona al hospital como una urgencia si se sospecha o se sospecha con fuerza enfermedad meningocócica, avisando al hospital receptor de que llega un paciente con sospecha de meningitis o de enfermedad meningocócica que necesita ser valorado por un profesional con capacidad de decisión clínica sénior. Si el traslado se retrasa, se administra ceftriaxona o bencilpenicilina por vía intravenosa o intramuscular.",
+        "Meningitis bacteriana y enfermedad meningocócica (NICE NG240, 2024). Tema: qué hacer cuando no hay exantema. Hallazgo: la guía es explícita en que no se descarte la enfermedad meningocócica solo porque la persona no tenga exantema, porque no todo el mundo con enfermedad meningocócica lo presenta, y el comité subrayó este punto precisamente para evitar diagnósticos erróneos y retrasos en el tratamiento. También pide informar a la familia de que vigile los cambios del exantema, ya que puede pasar de blanquear a no blanquear con el paso de las horas."
+      ]
+    },
+    {
+      "source_type": "protocol",
+      "title": "Convulsiones febriles (Protocolos diagnóstico-terapéuticos de la AEP, 2022)",
+      "organization": "Asociación Española de Pediatría",
+      "publication_year": 2022,
+      "url": "https://static.aeped.es/38_0_702f0d52ca.pdf",
+      "specialties": [
+        "pediatrics",
+        "general_medicine",
+        "neurology"
+      ],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "chunks": [
+        "Convulsiones febriles (García Ron A, Arriola Pereda G. Protoc diagn ter pediatr. 2022;1:379-385, Asociación Española de Pediatría). Tema: definición y frecuencia. Hallazgo: se definen como episodios convulsivos que aparecen entre los 6 meses y los 5 años, asociados a fiebre por encima de 38 °C, en niños sin anomalías neurológicas ni crisis febriles previas y sin evidencia de infección intracraneal ni de alteración metabólica que las justifique. Son el trastorno neurológico más común de la lactancia, con una prevalencia del 4 al 5 % de todos los niños y una incidencia anual de 460 por 100 000 en menores de 4 años, con un pico a los 18 meses.",
+        "Convulsiones febriles (García Ron A, Arriola Pereda G, AEP, 2022). Tema: crisis simples frente a atípicas. Hallazgo: las crisis febriles simples o típicas suponen del 60 al 70 % de los casos: aparecen en las primeras 24 horas del proceso febril, son generalizadas, breves, de menos de 15 minutos, con periodo poscrítico corto y sin focalidad neurológica. Las atípicas suponen del 30 al 40 %: son focales, prolongadas, con parálisis poscrítica de Todd o recurrentes en las primeras 24 horas. Las crisis prolongadas representan el 8 % del total y pueden progresar a un estatus convulsivo febril, que es el 5 % de todas las crisis febriles.",
+        "Convulsiones febriles (García Ron A, Arriola Pereda G, AEP, 2022). Tema: cuándo hacer punción lumbar. Hallazgo: el protocolo recomienda realizarla ante signos de infección del sistema nervioso central, como signos meníngeos o fontanela abombada; en lactantes menores de 18 meses que no estén adecuadamente vacunados, y en los que hayan recibido tratamiento antibiótico previo. Hasta un 15 % de los niños con meningitis pueden asociar crisis, pero prácticamente ninguno tiene una exploración neurológica normal después de la crisis. También plantea pruebas complementarias por debajo de los 6 meses, en crisis recurrentes y en crisis después de las primeras 48 horas de fiebre.",
+        "Convulsiones febriles (García Ron A, Arriola Pereda G, AEP, 2022). Tema: pronóstico y qué explicar a la familia. Hallazgo: el pronóstico global es favorable y las secuelas neurológicas son excepcionales. Tras una primera crisis febril recurren de media entre el 30 y el 45 % de los pacientes. El riesgo de desarrollar epilepsia varía entre el 2 % y el 10 % según la duración del seguimiento y el tipo de crisis, y es mayor en las crisis atípicas. Los factores asociados a recurrencia son la edad menor de 1 año, los antecedentes familiares de primer grado, una temperatura baja en la primera crisis, la recurrencia en el mismo proceso febril y las crisis atípicas.",
+        "Convulsiones febriles (García Ron A, Arriola Pereda G, AEP, 2022). Tema: antitérmicos y antiepilépticos como prevención. Hallazgo: el protocolo afirma que los fármacos antitérmicos no tienen ningún efecto en la prevención de las crisis febriles recurrentes, aunque ayudan a mejorar el bienestar del lactante o niño febril. Sobre los antiepilépticos, desaconseja su uso en todos los casos: las crisis febriles son benignas, dependientes de la edad y con un pronóstico neurocognitivo excelente, el tratamiento antiepiléptico no previene el desarrollo de epilepsia posterior y los posibles efectos adversos superan a los beneficios."
+      ]
+    },
+    {
+      "source_type": "protocol",
+      "title": "Anafilaxia en Pediatría (Protocolos diagnóstico-terapéuticos de la AEP, 2019)",
+      "organization": "Asociación Española de Pediatría",
+      "publication_year": 2019,
+      "url": "https://static.aeped.es/25_anafilaxia_a74b17c771.pdf",
+      "specialties": [
+        "pediatrics",
+        "general_medicine",
+        "allergy"
+      ],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "chunks": [
+        "Anafilaxia en Pediatría (Juliá Benito JC, Álvarez Caro F. Protoc diagn ter pediatr. 2019;2:363-380, Asociación Española de Pediatría). Tema: criterios clínicos. Hallazgo: el criterio 1 es el inicio agudo, en minutos u horas, de un síndrome que afecta a piel o mucosas, con urticaria generalizada, prurito, sofoco o edema de labios, úvula o lengua, más al menos uno de estos: compromiso respiratorio, con disnea, sibilancias, estridor o hipoxemia, o disminución de la presión arterial o síntomas de disfunción orgánica, como síncope o hipotonía. El criterio 2 exige dos o más de estos signos tras la exposición a un alérgeno potencial, incluidos los síntomas gastrointestinales persistentes.",
+        "Anafilaxia en Pediatría (Juliá Benito JC, Álvarez Caro F, AEP, 2019). Tema: adrenalina intramuscular. Hallazgo: la dosis intramuscular de adrenalina 1:1000, es decir 1 mg por ml, es de 0,01 mg/kg, con un máximo de 0,5 mg, equivalente a 0,01 ml/kg con un máximo de 0,5 ml. Se administra en la cara lateral del muslo y puede repetirse cada 5 a 15 minutos si no hay respuesta: hasta un tercio de los casos necesita más de una dosis. La vía intramuscular alcanza concentraciones plasmáticas y tisulares más rápido que la subcutánea y con más seguridad que la intravenosa.",
+        "Anafilaxia en Pediatría (Juliá Benito JC, Álvarez Caro F, AEP, 2019). Tema: autoinyectores y actuación fuera del hospital. Hallazgo: fuera del hospital se usa adrenalina autoinyectable de 0,15 mg, es decir 150 microgramos, por debajo de 25 kg; de 0,30 mg entre 25 y 50 kg, y de 0,50 mg por encima de 50 kg. En caso de picadura se valora un torniquete por encima de la lesión y aplicar hielo. Se retira el alérgeno si es posible. La posición es semiincorporado si hay disnea o vómitos, decúbito lateral si hay pérdida de conciencia y decúbito supino en el resto de situaciones. Se solicita ayuda sanitaria y traslado al hospital.",
+        "Anafilaxia en Pediatría (Juliá Benito JC, Álvarez Caro F, AEP, 2019). Tema: por qué los antihistamínicos y los corticoides no son el tratamiento. Hallazgo: el protocolo sitúa a los antihistamínicos anti-H1 y anti-H2 en la tercera línea: su uso aislado es insuficiente y como tratamiento complementario queda limitado al alivio de los síntomas cutáneos, y no debe retrasarse la administración de adrenalina esperando su acción. Los glucocorticoides se apoyan en el potencial teórico de prevenir reacciones bifásicas o prolongadas, algo que no se ha demostrado, y se administran una vez aplicadas la primera y la segunda línea.",
+        "Anafilaxia en Pediatría (Juliá Benito JC, Álvarez Caro F, AEP, 2019). Tema: causas más frecuentes en niños. Hallazgo: la tabla 2 recoge como desencadenantes los alimentos, sobre todo leche, huevo, frutos secos, pescado y legumbres; las picaduras de himenópteros, abeja y avispa; los medicamentos, en particular betalactámicos como la amoxicilina y antiinflamatorios no esteroideos como el ibuprofeno y el metamizol, además de contrastes radiológicos y vacunas; el látex, presente en guantes, chupetes, juguetes, pañales y globos; los inhalantes, y factores físicos como el ejercicio, el frío, el calor y la radiación solar."
+      ]
+    },
+    {
+      "source_type": "guideline",
+      "title": "Muertes del lactante relacionadas con el sueño: recomendaciones actualizadas 2022 de la AAP",
+      "organization": "American Academy of Pediatrics",
+      "publication_year": 2022,
+      "url": "https://publications.aap.org/pediatrics/article/150/1/e2022057990/188304/Sleep-Related-Infant-Deaths-Updated-2022",
+      "specialties": [
+        "pediatrics",
+        "general_medicine"
+      ],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "chunks": [
+        "Muertes del lactante relacionadas con el sueño: recomendaciones actualizadas de 2022 (Moon RY, Carlin RF, Hand I; Task Force on Sudden Infant Death Syndrome y Committee on Fetus and Newborn de la American Academy of Pediatrics. Pediatrics. 2022;150(1):e2022057990). Tema: postura para dormir. Hallazgo: la primera recomendación es boca arriba para cada sueño. Para reducir el riesgo de muerte relacionada con el sueño, se recomienda colocar al lactante en decúbito supino en cada sueño y por parte de cada cuidador hasta que cumpla 1 año de edad. Dormir de lado no es seguro y no se aconseja.",
+        "Muertes del lactante relacionadas con el sueño: recomendaciones AAP 2022 (Moon RY, Carlin RF, Hand I. Pediatrics. 2022;150(1):e2022057990). Tema: superficie de sueño. Hallazgo: la segunda recomendación es usar una superficie firme, plana y sin inclinación. El documento precisa que las superficies de sueño con inclinaciones mayores de 10 grados no son seguras para el sueño del lactante. Cualquier superficie alternativa debe cumplir, como mínimo, la norma de la Consumer Product Safety Commission de junio de 2021, que exige que todo producto de sueño infantil cumpla los estándares federales de seguridad de cunas, moisés, parques y cunas de colecho.",
+        "Muertes del lactante relacionadas con el sueño: recomendaciones AAP 2022 (Moon RY, Carlin RF, Hand I. Pediatrics. 2022;150(1):e2022057990). Tema: compartir habitación sin compartir cama. Hallazgo: se recomienda que el lactante duerma en la habitación de los padres, cerca de su cama pero sobre una superficie propia diseñada para lactantes, idealmente durante el primer año de vida y al menos durante los 6 primeros meses. Hay evidencia de que dormir en la habitación de los padres sobre una superficie separada reduce el riesgo de síndrome de muerte súbita del lactante hasta en un 50 %, y de que previene la asfixia, la estrangulación y el atrapamiento asociados a la cama de los adultos.",
+        "Muertes del lactante relacionadas con el sueño: recomendaciones AAP 2022 (Moon RY, Carlin RF, Hand I. Pediatrics. 2022;150(1):e2022057990). Tema: el conjunto de medidas. Hallazgo: el resumen del documento describe el entorno de sueño seguro como la combinación de posición supina, superficie firme y sin inclinación, compartir habitación sin compartir cama, y evitar la ropa de cama blanda y el sobrecalentamiento. Como medidas adicionales para reducir el riesgo de muerte súbita cita la alimentación con leche materna, evitar la exposición a nicotina, alcohol, cannabis, opioides y drogas ilícitas, la vacunación sistemática y el uso del chupete. En Estados Unidos mueren cada año 3500 lactantes por causas relacionadas con el sueño."
+      ]
+    },
+    {
+      "source_type": "guideline",
+      "title": "Soporte vital pediátrico: guías 2021 del European Resuscitation Council",
+      "organization": "European Resuscitation Council",
+      "publication_year": 2021,
+      "url": "https://www.resuscitationjournal.com/article/S0300-9572(21)00068-X/fulltext",
+      "specialties": [
+        "pediatrics",
+        "general_medicine",
+        "emergency_medicine"
+      ],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "chunks": [
+        "Soporte vital pediátrico, guías 2021 del European Resuscitation Council (Van de Voorde P, Turner NM, Djakow J, de Lucas N, Martinez-Mejias A, Biarent D y cols. Resuscitation. 2021;161:327-387). Tema: cuándo sospechar una obstrucción de la vía aérea por cuerpo extraño. Hallazgo: se sospecha, cuando nadie ha presenciado el episodio, si el inicio de los síntomas respiratorios, tos, arcadas, estridor o dificultad, es muy brusco y no hay otros signos de enfermedad. El antecedente de haber estado comiendo o jugando con objetos pequeños justo antes del inicio de los síntomas refuerza la sospecha.",
+        "Soporte vital pediátrico, guías ERC 2021 (Van de Voorde P y cols. Resuscitation. 2021;161:327-387). Tema: tos eficaz frente a tos ineficaz. Hallazgo: mientras el niño tose de forma eficaz, es decir está plenamente consciente, la tos es sonora, toma aire antes de toser y sigue llorando o hablando, no hace falta ninguna maniobra: se le anima a toser y se vigila su estado. Si la tos se vuelve ineficaz, con disminución del nivel de conciencia, tos silenciosa, incapacidad para respirar o vocalizar, o cianosis, se pide ayuda y se valora el nivel de conciencia; un segundo reanimador llama a emergencias, preferiblemente con el manos libres del móvil.",
+        "Soporte vital pediátrico, guías ERC 2021 (Van de Voorde P y cols. Resuscitation. 2021;161:327-387). Tema: maniobras en el lactante consciente que se atraganta. Hallazgo: si el niño sigue consciente pero la tos es ineficaz, se dan golpes en la espalda. Si los golpes en la espalda no resuelven la obstrucción, se dan compresiones torácicas en el lactante y compresiones abdominales en el niño mayor. Si el objeto no sale y la víctima sigue consciente, se continúa la secuencia alternando golpes en la espalda y compresiones. No se debe dejar solo al niño. El objetivo es resolver la obstrucción con cada compresión, no dar muchas.",
+        "Soporte vital pediátrico, guías ERC 2021 (Van de Voorde P y cols. Resuscitation. 2021;161:327-387). Tema: después del atragantamiento y pérdida de conciencia. Hallazgo: si el objeto se expulsa, se valora el estado clínico del niño, porque puede quedar parte del objeto en la vía respiratoria y causar complicaciones; ante cualquier duda, o si se han usado compresiones abdominales, el seguimiento médico urgente es obligatorio. Si el niño con obstrucción está inconsciente o se queda inconsciente, se continúa según el algoritmo de soporte vital básico pediátrico. El documento también desaconseja los dispositivos antiatragantamiento comerciales en los primeros auxilios."
+      ]
+    },
+    {
+      "source_type": "guideline",
+      "title": "Ictericia en recién nacidos menores de 28 días (NICE CG98)",
+      "organization": "National Institute for Health and Care Excellence (NICE)",
+      "publication_year": 2010,
+      "url": "https://www.nice.org.uk/guidance/cg98",
+      "specialties": [
+        "pediatrics",
+        "general_medicine",
+        "neonatology"
+      ],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "chunks": [
+        "Ictericia en recién nacidos menores de 28 días (NICE, guía CG98, publicada el 19 de mayo de 2010 y con recomendaciones modificadas en 2023). Tema: qué recién nacidos tienen más riesgo de hiperbilirrubinemia significativa. Hallazgo: la recomendación 1.2.1 identifica la edad gestacional por debajo de las 38 semanas, un hermano previo con ictericia neonatal que necesitó fototerapia, la intención materna de dar lactancia materna exclusiva y la ictericia visible en las primeras 24 horas de vida.",
+        "Ictericia en recién nacidos menores de 28 días (NICE CG98, 2010). Tema: la ictericia en las primeras 24 horas es una urgencia. Hallazgo: en todo recién nacido con ictericia sospechada o evidente en las primeras 24 horas de vida se mide y registra la bilirrubina sérica de forma urgente, en un plazo de 2 horas, y se repite cada 6 horas hasta que el valor esté por debajo del umbral de tratamiento y sea estable o descendente. Además se organiza una valoración médica urgente, lo antes posible y dentro de las 6 horas, para descartar causas patológicas de ictericia. Por encima de las 24 horas de vida, la bilirrubina se mide de forma urgente en un plazo de 6 horas.",
+        "Ictericia en recién nacidos menores de 28 días (NICE CG98, 2010). Tema: cómo se explora la ictericia. Hallazgo: la recomendación 1.2.5 indica examinar al recién nacido desnudo, con luz intensa y preferiblemente natural, explorar las escleróticas y las encías, y presionar ligeramente la piel para buscar signos de ictericia en la piel blanqueada. Advierte de que los cambios de coloración por hiperbilirrubinemia son más difíciles de ver en la piel oscura. La guía también dice que no se midan niveles de bilirrubina de forma rutinaria en recién nacidos sin ictericia visible y que no se confíe solo en la inspección visual para estimar el nivel.",
+        "Ictericia en recién nacidos menores de 28 días (NICE CG98, 2010). Tema: ictericia prolongada y signos que deben alarmar a los padres. Hallazgo: la recomendación 1.7.1 define la ictericia prolongada como la que dura más de 14 días en el recién nacido a término, de 37 semanas o más, y más de 21 días en el prematuro, y pide valorar entonces la presencia de heces pálidas, de color masilla, o de orina oscura que tiñe el pañal. La recomendación 1.1.1 pide informar a los padres de que vigilen la orina oscura o las heces pálidas y de la importancia de reconocer la ictericia en las primeras 24 horas de vida."
+      ]
+    }
+  ]
+}

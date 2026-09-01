@@ -37,4 +37,5 @@ export const briefings = api.briefings;
 export const ingestion = api.ingestion;
 export const enrichment = api.enrichment;
 export const billingStatus = api.billingStatus;
-export type { BillingStatus } from "./api-endpoints";
+export const onboarding = api.onboarding;
+export type { BabyOnboarding, BillingStatus, OnboardingStatus } from "./api-endpoints";

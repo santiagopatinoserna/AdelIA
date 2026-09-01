@@ -24,7 +24,7 @@ def _payload(allergies="no_known_allergies", immunizations=None, qa: list[QAItem
         schema_version="1.0",
         generated_at=datetime(2026, 5, 13, 10, 0, 0, tzinfo=UTC),
         target_specialty=Specialty.ENDOCRINOLOGY,
-        patient=PatientHeader(name="J. Doe", age=42, sex="F"),
+        patient=PatientHeader(name="J. Doe", age_months=18, sex="F"),
         sections=BriefingSections(
             reason_for_consult="control diabetes",
             active_problems=[],

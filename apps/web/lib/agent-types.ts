@@ -1,4 +1,6 @@
-// Agent-mode DTOs + SSE stream event types. No auth import — safe for client bundles.
+// Agent-mode DTOs + SSE stream event types. No auth import: safe for client bundles.
+
+import type { Citation, EvidenceCitation } from "@/lib/chat-types";
 
 export type AgentCard = {
   type: "action" | "confirm" | "question" | "lab" | "briefing" | "document" | "profile" | "insight";
@@ -12,7 +14,11 @@ export type AgentStreamEvent =
   | { type: "token"; content: string }
   | { type: "tool_call"; tool_name: string }
   | { type: "card"; card: AgentCard }
-  | { type: "final" }
+  // The terminal frame carries the citations of every tool call of the turn
+  // (audit 3.7). Before it did, the answer contract asked the model for
+  // [ev_N] markers on a surface that could only paint them as text pointing
+  // at nothing, so the agent's prompt had to override the contract.
+  | { type: "final"; citations: Citation[]; evidence_citations: EvidenceCitation[] }
   | { type: "error"; content: string };
 
 export function* parseAgentBlocks(
@@ -39,7 +45,13 @@ export function* parseAgentBlocks(
       case "token": yield { type: "token", content: String(data.content ?? "") }; break;
       case "tool_call": yield { type: "tool_call", tool_name: String(data.tool_name ?? "") }; break;
       case "card": yield { type: "card", card: data.card as AgentCard }; break;
-      case "final": yield { type: "final" }; break;
+      case "final":
+        yield {
+          type: "final",
+          citations: (data.citations as Citation[]) ?? [],
+          evidence_citations: (data.evidence_citations as EvidenceCitation[]) ?? [],
+        };
+        break;
       case "error": yield { type: "error", content: String(data.content ?? "") }; break;
       default: break;
     }

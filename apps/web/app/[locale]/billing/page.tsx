@@ -34,10 +34,17 @@ export default async function BillingPage({
 
   let active = false;
   let trialEnd: string | null = null;
+  // The card-free trial (audit 4.7) is not a Stripe subscription: there is no
+  // customer, so the portal has nothing to open and no first charge is
+  // scheduled. Both facts change what this screen may say and offer.
+  let localTrial = false;
+  let canManage = false;
   try {
     const b = await billingStatus();
     active = b.active;
     trialEnd = b.trial_end;
+    localTrial = b.trial_source === "local";
+    canManage = b.can_manage === true;
   } catch {
     // API hiccup: show the offer. This page is the ONLY one that stays
     // reachable when the status cannot be read, because the dashboard gate
@@ -75,15 +82,28 @@ export default async function BillingPage({
             <span className="inline-flex h-12 w-12 items-center justify-center rounded-2xl bg-primary-tint text-primary-text ring-1 ring-primary-tint-line">
               <Sparkles className="h-6 w-6" strokeWidth={1.8} />
             </span>
-            <h1 className="mt-4 text-2xl text-ink">{t("activeTitle")}</h1>
+            <h1 className="mt-4 text-2xl text-ink">
+              {localTrial ? t("localTrialTitle") : t("activeTitle")}
+            </h1>
             <p className="mt-2 text-sm text-ink-soft">
-              {trialEnd ? t("trialUntil", { date: fmtDate(trialEnd) }) : t("activeBody")}
+              {localTrial && trialEnd
+                ? t("localTrialBody", { date: fmtDate(trialEnd) })
+                : trialEnd
+                  ? t("trialUntil", { date: fmtDate(trialEnd) })
+                  : t("activeBody")}
             </p>
             <div className="mt-6 flex flex-col gap-3">
               <Link href="/dashboard" className="ad-btn ad-btn-primary py-3 text-sm">
                 {t("goDashboard")}
               </Link>
-              <ManageButton />
+              {/* With a Stripe customer, the portal (card, invoices, cancel).
+                  Without one there is nothing for it to show, so the offer is
+                  to subscribe, which she may do at any point of the trial. */}
+              {canManage ? (
+                <ManageButton />
+              ) : (
+                <StartTrialButton label={t("subscribeNowCta")} />
+              )}
               <Link
                 href="/dashboard/settings"
                 className="ad-btn ad-btn-ghost py-3 text-sm"

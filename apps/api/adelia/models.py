@@ -30,6 +30,24 @@ class User(Base):
     trial_end = Column(DateTime(timezone=True), nullable=True)
     current_period_end = Column(DateTime(timezone=True), nullable=True)
 
+    # When the account was asked about the baby (audit 4.3). NULL = never
+    # asked, which is the only condition that opens the onboarding screen;
+    # a timestamp means she answered or skipped, and the answer is a
+    # `child` profile.
+    onboarded_at = Column(DateTime(timezone=True), nullable=True)
+
+    # Sign-out invalidation (audit 4, "el JWT puente se sirve al navegador").
+    # Every bridge token carries the version it was signed under as its `tv`
+    # claim; adelia.auth.get_current_user refuses a token whose `tv` is not
+    # this number. Signing out increments it, so the tokens minted for that
+    # session stop being accepted the moment she leaves, instead of living
+    # out their remaining minutes in whatever stole them.
+    #
+    # A counter rather than a deny-list: it needs no expiry sweep, no second
+    # table and no cache, and it is read on the same row the request already
+    # loads to prove the account exists.
+    token_version = Column(Integer, nullable=False, server_default=text("0"))
+
 
 class Document(Base):
     __tablename__ = "documents"
@@ -49,6 +67,18 @@ class Document(Base):
 
     __table_args__ = (
         CheckConstraint("source IN ('web','manual','consulta')", name="documents_source_check"),
+        # The document list is the dashboard's first query and it is always
+        # the same shape: WHERE user_id = ? AND deleted_at IS NULL ORDER BY
+        # created_at DESC LIMIT ?. `ix_documents_user_id` alone made the
+        # planner sort every row the account owns on every page load; with
+        # created_at in the index the LIMIT is served by a backward scan, and
+        # the partial predicate keeps erased rows out of the index entirely.
+        Index(
+            "ix_documents_user_created",
+            "user_id",
+            "created_at",
+            postgresql_where=text("deleted_at IS NULL"),
+        ),
     )
 
 
@@ -64,6 +94,18 @@ class Chunk(Base):
     embedding = Column(Vector(1024))
     chunk_index = Column(Integer, nullable=False)
     chunk_metadata = Column("metadata", JSONB)
+
+    __table_args__ = (
+        # The chat's retrieval query (services/retrieval.py) filters chunks by
+        # user_id and orders by vector distance. Until 2026-09-01 this column
+        # had no index at all: the only ones on the table were the primary
+        # key, the HNSW index on `embedding` and ix_chunks_document_id. With
+        # `hnsw.ef_search = 40` that means the index scan stops after ~40
+        # GLOBAL candidates and then throws away everyone else's rows, so past
+        # a few dozen accounts a mother's own question starts coming back with
+        # less of her record than exists, silently.
+        Index("ix_chunks_user_id", "user_id"),
+    )
 
 
 class Entity(Base):
@@ -100,6 +142,18 @@ class Entity(Base):
             name="entities_provenance_check",
         ),
         Index("ix_entities_user_type_date", "user_id", "entity_type", "status", "event_date"),
+        # Scope(user_id, profile_id) reads (services/scope.py) filter on
+        # user_id AND (profile_id = ? OR profile_id IS NULL), which the
+        # existing index cannot serve: it leads with user_id but then jumps
+        # to entity_type. This one lets the planner combine both halves of
+        # the OR straight from the index, and the partial predicate matches
+        # the `deleted_at IS NULL` every one of those reads carries.
+        Index(
+            "ix_entities_user_profile",
+            "user_id",
+            "profile_id",
+            postgresql_where=text("deleted_at IS NULL"),
+        ),
     )
 
 
@@ -111,6 +165,14 @@ class Briefing(Base):
     )
     user_id: Mapped[PyUUID] = mapped_column(
         UUID(as_uuid=True), ForeignKey("users.id", ondelete="CASCADE"), nullable=False
+    )
+    # Which child this briefing is about. The COLUMN has existed since
+    # migration 0006 (it adds profile_id to documents, entities, chunks AND
+    # briefings); only the mapping was missing, so nothing could write or read
+    # it and a regenerate had no way to know whose briefing it was rebuilding
+    # (audit 4.1).
+    profile_id: Mapped[PyUUID | None] = mapped_column(
+        UUID(as_uuid=True), ForeignKey("profiles.id", ondelete="SET NULL"), nullable=True
     )
     target_specialty: Mapped[str] = mapped_column(String(64), nullable=False)
     payload: Mapped[dict | None] = mapped_column(JSONB, nullable=True)
@@ -391,3 +453,23 @@ class ConsentEvent(Base):
             name="ck_consent_events_type",
         ),
     )
+
+
+class FunnelCounter(Base):
+    """One integer per (day, event). The whole analytics of the product.
+
+    Audit 4.8. /privacidad promises "no te rastreamos", so the funnel is
+    measured the only way that promise allows: the server adds 1 to a counter
+    and forgets everything else. There is deliberately no column for an IP, a
+    user agent, a session, a user id or a referrer, and no cookie is set or
+    read on the way in. Two parents and one parent twice are the same +2.
+
+    Only pre-account events are stored ("visit", "start"): signups and
+    activations are derived at read time from users.created_at and
+    users.onboarded_at (services/funnel.summary), which are rows we already
+    keep, so nothing is duplicated to measure them.
+    """
+    __tablename__ = "funnel_counters"
+    day = Column(Date, primary_key=True)
+    event = Column(String(32), primary_key=True)
+    count = Column(BigInteger, nullable=False, server_default=text("0"))

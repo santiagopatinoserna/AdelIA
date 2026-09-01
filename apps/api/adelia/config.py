@@ -115,6 +115,40 @@ class Settings(BaseSettings):
     # Bounds DB-pool + Mistral-API pressure; excess uploads queue, not 500.
     # v0.2 replaces in-process tasks with a real worker queue (Celery).
     doc_processing_concurrency: int = 8
+    # Reconciliation at boot (audit 4.4). A document still unprocessed this
+    # many minutes after it was created was orphaned by a crash, an OOM or a
+    # deploy: the in-process task died with the worker and nothing ever
+    # retried it, so the app said "procesando" forever over an unrepeatable
+    # recording. 15 minutes is comfortably above the slowest real pipeline
+    # (a 20-minute consultation transcribes in ~2-3 min) so a healthy job in
+    # flight during a restart is never requeued underneath itself.
+    document_stuck_after_minutes: int = 15
+    # Cap per boot so a bad night cannot start hundreds of pipelines at once;
+    # the rest are picked up by the next boot or by /reprocess.
+    document_requeue_limit: int = 50
+
+    # ---- Funnel + public demo (audit 4.6, 4.7, 4.8) ----
+    # Who may read GET /funnel/summary. Empty (the default, and every
+    # self-hosted install) means nobody can: the endpoint answers 404 rather
+    # than 403 so it does not advertise that a set of numbers exists behind
+    # the right account. Compared case-insensitively against users.email.
+    owner_email: str = ""
+    # The card-free trial (audit 4.7) is granted by the code, not by Stripe:
+    # an account that has never touched checkout is treated as trialing for
+    # stripe_trial_days from users.created_at. Set to 0 to require checkout
+    # from the first screen, as it worked until 2026-09-01.
+    free_trial_days: int = 30
+    # /demo is a public LLM endpoint, which is a spending endpoint anybody on
+    # the internet can press. Two brakes: a per-minute rate limit per IP
+    # (ratelimit.ROUTE_BUDGETS) and this hard daily ceiling, counted in the
+    # funnel_counters row for "demo_ask" so it survives a restart. Past it the
+    # demo answers 429 and the page says to come back tomorrow.
+    demo_daily_budget: int = 300
+    # Kill switch for the whole public demo (endpoints answer 503).
+    demo_enabled: bool = True
+    # Longest question the demo will embed. A public endpoint with no cap is
+    # a way to buy someone else's embeddings by the megabyte.
+    demo_max_question_chars: int = 300
 
     @property
     def database_url(self) -> str:

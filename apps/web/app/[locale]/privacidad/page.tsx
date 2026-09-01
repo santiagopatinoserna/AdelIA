@@ -31,6 +31,13 @@ export default function PrivacyPage() {
     ["retentionTitle", "retentionBody"],
     ["recordingsTitle", "recordingsBody"],
     ["rightsTitle", "rightsBody"],
+    // Audit 4.8. The page promises "no te rastreamos", and the funnel the
+    // product needed could easily have broken that promise. It does not, and
+    // the only way a reader can know is if the page says exactly what is
+    // counted: a date, an event name and an integer, no cookie, no IP, no
+    // identifier. The section sits BEFORE "Lo que nunca hacemos" so it is
+    // read as part of the tracking answer, not as a footnote to it.
+    ["countersTitle", "countersBody"],
     ["neverTitle", "neverBody"],
     ["contactTitle", "contactBody"],
   ] as const;
