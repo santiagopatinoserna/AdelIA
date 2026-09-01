@@ -140,7 +140,11 @@ body="$(curl -s --max-time 10 "localhost:${WEB_PORT}/api/version" || true)"
 [[ "${pwa_fail}" -eq 0 ]] || { log "PWA checks FAILED"; exit 1; }
 log "PWA checks OK."
 
-log "E2E (recorder + a11y light&dark + theme + diary + showcase + landing + pwa service worker)..."
+# The whole suite, not a hand-kept list: every spec added after the list
+# was written (clinical safety, onboarding, demo, pricing, trial, GDPR
+# doors) was silently outside the deploy gate. Specs that need a real
+# key or a device skip themselves.
+log "E2E (suite completa)..."
 # One retry: a layout or focus assertion can lose a race under the full
 # suite's parallel load, and a single flake must not block a deploy. A test
 # that fails twice is a real failure and stops the script; flaky ones are
@@ -149,7 +153,7 @@ log "E2E (recorder + a11y light&dark + theme + diary + showcase + landing + pwa 
 E2E_LOG=/tmp/verify-e2e.log
 if (cd apps/web && env "${PG_ENV[@]}" AUTH_SECRET=ci-only-secret \
   E2E_BASE_URL="http://localhost:${WEB_PORT}" \
-  pnpm exec playwright test e2e/consulta-record.spec.ts e2e/a11y.spec.ts e2e/theme.spec.ts e2e/diary.spec.ts e2e/showcase.spec.ts e2e/landing-day.spec.ts e2e/pwa-sw.spec.ts --retries=1 --reporter=line >"${E2E_LOG}" 2>&1); then
+  pnpm exec playwright test --retries=1 --reporter=line >"${E2E_LOG}" 2>&1); then
   tail -3 "${E2E_LOG}"
   grep -E "^\s+.\s+\[?flaky|flaky\b" "${E2E_LOG}" | head -5 || true
 else
