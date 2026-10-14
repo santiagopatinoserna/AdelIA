@@ -204,6 +204,44 @@ def _spawn_pipeline(document_id: uuid.UUID, mime_type: str, is_consulta: bool) -
     return task
 
 
+async def cancel_background_pipelines(grace_s: float = 10.0) -> int:
+    """Cancel the pipelines boot reconciliation spawned and wait for them to
+    unwind. Called by the lifespan BEFORE it disposes the engine.
+
+    Why it exists: `requeue_stuck_documents` (audit 4.4) starts one task per
+    stuck document and the lifespan used to forget them. At shutdown it
+    cancelled its own sweep and reminder tasks, then disposed the engine,
+    while these pipelines were still mid-query. They kept checking connections
+    out of the freshly rebuilt pool, and the loop teardown that followed
+    killed them before `async with AsyncSessionLocal()` could hand the
+    connection back. SQLAlchemy then logged "garbage collector is trying to
+    clean up non-checked-in connection". The same ordering applies in
+    production whenever a pipeline is in flight at SIGTERM; the test suite
+    only made it visible, because every `TestClient(app)` boots and stops a
+    lifespan against a dev database full of stuck rows.
+
+    Cancelling is safe by design: `processed_at` is only written in the final
+    transaction, so a cancelled document is still "stuck" and the next boot
+    requeues it, exactly as it would after a crash. What changes is that the
+    cancellation now lands inside a live loop, where each session's own
+    `close()` runs to completion and the connection really goes back.
+
+    `grace_s` bounds the wait so a pipeline that swallows cancellation can
+    never hold a deploy hostage. Returns how many tasks were cancelled.
+    """
+    tasks = [task for task in _BACKGROUND_TASKS if not task.done()]
+    for task in tasks:
+        task.cancel()
+    if tasks:
+        _done, pending = await asyncio.wait(tasks, timeout=grace_s)
+        if pending:
+            logger.warning(
+                "%d document pipeline(s) ignored cancellation for %.0fs at shutdown",
+                len(pending), grace_s,
+            )
+    return len(tasks)
+
+
 async def requeue_stuck_documents(limit: int | None = None) -> list[uuid.UUID]:
     """Re-enqueue documents a dead worker left mid-pipeline. Called at boot.
 

@@ -148,6 +148,10 @@ async def lifespan(app: FastAPI):
         logger.info("daily diary reminder scheduled at %02d:00 %s",
                     settings.diary_reminder_hour, settings.diary_reminder_tz)
     yield
+    # Boot reconciliation's pipelines use the engine: they must be gone before
+    # it is disposed, or they check out connections from the rebuilt pool that
+    # the loop teardown then abandons (see cancel_background_pipelines).
+    await documents.cancel_background_pipelines()
     for task in (sweep_task, reminder_task):
         if task is None:
             continue

@@ -250,3 +250,65 @@ async def test_reprocess_is_an_opaque_404_across_users():
         app.dependency_overrides.pop(require_active_subscription, None)
 
     assert res.status_code == 404
+
+
+async def test_shutdown_unwinds_a_pipeline_before_the_engine_is_disposed(monkeypatch):
+    """A pipeline boot reconciliation spawned must be gone, with its connection
+    back in the pool, by the time the lifespan disposes the engine.
+
+    The lifespan used to cancel only its own sweep and reminder tasks. A
+    pipeline still mid-query then outlived `engine.dispose()`, checked a new
+    connection out of the rebuilt pool and was killed by the loop teardown
+    before the session could return it: SQLAlchemy's "garbage collector is
+    trying to clean up non-checked-in connection" at the end of the suite,
+    blamed on whichever unrelated test happened to be running (the dev
+    database holds hundreds of stuck rows, so every TestClient(app) boot
+    requeued some).
+
+    The fake pipeline holds a real pooled connection and then sleeps. Before
+    the fix it is still alive after the lifespan exits, with the connection
+    checked out; after it, it is cancelled and the connection was checked in.
+    """
+    import sqlalchemy as sa
+    from unittest.mock import AsyncMock
+
+    from adelia.config import settings
+    from adelia.db import AsyncSessionLocal, engine
+    from adelia.main import app, lifespan
+    from adelia.routers import documents as docs_mod
+    from adelia.routers import users as users_mod
+
+    # Only the shutdown path is under test: no boot sweep, no boot requeue
+    # (which would spawn real pipelines of its own), no evidence load, no
+    # Telegram reminder loop.
+    monkeypatch.setattr(users_mod, "sweep_blob_tombstones", AsyncMock())
+    monkeypatch.setattr(docs_mod, "requeue_stuck_documents", AsyncMock(return_value=[]))
+    monkeypatch.setattr(settings, "mistral_api_key", "")
+    monkeypatch.setattr(settings, "telegram_bot_token", "")
+
+    holding = asyncio.Event()
+
+    async def hold_a_connection(document_id, mime_type, is_consulta=False):
+        async with AsyncSessionLocal() as session:
+            await session.execute(sa.text("select 1"))
+            holding.set()
+            await asyncio.sleep(30)
+
+    monkeypatch.setattr(docs_mod, "process_document", hold_a_connection)
+
+    pool = engine.pool
+    task = None
+    try:
+        async with lifespan(app):
+            task = docs_mod._spawn_pipeline(uuid4(), "audio/webm", True)
+            await asyncio.wait_for(holding.wait(), timeout=10)
+            assert pool.checkedout() == 1
+        # Judged BEFORE the cleanup below, which would otherwise cancel the
+        # task itself and hide the regression.
+        assert task.cancelled(), "the lifespan left a pipeline running past engine.dispose()"
+        assert pool.checkedout() == 0
+        assert task not in docs_mod._BACKGROUND_TASKS
+    finally:
+        if task is not None and not task.done():
+            task.cancel()
+            await asyncio.gather(task, return_exceptions=True)
