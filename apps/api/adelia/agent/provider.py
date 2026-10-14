@@ -160,15 +160,24 @@ class MistralProvider:
     async def stream_step(
         self, *, system: str, messages: list[dict], tools: list[dict]
     ) -> AsyncIterator[dict]:
-        from adelia.llm import get_mistral_client
+        from adelia.llm import get_mistral_client, reasoning_effort_kwargs
 
         client = get_mistral_client()
+        # chat_reasoning_effort is the same knob as the RAG chat's: unset, this
+        # call is unchanged. Mistral does not document how reasoning_effort
+        # combines with tool calling, so enabling it also needs an agent run
+        # (apps/api/docs/MODELOS.md). _mistral_text already drops thinking chunks.
         resp = await client.chat.complete_async(
             model=settings.mistral_chat_model,
             messages=_to_mistral_messages(system, messages),
             tools=_to_mistral_tools(tools),
             tool_choice="auto",
             temperature=0.2,
+            **reasoning_effort_kwargs(
+                settings.chat_reasoning_effort,
+                settings.mistral_chat_model,
+                setting="chat_reasoning_effort",
+            ),
         )
         choice = resp.choices[0]
         message = choice.message

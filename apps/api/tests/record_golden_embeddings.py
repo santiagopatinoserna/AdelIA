@@ -15,6 +15,7 @@ import json
 from pathlib import Path
 
 from adelia.clinical.golden import GOLDEN_SET
+from adelia.config import settings
 from adelia.workers.embed import embed_texts
 
 OUT = Path(__file__).parent / "fixtures" / "golden_query_embeddings.json"
@@ -27,7 +28,7 @@ async def main() -> None:
     OUT.write_text(
         json.dumps(
             {
-                "model": "mistral-embed",
+                "model": settings.mistral_embed_model,
                 "questions": {q.id: q.question for q in asked},
                 "embeddings": {q.id: v for q, v in zip(asked, vectors, strict=True)},
             },

@@ -5,6 +5,7 @@ from datetime import date
 
 from pydantic import ValidationError
 
+from adelia.config import settings
 from adelia.llm import get_mistral_client
 from adelia.schemas import ExtractedEntity
 
@@ -89,7 +90,7 @@ async def extract_entities(text: str, *, diary_date: str | None = None) -> list[
         system_prompt += DIARY_PROMPT_SUFFIX.format(diary_date=diary_date)
 
     response = await client.chat.complete_async(
-        model="mistral-medium-latest",
+        model=settings.mistral_extraction_model,
         messages=[
             {"role": "system", "content": system_prompt},
             {"role": "user", "content": f"Document:\n\n{text}"},

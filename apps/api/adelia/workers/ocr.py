@@ -43,7 +43,7 @@ async def extract_text_from_pdf(body: bytes, mime_type: str) -> str:
     else:
         document = {"type": "document_url", "document_url": data_uri}
     payload = {
-        "model": "mistral-ocr-latest",
+        "model": settings.mistral_ocr_model,
         "document": document,
         "include_image_base64": False,
     }
