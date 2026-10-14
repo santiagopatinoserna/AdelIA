@@ -7,6 +7,7 @@
 | **Tratamiento evaluado** | Función "Grabar consulta": grabación de audio de la visita pediátrica, transcripción diarizada e incorporación al historial del menor. |
 | **Responsable del tratamiento** | SaaS `adelia.godi.ai`: Godi.AI. Instancias self-host: quien despliega la instancia (ver `README.md § Self-host`). |
 | **Encargado del tratamiento (STT)** | **Activo hoy**: Mistral AI (Francia/UE), La Plateforme, `audio/transcriptions`, modelo `voxtral-mini-latest`, con diarización. Alternativa cableada en el código pero **inactiva por defecto** (`STT_PROVIDER=openai`): OpenAI, contra su endpoint de residencia europea `https://eu.api.openai.com/v1`, modelo `whisper-1`, **sin diarización** (la transcripción no separa hablantes). Activar OpenAI exige revisar esta DPIA (ver disparador de revisión (a) en §6) y confirmar que el proyecto OpenAI está configurado en región europea antes del cambio. |
+| **Encargado del tratamiento (acceso y transporte)** | **Cloudflare, Inc.** (EE. UU.), declarado el 14 de octubre de 2026 (ver §7; no figuraba en la evaluación del 17 de agosto ni en el cierre del 19). Termina el TLS de `adelia.godi.ai`, actúa como red de distribución y aporta el túnel de acceso (`cloudflared`) por el que las visitas llegan al servidor. Todo el tráfico entre el navegador de la familia y AdelIA pasa por su red y es visible en su borde una vez terminado el TLS: incluye el audio de la consulta en la subida, la transcripción y los datos de salud del menor. Su red es global, así que ese tráfico puede encaminarse por centros de datos fuera de la UE. No le encargamos almacenar ni analizar el contenido, solo transportarlo. Base de la transferencia internacional: certificación de Cloudflare en el Marco de Privacidad de Datos UE-EE. UU. y, como respaldo, las cláusulas contractuales tipo de la Comisión Europea (Decisión de Ejecución (UE) 2021/914) incluidas en su adenda de tratamiento de datos (art. 28 y capítulo V RGPD). |
 | **Fecha de esta evaluación** | 2026-08-17 |
 | **Fecha de cierre y aprobación** | 2026-08-19 (ver §6) |
 | **Artefactos de referencia** | `docs/specs/2026-08-17-adelia-grabar-consulta-rgpd-design.md` (spec); `agent_marketing/08_adelia/research/2026-08-17_grabar_consulta_rgpd_research.md` (research: BOE, Légifrance, CURIA, AEPD, políticas Nabla/Doctolib/Medcorder/Tandem/Accurx/Hedy); `docs/plans/2026-08-17-adelia-grabar-consulta-rgpd.md` (plan de implementación, tasks 1-11). |
@@ -145,3 +146,15 @@ El tratamiento ya no es prospectivo: está **LIVE en producción** en `adelia.go
 ---
 
 Firmado: Santiago Patiño Serna, 19 de agosto de 2026.
+
+---
+
+## 7. Actualizaciones posteriores al cierre
+
+Registro de lo que se ha anotado en este documento después de la aprobación del 19 de agosto de 2026 (§6.1). La firma de arriba es de esa fecha y **no cubre** lo que se anota aquí: cada entrada indica su estado y quién tiene que confirmarla. Ninguna entrada cambia el texto de §1 a §6.
+
+| Fecha | Cambio | Motivo | Estado |
+|---|---|---|---|
+| 2026-10-14 | Se declara a Cloudflare, Inc. como encargado del tratamiento (acceso y transporte) en la tabla de cabecera. | La verificación del 14 de octubre de 2026 de la auditoría del 31 de agosto (punto 1.12, `docs/AUDITORIA_ESTADO_2026-10-14.md`) comprobó que Cloudflare termina el TLS de `adelia.godi.ai` y que el túnel de acceso pasa por su red, y que ni esta DPIA ni `/{locale}/privacidad` lo declaraban. La política pública se corrigió el mismo día en es, en y fr, con el mismo detalle de rol y de base de transferencia. | Pendiente de confirmación por el responsable del tratamiento (Santiago Patiño Serna). |
+
+Queda abierta, y la decide el responsable, la revisión de si el tránsito por Cloudflare altera la evaluación de riesgos de §4 y las menciones a residencia o procesamiento en la UE de §1.2, §2.3 y §6. Esta entrada declara el encargado; no reevalúa el riesgo ni modifica esas secciones. Tampoco se sabe desde el repositorio desde qué fecha exacta está Cloudflare en la ruta de producción: hay que fijarla antes de dar por cerrada la entrada.

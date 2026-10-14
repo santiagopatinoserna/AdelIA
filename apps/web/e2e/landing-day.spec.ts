@@ -34,6 +34,38 @@ test.describe("landing: Un día con AdelIA", () => {
     await expect(page).toHaveURL(/\/es\/(dashboard|signin)/, { timeout: 20_000 });
   });
 
+  // Audit 1.2: the medical notice used to live only in the page footer, far from the fever
+  // and paracetamol the block talks about. It now sits inside #day, ahead of the first step,
+  // at reading size (the 11px footnote under the CTA stays a statement about the data).
+  const NOTICE: Record<string, RegExp> = {
+    es: /no sustituye el consejo médico/,
+    en: /does not replace medical advice/,
+    fr: /ne remplace pas l’avis médical/,
+  };
+
+  for (const locale of ["es", "en", "fr"]) {
+    test(`carries its own medical notice before the first step (${locale})`, async ({ page }) => {
+      await page.goto(`/${locale}`);
+      const day = page.locator("section#day");
+      const note = day.getByTestId("day-disclaimer");
+      await expect(note).toBeVisible();
+      await expect(note).toContainText(NOTICE[locale]);
+      await expect(note).toContainText("112");
+
+      const noteBox = await note.boundingBox();
+      const firstStepBox = await day.locator("ol > li").first().boundingBox();
+      expect(noteBox, "notice has a box").not.toBeNull();
+      expect(firstStepBox, "first step has a box").not.toBeNull();
+      expect(noteBox!.y + noteBox!.height).toBeLessThanOrEqual(firstStepBox!.y);
+
+      // Not small print: at least 14px.
+      const fontSize = await note
+        .locator("p")
+        .evaluate((el) => parseFloat(getComputedStyle(el).fontSize));
+      expect(fontSize).toBeGreaterThanOrEqual(14);
+    });
+  }
+
   test("is accessible and never scrolls the body sideways, desktop and phone", async ({ browser }) => {
     for (const viewport of [
       { width: 1280, height: 800 },

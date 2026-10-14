@@ -210,8 +210,9 @@ con una cadena (el caso de hoy) devuelve la misma cadena. Lo cubren `test_chat_n
 
 ### 4.6 Cambiar de proveedor
 
-El texto de `/privacidad` (`privacy.whereBody`) nombra cuatro encargados: Mistral AI, Stripe,
-Resend y Telegram, y dice: "Ningún dato va más allá de estos cuatro". Con `LLM_PROVIDER=openai`
+El texto de `/privacidad` (`privacy.whereBody`) nombra cinco encargados: Mistral AI, Stripe,
+Resend, Cloudflare y Telegram, y dice: "Ningún dato va más allá de estos cinco" (Cloudflare se
+declaró el 14 de octubre de 2026, auditoría 1.12). Con `LLM_PROVIDER=openai`
 el contexto del chat, y con `ANTHROPIC_API_KEY` el del agente, salen hacia un proveedor que ese
 texto no nombra. Qué proveedor sirve de verdad el chat y el agente en una instalación se decide
 solo por variables de entorno, así que este repositorio no lo dice: quien apruebe un cambio debe
