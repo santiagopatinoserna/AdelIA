@@ -22,13 +22,13 @@ from adelia.config import settings
 from adelia.db import AsyncSessionLocal, get_db
 from adelia.enrichment import profile_service
 from adelia.models import BlobTombstone, Chunk, ConsentEvent, Document, Entity, Profile
-from adelia.schemas import DocumentOut, ExtractedEntity, derive_status
+from adelia.schemas import DocumentOut, ExtractedEntity, ExtractionReport, derive_status
 from adelia.services import briefing_repo
 from adelia.services.scope import Scope
 from adelia.storage import S3Storage
 from adelia.workers.chunker import ChunkConfig, chunk_hierarchical
 from adelia.workers.embed import embed_texts
-from adelia.workers.extract import extract_entities
+from adelia.workers.extract import extract_entities, locate_quote
 from adelia.workers.ocr import extract_text_from_pdf
 from adelia.workers.summarize import summarize_consultation
 from adelia.workers.transcribe import transcribe_audio
@@ -163,6 +163,7 @@ def _doc_to_out(doc: Document, *, entity_count: int = 0, chunk_count: int = 0) -
         speaker_names=(doc.document_metadata or {}).get("speaker_names"),
         summary=(doc.document_metadata or {}).get("summary"),
         diary_date=(doc.document_metadata or {}).get("diary_date"),
+        extraction=(doc.document_metadata or {}).get("extraction"),
     )
 
 
@@ -306,6 +307,7 @@ async def _process_document_inner(document_id: uuid.UUID, mime_type: str, is_con
 
     raw_text = ""
     summary: str | None = None
+    extraction_report: ExtractionReport | None = None
     entities: list[Entity] = []
     chunks: list[Chunk] = []
 
@@ -356,6 +358,8 @@ async def _process_document_inner(document_id: uuid.UUID, mime_type: str, is_con
                 lambda: (extract_entities(raw_text, diary_date=diary_date) if diary_date
                          else extract_entities(raw_text)),
             )
+            # Plain-list fakes carry no report; the real extractor always does.
+            extraction_report = getattr(extracted, "report", None)
             entity_ranges: dict[str, tuple[int, int]] = {}
             for ex in extracted:
                 eid = uuid.uuid4()
@@ -377,9 +381,13 @@ async def _process_document_inner(document_id: uuid.UUID, mime_type: str, is_con
                     page=ex.page,
                     needs_review=ex.confidence < NEEDS_REVIEW_CONFIDENCE_THRESHOLD,
                 ))
-                if ex.raw_quote and ex.raw_quote in raw_text:
-                    s = raw_text.find(ex.raw_quote)
-                    entity_ranges[str(eid)] = (s, s + len(ex.raw_quote))
+                # Only a quote that occurs exactly once has a place. find() used
+                # to return the FIRST occurrence of a repeated quote and link the
+                # entity to the wrong chunk; an ambiguous quote now gets no range
+                # (the entity is still saved, see workers.extract.locate_quote).
+                span = locate_quote(raw_text, ex.raw_quote)
+                if span is not None:
+                    entity_ranges[str(eid)] = span
 
             # Stage 3: hierarchical chunking
             chunk_output = chunk_hierarchical(
@@ -411,9 +419,11 @@ async def _process_document_inner(document_id: uuid.UUID, mime_type: str, is_con
     except (RuntimeError, httpx.HTTPError, MistralError, ClientError, EndpointConnectionError, OpenAIAPIError) as exc:
         logger.exception("process_document failed for document_id=%s: %s", document_id, exc)
         raw_text, entities, chunks = _text_after_failure(mime_type, raw_text), [], []
+        extraction_report = None  # nothing was persisted, so there is nothing to explain
     except Exception as exc:  # noqa: BLE001 — final fallback to set processed_at
         logger.exception("process_document unexpected failure for document_id=%s: %s", document_id, exc)
         raw_text, entities, chunks = _text_after_failure(mime_type, raw_text), [], []
+        extraction_report = None  # nothing was persisted, so there is nothing to explain
 
     # Short write: persist everything in one quick transaction.
     async with AsyncSessionLocal() as session:
@@ -456,6 +466,13 @@ async def _process_document_inner(document_id: uuid.UUID, mime_type: str, is_con
             doc.document_metadata = {
                 **(doc.document_metadata or {}),
                 "audio_deleted_scheduled": True,
+            }
+        if extraction_report is not None:
+            # What the extractor kept and why it discarded the rest, so a thin
+            # record is explained (surfaced as DocumentOut.extraction).
+            doc.document_metadata = {
+                **(doc.document_metadata or {}),
+                "extraction": extraction_report.model_dump(),
             }
         if summary:
             # Written whatever the retention branch decided: the consultation

@@ -72,7 +72,7 @@ Run AFTER `scripts/m3-acceptance.sh` exits green AND M2 acceptance is verified.
 - Citation chunk_id is repurposed for entity IDs in the temporal path (since chunks aren't searched). v0.1.1 may separate the Citation schema by path type.
 - No timeout on the orchestrator stream. v0.1.1 should add asyncio.wait_for(60s).
 - No conversation history passed to orchestrator (one-shot per question). Multi-turn context awareness is v0.1.1.
-- raw_text.find() multi-occurrence carry-over from M2-T6 orchestrator still applies.
+- raw_text.find() multi-occurrence carry-over from M2-T6 orchestrator still applies. RESOLVED 2026-10-14: `locate_quote` (workers/extract.py) returns a range only for a quote that occurs exactly once; an ambiguous quote keeps its entity but gets no chunk link.
 
 ## Tagging
 

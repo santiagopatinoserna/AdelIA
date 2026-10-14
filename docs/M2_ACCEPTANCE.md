@@ -56,7 +56,7 @@ In addition to M1 prereqs, you need:
 - Embedding batching is one Mistral call per document (fine for documents < 50 chunks). For very long docs, batch into multiple calls in v0.2.
 - No client-side polling on detail page — manually reload after `~20-30s` for the full pipeline.
 - Whisper API limit: 25 MB per file. Backend rejects >50 MB at upload (T8 M1) but Whisper itself caps tighter; long audio will fail at transcribe stage.
-- `entity_ranges` uses `raw_text.find()` first-occurrence: entities citing repeated phrases may be mis-tagged to the first occurrence in chunk metadata. v0.1.1 carry-over with same root cause as the T4 chunker fix.
+- `entity_ranges` uses `raw_text.find()` first-occurrence: entities citing repeated phrases may be mis-tagged to the first occurrence in chunk metadata. v0.1.1 carry-over with same root cause as the T4 chunker fix. RESOLVED 2026-10-14: `locate_quote` (workers/extract.py) returns a range only for a quote that occurs exactly once; an ambiguous quote keeps its entity but gets no chunk link.
 
 ## Tagging
 
