@@ -40,6 +40,18 @@ supporting fragments in enrichment/data/evidence_urgencias_lactante.json):
   lethargy              NICE NG143 1.2.5 (does not wake / no response)
   no_wet_nappy_12h      NICE NG9 1.6.1 (no wet nappy for 12 hours)
   dehydration           NICE CG84 table 1 (sunken eyes, no tears, turgor)
+
+Languages. Matching is language-agnostic, but a pattern table written from
+the Spanish side is not the same as one that knows how a French or an English
+parent writes the sentence. The golden-set work (tests/test_red_flags_languages.py)
+failed 38 of its first 101 cases against this module, among them
+"il a avalé de travers", "her eyes rolled back", "spots that don't fade" (the
+plural "don't", where the pattern only knew "doesn't"), "œdème" (a ligature
+that accent folding leaves whole), "a 2-month-old" (the hyphen hid the age
+from the fever rule), "dos meses" written as words, and a Fahrenheit reading.
+Each is now a pattern or a parser rule, and the test file keeps at least two
+parent-written positives per flag per language so the next flag cannot ship
+in one language only.
 """
 from __future__ import annotations
 
@@ -87,11 +99,16 @@ def normalize(text: str) -> str:
 
     Patterns are written accent-free so that "fiebre"/"fièvre", "pañal"/
     "panal" and "étouffe"/"etouffe" need one spelling each, and so that a
-    parent typing without accents at 3 a.m. is not a miss.
+    parent typing without accents at 3 a.m. is not a miss. The ligatures
+    œ and æ are spelled out, because accent folding does not touch them.
     """
     folded = unicodedata.normalize("NFD", text or "")
     folded = "".join(c for c in folded if unicodedata.category(c) != "Mn")
     folded = folded.replace("’", "'").replace("ʼ", "'")
+    # NFD leaves the ligatures whole, so "œdème de Quincke" and "l'œuf" would
+    # never meet a pattern written "oedeme" and "oeuf". French writes them
+    # with the ligature far more often than without.
+    folded = folded.replace("œ", "oe").replace("æ", "ae")
     return re.sub(r"\s+", " ", folded).lower().strip()
 
 
@@ -110,29 +127,34 @@ _PATTERNS: dict[str, tuple[str, ...]] = {
         # en
         r"\bchok(?:ing|ed|es)\b", r"\bfor?eign body\b", r"\bairway obstruction\b",
         r"\bswallowed a\b", r"\bheimlich\b",
+        r"\b(?:can'?t|cannot|unable to) make (?:a|any) (?:sound|noise)\b",
         # fr
         r"\betouffe\w*\b", r"\bfausse route\b", r"\bcorps etranger\b", r"\ba avale (?:un|une)\b",
-        r"\bs'?etrangl\w*",
+        r"\bs'?etrangl\w*", r"\bavale(?:e)? de travers\b",
+        r"\bn'?arrive (?:plus|pas) a (?:tousser|crier)\b",
     ),
     "anaphylaxis": (
         # es
         r"\banafilaxi\w*", r"\breaccion alergica grave\b", r"\bedema de glotis\b",
         r"\bshock anafilactico\b",
-        r"\b(?:se le )?(?:ha )?hinch\w+ (?:la )?(?:cara|lengua|labios|garganta)\b",
+        r"\b(?:se le )?(?:ha )?hinch\w+ (?:la |las |los |el )?(?:cara|lengua|labios|garganta)\b",
         r"\bhinchazon de (?:la )?(?:cara|lengua|labios|garganta)\b",
         r"\badrenalina autoinyect\w*", r"\bautoinyector de adrenalina\b",
         # en
         r"\banaphyla\w*", r"\bepipen\b", r"\bswollen (?:lips|tongue|face|throat)\b",
         r"\bsevere allergic reaction\b",
+        r"\b(?:swelling|swelled)(?: up)?\b[^.,;]{0,15}\b(?:lips?|tongue|face|throat)\b",
+        r"\b(?:lips?|tongue|face|throat)\b[^.,;]{0,20}\b(?:swelled|swollen|swelling|puffed up)\b",
         # fr
         r"\banaphyla\w*", r"\boedeme de quincke\b", r"\breaction allergique grave\b",
         r"\bgonflement (?:des levres|de la langue|du visage|de la gorge)\b",
+        r"\b(?:visage|levres?|langue|gorge)\b[^.,;]{0,25}\b(?:gonfl|enfl)\w+",
     ),
     "cyanosis": (
         # es
         r"\bcianosis\b", r"\bcianotic\w*",
         r"\b(?:labios|lengua|piel|cara|manos|pies|u[nñ]as)[^.,;]{0,24}(?:azul\w*|morad\w*|violet\w*)",
-        r"\b(?:se (?:pone|puso)|esta)[^.,;]{0,16}(?:azul\w*|morad\w*)",
+        r"\b(?:se (?:ha )?(?:pone|puso|puesto)|esta)[^.,;]{0,16}(?:azul\w*|morad\w*)",
         # en
         r"\bcyanosis\b", r"\bcyanotic\b", r"\bblue (?:lips|tongue|around the mouth)\b",
         r"\b(?:lips|tongue|skin)[^.,;]{0,20}(?:blue|dusky|grey|gray)\b",
@@ -146,10 +168,13 @@ _PATTERNS: dict[str, tuple[str, ...]] = {
         r"\bconvulsion\w*", r"\bconvulsiv\w*", r"\bconvulsion\w*",
         r"\bcrisis (?:febril|convulsiva|epileptica)\w*", r"\bha convulsionado\b",
         r"\bataque epileptic\w*", r"\bespasmo\w* febril\w*",
+        r"\bojos en blanco\b", r"\bse (?:quedo|puso) rigid\w*",
         # en
         r"\bseizur\w*", r"\bconvuls\w*", r"\bfebrile fit\b", r"\bhad a fit\b",
+        r"\beyes? roll(?:ed|ing)? (?:back|up)\b", r"\b(?:went|goes|going|gone) (?:completely )?stiff\b",
         # fr
         r"\bconvuls\w*", r"\bcrise convulsive\b", r"\bcrise febrile\b",
+        r"\byeux (?:reverses|revulses)\b", r"\bs'?est raidi\w*",
     ),
     "respiratory_distress": (
         # es
@@ -157,15 +182,21 @@ _PATTERNS: dict[str, tuple[str, ...]] = {
         r"\baleteo nasal\b", r"\bse le marcan las costillas\b", r"\bhunde (?:el pecho|las costillas)\b",
         r"\b(?:le cuesta|no puede|dificultad para) respirar\b", r"\brespira (?:muy )?(?:rapid|agitad)\w*",
         r"\bdistres respiratori\w*", r"\bapnea\w*\b", r"\bdeja de respirar\b",
+        r"\bno respira\b",
         # en
         r"\bgrunting\b", r"\bchest (?:in)?drawing\b", r"\bretractions?\b", r"\bnasal flaring\b",
         r"\b(?:struggling|working hard|difficulty) (?:to )?breath\w*",
-        r"\bcan'?t breathe\b", r"\bapnoea\b", r"\bapnea\b", r"\bstops breathing\b",
+        r"\bcan(?:'?t|not| not) breathe\b", r"\bapnoea\b", r"\bapnea\b", r"\bstops breathing\b",
         r"\bribs (?:are )?(?:showing|sucking in)\b",
+        r"\bbreathing (?:really |very |so |too |extremely )?(?:fast|quickly|rapidly)\b",
+        r"\b(?:skin|belly|tummy|chest|stomach)\b[^.,;]{0,25}\b(?:pull|suck|sink|draw)\w* in\b",
         # fr
         r"\bgeignement\w*\b", r"\bgeint\b", r"\btirage\b", r"\bbattement des ailes du nez\b",
         r"\b(?:du mal|difficulte\w*) a respirer\b", r"\bne respire (?:plus|pas)\b",
         r"\bapnee\w*\b", r"\bdetresse respiratoire\b",
+        r"\bgemi\w*", r"\bn'?arrive (?:plus|pas) a respirer\b",
+        r"\brespire (?:tres |trop |si )?(?:vite|rapidement)\b",
+        r"\b(?:ventre|cotes|thorax)\b[^.,;]{0,20}\bse (?:creus|rentr)\w*",
     ),
     "non_blanching_rash": (
         # es
@@ -174,35 +205,41 @@ _PATTERNS: dict[str, tuple[str, ...]] = {
         r"\bno desaparec\w+ al (?:presionar|apretar|estirar)\b",
         r"\bpetequia\w*\b", r"\bpurpur\w*\b", r"\bprueba del vaso\b",
         # en
-        r"\bnon[- ]?blanching\b", r"\bdoes ?n'?o?t (?:fade|blanch)\b",
-        r"\b(?:rash|spots)[^.,;]{0,40}(?:does ?n'?o?t|won'?t) (?:fade|blanch|go away when)",
+        r"\bnon[- ]?blanching\b", r"\b(?:does|do) ?n'?o?t (?:fade|blanch)\b",
+        r"\b(?:rash|spots)[^.,;]{0,40}(?:(?:does|do) ?n'?o?t|won'?t) (?:fade|blanch|go away when)",
         r"\bpetechia\w*\b", r"\bpurpur\w*\b", r"\bglass test\b", r"\btumbler test\b",
+        r"\b(?:press|roll)\w* (?:a |the )?(?:drinking )?glass\b",
         # fr
         r"\bne s'?efface(?:nt)? pas\b", r"\bne blanchi(?:t|ssent) pas\b",
-        r"\bne disparai(?:t|ssent) pas (?:a la pression|quand)\b",
+        r"\bne (?:disparai(?:t|ssent)|part|partent) pas (?:a la pression|quand)\b",
         r"\bpetechi\w*\b", r"\bpurpur\w*\b", r"\btest du verre\b",
+        r"\b(?:appuy\w+|appuie|presse\w*|roule\w*)[^.,;]{0,25}\bverre\b",
     ),
     "bulging_fontanelle": (
         # es
-        r"\bfontanela\w*[^.,;]{0,20}(?:abombad|abultad|tensa|hinchad|salient)\w*",
-        r"\bmollera[^.,;]{0,20}(?:abombad|abultad|hinchad|salient)\w*",
+        r"\bfontanela\w*[^.,;]{0,40}(?:abombad|abultad|tensa|hinchad|salient)\w*",
+        r"\bmollera[^.,;]{0,40}(?:abombad|abultad|hinchad|salient)\w*",
         # en
-        r"\bbulging fontanel\w*", r"\bfontanel\w*[^.,;]{0,16}(?:bulg|swollen|raised|tense)\w*",
-        r"\bsoft spot[^.,;]{0,20}(?:bulg|swollen|raised|tense)\w*",
+        r"\bbulging (?:fontanel\w*|soft spot)", r"\bfontanel\w*[^.,;]{0,40}(?:bulg|swollen|raised|tense)\w*",
+        r"\bsoft spot[^.,;]{0,40}(?:bulg|swollen|raised|tense)\w*",
         # fr
-        r"\bfontanelle[^.,;]{0,20}(?:bombee|tendue|gonflee|bombe)\b",
+        r"\bfontanelle[^.,;]{0,40}(?:bombee|tendue|gonflee|bombe)\b",
     ),
     "lethargy": (
         # es
         r"\bletargi\w*", r"\bletargic\w*", r"\bno (?:se )?despierta\b", r"\bno hay forma de despertarl\w*",
         r"\bno reacciona\b", r"\bno responde a (?:nada|est[ií]mulos|mi voz|la voz)\b",
         r"\bmuy decaid\w*", r"\bno se mantiene despiert\w*", r"\bmuy flojit\w*", r"\bhipotoni\w*",
+        r"\bno (?:consigo|puedo|logro) despertarl\w*", r"\bcuesta (?:mucho )?despertarl\w*",
         # en
         r"\blethargi\w*", r"\bwon'?t wake\b", r"\bwill not wake\b", r"\bnot waking\b",
         r"\bunresponsive\b", r"\bfloppy\b", r"\bdoes ?n'?o?t respond to\b",
+        r"\bcan(?:'?t|not| not) (?:\w+ )?(?:wake|rouse)\b", r"\bhard to (?:wake|rouse)\b",
         # fr
         r"\blethargi\w*", r"\bne se reveille pas\b", r"\bne reagit pas\b", r"\btres abattu\w*",
         r"\bhypotoni\w*", r"\bmou et ne reagit\b",
+        r"\bn'?arrive (?:plus|pas) a (?:le |la |l')?reveiller\b", r"\bdifficile a reveiller\b",
+        r"\bimpossible de (?:le |la |l')?reveiller\b", r"\best (?:tout |tres |completement )?(?:molle?|flasque)\b",
     ),
     "dehydration": (
         # es
@@ -212,19 +249,24 @@ _PATTERNS: dict[str, tuple[str, ...]] = {
         # en
         r"\bdehydrat\w*", r"\bsunken (?:eyes|fontanel\w*|soft spot)\b", r"\bno tears\b",
         r"\bdry mouth\b", r"\bskin turgor\b",
+        r"\beyes?\b[^.,;]{0,20}\bsunken\b", r"\b(?:cries|crying|cried) without (?:any )?tears\b",
         # fr
         r"\bdeshydrat\w*", r"\byeux creux\b", r"\byeux enfonces\b", r"\bfontanelle creuse\b",
         r"\bpleure sans larmes\b", r"\bbouche seche\b",
     ),
     "no_wet_nappy_12h": (
         # es
-        r"\bno ha (?:mojado|manchado) (?:el )?pa[nñ]al\b", r"\bpa[nñ]al(?:es)? sec\w*",
+        r"\bno ha (?:mojado|manchado) (?:el )?pa[nñ]al\b",
+        r"\bpa[nñ]al(?:es)? (?:esta |sigue |continua |lleva )?(?:todo el dia )?(?:completamente )?sec\w*",
         r"\bno (?:orina|hace pis|ha orinado|ha hecho pis)\b", r"\bsin (?:orinar|hacer pis|mojar)\b",
         # en
         r"\bno wet (?:nappy|nappies|diaper|diapers)\b", r"\bdry (?:nappy|nappies|diaper|diapers)\b",
-        r"\bhas ?n'?o?t (?:peed|weed|urinated|had a wet)\b", r"\bnot passed urine\b",
+        r"\bhas ?n'?o?t (?:peed|weed|wee'?d|urinated|had a wet)\b", r"\bnot passed urine\b",
+        r"\b(?:nappy|nappies|diaper|diapers)\b (?:has |have |had )?(?:been |stayed |remained |is |was |are )?"
+        r"(?:still )?(?:completely |totally )?dry\b",
         # fr
         r"\bcouches? seches?\b", r"\bpas de couche mouillee\b", r"\bn'?a pas (?:urine|fait pipi)\b",
+        r"\bn'?a pas mouille\b", r"\bcouche\w* (?:est |sont |reste |restent )?(?:toujours |encore )?seche",
     ),
 }
 
@@ -250,7 +292,21 @@ _FEVER_WORDS = re.compile(
     r"\b(?:fiebre|febril|febricula|destemplad\w*|decimas?\b|temperatura|"
     r"fever|feverish|temperature|"
     r"fievre|febrile|temperature)\b"
+    # How a parent says "fever" without the word. NG143 1.1.6 treats the
+    # parent's perception as valid, and "feels hot" / "il est brulant" is
+    # what an English or French parent types before they reach for a
+    # thermometer. Subject-anchored in both languages ("she feels hot", "il
+    # est chaud", never "the bath water feels hot" or "l'eau est chaude") so
+    # a bath-temperature question is not a fever.
+    r"|\b(?:she|he|baby|forehead|head|skin|body) (?:really |just |still )?feels? "
+    r"(?:really |very |so |quite |extremely )?hot\b|\bfeels? hot to (?:the )?touch\b"
+    r"|\bburning (?:hot|up)\b"
+    r"|\b(?:il|elle) est (?:tres |tout |bien |vraiment )?chaud(?:e)?\b|\bbrulant\w*"
 )
+
+#: A thermometer in the sentence makes a bare 35..43 a reading, the same way
+#: the word "fever" does: "le thermometre indique 38".
+_THERMOMETER = re.compile(r"\b(?:thermometer|termometro|thermometre)\b")
 
 # A temperature is only read where it cannot be anything else. Two passes:
 #
@@ -265,15 +321,44 @@ _TEMPERATURE_MARKED = re.compile(
     r"|"
     r"(?<![\d,.])(3[5-9]|4[0-3])()\s*(?:o|°|º)?\s*(?:c\b|celsius\b|grados?\b|degres?\b|degrees?\b)"
 )
+# English-speaking parents read Fahrenheit. Only a number with its own unit is
+# taken ("100.8 F", "101°F"): a bare 100 is a weight in grams, a count, a price.
+_TEMPERATURE_F = re.compile(
+    r"(?<![\d,.])(9[5-9]|10[0-9])(?:[.,](\d))?\s*(?:°|º)?\s*(?:f\b|fahrenheit\b)"
+)
 _TEMPERATURE_BARE = re.compile(
     r"(?<![\d,.])(3[5-9]|4[0-3])(?![\d,.])"
     r"(?!\s*(?:mes|month|mois|semana|week|semaine|dia|day|jour|ano|year|an\b|h\b|hora|hour|heure"
     r"|cm|mm|kg|g\b|ml|l\b|%|sg\b|sem\b))"
 )
 
-_AGE_MONTHS = re.compile(r"\b(\d{1,2})\s*(?:mes(?:es)?|months?|mois)\b")
-_AGE_WEEKS = re.compile(r"\b(\d{1,2})\s*(?:semanas?|weeks?|semaines?)\b")
-_AGE_DAYS = re.compile(r"\b(\d{1,3})\s*(?:dias?|days?|jours?)\b")
+# "[\s-]*" and not "\s*": "my 2-month-old" and "a 6-week-old" are how English
+# writes an age, and before this a hyphen hid the age from the fever rule.
+_AGE_MONTHS = re.compile(r"\b(\d{1,2})[\s-]*(?:mes(?:es)?|months?|mois)\b")
+_AGE_WEEKS = re.compile(r"\b(\d{1,2})[\s-]*(?:semanas?|weeks?|semaines?)\b")
+_AGE_DAYS = re.compile(r"\b(\d{1,3})[\s-]*(?:dias?|days?|jours?)\b")
+
+# "mi bebe de dos meses" is how a parent writes it at least as often as "2
+# meses", in all three languages. Only a number word directly before an age
+# unit is read, so "once a day" and "un poco" never become a 1 or an 11.
+_NUMBER_WORDS: dict[str, int] = {
+    "un": 1, "uno": 1, "una": 1, "one": 1,
+    "dos": 2, "deux": 2, "two": 2,
+    "tres": 3, "trois": 3, "three": 3,
+    "cuatro": 4, "quatre": 4, "four": 4,
+    "cinco": 5, "cinq": 5, "five": 5,
+    "seis": 6, "six": 6,
+    "siete": 7, "sept": 7, "seven": 7,
+    "ocho": 8, "huit": 8, "eight": 8,
+    "nueve": 9, "neuf": 9, "nine": 9,
+    "diez": 10, "dix": 10, "ten": 10,
+    "once": 11, "onze": 11, "eleven": 11,
+    "doce": 12, "douze": 12, "twelve": 12,
+}
+_NUMBER_WORD_BEFORE_AGE_UNIT = re.compile(
+    r"\b(" + "|".join(sorted(_NUMBER_WORDS, key=len, reverse=True)) + r")"
+    r"(?=[\s-]*(?:mes(?:es)?|months?|mois|semanas?|weeks?|semaines?|dias?|days?|jours?)\b)"
+)
 _NEWBORN = re.compile(r"\b(?:recien nacid\w*|neonat\w*|newborn|nouveau[- ]?nes?)\b")
 
 _HOURS = re.compile(r"\b(\d{1,3})\s*(?:h\b|horas?|hours?|heures?)\b")
@@ -284,8 +369,16 @@ def age_months_in(text: str) -> int | None:
 
     "3 semanas" and "20 dias" both round DOWN to 0 months, which is the safe
     direction: it keeps a neonate under the <3 months rule.
+
+    Known limit, kept on purpose: a DURATION written like an age ("lleva 2
+    dias con fiebre", "fever for two days") reads as an age, and so makes the
+    fever rule fire for an older baby. Digits always did this; number words
+    ("dos", "two", "deux") now do too. Telling "mi bebe de dos semanas con
+    fiebre" (a neonate) from "dos semanas con fiebre" (a duration) takes more
+    than a regex, and the wrong answer in the neonate's direction is the one
+    this module exists to avoid. A false positive costs a phone call.
     """
-    n = normalize(text)
+    n = _NUMBER_WORD_BEFORE_AGE_UNIT.sub(lambda m: str(_NUMBER_WORDS[m.group(1)]), normalize(text))
     if (m := _AGE_MONTHS.search(n)) is not None:
         return int(m.group(1))
     if (m := _AGE_WEEKS.search(n)) is not None:
@@ -305,7 +398,10 @@ def temperature_in(text: str) -> float | None:
         whole, frac = (a_whole or b_whole), (a_frac or b_frac)
         if whole:
             values.append(float(f"{whole}.{frac or 0}"))
-    if not values and _FEVER_WORDS.search(n):
+    for m in _TEMPERATURE_F.finditer(n):
+        fahrenheit = float(f"{m.group(1)}.{m.group(2) or 0}")
+        values.append(round((fahrenheit - 32) * 5 / 9, 1))
+    if not values and (_FEVER_WORDS.search(n) or _THERMOMETER.search(n)):
         values.extend(float(m.group(1)) for m in _TEMPERATURE_BARE.finditer(n))
     return max(values) if values else None
 
