@@ -9,7 +9,7 @@
     {
       "source_type": "guideline",
       "title": "Recomendaciones de la Asociación Española de Pediatría sobre la Alimentación Complementaria",
-      "organization": "Asociación Española de Pediatría (Comité de Lactancia Materna y Comité de Nutrición)",
+      "organization": "Asociación Española de Pediatría",
       "publication_year": 2018,
       "url": "https://www.aeped.es/publicaciones/protocolos/recomendaciones-aep-sobre-alimentacion",
       "specialties": [
@@ -28,7 +28,7 @@
     {
       "source_type": "guideline",
       "title": "Lactancia materna en niños mayores o \"prolongada\"",
-      "organization": "Comité de Lactancia Materna, Asociación Española de Pediatría",
+      "organization": "Asociación Española de Pediatría",
       "publication_year": 2015,
       "url": "https://www.aeped.es/publicaciones/protocolos/lactancia-materna-en-ninos-mayores-o",
       "specialties": [
@@ -136,7 +136,7 @@
     {
       "source_type": "reference",
       "title": "El segundo año de vida. Consejos de los 12 a los 24 meses",
-      "organization": "Familia y Salud (Asociación Española de Pediatría de Atención Primaria, AEPap)",
+      "organization": "Asociación Española de Pediatría de Atención Primaria (AEPap)",
       "publication_year": 2020,
       "url": "https://www.familiaysalud.es/crecemos/el-segundo-ano/el-segundo-ano-de-vida-consejos-de-los-12-los-24-meses",
       "specialties": [
@@ -171,7 +171,7 @@
     {
       "source_type": "guideline",
       "title": "Les nouvelles recommandations du PNNS sur la diversification alimentaire",
-      "organization": "Comité de nutrition de la Société française de pédiatrie; Perfectionnement en Pédiatrie 2022;5(2):127-133 (Elsevier Masson /",
+      "organization": "Société française de pédiatrie",
       "publication_year": 2022,
       "url": "https://doi.org/10.1016/j.perped.2022.04.005",
       "specialties": [
@@ -190,7 +190,7 @@
     {
       "source_type": "guideline",
       "title": "Diversification alimentaire : évolution des concepts et recommandations",
-      "organization": "Comité de nutrition de la Société française de pédiatrie (Archives de Pédiatrie, Elsevier Masson)",
+      "organization": "Société française de pédiatrie",
       "publication_year": 2015,
       "url": "https://doi.org/10.1016/j.arcped.2015.02.018",
       "specialties": [
@@ -209,7 +209,7 @@
     {
       "source_type": "guideline",
       "title": "Allaitement maternel : les bénéfices pour la santé de l'enfant et de sa mère",
-      "organization": "Comité de nutrition de la Société française de pédiatrie (Archives de Pédiatrie, Elsevier Masson)",
+      "organization": "Société française de pédiatrie",
       "publication_year": 2013,
       "url": "https://doi.org/10.1016/S0929-693X(13)72251-6",
       "specialties": [
@@ -227,7 +227,7 @@
     {
       "source_type": "guideline",
       "title": "Fer et nutrition",
-      "organization": "Archives de Pédiatrie (groupe de travail sur le fer de la Société française de pédiatrie)",
+      "organization": "Société française de pédiatrie",
       "publication_year": 2017,
       "url": "https://doi.org/10.1016/S0929-693X(17)24006-8",
       "specialties": [
@@ -298,7 +298,7 @@
     {
       "source_type": "reference",
       "title": "Feeding & Nutrition Tips: Your 1-Year-Old (HealthyChildren.org)",
-      "organization": "American Academy of Pediatrics (HealthyChildren.org)",
+      "organization": "American Academy of Pediatrics",
       "publication_year": 2020,
       "url": "https://www.healthychildren.org/English/ages-stages/toddler/nutrition/Pages/Feeding-and-Nutrition-Your-One-Year-Old.aspx",
       "specialties": [
@@ -315,7 +315,7 @@
     {
       "source_type": "guideline",
       "title": "Bright Futures: Nutrition, 3rd Edition. Nutrition Supervision: Early Childhood",
-      "organization": "American Academy of Pediatrics (Bright Futures)",
+      "organization": "American Academy of Pediatrics",
       "publication_year": 2011,
       "url": "https://downloads.aap.org/AAP/PDF/Bright%20Futures/BFNutrition3rdEditionSupervision.pdf",
       "specialties": [
@@ -333,7 +333,7 @@
     {
       "source_type": "reference",
       "title": "10 Tips for Parents of Picky Eaters (HealthyChildren.org)",
-      "organization": "American Academy of Pediatrics, Committee on Nutrition (HealthyChildren.org)",
+      "organization": "American Academy of Pediatrics",
       "publication_year": 2018,
       "url": "https://www.healthychildren.org/English/ages-stages/toddler/nutrition/Pages/Picky-Eaters.aspx",
       "specialties": [
@@ -601,7 +601,7 @@
     {
       "source_type": "paper",
       "title": "Population-based study of the impact of childcare attendance on hospitalizations for acute respiratory infections",
-      "organization": "Pediatrics",
+      "organization": "Pediatrics (American Academy of Pediatrics)",
       "publication_year": 2006,
       "url": "https://doi.org/10.1542/peds.2006-0373",
       "specialties": [
@@ -896,7 +896,7 @@
     {
       "source_type": "guideline",
       "title": "Iron Requirements of Infants and Toddlers (ESPGHAN Committee on Nutrition position paper)",
-      "organization": "Journal of Pediatric Gastroenterology and Nutrition (ESPGHAN)",
+      "organization": "European Society for Paediatric Gastroenterology, Hepatology and Nutrition (ESPGHAN)",
       "publication_year": 2014,
       "url": "https://doi.org/10.1097/MPG.0000000000000206",
       "specialties": [
@@ -914,7 +914,7 @@
     {
       "source_type": "guideline",
       "title": "Diagnosis and Prevention of Iron Deficiency and Iron-Deficiency Anemia in Infants and Young Children (0-3 Years of Age)",
-      "organization": "Pediatrics (American Academy of Pediatrics, Committee on Nutrition)",
+      "organization": "American Academy of Pediatrics",
       "publication_year": 2010,
       "url": "https://doi.org/10.1542/peds.2010-2576",
       "specialties": [

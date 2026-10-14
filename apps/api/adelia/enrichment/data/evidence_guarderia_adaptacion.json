@@ -95,7 +95,7 @@
       "source_type": "guideline",
       "title": "Das Berliner Eingewöhnungsmodell (Modelo de adaptación de Berlín)",
       "organization": "socialnet Lexikon",
-      "publication_year": null,
+      "publication_year": 2021,
       "url": "https://www.socialnet.de/lexikon/Berliner-Eingewoehnungsmodell",
       "specialties": [
         "pediatrics",
@@ -111,8 +111,8 @@
     {
       "source_type": "guideline",
       "title": "Separation Anxiety and Stranger Anxiety (guía clínica para pediatras/familias)",
-      "organization": "https://www",
-      "publication_year": null,
+      "organization": "American Academy of Pediatrics",
+      "publication_year": 2026,
       "url": "https://www.healthychildren.org/English/ages-stages/toddler/Pages/Soothing-Your-Childs-Separation-Anxiety.aspx",
       "specialties": [
         "pediatrics",
@@ -264,7 +264,7 @@
     {
       "source_type": "guideline",
       "title": "Statutory Framework for the Early Years Foundation Stage (EYFS) — for group and school-based providers, efectivo desde enero 2024",
-      "organization": "GOV",
+      "organization": "GOV.UK",
       "publication_year": 2024,
       "url": "https://www.gov.uk/government/publications/early-years-foundation-stage-framework--2",
       "specialties": [
@@ -298,7 +298,7 @@
     {
       "source_type": "paper",
       "title": "Impact of early daycare on healthcare resource use related to upper respiratory tract infections during childhood: prospective WHISTLER cohort study",
-      "organization": "BMC Medicine 12:107",
+      "organization": "BMC Medicine",
       "publication_year": 2014,
       "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC4098954/",
       "specialties": [
@@ -315,7 +315,7 @@
     {
       "source_type": "paper",
       "title": "Symptom Burden and Factors Associated with Acute Respiratory Infections in the First Two Years of Life — Results from the LoewenKIDS Cohort",
-      "organization": "Microorganisms 10(1):111",
+      "organization": "Microorganisms",
       "publication_year": 2022,
       "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC8781593/",
       "specialties": [
@@ -332,7 +332,7 @@
     {
       "source_type": "guideline",
       "title": "IMCI Chart Booklet — Assess & Classify the Sick Child, Give Extra Fluid and Continue Feeding",
-      "organization": "WHO",
+      "organization": "World Health Organization (WHO)",
       "publication_year": 2014,
       "url": "https://cdn.who.int/media/docs/default-source/mca-documents/child/imci-integrated-management-of-childhood-illness/imci-in-service-training/imci-chart-booklet.pdf",
       "specialties": [
@@ -349,7 +349,7 @@
     {
       "source_type": "guideline",
       "title": "Fever in under 5s: assessment and initial management (NG143)",
-      "organization": "NICE Guideline NG143",
+      "organization": "National Institute for Health and Care Excellence (NICE)",
       "publication_year": 2019,
       "url": "https://www.nice.org.uk/guidance/ng143",
       "specialties": [
@@ -366,7 +366,7 @@
     {
       "source_type": "guideline",
       "title": "Guía de Algoritmos en Pediatría de Atención Primaria: Falta de apetito",
-      "organization": "AEPap (Asociación Española de Pediatría de Atención Primaria)",
+      "organization": "Asociación Española de Pediatría de Atención Primaria (AEPap)",
       "publication_year": 2016,
       "url": "https://algoritmos.aepap.org/algoritmo/23/falta-de-apetito",
       "specialties": [
@@ -400,7 +400,7 @@
     {
       "source_type": "paper",
       "title": "Immunological Mechanisms of Sickness Behavior in Viral Infection",
-      "organization": "Viruses 13(11):2245",
+      "organization": "Viruses",
       "publication_year": 2021,
       "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC8624889/",
       "specialties": [
@@ -417,7 +417,7 @@
     {
       "source_type": "paper",
       "title": "La adaptación a la escuela: un camino a recorrer",
-      "organization": "Familia y Salud (AEPap)",
+      "organization": "Asociación Española de Pediatría de Atención Primaria (AEPap)",
       "publication_year": 2018,
       "url": "https://www.familiaysalud.es/salud-y-escuela/educacion-infantil-0/temas-psicoeducativos/la-adaptacion-la-escuela-un-camino",
       "specialties": [
@@ -451,7 +451,7 @@
     {
       "source_type": "guideline",
       "title": "¿Cuándo no deben ir los niños a la guardería?",
-      "organization": "Familia y Salud (AEPap)",
+      "organization": "Asociación Española de Pediatría de Atención Primaria (AEPap)",
       "publication_year": 2013,
       "url": "https://www.familiaysalud.es/sintomas-y-enfermedades/infecciones/de-la-la-g/cuando-no-deben-ir-los-ninos-la-guarderia",
       "specialties": [
@@ -468,7 +468,7 @@
     {
       "source_type": "guideline",
       "title": "Mi bebé empieza la guardería, ¿cómo puedo mantener la lactancia materna?",
-      "organization": "Familia y Salud (AEPap)",
+      "organization": "Asociación Española de Pediatría de Atención Primaria (AEPap)",
       "publication_year": 2022,
       "url": "https://www.familiaysalud.es/vivimos-sanos/lactancia-materna/seguimos-creciendo/mi-bebe-empieza-la-guarderia-como-puedo-mantener",
       "specialties": [
@@ -573,7 +573,7 @@
     {
       "source_type": "guideline",
       "title": "Complementary Feeding: A Position Paper by the ESPGHAN Committee on Nutrition",
-      "organization": "ESPGHAN / Journal of Pediatric Gastroenterology and Nutrition",
+      "organization": "European Society for Paediatric Gastroenterology, Hepatology and Nutrition (ESPGHAN)",
       "publication_year": 2017,
       "url": "https://doi.org/10.1097/MPG.0000000000001454",
       "specialties": [
@@ -591,7 +591,7 @@
     {
       "source_type": "guideline",
       "title": "Prevención de la ferropenia en lactantes (Guía de Algoritmos en Pediatría de Atención Primaria)",
-      "organization": "AEPap",
+      "organization": "Asociación Española de Pediatría de Atención Primaria (AEPap)",
       "publication_year": 2015,
       "url": "https://algoritmos.aepap.org/adjuntos/ferropenia.pdf",
       "specialties": [
@@ -609,7 +609,7 @@
     {
       "source_type": "guideline",
       "title": "WHO Guideline for complementary feeding of infants and young children 6-23 months of age",
-      "organization": "Organización Mundial de la Salud",
+      "organization": "World Health Organization (WHO)",
       "publication_year": 2023,
       "url": "https://www.who.int/publications/i/item/9789240081864",
       "specialties": [
@@ -645,7 +645,7 @@
     {
       "source_type": "guideline",
       "title": "The Diagnosis and Management of Acute Otitis Media (AAP clinical practice guideline)",
-      "organization": "American Academy of Pediatrics / Pediatrics",
+      "organization": "American Academy of Pediatrics",
       "publication_year": 2013,
       "url": "https://doi.org/10.1542/peds.2012-3488",
       "specialties": [
