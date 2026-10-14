@@ -8,6 +8,7 @@ import {
   type ChatSessionDetail,
   type StreamEvent,
 } from "./chat-types";
+import { isLocalRedactionEnabled, redactOutgoingQuestion } from "./redaction/chat";
 
 export type {
   ChatMessage,
@@ -42,6 +43,12 @@ export async function deleteChatSession(id: string): Promise<void> {
  * `profileId` is which child the question is about. The API resolves null to
  * the account's default profile, and the answer, the age that gates the red
  * flags and the citations are then all about the same child (audit 4.1, 4.2).
+ *
+ * This is the one place the question leaves the browser for the chat API, so it
+ * is the one call site of local redaction (lib/redaction/chat.ts). That is
+ * behind NEXT_PUBLIC_LOCAL_REDACTION, which is OFF: with it off `redaction` is
+ * null, the body below is exactly what it always was and the stream is passed
+ * through untouched.
  */
 export async function* streamChat(
   question: string,
@@ -50,6 +57,9 @@ export async function* streamChat(
   signal?: AbortSignal,
   profileId?: string | null,
 ): AsyncGenerator<StreamEvent> {
+  const redaction = isLocalRedactionEnabled()
+    ? await redactOutgoingQuestion(question, sessionId)
+    : null;
   const res = await fetch("/api/backend/chat", {
     method: "POST",
     headers: {
@@ -58,7 +68,7 @@ export async function* streamChat(
     },
     body: JSON.stringify({
       session_id: sessionId,
-      question,
+      question: redaction ? redaction.question : question,
       locale,
       profile_id: profileId ?? null,
     }),
@@ -76,12 +86,15 @@ export async function* streamChat(
     const { done, value } = await reader.read();
     if (done) break;
     buffer += decoder.decode(value, { stream: true });
-    yield* parseBufferBlocks(() => buffer, (rest) => { buffer = rest; });
+    const events = parseBufferBlocks(() => buffer, (rest) => { buffer = rest; });
+    yield* redaction ? redaction.events(events) : events;
   }
   // Flush trailing partial block — if the server's final SSE message
   // doesn't end with \n\n (some proxies strip it), we'd otherwise drop
   // the 'final' event and its citations silently.
   if (buffer.trim()) {
-    yield* parseBufferBlocks(() => buffer + "\n\n", (rest) => { buffer = rest; });
+    const events = parseBufferBlocks(() => buffer + "\n\n", (rest) => { buffer = rest; });
+    yield* redaction ? redaction.events(events) : events;
   }
+  if (redaction) yield* redaction.finish();
 }
