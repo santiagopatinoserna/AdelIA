@@ -1,9 +1,42 @@
 from datetime import date as date_type, datetime
 from enum import Enum
-from typing import Literal
+from typing import Literal, get_args
 from uuid import UUID
 
 from pydantic import BaseModel, ConfigDict, Field
+
+
+DropReason = Literal["schema_invalid", "quote_not_verbatim", "validation_error", "duplicate"]
+DROP_REASONS: tuple[str, ...] = get_args(DropReason)
+
+
+class ExtractionReport(BaseModel):
+    """What the extractor did with the model's reply, so a thin record has a reason.
+
+    Every entity the extractor discarded used to vanish with a `continue` and
+    a log line nobody joined to a document (the audit flagged it): a child's
+    record came out thinner and nothing said why. The counts separate
+    "the model broke the shape" (schema_invalid, validation_error) from "the
+    model invented a quote" (quote_not_verbatim) and from harmless repetition
+    (duplicate), which are very different problems to fix.
+
+    Invariant: received == kept + sum(dropped.values()). `ambiguous_quote` is
+    NOT a drop: those entities are kept (their quote is verbatim) but have no
+    single place in the document, see workers.extract.locate_quote.
+    """
+
+    path: Literal["json_schema", "json_object"] = "json_object"
+    received: int = 0
+    kept: int = 0
+    dropped: dict[str, int] = Field(default_factory=lambda: dict.fromkeys(DROP_REASONS, 0))
+    ambiguous_quote: int = 0
+    # True when the reply carried no usable {"entities": [...]} at all, so
+    # `received == 0` means "unreadable", not "the document had no facts".
+    unusable_reply: bool = False
+
+    @property
+    def dropped_total(self) -> int:
+        return sum(self.dropped.values())
 
 
 class DocumentOut(BaseModel):
@@ -24,6 +57,10 @@ class DocumentOut(BaseModel):
     summary: str | None = None
     # Daily diary entries (Telegram-first): ISO date the entry is about.
     diary_date: str | None = None
+    # What the extractor kept and discarded for this document (the audit
+    # flagged the silent drops). None for documents processed before this
+    # existed and for pipelines that fail before extraction.
+    extraction: ExtractionReport | None = None
 
     model_config = ConfigDict(from_attributes=True)
 
