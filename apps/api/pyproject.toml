@@ -38,6 +38,7 @@ dev = [
     "httpx>=0.27",
     "ruff>=0.15.16",
     "reportlab>=4.5.1",
+    "pytest-timeout>=2.4.0",
 ]
 
 [build-system]
@@ -47,6 +48,11 @@ build-backend = "hatchling.build"
 [tool.pytest.ini_options]
 asyncio_mode = "auto"
 testpaths = ["tests"]
+# Per-test ceiling (pytest-timeout). The suite talks to Postgres and MinIO, and
+# to live APIs when keys exist, so an unattended run can hang on a socket. The
+# slowest local test takes ~1.4s, so 120s only ever fires on a real hang. A test
+# that legitimately needs longer takes @pytest.mark.timeout(n); do not raise this.
+timeout = 120
 
 [tool.ruff]
 line-length = 100
