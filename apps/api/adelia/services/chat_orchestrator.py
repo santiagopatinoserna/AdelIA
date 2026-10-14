@@ -197,6 +197,8 @@ async def _retrieve_evidence_for_query(
     query_embedding: list[float] | None,
     *,
     top_k: int = 4,
+    query_text: str | None = None,
+    locale: str | None = None,
 ) -> list[EvidenceMatch]:
     """Best-effort evidence retrieval. Returns [] on any error (graceful degradation).
 
@@ -212,6 +214,9 @@ async def _retrieve_evidence_for_query(
     search over all of them returned anticoagulation or cancer-screening
     fragments labelled "Clinical evidence" in an app about a baby. All 110
     pediatric sources carry the tag; the 8 adult ones do not.
+
+    `query_text` and `locale` feed the lexical half of hybrid retrieval and do
+    nothing while settings.retrieval_hybrid_enabled is off (the default).
     """
     if query_embedding is None:
         return []
@@ -223,6 +228,8 @@ async def _retrieve_evidence_for_query(
                 specialties=["pediatrics"],
                 top_k=top_k,
                 max_distance=settings.evidence_max_distance,
+                query_text=query_text,
+                locale=locale,
             )
     except Exception as e:
         logger.warning("evidence retrieval failed (continuing without): %s", e)
@@ -338,6 +345,12 @@ async def answer_question_streaming(
                 query_embedding=query_embedding,
                 top_k=8,
                 max_distance=settings.patient_max_distance,
+                # The lexical half matches the words she just typed. The
+                # history tail in `retrieval_query` is for the embedding, which
+                # needs the conversation to resolve "and at 8 months?"; fed to
+                # a keyword search it would only dilute the question.
+                query_text=question,
+                locale=locale,
             )
             patient_context = _format_rag_context(chunks)
             for c in chunks:
@@ -351,7 +364,9 @@ async def answer_question_streaming(
                 )
 
         # Dual-RAG: parallel evidence retrieval
-        evidence_matches = await _retrieve_evidence_for_query(query_embedding)
+        evidence_matches = await _retrieve_evidence_for_query(
+            query_embedding, query_text=question, locale=locale
+        )
         evidence_block = format_evidence_for_prompt(evidence_matches)
         evidence_citations = evidence_citations_for_response(evidence_matches)
 

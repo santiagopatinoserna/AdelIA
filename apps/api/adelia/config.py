@@ -72,6 +72,21 @@ class Settings(BaseSettings):
     # production holds 0 patient documents; re-measure once real ones exist.
     patient_max_distance: float = 0.45
 
+    # Hybrid retrieval: pgvector cosine search cross-checked by Postgres
+    # full-text search and fused by Reciprocal Rank Fusion (services/fusion.py,
+    # wired in enrichment/evidence_retrieval.py and services/retrieval.py).
+    #
+    # OFF by default and it stays off until the eval harness says the fused
+    # order is better than the vector one: a retrieval change moves what the
+    # model is allowed to cite about a baby, so it is not flipped on a hunch.
+    # With the flag off both retrieval functions run the exact SQL they ran
+    # before it existed, and no lexical query is issued.
+    #
+    # The flag changes the ORDER of what survives the cut-offs above, never
+    # which fragments survive: evidence_max_distance and patient_max_distance
+    # remain the only admission control (see evidence_retrieval for why).
+    retrieval_hybrid_enabled: bool = False
+
     # STT (speech-to-text). "mistral" = Voxtral (UE por defecto, diarización);
     # "openai" = whisper-1 (sin diarización). Voxtral reusa mistral_api_key.
     stt_provider: str = "mistral"  # "mistral" | "openai"
