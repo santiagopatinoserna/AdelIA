@@ -274,3 +274,25 @@ def test_the_rendered_header_never_prints_a_zero_age():
         html = render_briefing_html(payload)
         assert needle in html, locale
         assert "0 años" not in html and "0 years" not in html
+
+
+@pytest.mark.asyncio
+async def test_the_briefing_passes_the_relative_margin_from_the_setting():
+    from adelia.config import settings
+    from adelia.services import briefing_orchestrator
+
+    with patch.object(
+        briefing_orchestrator, "embed_texts", new_callable=AsyncMock
+    ) as embed, patch.object(
+        briefing_orchestrator, "retrieve_evidence", new_callable=AsyncMock
+    ) as retrieve, patch.object(
+        briefing_orchestrator, "AsyncSessionLocal"
+    ):
+        embed.return_value = [[0.1] * 1024]
+        retrieve.return_value = []
+
+        await briefing_orchestrator._retrieve_specialty_evidence(
+            target_specialty=Specialty.DEFAULT, entities_text="Hb 10.5"
+        )
+
+    assert retrieve.call_args.kwargs["relative_margin"] == settings.evidence_relative_margin

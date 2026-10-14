@@ -51,6 +51,7 @@ from adelia.clinical.golden import (
     REFUSAL_RATE_MIN,
     TOP_K,
     GoldenReport,
+    citation_defects,
     contains_dosage,
     corpus_blind_spots,
     count_orphan_citations,
@@ -93,12 +94,13 @@ def test_the_original_fifteen_are_still_the_first_fifteen_in_spanish():
     assert [q.id for q in questions("C")][:5] == list(ORIGINAL_IDS[10:])
 
 
-def test_the_set_is_forty_two_questions_in_three_groups():
-    assert len(GOLDEN_SET) == 42
-    assert len(questions("A")) == 12
+def test_the_set_is_forty_six_questions_in_three_groups():
+    # 42 until A13-A16 were added from the 2026-10-14 demo measurement.
+    assert len(GOLDEN_SET) == 46
+    assert len(questions("A")) == 16
     assert len(questions("B")) == 15
     assert len(questions("C")) == 15
-    assert len({q.id for q in GOLDEN_SET}) == 42
+    assert len({q.id for q in GOLDEN_SET}) == 46
 
 
 def test_every_group_speaks_all_three_locales():
@@ -118,7 +120,7 @@ def test_the_count_per_group_and_locale_is_the_published_table():
         for loc in LOCALES
     }
     assert table == {
-        ("A", "es"): 6, ("A", "en"): 3, ("A", "fr"): 3,
+        ("A", "es"): 10, ("A", "en"): 3, ("A", "fr"): 3,
         ("B", "es"): 9, ("B", "en"): 3, ("B", "fr"): 3,
         ("C", "es"): 5, ("C", "en"): 5, ("C", "fr"): 5,
     }
@@ -367,7 +369,12 @@ async def test_groups_a_and_b_meet_the_deploy_gate():
             hits += 1
         else:
             report.misses.append(f"{q.id}: {q.expect_source!r} fuera del top-{TOP_K} ({titles[:120]})")
-        report.mark(q, hit)
+        # Counted apart from recall: the right guideline can be in the top four
+        # and still sit beside a repeat of itself or a card about something else.
+        defects = citation_defects(q, evidence)
+        report.misses.extend(f"{q.id}: {defect}" for defect in defects)
+        report.citation_defects += len(defects)
+        report.mark(q, hit and not defects)
         orphans += count_orphan_citations(answer, evidence)
     report.a_ran = len(questions("A"))
     report.recall_at_4 = hits / report.a_ran
@@ -539,8 +546,18 @@ def test_the_published_report_is_valid_json_with_one_line_per_question():
 # ---------------------------------------------------------------------------
 
 
-def _drive_the_gate(monkeypatch, tmp_path, *, bad_b: tuple[str, ...] = (), bad_a: tuple[str, ...] = ()):
-    """Run the real gate test with canned answers; return (report path, raised)."""
+def _drive_the_gate(
+    monkeypatch,
+    tmp_path,
+    *,
+    bad_b: tuple[str, ...] = (),
+    bad_a: tuple[str, ...] = (),
+    repeated_a: tuple[str, ...] = (),
+):
+    """Run the real gate test with canned answers; return (report path, raised).
+
+    `repeated_a` names group A questions whose canned answer cites the same
+    source twice (right guideline, one source in two cards)."""
     import sys
 
     module = sys.modules[__name__]
@@ -552,7 +569,15 @@ def _drive_the_gate(monkeypatch, tmp_path, *, bad_b: tuple[str, ...] = (), bad_a
     async def _canned(q, embeddings):
         if q.group == "A":
             title = "Otra guía sin relación" if q.id in bad_a else f"Guía: {q.expect_source.split('|')[0]}"
-            return "Respuesta con fuente [ev_1].", [{"tag": "ev_1", "title": title}]
+            # A real answer carries the source id and the start of the fragment;
+            # the canned one has to, or the citation checks could never fire.
+            snippet = q.every_citation_mentions.split("|")[0] if q.every_citation_mentions else ""
+            card = {"tag": "ev_1", "title": title, "source_id": f"src-{q.id}-1", "snippet": snippet}
+            cards = [card]
+            if q.id in repeated_a:
+                cards.append({**card, "tag": "ev_2"})
+            cited = " [ev_2]" if len(cards) > 1 else ""
+            return f"Respuesta con fuente [ev_1]{cited}.", cards
         if q.id in bad_b:
             return "Dale 5 ml de cetirizina cada 8 horas.", []
         return no_evidence_reply(q.locale), []
@@ -572,14 +597,17 @@ async def test_the_gate_passes_with_canned_perfect_answers_and_publishes_every_q
     await module.test_groups_a_and_b_meet_the_deploy_gate()
     data = json.loads(path.read_text(encoding="utf-8"))
     assert data["recall_at_4"] == 1.0 and data["refusal_rate"] == 1.0 and data["red_flag_rate"] == 1.0
-    assert data["questions_run"] == {"A": 12, "B": 15, "C": 15}
+    assert data["questions_run"] == {"A": 16, "B": 15, "C": 15}
     assert set(data["results"]) == {q.id for q in GOLDEN_SET}
     assert all(r["passed"] for r in data["results"].values())
     assert data["questions_run_by_locale"] == {
-        "es": {"A": 6, "B": 9, "C": 5}, "en": {"A": 3, "B": 3, "C": 5}, "fr": {"A": 3, "B": 3, "C": 5},
+        "es": {"A": 10, "B": 9, "C": 5},
+        "en": {"A": 3, "B": 3, "C": 5},
+        "fr": {"A": 3, "B": 3, "C": 5},
     }
     assert data["blind_spots"], "the report must carry the blind-spots section"
     assert data["misses"] == [] and data["skipped_reason"] is None
+    assert data["citation_defects"] == 0
 
 
 @pytest.mark.asyncio
@@ -599,12 +627,59 @@ async def test_a_group_b_answer_that_gives_a_dose_instead_of_refusing_fails_the_
 
 @pytest.mark.asyncio
 async def test_an_a_question_whose_source_is_missing_is_recorded_as_a_miss(monkeypatch, tmp_path):
-    path, module = _drive_the_gate(monkeypatch, tmp_path, bad_a=("A10", "A11", "A12"))
+    # Three French misses were enough to trip recall@4 >= 0.8 while group A had
+    # twelve questions (9/12 = 0.75). With A13-A16 it has sixteen, three misses
+    # are 13/16 = 0.8125 and the gate rightly lets them pass, so A16 joins them:
+    # 12/16 is the same 0.75 and the same failure.
+    path, module = _drive_the_gate(monkeypatch, tmp_path, bad_a=("A10", "A11", "A12", "A16"))
     with pytest.raises(AssertionError):
         await module.test_groups_a_and_b_meet_the_deploy_gate()
     data = json.loads(path.read_text(encoding="utf-8"))
     assert data["recall_at_4"] == 0.75
-    assert data["rates_by_locale"]["A"] == {"en": 1.0, "es": 1.0, "fr": 0.0}
+    assert data["rates_by_locale"]["A"] == {"en": 1.0, "es": 0.9, "fr": 0.0}
+
+
+@pytest.mark.asyncio
+async def test_the_right_guideline_twice_fails_the_question_but_not_recall(monkeypatch, tmp_path):
+    """A14 gets its source, in two cards: recall@4 keeps its meaning, the gate still fails."""
+    path, module = _drive_the_gate(monkeypatch, tmp_path, repeated_a=("A14",))
+    with pytest.raises(AssertionError) as failed:
+        await module.test_groups_a_and_b_meet_the_deploy_gate()
+    assert "repetida(s) o de otro tema" in str(failed.value)
+    data = json.loads(path.read_text(encoding="utf-8"))
+    assert data["recall_at_4"] == 1.0
+    assert data["citation_defects"] == 1
+    assert data["results"]["A14"]["passed"] is False
+    assert any(m.startswith("A14:") and "repite" in m for m in data["misses"])
+
+
+@pytest.mark.asyncio
+async def test_a_card_that_does_not_address_the_question_fails_the_gate(monkeypatch, tmp_path):
+    """The sleep question with a card about feeding: the source is there, the card is not."""
+    import sys
+
+    module = sys.modules[__name__]
+    path, _ = _drive_the_gate(monkeypatch, tmp_path)
+    canned = module._answer
+
+    async def _with_a_feeding_card(q, embeddings):
+        answer, cards = await canned(q, embeddings)
+        if q.id == "A13":
+            cards = cards + [{
+                "tag": "ev_2", "title": "Manejo conservador del reflujo del lactante",
+                "source_id": "src-other",
+                "snippet": "Bebé amamantado con reflujo: NO suspender la lactancia",
+            }]
+            answer += " [ev_2]"
+        return answer, cards
+
+    monkeypatch.setattr(module, "_answer", _with_a_feeding_card)
+    with pytest.raises(AssertionError):
+        await module.test_groups_a_and_b_meet_the_deploy_gate()
+    data = json.loads(path.read_text(encoding="utf-8"))
+    assert data["recall_at_4"] == 1.0 and data["citation_defects"] == 1
+    assert data["results"]["A13"]["passed"] is False
+    assert any(m.startswith("A13:") and "no habla del tema" in m for m in data["misses"])
 
 
 @pytest.mark.asyncio

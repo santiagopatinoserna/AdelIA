@@ -178,6 +178,66 @@ tocar código. Si las dos poblaciones se solapan, un umbral de distancia no bast
 y hace falta un segundo filtro (reranker o juez binario barato), como decía la
 auditoría.
 
+## Criterio relativo y una cita por fuente (14 de octubre de 2026)
+
+El corte absoluto de arriba no se ha tocado. Medido ese día en la demo pública
+(127 fuentes, 301 fragmentos), dejaba pasar dos cosas que un número fijo no puede
+ver:
+
+* **La misma fuente en varias tarjetas.** La guía de la AAP 2022 ocupó 3 de las 4
+  citas de la pregunta sobre muerte súbita, NICE 2019 (reflujo) 2 de las 4 de la
+  de regurgitación y la guía de AEPap sobre la adaptación 2 de las 4 de la de
+  guardería. La interfaz dice "fuentes citadas", así que cuatro tarjetas con dos
+  fuentes aparentan una concordancia que no existe.
+* **Relleno.** Con una sola fuente buena, las otras plazas se llenan con lo
+  siguiente que haya dentro de 0,19, sea o no del tema.
+
+`retrieve_evidence` ahora hace dos cosas más sobre lo que el corte absoluto
+admitió, y ninguna puede admitir nada nuevo:
+
+1. **Margen relativo** (`settings.evidence_relative_margin`, 0,08): se descarta un
+   fragmento cuya distancia supera en más de ese margen a la del mejor fragmento
+   de la misma consulta. Los tres puntos de llamada (chat, demo, briefings) lo
+   pasan; la función sin argumento no aplica criterio relativo, porque un vector
+   almacenado usado como consulta se encuentra a sí mismo a 0,0 y fijaría el
+   margen en cero, que es lo que hacen las pruebas de calibración de arriba.
+2. **Una cita por `source_id`**: se queda el mejor fragmento de cada fuente y se
+   sigue bajando por la lista hasta completar `top_k` fuentes distintas. Si hay
+   menos, se devuelven menos tarjetas. Se deduplica por `source_id` y nunca por
+   título (hay títulos repetidos entre fuentes distintas), y el fragmento que se
+   cita es exactamente el que lee el modelo.
+
+### Cómo se eligió 0,08, y qué no se comprobó
+
+No había clave de embeddings donde se escribió, así que no se pudo embeber ninguna
+pregunta real. Lo que sí se midió es el corpus de dev (tema reflujo: 7 fuentes, 14
+fragmentos como sondas, cada uno contra las otras seis fuentes, la misma
+aproximación fragmento-como-consulta de este documento). La 2ª, 3ª y 4ª mejor
+fuente del mismo tema quedan, como mucho, a 0,0479, 0,0499 y 0,0557 de la mejor
+(p90 0,0472, 0,0491 y 0,0551). 0,08 es 1,4 veces la mayor, de modo que en esa
+muestra no quita ninguna fuente legítima. Es un suelo de laxitud, no un valor
+ajustado.
+
+Lo que **no** se comprobó, y hay que hacer con clave:
+
+* Una pregunta corta se aleja más de un pasaje que un pasaje de otro pasaje, así
+  que la dispersión real puede ser mayor.
+* Con un mejor fragmento ya malo (0,12 o más) el margen no hace nada, porque
+  0,12 + 0,08 supera 0,19.
+* **No se sabe si quita la cita de reflujo de la pregunta sobre muerte súbita.**
+  El fragmento 2 de NICE NG1 ("Posición para dormir en el bebé con reflujo:
+  SIEMPRE boca arriba (supino) por el riesgo de muerte súbita del lactante")
+  trata justo de eso, y es el único de esa fuente que habla de sueño. Si fue el
+  `ev_4` de la medición, la tarjeta llevaba un título de reflujo pero un texto
+  pertinente, y un buen margen no debería quitarla. Si fue uno de los otros dos
+  (tomas), sí. La comprobación del golden set (A13) se hace sobre el texto de cada
+  cita y no sobre el nombre de su fuente por esa razón.
+
+Para cerrarlo: lanzar las cuatro preguntas del golden set (A13 a A16) con una
+clave de dev, leer el campo `distance` de cada cita y mover
+`EVIDENCE_RELATIVE_MARGIN` si hace falta. Es una variable de entorno, como el
+corte absoluto.
+
 ## Qué pasa cuando no queda nada
 
 Calibrar el corte solo sirve si el rechazo es real. En

@@ -123,6 +123,40 @@ class Settings(BaseSettings):
     # filtered nothing at all: every question got four "clinical evidence"
     # fragments whether or not they were about the question.
     evidence_max_distance: float = 0.19
+    # Relative cut-off, applied on top of the absolute one: a fragment is dropped
+    # when its distance exceeds the BEST fragment's distance for the same query
+    # by more than this margin. Measured on the public demo on 2026-10-14, the
+    # absolute cut-off alone let a reflux guideline through as the fourth
+    # "evidence" of a question about sudden infant death: it was inside 0.19, so
+    # it passed. An absolute number says "close enough to the corpus", not
+    # "close enough to what this question found", and when only one or two
+    # sources are good the remaining slots get filled with the next best thing
+    # the corpus has. This one is anchored to the query's own best result, so a
+    # question with one good source returns one citation. Only the title of
+    # that fourth card was recorded: fragment 2 of that guideline (NICE NG1) is
+    # the sleeping-position advice, which IS about the question, so the card may
+    # have been legitimate; the margin is aimed at its feeding fragments.
+    #
+    # How 0.08 was chosen, and what it was NOT checked against. There is no
+    # embeddings key in the environment this was written in, so no mother's
+    # question could be embedded. What was measured is the dev corpus (reflux
+    # topic: 7 sources, 14 fragments used as probes, each against the other six
+    # sources, the same chunk-as-query proxy docs/CALIBRACION_UMBRAL_EVIDENCIA.md
+    # uses): the 2nd, 3rd and 4th best sources of the same topic sit at most
+    # 0.0479, 0.0499 and 0.0557 behind the best (p90 0.0472, 0.0491, 0.0551). The
+    # margin is 1.4 times the largest of them, so on that sample it removes none
+    # of the sources a question legitimately has, and that is what "conservative"
+    # means here: a wrongly dropped citation costs a card, a wrongly kept
+    # off-topic one costs the mother's trust. It is a floor on how loose it can
+    # be, not a fitted value. Short questions embed farther from a passage than a
+    # passage does from another passage (the calibration doc's own caveat), so
+    # the real spread may be wider; and a margin this wide does nothing when the
+    # best fragment is itself poor (best 0.12 + 0.08 is already past 0.19).
+    # Re-measure with `scripts/calibrate_answer_threshold.py --mode questions`
+    # once a dev key exists, and read the `distance` field of the citations the
+    # demo returns for the three 2026-10-14 questions. Tunable through
+    # EVIDENCE_RELATIVE_MARGIN without touching code, like the absolute cut.
+    evidence_relative_margin: float = 0.08
     # Patient chunks are the user's OWN documents and carry facts, not clinical
     # claims (the answer contract forbids interpreting them without an [ev_N]
     # citation), so this cut is deliberately looser: its job is to drop noise,

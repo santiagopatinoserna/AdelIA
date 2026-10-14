@@ -210,6 +210,7 @@ async def _retrieve_specialty_evidence(
                 specialties=["pediatrics"],
                 top_k=top_k,
                 max_distance=settings.evidence_max_distance,
+                relative_margin=settings.evidence_relative_margin,
             )
         prompt_block = format_evidence_for_prompt(matches)
         citation_dicts = evidence_citations_for_response(matches)

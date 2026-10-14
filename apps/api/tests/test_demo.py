@@ -253,3 +253,26 @@ async def test_a_very_long_question_is_refused_before_the_embedding(client):
 
     assert resp.status_code == 422
     embed.assert_not_called()
+
+
+@pg_only
+async def test_the_demo_passes_the_relative_margin_from_the_setting(client):
+    """The public demo is where the repeated and off-topic cards were measured
+    (2026-10-14); its retrieval call has to carry the margin."""
+    seen: dict = {}
+
+    async def _retrieve(session, **kwargs):
+        seen.update(kwargs)
+        return []
+
+    with patch("adelia.routers.demo.embed_texts", return_value=[[0.0] * 1024]), patch(
+        "adelia.routers.demo.retrieve_evidence", _retrieve
+    ):
+        resp = await client.post(
+            "/demo/ask",
+            json={"question": "¿Cómo debe dormir mi bebé?", "locale": "es"},
+        )
+
+    assert resp.status_code == 200, resp.text
+    assert seen["relative_margin"] == settings.evidence_relative_margin
+    assert seen["max_distance"] == settings.evidence_max_distance
