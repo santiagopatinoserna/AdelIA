@@ -1,6 +1,5 @@
 import type { Metadata } from "next";
-import { useTranslations, useLocale } from "next-intl";
-import { getTranslations } from "next-intl/server";
+import { getLocale, getTranslations } from "next-intl/server";
 import { Link } from "@/lib/navigation";
 import { LocaleSwitcher } from "@/components/locale-switcher";
 import {
@@ -28,7 +27,13 @@ import {
 } from "lucide-react";
 
 import { FunnelVisit, StartLink } from "@/components/funnel";
+import { getCorpusStats } from "@/lib/corpus-stats";
 import { publicPageAlternates } from "@/lib/seo";
+
+// Rendered per request, never frozen at build time: the corpus figures come
+// from the API (GET /clinical/corpus-stats), which is not running during
+// `next build`, and a page prerendered without them would stay that way.
+export const dynamic = "force-dynamic";
 
 const GITHUB_URL = "https://github.com/santiagopatinoserna/AdelIA";
 
@@ -71,9 +76,10 @@ function cited(text: string) {
   });
 }
 
-export default function HomePage() {
-  const t = useTranslations();
-  const locale = useLocale();
+export default async function HomePage() {
+  const t = await getTranslations();
+  const locale = await getLocale();
+  const stats = await getCorpusStats();
   const features = [
     { icon: ShieldCheck, title: t("home.feature1Title"), body: t("home.feature1Body") },
     { icon: Quote, title: t("home.feature2Title"), body: t("home.feature2Body") },
@@ -96,20 +102,49 @@ export default function HomePage() {
     { age: t("home.mixT4Age"), event: t("home.mixT4") },
     { age: t("home.mixT5Age"), event: t("home.mixT5") },
   ];
-  const evStats = [
-    { value: t("home.evStat1V"), label: t("home.evStat1L") },
-    { value: t("home.evStat2V"), label: t("home.evStat2L") },
-    { value: t("home.evStat3V"), label: t("home.evStat3L") },
-    { value: t("home.evStat4V"), label: t("home.evStat4L") },
+  // The figures are counted by the API in the database retrieval searches
+  // (audit 1.1); the catalogs hold only the words around them. Without an
+  // answer the tiles are left out and the table cell falls back to a sentence
+  // with no number, so the page can be incomplete but never wrong.
+  const number = new Intl.NumberFormat(locale);
+  const hasRange = stats !== null && stats.year_min !== null && stats.year_max !== null;
+  const evStats =
+    stats === null
+      ? []
+      : [
+          { value: number.format(stats.sources), label: t("home.evStat1L") },
+          { value: number.format(stats.chunks), label: t("home.evStat2L") },
+          ...(hasRange
+            ? [{ value: `${stats.year_min}–${stats.year_max}`, label: t("home.evStat3L") }]
+            : []),
+        ];
+  const corpusCell =
+    stats !== null && hasRange
+      ? t("home.vsR5A", {
+          count: stats.sources,
+          from: String(stats.year_min),
+          to: String(stats.year_max),
+        })
+      : t("home.vsR5AFallback");
+  // Institutions that stand behind at least one source in the corpus files.
+  // tests/test_evidence_files.py fails when one of these names has no source
+  // behind it, so the page cannot name an institution the corpus lacks.
+  // "OMS" is "WHO" in English.
+  const evOrgs = [
+    "NICE",
+    "American Academy of Pediatrics",
+    locale === "en" ? "WHO" : "OMS",
+    "Asociación Española de Pediatría",
+    "AEPap",
+    "NASPGHAN-ESPGHAN",
+    "Santé publique France",
   ];
-  // Real organizations present in the evidence corpus (verifiable in DB).
-  const evOrgs = ["NASPGHAN-ESPGHAN", "NICE", "CDC", "AHA", "ADA", "ESC", "GINA", "USPSTF"];
   const vsRows = [
     { l: t("home.vsR1L"), g: t("home.vsR1G"), a: t("home.vsR1A") },
     { l: t("home.vsR2L"), g: t("home.vsR2G"), a: t("home.vsR2A") },
     { l: t("home.vsR3L"), g: t("home.vsR3G"), a: t("home.vsR3A") },
     { l: t("home.vsR4L"), g: t("home.vsR4G"), a: t("home.vsR4A") },
-    { l: t("home.vsR5L"), g: t("home.vsR5G"), a: t("home.vsR5A") },
+    { l: t("home.vsR5L"), g: t("home.vsR5G"), a: corpusCell },
   ];
   const tiers = [
     {
@@ -638,14 +673,16 @@ export default function HomePage() {
             </h2>
             <p className="mt-4 text-[15px] leading-relaxed text-ink-soft">{t("home.evBody")}</p>
           </div>
-          <div className="mt-10 grid grid-cols-2 gap-4 sm:gap-3 md:grid-cols-4">
-            {evStats.map((s) => (
-              <div key={s.label} className="ad-card px-4 py-5 text-center sm:px-5">
-                <div className="font-display text-2xl font-semibold text-primary-text sm:text-3xl">{s.value}</div>
-                <div className="mt-1.5 text-xs leading-snug text-ink-soft">{s.label}</div>
-              </div>
-            ))}
-          </div>
+          {evStats.length > 0 && (
+            <div className="mt-10 grid grid-cols-1 gap-3 sm:grid-cols-3">
+              {evStats.map((s) => (
+                <div key={s.label} className="ad-card px-4 py-5 text-center sm:px-5">
+                  <div className="font-display text-2xl font-semibold text-primary-text sm:text-3xl">{s.value}</div>
+                  <div className="mt-1.5 text-xs leading-snug text-ink-soft">{s.label}</div>
+                </div>
+              ))}
+            </div>
+          )}
           <div className="mt-8 flex flex-col items-center gap-3">
             <span className="ad-eyebrow">{t("home.evSourcesLabel")}</span>
             <div className="flex max-w-3xl flex-wrap items-center justify-center gap-2">

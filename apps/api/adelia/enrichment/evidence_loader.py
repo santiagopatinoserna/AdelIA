@@ -14,11 +14,12 @@ import json
 import logging
 from pathlib import Path
 
-from sqlalchemy import select
+from sqlalchemy import func, select
 
 from mistralai.client.errors import MistralError
 
 from adelia.db import AsyncSessionLocal
+from adelia.enrichment.evidence_hygiene import canonical_organization
 from adelia.models import EvidenceChunk, EvidenceSource
 from adelia.workers.embed import embed_texts
 
@@ -72,10 +73,15 @@ async def load_seed_if_empty() -> tuple[int, int]:
 
     async with AsyncSessionLocal() as session:
         existing_count = await session.execute(select(EvidenceSource).limit(1))
-        if existing_count.scalar_one_or_none() is not None:
-            logger.info("evidence_sources already populated, skipping seed load")
-            return 0, 0
+        populated = existing_count.scalar_one_or_none() is not None
+    if populated:
+        logger.info("evidence_sources already populated, skipping seed load")
+        # The seed is never reloaded, so a correction to its file would never
+        # reach the rows loaded long ago without this.
+        await sync_source_metadata(_SEED_FILE, seed)
+        return 0, 0
 
+    async with AsyncSessionLocal() as session:
         sources_added = 0
         chunks_added = 0
 
@@ -84,7 +90,7 @@ async def load_seed_if_empty() -> tuple[int, int]:
             source = EvidenceSource(
                 source_type=src_data["source_type"],
                 title=src_data["title"],
-                organization=src_data.get("organization"),
+                organization=canonical_organization(src_data.get("organization")),
                 publication_year=src_data.get("publication_year"),
                 url=src_data.get("url"),
                 specialties=src_data.get("specialties", []),
@@ -125,6 +131,64 @@ async def load_seed_if_empty() -> tuple[int, int]:
         return sources_added, chunks_added
 
 
+async def sync_source_metadata(path: Path, data: dict | None = None) -> int:
+    """Bring already-loaded sources in line with their corpus file.
+
+    The loader is idempotent by title: a source whose title exists is skipped
+    whole, so a correction made in the JSON (an organization written as
+    "https://www", a missing year) never reached the rows deployed before the
+    correction, and fixing the file alone changed nothing in production. This
+    pass closes that gap, which is also why the files, not the database, are
+    where the corpus gets fixed: the next boot copies them over.
+
+    A field is written only when the file has a value and it differs. An
+    absent value never blanks what the row has, so a year set by hand in the
+    database survives a file that does not know it. A source without a year
+    stays without one: NULL, rendered by the card and by the prompt as no year
+    at all (both skip it), never as "(None)" or an empty pair of brackets.
+
+    Only display metadata is copied (organization, publication_year): the
+    chunks, their embeddings and the title, which is the idempotency key, are
+    never rewritten from here.
+
+    Returns the number of rows changed.
+    """
+    if data is None:
+        with path.open("r", encoding="utf-8") as f:
+            data = json.load(f)
+
+    wanted: dict[str, dict[str, object]] = {}
+    for src_data in data.get("sources", []):
+        values = {
+            "organization": canonical_organization(src_data.get("organization")),
+            "publication_year": src_data.get("publication_year"),
+        }
+        wanted[src_data["title"]] = {k: v for k, v in values.items() if v is not None}
+
+    changed = 0
+    async with AsyncSessionLocal() as session:
+        rows = await session.execute(
+            select(EvidenceSource).where(EvidenceSource.title.in_(list(wanted)))
+        )
+        for source in rows.scalars():
+            diff = {
+                field: value
+                for field, value in wanted[source.title].items()
+                if getattr(source, field) != value
+            }
+            if not diff:
+                continue
+            for field, value in diff.items():
+                setattr(source, field, value)
+            source.updated_at = func.now()
+            changed += 1
+            logger.info("evidence source %r synced from %s: %s", source.title[:60], path.name,
+                        sorted(diff))
+        if changed:
+            await session.commit()
+    return changed
+
+
 async def load_evidence_file(path: Path) -> tuple[int, int]:
     """Ingest one evidence JSON file additively, idempotent by source title.
 
@@ -132,10 +196,22 @@ async def load_evidence_file(path: Path) -> tuple[int, int]:
     skips any source whose title already exists — so re-running is safe and
     new topic corpora (e.g. pediatric reflux) can be layered in.
 
+    Display metadata is cleaned on the way in (audit 1.1 follow-up). The
+    organization goes through evidence_hygiene.canonical_organization: one
+    spelling per institution, and a value that looks like a URL is stored
+    empty with a warning instead of rejecting the source, because rejecting it
+    would drop its chunks and the field alone is what is wrong. A source with
+    no publication_year is stored with NULL and shown without a year; the
+    citation card and the prompt both skip a missing year, so it never renders
+    as "(None)" or as a gap. Sources already loaded are brought in line with
+    the file first, see sync_source_metadata.
+
     Returns: (sources_inserted, chunks_inserted).
     """
     with path.open("r", encoding="utf-8") as f:
         data = json.load(f)
+
+    await sync_source_metadata(path, data)
 
     async with AsyncSessionLocal() as session:
         existing = await session.execute(select(EvidenceSource.title))
@@ -150,7 +226,7 @@ async def load_evidence_file(path: Path) -> tuple[int, int]:
             source = EvidenceSource(
                 source_type=src_data["source_type"],
                 title=src_data["title"],
-                organization=src_data.get("organization"),
+                organization=canonical_organization(src_data.get("organization")),
                 publication_year=src_data.get("publication_year"),
                 url=src_data.get("url"),
                 specialties=src_data.get("specialties", []),
