@@ -239,6 +239,15 @@ def _extract_client(calls: list[dict]) -> MagicMock:
 
 
 async def test_extraction_default_call_is_the_one_made_before_the_name_moved(monkeypatch):
+    """The model name is pinned here; the response format belongs to extract.py.
+
+    This test exists to catch a silent change of the extraction model, so it
+    asserts the model and the messages exactly. It deliberately does NOT inline
+    the JSON schema: schema-enforced output is the first attempt extract.py
+    makes by design (the verbatim-quote rule is enforced on both paths), and
+    pinning the whole schema here would make every field added to
+    ExtractedEntity fail an unrelated test.
+    """
     calls: list[dict] = []
     monkeypatch.setattr(extract_mod, "get_mistral_client", lambda: _extract_client(calls))
     monkeypatch.setattr(
@@ -249,17 +258,17 @@ async def test_extraction_default_call_is_the_one_made_before_the_name_moved(mon
 
     await extract_mod.extract_entities("nota clinica")
 
-    assert calls == [
-        {
-            "model": "mistral-medium-latest",
-            "messages": [
-                {"role": "system", "content": extract_mod.SYSTEM_PROMPT},
-                {"role": "user", "content": "Document:\n\nnota clinica"},
-            ],
-            "response_format": {"type": "json_object"},
-            "temperature": 0.0,
-        }
+    assert len(calls) == 1
+    call = calls[0]
+    assert call["model"] == "mistral-medium-latest"
+    assert call["messages"] == [
+        {"role": "system", "content": extract_mod.SYSTEM_PROMPT},
+        {"role": "user", "content": "Document:\n\nnota clinica"},
     ]
+    assert call["temperature"] == 0.0
+    # Schema-enforced first, with json_object as the documented fallback.
+    assert call["response_format"]["type"] == "json_schema"
+    assert call["response_format"]["json_schema"]["name"] == "extracted_entities"
 
 
 async def test_extraction_sends_the_model_from_settings(monkeypatch):
