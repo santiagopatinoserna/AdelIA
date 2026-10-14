@@ -240,6 +240,7 @@ async def _retrieve_evidence_for_query(
                 specialties=["pediatrics"],
                 top_k=top_k,
                 max_distance=settings.evidence_max_distance,
+                relative_margin=settings.evidence_relative_margin,
                 query_text=query_text,
                 locale=locale,
             )

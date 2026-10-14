@@ -18,6 +18,7 @@ from adelia.clinical.golden import (
     GOLDEN_SET,
     RED_FLAG_DOSAGE_MAX,
     GoldenReport,
+    citation_defects,
     contains_dosage,
     corpus_blind_spots,
     is_refusal,
@@ -353,3 +354,98 @@ def test_blind_spots_render_one_line_per_theme_with_examples():
 def test_every_question_belongs_to_a_known_locale_and_group():
     assert {q.group for q in GOLDEN_SET} == {"A", "B", "C"}
     assert {q.locale for q in GOLDEN_SET} == {"es", "en", "fr"}
+
+
+# ---------------------------------------------------------------------------
+# Citation defects (public demo, 2026-10-14): one source in several cards, and a
+# card about something else
+# ---------------------------------------------------------------------------
+
+_QUESTIONS = {q.id: q for q in GOLDEN_SET}
+
+
+def _card(tag: str, source_id: str, title: str, snippet: str = "") -> dict:
+    return {"tag": tag, "source_id": source_id, "title": title, "snippet": snippet}
+
+
+def test_the_four_measured_questions_are_in_the_set_and_cite_the_measurement():
+    for qid in ("A13", "A14", "A15", "A16"):
+        q = _QUESTIONS[qid]
+        assert q.group == "A" and q.locale == "es"
+        assert "14-oct-2026" in q.rationale, qid
+    assert _QUESTIONS["A13"].every_citation_mentions
+    assert all(_QUESTIONS[i].distinct_sources for i in ("A13", "A14", "A15"))
+    # A15 is A3 word for word on purpose: it measures the cards, A3 the recall.
+    assert _QUESTIONS["A15"].question == _QUESTIONS["A3"].question
+
+
+def test_a_source_in_two_cards_is_a_defect_even_under_a_different_title():
+    q = _QUESTIONS["A14"]
+    cards = [
+        _card("ev_1", "s1", "NICE 2019 reflujo"),
+        _card("ev_2", "s2", "Otra guía"),
+        _card("ev_3", "s1", "NICE 2019 reflujo (otro fragmento)"),
+    ]
+    defects = citation_defects(q, cards)
+    assert len(defects) == 1 and defects[0].startswith("ev_3 repite la fuente de ev_1")
+
+
+def test_two_sources_with_the_same_title_are_not_a_repeat():
+    """The key is the id: the corpus has titles shared by different sources."""
+    q = _QUESTIONS["A14"]
+    cards = [_card("ev_1", "s1", "Mismo título"), _card("ev_2", "s2", "Mismo título")]
+    assert citation_defects(q, cards) == []
+
+
+def test_a_card_without_a_source_id_cannot_be_called_a_repeat():
+    q = _QUESTIONS["A14"]
+    cards = [{"tag": "ev_1", "title": "x"}, {"tag": "ev_2", "title": "x"}]
+    assert citation_defects(q, cards) == []
+
+
+def test_a_card_that_never_names_the_topic_is_a_defect():
+    q = _QUESTIONS["A13"]
+    sleep = _card("ev_1", "s1", "Muertes del lactante relacionadas con el sueño", "Tema: postura")
+    feeding = _card(
+        "ev_2", "s2", "Manejo conservador del reflujo",
+        "Bebé amamantado con reflujo: NO suspender la lactancia",
+    )
+    defects = citation_defects(q, [sleep, feeding])
+    assert len(defects) == 1 and defects[0].startswith("ev_2 no habla del tema")
+
+
+def test_a_reflux_card_about_sleeping_position_is_not_a_defect_for_the_sleep_question():
+    """The text decides, not the name of the source.
+
+    Fragment 2 of NICE NG1 is the sleeping-position advice for a baby with
+    reflux (always on the back, because of sudden infant death). Rejecting
+    every reflux source would throw away a card that answers the question.
+    """
+    q = _QUESTIONS["A13"]
+    card = _card(
+        "ev_2", "s2", "Manejo conservador del reflujo del lactante",
+        "Posición para dormir en el bebé con reflujo: SIEMPRE boca arriba (supino) por el "
+        "riesgo de muerte súbita del lactante (SIDS).",
+    )
+    assert citation_defects(q, [card]) == []
+
+
+def test_the_topic_match_ignores_case_and_accents():
+    q = _QUESTIONS["A13"]
+    assert citation_defects(q, [_card("ev_1", "s1", "x", "MUERTE SUBITA del lactante")]) == []
+
+
+def test_a_question_that_declares_no_check_is_never_charged():
+    """The original questions score exactly as they did before the checks existed."""
+    repeated = [_card("ev_1", "s1", "a"), _card("ev_2", "s1", "a"), _card("ev_3", "s9", "zzz")]
+    for qid in ("A3", "A4", "A5", "A16"):
+        assert citation_defects(_QUESTIONS[qid], repeated) == [], qid
+
+
+def test_the_report_carries_and_gates_on_citation_defects():
+    report = GoldenReport()
+    assert report.as_dict()["citation_defects"] == 0 and report.failures() == []
+    report.citation_defects = 2
+    assert report.as_dict()["citation_defects"] == 2
+    assert any("repetida(s) o de otro tema" in f for f in report.failures())
+    assert "citas repetidas o ajenas:  2" in report.render()

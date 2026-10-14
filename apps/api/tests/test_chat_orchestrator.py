@@ -441,3 +441,22 @@ async def test_the_referral_speaks_the_parents_language(locale, needle):
         )
     )
     assert needle in "".join(e.content for e in events if e.type == "token")
+
+
+@patch("adelia.services.chat_orchestrator.retrieve_evidence")
+@patch("adelia.services.chat_orchestrator.AsyncSessionLocal")
+async def test_the_chat_passes_the_relative_margin_from_the_setting(
+    mock_session, mock_retrieve_evidence,
+):
+    """retrieve_evidence applies no relative criterion unless asked, so the
+    chat has to ask: without this the margin exists and nothing uses it."""
+    from adelia.config import settings
+    from adelia.services.chat_orchestrator import _retrieve_evidence_for_query
+
+    mock_retrieve_evidence.return_value = []
+    await _retrieve_evidence_for_query([0.1] * 1024)
+
+    assert (
+        mock_retrieve_evidence.call_args.kwargs["relative_margin"]
+        == settings.evidence_relative_margin
+    )

@@ -13,7 +13,7 @@ from __future__ import annotations
 
 import logging
 from dataclasses import dataclass
-from typing import Iterable
+from typing import Iterable, Sequence
 from uuid import UUID
 
 from sqlalchemy import String, bindparam, text
@@ -41,6 +41,81 @@ class EvidenceMatch:
     distance: float  # cosine distance, lower = more relevant
 
 
+#: Most rows the vector query is ever asked for when it has to look past
+#: repeated sources. The corpus has up to 8 fragments per source (127 sources,
+#: 301 fragments), so finding 4 distinct sources can mean reading
+#: (4 - 1) * 8 + 1 = 25 rows in the worst case; 64 covers that with room, and
+#: keeps a corpus that grows a 20-fragment source from turning one question
+#: into a table scan.
+EVIDENCE_CANDIDATE_CAP = 64
+
+
+def within_relative_margin(
+    matches: Sequence[EvidenceMatch], margin: float | None
+) -> list[EvidenceMatch]:
+    """Keep the matches no farther than `margin` behind the best one.
+
+    The absolute cut-off (settings.evidence_max_distance) asks "is this close
+    to the corpus?". This asks "is this close to what THIS question found?".
+    On 2026-10-14 the public demo answered a question about sudden infant
+    death with three sleep fragments and a reflux guideline as the fourth
+    "evidence". It was inside 0.19, so the absolute cut-off let it through, and
+    no fixed number can tell whether the fragment is about the question. The
+    measurement kept only the title, so it is not known whether that card was
+    the sleeping-position paragraph of NICE NG1 (relevant) or one of its
+    feeding paragraphs (not); the margin is aimed at the second case and cannot
+    tell them apart except through distance. Anchored to the query's own best
+    distance, a question with one good source keeps one fragment.
+
+    The best distance is the minimum over `matches`, not the first element, so
+    the result does not depend on the order the caller holds them in; the order
+    is preserved. `margin=None` disables the criterion. A match exactly
+    `margin` behind the best is kept (the comparison is `<=`).
+    """
+    if margin is None or not matches:
+        return list(matches)
+    ceiling = min(m.distance for m in matches) + margin
+    return [m for m in matches if m.distance <= ceiling]
+
+
+def dedupe_by_source(matches: Sequence[EvidenceMatch], top_k: int) -> list[EvidenceMatch]:
+    """The first match of each source, in the given order, up to `top_k`.
+
+    "FUENTES CITADAS" shows one card per returned match. Measured on the public
+    demo on 2026-10-14, one question about safe sleep showed the same AAP 2022
+    title in three of its four cards, reflux showed NICE 2019 twice and the
+    nursery question showed the AEPap guide twice. A mother reads four cards as
+    four independent sources agreeing, and it was two, so the cards are the
+    product's only credibility signal and were overstating it.
+
+    `matches` must already be in the order that decides who wins (ascending
+    distance, or the fused/reranked order of the hybrid path): the first
+    fragment of a source is the one kept, and it is the one the model reads and
+    the one the parent sees, because both are rendered from this same list
+    (format_evidence_for_prompt and evidence_citations_for_response). Never
+    swap in another fragment of the source afterwards: the quoted text is the
+    guarantee.
+
+    The key is `source_id`, never the title. Different sources share a title
+    (the corpus has repeated ones), and collapsing those would drop a real,
+    independent source. When fewer than `top_k` distinct sources exist this
+    returns fewer than `top_k`, on purpose: four cards from two sources say
+    more than the evidence does, two honest cards do not.
+    """
+    if top_k <= 0:
+        return []
+    seen: set[UUID] = set()
+    kept: list[EvidenceMatch] = []
+    for match in matches:
+        if match.source_id in seen:
+            continue
+        seen.add(match.source_id)
+        kept.append(match)
+        if len(kept) == top_k:
+            break
+    return kept
+
+
 async def retrieve_evidence(
     session: AsyncSession,
     *,
@@ -48,11 +123,12 @@ async def retrieve_evidence(
     specialties: Iterable[str] | None = None,
     top_k: int = 5,
     max_distance: float | None = None,
+    relative_margin: float | None = None,
     query_text: str | None = None,
     locale: str | None = None,
     reranker: Reranker | None = None,
 ) -> list[EvidenceMatch]:
-    """Retrieve top-K evidence chunks ranked by cosine distance.
+    """Retrieve up to top-K evidence chunks, one per source, ranked by cosine distance.
 
     Args:
         query_embedding: 1024-dim vector from mistral-embed
@@ -61,12 +137,25 @@ async def retrieve_evidence(
             answering path passes ['pediatrics'] so a question about a baby
             can never be answered with the adult sources the same table
             holds (atrial fibrillation, cancer screening, SBAR).
-        top_k: max results
+        top_k: max results. At most `top_k`, and FEWER when fewer distinct
+            sources are good enough: see "One citation per source" below.
         max_distance: cosine distance cut-off. Defaults to
             settings.evidence_max_distance, calibrated against the real corpus
             (see apps/api/docs/CALIBRACION_UMBRAL_EVIDENCIA.md). The previous
             default, 0.45, was above the corpus's own diameter (0.3386), so it
             rejected nothing and every question came back "evidence-backed".
+        relative_margin: how far behind the query's own best fragment a
+            fragment may be and still be returned, see within_relative_margin.
+            A second admission control on top of `max_distance`, never looser
+            than it. None, the default, applies no relative criterion. The
+            answering call sites (chat, demo, briefings) pass
+            settings.evidence_relative_margin, the way they already pass
+            `max_distance`; how that value was chosen is written next to it in
+            config.py. The policy lives with the callers on purpose: a stored
+            vector used as the query matches itself at distance 0.0, which
+            would anchor the margin at 0 and drop every other source, and the
+            calibration tests do exactly that. A parent's question never lands
+            on a fragment, so it never happens in production.
         query_text: the question as text, for the lexical half of hybrid
             retrieval. Ignored (and may be omitted, as briefings and the demo
             do) unless settings.retrieval_hybrid_enabled is on.
@@ -76,11 +165,30 @@ async def retrieve_evidence(
             Defaults to NullReranker, the identity. Only used on the hybrid
             path, see below.
 
+    One citation per source, and no filler (measured on the public demo on
+    2026-10-14). The corpus holds several fragments per source, so the top
+    four rows of a question were often three or two fragments of one guideline
+    and four cards showed two sources. Two defects, two fixes, both applied to
+    what the vector query admitted and neither able to admit anything new:
+
+      * `dedupe_by_source` keeps the best fragment of each `source_id` and goes
+        on down the ranking until `top_k` distinct sources are found, or the
+        ranking runs out. The first statement asks for `top_k` rows, exactly as
+        before; only when those rows repeat a source (and more could still pass)
+        is a second, wider one run (see EVIDENCE_CANDIDATE_CAP). The fragment
+        returned is the one the model reads and the one the parent sees: the
+        quoted text is the guarantee, so it is never swapped for another
+        fragment of the same source.
+      * `within_relative_margin` drops fragments too far behind the best one,
+        so a question with one good source does not fill the other slots with
+        the fifth-best thing in the corpus.
+
     Hybrid retrieval (settings.retrieval_hybrid_enabled, OFF by default). With
     the flag off, or without `query_text`, or with a locale the corpus is not
     written in, this function runs the vector query below with LIMIT top_k and
-    nothing else: the same SQL, the same parameters, the same result as before
-    the flag existed. With it on:
+    nothing else: the same first SQL and parameters as before the flag
+    existed (the dedup and the margin above are the only things applied to its
+    rows, and they are not part of the flag). With it on:
 
       1. the vector query runs unchanged (same calibrated `max_distance`, same
          specialty filter) but returns a pool of HYBRID_CANDIDATE_POOL rows
@@ -90,7 +198,8 @@ async def retrieve_evidence(
          a question about a baby; a lexical query that skipped it would put
          them back);
       3. the two rankings are fused by Reciprocal Rank Fusion;
-      4. the reranker reorders the fused pool, and the first top_k are kept.
+      4. the reranker reorders the fused pool, and the first top_k distinct
+         sources are kept.
 
     The lexical ranking can reorder, it cannot admit. Only fragments that
     already passed `max_distance` can be returned; a chunk the full-text query
@@ -105,7 +214,8 @@ async def retrieve_evidence(
     reorders the vector survivors, and rescuing a fragment that falls just
     outside the cut-off stays an open item for after the eval harness exists.
 
-    Returns: sorted list, most relevant first.
+    Returns: sorted list, most relevant first, never two fragments of one
+    source, possibly shorter than `top_k` and possibly empty.
     """
     if max_distance is None:
         max_distance = settings.evidence_max_distance
@@ -144,32 +254,49 @@ async def retrieve_evidence(
         params["spec_list"] = spec_list
 
     stmt_text += " ORDER BY distance ASC LIMIT :k"
-    params["k"] = pool
 
     stmt = text(stmt_text)
     if spec_list:
         stmt = stmt.bindparams(bindparam("spec_list", type_=ARRAY(String)))
-    result = await session.execute(stmt, params)
-    rows = result.mappings().all()
 
-    matches = [
-        EvidenceMatch(
-            chunk_id=r["chunk_id"],
-            source_id=r["source_id"],
-            source_title=r["source_title"],
-            organization=r["organization"],
-            publication_year=r["publication_year"],
-            url=r["url"],
-            content=r["content"],
-            chunk_index=r["chunk_index"],
-            distance=float(r["distance"]),
-        )
-        for r in rows
-    ]
+    limit = pool
+    while True:
+        params["k"] = limit
+        result = await session.execute(stmt, params)
+        rows = result.mappings().all()
+        matches = [
+            EvidenceMatch(
+                chunk_id=r["chunk_id"],
+                source_id=r["source_id"],
+                source_title=r["source_title"],
+                organization=r["organization"],
+                publication_year=r["publication_year"],
+                url=r["url"],
+                content=r["content"],
+                chunk_index=r["chunk_index"],
+                distance=float(r["distance"]),
+            )
+            for r in rows
+        ]
+        admitted = within_relative_margin(matches, relative_margin)
+        # Look past repeated sources only when that can still pay off: the
+        # rows so far do not hold `top_k` distinct sources, the margin has not
+        # already cut the tail (rows are in ascending distance, so everything
+        # after a cut is farther still), the cut-off has not run out of rows
+        # (fewer rows than asked for), and the cap has not been reached.
+        if (
+            len({m.source_id for m in admitted}) >= top_k
+            or len(admitted) < len(matches)
+            or len(rows) < limit
+            or limit >= EVIDENCE_CANDIDATE_CAP
+        ):
+            break
+        limit = EVIDENCE_CANDIDATE_CAP
+    matches = admitted
     if plan is None or not matches:
-        # Nothing survived the cut-off means nothing can be returned, so there
+        # Nothing survived the cut-offs means nothing can be returned, so there
         # is no point asking the lexical index either.
-        return matches
+        return dedupe_by_source(matches, top_k)
 
     lexical_ids = await lexical_evidence_ranking(
         session, plan=plan, specialties=spec_list, pool=pool
@@ -186,7 +313,7 @@ async def retrieve_evidence(
         text_of=lambda m: m.content,
         score_of=lambda m: fused[str(m.chunk_id)],
     )
-    return ordered[:top_k]
+    return dedupe_by_source(ordered, top_k)
 
 
 async def lexical_evidence_ranking(

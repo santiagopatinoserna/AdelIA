@@ -1,7 +1,8 @@
 # Aprobar un cambio de modelo
 
 **Fecha:** 14 de octubre de 2026
-**Conjunto medido:** 42 preguntas (`apps/api/adelia/clinical/golden.py`)
+**Conjunto medido:** 46 preguntas (`apps/api/adelia/clinical/golden.py`); las cuatro
+últimas, A13 a A16, salen de la medición del 14 de octubre de 2026 en la demo pública
 **Herramientas:** `apps/api/tests/test_rag_golden.py` (mide) y
 `apps/api/scripts/compare_golden.py` (compara)
 

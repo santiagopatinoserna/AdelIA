@@ -150,6 +150,7 @@ async def ask_demo(payload: DemoQuestion) -> dict:
             specialties=["pediatrics"],
             top_k=4,
             max_distance=settings.evidence_max_distance,
+            relative_margin=settings.evidence_relative_margin,
         )
 
     # Nothing in the corpus supports an answer: refuse in code, as the chat
