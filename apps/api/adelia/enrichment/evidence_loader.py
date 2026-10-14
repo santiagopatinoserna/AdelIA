@@ -107,6 +107,11 @@ async def load_seed_if_empty() -> tuple[int, int]:
                     chunk_index=idx,
                     chunk_metadata={"section": src_data.get("title")},
                     embedding=emb,
+                    # Same value as the source above, written explicitly: the
+                    # full-text column is generated from it (migration 0021),
+                    # and the column default ('en') would stem Spanish text as
+                    # English and make it unfindable by the lexical half.
+                    language=source.language,
                 )
                 session.add(chunk)
                 chunks_added += 1
@@ -166,6 +171,7 @@ async def load_evidence_file(path: Path) -> tuple[int, int]:
                     chunk_index=idx,
                     chunk_metadata={"section": src_data["title"]},
                     embedding=emb,
+                    language=source.language,  # see load_seed_if_empty
                 ))
                 chunks_added += 1
             # Commit per source: progress survives a later failure and the

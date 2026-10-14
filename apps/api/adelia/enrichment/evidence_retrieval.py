@@ -11,6 +11,7 @@ LLM synthesizes both with separate citation namespaces:
 """
 from __future__ import annotations
 
+import logging
 from dataclasses import dataclass
 from typing import Iterable
 from uuid import UUID
@@ -20,7 +21,11 @@ from sqlalchemy.dialects.postgresql import ARRAY
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from adelia.config import settings
+from adelia.services.fusion import rrf
+from adelia.services.lexical import HYBRID_CANDIDATE_POOL, LexicalPlan, plan_lexical
+from adelia.services.reranker import NullReranker, Reranker, rerank_items
 
+logger = logging.getLogger(__name__)
 
 
 @dataclass(frozen=True)
@@ -43,6 +48,9 @@ async def retrieve_evidence(
     specialties: Iterable[str] | None = None,
     top_k: int = 5,
     max_distance: float | None = None,
+    query_text: str | None = None,
+    locale: str | None = None,
+    reranker: Reranker | None = None,
 ) -> list[EvidenceMatch]:
     """Retrieve top-K evidence chunks ranked by cosine distance.
 
@@ -59,11 +67,50 @@ async def retrieve_evidence(
             (see apps/api/docs/CALIBRACION_UMBRAL_EVIDENCIA.md). The previous
             default, 0.45, was above the corpus's own diameter (0.3386), so it
             rejected nothing and every question came back "evidence-backed".
+        query_text: the question as text, for the lexical half of hybrid
+            retrieval. Ignored (and may be omitted, as briefings and the demo
+            do) unless settings.retrieval_hybrid_enabled is on.
+        locale: the question's language (es/en/fr), picks the text-search
+            configuration. Any other value means no lexical query.
+        reranker: a services.reranker.Reranker applied to the fused pool.
+            Defaults to NullReranker, the identity. Only used on the hybrid
+            path, see below.
+
+    Hybrid retrieval (settings.retrieval_hybrid_enabled, OFF by default). With
+    the flag off, or without `query_text`, or with a locale the corpus is not
+    written in, this function runs the vector query below with LIMIT top_k and
+    nothing else: the same SQL, the same parameters, the same result as before
+    the flag existed. With it on:
+
+      1. the vector query runs unchanged (same calibrated `max_distance`, same
+         specialty filter) but returns a pool of HYBRID_CANDIDATE_POOL rows
+         instead of top_k;
+      2. a `tsvector` query ranks the same corpus by `ts_rank_cd`, under the
+         SAME specialty filter (that filter is what keeps adult sources out of
+         a question about a baby; a lexical query that skipped it would put
+         them back);
+      3. the two rankings are fused by Reciprocal Rank Fusion;
+      4. the reranker reorders the fused pool, and the first top_k are kept.
+
+    The lexical ranking can reorder, it cannot admit. Only fragments that
+    already passed `max_distance` can be returned; a chunk the full-text query
+    found but the vector query did not is dropped. That is deliberate. The
+    refusal in chat_orchestrator ("nothing grounded, so no generative call")
+    is the audit's answer to a confident, sourceless answer about a baby, and
+    it hangs on this function returning [] for an off-corpus question. A
+    keyword search admits on shared vocabulary ("dosis", "bebé", "meses" are in
+    nearly every pediatric chunk), which is precisely the failure the
+    calibration removed, and a lexical admission criterion cannot be calibrated
+    without live embeddings. So the full-text signal cross-checks and
+    reorders the vector survivors, and rescuing a fragment that falls just
+    outside the cut-off stays an open item for after the eval harness exists.
 
     Returns: sorted list, most relevant first.
     """
     if max_distance is None:
         max_distance = settings.evidence_max_distance
+    plan = plan_lexical(query_text, locale)
+    pool = max(top_k, HYBRID_CANDIDATE_POOL) if plan is not None else top_k
     # pgvector cosine distance via `<=>` operator
     # We do a join to evidence_sources to filter by specialty + return metadata
     stmt_text = """
@@ -97,7 +144,7 @@ async def retrieve_evidence(
         params["spec_list"] = spec_list
 
     stmt_text += " ORDER BY distance ASC LIMIT :k"
-    params["k"] = top_k
+    params["k"] = pool
 
     stmt = text(stmt_text)
     if spec_list:
@@ -105,7 +152,7 @@ async def retrieve_evidence(
     result = await session.execute(stmt, params)
     rows = result.mappings().all()
 
-    return [
+    matches = [
         EvidenceMatch(
             chunk_id=r["chunk_id"],
             source_id=r["source_id"],
@@ -119,6 +166,87 @@ async def retrieve_evidence(
         )
         for r in rows
     ]
+    if plan is None or not matches:
+        # Nothing survived the cut-off means nothing can be returned, so there
+        # is no point asking the lexical index either.
+        return matches
+
+    lexical_ids = await lexical_evidence_ranking(
+        session, plan=plan, specialties=spec_list, pool=pool
+    )
+    fused = dict(rrf([[str(m.chunk_id) for m in matches], lexical_ids]))
+    # Only vector survivors are fused back in: see "reorder, cannot admit".
+    # sorted() is stable, so equal fused scores keep their vector order.
+    ordered = sorted(matches, key=lambda m: -fused[str(m.chunk_id)])
+    ordered = await rerank_items(
+        reranker or NullReranker(),
+        query_text,
+        ordered,
+        id_of=lambda m: str(m.chunk_id),
+        text_of=lambda m: m.content,
+        score_of=lambda m: fused[str(m.chunk_id)],
+    )
+    return ordered[:top_k]
+
+
+async def lexical_evidence_ranking(
+    session: AsyncSession,
+    *,
+    plan: LexicalPlan,
+    specialties: list[str] | None,
+    pool: int,
+) -> list[str]:
+    """Evidence chunk ids ranked by full-text relevance, best first (as str).
+
+    The same corpus the vector query searches, narrowed the same way:
+      * `specialties` is the identical `?|` filter, so the pediatric-only
+        promise holds for this ranking too;
+      * `ec.language = :language` restricts the match to rows indexed in the
+        question's language, since `tsv` was built per row from that column
+        (migration 0021) and only the same configuration produces the same
+        stems. English rows are the vector search's to find.
+
+    Best-effort: this is a cross-check, so a failure (the migration not applied
+    yet, a malformed tsquery) is logged and returns [], and the caller falls
+    back to the vector order. It runs in a SAVEPOINT so the failed statement
+    does not poison the caller's transaction.
+    """
+    stmt_text = """
+        SELECT ec.id AS chunk_id
+        FROM evidence_chunks ec
+        JOIN evidence_sources es ON es.id = ec.source_id
+        CROSS JOIN (
+            SELECT to_tsquery(CAST(:ts_config AS regconfig), :tsquery) AS q
+        ) lex
+        WHERE ec.language = :language AND ec.tsv @@ lex.q
+    """
+    params: dict = {
+        "ts_config": plan.ts_config,
+        "tsquery": plan.tsquery,
+        "language": plan.language,
+        "k": pool,
+    }
+    if specialties:
+        stmt_text += " AND es.specialties ?| :spec_list"
+        params["spec_list"] = list(specialties)
+    # Normalisation 1 divides the rank by 1 + log(length), a mild brake on long
+    # chunks that match more terms simply by containing more words.
+    stmt_text += " ORDER BY ts_rank_cd(ec.tsv, lex.q, 1) DESC, ec.id ASC LIMIT :k"
+
+    stmt = text(stmt_text)
+    if specialties:
+        stmt = stmt.bindparams(bindparam("spec_list", type_=ARRAY(String)))
+    try:
+        async with session.begin_nested():
+            result = await session.execute(stmt, params)
+            return [str(row.chunk_id) for row in result]
+    except Exception as exc:  # noqa: BLE001 - never let the cross-check break retrieval
+        # Class name only: str(exc) carries the bound parameters, which are the
+        # parent's question terms, and health questions do not belong in logs.
+        logger.warning(
+            "lexical evidence ranking failed, using vector order: %s", type(exc).__name__
+        )
+        return []
 
 
 def format_evidence_for_prompt(matches: list[EvidenceMatch]) -> str:
