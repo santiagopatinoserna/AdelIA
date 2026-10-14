@@ -3,41 +3,36 @@
 import { ExternalLink } from "lucide-react";
 import type { EvidenceCitation } from "@/lib/chat-types";
 
-export function EvidenceCard({
-  citation,
-}: {
-  citation: EvidenceCitation;
-}) {
+export function EvidenceCard({ citation }: { citation: EvidenceCitation }) {
   const attribution = [
     citation.organization,
     citation.year ? `(${citation.year})` : null,
-  ]
-    .filter(Boolean)
-    .join(" ");
-  const Inner = (
-    <div className="rounded-lg border border-accent-tint-line bg-accent-tint/60 p-2.5 text-xs text-ink transition-colors hover:bg-accent-tint">
-      <div className="flex items-center gap-1.5 font-medium">
-        <span className="ad-ev-tag">
-          {citation.tag}
-        </span>
-        <span className="min-w-0 flex-1 truncate">{citation.title}</span>
-        {citation.url && <ExternalLink className="h-3 w-3 shrink-0 text-accent-text" strokeWidth={2} />}
+  ].filter(Boolean).join(" ");
+
+  // A source is something to read, not a badge. Keep the complete title and
+  // passage visible, especially when the parent is using a phone at night.
+  const inner = (
+    <div className="rounded-xl border border-line bg-surface-2 p-4 text-sm leading-relaxed text-ink transition-colors hover:border-line-control">
+      <div className="flex items-start gap-3">
+        <span className="ad-ev-tag mt-0.5 shrink-0">{citation.tag}</span>
+        <span className="min-w-0 flex-1 break-words font-medium">{citation.title}</span>
+        {citation.url && (
+          <ExternalLink className="mt-1 h-4 w-4 shrink-0 text-primary-text" strokeWidth={1.8} aria-hidden />
+        )}
       </div>
-      {attribution && <div className="mt-0.5 text-[10px] text-ink-soft">{attribution}</div>}
-      {/* A red-flag citation names the guideline without quoting a chunk
-          (nothing was retrieved), so an empty snippet must not render as a
-          pair of empty quotation marks. */}
+      {attribution && <div className="mt-2 text-xs leading-relaxed text-ink-soft">{attribution}</div>}
+      {/* Red flags name a guideline without retrieving a passage. Never show
+          empty quotation marks or imply a quotation where there is none. */}
       {citation.snippet?.trim() && (
-        <div className="mt-1 line-clamp-2 text-[11px] italic text-ink-soft">“{citation.snippet}”</div>
+        <blockquote className="mt-3 border-t border-line pt-3 text-sm leading-relaxed text-ink-soft">
+          “{citation.snippet}”
+        </blockquote>
       )}
     </div>
   );
-  if (citation.url) {
-    return (
-      <a href={citation.url} target="_blank" rel="noopener" className="block">
-        {Inner}
-      </a>
-    );
-  }
-  return Inner;
+  return citation.url ? (
+    <a href={citation.url} target="_blank" rel="noopener" className="block rounded-xl">
+      {inner}
+    </a>
+  ) : inner;
 }

@@ -20,8 +20,8 @@
     "clinicalDisclaimerShort": "AdelIA no sustituye a tu pediatra."
   },
   "home": {
-    "hero": "Toda la salud de tu bebé, en un solo sitio. Y una IA que responde, con la evidencia en la mano.",
-    "subhero": "¿Esas dudas que te quitan el sueño? Reúne el historial médico de tu bebé y pregúntale lo que quieras. Cada respuesta se apoya en investigación y cita sus fuentes.",
+    "hero": "La salud de tu bebé, con menos dudas.",
+    "subhero": "Sus informes, tus preguntas y las fuentes para entenderlos. Todo en un mismo lugar.",
     "cta": "Empezar",
     "eyebrow": "Para mamás · la salud del bebé, con pruebas",
     "ctaSecondary": "Ver cómo funciona",
@@ -139,7 +139,7 @@
     "modeBDemoS3": "¿Conviene revisar la introducción de alimentos sólidos?",
     "evEyebrow": "De dónde sale cada respuesta",
     "evTitle": "Las respuestas llevan su fuente.",
-    "evBody": "AdelIA no responde desde una caja negra. Busca en guías clínicas, en estudios revisados por pares y en páginas para familias de asociaciones pediátricas, y cita lo que encuentra. Si nada respalda tu pregunta, lo dice en vez de inventar.",
+    "evBody": "Busca en guías clínicas, estudios y páginas de asociaciones pediátricas. Puedes consultar las fuentes. Sin evidencia suficiente, prefiere no responder.",
     "evStat1L": "fuentes indexadas",
     "evStat2L": "fragmentos citables",
     "evStat3L": "rango de publicación",
@@ -1027,7 +1027,7 @@
     "eyebrow": "Demo pública",
     "badge": "Demo",
     "title": "Pregunta lo que le preguntarías a tu pediatra",
-    "subtitle": "Lucía es un bebé inventado con un historial de ejemplo. Pregunta lo que quieras: la respuesta se apoya en las guías clínicas y los estudios que AdelIA tiene indexados, y verás cada fuente debajo.",
+    "subtitle": "Lucía es un bebé inventado. Prueba con su historial de ejemplo y consulta las fuentes que encuentra AdelIA.",
     "noStore": "Sin cuenta y sin tarjeta. Nada de lo que escribas aquí se guarda.",
     "recordUnavailable": "No hemos podido cargar el historial de ejemplo. Puedes preguntar igualmente.",
     "askTitle": "Tu pregunta",

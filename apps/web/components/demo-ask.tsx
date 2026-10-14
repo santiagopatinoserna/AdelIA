@@ -103,7 +103,7 @@ export function DemoAsk({ suggested }: { suggested: string[] }) {
           void ask(question);
         }}
       >
-        <label htmlFor="demo-question" className="ad-eyebrow block">
+        <label htmlFor="demo-question" className="block text-lg font-semibold leading-snug text-ink">
           {t("askTitle")}
         </label>
         <textarea
@@ -130,7 +130,7 @@ export function DemoAsk({ suggested }: { suggested: string[] }) {
           enterKeyHint="send"
           placeholder={t("askPlaceholder")}
           aria-label={t("askLabel")}
-          className="ad-field mt-2 w-full resize-y"
+          className="ad-field mt-3 w-full resize-y text-base leading-relaxed"
         />
         <button
           type="submit"
@@ -182,21 +182,21 @@ export function DemoAsk({ suggested }: { suggested: string[] }) {
         <section
           data-testid="demo-answer"
           aria-live="polite"
-          className="ad-card ad-rise mt-6 p-5"
+          className="ad-rise mt-8 border-t border-line pt-6"
         >
           <p className="ad-eyebrow">{t("answerTitle")}</p>
           {result.kind === "red_flag" && (
-            <p className="mt-2 flex items-start gap-2 rounded-xl border border-accent-tint-line bg-accent-tint/60 p-3 text-xs text-ink">
+            <p className="mt-3 flex items-start gap-3 rounded-xl border border-error-tint-line bg-error-tint p-4 text-sm leading-relaxed text-error-text">
               <ShieldAlert className="mt-0.5 h-4 w-4 shrink-0 text-accent-text" strokeWidth={2.2} />
               <span>{t("redFlagNote")}</span>
             </p>
           )}
           {result.kind === "evidence_only" ? (
-            <p className="mt-2 text-sm leading-relaxed text-ink-soft">
+            <p className="mt-4 text-base leading-relaxed text-ink-soft">
               {t("evidenceOnlyNote")}
             </p>
           ) : (
-            <p className="mt-2 whitespace-pre-wrap text-[15px] leading-relaxed text-ink">
+            <p className="mt-4 max-w-[65ch] whitespace-pre-wrap text-base leading-7 text-ink">
               {result.answer}
             </p>
           )}
@@ -215,7 +215,7 @@ export function DemoAsk({ suggested }: { suggested: string[] }) {
           {/* The same fixed clinical line the product paints under every
               answer (audit 3.8), in the visitor's language, sent by the API
               so the demo cannot drift from the wording the app uses. */}
-          <p className="mt-5 flex items-start gap-1.5 border-t border-line pt-3 text-xs leading-snug text-ink-soft">
+          <p className="mt-6 flex items-start gap-2 border-t border-line pt-4 text-sm leading-relaxed text-ink-soft">
             <ShieldAlert className="mt-px h-3.5 w-3.5 shrink-0 text-accent-text" strokeWidth={2} aria-hidden />
             <span>{result.disclaimer}</span>
           </p>

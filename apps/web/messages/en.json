@@ -20,8 +20,8 @@
     "clinicalDisclaimerShort": "AdelIA does not replace your pediatrician."
   },
   "home": {
-    "hero": "All your baby's health, in one place. And an AI that answers: with the evidence to back it.",
-    "subhero": "Those questions that keep you up at night? Gather your baby's medical record and just ask. Every answer is backed by research, and cites its sources.",
+    "hero": "Your baby's health. A little more clarity.",
+    "subhero": "Their records, your questions and the sources to understand them. All in one place.",
     "cta": "Get started",
     "eyebrow": "For moms · baby health, evidence-backed",
     "ctaSecondary": "See how it works",
@@ -139,7 +139,7 @@
     "modeBDemoS3": "Should we review the introduction of solid foods?",
     "evEyebrow": "Where every answer comes from",
     "evTitle": "Answers come with their source.",
-    "evBody": "AdelIA doesn't answer from a black box. It searches clinical guidelines, peer-reviewed studies and family pages from pediatric associations, and cites what it finds. If nothing backs your question, it says so instead of making something up.",
+    "evBody": "It searches clinical guidelines, studies and pages from pediatric associations. You can read the sources. Without enough evidence, it prefers not to answer.",
     "evStat1L": "sources indexed",
     "evStat2L": "citable passages",
     "evStat3L": "publication range",
@@ -1027,7 +1027,7 @@
     "eyebrow": "Public demo",
     "badge": "Demo",
     "title": "Ask what you would ask your pediatrician",
-    "subtitle": "Lucía is a made-up baby with a sample record. Ask anything: the answer rests on the clinical guidelines and studies AdelIA has indexed, and you will see every source below.",
+    "subtitle": "Lucía is a made-up baby. Try her sample record and read the sources AdelIA finds.",
     "noStore": "No account, no card. Nothing you type here is saved.",
     "recordUnavailable": "We could not load the sample record. You can still ask a question.",
     "askTitle": "Your question",

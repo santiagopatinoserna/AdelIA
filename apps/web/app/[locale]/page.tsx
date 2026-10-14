@@ -16,7 +16,6 @@ import {
   FileText,
   Check,
   X,
-  BookMarked,
   Sparkles,
   Baby,
   Mic,
@@ -406,35 +405,29 @@ export default async function HomePage() {
   // the fold with no id, the desktop copy keeps #evidence where it always was.
   const evidenceSection = (props: { id?: string; className: string }) => (
     <section id={props.id} className={props.className}>
-      <div className="mx-auto max-w-2xl text-center">
-        <p className="ad-eyebrow flex items-center justify-center gap-2">
-          <BookMarked className="h-3.5 w-3.5" strokeWidth={2.2} />
-          {t("home.evEyebrow")}
-        </p>
-        <h2 className="mt-3 text-balance font-display text-3xl leading-tight text-ink md:text-4xl">
-          {t("home.evTitle")}
-        </h2>
-        <p className="mt-4 text-[15px] leading-relaxed text-ink-soft">{t("home.evBody")}</p>
-      </div>
-      <div className="mt-10 grid grid-cols-2 gap-4 sm:gap-3 md:grid-cols-4">
-        {evStats.map((s) => (
-          <div key={s.label} className="ad-card px-4 py-5 text-center sm:px-5">
-            <div className="font-display text-2xl font-semibold text-primary-text sm:text-3xl">{s.value}</div>
-            <div className="mt-1.5 text-xs leading-snug text-ink-soft">{s.label}</div>
-          </div>
-        ))}
-      </div>
-      <div className="mt-8 flex flex-col items-center gap-3">
-        <span className="ad-eyebrow">{t("home.evSourcesLabel")}</span>
-        <div className="flex max-w-3xl flex-wrap items-center justify-center gap-2">
-          {evOrgs.map((o) => (
-            <span
-              key={o}
-              className="rounded-full border border-line-control bg-surface px-3 py-1 font-mono text-xs text-ink-soft"
-            >
-              {o}
-            </span>
-          ))}
+      <div className="grid gap-8 border-t border-line pt-8 md:grid-cols-[1.1fr_0.9fr] md:gap-16 md:pt-12">
+        <div>
+          <p className="ad-eyebrow">{t("home.evEyebrow")}</p>
+          <h2 className="mt-3 max-w-[18ch] text-balance font-display text-3xl leading-tight text-ink md:text-4xl">
+            {t("home.evTitle")}
+          </h2>
+          <p className="mt-4 max-w-[48ch] text-base leading-relaxed text-ink-soft">{t("home.evBody")}</p>
+        </div>
+        <div>
+          {evStats.length > 0 && (
+            <dl className="grid grid-cols-[1fr_1fr_1.2fr] gap-3 border-b border-line pb-6">
+              {evStats.map((s) => (
+                <div key={s.label}>
+                  <dt className="text-xs leading-relaxed text-ink-soft">{s.label}</dt>
+                  <dd className="mt-2 font-display text-xl font-semibold tracking-tight text-primary-text sm:text-2xl">{s.value}</dd>
+                </div>
+              ))}
+            </dl>
+          )}
+          <p className="ad-eyebrow mt-6">{t("home.evSourcesLabel")}</p>
+          <ul className="mt-3 flex flex-wrap gap-x-4 gap-y-2 text-sm leading-relaxed text-ink-soft">
+            {evOrgs.map((o) => <li key={o}>{o}</li>)}
+          </ul>
         </div>
       </div>
     </section>
@@ -489,7 +482,7 @@ export default async function HomePage() {
             {/* 34 px on a phone: at 48 px the h1 took seven lines (349 px) and
                 pushed the demo button off the first screen. sm and up keep the
                 original 48/60 px. */}
-            <h1 className="text-balance font-display text-[2.125rem] leading-[1.08] tracking-tight text-ink sm:text-5xl sm:leading-[1.04] md:mt-5 md:text-6xl">
+            <h1 className="text-balance font-display text-[2.375rem] leading-[1.12] tracking-tight text-ink sm:text-5xl sm:leading-[1.04] md:mt-5 md:text-6xl">
               {t("home.hero")}
             </h1>
             <p className="mt-4 max-w-xl text-base leading-relaxed text-ink-soft md:mt-6 md:text-lg">
@@ -500,16 +493,13 @@ export default async function HomePage() {
             <div className="mt-6 flex flex-col gap-3 sm:flex-row sm:flex-wrap sm:items-center md:mt-9">
               <StartLink
                 href="/dashboard"
-                className="ad-btn ad-btn-primary w-full px-6 py-3 text-base sm:w-auto"
+                className="ad-btn ad-btn-ghost w-full px-5 py-3 text-base sm:w-auto"
               >
                 {t("home.cta")}
-                <ArrowRight className="h-4 w-4" strokeWidth={2.4} />
               </StartLink>
-              {/* The demo is the answer to "a card before the first useful
-                  pixel" (audit 4.6): a stranger can see the product answer a
-                  real question, with its sources, before deciding anything. */}
-              <Link href="/demo" className="ad-btn ad-btn-ghost w-full px-5 py-3 text-base sm:w-auto">
+              <Link href="/demo" className="ad-btn ad-btn-primary w-full px-6 py-3 text-base sm:w-auto">
                 {t("home.demoLink")}
+                <ArrowRight className="h-4 w-4" strokeWidth={2.4} />
               </Link>
               {/* Not on phones: its target (#how) is folded there. */}
               <a href="#how" className="ad-btn ad-btn-ghost px-5 py-3 text-base max-md:hidden">
@@ -520,24 +510,20 @@ export default async function HomePage() {
 
           {/* Right: evidence proof card — the differentiator */}
           <div className="ad-rise" style={{ animationDelay: "180ms" }}>
-            <figure className="ad-card relative overflow-hidden p-6 md:p-7">
-              <div
-                aria-hidden
-                className="pointer-events-none absolute -right-16 -top-16 h-48 w-48 rounded-full bg-primary-tint/50 blur-2xl"
-              />
+            <figure className="ad-card relative overflow-hidden p-6 md:p-8">
               <figcaption className="ad-eyebrow flex items-center gap-2">
                 <Quote className="h-3.5 w-3.5" strokeWidth={2.2} />
                 {t("home.proofLabel")}
               </figcaption>
-              <p className="mt-4 text-sm font-medium italic text-ink-soft">
+              <p className="mt-5 max-w-[38ch] font-display text-xl leading-snug text-ink">
                 “{t("home.proofQuestion")}”
               </p>
-              <p className="mt-4 text-[15px] leading-relaxed text-ink">
+              <p className="mt-4 text-base leading-relaxed text-ink">
                 {t("home.proofAnswer")}{" "}
                 <span className="ad-ev-tag align-middle">ev_1</span>
               </p>
               <div className="mt-5 border-t border-line pt-4">
-                <p className="font-mono text-xs text-ink-soft">
+                <p className="text-sm leading-relaxed text-ink-soft">
                   {t("home.proofSource")}
                 </p>
               </div>

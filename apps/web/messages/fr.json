@@ -20,8 +20,8 @@
     "clinicalDisclaimerShort": "AdelIA ne remplace pas votre pédiatre."
   },
   "home": {
-    "hero": "Toute la santé de ton bébé, au même endroit. Et une IA qui répond, preuves à l’appui.",
-    "subhero": "Ces questions qui te tiennent éveillée la nuit ? Réunis le dossier médical de ton bébé et pose-les, tout simplement. Chaque réponse s’appuie sur la recherche et cite ses sources.",
+    "hero": "La santé de ton bébé. Des repères pour toi.",
+    "subhero": "Ses comptes rendus, tes questions et les sources pour les comprendre. Au même endroit.",
     "cta": "Commencer",
     "eyebrow": "Pour les mamans · la santé de bébé, preuves à l’appui",
     "ctaSecondary": "Voir comment ça marche",
@@ -139,7 +139,7 @@
     "modeBDemoS3": "Faut-il revoir l’introduction des aliments solides ?",
     "evEyebrow": "D’où vient chaque réponse",
     "evTitle": "Les réponses indiquent leurs sources.",
-    "evBody": "AdelIA ne répond pas depuis une boîte noire. Elle cherche dans des recommandations cliniques, des études évaluées par les pairs et des pages pour les familles d’associations pédiatriques, et cite ce qu’elle trouve. Si rien n’appuie votre question, elle le dit au lieu d’inventer.",
+    "evBody": "Elle cherche dans des recommandations cliniques, des études et des pages d’associations pédiatriques. Tu peux consulter les sources. Sans preuves suffisantes, elle préfère ne pas répondre.",
     "evStat1L": "sources indexées",
     "evStat2L": "passages citables",
     "evStat3L": "plage de publication",
@@ -1027,7 +1027,7 @@
     "eyebrow": "Démo publique",
     "badge": "Démo",
     "title": "Pose la question que tu poserais à ton pédiatre",
-    "subtitle": "Lucía est un bébé inventé avec un dossier d’exemple. Pose ce que tu veux : la réponse s’appuie sur les recommandations cliniques et les études qu’AdelIA a indexées, et chaque source s’affiche en dessous.",
+    "subtitle": "Lucía est un bébé inventé. Essaie son dossier d’exemple et consulte les sources trouvées par AdelIA.",
     "noStore": "Sans compte et sans carte. Rien de ce que tu écris ici n’est conservé.",
     "recordUnavailable": "On n’a pas pu charger le dossier d’exemple. Tu peux quand même poser ta question.",
     "askTitle": "Ta question",
