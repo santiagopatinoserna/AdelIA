@@ -28,6 +28,7 @@ import {
 } from "lucide-react";
 
 import { FunnelVisit, StartLink } from "@/components/funnel";
+import { LandingFold } from "@/components/landing-fold";
 import { publicPageAlternates } from "@/lib/seo";
 
 const GITHUB_URL = "https://github.com/santiagopatinoserna/AdelIA";
@@ -71,6 +72,62 @@ function cited(text: string) {
   });
 }
 
+/*
+ * What a phone gets, and why (below `md`; from `md` up the page is unchanged).
+ *
+ * Measured 2026-10-14 at 390x844: 11,936 CSS px of scroll (about 14 screens)
+ * and a six-to-seven line h1 that pushed "Ver la demo sin cuenta" past the
+ * fold. The reader is a mother, often at night, often with the baby in one
+ * arm. Three things have to reach her, in this order, and every section was
+ * judged by which of them it carries:
+ *
+ *   (a) what AdelIA is, in a sentence;
+ *   (b) the proof that it does not invent answers, which is what separates it
+ *       from a generic chatbot;
+ *   (c) a way to try it without an account.
+ *
+ * SURVIVE on a phone (always visible):
+ *   1. Hero: h1, one supporting paragraph and two buttons, all inside the first
+ *      844 px. (a) and (c): "Ver la demo sin cuenta" is the lowest-friction path
+ *      the product has, so it is on the first screen, whole.
+ *   2. The proof card inside the hero (a real question, a cited answer, the
+ *      guideline it came from). (b), in one glance and directly under the buttons.
+ *   3. #evidence, "Cada respuesta nace de un estudio": (b) in words and numbers.
+ *      It is the one place that states the refusal ("si ninguno respalda tu
+ *      pregunta, lo dice en vez de inventar"), which is the product's rule. It
+ *      is followed by one more "Ver la demo sin cuenta" so the mother who has
+ *      read the proof has the way in under her thumb (c).
+ *
+ * FOLDED behind "Ver más" (still in the HTML, one tap away):
+ *   - #day: the page's signature on a desktop, and 2,397 px on a phone, the
+ *     longest block. It illustrates, it does not prove.
+ *   - #features: three claims that the hero, the proof card and #evidence have
+ *     already made, shorter.
+ *   - #how (modes A and B) and #story (timeline): they explain the product to
+ *     someone who has decided to look closer, not to someone deciding whether to.
+ *   - the comparison with a generic chatbot: it repeats the proof card at 1,438 px.
+ *   - the open-source band: matters to the people who self-host, not to the
+ *     first minute of a mother's visit.
+ *   - #pricing: what a mother needs before paying, not before trying. The
+ *     trial note ("sin tarjeta") is a tap away and the demo asks for no card.
+ *
+ * Also dropped on a phone only: the eyebrow (a second line of small print above
+ * the h1, saying what the h1 and the paragraph already say), the "Ver cómo
+ * funciona" button (its target is folded; two buttons is what fits), and the
+ * header's "Empezar" (the hero carries the same action on the same screen).
+ *
+ * The footer stays whole: it carries the clinical disclaimer and the privacy
+ * and terms links, which are not optional on a health product.
+ *
+ * Nothing was deleted and no i18n key was dropped: this is hierarchy and
+ * visibility. #evidence is rendered twice (a phone copy ahead of the fold, the
+ * desktop copy in its original place), because moving it earlier would reorder
+ * the desktop narrative and reordering with CSS would split the reading order
+ * from the focus order. Only one copy is ever displayed, and only the desktop
+ * copy carries the id. Spec: 44 px touch floor and the amber focus ring come
+ * from `.ad-btn` and `:focus-visible`; no colour, token or dark-mode rule is
+ * touched here.
+ */
 export default function HomePage() {
   const t = useTranslations();
   const locale = useLocale();
@@ -310,13 +367,51 @@ export default function HomePage() {
     },
   ];
 
+  // Rendered twice, see the note above HomePage: the phone copy sits ahead of
+  // the fold with no id, the desktop copy keeps #evidence where it always was.
+  const evidenceSection = (props: { id?: string; className: string }) => (
+    <section id={props.id} className={props.className}>
+      <div className="mx-auto max-w-2xl text-center">
+        <p className="ad-eyebrow flex items-center justify-center gap-2">
+          <BookMarked className="h-3.5 w-3.5" strokeWidth={2.2} />
+          {t("home.evEyebrow")}
+        </p>
+        <h2 className="mt-3 text-balance font-display text-3xl leading-tight text-ink md:text-4xl">
+          {t("home.evTitle")}
+        </h2>
+        <p className="mt-4 text-[15px] leading-relaxed text-ink-soft">{t("home.evBody")}</p>
+      </div>
+      <div className="mt-10 grid grid-cols-2 gap-4 sm:gap-3 md:grid-cols-4">
+        {evStats.map((s) => (
+          <div key={s.label} className="ad-card px-4 py-5 text-center sm:px-5">
+            <div className="font-display text-2xl font-semibold text-primary-text sm:text-3xl">{s.value}</div>
+            <div className="mt-1.5 text-xs leading-snug text-ink-soft">{s.label}</div>
+          </div>
+        ))}
+      </div>
+      <div className="mt-8 flex flex-col items-center gap-3">
+        <span className="ad-eyebrow">{t("home.evSourcesLabel")}</span>
+        <div className="flex max-w-3xl flex-wrap items-center justify-center gap-2">
+          {evOrgs.map((o) => (
+            <span
+              key={o}
+              className="rounded-full border border-line-control bg-surface px-3 py-1 font-mono text-xs text-ink-soft"
+            >
+              {o}
+            </span>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+
   return (
     <div className="relative min-h-screen overflow-hidden">
       {/* One aggregate counter per page view, no cookie and no identifier
           (audit 4.8, components/funnel.tsx). Renders nothing. */}
       <FunnelVisit />
       {/* Top bar */}
-      <header className="mx-auto flex max-w-6xl items-center justify-between px-6 py-6">
+      <header className="mx-auto flex max-w-6xl items-center justify-between px-6 py-4 md:py-6">
         <span className="font-display text-2xl font-semibold tracking-tight text-ink">
           Adel<span className="text-accent-text">IA</span>
         </span>
@@ -331,9 +426,12 @@ export default function HomePage() {
             <Code2 className="h-5 w-5" strokeWidth={1.9} />
           </a>
           <LocaleSwitcher current={locale} />
+          {/* Phones: the hero below carries the same action on the same
+              screen, so a second "Empezar" in the corner only splits the
+              thumb's choice three ways. */}
           <StartLink
             href="/dashboard"
-            className="ad-btn ad-btn-ghost px-3.5 py-1.5 text-sm"
+            className="ad-btn ad-btn-ghost px-3.5 py-1.5 text-sm max-sm:hidden"
           >
             {t("home.cta")}
           </StartLink>
@@ -341,32 +439,45 @@ export default function HomePage() {
       </header>
 
       {/* Hero */}
-      <main className="mx-auto max-w-6xl px-6 pb-24 pt-10 md:pt-16">
-        <div className="grid items-center gap-14 lg:grid-cols-[1.05fr_0.95fr]">
+      <main className="mx-auto max-w-6xl px-6 pb-16 pt-4 md:pb-24 md:pt-16">
+        <div className="grid items-center gap-10 lg:grid-cols-[1.05fr_0.95fr] lg:gap-14">
           {/* Left: copy */}
           <div className="ad-rise" style={{ animationDelay: "60ms" }}>
-            <p className="ad-eyebrow flex items-center gap-2">
+            {/* Not on phones: small print above the h1 that the h1 and the
+                paragraph already say. On a 390 px screen it wrapped to two
+                lines and was one more thing between the mother and the
+                buttons. */}
+            <p className="ad-eyebrow hidden items-center gap-2 md:flex">
               <Stethoscope className="h-3.5 w-3.5" strokeWidth={2.2} />
               {t("home.eyebrow")}
             </p>
-            <h1 className="mt-5 text-balance font-display text-5xl leading-[1.04] tracking-tight text-ink md:text-6xl">
+            {/* 34 px on a phone: at 48 px the h1 took seven lines (349 px) and
+                pushed the demo button off the first screen. sm and up keep the
+                original 48/60 px. */}
+            <h1 className="text-balance font-display text-[2.125rem] leading-[1.08] tracking-tight text-ink sm:text-5xl sm:leading-[1.04] md:mt-5 md:text-6xl">
               {t("home.hero")}
             </h1>
-            <p className="mt-6 max-w-xl text-lg leading-relaxed text-ink-soft">
+            <p className="mt-4 max-w-xl text-base leading-relaxed text-ink-soft md:mt-6 md:text-lg">
               {t("home.subhero")}
             </p>
-            <div className="mt-9 flex flex-wrap items-center gap-3">
-              <StartLink href="/dashboard" className="ad-btn ad-btn-primary px-6 py-3 text-base">
+            {/* Phones: one column, full width, 12 px apart. Both buttons are
+                `.ad-btn` (44 px floor, 8 px minimum gap in spec 7.5). */}
+            <div className="mt-6 flex flex-col gap-3 sm:flex-row sm:flex-wrap sm:items-center md:mt-9">
+              <StartLink
+                href="/dashboard"
+                className="ad-btn ad-btn-primary w-full px-6 py-3 text-base sm:w-auto"
+              >
                 {t("home.cta")}
                 <ArrowRight className="h-4 w-4" strokeWidth={2.4} />
               </StartLink>
               {/* The demo is the answer to "a card before the first useful
                   pixel" (audit 4.6): a stranger can see the product answer a
                   real question, with its sources, before deciding anything. */}
-              <Link href="/demo" className="ad-btn ad-btn-ghost px-5 py-3 text-base">
+              <Link href="/demo" className="ad-btn ad-btn-ghost w-full px-5 py-3 text-base sm:w-auto">
                 {t("home.demoLink")}
               </Link>
-              <a href="#how" className="ad-btn ad-btn-ghost px-5 py-3 text-base">
+              {/* Not on phones: its target (#how) is folded there. */}
+              <a href="#how" className="ad-btn ad-btn-ghost px-5 py-3 text-base max-md:hidden">
                 {t("home.ctaSecondary")}
               </a>
             </div>
@@ -399,6 +510,22 @@ export default function HomePage() {
           </div>
         </div>
 
+        {/* Phones only: the proof in words and numbers, then the way in. The
+            rest of the page is behind "Ver más" (note above HomePage). The
+            JSX inside <LandingFold> keeps its old indentation on purpose, so
+            the diff shows the fold and not 700 re-indented lines. */}
+        {evidenceSection({ className: "mt-14 md:hidden" })}
+        <div className="mt-10 md:hidden">
+          <Link href="/demo" className="ad-btn ad-btn-primary w-full px-5 py-3 text-base">
+            {t("home.demoLink")}
+          </Link>
+        </div>
+
+        <LandingFold
+          hint={t("home.foldHint")}
+          moreLabel={t("home.foldMore")}
+          lessLabel={t("home.foldLess")}
+        >
         {/* A day with AdelIA: the page's signature. A real day, one artefact per step */}
         <section id="day" className="mt-24 scroll-mt-24">
           <div className="mx-auto max-w-2xl text-center">
@@ -626,40 +753,9 @@ export default function HomePage() {
           </div>
         </section>
 
-        {/* Evidence guarantee — where every answer comes from */}
-        <section id="evidence" className="mt-28 scroll-mt-24">
-          <div className="mx-auto max-w-2xl text-center">
-            <p className="ad-eyebrow flex items-center justify-center gap-2">
-              <BookMarked className="h-3.5 w-3.5" strokeWidth={2.2} />
-              {t("home.evEyebrow")}
-            </p>
-            <h2 className="mt-3 text-balance font-display text-3xl leading-tight text-ink md:text-4xl">
-              {t("home.evTitle")}
-            </h2>
-            <p className="mt-4 text-[15px] leading-relaxed text-ink-soft">{t("home.evBody")}</p>
-          </div>
-          <div className="mt-10 grid grid-cols-2 gap-4 sm:gap-3 md:grid-cols-4">
-            {evStats.map((s) => (
-              <div key={s.label} className="ad-card px-4 py-5 text-center sm:px-5">
-                <div className="font-display text-2xl font-semibold text-primary-text sm:text-3xl">{s.value}</div>
-                <div className="mt-1.5 text-xs leading-snug text-ink-soft">{s.label}</div>
-              </div>
-            ))}
-          </div>
-          <div className="mt-8 flex flex-col items-center gap-3">
-            <span className="ad-eyebrow">{t("home.evSourcesLabel")}</span>
-            <div className="flex max-w-3xl flex-wrap items-center justify-center gap-2">
-              {evOrgs.map((o) => (
-                <span
-                  key={o}
-                  className="rounded-full border border-line-control bg-surface px-3 py-1 font-mono text-xs text-ink-soft"
-                >
-                  {o}
-                </span>
-              ))}
-            </div>
-          </div>
-        </section>
+        {/* Evidence guarantee — where every answer comes from. Desktop copy:
+            phones read the one ahead of the fold (evidenceSection above). */}
+        {evidenceSection({ id: "evidence", className: "mt-28 scroll-mt-24 max-md:hidden" })}
 
         {/* Classic GPT vs AdelIA — honest, structural comparison */}
         <section className="mt-28">
@@ -852,6 +948,7 @@ export default function HomePage() {
             {t("home.prFootnote")}
           </p>
         </section>
+        </LandingFold>
       </main>
 
       {/* Footer */}

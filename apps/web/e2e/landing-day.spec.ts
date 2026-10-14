@@ -1,6 +1,8 @@
 import AxeBuilder from "@axe-core/playwright";
 import { expect, test } from "@playwright/test";
 
+import { openLandingFold } from "./utils/landing";
+
 // Public landing, section "Un día con AdelIA" (#day): five moments of a
 // parent's day, each showing the artefact the product produces. No login,
 // no external calls. Copy comes from messages/*.json home.day.*.
@@ -50,6 +52,10 @@ test.describe("landing: Un día con AdelIA", () => {
       });
       const page = await context.newPage();
       await page.goto("/es");
+      // On a phone #day is folded behind "Ver más" (components/landing-fold.tsx,
+      // the 11,936 px landing). Open it first, so axe and the overflow check
+      // below still see the whole section; the assertions are unchanged.
+      if (viewport.width < 500) await openLandingFold(page);
       await expect(page.locator("section#day")).toBeVisible();
       const results = await new AxeBuilder({ page }).include("#day").analyze();
       expect(results.violations, JSON.stringify(results.violations, null, 2)).toEqual([]);

@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useLocale, useTranslations } from "next-intl";
 import { AlertCircle, Loader2, Send, ShieldAlert, Sparkles } from "lucide-react";
 
@@ -35,6 +35,30 @@ export function DemoAsk({ suggested }: { suggested: string[] }) {
   const [busy, setBusy] = useState(false);
   const [result, setResult] = useState<DemoAnswer | null>(null);
   const [error, setError] = useState<string | null>(null);
+
+  const form = useRef<HTMLFormElement>(null);
+  const [typing, setTyping] = useState(false);
+
+  // Keyboard up on a phone: keep the whole form, field AND "Preguntar", above
+  // it. The browser scrolls the focused field into view and nothing else, so
+  // the button used to end up behind the keyboard. `visualViewport` is what
+  // shrinks when the keyboard opens (the layout viewport does not, on iOS and
+  // on Chrome's default), so the edge to clear is read from it.
+  useEffect(() => {
+    if (!typing) return;
+    function revealForm() {
+      const el = form.current;
+      if (!el) return;
+      const vv = window.visualViewport;
+      const visibleBottom = vv ? vv.offsetTop + vv.height : window.innerHeight;
+      const overflow = el.getBoundingClientRect().bottom + 12 - visibleBottom;
+      if (overflow > 0) window.scrollBy({ top: overflow });
+    }
+    revealForm();
+    const target: EventTarget = window.visualViewport ?? window;
+    target.addEventListener("resize", revealForm);
+    return () => target.removeEventListener("resize", revealForm);
+  }, [typing]);
 
   async function ask(text: string) {
     const trimmed = text.trim();
@@ -73,6 +97,7 @@ export function DemoAsk({ suggested }: { suggested: string[] }) {
   return (
     <div data-testid="demo-ask">
       <form
+        ref={form}
         onSubmit={(e) => {
           e.preventDefault();
           void ask(question);
@@ -87,6 +112,22 @@ export function DemoAsk({ suggested }: { suggested: string[] }) {
           maxLength={300}
           value={question}
           onChange={(e) => setQuestion(e.target.value)}
+          onFocus={() => setTyping(true)}
+          onBlur={() => setTyping(false)}
+          // Enter sends and Shift+Enter breaks the line, as in every chat the
+          // visitor already uses. It used to only add a newline: an automated
+          // check typed a question, pressed Enter and the page stayed put, and
+          // on a phone the button can be behind the keyboard. Routed through
+          // requestSubmit so there is one send path (onSubmit above, with its
+          // minimum length and busy guards). `isComposing`: Enter that
+          // confirms an IME candidate (and some Android keyboards' word
+          // suggestions) must not send half a sentence.
+          onKeyDown={(e) => {
+            if (e.key !== "Enter" || e.shiftKey || e.nativeEvent.isComposing) return;
+            e.preventDefault();
+            e.currentTarget.form?.requestSubmit();
+          }}
+          enterKeyHint="send"
           placeholder={t("askPlaceholder")}
           aria-label={t("askLabel")}
           className="ad-field mt-2 w-full resize-y"
