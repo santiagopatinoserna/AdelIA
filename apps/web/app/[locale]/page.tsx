@@ -574,6 +574,20 @@ export default async function HomePage() {
             <p className="mt-4 text-[15px] leading-relaxed text-ink-soft">{t("home.day.intro")}</p>
           </div>
 
+          {/* Audit 1.2. This block talks about a fever and paracetamol, and the only
+              "does not replace medical advice" on the page used to sit in the footer,
+              thousands of pixels below. The notice now comes before the first step, at
+              reading size (not the 11px footnote under the CTA): on a phone and on lg
+              alike it is read before the timeline, not after. */}
+          <div
+            role="note"
+            data-testid="day-disclaimer"
+            className="mx-auto mt-8 flex max-w-2xl items-start gap-3 rounded-xl border border-accent-tint-line bg-accent-tint/50 p-4 text-sm leading-relaxed text-ink"
+          >
+            <ShieldCheck className="mt-0.5 h-4 w-4 shrink-0 text-accent-text" strokeWidth={2.2} aria-hidden />
+            <p>{t("home.day.disclaimer")}</p>
+          </div>
+
           {/* Timeline: vertical with the line on the left (phones), one horizontal band of 5 on lg+ */}
           <ol className="relative mt-12 flex flex-col gap-9 border-l border-line-strong pl-6 lg:grid lg:grid-cols-5 lg:items-start lg:gap-3 lg:border-l-0 lg:border-t lg:pl-0 lg:pt-7">
             {daySteps.map((step, i) => (
