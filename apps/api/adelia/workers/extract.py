@@ -6,6 +6,7 @@ from datetime import date
 from mistralai.client.errors import MistralError
 from pydantic import ValidationError
 
+from adelia.config import settings
 from adelia.llm import get_mistral_client
 from adelia.schemas import ExtractedEntity, ExtractionReport
 
@@ -277,7 +278,9 @@ def _parse_reply(content: str) -> list | None:
 
 async def _complete(client, system_prompt: str, text: str, response_format: dict):
     return await client.chat.complete_async(
-        model="mistral-medium-latest",
+        # Not a literal: extraction has its own setting so it can be pinned
+        # separately from chat (docs/MODELOS.md). Default is unchanged.
+        model=settings.mistral_extraction_model,
         messages=[
             {"role": "system", "content": system_prompt},
             {"role": "user", "content": f"Document:\n\n{text}"},

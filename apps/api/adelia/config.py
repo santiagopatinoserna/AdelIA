@@ -1,4 +1,28 @@
+from typing import Literal
+
+from pydantic import field_validator
 from pydantic_settings import BaseSettings, SettingsConfigDict
+
+# Values Mistral documents for `reasoning_effort` on the models in
+# adelia.llm.REASONING_EFFORT_MODELS: "none" thinks minimally and returns no
+# thinking trace, "high" returns a full thinking chunk before the answer and
+# spends more tokens. A typo in the env var fails at boot instead of as a 422
+# in the middle of a parent's chat turn.
+ReasoningEffort = Literal["none", "high"]
+
+# The output size of every embedding model this code knows how to store, and
+# the ONE place that couples a model name to a vector dimension. The `chunks`
+# and `evidence_chunks` embedding columns are Vector(1024) (migrations 0001
+# and 0005, models.py) because mistral-embed returns 1024 floats, so changing
+# the embedding model is a migration plus a full re-embed, never a config edit:
+# a model that returns another size cannot be stored, and one that returns the
+# same size is still a different vector space, so every stored vector and
+# every distance cut-off (evidence_max_distance) stops meaning anything.
+# Settings refuses a name that is not in this table, and
+# tests/test_model_config.py compares this table with the real columns, so a
+# new entry cannot be added without the migration that makes it storable.
+# Procedure: apps/api/docs/MODELOS.md.
+EMBEDDING_MODEL_DIMENSIONS: dict[str, int] = {"mistral-embed": 1024}
 
 
 class Settings(BaseSettings):
@@ -36,6 +60,40 @@ class Settings(BaseSettings):
     llm_provider: str = "mistral"  # "mistral" | "openai"
     mistral_chat_model: str = "mistral-medium-latest"
     openai_chat_model: str = "gpt-5.1"
+
+    # ---- Every other model name the product sends to a provider ----
+    # They used to sit inline in worker code (ocr.py, embed.py, extract.py,
+    # qa_pre_baker.py), so changing one meant editing logic. The defaults below
+    # are exactly the literals that were inline; tests/test_model_config.py pins
+    # them, so a future bump is a visible diff in a test and not a silent edit.
+    # extraction and briefing are separate settings from mistral_chat_model on
+    # purpose: they share its value today, but setting MISTRAL_CHAT_MODEL for the
+    # chat must never move structured extraction or the briefing with it.
+    # Table of all models, what depends on each, and the approval procedure:
+    # apps/api/docs/MODELOS.md.
+    mistral_extraction_model: str = "mistral-medium-latest"
+    mistral_briefing_model: str = "mistral-medium-latest"
+    mistral_ocr_model: str = "mistral-ocr-latest"
+    # Not a free choice: must be a key of EMBEDDING_MODEL_DIMENSIONS (see above).
+    mistral_embed_model: str = "mistral-embed"
+
+    # Reasoning effort, per surface. None (the default, and what both were
+    # before this setting existed) means the request carries no reasoning_effort
+    # field at all, so it is identical to the one sent today. When set, it is sent
+    # only if the configured model is on adelia.llm.REASONING_EFFORT_MODELS; on
+    # any other model it is ignored with one warning, never forwarded, so it
+    # cannot reach a model that would reject it. The default model name
+    # "mistral-medium-latest" is NOT on that list: Mistral does not state which
+    # model that alias points to, so using the knob means pinning
+    # MISTRAL_CHAT_MODEL (or MISTRAL_BRIEFING_MODEL) to a listed id as a
+    # deliberate second step. Neither knob has been measured; do not set them in
+    # production before the evaluation in apps/api/docs/MODELOS.md.
+    #   chat_reasoning_effort      read by the RAG chat stream (which also serves
+    #                              /demo) and by the agent's Mistral fallback
+    #   briefing_reasoning_effort  read by the briefing Q&A pre-baker
+    # Not read by extraction (temperature 0, JSON) or by the consultation summary.
+    chat_reasoning_effort: ReasoningEffort | None = None
+    briefing_reasoning_effort: ReasoningEffort | None = None
 
     # ---- Dual-RAG retrieval cut-offs (cosine distance, lower = closer) ----
     # Calibrated 2026-08-31 against the production corpus (118 sources, 258
@@ -164,6 +222,31 @@ class Settings(BaseSettings):
     # Longest question the demo will embed. A public endpoint with no cap is
     # a way to buy someone else's embeddings by the megabyte.
     demo_max_question_chars: int = 300
+
+    @field_validator("chat_reasoning_effort", "briefing_reasoning_effort", mode="before")
+    @classmethod
+    def _blank_effort_means_unset(cls, value):
+        # An env file line such as `CHAT_REASONING_EFFORT=` arrives as "". That
+        # is not a valid effort and should read as "not configured".
+        if isinstance(value, str) and not value.strip():
+            return None
+        return value
+
+    @field_validator("mistral_embed_model")
+    @classmethod
+    def _embed_model_must_have_a_known_dimension(cls, value: str) -> str:
+        if value not in EMBEDDING_MODEL_DIMENSIONS:
+            raise ValueError(
+                f"unknown embedding model {value!r}: the vector columns are sized for "
+                f"{sorted(EMBEDDING_MODEL_DIMENSIONS)}. Changing the embedding model is a "
+                "migration plus a re-embed of every stored vector, not a config edit "
+                "(see apps/api/docs/MODELOS.md)."
+            )
+        return value
+
+    @property
+    def embedding_dimension(self) -> int:
+        return EMBEDDING_MODEL_DIMENSIONS[self.mistral_embed_model]
 
     @property
     def database_url(self) -> str:

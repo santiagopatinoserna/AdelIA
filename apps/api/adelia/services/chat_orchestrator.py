@@ -10,7 +10,7 @@ from uuid import UUID
 
 
 from adelia.config import settings
-from adelia.llm import get_mistral_client
+from adelia.llm import content_text, get_mistral_client, reasoning_effort_kwargs
 from adelia.db import AsyncSessionLocal
 from adelia.enrichment.evidence_retrieval import (
     EvidenceMatch,
@@ -112,17 +112,29 @@ async def _stream_llm_tokens(
 
 
 async def _stream_mistral_tokens(messages: list[dict]) -> AsyncIterator[str]:
-    """Raises RuntimeError if MISTRAL_API_KEY missing."""
+    """Raises RuntimeError if MISTRAL_API_KEY missing.
+
+    settings.chat_reasoning_effort rides along only when it is set AND the model
+    is on adelia.llm.REASONING_EFFORT_MODELS; unset, the call has exactly the
+    keyword arguments it always had. With effort "high" the delta `content` is
+    a list that starts with a thinking chunk, so every piece goes through
+    content_text: the reasoning trace is never streamed to the parent.
+    """
     client = get_mistral_client()
     response = await client.chat.stream_async(
         model=settings.mistral_chat_model,
         messages=messages,
         temperature=0.2,
+        **reasoning_effort_kwargs(
+            settings.chat_reasoning_effort,
+            settings.mistral_chat_model,
+            setting="chat_reasoning_effort",
+        ),
     )
     async for event in response:
         if event.data and event.data.choices:
             delta = event.data.choices[0].delta
-            piece = getattr(delta, "content", "") or ""
+            piece = content_text(getattr(delta, "content", "") or "")
             if piece:
                 yield piece
 

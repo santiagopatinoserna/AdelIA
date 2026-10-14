@@ -106,7 +106,15 @@ async def _llm_structured_call(
     """
     from mistralai.client.errors import MistralError
 
+    from adelia.llm import content_text, reasoning_effort_kwargs
+
     try:
+        # settings.briefing_reasoning_effort: unset (the default) adds nothing to
+        # this call, so the request is the one sent before the knob existed. It
+        # is the deliberate end of the range (a doctor's briefing), opposite to
+        # chat_reasoning_effort, and Mistral does not document how reasoning
+        # combines with a strict json_schema, so it needs an eval run first
+        # (apps/api/docs/MODELOS.md).
         resp = await client.chat.complete_async(
             model=model,
             messages=[
@@ -118,6 +126,9 @@ async def _llm_structured_call(
                 "json_schema": {"name": "qa_items", "schema": _QA_JSON_SCHEMA, "strict": True},
             },
             temperature=0.2,
+            **reasoning_effort_kwargs(
+                settings.briefing_reasoning_effort, model, setting="briefing_reasoning_effort"
+            ),
         )
     except MistralError as e:
         raise QAPrebakerError(f"Mistral API error: {e}") from e
@@ -125,6 +136,10 @@ async def _llm_structured_call(
         raise QAPrebakerError(f"Unexpected error during Mistral call: {e}") from e
 
     content = resp.choices[0].message.content
+    if isinstance(content, list):
+        # reasoning_effort="high" answers with [ThinkChunk, TextChunk]; the JSON
+        # is the text chunk and the thinking trace is not parsed or kept.
+        content = content_text(content)
     tokens_used = getattr(resp.usage, "total_tokens", 0) if getattr(resp, "usage", None) else 0
     try:
         data = json.loads(content)
@@ -192,16 +207,20 @@ async def bake_questions(
     entities_text: str,
     specialty_hints: str,
     source_raw_texts: dict[str, str],
-    model: str = "mistral-medium-latest",
+    model: str | None = None,
     locale: str = "es",
 ) -> tuple[list[QAItem], LLMMeta]:
     """Generate top-5 Q&A from patient context, with anti-hallucination filter.
 
     Returns (items, meta). Items may be 0-5 after filter; LLMMeta records cost/tokens.
 
+    `model` defaults to settings.mistral_briefing_model ("mistral-medium-latest"
+    today, the literal that used to be the default here); an explicit value wins.
+
     Async since 2026-08-31: the awaited call inside is the one that used to
     stall the event loop for the length of a briefing (audit 4.5).
     """
+    model = model or settings.mistral_briefing_model
     client = _build_client()
     system_prompt = _system_prompt(specialty, specialty_hints, locale)
     user_content = (
