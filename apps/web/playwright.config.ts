@@ -10,6 +10,9 @@ export default defineConfig({
   timeout: 120_000,
   retries: 0,
   use: {
+    // CI's headless shell crashed with SIGSEGV while creating browser contexts.
+    // Use Chromium's full new-headless implementation, without retrying tests.
+    channel: process.env.CI ? "chromium" : undefined,
     baseURL: process.env.E2E_BASE_URL ?? "http://localhost:3001",
     trace: "retain-on-failure",
     // Fake mic: lets Chromium feed MediaRecorder a synthetic audio device in
