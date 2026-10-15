@@ -41,7 +41,7 @@ jobs:
       run:
         working-directory: apps/api
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v7
 
       # GH service containers can't override the image command; MinIO needs one.
       - name: Start MinIO
@@ -93,7 +93,7 @@ jobs:
       run:
         working-directory: apps/web
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v7
 
       - uses: actions/setup-node@v6
         with:
@@ -160,7 +160,7 @@ jobs:
       TELEGRAM_BOT_TOKEN: e2e-dummy
       # No MISTRAL_API_KEY: the upload spec self-skips; auth/locale/a11y/GDPR run.
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v7
 
       - uses: astral-sh/setup-uv@v7
         with:
