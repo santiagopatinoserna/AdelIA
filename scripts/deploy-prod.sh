@@ -4,7 +4,7 @@
 # The server's IP is assigned by DHCP and changes across reboots (no router
 # access to reserve one). Instead of hardcoding an IP, this script discovers
 # the server each run: env override -> known recent IPs -> a short LAN scan.
-# mDNS (santiago-mp80.local) does NOT resolve on this network, so that's not
+# mDNS (the server's .local hostname) does NOT resolve on this network, so that's not
 # an option.
 #
 # Usage:
@@ -123,7 +123,7 @@ Tried, in order:
 
 Find it by hand (run on the same LAN, after pinging the subnet or waking
 the machine):
-  arp -a | grep -i santiago
+  arp -a | grep -i <server-hostname>
 
 Then force it for this run (and optionally export it in your shell so
 future deploys skip discovery entirely):

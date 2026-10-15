@@ -73,7 +73,7 @@ Run ruff as written. With `--directory apps/api` the path is relative to `apps/a
 - **Live-API tests skip without keys.** Tests that call Mistral (OCR, embeddings, extraction, transcription, the briefing QA pre-baker) skip when `MISTRAL_API_KEY` is empty, and the one OpenAI transcription test skips without `OPENAI_API_KEY`. A contributor with no keys gets a green suite. A new test that needs a live key must use `pytest.mark.skipif(not settings.<key_name>, ...)` like the existing ones, and no test may require a key to pass.
 - **There is no separate test database.** The suite uses the dev database `adelia` and inserts throwaway users (`tests/db_helpers.py`), so do not point it at data you care about.
 
-Reference run on 2026-10-14, stack up, no API keys: 798 tests collected, 787 passed, 11 skipped (every skip is a key gate), in about 21 s. `docs/ESTADO.md` keeps the current numbers.
+Reference run on 2026-10-14, stack up, no API keys: 798 tests collected, 787 passed, 11 skipped (every skip is a key gate), in about 21 s.
 
 ## Code style
 

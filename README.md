@@ -2,7 +2,13 @@
 
 Open source personal medical vault + AI analysis (self-analysis + doctor briefing).
 
-**Status:** the tag `v0.2.0-rc1` (2026-06-10) marks the v0.1 milestones (M1-M6) plus the v0.2 enrichment layers. `main` is well past that tag: the clinical audit remediation of 2026-09-01 (answer contract, red flags, evidence cut-off, per-profile scope, paywall on the API) is on it. See `docs/ESTADO.md` for the current state and test counts, and `docs/specs/` and `docs/plans/` for design history.
+**Live demo, no account needed:** https://adelia.godi.ai/en/demo (also `/es/demo`, `/fr/demo`).
+
+**Why it exists.** A child's medical history ends up spread across several doctors and countries, and each visit starts from the last result and a summary of the previous visit. AdelIA keeps the documents in one place and answers questions about them with citations, or refuses when it has no evidence.
+
+**How it is built.** I wrote it with AI coding agents (Claude Code) under my direction. The commits are co-authored, and the specs and plans in `docs/` are the design record. The clinical rules are enforced in code and pinned by tests, see "Clinical answer contract" below.
+
+**Status:** the tag `v0.2.0-rc1` (2026-06-10) marks the v0.1 milestones (M1-M6) plus the v0.2 enrichment layers. `main` is well past that tag: the clinical audit remediation of 2026-09-01 (answer contract, red flags, evidence cut-off, per-profile scope, paywall on the API) is on it. See `docs/specs/` and `docs/plans/` for design history.
 
 **What works today** (each line checked against the code; the file it rests on is named where it helps):
 
@@ -134,7 +140,7 @@ You should see the AdelIA home page. Click "Empezar" → sign in with magic link
 pnpm test:api
 ```
 
-With the dev stack running (Postgres + MinIO) the suite includes live Postgres integration tests (auto-detected via TCP probe, override with `PG_AVAILABLE=0/1`). Tests that call the live Mistral or OpenAI APIs skip when the key is empty, so a checkout with no keys still gets a green run. `CONTRIBUTING.md` has the ports and the `apps/api/.env` setting a fresh machine needs (the dev Postgres listens on 5434, not 5432), and `docs/ESTADO.md` has the current test counts.
+With the dev stack running (Postgres + MinIO) the suite includes live Postgres integration tests (auto-detected via TCP probe, override with `PG_AVAILABLE=0/1`). Tests that call the live Mistral or OpenAI APIs skip when the key is empty, so a checkout with no keys still gets a green run. `CONTRIBUTING.md` has the ports and the `apps/api/.env` setting a fresh machine needs (the dev Postgres listens on 5434, not 5432).
 
 **Frontend (typecheck + production build):**
 
@@ -182,9 +188,8 @@ Document blobs live in the `miniodata` volume — snapshot it at the filesystem 
 
 ## Deploy (SaaS propio)
 
-The hosted instance at `adelia.godi.ai` runs on a home server reachable only
-by LAN IP, which changes on reboot (DHCP, no router access to reserve it).
-`scripts/deploy-prod.sh` handles that: it discovers the host (env override →
+The hosted instance at `adelia.godi.ai` is deployed with
+`scripts/deploy-prod.sh`: it discovers the host (env override →
 known recent IPs → a short LAN scan), rsyncs the repo over (the root pass
 never deletes, so the server keeps its own `.env.prod`; `apps`, `scripts`,
 `infra` and `docs` are mirrored so a removal in git reaches the server, per
@@ -198,8 +203,7 @@ commit `89db9c6`), rebuilds `api`+`web` via
 ADELIA_HOST=192.168.1.x ./scripts/deploy-prod.sh   # force the host
 ```
 
-If discovery fails, find the box with `arp -a | grep -i santiago` and pass it
-via `ADELIA_HOST`. See `DEPLOY.md` for first-time server setup (Caddy/TLS).
+If discovery fails, pass the host explicitly via `ADELIA_HOST`. See `DEPLOY.md` for first-time server setup (Caddy/TLS).
 
 ### PWA: service worker and updates
 
@@ -218,37 +222,12 @@ every 5 min) so an installed app learns about a deploy without a reload.
 `apps/web/e2e/pwa-sw.spec.ts` covers registration, the offline fallback and
 the notice; `scripts/server-verify.sh` runs it.
 
-### Cloudflare Web Analytics (beacon): switch it off
-
-Cloudflare injects its Web Analytics beacon into every HTML response of
-`adelia.godi.ai` (`<script src="https://static.cloudflareinsights.com/beacon.min.js/..." data-cf-beacon=...>`,
-which posts to `https://cloudflareinsights.com/cdn-cgi/rum`). No page or
-component in this repository loads it: the only occurrences under `apps/`
-are the two CSP origins in `apps/web/next.config.ts`. The
-privacy policy promises no tracking, so it has to be disabled in the
-Cloudflare dashboard, zone `godi.ai`:
-
-1. **Analytics & Logs → Web Analytics** → site `adelia.godi.ai` → **Manage
-   site** → disable the automatic setup (JS snippet injection), or remove the
-   site from Web Analytics altogether.
-2. On older dashboards the same toggle lives under **Speed → Optimization →
-   Content Optimization → Cloudflare Web Analytics → Off**.
-3. Check: `curl -s https://adelia.godi.ai/es | grep -c cloudflareinsights`
-   must print `0`.
-
-Until then the CSP in `apps/web/next.config.ts` allows those two origins
-(`script-src https://static.cloudflareinsights.com`,
-`connect-src https://cloudflareinsights.com`) so the console stays free of
-the blocked-script error; remove them once the beacon is off.
-
 ## Roadmap
 
 - **Now:** what the repository itself marks as pending.
   - Email forwarding: the Postmark webhook, the per-user alias and the dashboard page that shows it exist, but attachments are not stored (`ingestion/email_inbound.py`, "deferred to v0.2.1"). Wire them to the document pipeline, or hide the alias page until then.
   - Calibrate `patient_max_distance` (0.45 today, a noise filter) against real patient documents. Production held none on 2026-08-31 (`config.py`).
   - Replace the in-process document tasks with a worker queue (`config.py`, `doc_processing_concurrency`). Re-queueing stuck documents at boot is the current safety net.
-  - Switch off the Cloudflare Web Analytics beacon (section above), then drop its two CSP origins.
-  - Pre-launch ops that depend on accounts and keys outside this repository: Resend domain verification, the Postmark inbound token, the Telegram bot token (the Telegram code is merged and tested).
 - **v0.2.x:** streaming transcription during a consultation (Grabar consulta today records first and transcribes after), WhatsApp ingest, `clinician_verified` provenance (the schema accepts the value; nothing writes it yet).
 - **v0.3:** doctor query mode (QR + ephemeral session), Mon Espace Santé (FR) integration (today there is an import guide only), Sanidad ES (per CCAA). The agent with cards that `docs/specs/2026-07-02-adelia-v0.3-agent-mode-cards-design.md` scoped as v0.3 has already shipped.
 
