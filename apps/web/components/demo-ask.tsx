@@ -2,7 +2,8 @@
 
 import { useEffect, useRef, useState } from "react";
 import { useLocale, useTranslations } from "next-intl";
-import { AlertCircle, Loader2, Send, ShieldAlert, Sparkles } from "lucide-react";
+import { AlertCircle, ArrowUpRight, Loader2, Send, ShieldAlert } from "lucide-react";
+import { AnimatePresence, motion, useReducedMotion } from "motion/react";
 
 import { EvidenceCard } from "@/components/evidence-card";
 import type { EvidenceCitation } from "@/lib/chat-types";
@@ -37,7 +38,37 @@ export function DemoAsk({ suggested }: { suggested: string[] }) {
   const [error, setError] = useState<string | null>(null);
 
   const form = useRef<HTMLFormElement>(null);
+  const status = useRef<HTMLDivElement>(null);
+  const answerRef = useRef<HTMLElement>(null);
   const [typing, setTyping] = useState(false);
+  const [asked, setAsked] = useState<string | null>(null);
+  const [stage, setStage] = useState(0);
+  const reduce = useReducedMotion();
+
+  // The model takes several seconds. Say what is happening, in two calm steps,
+  // so the wait reads as work and not as a frozen page.
+  useEffect(() => {
+    if (!busy) return;
+    setStage(0);
+    const a = setTimeout(() => setStage(1), 2500);
+    const b = setTimeout(() => setStage(2), 7000);
+    return () => {
+      clearTimeout(a);
+      clearTimeout(b);
+    };
+  }, [busy]);
+
+  // Chip tapped: the chips are above the fold of the answer. Bring the status
+  // block into view, then the answer when it lands.
+  useEffect(() => {
+    const el = busy ? status.current : result ? answerRef.current : null;
+    if (!el) return;
+    const r = el.getBoundingClientRect();
+    const vh = window.visualViewport?.height ?? window.innerHeight;
+    if (r.top < 0 || r.top > vh * 0.6) {
+      el.scrollIntoView({ block: "start", behavior: reduce ? "auto" : "smooth" });
+    }
+  }, [busy, result, reduce]);
 
   // Keyboard up on a phone: keep the whole form, field AND "Preguntar", above
   // it. The browser scrolls the focused field into view and nothing else, so
@@ -64,6 +95,7 @@ export function DemoAsk({ suggested }: { suggested: string[] }) {
     const trimmed = text.trim();
     if (trimmed.length < 3 || busy) return;
     setBusy(true);
+    setAsked(trimmed);
     setError(null);
     setResult(null);
     try {
@@ -135,12 +167,13 @@ export function DemoAsk({ suggested }: { suggested: string[] }) {
         <button
           type="submit"
           disabled={busy || question.trim().length < 3}
+          aria-busy={busy}
           className="ad-btn ad-btn-primary mt-3 w-full py-3 text-base"
         >
           {busy ? (
-            <Loader2 className="h-4 w-4 animate-spin" strokeWidth={2.2} />
+            <Loader2 className="h-4 w-4 animate-spin" strokeWidth={2.2} aria-hidden />
           ) : (
-            <Send className="h-4 w-4" strokeWidth={2.2} />
+            <Send className="h-4 w-4" strokeWidth={2.2} aria-hidden />
           )}
           {busy ? t("askBusy") : t("askCta")}
         </button>
@@ -148,20 +181,21 @@ export function DemoAsk({ suggested }: { suggested: string[] }) {
 
       <div className="mt-5">
         <p className="ad-eyebrow">{t("suggestedTitle")}</p>
-        <ul className="mt-2 flex flex-col gap-2">
+        <ul className="mt-2 flex flex-col">
           {suggested.map((s) => (
-            <li key={s}>
+            <li key={s} className="border-t border-line first:border-t-0">
               <button
                 type="button"
                 disabled={busy}
+                aria-current={busy && asked === s ? "true" : undefined}
                 onClick={() => {
                   setQuestion(s);
                   void ask(s);
                 }}
-                className="ad-btn ad-btn-ghost w-full justify-start px-3.5 py-2.5 text-left text-sm"
+                className="ad-chip"
               >
-                <Sparkles className="h-3.5 w-3.5 shrink-0 text-accent-text" strokeWidth={2.2} />
                 <span className="min-w-0 flex-1">{s}</span>
+                <ArrowUpRight className="h-4 w-4 shrink-0 text-ink-soft" strokeWidth={1.8} aria-hidden />
               </button>
             </li>
           ))}
@@ -178,11 +212,41 @@ export function DemoAsk({ suggested }: { suggested: string[] }) {
         </p>
       )}
 
-      {result && (
-        <section
+      <AnimatePresence initial={false}>
+        {busy && (
+          <motion.div
+            key="status"
+            ref={status}
+            role="status"
+            data-testid="demo-loading"
+            className="mt-8 scroll-mt-4 border-t border-line pt-6"
+            initial={reduce ? false : { opacity: 0, y: 6 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={reduce ? { opacity: 0 } : { opacity: 0, transition: { duration: 0.15 } }}
+            transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] }}
+          >
+            <p className="flex items-center gap-2.5 text-base text-ink">
+              <span className="ad-pulse-dot" aria-hidden />
+              <span>{stage === 0 ? t("loadingSearch") : stage === 1 ? t("loadingWrite") : t("loadingSlow")}</span>
+            </p>
+            <div className="mt-5 space-y-2.5" aria-hidden>
+              <div className="ad-skel h-3.5 w-full" />
+              <div className="ad-skel h-3.5 w-[92%]" />
+              <div className="ad-skel h-3.5 w-[64%]" />
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      {result && !busy && (
+        <motion.section
+          ref={answerRef}
+          initial={reduce ? false : { opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.45, ease: [0.16, 1, 0.3, 1] }}
           data-testid="demo-answer"
           aria-live="polite"
-          className="ad-rise mt-8 border-t border-line pt-6"
+          className="mt-8 scroll-mt-4 border-t border-line pt-6"
         >
           <p className="ad-eyebrow">{t("answerTitle")}</p>
           {result.kind === "red_flag" && (
@@ -219,7 +283,7 @@ export function DemoAsk({ suggested }: { suggested: string[] }) {
             <ShieldAlert className="mt-px h-3.5 w-3.5 shrink-0 text-accent-text" strokeWidth={2} aria-hidden />
             <span>{result.disclaimer}</span>
           </p>
-        </section>
+        </motion.section>
       )}
     </div>
   );
