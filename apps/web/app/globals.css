@@ -491,6 +491,15 @@
     color: var(--color-ink-faint);
     box-shadow: none;
   }
+  .ad-btn { -webkit-tap-highlight-color: transparent; touch-action: manipulation; }
+  /* Waiting is not "off": a busy button keeps its primary look and a progress cursor. */
+  .ad-btn-primary[aria-busy="true"]:disabled {
+    background: var(--color-primary);
+    border-color: var(--color-primary-line);
+    color: var(--color-on-primary);
+    box-shadow: var(--shadow-soft);
+    cursor: progress;
+  }
   .ad-btn:disabled:active { transform: none; }
 
   /* Primary: flat pine with a hairline. No gradient. */
@@ -544,13 +553,45 @@
   .ad-field {
     background: var(--color-surface);
     color: var(--color-ink);
-    border: 1px solid var(--color-line-control);
+    border: 1.5px solid var(--color-line-control);
     border-radius: var(--radius);
+    padding: 0.75rem 0.875rem;
+    min-height: var(--tap-md);
+    transition: border-color 0.15s var(--ease-out-soft), box-shadow 0.15s var(--ease-out-soft);
   }
+  textarea.ad-field { min-height: 6.5rem; }
   .ad-field::placeholder { color: var(--color-ink-faint); }
   .ad-field:hover { border-color: var(--color-primary-text); }
   .ad-field:focus { border-color: var(--color-primary-text); }
   .ad-field:disabled { background: var(--color-surface-2); color: var(--color-ink-faint); cursor: not-allowed; }
+
+  /* Suggested question: a quiet full-width row, 48 px tall, no box. */
+  .ad-chip {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    width: 100%;
+    min-height: 3rem;
+    padding: 0.625rem 0.25rem;
+    text-align: left;
+    font-size: 0.9375rem;
+    line-height: 1.4;
+    color: var(--color-ink);
+    border-radius: 0.5rem;
+    -webkit-tap-highlight-color: transparent;
+    touch-action: manipulation;
+    transition: background-color 0.15s var(--ease-out-soft), color 0.15s var(--ease-out-soft);
+  }
+  .ad-chip:hover { background: var(--color-surface-2); }
+  .ad-chip:active { background: var(--color-primary-tint, var(--color-surface-2)); }
+  .ad-chip:disabled { cursor: not-allowed; color: var(--color-ink-soft); }
+  .ad-chip[aria-current="true"] { color: var(--color-ink); font-weight: 560; }
+  .ad-chip:focus-visible { outline: 2px solid var(--color-focus-halo); outline-offset: 1px; }
+
+  /* Source row: a pressed row answers the thumb. */
+  .ad-ev-row { -webkit-tap-highlight-color: transparent; transition: background-color 0.15s var(--ease-out-soft); }
+  .ad-ev-row:active { background: var(--color-surface-2); }
+  .ad-ev-row { padding-block: 0.5rem; }
 
   /* Citation chip: the trust differentiator, now carrying the colour of
      discovering. */
@@ -696,6 +737,10 @@
     0%, 80%, 100% { opacity: 0.25; transform: translateY(0); }
     40% { opacity: 1; transform: translateY(-3px); }
   }
+  @keyframes ad-pulse { 0%, 100% { opacity: 0.35; transform: scale(0.85); } 50% { opacity: 1; transform: scale(1); } }
+  .ad-pulse-dot { width: 0.5rem; height: 0.5rem; border-radius: 9999px; background: var(--color-primary-text); animation: ad-pulse 1.6s ease-in-out infinite; }
+  @keyframes ad-skel { 0%, 100% { opacity: 0.55; } 50% { opacity: 1; } }
+  .ad-skel { border-radius: 0.375rem; background: var(--color-surface-2); border: 1px solid var(--color-line); animation: ad-skel 2s ease-in-out infinite; }
   .ad-typing-dot { animation: ad-typing 1.2s var(--ease-out-soft) infinite; }
 }
 
@@ -738,5 +783,5 @@ html.kb-open .ad-agent-canvas {
     scroll-behavior: auto !important;
   }
   /* Looping cues (typing dots, pulses) settle to a calm resting state */
-  .ad-typing-dot { animation: none !important; opacity: 0.6 !important; transform: none !important; }
+  .ad-typing-dot, .ad-pulse-dot, .ad-skel { animation: none !important; opacity: 0.7 !important; transform: none !important; }
 }
