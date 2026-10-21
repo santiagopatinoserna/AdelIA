@@ -94,6 +94,9 @@ services:
       # public demo will pay for in a day (it also has a per-IP rate limit).
       OWNER_EMAIL: ${OWNER_EMAIL:-}
       DEMO_ENABLED: ${DEMO_ENABLED:-true}
+      # Generation provider for the public demo only; empty follows the
+      # product's llm_provider. See config.py demo_llm_provider.
+      DEMO_LLM_PROVIDER: ${DEMO_LLM_PROVIDER:-}
       DEMO_DAILY_BUDGET: ${DEMO_DAILY_BUDGET:-300}
     ports:
       - "${API_PORT:-8000}:8000"

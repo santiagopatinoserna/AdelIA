@@ -172,7 +172,11 @@ async def ask_demo(payload: DemoQuestion) -> dict:
         ]
     )
     try:
-        answer = await generate_answer(chat_system_prompt(locale), user_message)
+        answer = await generate_answer(
+            chat_system_prompt(locale),
+            user_message,
+            provider=settings.demo_llm_provider or None,
+        )
     except Exception as exc:  # noqa: BLE001
         logger.warning("demo: generation failed (%s)", exc)
         # Retrieval worked, generation did not. The corpus fragments are the

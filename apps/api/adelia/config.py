@@ -253,6 +253,12 @@ class Settings(BaseSettings):
     demo_daily_budget: int = 300
     # Kill switch for the whole public demo (endpoints answer 503).
     demo_enabled: bool = True
+    # Generation provider for the public demo ONLY ("" = follow llm_provider).
+    # The demo reads one invented baby, so it can sit on a different provider
+    # than the chat and briefings, which read real records and whose processor
+    # (Mistral, EU) the privacy notice and the DPIA name. Moving real data to
+    # another provider is a legal change; moving the demo is not.
+    demo_llm_provider: str = ""  # "" | "mistral" | "openai"
     # Longest question the demo will embed. A public endpoint with no cap is
     # a way to buy someone else's embeddings by the megabyte.
     demo_max_question_chars: int = 300

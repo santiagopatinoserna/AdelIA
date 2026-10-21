@@ -89,12 +89,16 @@ async def _stream_llm_tokens(
     system_prompt: str,
     user_message: str,
     history: list[dict] | None = None,
+    *,
+    provider: str | None = None,
 ) -> AsyncIterator[str]:
     """Stream generation tokens from the configured provider.
 
-    Provider is selected by settings.llm_provider ("mistral" | "openai").
-    Embeddings/OCR always use Mistral regardless — only generation is
-    pluggable. history: prior turns ({"role","content"}), oldest first; the
+    Provider is selected by `provider` when given, else by settings.llm_provider
+    ("mistral" | "openai"). Only the public demo passes one (settings
+    .demo_llm_provider); the chat and briefings never do, so they keep following
+    llm_provider. Embeddings/OCR always use Mistral regardless — only generation
+    is pluggable. history: prior turns ({"role","content"}), oldest first; the
     RAG context lives only in the final user message.
 
     Raises RuntimeError if the selected provider's API key is missing.
@@ -103,7 +107,7 @@ async def _stream_llm_tokens(
     messages.extend(history or [])
     messages.append({"role": "user", "content": user_message})
 
-    if settings.llm_provider == "openai":
+    if (provider or settings.llm_provider) == "openai":
         async for piece in _stream_openai_tokens(messages):
             yield piece
     else:
@@ -167,6 +171,7 @@ async def generate_answer(
     user_message: str,
     *,
     timeout_s: float = STREAM_TOTAL_TIMEOUT_S,
+    provider: str | None = None,
 ) -> str:
     """One complete answer from the configured provider, no streaming.
 
@@ -180,7 +185,7 @@ async def generate_answer(
     the provider open until GC, which is the leak the chat's own timeouts
     exist to prevent.
     """
-    token_iter = _stream_llm_tokens(system_prompt, user_message).__aiter__()
+    token_iter = _stream_llm_tokens(system_prompt, user_message, provider=provider).__aiter__()
     pieces: list[str] = []
     start = time.monotonic()
     try:
