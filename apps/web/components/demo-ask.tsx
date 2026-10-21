@@ -135,7 +135,7 @@ export function DemoAsk({ suggested }: { suggested: string[] }) {
           void ask(question);
         }}
       >
-        <label htmlFor="demo-question" className="block font-display text-[1.375rem] font-medium leading-snug tracking-tight text-ink">
+        <label htmlFor="demo-question" className="flex min-h-11 items-center font-display text-[1.375rem] font-medium leading-snug tracking-tight text-ink">
           {t("askTitle")}
         </label>
         <textarea
@@ -162,7 +162,7 @@ export function DemoAsk({ suggested }: { suggested: string[] }) {
           enterKeyHint="send"
           placeholder={t("askPlaceholder")}
           aria-label={t("askLabel")}
-          className="ad-field mt-2 w-full resize-y text-base leading-relaxed"
+          className="ad-field w-full resize-y text-base leading-relaxed"
         />
         <button
           type="submit"
