@@ -23,6 +23,7 @@ answer cites comes from the real corpus, not from here.
 """
 from __future__ import annotations
 
+import re
 from datetime import date, timedelta
 
 DEMO_LOCALES = ("es", "en", "fr")
@@ -41,6 +42,12 @@ def _dob(today: date) -> date:
     """A date of birth that keeps the baby at AGE_MONTHS months."""
     return today - timedelta(days=AGE_MONTHS * 30 + 12)
 
+
+# What stands in for the baby's name when a question goes to the corpus search.
+# A first name is not clinical content and it costs relevance: on 2026-10-14 the
+# demo's own first suggestion moved from distance 0.154 ("mi bebé") to 0.261
+# ("Lucía"), past the 0.19 cut-off, and the demo refused its own example.
+_NEUTRAL_SUBJECT = {"es": "mi bebé", "en": "my baby", "fr": "mon bébé"}
 
 _CONTENT: dict[str, dict] = {
     "es": {
@@ -150,9 +157,9 @@ _CONTENT: dict[str, dict] = {
             },
         ],
         "suggested": [
-            "Is it normal for Lucía to spit up after almost every feed?",
-            "When should complementary feeding start?",
-            "Her haemoglobin is 10.8 g/dL. What does that mean at 5 months?",
+            "My baby regurgitates after almost every feed. Is infant reflux normal?",
+            "When should I start complementary feeding for my baby?",
+            "My baby's haemoglobin is 10.8 g/dL at 5 months. Is that low?",
         ],
         "context_intro": "Demo baby (fictional data).",
     },
@@ -207,9 +214,9 @@ _CONTENT: dict[str, dict] = {
             },
         ],
         "suggested": [
-            "Est-ce normal que Lucía régurgite après presque chaque tétée ?",
-            "Quand faut-il commencer la diversification alimentaire ?",
-            "Son hémoglobine est à 10,8 g/dL. Qu’est-ce que ça veut dire à 5 mois ?",
+            "Mon bébé régurgite après chaque tétée : à partir de quand ça s’améliore ?",
+            "À partir de quel âge commencer la diversification alimentaire de mon bébé ?",
+            "L’hémoglobine de mon bébé est à 10,8 g/dL à 5 mois. Est-ce trop bas ?",
         ],
         "context_intro": "Bébé de la démo (données fictives).",
     },
@@ -221,6 +228,19 @@ def _resolve(locale: str) -> tuple[str, dict]:
     if key not in _CONTENT:
         key = DEFAULT_LOCALE
     return key, _CONTENT[key]
+
+
+def retrieval_query(question: str, locale: str = DEFAULT_LOCALE) -> str:
+    """The sentence the corpus search embeds: the question without the baby's name.
+
+    The model still reads the original question, with the name, next to the
+    patient record. Only the embedding is neutralised. Case and accent are
+    ignored because a visitor who types "lucia" must get the same treatment.
+    """
+    key, content = _resolve(locale)
+    # "Lucía" -> "Luc[ií]a": the unaccented spelling is how most phones type it.
+    pattern = re.compile(re.escape(content["baby_name"]).replace("í", "[ií]"), re.IGNORECASE)
+    return pattern.sub(_NEUTRAL_SUBJECT[key], question)
 
 
 def demo_profile(locale: str = DEFAULT_LOCALE, *, today: date | None = None) -> dict:

@@ -32,7 +32,12 @@ from pydantic import BaseModel, Field
 from adelia.clinical import red_flags
 from adelia.config import settings
 from adelia.db import AsyncSessionLocal
-from adelia.demo.fixture import DEFAULT_LOCALE, demo_patient_context, demo_profile
+from adelia.demo.fixture import (
+    DEFAULT_LOCALE,
+    demo_patient_context,
+    demo_profile,
+    retrieval_query,
+)
 from adelia.enrichment.evidence_retrieval import (
     evidence_citations_for_response,
     format_evidence_for_prompt,
@@ -132,7 +137,10 @@ async def ask_demo(payload: DemoQuestion) -> dict:
         )
 
     try:
-        embeds = await embed_texts([question])
+        # The embedding carries the question WITHOUT the invented baby's name: a
+        # first name is not clinical content and, measured, it pushed the demo's
+        # own first suggestion past the relevance cut-off (see fixture.py).
+        embeds = await embed_texts([retrieval_query(question, locale)])
     except Exception as exc:  # noqa: BLE001 — no key, no network, provider down
         logger.warning("demo: embedding failed (%s)", exc)
         raise HTTPException(
