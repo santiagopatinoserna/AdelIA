@@ -148,38 +148,38 @@ export default async function HomePage() {
         </div>
 
         {/* 3. Where the answers come from */}
-        <section id="evidence" className="mt-12 scroll-mt-24 border-t border-line pt-6">
-          <h2 className="max-w-[26ch] text-balance font-display text-2xl leading-tight text-ink md:text-3xl">
+        <section id="evidence" className="mt-[var(--ad-section)] scroll-mt-24 border-t border-line pt-6">
+          <h2 className="t-h2 max-w-[26ch] text-ink">
             {t("home.evTitle")}
           </h2>
-          <p className="mt-3 max-w-[52ch] text-base leading-relaxed text-ink-soft">{t("home.evBody")}</p>
+          <p className="t-body mt-3 text-ink-soft">{t("home.evBody")}</p>
           {evStats.length > 0 && (
             <dl className="mt-5 grid max-w-xl grid-cols-3 gap-4">
               {evStats.map((s) => (
                 <div key={s.label}>
-                  <dd className="font-display text-2xl font-semibold tracking-tight text-primary-text md:text-3xl">
+                  <dd className="t-figure font-display text-2xl font-semibold text-primary-text md:text-3xl">
                     {s.value}
                   </dd>
-                  <dt className="mt-1 text-xs leading-snug text-ink-soft">{s.label}</dt>
+                  <dt className="mt-1 text-[0.8125rem] leading-snug text-ink-soft">{s.label}</dt>
                 </div>
               ))}
             </dl>
           )}
-          <p className="mt-6 max-w-[60ch] text-sm leading-relaxed text-ink-soft">{evOrgs.join(" · ")}</p>
+          <p className="t-small mt-8 text-ink-soft">{evOrgs.join(" · ")}</p>
         </section>
 
         {/* 4. What it costs */}
-        <section id="pricing" className="mt-12 scroll-mt-24 border-t border-line pt-6">
-          <h2 className="font-display text-2xl leading-tight text-ink md:text-3xl">{t("home.prTitle")}</h2>
+        <section id="pricing" className="mt-[var(--ad-section)] scroll-mt-24 border-t border-line pt-6">
+          <h2 className="t-h2 text-ink">{t("home.prTitle")}</h2>
           <div className="mt-6 grid gap-8 md:grid-cols-2 md:gap-12">
             {tiers.map((tier) => (
               <div key={tier.name} className="flex flex-col">
-                <h3 className="font-display text-xl text-ink">{tier.name}</h3>
+                <h3 className="t-h3 font-display text-ink">{tier.name}</h3>
                 <p className="mt-2 flex items-baseline gap-1">
-                  <span className="font-display text-4xl font-semibold text-ink">{tier.price}</span>
+                  <span className="t-figure font-display text-4xl font-semibold text-ink">{tier.price}</span>
                   <span className="text-sm text-ink-soft">{tier.cadence}</span>
                 </p>
-                <p className="mt-3 max-w-[40ch] text-sm leading-relaxed text-ink-soft">{tier.desc}</p>
+                <p className="t-small mt-3 max-w-[40ch] text-ink-soft">{tier.desc}</p>
                 {tier.external ? (
                   <a
                     href={tier.href}
@@ -201,7 +201,7 @@ export default async function HomePage() {
                     {tier.cta}
                   </StartLink>
                 )}
-                {tier.note && <p className="mt-3 text-sm text-ink-soft">{tier.note}</p>}
+                {tier.note && <p className="t-small mt-3 text-ink-soft">{tier.note}</p>}
               </div>
             ))}
           </div>
@@ -210,7 +210,7 @@ export default async function HomePage() {
 
       <footer className="border-t border-line">
         <div className="mx-auto flex max-w-3xl flex-col gap-6 px-5 py-8 sm:px-6 md:flex-row md:items-start md:justify-between">
-          <p className="max-w-md text-sm leading-relaxed text-ink-soft">{t("home.footerDisclaimer")}</p>
+          <p className="t-small max-w-md text-ink-soft">{t("home.footerDisclaimer")}</p>
           <nav className="flex flex-wrap gap-x-5 text-sm" aria-label="Footer">
             <Link href="/privacidad" className="py-2 text-ink-soft hover:text-primary-text-hover">
               {t("home.footerPrivacy")}

@@ -135,7 +135,7 @@ export function DemoAsk({ suggested }: { suggested: string[] }) {
           void ask(question);
         }}
       >
-        <label htmlFor="demo-question" className="block text-lg font-semibold leading-snug text-ink">
+        <label htmlFor="demo-question" className="block font-display text-[1.375rem] font-medium leading-snug tracking-tight text-ink">
           {t("askTitle")}
         </label>
         <textarea
@@ -260,7 +260,7 @@ export function DemoAsk({ suggested }: { suggested: string[] }) {
               {t("evidenceOnlyNote")}
             </p>
           ) : (
-            <p className="mt-4 max-w-[65ch] whitespace-pre-wrap text-base leading-7 text-ink">
+            <p className="mt-4 max-w-[62ch] whitespace-pre-wrap text-base leading-[1.7] text-ink">
               {result.answer}
             </p>
           )}

@@ -356,7 +356,9 @@
     font-weight: 540;
     letter-spacing: -0.012em;
     color: var(--color-ink);
+    text-wrap: balance;
   }
+  p, li, dd { text-wrap: pretty; }
 
   /* Selection is a discovery signal: amber, and in dark it is immediate. */
   ::selection {
@@ -701,6 +703,44 @@
       0 0 0 2px var(--color-focus-contrast),
       0 0 0 6px var(--color-focus-halo);
   }
+}
+
+/* Type and rhythm for the public pages. One fluid scale (clamp, 390 -> 1280)
+   and one spacing scale; pages name a role, never a loose size.
+   Spacing steps: 2 (0.5rem) 4 (1rem) 6 (1.5rem) 8 (2rem) then --ad-section. */
+@layer components {
+  :root { --ad-section: clamp(3.5rem, 2.6rem + 3.6vw, 5.5rem); }
+  .t-display {
+    font-size: clamp(2.375rem, 1.75rem + 2.9vw, 3.75rem);
+    line-height: 1.04;
+    letter-spacing: -0.028em;
+    font-weight: 520;
+  }
+  .t-h1 {
+    font-size: clamp(2.125rem, 1.7rem + 2vw, 3.25rem);
+    line-height: 1.08;
+    letter-spacing: -0.024em;
+    font-weight: 520;
+  }
+  .t-h2 {
+    font-size: clamp(1.75rem, 1.45rem + 1.4vw, 2.5rem);
+    line-height: 1.12;
+    letter-spacing: -0.02em;
+  }
+  .t-h3 { font-size: 1.25rem; line-height: 1.25; letter-spacing: -0.01em; }
+  .t-lede {
+    font-size: clamp(1.0625rem, 1rem + 0.3vw, 1.25rem);
+    line-height: 1.55;
+    max-width: 46ch;
+    color: var(--color-ink-soft);
+  }
+  .t-body { font-size: 1rem; line-height: 1.65; max-width: 62ch; }
+  .t-small { font-size: 0.875rem; line-height: 1.6; max-width: 62ch; }
+  .t-figure {
+    font-variant-numeric: lining-nums tabular-nums;
+    letter-spacing: -0.02em;
+  }
+  .ad-section { padding-top: var(--ad-section); }
 }
 
 @layer utilities {
