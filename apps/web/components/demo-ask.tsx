@@ -37,6 +37,7 @@ export function DemoAsk({ suggested }: { suggested: string[] }) {
   const [error, setError] = useState<string | null>(null);
 
   const form = useRef<HTMLFormElement>(null);
+  const answerRef = useRef<HTMLElement>(null);
   const [typing, setTyping] = useState(false);
 
   // Keyboard up on a phone: keep the whole form, field AND "Preguntar", above
@@ -59,6 +60,15 @@ export function DemoAsk({ suggested }: { suggested: string[] }) {
     target.addEventListener("resize", revealForm);
     return () => target.removeEventListener("resize", revealForm);
   }, [typing]);
+
+  // On a phone the answer lands below the form and the suggestions, off
+  // screen. Bring it to the top so the tap that asks is also the last tap
+  // before reading. Instant for people who asked for reduced motion.
+  useEffect(() => {
+    if (!result && !error) return;
+    const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    answerRef.current?.scrollIntoView({ block: "start", behavior: reduce ? "auto" : "smooth" });
+  }, [result, error]);
 
   async function ask(text: string) {
     const trimmed = text.trim();
@@ -108,7 +118,7 @@ export function DemoAsk({ suggested }: { suggested: string[] }) {
         </label>
         <textarea
           id="demo-question"
-          rows={3}
+          rows={2}
           maxLength={300}
           value={question}
           onChange={(e) => setQuestion(e.target.value)}
@@ -130,12 +140,12 @@ export function DemoAsk({ suggested }: { suggested: string[] }) {
           enterKeyHint="send"
           placeholder={t("askPlaceholder")}
           aria-label={t("askLabel")}
-          className="ad-field mt-3 w-full resize-y text-base leading-relaxed"
+          className="ad-field mt-2 w-full resize-y text-base leading-relaxed"
         />
         <button
           type="submit"
           disabled={busy || question.trim().length < 3}
-          className="ad-btn ad-btn-primary mt-3 w-full py-3 text-base"
+          className="ad-btn ad-btn-primary mt-2 w-full py-3 text-base"
         >
           {busy ? (
             <Loader2 className="h-4 w-4 animate-spin" strokeWidth={2.2} />
@@ -146,9 +156,9 @@ export function DemoAsk({ suggested }: { suggested: string[] }) {
         </button>
       </form>
 
-      <div className="mt-5">
+      <div className="mt-4">
         <p className="ad-eyebrow">{t("suggestedTitle")}</p>
-        <ul className="mt-2 flex flex-col gap-2">
+        <ul className="mt-2 flex flex-col gap-1.5">
           {suggested.map((s) => (
             <li key={s}>
               <button
@@ -180,9 +190,10 @@ export function DemoAsk({ suggested }: { suggested: string[] }) {
 
       {result && (
         <section
+          ref={answerRef}
           data-testid="demo-answer"
           aria-live="polite"
-          className="ad-rise mt-8 border-t border-line pt-6"
+          className="ad-rise mt-6 scroll-mt-3 border-t border-line pt-5"
         >
           <p className="ad-eyebrow">{t("answerTitle")}</p>
           {result.kind === "red_flag" && (

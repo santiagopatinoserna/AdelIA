@@ -42,13 +42,15 @@ test.describe("landing pricing", () => {
     await expect(pricing.getByText("Prueba gratis 30 días, sin tarjeta")).toBeVisible();
   });
 
-  test("the landing offers the demo without an account", async ({ page }) => {
+  test("the landing lets you ask without an account, and /demo still arrives there", async ({ page }) => {
+    // Was: a "Ver la demo sin cuenta" link that walked to /es/demo. The demo
+    // is on the landing now, so the form is there from the first paint.
     await page.goto("/es");
+    await expect(page.getByTestId("demo-ask")).toBeVisible();
+    await expect(page.getByRole("link", { name: "Ver la demo sin cuenta" })).toHaveCount(0);
 
-    const demoLink = page.getByRole("link", { name: "Ver la demo sin cuenta" }).first();
-    await expect(demoLink).toBeVisible();
-    await demoLink.click();
-    await expect(page).toHaveURL(/\/es\/demo/);
+    await page.goto("/es/demo");
+    await expect(page).toHaveURL(/\/es\/?$/);
     await expect(page.getByTestId("demo-ask")).toBeVisible();
   });
 });

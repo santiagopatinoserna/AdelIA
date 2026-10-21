@@ -9,10 +9,10 @@ export const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? "https://adelia.godi
 // Locale-less paths of the indexable pages. Everything under /dashboard,
 // /billing and /api is private (see app/robots.ts).
 //
-// "/demo" is here on purpose (audit 4.6): the public demo is the only page
-// that shows the product working without an account, so it is exactly the one
-// a search engine should be able to find.
-export const PUBLIC_PATHS = ["", "/demo", "/profesionales", "/privacidad", "/terminos"] as const;
+// "/demo" is not here any more: the demo moved onto the landing (audit 4.6
+// still holds, the product working without an account is what a search engine
+// finds at "/") and /demo only redirects there.
+export const PUBLIC_PATHS = ["", "/profesionales", "/privacidad", "/terminos"] as const;
 
 // Canonical + hreflang for one public page. Relative URLs: Next resolves them
 // against metadataBase, so dev/prod origins never leak into the code. The

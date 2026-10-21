@@ -6,12 +6,26 @@ import { expect, test, type Page } from "@playwright/test";
 //
 // No session anywhere in this file. If any assertion here starts needing one,
 // the page has stopped being what it exists to be.
+//
+// Composition change: the demo is now the landing itself ("/es"), so the
+// asking, the folded record and the keyboard behaviour are exercised there.
+// "/es/demo" survives only as a redirect, pinned by the first test. Every
+// `goto("/es/demo")` below became `goto("/es")`; no assertion about the demo
+// itself was loosened.
 
 test.describe("public demo", () => {
+  test("/demo still works: it lands on the landing, where the question is", async ({ page }) => {
+    for (const locale of ["es", "en", "fr"]) {
+      await page.goto(`/${locale}/demo`);
+      await expect(page).toHaveURL(new RegExp(`/${locale}/?$`));
+      await expect(page.getByTestId("demo-ask")).toBeVisible();
+    }
+  });
+
   test("shows a fictional baby's record, labelled as a demo, with no account", async ({
     page,
   }) => {
-    await page.goto("/es/demo");
+    await page.goto("/es");
 
     await expect(page.getByRole("heading", { level: 1 })).toBeVisible();
     // Marked as a demo more than once: the badge on the card and the banner
@@ -37,7 +51,7 @@ test.describe("public demo", () => {
   });
 
   test("offers suggested questions and a free-text box", async ({ page }) => {
-    await page.goto("/es/demo");
+    await page.goto("/es");
 
     const ask = page.getByTestId("demo-ask");
     await expect(ask.getByLabel(/Escribe tu pregunta/)).toBeVisible();
@@ -55,7 +69,7 @@ test.describe("public demo", () => {
   test("asking never leaves the visitor without an answer or an explanation", async ({
     page,
   }) => {
-    await page.goto("/es/demo");
+    await page.goto("/es");
     const ask = page.getByTestId("demo-ask");
     await ask.locator("ul button").first().click();
 
@@ -70,23 +84,28 @@ test.describe("public demo", () => {
     await expect(ask.getByRole("button", { name: "Pensando…" })).toHaveCount(0);
   });
 
-  test("is indexable: in the sitemap, allowed by robots, in three languages", async ({
+  test("is indexable at the landing: /demo left the sitemap, the landing says what to ask", async ({
     page,
     request,
   }) => {
+    // /demo only redirects now, so listing it would hand search engines a
+    // redirect as a canonical page. The landing (in three languages) is the
+    // indexable page that carries the demo.
     const sitemap = await (await request.get("/sitemap.xml")).text();
     for (const locale of ["es", "en", "fr"]) {
-      expect(sitemap).toContain(`/${locale}/demo`);
+      expect(sitemap).not.toContain(`/${locale}/demo`);
+      expect(sitemap).toContain(`/${locale}</loc>`);
     }
     const robots = await (await request.get("/robots.txt")).text();
     expect(robots).not.toContain("/demo");
 
     for (const [locale, heading] of [
-      ["en", /Ask what you would ask your pediatrician/i],
-      ["fr", /Pose la question que tu poserais/i],
+      ["en", /Your baby's health\. A little more clarity/i],
+      ["fr", /La santé de ton bébé/i],
     ] as const) {
-      await page.goto(`/${locale}/demo`);
+      await page.goto(`/${locale}`);
       await expect(page.getByRole("heading", { level: 1, name: heading })).toBeVisible();
+      await expect(page.getByTestId("demo-ask")).toBeVisible();
     }
   });
 
@@ -99,7 +118,7 @@ test.describe("public demo", () => {
         reducedMotion: "reduce",
       });
       const page = await context.newPage();
-      await page.goto("/es/demo");
+      await page.goto("/es");
       await page.waitForLoadState("networkidle").catch(() => {});
       const results = await new AxeBuilder({ page }).analyze();
       const blocking = results.violations.filter((v) =>
@@ -151,7 +170,7 @@ test.describe("public demo: sending from the keyboard", () => {
 
   test("Enter sends the question and leaves the text as typed", async ({ page }) => {
     const questions = await interceptAsk(page);
-    await page.goto("/es/demo");
+    await page.goto("/es");
     const field = await typeQuestion(page, "¿Es normal que regurgite?");
 
     await field.press("Enter");
@@ -164,7 +183,7 @@ test.describe("public demo: sending from the keyboard", () => {
 
   test("Shift+Enter breaks the line and does not send", async ({ page }) => {
     const questions = await interceptAsk(page);
-    await page.goto("/es/demo");
+    await page.goto("/es");
     const field = await typeQuestion(page, "primera línea");
 
     await field.press("Shift+Enter");
@@ -181,7 +200,7 @@ test.describe("public demo: sending from the keyboard", () => {
     page,
   }) => {
     const questions = await interceptAsk(page);
-    await page.goto("/es/demo");
+    await page.goto("/es");
     const ask = page.getByTestId("demo-ask");
     const field = ask.getByLabel(/Escribe tu pregunta/);
     await field.fill("ok");
@@ -200,7 +219,7 @@ test.describe("public demo: sending from the keyboard", () => {
     page,
   }) => {
     const questions = await interceptAsk(page, 1_200);
-    await page.goto("/es/demo");
+    await page.goto("/es");
     const field = await typeQuestion(page, "¿Es normal que regurgite?");
 
     await field.press("Enter");
@@ -218,7 +237,7 @@ test.describe("public demo: sending from the keyboard", () => {
   test("keyboard navigation and the amber focus ring still work: Tab reaches the button", async ({
     page,
   }) => {
-    await page.goto("/es/demo");
+    await page.goto("/es");
     const ask = page.getByTestId("demo-ask");
     const field = await typeQuestion(page, "¿Es normal que regurgite?");
     await field.focus();
@@ -241,7 +260,7 @@ test.describe("public demo: sending from the keyboard", () => {
     });
     const page = await context.newPage();
     await interceptAsk(page);
-    await page.goto("/es/demo");
+    await page.goto("/es");
     const ask = page.getByTestId("demo-ask");
     const field = await typeQuestion(page, "¿Es normal que regurgite?");
     const button = ask.getByRole("button", { name: "Preguntar" });

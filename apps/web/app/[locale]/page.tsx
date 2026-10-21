@@ -1,10 +1,12 @@
 import type { Metadata } from "next";
 import { getLocale, getTranslations } from "next-intl/server";
-import { ArrowRight } from "lucide-react";
 
+import { DemoAsk } from "@/components/demo-ask";
+import { DemoRecord } from "@/components/demo-record";
 import { FunnelVisit, StartLink } from "@/components/funnel";
 import { LocaleSwitcher } from "@/components/locale-switcher";
 import { getCorpusStats } from "@/lib/corpus-stats";
+import { loadDemoProfile } from "@/lib/demo-profile";
 import { Link } from "@/lib/navigation";
 import { publicPageAlternates } from "@/lib/seo";
 
@@ -29,22 +31,22 @@ export async function generateMetadata({
 }
 
 /*
- * The landing says four things and then stops, because the reader is a mother
- * with a phone, often at night:
+ * One screen, one job: ask a question. The landing and the demo used to be two
+ * pages joined by a button, so a visitor paid a page load and a scroll before
+ * seeing the product work. Now the question field is the first thing under the
+ * headline and a suggested question is one tap from a cited answer.
  *
- *   1. what AdelIA is, and the way to try it without an account (hero);
- *   2. proof that it does not invent answers (one real answer with its source);
+ * Surface: Command (one input, one result). The hero-and-sections shape of a
+ * Decide page is gone on purpose: the answer is the proof, so the static
+ * "one real answer" figure was removed with it.
+ *
+ *   1. headline, the no-account promise, the question (DemoAsk);
+ *   2. who the question is about, folded and labelled as invented (DemoRecord);
  *   3. where the answers come from, in numbers counted by the API (#evidence);
  *   4. what it costs, with the trial terms (#pricing).
  *
  * The footer stays whole: the clinical disclaimer and the privacy and terms
- * links are not optional on a health product.
- *
- * Removed on purpose, not folded: "a day with AdelIA", the three feature
- * cards, the two-modes block, the history timeline, the comparison with a
- * generic chatbot and the open-source band. Each repeated what the proof and
- * #evidence already say, or explained the product to someone who has already
- * decided. The i18n keys are still in the catalogues and git has the JSX.
+ * links are not optional on a health product. /demo redirects here.
  * The figures never come from the catalogues: if the API does not answer, the
  * numbers are left out, so the page can be incomplete but never wrong.
  */
@@ -52,6 +54,7 @@ export default async function HomePage() {
   const t = await getTranslations();
   const locale = await getLocale();
   const stats = await getCorpusStats();
+  const profile = await loadDemoProfile(locale);
 
   const number = new Intl.NumberFormat(locale);
   const hasRange = stats !== null && stats.year_min !== null && stats.year_max !== null;
@@ -112,52 +115,46 @@ export default async function HomePage() {
           (audit 4.8, components/funnel.tsx). Renders nothing. */}
       <FunnelVisit />
 
-      <header className="mx-auto flex max-w-5xl items-center justify-between px-6 py-5">
+      <header className="mx-auto flex max-w-3xl items-center justify-between px-5 py-3 sm:px-6">
         <span className="font-display text-2xl font-semibold tracking-tight text-ink">
           Adel<span className="text-accent-text">IA</span>
         </span>
-        <LocaleSwitcher current={locale} />
+        <div className="flex items-center gap-3">
+          <StartLink
+            href="/dashboard"
+            className="inline-flex min-h-11 items-center rounded-lg px-2 text-sm font-medium text-primary-text hover:text-primary-text-hover"
+          >
+            {t("home.cta")}
+          </StartLink>
+          <LocaleSwitcher current={locale} />
+        </div>
       </header>
 
-      <main className="mx-auto max-w-5xl px-6 pb-20">
-        {/* 1. What it is, and the way in */}
-        <section className="pb-14 pt-6 md:pb-20 md:pt-16">
-          <h1 className="max-w-[16ch] text-balance font-display text-[2.5rem] leading-[1.08] tracking-tight text-ink md:text-6xl">
+      <main className="mx-auto max-w-3xl px-5 pb-16 sm:px-6">
+        {/* 1. The question, first */}
+        <section id="pregunta" className="pt-3 md:pt-10">
+          <h1 className="max-w-[18ch] text-balance font-display text-[1.75rem] leading-[1.1] tracking-tight text-ink md:text-5xl">
             {t("home.hero")}
           </h1>
-          <p className="mt-5 max-w-[44ch] text-lg leading-relaxed text-ink-soft">{t("home.subhero")}</p>
-          <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:items-center">
-            <Link href="/demo" className="ad-btn ad-btn-primary w-full px-6 py-3 text-base sm:w-auto">
-              {t("home.demoLink")}
-              <ArrowRight className="h-4 w-4" strokeWidth={2.4} />
-            </Link>
-            <StartLink
-              href="/dashboard"
-              className="ad-btn ad-btn-ghost w-full px-5 py-3 text-base sm:w-auto"
-            >
-              {t("home.cta")}
-            </StartLink>
+          <p className="mt-2 text-sm leading-relaxed text-ink-soft">{t("demo.noStore")}</p>
+          <div className="mt-5">
+            <DemoAsk suggested={profile?.suggested ?? []} />
           </div>
         </section>
 
-        {/* 2. Proof: one real answer and the guideline it came from */}
-        <figure className="max-w-2xl border-t border-line pt-8">
-          <figcaption className="ad-eyebrow">{t("home.proofLabel")}</figcaption>
-          <p className="mt-4 font-display text-xl leading-snug text-ink">“{t("home.proofQuestion")}”</p>
-          <p className="mt-3 text-base leading-relaxed text-ink">
-            {t("home.proofAnswer")} <span className="ad-ev-tag align-middle">ev_1</span>
-          </p>
-          <p className="mt-3 text-sm leading-relaxed text-ink-soft">{t("home.proofSource")}</p>
-        </figure>
+        {/* 2. Who it is about: fictional, folded */}
+        <div className="mt-8">
+          <DemoRecord profile={profile} />
+        </div>
 
         {/* 3. Where the answers come from */}
-        <section id="evidence" className="mt-16 scroll-mt-24 border-t border-line pt-8 md:mt-20">
-          <h2 className="max-w-[22ch] text-balance font-display text-3xl leading-tight text-ink md:text-4xl">
+        <section id="evidence" className="mt-12 scroll-mt-24 border-t border-line pt-6">
+          <h2 className="max-w-[26ch] text-balance font-display text-2xl leading-tight text-ink md:text-3xl">
             {t("home.evTitle")}
           </h2>
-          <p className="mt-4 max-w-[52ch] text-base leading-relaxed text-ink-soft">{t("home.evBody")}</p>
+          <p className="mt-3 max-w-[52ch] text-base leading-relaxed text-ink-soft">{t("home.evBody")}</p>
           {evStats.length > 0 && (
-            <dl className="mt-8 grid max-w-xl grid-cols-3 gap-4">
+            <dl className="mt-5 grid max-w-xl grid-cols-3 gap-4">
               {evStats.map((s) => (
                 <div key={s.label}>
                   <dd className="font-display text-2xl font-semibold tracking-tight text-primary-text md:text-3xl">
@@ -172,9 +169,9 @@ export default async function HomePage() {
         </section>
 
         {/* 4. What it costs */}
-        <section id="pricing" className="mt-16 scroll-mt-24 border-t border-line pt-8 md:mt-20">
-          <h2 className="font-display text-3xl leading-tight text-ink md:text-4xl">{t("home.prTitle")}</h2>
-          <div className="mt-8 grid gap-10 md:grid-cols-2 md:gap-16">
+        <section id="pricing" className="mt-12 scroll-mt-24 border-t border-line pt-6">
+          <h2 className="font-display text-2xl leading-tight text-ink md:text-3xl">{t("home.prTitle")}</h2>
+          <div className="mt-6 grid gap-8 md:grid-cols-2 md:gap-12">
             {tiers.map((tier) => (
               <div key={tier.name} className="flex flex-col">
                 <h3 className="font-display text-xl text-ink">{tier.name}</h3>
@@ -212,7 +209,7 @@ export default async function HomePage() {
       </main>
 
       <footer className="border-t border-line">
-        <div className="mx-auto flex max-w-5xl flex-col gap-6 px-6 py-10 md:flex-row md:items-start md:justify-between">
+        <div className="mx-auto flex max-w-3xl flex-col gap-6 px-5 py-8 sm:px-6 md:flex-row md:items-start md:justify-between">
           <p className="max-w-md text-sm leading-relaxed text-ink-soft">{t("home.footerDisclaimer")}</p>
           <nav className="flex flex-wrap gap-x-5 text-sm" aria-label="Footer">
             <Link href="/privacidad" className="py-2 text-ink-soft hover:text-primary-text-hover">
@@ -231,7 +228,7 @@ export default async function HomePage() {
             </a>
           </nav>
         </div>
-        <p className="mx-auto max-w-5xl px-6 pb-8 font-mono text-xs text-ink-faint">
+        <p className="mx-auto max-w-3xl px-5 pb-8 font-mono sm:px-6 text-xs text-ink-faint">
           © {t("home.footerLicense")}
         </p>
       </footer>

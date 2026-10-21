@@ -13,18 +13,23 @@ for (const locale of ["es", "en", "fr"]) {
   });
 }
 
-test("demo: the question is reachable before reading the sample record on a phone", async ({ page }) => {
+// The demo is the landing now ("/es"), so the question has to sit higher than
+// the old 760 px ceiling: field, "Preguntar" and the first suggested question
+// all in the first screen of a 390x844 phone (one tap to a cited answer).
+test("landing: the question and a suggested question are in the first screen of a phone", async ({ page }) => {
   await page.setViewportSize({ width: 390, height: 844 });
-  await page.goto("/es/demo");
+  await page.goto("/es");
   const field = page.locator("#demo-question");
   const box = await field.boundingBox();
   expect(box).not.toBeNull();
-  expect(box!.y + box!.height).toBeLessThanOrEqual(760);
+  expect(box!.y + box!.height).toBeLessThanOrEqual(380);
+  const first = (await page.locator('[data-testid="demo-ask"] ul button').first().boundingBox())!;
+  expect(first.y + first.height).toBeLessThanOrEqual(844);
 });
 
 test("demo: source titles and attribution remain readable without truncation", async ({ page }) => {
   await page.setViewportSize({ width: 390, height: 844 });
-  await page.goto("/es/demo");
+  await page.goto("/es");
   await page.locator("#demo-question").fill("Mi bebé de 2 meses tiene fiebre de 38,2 grados.");
   await page.getByRole("button", { name: "Preguntar", exact: true }).click();
   const answer = page.getByTestId("demo-answer");
@@ -65,7 +70,7 @@ test("demo: each source is one row and its literal passage opens on tap", async 
     }),
   );
   await page.setViewportSize({ width: 390, height: 844 });
-  await page.goto("/es/demo");
+  await page.goto("/es");
   await page.locator("#demo-question").fill("¿Es normal que regurgite después de las tomas?");
   await page.getByRole("button", { name: "Preguntar", exact: true }).click();
 

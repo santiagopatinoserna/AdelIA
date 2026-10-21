@@ -6,10 +6,12 @@ import esMessages from "@/messages/es.json";
 import frMessages from "@/messages/fr.json";
 
 // The landing on a phone, for a mother who has the baby in one arm. The page
-// is short on purpose: what AdelIA is, one real answer, where answers come
-// from, what it costs, and the legal footer. This file pins that:
+// is the demo: the question comes first, then where answers come from, what it
+// costs, and the legal footer. This file pins that:
 //
-//   * the first screen holds the headline and both buttons, whole;
+//   * the first screen holds the headline, the question field with its send
+//     button, and the "Empezar" link (it was: headline and two buttons; the
+//     "see the demo" button is gone because the demo is the page);
 //   * the whole page stays short (a ceiling on the scroll height);
 //   * what the page must keep is there, and what was removed does not return;
 //   * nothing scrolls sideways, touch targets are 44 px, and axe is clean.
@@ -20,10 +22,10 @@ const LOCALES = ["es", "en", "fr"] as const;
 const PHONE = { width: 390, height: 844 }; // iPhone 12-15
 const SE = { width: 375, height: 667 }; // the tightest common phone
 
-// Total scroll height at 390 px, in CSS px. Before the minimal redesign the
-// page was 2,268 px with most of it folded away; the ceiling guards the
-// opposite drift, a section quietly growing back.
-const HEIGHT_CEILING = 2_600;
+// Total scroll height at 390 px, in CSS px. Measured 2,364 before the one-screen
+// composition and 2,111 after (the old separate demo page added 1,278 more);
+// the ceiling guards against a section quietly growing back.
+const HEIGHT_CEILING = 2_250;
 
 // Blink reports a 2.75rem (44 px) box as 43.999969482421875 under mobile
 // emulation; same epsilon and reason as showcase.spec.ts.
@@ -46,7 +48,7 @@ const scrollHeight = (page: Page) => page.evaluate(() => document.documentElemen
 test.describe("landing on a phone", () => {
   for (const viewport of [PHONE, SE]) {
     for (const locale of LOCALES) {
-      test(`first screen ${viewport.width}x${viewport.height} ${locale}: headline and both buttons, whole`, async ({
+      test(`first screen ${viewport.width}x${viewport.height} ${locale}: headline, question and send, whole`, async ({
         browser,
       }) => {
         const m = MESSAGES[locale].home;
@@ -55,10 +57,11 @@ test.describe("landing on a phone", () => {
 
         await expect(page.getByRole("heading", { level: 1 })).toHaveText(m.hero);
 
-        const demo = page.getByRole("link", { name: m.demoLink, exact: true }).first();
+        const field = page.locator("#demo-question");
+        const send = page.getByRole("button", { name: MESSAGES[locale].demo.askCta, exact: true });
         const start = page.getByRole("link", { name: m.cta, exact: true }).first();
-        for (const [name, el] of [["demo", demo], ["start", start]] as const) {
-          await expect(el, `${name} button`).toBeVisible();
+        for (const [name, el] of [["field", field], ["send", send], ["start", start]] as const) {
+          await expect(el, `${name}`).toBeVisible();
           const box = (await el.boundingBox())!;
           expect(box.height, `${name}: touch height`).toBeGreaterThanOrEqual(TAP_MIN);
           expect(box.y + box.height, `${name} inside the first screen`).toBeLessThanOrEqual(
@@ -77,7 +80,7 @@ test.describe("landing on a phone", () => {
   }
 
   for (const locale of LOCALES) {
-    test(`${locale}: short page, with the proof, the sources, the price and the legal footer`, async ({
+    test(`${locale}: short page, with the question, the sources, the price and the legal footer`, async ({
       browser,
     }) => {
       const m = MESSAGES[locale].home;
@@ -90,7 +93,10 @@ test.describe("landing on a phone", () => {
         `landing is ${height}px tall at 390px; ceiling ${HEIGHT_CEILING}`,
       ).toBeLessThanOrEqual(HEIGHT_CEILING);
 
-      await expect(page.getByText(m.proofAnswer)).toBeVisible();
+      // The static "one real answer" figure (proofAnswer) was removed: the live
+      // answer to a suggested question is the proof now.
+      await expect(page.getByTestId("demo-ask")).toBeVisible();
+      await expect(page.getByTestId("demo-record").getByText(MESSAGES[locale].demo.badge, { exact: true })).toBeVisible();
       await expect(page.getByRole("heading", { level: 2, name: m.evTitle })).toBeVisible();
       await expect(page.locator("section#pricing").getByText(m.prT2Trial)).toBeVisible();
       await expect(page.getByRole("contentinfo")).toContainText(m.footerDisclaimer);
