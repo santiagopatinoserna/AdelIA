@@ -204,7 +204,7 @@ export function DemoAsk({ suggested }: { suggested: string[] }) {
           {result.evidence_citations.length > 0 && (
             <div className="mt-5">
               <p className="ad-eyebrow">{t("sourcesTitle")}</p>
-              <div className="mt-2 flex flex-col gap-2">
+              <div className="mt-1 flex flex-col">
                 {result.evidence_citations.map((c) => (
                   <EvidenceCard key={`${c.tag}-${c.chunk_id}`} citation={c} />
                 ))}

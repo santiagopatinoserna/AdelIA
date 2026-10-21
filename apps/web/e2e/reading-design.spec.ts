@@ -40,3 +40,46 @@ test("demo: source titles and attribution remain readable without truncation", a
   const attribution = source.getByText(/National Institute for Health and Care Excellence/);
   expect(await attribution.evaluate((el) => parseFloat(getComputedStyle(el).fontSize))).toBeGreaterThanOrEqual(12);
 });
+
+test("demo: each source is one row and its literal passage opens on tap", async ({ page }) => {
+  const quote = "La regurgitación suele alcanzar su pico hacia los 4 meses.";
+  await page.route("**/api/demo/ask", (route) =>
+    route.fulfill({
+      status: 200,
+      contentType: "application/json",
+      body: JSON.stringify({
+        kind: "answer",
+        answer: "Es habitual a esa edad [ev_1].",
+        evidence_citations: [
+          {
+            tag: "ev_1",
+            chunk_id: "c1",
+            title: "Reflujo del lactante: historia natural",
+            organization: "NASPGHAN-ESPGHAN",
+            year: 2018,
+            url: "https://example.org/guia",
+            snippet: quote,
+          },
+        ],
+      }),
+    }),
+  );
+  await page.setViewportSize({ width: 390, height: 844 });
+  await page.goto("/es/demo");
+  await page.locator("#demo-question").fill("¿Es normal que regurgite después de las tomas?");
+  await page.getByRole("button", { name: "Preguntar", exact: true }).click();
+
+  const answer = page.getByTestId("demo-answer");
+  const source = answer.locator("details").first();
+  await expect(source.getByText("Reflujo del lactante: historia natural")).toBeVisible();
+  await expect(source.getByText("NASPGHAN-ESPGHAN (2018)").first()).toBeVisible();
+  // Closed: the quotation is in the page but not on screen.
+  await expect(source.getByText(quote)).toBeHidden();
+  expect((await source.boundingBox())!.height).toBeLessThan(110);
+
+  await source.locator("summary").click();
+  await expect(source.getByText(quote)).toBeVisible();
+  const link = source.getByRole("link");
+  await expect(link).toHaveAttribute("href", "https://example.org/guia");
+  expect((await link.boundingBox())!.height).toBeGreaterThanOrEqual(43.9);
+});
