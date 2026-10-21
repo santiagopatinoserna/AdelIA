@@ -392,10 +392,11 @@ verify() {
   local pwa_status="OK"
 
   code_home=$(wait_for_url "https://adelia.godi.ai/es") || true
-  # The public demo (audit 4.6) is the only page that shows the product
-  # working without an account, and it is the one public page that needs the
-  # API to render: a 200 here also proves web->api is wired.
+  # The landing now hosts the demo. Its old URL must redirect to /es.
   code_demo=$(check_url "https://adelia.godi.ai/es/demo")
+  local demo_target
+  demo_target=$(curl -sS --max-time 20 -o /dev/null -w '%{redirect_url}' \
+    "https://adelia.godi.ai/es/demo" 2>/dev/null || true)
   code_prof=$(check_url "https://adelia.godi.ai/es/profesionales")
   code_priv=$(check_url "https://adelia.godi.ai/es/privacidad")
   code_terms=$(check_url "https://adelia.godi.ai/es/terminos")
@@ -409,7 +410,12 @@ verify() {
   expected=$(expected_alembic_head)
 
   [[ "${code_home}" == "200" ]] || { log "FAIL: GET /es -> ${code_home}"; fail=1; }
-  [[ "${code_demo}" == "200" ]] || { log "FAIL: GET /es/demo -> ${code_demo}"; fail=1; }
+  # /es/demo redirects to /es since the landing IS the demo (2026-10-21):
+  # 307 is the correct answer there. A 200 would mean the redirect is gone.
+  [[ "${code_demo}" == "307" || "${code_demo}" == "308" ]] \
+    || { log "FAIL: GET /es/demo -> ${code_demo} (want a 307/308 redirect to /es)"; fail=1; }
+  [[ "${demo_target}" == "https://adelia.godi.ai/es" ]] \
+    || { log "FAIL: /es/demo redirects to '${demo_target}', expected /es"; fail=1; }
   [[ "${code_prof}" == "200" ]] || { log "FAIL: GET /es/profesionales -> ${code_prof}"; fail=1; }
   [[ "${code_priv}" == "200" ]] || { log "FAIL: GET /es/privacidad -> ${code_priv}"; fail=1; }
   [[ "${code_terms}" == "200" ]] || { log "FAIL: GET /es/terminos -> ${code_terms}"; fail=1; }
