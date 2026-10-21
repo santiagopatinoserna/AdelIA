@@ -19,6 +19,11 @@ test.describe("public demo", () => {
     // real child's file is a liability, not a demo.
     const record = page.getByTestId("demo-record");
     await expect(record).toBeVisible();
+    // The sample record is folded so the question comes first; name, "Demo"
+    // and "Datos ficticios" are visible without opening it.
+    await expect(record.getByText("Demo", { exact: true })).toBeVisible();
+    await expect(record.getByText(/Datos ficticios/i)).toBeVisible();
+    await record.locator("summary").click();
     await expect(record.getByText("Demo", { exact: true })).toBeVisible();
     await expect(record.getByText(/bebé inventado/i)).toBeVisible();
     await expect(record.getByText(/Datos ficticios/i)).toBeVisible();

@@ -342,13 +342,10 @@
     background-color: var(--color-canvas);
     color: var(--color-ink);
     font-family: var(--font-sans);
-    /* Atmospheric depth. In dark the washes are deep pine and deep honey, so
-       the ground breathes without lifting the real black level. */
-    background-image:
-      radial-gradient(58rem 40rem at 8% -8%, var(--ad-wash-1), transparent 60%),
-      radial-gradient(48rem 36rem at 102% 4%, var(--ad-wash-2), transparent 55%),
-      radial-gradient(60rem 50rem at 50% 116%, var(--ad-wash-3), transparent 60%);
-    background-attachment: fixed;
+    /* Flat ground. There used to be three radial washes here, fixed to the
+       viewport; on a phone they showed as a visible seam where the gradient
+       ended, and a clean page does not need them. The --ad-wash-* tokens stay
+       defined in case a surface wants one back. */
     min-height: 100vh;
     -webkit-font-smoothing: antialiased;
     text-rendering: optimizeLegibility;
