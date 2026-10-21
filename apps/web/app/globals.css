@@ -82,7 +82,7 @@
   --color-on-error: #fdf1ee;
 
   /* Lines */
-  --color-line: #e7e0d3;
+  --color-line: #e2dacb;
   --color-line-strong: #cfc4ae;
   --color-line-control: #6b8478;
 
@@ -152,9 +152,9 @@
   --radius-lg: 1.25rem;
   --radius-xl: 1.75rem;
 
-  --shadow-soft: 0 1px 2px rgb(24 32 27 / 0.04), 0 6px 16px -8px rgb(24 32 27 / 0.10);
-  --shadow-lift: 0 2px 4px rgb(24 32 27 / 0.05), 0 18px 40px -16px rgb(11 52 41 / 0.22);
-  --shadow-glow: 0 0 0 1px rgb(17 84 67 / 0.08), 0 24px 60px -24px rgb(11 52 41 / 0.30);
+  --shadow-soft: 0 1px 1px rgb(24 32 27 / 0.03), 0 2px 6px -4px rgb(24 32 27 / 0.08);
+  --shadow-lift: 0 1px 2px rgb(24 32 27 / 0.05), 0 8px 20px -12px rgb(11 52 41 / 0.18);
+  --shadow-glow: 0 0 0 1px rgb(17 84 67 / 0.10), 0 16px 36px -20px rgb(11 52 41 / 0.24);
 
   --ease-out-soft: cubic-bezier(0.16, 1, 0.3, 1);
 
@@ -215,11 +215,11 @@
 
     --color-accent: #d99f43;
     --color-accent-hover: #e2b25f;
-    --color-accent-line: #8a6a2a;
+    --color-accent-line: #a98334;
     --color-accent-text: #e2b25f;
     --color-accent-text-hover: #eec27a;
     --color-accent-tint: #4d3813;
-    --color-accent-tint-line: #8a6a2a;
+    --color-accent-tint-line: #a98334;
     --color-on-accent-tint: #eec27a;
 
     --color-focus: #e2b25f;
@@ -231,7 +231,7 @@
     --color-success-line: #2f8268;
     --color-warning-text: #eec27a;
     --color-warning-tint: #4d3813;
-    --color-warning-line: #8a6a2a;
+    --color-warning-line: #a98334;
     --color-error: #b8402a;
     --color-error-text: #f0a48d;
     --color-error-tint: #43201a;
@@ -251,9 +251,9 @@
     --ad-wash-2: rgb(90 65 20 / 0.28);
     --ad-wash-3: rgb(11 52 41 / 0.45);
 
-    --shadow-soft: 0 1px 2px rgb(0 0 0 / 0.35), 0 6px 16px -8px rgb(0 0 0 / 0.45);
-    --shadow-lift: 0 2px 4px rgb(0 0 0 / 0.40), 0 18px 40px -16px rgb(0 0 0 / 0.55);
-    --shadow-glow: 0 0 0 1px rgb(71 119 104 / 0.35), 0 24px 60px -24px rgb(0 0 0 / 0.60);
+    --shadow-soft: none;
+    --shadow-lift: 0 8px 20px -12px rgb(0 0 0 / 0.55);
+    --shadow-glow: 0 0 0 1px rgb(95 143 128 / 0.35), 0 16px 36px -20px rgb(0 0 0 / 0.60);
   }
 }
 
@@ -290,11 +290,11 @@
 
   --color-accent: #d99f43;
   --color-accent-hover: #e2b25f;
-  --color-accent-line: #8a6a2a;
+  --color-accent-line: #a98334;
   --color-accent-text: #e2b25f;
   --color-accent-text-hover: #eec27a;
   --color-accent-tint: #4d3813;
-  --color-accent-tint-line: #8a6a2a;
+  --color-accent-tint-line: #a98334;
   --color-on-accent-tint: #eec27a;
 
   --color-focus: #e2b25f;
@@ -306,7 +306,7 @@
   --color-success-line: #2f8268;
   --color-warning-text: #eec27a;
   --color-warning-tint: #4d3813;
-  --color-warning-line: #8a6a2a;
+  --color-warning-line: #a98334;
   --color-error: #b8402a;
   --color-error-text: #f0a48d;
   --color-error-tint: #43201a;
@@ -326,9 +326,9 @@
   --ad-wash-2: rgb(90 65 20 / 0.28);
   --ad-wash-3: rgb(11 52 41 / 0.45);
 
-  --shadow-soft: 0 1px 2px rgb(0 0 0 / 0.35), 0 6px 16px -8px rgb(0 0 0 / 0.45);
-  --shadow-lift: 0 2px 4px rgb(0 0 0 / 0.40), 0 18px 40px -16px rgb(0 0 0 / 0.55);
-  --shadow-glow: 0 0 0 1px rgb(71 119 104 / 0.35), 0 24px 60px -24px rgb(0 0 0 / 0.60);
+  --shadow-soft: none;
+  --shadow-lift: 0 8px 20px -12px rgb(0 0 0 / 0.55);
+  --shadow-glow: 0 0 0 1px rgb(95 143 128 / 0.35), 0 16px 36px -20px rgb(0 0 0 / 0.60);
 }
 
 @layer base {
@@ -446,9 +446,9 @@
       border-color 0.2s var(--ease-out-soft);
   }
   .ad-card-hover:hover {
-    transform: translateY(-2px);
+    transform: translateY(-1px);
     box-shadow: var(--shadow-lift);
-    border-color: var(--color-primary-tint-line);
+    border-color: var(--color-line-strong);
   }
 
   /* Elevated: dialogs, sheets, the bottom bar, the profile menu. In DARK,
@@ -482,7 +482,15 @@
      shipped at 36x44. */
   .ad-btn-icon { min-height: var(--tap-md); min-width: var(--tap-md); padding-inline: 0; }
   .ad-btn:active { transform: translateY(1px) scale(0.99); }
-  .ad-btn:disabled { cursor: not-allowed; opacity: 0.5; box-shadow: none; }
+  /* Disabled is tonal, not a 50% fade: flat surface, hairline, faint ink. It
+     reads as "off" without turning the label into low-contrast mush. */
+  .ad-btn:disabled {
+    cursor: not-allowed;
+    background: var(--color-surface-2);
+    border-color: var(--color-line);
+    color: var(--color-ink-faint);
+    box-shadow: none;
+  }
   .ad-btn:disabled:active { transform: none; }
 
   /* Primary: flat pine with a hairline. No gradient. */
@@ -540,7 +548,9 @@
     border-radius: var(--radius);
   }
   .ad-field::placeholder { color: var(--color-ink-faint); }
+  .ad-field:hover { border-color: var(--color-primary-text); }
   .ad-field:focus { border-color: var(--color-primary-text); }
+  .ad-field:disabled { background: var(--color-surface-2); color: var(--color-ink-faint); cursor: not-allowed; }
 
   /* Citation chip: the trust differentiator, now carrying the colour of
      discovering. */
