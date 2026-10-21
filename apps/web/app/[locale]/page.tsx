@@ -119,13 +119,13 @@ export default async function HomePage() {
         <LocaleSwitcher current={locale} />
       </header>
 
-      <main className="mx-auto max-w-5xl px-6 pb-20">
+      <main className="mx-auto max-w-5xl px-6 pb-[var(--ad-section)]">
         {/* 1. What it is, and the way in */}
-        <section className="pb-14 pt-6 md:pb-20 md:pt-16">
-          <h1 className="max-w-[16ch] text-balance font-display text-[2.5rem] leading-[1.08] tracking-tight text-ink md:text-6xl">
+        <section className="pb-12 pt-8 md:pb-[var(--ad-section)] md:pt-16">
+          <h1 className="t-display max-w-[15ch] text-ink">
             {t("home.hero")}
           </h1>
-          <p className="mt-5 max-w-[44ch] text-lg leading-relaxed text-ink-soft">{t("home.subhero")}</p>
+          <p className="t-lede mt-6">{t("home.subhero")}</p>
           <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:items-center">
             <Link href="/demo" className="ad-btn ad-btn-primary w-full px-6 py-3 text-base sm:w-auto">
               {t("home.demoLink")}
@@ -143,46 +143,46 @@ export default async function HomePage() {
         {/* 2. Proof: one real answer and the guideline it came from */}
         <figure className="max-w-2xl border-t border-line pt-8">
           <figcaption className="ad-eyebrow">{t("home.proofLabel")}</figcaption>
-          <p className="mt-4 font-display text-xl leading-snug text-ink">“{t("home.proofQuestion")}”</p>
-          <p className="mt-3 text-base leading-relaxed text-ink">
+          <p className="mt-4 font-display text-[1.375rem] leading-snug tracking-tight text-ink">“{t("home.proofQuestion")}”</p>
+          <p className="t-body mt-4 text-ink">
             {t("home.proofAnswer")} <span className="ad-ev-tag align-middle">ev_1</span>
           </p>
-          <p className="mt-3 text-sm leading-relaxed text-ink-soft">{t("home.proofSource")}</p>
+          <p className="t-small mt-4 text-ink-soft">{t("home.proofSource")}</p>
         </figure>
 
         {/* 3. Where the answers come from */}
-        <section id="evidence" className="mt-16 scroll-mt-24 border-t border-line pt-8 md:mt-20">
-          <h2 className="max-w-[22ch] text-balance font-display text-3xl leading-tight text-ink md:text-4xl">
+        <section id="evidence" className="scroll-mt-24 border-t border-line pt-8 mt-[var(--ad-section)]">
+          <h2 className="t-h2 max-w-[22ch] text-ink">
             {t("home.evTitle")}
           </h2>
-          <p className="mt-4 max-w-[52ch] text-base leading-relaxed text-ink-soft">{t("home.evBody")}</p>
+          <p className="t-body mt-4 text-ink-soft">{t("home.evBody")}</p>
           {evStats.length > 0 && (
             <dl className="mt-8 grid max-w-xl grid-cols-3 gap-4">
               {evStats.map((s) => (
                 <div key={s.label}>
-                  <dd className="font-display text-2xl font-semibold tracking-tight text-primary-text md:text-3xl">
+                  <dd className="t-figure font-display text-2xl font-semibold text-primary-text md:text-3xl">
                     {s.value}
                   </dd>
-                  <dt className="mt-1 text-xs leading-snug text-ink-soft">{s.label}</dt>
+                  <dt className="mt-1 text-[0.8125rem] leading-snug text-ink-soft">{s.label}</dt>
                 </div>
               ))}
             </dl>
           )}
-          <p className="mt-6 max-w-[60ch] text-sm leading-relaxed text-ink-soft">{evOrgs.join(" · ")}</p>
+          <p className="t-small mt-8 text-ink-soft">{evOrgs.join(" · ")}</p>
         </section>
 
         {/* 4. What it costs */}
-        <section id="pricing" className="mt-16 scroll-mt-24 border-t border-line pt-8 md:mt-20">
-          <h2 className="font-display text-3xl leading-tight text-ink md:text-4xl">{t("home.prTitle")}</h2>
+        <section id="pricing" className="scroll-mt-24 border-t border-line pt-8 mt-[var(--ad-section)]">
+          <h2 className="t-h2 text-ink">{t("home.prTitle")}</h2>
           <div className="mt-8 grid gap-10 md:grid-cols-2 md:gap-16">
             {tiers.map((tier) => (
               <div key={tier.name} className="flex flex-col">
-                <h3 className="font-display text-xl text-ink">{tier.name}</h3>
+                <h3 className="t-h3 font-display text-ink">{tier.name}</h3>
                 <p className="mt-2 flex items-baseline gap-1">
-                  <span className="font-display text-4xl font-semibold text-ink">{tier.price}</span>
+                  <span className="t-figure font-display text-4xl font-semibold text-ink">{tier.price}</span>
                   <span className="text-sm text-ink-soft">{tier.cadence}</span>
                 </p>
-                <p className="mt-3 max-w-[40ch] text-sm leading-relaxed text-ink-soft">{tier.desc}</p>
+                <p className="t-small mt-3 max-w-[40ch] text-ink-soft">{tier.desc}</p>
                 {tier.external ? (
                   <a
                     href={tier.href}
@@ -204,7 +204,7 @@ export default async function HomePage() {
                     {tier.cta}
                   </StartLink>
                 )}
-                {tier.note && <p className="mt-3 text-sm text-ink-soft">{tier.note}</p>}
+                {tier.note && <p className="t-small mt-3 text-ink-soft">{tier.note}</p>}
               </div>
             ))}
           </div>
@@ -213,7 +213,7 @@ export default async function HomePage() {
 
       <footer className="border-t border-line">
         <div className="mx-auto flex max-w-5xl flex-col gap-6 px-6 py-10 md:flex-row md:items-start md:justify-between">
-          <p className="max-w-md text-sm leading-relaxed text-ink-soft">{t("home.footerDisclaimer")}</p>
+          <p className="t-small max-w-md text-ink-soft">{t("home.footerDisclaimer")}</p>
           <nav className="flex flex-wrap gap-x-5 text-sm" aria-label="Footer">
             <Link href="/privacidad" className="py-2 text-ink-soft hover:text-primary-text-hover">
               {t("home.footerPrivacy")}

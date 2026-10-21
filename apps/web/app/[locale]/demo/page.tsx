@@ -102,16 +102,16 @@ export default async function DemoPage() {
 
       <main className="mx-auto max-w-6xl px-5 py-8 sm:px-6 md:py-14">
         <div className="max-w-2xl">
-          <h1 className="text-balance font-display text-4xl leading-tight tracking-tight text-ink md:text-5xl">
+          <h1 className="t-h1 text-ink">
             {t("title")}
           </h1>
-          <p className="mt-4 max-w-[48ch] text-base leading-relaxed text-ink-soft md:text-lg">{t("subtitle")}</p>
-          <p className="mt-3 text-sm leading-relaxed text-ink-soft">
+          <p className="t-lede mt-4">{t("subtitle")}</p>
+          <p className="t-small mt-3 text-ink-soft">
             {t("noStore")}
           </p>
         </div>
 
-        <div className="mt-8 grid gap-8 lg:grid-cols-[0.85fr_1.15fr] lg:items-start">
+        <div className="mt-10 grid gap-10 lg:grid-cols-[0.85fr_1.15fr] lg:items-start">
           {/* The action comes first in DOM and focus order. On a phone the
               parent can ask before reading all four sample documents. */}
           <section className="lg:col-start-2 lg:row-start-1">
@@ -126,7 +126,7 @@ export default async function DemoPage() {
               <>
                 <summary className="flex min-h-11 cursor-pointer list-none items-center gap-3 [&::-webkit-details-marker]:hidden">
                   <div className="min-w-0">
-                    <h2 className="font-display text-xl text-ink">
+                    <h2 className="t-h3 font-display text-ink">
                       {profile.baby_name}, {profile.age_label}
                     </h2>
                     <p className="text-sm text-ink-soft">{profile.record_note}</p>
@@ -140,7 +140,7 @@ export default async function DemoPage() {
                     aria-hidden
                   />
                 </summary>
-                <p className="mt-4 text-sm leading-relaxed text-ink-soft">{profile.banner}</p>
+                <p className="t-small mt-4 text-ink-soft">{profile.banner}</p>
                 <p className="ad-eyebrow mt-6">{profile.record_title}</p>
                 <ul className="mt-3 flex flex-col divide-y divide-line">
                   {profile.items.map((item) => {
@@ -175,14 +175,14 @@ export default async function DemoPage() {
 
         </div>
 
-        <section className="mt-14 flex flex-col items-start gap-3 border-t border-line pt-8">
-          <h2 className="text-balance font-display text-2xl text-ink">{t("signupTitle")}</h2>
-          <p className="max-w-xl text-sm leading-relaxed text-ink-soft">{t("signupBody")}</p>
+        <section className="mt-[var(--ad-section)] flex flex-col items-start gap-4 border-t border-line pt-8">
+          <h2 className="t-h2 text-ink">{t("signupTitle")}</h2>
+          <p className="t-body max-w-xl text-ink-soft">{t("signupBody")}</p>
           <StartLink href="/dashboard" className="ad-btn ad-btn-primary mt-1 px-6 py-3 text-base">
             {t("signupCta")}
             <ArrowRight className="h-4 w-4" strokeWidth={2.4} />
           </StartLink>
-          <p className="text-xs text-ink-soft">{t("signupNote")}</p>
+          <p className="text-[0.8125rem] leading-snug text-ink-soft">{t("signupNote")}</p>
         </section>
       </main>
     </div>
