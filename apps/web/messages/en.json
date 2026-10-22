@@ -20,8 +20,8 @@
     "clinicalDisclaimerShort": "AdelIA does not replace your pediatrician."
   },
   "home": {
-    "calmTitle": "What’s on your mind today?",
-    "calmIntro": "Tell me what’s happening. One step at a time.",
+    "calmTitle": "The AI that follows your baby’s development",
+    "calmIntro": "It answers with what pediatric guidelines and studies say, always with the source. It doesn’t replace your pediatrician: it looks where they studied.",
     "aboutLabel": "About AdelIA and pricing",
     "moreExamples": "More examples",
     "hero": "Your baby's health. A little more clarity.",
@@ -1045,7 +1045,7 @@
     "uxReady": "The response is available below your question.",
     "uxRetry": "Retry the same question",
     "uxSendSuggestion": "Send this question",
-    "uxLiteralPassage": "View quoted passage",
+    "uxLiteralPassage": "See the source summary",
     "uxOpenSource": "Open original source",
     "uxNewTab": "Opens in a new tab",
     "askBusy": "Thinking…",

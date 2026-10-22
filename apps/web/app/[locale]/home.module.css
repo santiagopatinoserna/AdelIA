@@ -7,19 +7,21 @@
 .home :global(.home-language) { display:inline-flex; align-items:center; gap:4px; color:var(--color-ink-soft); }
 .home :global(.home-language select) { min-height:48px; min-width:52px; padding:8px 4px; background:transparent; color:var(--color-ink); font-size:13px; border:0; }
 .home :global(.home-language option) { background:var(--color-surface); }
-.main { padding-top:28px; padding-bottom:16px; }
+.main { padding-top:16px; padding-bottom:16px; }
 .workspace { min-width:0; min-height:calc(100svh - 100px); }
 /* Leave the first screen to the question, examples and optional demo context.
    min-height grows with answers; it never clips clinical content. */
 .command { min-width:0; }
-.headline { font-family:var(--font-display); font-size:clamp(30px,5vw,38px); font-weight:500; letter-spacing:-.025em; line-height:1.15; text-wrap:balance; }
+.headline { font-family:var(--font-display); font-size:clamp(28px,5vw,38px); font-weight:500; letter-spacing:-.025em; line-height:1.15; text-wrap:balance; }
 /* After asking, the answer replaces the invitation, not the accessible h1.
    Only chrome is hidden; the clinical response always stays fully visible. */
 .command:has(:global([data-testid="demo-answer"])) .headline { position:absolute; width:1px; height:1px; overflow:hidden; clip-path:inset(50%); white-space:nowrap; }
 .command:has(:global([data-testid="demo-answer"])) .ask { margin-top:0; }
 .command:has(:global([data-testid="demo-answer"])) :global([data-testid="demo-answer"]) { margin-top:0; border-top:0; padding-top:0; }
-.ask { margin-top:28px; }
-.ask :global(textarea) { min-height:120px; border-radius:18px; padding:16px; box-shadow:none; }
+.intro { margin-top:8px; max-width:46ch; font-size:15px; line-height:1.55; color:var(--color-ink-soft); }
+.command:has(:global([data-testid="demo-answer"])) .intro { display:none; }
+.ask { margin-top:16px; }
+.ask :global(textarea) { min-height:96px; border-radius:18px; padding:16px; box-shadow:none; }
 .ask :global(button[type="submit"]) { min-height:48px; border-radius:14px; }
 .record { margin-top:20px; }
 .record > details { padding-top:14px; }

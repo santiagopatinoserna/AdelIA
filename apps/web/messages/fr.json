@@ -20,8 +20,8 @@
     "clinicalDisclaimerShort": "AdelIA ne remplace pas votre pédiatre."
   },
   "home": {
-    "calmTitle": "Qu’est-ce qui vous inquiète ?",
-    "calmIntro": "Raconte-moi ce qui se passe. Pas à pas.",
+    "calmTitle": "L’IA qui suit le développement de ton bébé",
+    "calmIntro": "Elle répond avec les études et recommandations de pédiatrie, sources à l’appui. Elle ne remplace pas ton pédiatre : elle cherche là où il a étudié.",
     "aboutLabel": "À propos et tarifs",
     "moreExamples": "Autres exemples",
     "hero": "La santé de ton bébé. Des repères pour toi.",
@@ -1045,7 +1045,7 @@
     "uxReady": "La réponse est disponible sous ta question.",
     "uxRetry": "Réessayer la même question",
     "uxSendSuggestion": "Envoyer cette question",
-    "uxLiteralPassage": "Voir le passage cité",
+    "uxLiteralPassage": "Voir le résumé de la source",
     "uxOpenSource": "Ouvrir la source originale",
     "uxNewTab": "S’ouvre dans un nouvel onglet",
     "askBusy": "Réflexion…",

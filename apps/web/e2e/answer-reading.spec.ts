@@ -183,7 +183,7 @@ test("keeps the entire red-flag response, notice, disclaimer and expandable sour
   await source.locator("summary").focus();
   await page.keyboard.press("Enter");
   await expect(source).toHaveAttribute("open", "");
-  await expect(source.locator("blockquote")).toHaveText(`“${citation.snippet}”`);
+  await expect(source.locator("blockquote")).toHaveText(citation.snippet);
   await expect(source.getByRole("link")).toHaveAttribute("href", citation.url);
   await screenshot(page, "red-flag-source-phone");
   await page.setViewportSize({ width: 1440, height: 1000 });

@@ -49,7 +49,7 @@ for (const locale of ["es", "en", "fr"] as const) {
     await summary.click();
     await expect(sources.getByText(citation.title, { exact: true })).toBeVisible();
     await sources.locator("details > summary").click();
-    await expect(sources.locator("blockquote")).toHaveText(`“${citation.snippet}”`);
+    await expect(sources.locator("blockquote")).toHaveText(citation.snippet);
     const another = page.getByTestId("ask-another");
     expect((await another.boundingBox())!.height).toBeGreaterThanOrEqual(44);
     await another.click();

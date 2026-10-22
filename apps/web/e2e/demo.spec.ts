@@ -106,8 +106,8 @@ test.describe("public demo", () => {
     expect(robots).not.toContain("/demo");
 
     for (const [locale, heading] of [
-      ["en", /What’s on your mind today/i],
-      ["fr", /Qu’est-ce qui vous inquiète/i],
+      ["en", /The AI that follows your baby/i],
+      ["fr", /L’IA qui suit le développement/i],
     ] as const) {
       await page.goto(`/${locale}`);
       await expect(page.getByRole("heading", { level: 1, name: heading })).toBeVisible();

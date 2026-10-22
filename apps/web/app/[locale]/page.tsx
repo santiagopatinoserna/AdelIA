@@ -151,6 +151,7 @@ export default async function HomePage() {
           <h1 className={styles.headline}>
             {t("home.calmTitle")}
           </h1>
+          <p className={styles.intro} data-testid="home-intro">{t("home.calmIntro")}</p>
           <div className={styles.ask}>
             <DemoAsk
               suggested={profile?.suggested ?? []}

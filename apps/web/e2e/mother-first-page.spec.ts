@@ -133,3 +133,41 @@ for (const locale of ["es", "en", "fr"] as const) {
     await expect(page).toHaveURL(new RegExp(`/${locale}/?$`));
   });
 }
+
+const pediatrician = { es: /pediatra/, en: /pediatrician/, fr: /pédiatre/ };
+for (const locale of ["es", "en", "fr"] as const) {
+  test(`live ${locale}: the first screen says what AdelIA is and keeps the field in reach`, async ({ page }) => {
+    await page.setViewportSize({ width: 390, height: 844 });
+    await page.goto(`/${locale}`);
+    const m = catalogs[locale];
+    await expect(page.getByRole("heading", { level: 1 })).toHaveText(m.home.calmTitle);
+    // What it is, where answers come from, and that it does not replace the doctor.
+    expect(m.home.calmTitle).toMatch(/IA|AI/);
+    const intro = page.getByTestId("home-intro");
+    await expect(intro).toHaveText(m.home.calmIntro);
+    expect(m.home.calmIntro).toMatch(pediatrician[locale]);
+    const field = (await page.locator("#demo-question").boundingBox())!;
+    expect(field.y + field.height).toBeLessThanOrEqual(380);
+  });
+
+  test(`live ${locale}: source passages are not presented as literal quotations`, async ({ page }) => {
+    // The corpus stores paraphrased summaries of each source (see the _meta
+    // caveat in apps/api/adelia/enrichment/data). Calling them literal is false.
+    const m = catalogs[locale];
+    expect(m.demo.uxLiteralPassage).not.toMatch(/literal|littéral/i);
+    await page.route("**/api/demo/ask", (route) => route.fulfill({ json: {
+      kind: "answer", answer: "Texto [ev_1].", disclaimer: "Aviso.",
+      evidence_citations: [{ tag: "ev_1", source_id: "s", chunk_id: "c", title: "Fuente", organization: "Org",
+        year: 2026, url: "https://example.org", snippet: "Resumen de prueba." }],
+    } }));
+    await page.goto(`/${locale}`);
+    await page.locator("#demo-question").fill("Pregunta de prueba");
+    await page.locator('[data-testid="demo-ask"] button[type="submit"]').click();
+    const depth = page.getByTestId("answer-depth");
+    await depth.locator(":scope > summary").click();
+    const source = depth.locator("details").first();
+    await expect(source.locator("summary")).toContainText(m.demo.uxLiteralPassage);
+    await source.locator("summary").click();
+    await expect(source.locator("blockquote")).toHaveText("Resumen de prueba.");
+  });
+}

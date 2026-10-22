@@ -46,7 +46,7 @@ test("demo: source titles and attribution remain readable without truncation", a
   expect(await attribution.evaluate((el) => parseFloat(getComputedStyle(el).fontSize))).toBeGreaterThanOrEqual(12);
 });
 
-test("demo: each source is one row and its literal passage opens on tap", async ({ page }) => {
+test("demo: each source is one row and its summary opens on tap", async ({ page }) => {
   const quote = "La regurgitación suele alcanzar su pico hacia los 4 meses.";
   await page.route("**/api/demo/ask", (route) =>
     route.fulfill({

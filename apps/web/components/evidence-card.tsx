@@ -59,7 +59,9 @@ export function EvidenceCard({ citation }: { citation: EvidenceCitation }) {
           aria-hidden
         />
       </summary>
-      <blockquote className="whitespace-pre-wrap break-words pl-9 text-sm leading-relaxed text-ink-soft">“{snippet}”</blockquote>
+      {/* The corpus stores a summary of each source, not its exact words, so
+          no quotation marks: the original is one tap away, below. */}
+      <blockquote className="whitespace-pre-wrap break-words pl-9 text-sm leading-relaxed text-ink-soft">{snippet}</blockquote>
       {citation.url && (
         <a
           href={citation.url}
