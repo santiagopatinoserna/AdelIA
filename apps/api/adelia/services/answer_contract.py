@@ -49,20 +49,55 @@ class LocaleContract:
     refusal: str
 
 
-#: The four sections of an action plan, per locale (Kenza, 2026-10-22). The
+#: The four sections of an action plan, per locale (Kenza, 2026-10-22), plus
+#: the optional fifth, "mothers": what other parents report in public blogs
+#: and forums, fed only by the experience tier and placed after the four. The
 #: web renders a section as a plan card only when the model used one of these
 #: exact headings; tests/test_answer_plan.py checks the web catalogues against
 #: this table so the two cannot drift.
 PLAN_HEADINGS: dict[str, dict[str, str]] = {
     "es": {"today": "Hoy", "watch": "Vigila", "doctor": "Cuándo ir al médico",
-           "remember": "No olvides"},
+           "remember": "No olvides", "mothers": "Lo que cuentan otras madres"},
     "en": {"today": "Today", "watch": "Watch for", "doctor": "When to see a doctor",
-           "remember": "Don’t forget"},
+           "remember": "Don’t forget", "mothers": "What other mothers say"},
     "fr": {"today": "Aujourd’hui", "watch": "À surveiller", "doctor": "Quand consulter",
-           "remember": "À ne pas oublier"},
+           "remember": "À ne pas oublier", "mothers": "Ce que racontent d’autres mères"},
 }
 
 _H = PLAN_HEADINGS
+
+#: The rule for the optional fifth section. It is the one place in the answer
+#: where a non-clinical source may appear, so the rule names what it may never
+#: carry rather than trusting the material's own header: a dose, a warning
+#: sign, or anything a cited guideline contradicts, and it exists only when
+#: the prompt actually brought [ex_N] material (the chat brings none today).
+_MOTHERS_RULE = {
+    "es": (
+        f"Después de \"## {_H['es']['remember']}\" puedes añadir un único apartado opcional, "
+        f"\"## {_H['es']['mothers']}\", con 1 a 3 viñetas, solo si el contexto trae fragmentos "
+        "[ex_N] de experiencias de otros padres; cada viñeta cita su [ex_N]. Es experiencia, "
+        "no evidencia: nunca una dosis ni un medicamento, nunca una señal de alarma ni una "
+        "urgencia, nunca algo que contradiga una guía citada en la respuesta. Omítelo si no "
+        "hay fragmentos [ex_N] o si lo único que cuentan choca con las fuentes. "
+    ),
+    "en": (
+        f"After \"## {_H['en']['remember']}\" you may add one optional section, "
+        f"\"## {_H['en']['mothers']}\", with 1 to 3 bullets, only when the context carries "
+        "[ex_N] fragments of other parents' experience; each bullet cites its [ex_N]. It is "
+        "experience, not evidence: never a dose or a medicine, never a warning sign or an "
+        "urgency, never anything that contradicts a guideline cited in the answer. Leave it "
+        "out if nothing [ex_N] was retrieved or if all it says clashes with the sources. "
+    ),
+    "fr": (
+        f"Après \"## {_H['fr']['remember']}\" tu peux ajouter une seule rubrique facultative, "
+        f"\"## {_H['fr']['mothers']}\", de 1 à 3 puces, uniquement si le contexte apporte des "
+        "fragments [ex_N] d’expériences d’autres parents ; chaque puce cite son [ex_N]. C’est "
+        "de l’expérience, pas une preuve : jamais de dose ni de médicament, jamais de signe "
+        "d’alerte ni d’urgence, jamais rien qui contredise une recommandation citée dans la "
+        "réponse. Omets-la si rien [ex_N] n’a été trouvé ou si tout ce qui s’y dit heurte les "
+        "sources. "
+    ),
+}
 
 _PLAN_RULE = {
     "es": (
@@ -75,6 +110,7 @@ _PLAN_RULE = {
         "vacío ni relleno. Cada viñeta es una acción concreta de una frase con su cita. "
         "En el apartado del médico, usa la urgencia que indica la fuente para cada señal "
         "(urgencias, hoy, consulta programada): ni la subas ni la bajes. "
+        + _MOTHERS_RULE["es"]
     ),
     "en": (
         "Organise the answer as an action plan: one opening sentence that answers, then only "
@@ -86,6 +122,7 @@ _PLAN_RULE = {
         "filler. Each bullet is one concrete action in one sentence with its citation. "
         "In the doctor section, use the urgency the source states for each sign (emergency, "
         "today, booked visit): neither raise nor lower it. "
+        + _MOTHERS_RULE["en"]
     ),
     "fr": (
         "Organise la réponse en plan d’action : une phrase d’ouverture qui répond, puis "
@@ -98,6 +135,7 @@ _PLAN_RULE = {
         "Dans la rubrique du médecin, garde pour chaque signe l’urgence indiquée par la "
         "source (urgences, aujourd’hui, consultation programmée), sans l’augmenter ni la "
         "réduire. "
+        + _MOTHERS_RULE["fr"]
     ),
 }
 
