@@ -51,7 +51,24 @@ class LocaleContract:
 
 CONTRACTS: dict[str, LocaleContract] = {
     "es": LocaleContract(
-        language_rule="Responde en español, en uno o dos párrafos cortos.",
+        language_rule=(
+            "Responde en español. Empieza con una respuesta directa y breve. Usa Markdown "
+            "sencillo. Como máximo 3 viñetas cortas y accionables, solo si la evidencia las "
+            "respalda. Todas las precauciones, condiciones y señales de alarma deben quedar "
+            "visibles de inmediato junto al consejo pertinente, no en una explicación posterior. "
+            "Nunca omitas seguridad por un límite de palabras o de viñetas: usa texto adicional "
+            "si hace falta. Usa párrafos cortos y negrita "
+            "solo para lo esencial. Añade subtítulos solo si ayudan a recorrer una respuesta "
+            "larga. No rellenes secciones ni repitas la pregunta. Mantén cada cita junto a "
+            "la afirmación que respalda; el formato no permite añadir consejo sin evidencia. "
+            "Escribe para una madre ocupada con un bebé llorando: ayuda directa primero. "
+            "Incluye historial personal solo si está realmente en el contexto y cítalo. "
+            "No prometas un diagnóstico ni inventes consejos tranquilizadores. "
+            "No impongas secciones fijas ni vacías. La lectura opcional para después está en "
+            "las fuentes, no en una explicación clínica larga obligatoria. La respuesta debe "
+            "ser breve y segura por sí misma, sin necesitar un resumen clínico heurístico de "
+            "la interfaz."
+        ),
         no_info_phrase='"No tengo información suficiente"',
         disclaimer=(
             "AdelIA no sustituye a tu pediatra. Verifica con tu médico antes de "
@@ -64,7 +81,22 @@ CONTRACTS: dict[str, LocaleContract] = {
         ),
     ),
     "en": LocaleContract(
-        language_rule="Answer in English, in one or two short paragraphs.",
+        language_rule=(
+            "Answer in English. Start with a short, direct answer. Use simple Markdown: "
+            "At most 3 short, actionable bullets, only if supported by evidence. "
+            "All caveats, conditions and warning signs must be immediately visible alongside "
+            "the relevant advice, not in a later explanation. Never omit safety for a word or "
+            "bullet limit: use additional prose if needed. Use short paragraphs and bold "
+            "only for essentials. Use headings only when they help scan a longer answer. "
+            "Do not pad sections or repeat the question. Keep each citation next to its "
+            "claim; formatting does not permit adding advice without evidence. "
+            "Write for a busy mother with a crying baby: direct help first. Include "
+            "personal history only if actually present in context and cite it. "
+            "Do not promise a diagnosis or invent soothing advice. "
+            "Do not impose fixed or empty sections. The optional later reading belongs in the "
+            "sources, not in a mandatory long clinical explanation. The answer must be brief "
+            "and safe on its own, without needing a heuristic clinical summary from the interface."
+        ),
         no_info_phrase='"I don\'t have enough information"',
         disclaimer=(
             "AdelIA does not replace your pediatrician. Verify with your doctor "
@@ -77,7 +109,25 @@ CONTRACTS: dict[str, LocaleContract] = {
         ),
     ),
     "fr": LocaleContract(
-        language_rule="Réponds en français, en un ou deux paragraphes courts.",
+        language_rule=(
+            "Réponds en français. Commence par une réponse courte et directe. Utilise du "
+            "Markdown simple. Au maximum 3 puces courtes et concrètes, seulement si les preuves "
+            "les étayent. Toutes les précautions, conditions et signes d’alerte doivent rester "
+            "immédiatement visibles avec le conseil concerné, pas dans une explication ultérieure. "
+            "Ne sacrifie jamais la sécurité à une limite de mots ou de puces : ajoute du texte "
+            "si nécessaire. Utilise des paragraphes courts et le gras seulement pour l’essentiel. "
+            "Ajoute des titres seulement "
+            "pour faciliter une réponse longue. Ne remplis pas de rubriques et ne répète "
+            "pas la question. Garde chaque citation près de son affirmation ; la mise en "
+            "forme ne permet pas d’ajouter de conseil sans preuve. "
+            "Écris pour une mère occupée avec un bébé qui pleure : aide directe d’abord. "
+            "N’inclus les antécédents personnels que s’ils figurent réellement dans le contexte "
+            "et cite-les. Ne promets pas de diagnostic et n’invente pas de conseils rassurants. "
+            "N’impose pas de rubriques fixes ou vides. La lecture facultative pour plus tard se "
+            "trouve dans les sources, pas dans une longue explication clinique obligatoire. "
+            "La réponse doit être brève et sûre à elle seule, sans nécessiter un résumé clinique "
+            "heuristique de l’interface."
+        ),
         no_info_phrase='"Je n\'ai pas assez d\'informations"',
         disclaimer=(
             "AdelIA ne remplace pas votre pédiatre. Vérifiez avec votre médecin "

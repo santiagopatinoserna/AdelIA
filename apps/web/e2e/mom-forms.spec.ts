@@ -47,6 +47,11 @@ test.describe("mom-forms UX invariants", () => {
       const out: string[] = [];
       document.querySelectorAll("a,button,input,label,select").forEach((el) => {
         const r = el.getBoundingClientRect();
+        // A visually clipped label names its real control; it is not a tap target.
+        const srLabel = el.tagName === "LABEL" && r.width <= 1 && r.height <= 1
+          && (getComputedStyle(el).clip === "rect(0px, 0px, 0px, 0px)"
+            || getComputedStyle(el).clipPath === "inset(50%)");
+        if (srLabel) return;
         if (r.width > 0 && r.height > 0 && r.height < 32 && (el as HTMLElement).offsetParent !== null) {
           out.push(`${r.height|0}px ${el.tagName}`);
         }

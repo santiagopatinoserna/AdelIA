@@ -1,0 +1,85 @@
+import { expect, test } from "@playwright/test";
+import AxeBuilder from "@axe-core/playwright";
+import es from "../messages/es.json";
+import en from "../messages/en.json";
+import fr from "../messages/fr.json";
+
+// Synthetic, non-clinical content: this suite tests reading and disclosure only.
+test.use({ viewport: { width: 390, height: 844 } });
+const copy = { es, en, fr };
+const text = "Una respuesta directa **sin perder condiciones** [ev_1].\n\n- Primera acción documentada [ev_1].\n- Segunda acción, solo si se cumple la condición indicada.\n\n## Cuándo pedir ayuda\n\nEsta advertencia debe permanecer visible, incluso al final de una respuesta larga.";
+const citation = {
+  tag: "ev_1", source_id: "mother-source", chunk_id: "mother-chunk",
+  title: "Título completo de la fuente de prueba", organization: "Institución de prueba",
+  year: 2026, url: "https://example.org/source", snippet: "Fragmento literal íntegro para leer con calma.",
+};
+
+for (const locale of ["es", "en", "fr"] as const) {
+  test(`${locale}: answer first, all clinical content visible, sources for later and a one-tap new question`, async ({ page }) => {
+    const m = copy[locale];
+    const sent: string[] = [];
+    await page.route("**/api/demo/ask", route => {
+      sent.push(JSON.parse(route.request().postData()!).question);
+      return route.fulfill({ json: {
+        kind: "answer", answer: text, evidence_citations: [citation], disclaimer: "Aviso clínico siempre visible.",
+      } });
+    });
+    await page.goto(`/${locale}`);
+    await page.locator("#demo-question").fill("Pregunta breve sin redactar perfectamente");
+    await page.getByRole("button", { name: m.demo.askCta, exact: true }).click();
+    const answer = page.getByTestId("demo-answer");
+    await expect(answer).toBeVisible();
+    // Do not spend the first phone screen repeating the long question.
+    await expect(answer.getByText("Pregunta breve sin redactar perfectamente", { exact: true })).toHaveCount(0);
+    await expect(page.locator("#demo-question")).toBeHidden();
+    await expect(page.locator('[data-testid="demo-ask"] ul button:visible')).toHaveCount(0);
+    const body = page.getByTestId("answer-content");
+    // Once she has asked, the invitation to ask must not displace her answer.
+    expect((await body.boundingBox())!.y).toBeLessThan(200);
+    await expect(body.getByText(/Esta advertencia debe permanecer visible/)).toBeVisible();
+    await expect(body.locator("li")).toHaveCount(2);
+    await expect(body.locator("details")).toHaveCount(0);
+    expect(await body.locator(":scope > p").first().evaluate(el => parseFloat(getComputedStyle(el).fontSize))).toBeGreaterThanOrEqual(18);
+    await expect(answer.getByText("Aviso clínico siempre visible.", { exact: true })).toBeVisible();
+    const sources = page.getByTestId("answer-depth");
+    await expect(sources).not.toHaveAttribute("open");
+    await expect(sources.getByText(citation.title, { exact: true })).toBeHidden();
+    const summary = sources.locator(":scope > summary");
+    expect((await summary.boundingBox())!.height).toBeGreaterThanOrEqual(44);
+    await summary.click();
+    await expect(sources.getByText(citation.title, { exact: true })).toBeVisible();
+    await sources.locator("details > summary").click();
+    await expect(sources.locator("blockquote")).toHaveText(`“${citation.snippet}”`);
+    const another = page.getByTestId("ask-another");
+    expect((await another.boundingBox())!.height).toBeGreaterThanOrEqual(44);
+    await another.click();
+    await expect(page.locator("#demo-question")).toBeFocused();
+    await expect(page.locator("#demo-question")).toHaveValue("");
+    await expect(page.locator('[data-testid="demo-ask"] ul button:visible')).toHaveCount(3);
+    expect(sent).toEqual(["Pregunta breve sin redactar perfectamente"]);
+    expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
+  });
+}
+
+test("emergency and refusal never fold or shorten the original clinical answer", async ({ page }) => {
+  for (const kind of ["red_flag", "no_evidence"]) {
+    const original = `Primer párrafo íntegro de ${kind}.\n\nSegundo párrafo con una condición importante.\n\nÚltima advertencia que no debe quedar oculta.`;
+    await page.route("**/api/demo/ask", route => route.fulfill({ json: {
+      kind, answer: original, evidence_citations: [], disclaimer: "Aviso clínico siempre visible.",
+    } }));
+    await page.goto("/es");
+    await page.locator("#demo-question").fill("Consulta de prueba");
+    await page.getByRole("button", { name: "Preguntar", exact: true }).click();
+    const content = page.getByTestId("answer-content");
+    await expect(content).toBeVisible();
+    if (kind === "red_flag") {
+      await expect(page.getByTestId("demo-answer").getByRole("heading", { level: 2 })).toHaveText("Esto no puede esperar");
+    }
+    expect(await content.locator("p").allTextContents()).toEqual(original.split("\n\n"));
+    await expect(content.getByText("Última advertencia que no debe quedar oculta.", { exact: true })).toBeVisible();
+    await expect(page.getByTestId("answer-depth")).toHaveCount(0);
+    const results = await new AxeBuilder({ page }).include('[data-testid="demo-answer"]').analyze();
+    expect(results.violations).toEqual([]);
+    await page.unroute("**/api/demo/ask");
+  }
+});

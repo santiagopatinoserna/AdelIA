@@ -54,12 +54,12 @@ _CONTENT: dict[str, dict] = {
         "baby_name": "Lucía",
         "age_label": "5 meses",
         "banner": (
-            "Demo pública. Lucía es un bebé inventado y su historial también: "
-            "sirve para enseñar cómo responde AdelIA. No se guarda nada de lo que "
-            "escribas aquí."
+            "Esta es la historia de Lucía, creada para que puedas probar AdelIA. "
+            "Sus revisiones y consultas te ayudarán a ver cómo tiene en cuenta "
+            "lo que le ha ido pasando. No se guarda nada de lo que escribas aquí."
         ),
-        "record_title": "El historial de Lucía",
-        "record_note": "Datos ficticios de ejemplo",
+        "record_title": "La historia de Lucía",
+        "record_note": "Su historia hasta hoy",
         "items": [
             {
                 "kind": "report",
@@ -101,9 +101,9 @@ _CONTENT: dict[str, dict] = {
             },
         ],
         "suggested": [
-            "¿Es normal que Lucía regurgite después de casi todas las tomas?",
-            "¿Cuándo conviene empezar la alimentación complementaria?",
-            "Su hemoglobina es 10,8 g/dL. ¿Qué significa a los 5 meses?",
+            "¿Es normal que mi bebé regurgite después de casi todas las tomas?",
+            "Con su edad, la lactancia y lo que indicó su pediatra, ¿está preparada para empezar con otros alimentos?",
+            "Está comiendo menos. Comparando sus revisiones, ¿qué debería vigilar y qué le pregunto al pediatra?",
         ],
         "context_intro": "Bebé de la demo (datos ficticios).",
     },
@@ -111,11 +111,12 @@ _CONTENT: dict[str, dict] = {
         "baby_name": "Lucía",
         "age_label": "5 months",
         "banner": (
-            "Public demo. Lucía is a made-up baby and so is her record: it is here "
-            "to show how AdelIA answers. Nothing you type is saved."
+            "Lucía’s story was created so you can try AdelIA. Her check-ups and "
+            "appointments show how her history informs the answers. "
+            "Nothing you type is saved."
         ),
-        "record_title": "Lucía's record",
-        "record_note": "Fictional sample data",
+        "record_title": "Lucía's story",
+        "record_note": "Her story so far",
         "items": [
             {
                 "kind": "report",
@@ -158,8 +159,8 @@ _CONTENT: dict[str, dict] = {
         ],
         "suggested": [
             "My baby regurgitates after almost every feed. Is infant reflux normal?",
-            "When should I start complementary feeding for my baby?",
-            "My baby's haemoglobin is 10.8 g/dL at 5 months. Is that low?",
+            "Considering her age, breastfeeding and her pediatrician’s advice, is she ready to start other foods?",
+            "She is feeding less. Comparing her check-ups, what should I watch for and ask her pediatrician?",
         ],
         "context_intro": "Demo baby (fictional data).",
     },
@@ -167,12 +168,12 @@ _CONTENT: dict[str, dict] = {
         "baby_name": "Lucía",
         "age_label": "5 mois",
         "banner": (
-            "Démo publique. Lucía est un bébé inventé, et son dossier aussi : il sert "
-            "à montrer comment AdelIA répond. Rien de ce que tu écris ici n’est "
-            "conservé."
+            "L’histoire de Lucía a été créée pour que tu puisses essayer AdelIA. "
+            "Ses consultations montrent comment son histoire éclaire les réponses. "
+            "Rien de ce que tu écris ici n’est conservé."
         ),
-        "record_title": "Le dossier de Lucía",
-        "record_note": "Données fictives d’exemple",
+        "record_title": "L’histoire de Lucía",
+        "record_note": "Son histoire jusqu’ici",
         "items": [
             {
                 "kind": "report",
@@ -215,8 +216,8 @@ _CONTENT: dict[str, dict] = {
         ],
         "suggested": [
             "Mon bébé régurgite après chaque tétée : à partir de quand ça s’améliore ?",
-            "À partir de quel âge commencer la diversification alimentaire de mon bébé ?",
-            "L’hémoglobine de mon bébé est à 10,8 g/dL à 5 mois. Est-ce trop bas ?",
+            "Avec son âge, l’allaitement et l’avis de sa pédiatre, est-elle prête à découvrir d’autres aliments ?",
+            "Elle mange moins. En comparant ses consultations, que dois-je surveiller et demander au pédiatre ?",
         ],
         "context_intro": "Bébé de la démo (données fictives).",
     },

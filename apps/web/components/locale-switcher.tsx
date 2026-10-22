@@ -15,9 +15,11 @@ const LABELS: Record<string, string> = { es: "ES", en: "EN", fr: "FR" };
 export function LocaleSwitcher({
   current,
   variant = "nav",
+  compact = false,
 }: {
   current: string;
   variant?: "nav" | "group";
+  compact?: boolean;
 }) {
   const pathname = usePathname();
   const router = useRouter();
@@ -39,6 +41,36 @@ export function LocaleSwitcher({
   }
 
   const Tag = variant === "nav" ? "nav" : "div";
+  // A native picker keeps all three languages one tap away without giving
+  // language selection more visual weight than the question itself.
+  if (compact) {
+    return (
+      <Tag
+        role={variant === "group" ? "group" : undefined}
+        aria-label={t("language")}
+        aria-busy={pending}
+        className="home-language"
+      >
+        {pending ? (
+          <Loader2 className="h-4 w-4 animate-spin" aria-hidden="true" />
+        ) : (
+          <Globe className="h-4 w-4" aria-hidden="true" />
+        )}
+        <select
+          aria-label={t("language")}
+          value={current}
+          disabled={pending}
+          onChange={(event) => switchTo(event.target.value)}
+        >
+          {locales.map((l) => (
+            <option key={l} value={l} aria-label={`${LABELS[l]}, ${t(`lang_${l}`)}`}>
+              {LABELS[l]}
+            </option>
+          ))}
+        </select>
+      </Tag>
+    );
+  }
   return (
     <Tag
       role={variant === "group" ? "group" : undefined}

@@ -274,7 +274,7 @@ test("showcase: 'Preguntar' opens the chat, sends the example question once and 
   expect(captured.bodies[0]?.locale).toBe("es");
   await expect(page.getByText(ASK_QUESTION, { exact: true })).toBeVisible();
   await expect(page.getByText("Respuesta de prueba.")).toBeVisible();
-  await expect(page.getByText(EVIDENCE_TITLE)).toBeVisible();
+  await expect(page.getByText(EVIDENCE_TITLE, { exact: true })).toBeVisible();
   // The one-shot question leaves the URL, so a reload does not send it again.
   await expect(page).toHaveURL(/\/es\/dashboard\/chat$/);
   await page.reload();

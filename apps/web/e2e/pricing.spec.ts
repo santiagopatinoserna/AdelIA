@@ -17,6 +17,7 @@ test.describe("landing pricing", () => {
       page,
     }) => {
       await page.goto(`/${locale}`);
+      await page.getByTestId("home-about").locator("summary").click();
       const pricing = page.locator("section#pricing");
       await expect(pricing).toBeVisible();
 
@@ -33,6 +34,7 @@ test.describe("landing pricing", () => {
     page,
   }) => {
     await page.goto("/es");
+    await page.getByTestId("home-about").locator("summary").click();
     const pricing = page.locator("section#pricing");
 
     await expect(pricing.getByRole("heading", { level: 3, name: "Open Source" })).toBeVisible();

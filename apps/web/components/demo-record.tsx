@@ -13,7 +13,7 @@ const ICONS = {
 /**
  * The fictional record, folded. It stays on the landing because it says WHO
  * the question is about and that the data is invented: the badge on the card,
- * the note under the name, and the banner the API itself writes. A demo of a
+ * the sample-profile note under the name, and the explicit banner inside. A demo of a
  * health product that looks like a real child's file is a liability.
  */
 export async function DemoRecord({ profile }: { profile: DemoProfile | null }) {

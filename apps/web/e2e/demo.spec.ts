@@ -36,16 +36,18 @@ test.describe("public demo", () => {
     // The sample record is folded so the question comes first; name, "Demo"
     // and "Datos ficticios" are visible without opening it.
     await expect(record.getByText("Demo", { exact: true })).toBeVisible();
-    await expect(record.getByText(/Datos ficticios/i)).toBeVisible();
+    await expect(record.getByText(/Su historia hasta hoy/i)).toBeVisible();
     await record.locator("summary").click();
     await expect(record.getByText("Demo", { exact: true })).toBeVisible();
-    await expect(record.getByText(/bebé inventado/i)).toBeVisible();
-    await expect(record.getByText(/Datos ficticios/i)).toBeVisible();
+    await expect(record.getByText(/historia de Lucía, creada para que puedas probar/i)).toBeVisible();
+    await expect(record.getByText(/Su historia hasta hoy/i)).toBeVisible();
     // The record itself: report, labs, recorded appointment, diary.
     await expect(record.getByText(/Informe de la revisión de los 4 meses/)).toBeVisible();
     await expect(record.getByText(/Hemoglobina 10,8/)).toBeVisible();
     await expect(record.getByText(/Consulta grabada/)).toBeVisible();
 
+    // Privacy explanation is now in the optional information, not above the field.
+    await page.getByTestId("home-about").locator("summary").click();
     // ...and the promise that nothing is stored.
     await expect(page.getByText(/Nada de lo que escribas aquí se guarda/)).toBeVisible();
   });
@@ -64,6 +66,10 @@ test.describe("public demo", () => {
     // At least three ready-made questions, straight from the API fixture.
     const suggestions = ask.locator("ul button");
     expect(await suggestions.count()).toBeGreaterThanOrEqual(3);
+    // One bold simple question and two contextual examples are all visible.
+    await expect(suggestions.first().locator("strong")).toBeVisible();
+    await expect(suggestions.nth(1)).toBeVisible();
+    await expect(suggestions.nth(2)).toBeVisible();
   });
 
   test("asking never leaves the visitor without an answer or an explanation", async ({
@@ -100,8 +106,8 @@ test.describe("public demo", () => {
     expect(robots).not.toContain("/demo");
 
     for (const [locale, heading] of [
-      ["en", /Your baby's health\. A little more clarity/i],
-      ["fr", /La santé de ton bébé/i],
+      ["en", /What’s on your mind today/i],
+      ["fr", /Qu’est-ce qui vous inquiète/i],
     ] as const) {
       await page.goto(`/${locale}`);
       await expect(page.getByRole("heading", { level: 1, name: heading })).toBeVisible();

@@ -9,6 +9,7 @@ import { getCorpusStats } from "@/lib/corpus-stats";
 import { loadDemoProfile } from "@/lib/demo-profile";
 import { Link } from "@/lib/navigation";
 import { publicPageAlternates } from "@/lib/seo";
+import styles from "./home.module.css";
 
 // Rendered per request, never frozen at build time: the corpus figures come
 // from the API (GET /clinical/corpus-stats), which is not running during
@@ -53,8 +54,10 @@ export async function generateMetadata({
 export default async function HomePage() {
   const t = await getTranslations();
   const locale = await getLocale();
-  const stats = await getCorpusStats();
-  const profile = await loadDemoProfile(locale);
+  const [stats, profile] = await Promise.all([
+    getCorpusStats(),
+    loadDemoProfile(locale),
+  ]);
 
   const number = new Intl.NumberFormat(locale);
   const hasRange = stats !== null && stats.year_min !== null && stats.year_max !== null;
@@ -110,12 +113,12 @@ export default async function HomePage() {
   ];
 
   return (
-    <div className="min-h-screen">
+    <div className={styles.home}>
       {/* One aggregate counter per page view, no cookie and no identifier
           (audit 4.8, components/funnel.tsx). Renders nothing. */}
       <FunnelVisit />
 
-      <header className="mx-auto flex max-w-3xl items-center justify-between px-5 py-3 sm:px-6">
+      <header className={styles.header}>
         <span className="font-display text-2xl font-semibold tracking-tight text-ink">
           Adel<span className="text-accent-text">IA</span>
         </span>
@@ -126,38 +129,46 @@ export default async function HomePage() {
           >
             {t("home.cta")}
           </StartLink>
-          <LocaleSwitcher current={locale} />
+          <LocaleSwitcher current={locale} compact />
         </div>
       </header>
 
-      <main className="mx-auto max-w-3xl px-5 pb-16 sm:px-6">
+      <main className={styles.main}>
+        <div className={styles.workspace}>
         {/* 1. The question, first */}
-        <section id="pregunta" className="pt-3 md:pt-10">
-          <h1 className="max-w-[18ch] text-balance font-display text-[1.75rem] leading-[1.1] tracking-tight text-ink md:text-5xl">
-            {t("home.hero")}
+        <section id="pregunta" className={styles.command}>
+          <h1 className={styles.headline}>
+            {t("home.calmTitle")}
           </h1>
-          <p className="mt-2 text-sm leading-relaxed text-ink-soft">{t("demo.noStore")}</p>
-          <div className="mt-5">
-            <DemoAsk suggested={profile?.suggested ?? []} />
+          <div className={styles.ask}>
+            <DemoAsk
+              suggested={profile?.suggested ?? []}
+              corpusStats={stats ? { sources: stats.sources, chunks: stats.chunks } : undefined}
+            />
           </div>
         </section>
 
         {/* 2. Who it is about: fictional, folded */}
-        <div className="mt-8">
+        <div className={styles.record}>
           <DemoRecord profile={profile} />
+          <p className="mt-3 text-sm leading-relaxed text-ink-soft">{t("demo.noStore")}</p>
         </div>
 
+        </div>
+        <details className={styles.support} data-testid="home-about">
+          <summary className={styles.aboutToggle}>{t("home.aboutLabel")}</summary>
+          <div className={styles.aboutContent}>
         {/* 3. Where the answers come from */}
-        <section id="evidence" className="mt-[var(--ad-section)] scroll-mt-24 border-t border-line pt-6">
-          <h2 className="t-h2 max-w-[26ch] text-ink">
+        <section id="evidence" className={styles.supportSection}>
+          <h2 className={styles.supportTitle}>
             {t("home.evTitle")}
           </h2>
-          <p className="t-body mt-3 text-ink-soft">{t("home.evBody")}</p>
+          <p className={styles.supportBody}>{t("home.evBody")}</p>
           {evStats.length > 0 && (
-            <dl className="mt-5 grid max-w-xl grid-cols-3 gap-4">
+            <dl className={styles.stats}>
               {evStats.map((s) => (
                 <div key={s.label}>
-                  <dd className="t-figure font-display text-2xl font-semibold text-primary-text md:text-3xl">
+                  <dd className={styles.statValue}>
                     {s.value}
                   </dd>
                   <dt className="mt-1 text-[0.8125rem] leading-snug text-ink-soft">{s.label}</dt>
@@ -165,27 +176,27 @@ export default async function HomePage() {
               ))}
             </dl>
           )}
-          <p className="t-small mt-8 text-ink-soft">{evOrgs.join(" · ")}</p>
+          <p className={styles.organizations}>{evOrgs.join(" · ")}</p>
         </section>
 
         {/* 4. What it costs */}
-        <section id="pricing" className="mt-[var(--ad-section)] scroll-mt-24 border-t border-line pt-6">
-          <h2 className="t-h2 text-ink">{t("home.prTitle")}</h2>
-          <div className="mt-6 grid gap-8 md:grid-cols-2 md:gap-12">
+        <section id="pricing" className={styles.supportSection}>
+          <h2 className={styles.supportTitle}>{t("home.prTitle")}</h2>
+          <div className={styles.plans}>
             {tiers.map((tier) => (
-              <div key={tier.name} className="flex flex-col">
-                <h3 className="t-h3 font-display text-ink">{tier.name}</h3>
+              <div key={tier.name} className={styles.plan}>
+                <h3 className={styles.planName}>{tier.name}</h3>
                 <p className="mt-2 flex items-baseline gap-1">
-                  <span className="t-figure font-display text-4xl font-semibold text-ink">{tier.price}</span>
+                  <span className={styles.price}>{tier.price}</span>
                   <span className="text-sm text-ink-soft">{tier.cadence}</span>
                 </p>
-                <p className="t-small mt-3 max-w-[40ch] text-ink-soft">{tier.desc}</p>
+                <p className={styles.planDescription}>{tier.desc}</p>
                 {tier.external ? (
                   <a
                     href={tier.href}
                     target="_blank"
                     rel="noreferrer"
-                    className={`ad-btn mt-5 w-full self-start px-5 py-2.5 text-sm sm:w-auto ${
+                    className={`ad-btn mt-3 w-full self-start px-5 py-2.5 text-sm ${
                       tier.primary ? "ad-btn-primary" : "ad-btn-ghost"
                     }`}
                   >
@@ -194,22 +205,24 @@ export default async function HomePage() {
                 ) : (
                   <StartLink
                     href={tier.href}
-                    className={`ad-btn mt-5 w-full self-start px-5 py-2.5 text-sm sm:w-auto ${
+                    className={`ad-btn mt-3 w-full self-start px-5 py-2.5 text-sm ${
                       tier.primary ? "ad-btn-primary" : "ad-btn-ghost"
                     }`}
                   >
                     {tier.cta}
                   </StartLink>
                 )}
-                {tier.note && <p className="t-small mt-3 text-ink-soft">{tier.note}</p>}
+                {tier.note && <p className={styles.trial}>{tier.note}</p>}
               </div>
             ))}
           </div>
         </section>
+          </div>
+        </details>
       </main>
 
       <footer className="border-t border-line">
-        <div className="mx-auto flex max-w-3xl flex-col gap-6 px-5 py-8 sm:px-6 md:flex-row md:items-start md:justify-between">
+        <div className={styles.footerInner}>
           <p className="t-small max-w-md text-ink-soft">{t("home.footerDisclaimer")}</p>
           <nav className="flex flex-wrap gap-x-5 text-sm" aria-label="Footer">
             <Link href="/privacidad" className="py-2 text-ink-soft hover:text-primary-text-hover">
@@ -228,7 +241,7 @@ export default async function HomePage() {
             </a>
           </nav>
         </div>
-        <p className="mx-auto max-w-3xl px-5 pb-8 font-mono sm:px-6 text-xs text-ink-faint">
+        <p className={styles.license}>
           © {t("home.footerLicense")}
         </p>
       </footer>

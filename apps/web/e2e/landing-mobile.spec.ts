@@ -55,7 +55,7 @@ test.describe("landing on a phone", () => {
         const { context, page } = await phone(browser, viewport);
         await page.goto(`/${locale}`);
 
-        await expect(page.getByRole("heading", { level: 1 })).toHaveText(m.hero);
+        await expect(page.getByRole("heading", { level: 1 })).toHaveText(m.calmTitle);
 
         const field = page.locator("#demo-question");
         const send = page.getByRole("button", { name: MESSAGES[locale].demo.askCta, exact: true });
@@ -97,6 +97,9 @@ test.describe("landing on a phone", () => {
       // answer to a suggested question is the proof now.
       await expect(page.getByTestId("demo-ask")).toBeVisible();
       await expect(page.getByTestId("demo-record").getByText(MESSAGES[locale].demo.badge, { exact: true })).toBeVisible();
+      // Secondary information is deliberately closed in the phone-first design.
+      await expect(page.locator("#pricing")).toBeHidden();
+      await page.getByTestId("home-about").locator("summary").click();
       await expect(page.getByRole("heading", { level: 2, name: m.evTitle })).toBeVisible();
       await expect(page.locator("section#pricing").getByText(m.prT2Trial)).toBeVisible();
       await expect(page.getByRole("contentinfo")).toContainText(m.footerDisclaimer);
@@ -134,6 +137,7 @@ test.describe("landing on a desktop", () => {
       const context = await browser.newContext({ viewport: { width: 1280, height: 900 } });
       const page = await context.newPage();
       await page.goto(`/${locale}`);
+      await page.getByTestId("home-about").locator("summary").click();
       for (const id of ["evidence", "pricing"]) {
         await expect(page.locator(`section#${id}`), `${locale}: #${id}`).toBeVisible();
       }

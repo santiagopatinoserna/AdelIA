@@ -75,8 +75,11 @@ test("demo: each source is one row and its literal passage opens on tap", async 
   await page.getByRole("button", { name: "Preguntar", exact: true }).click();
 
   const answer = page.getByTestId("demo-answer");
-  const source = answer.locator("details").first();
-  await expect(source.getByText("Reflujo del lactante: historia natural")).toBeVisible();
+  const depth = answer.getByTestId("answer-depth");
+  await depth.locator(":scope > summary").click();
+  const source = depth.locator("details").first();
+  // The outbound link also names the source for screen readers; select the visible title exactly.
+  await expect(source.getByText("Reflujo del lactante: historia natural", { exact: true })).toBeVisible();
   await expect(source.getByText("NASPGHAN-ESPGHAN (2018)").first()).toBeVisible();
   // Closed: the quotation is in the page but not on screen.
   await expect(source.getByText(quote)).toBeHidden();
