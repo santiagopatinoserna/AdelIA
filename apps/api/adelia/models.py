@@ -344,7 +344,8 @@ class IngestionEvent(Base):
 class EvidenceSource(Base):
     __tablename__ = "evidence_sources"
     id = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
-    source_type = Column(String(32), nullable=False)  # guideline | paper | protocol | reference
+    # guideline | paper | protocol | reference | experience
+    source_type = Column(String(32), nullable=False)
     title = Column(String(512), nullable=False)
     organization = Column(String(128))
     publication_year = Column(Integer)
@@ -352,14 +353,20 @@ class EvidenceSource(Base):
     specialties = Column(JSONB)  # list of specialty tags — stored as JSONB array for simplicity
     license = Column(String(64))
     language = Column(String(8), server_default=text("'en'"))
+    # 'evidence' (studies, guidelines) or 'experience' (what other parents
+    # report in public blogs and forums, migration 0022). Retrieval filters on
+    # it, so a question about a baby is answered from one tier at a time and
+    # an experience row can never be cited as a guideline.
+    tier = Column(String(16), nullable=False, server_default=text("'evidence'"))
     created_at = Column(DateTime(timezone=True), server_default=func.now(), nullable=False)
     updated_at = Column(DateTime(timezone=True), server_default=func.now(), nullable=False)
 
     __table_args__ = (
         CheckConstraint(
-            "source_type IN ('guideline', 'paper', 'protocol', 'reference')",
+            "source_type IN ('guideline', 'paper', 'protocol', 'reference', 'experience')",
             name="ck_evidence_sources_type",
         ),
+        CheckConstraint("tier IN ('evidence', 'experience')", name="ck_evidence_sources_tier"),
     )
 
 

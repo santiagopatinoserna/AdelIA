@@ -212,14 +212,26 @@ async def load_evidence_file(path: Path) -> tuple[int, int]:
         data = json.load(f)
 
     await sync_source_metadata(path, data)
+    return await load_sources(data.get("sources", []), path.name)
 
+
+async def load_sources(sources: list[dict], origin: str, *, tier: str = "evidence") -> tuple[int, int]:
+    """The additive, per-source-committed load behind load_evidence_file.
+
+    Split out so the experience fixture (experience_loader.py), whose file has
+    a different shape, can reach the same embedding, the same idempotency
+    rule and the same table once its entries are converted. `tier` is written
+    on every source created here; a source dict may carry its own `tier`,
+    which wins, so one list can never be loaded under the wrong label by
+    forgetting the argument.
+    """
     async with AsyncSessionLocal() as session:
         existing = await session.execute(select(EvidenceSource.title))
         existing_titles = {row[0] for row in existing.all()}
 
         sources_added = 0
         chunks_added = 0
-        for src_data in data.get("sources", []):
+        for src_data in sources:
             if src_data["title"] in existing_titles:
                 continue
             chunks_text = list(src_data.get("chunks", []))
@@ -232,6 +244,7 @@ async def load_evidence_file(path: Path) -> tuple[int, int]:
                 specialties=src_data.get("specialties", []),
                 license=src_data.get("license"),
                 language=src_data.get("language", "en"),
+                tier=src_data.get("tier", tier),
             )
             # Embed BEFORE adding the source: if embedding ultimately fails the
             # source is not left behind without chunks (idempotency is by
@@ -256,7 +269,7 @@ async def load_evidence_file(path: Path) -> tuple[int, int]:
             existing_titles.add(src_data["title"])
             if SOURCE_PACING_S:
                 await asyncio.sleep(SOURCE_PACING_S)
-        logger.info("evidence file %s: +%d sources, +%d chunks", path.name, sources_added, chunks_added)
+        logger.info("evidence file %s: +%d sources, +%d chunks", origin, sources_added, chunks_added)
         return sources_added, chunks_added
 
 
