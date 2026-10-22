@@ -18,6 +18,10 @@ export type EvidenceCitation = {
   url?: string | null;
   snippet: string;
   distance?: number;
+  // 'evidence' (studies, guidelines; tags ev_N) or 'experience' (what other
+  // mothers report in public blogs and forums; tags ex_N). Absent means
+  // evidence: older payloads and the red-flag citation never send it.
+  tier?: "evidence" | "experience";
 };
 
 export type ChatMessage = {

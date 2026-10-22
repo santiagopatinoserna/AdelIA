@@ -16,14 +16,30 @@ export function AnswerSources({ citations, kind, answer, corpusStats }: {
 }) {
   const t = useTranslations("demo");
   if (!citations.length) return null;
+  // Scientific sources first, then what other mothers say under its own
+  // title, whatever order the payload came in: the experience tier is a layer
+  // under the plan, never a peer of a guideline.
+  const evidence = citations.filter(c => c.tier !== "experience");
+  const experience = citations.filter(c => c.tier === "experience");
   const contents = (
     <>
       <AnswerSourceContext kind={kind} answer={answer} corpusStats={corpusStats} />
       <div className="mt-3 flex flex-col">
-        {citations.map(citation => (
+        {evidence.map(citation => (
           <EvidenceCard key={`${citation.tag}-${citation.chunk_id}`} citation={citation} />
         ))}
       </div>
+      {experience.length > 0 && (
+        <div data-testid="experience-sources" className="mt-5">
+          <h4 className="text-sm font-medium text-ink">{t("sourcesExperienceTitle")}</h4>
+          <p className="mt-1 text-sm leading-relaxed text-ink-soft">{t("mothersLabel")}</p>
+          <div className="mt-3 flex flex-col">
+            {experience.map(citation => (
+              <EvidenceCard key={`${citation.tag}-${citation.chunk_id}`} citation={citation} />
+            ))}
+          </div>
+        </div>
+      )}
     </>
   );
 

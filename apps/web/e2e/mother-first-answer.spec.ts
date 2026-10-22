@@ -96,6 +96,8 @@ test("a plan answer renders as plan sections, keeps every line, and folds only t
     `## ${plan.doctor}`, "- **Urgencias** si aparece la señal de prueba [ev_1].",
     "",
     `## ${plan.remember}`, "- Indicación previa del pediatra [4].",
+    "",
+    `## ${plan.mothers}`, "- Lo que contó otra madre [ex_1].",
   ].join("\n");
   await page.route("**/api/demo/ask", (route) => route.fulfill({ json: {
     kind: "answer", answer, evidence_citations: [citation], disclaimer: "Aviso clínico siempre visible.",
@@ -116,6 +118,70 @@ test("a plan answer renders as plan sections, keeps every line, and folds only t
   await expect(body.locator("details")).toHaveCount(0);
   await expect(page.getByTestId("answer-depth").locator(":scope > summary")).toContainText(es.demo.readMoreTitle);
   await expect(page.locator("#demo-answer-title")).toHaveText(es.demo.answerTitle);
+  expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
+  for (const colorScheme of ["light", "dark"] as const) {
+    await page.emulateMedia({ colorScheme, reducedMotion: "reduce" });
+    const audit = await new AxeBuilder({ page }).include('[data-testid="demo-answer"]').analyze();
+    expect(audit.violations, colorScheme).toEqual([]);
+  }
+});
+
+// What other mothers say (Kenza, 2026-10-22): one optional section after
+// "No olvides", labelled as experience, its sources badged and listed after
+// the scientific ones. Experience is never clinical: no doses, no warning
+// signs, so the section must not look like the doctor card.
+test("the mothers section renders last, labelled as experience, and its source is badged and listed after the evidence", async ({ page }) => {
+  const plan = es.demo.plan;
+  const answer = [
+    "Respuesta directa de prueba [ev_1].",
+    "",
+    `## ${plan.today}`, "- Acción uno [ev_1].",
+    "",
+    `## ${plan.doctor}`, "- **Urgencias** si aparece la señal de prueba [ev_1].",
+    "",
+    `## ${plan.remember}`, "- Indicación previa del pediatra [ev_1].",
+    "",
+    `## ${plan.mothers}`, "- A otras madres les ayudó adelantar la rutina de la noche [ex_1].",
+  ].join("\n");
+  const experience = {
+    tag: "ex_1", source_id: "exp-source", chunk_id: "exp-chunk", tier: "experience",
+    title: "Hilo de madres sobre el sueño", organization: "Foro de prueba",
+    year: 2026, url: "https://example.org/forum", snippet: "Resumen de lo que cuentan otras madres.",
+  };
+  // Experience deliberately FIRST in the payload: the page, not the API order,
+  // must put it after the scientific sources.
+  await page.route("**/api/demo/ask", (route) => route.fulfill({ json: {
+    kind: "answer", answer, evidence_citations: [experience, { ...citation, tier: "evidence" }],
+    disclaimer: "Aviso clínico siempre visible.",
+  } }));
+  await page.goto("/es");
+  await page.locator("#demo-question").fill("Pregunta de prueba");
+  await page.getByRole("button", { name: "Preguntar", exact: true }).click();
+  const body = page.getByTestId("answer-content");
+  const mothers = body.getByTestId("plan-section-mothers");
+  await expect(mothers).toBeVisible();
+  await expect(mothers.getByRole("heading", { level: 3 })).toHaveText(plan.mothers);
+  await expect(mothers.getByText(es.demo.mothersLabel, { exact: true })).toBeVisible();
+  await expect(mothers.locator("li")).toHaveText(["A otras madres les ayudó adelantar la rutina de la noche [ex_1]."]);
+  // After "No olvides" and never styled like the doctor card.
+  const order = await body.locator("[data-testid^='plan-section-']").evaluateAll(els => els.map(e => e.getAttribute("data-testid")));
+  expect(order).toEqual(["plan-section-today", "plan-section-doctor", "plan-section-remember", "plan-section-mothers"]);
+  const [doctorBg, mothersBg] = await Promise.all([
+    body.getByTestId("plan-section-doctor").evaluate(el => getComputedStyle(el).backgroundColor),
+    mothers.evaluate(el => getComputedStyle(el).backgroundColor),
+  ]);
+  expect(mothersBg).not.toBe(doctorBg);
+
+  const sources = page.getByTestId("answer-depth");
+  await sources.locator(":scope > summary").click();
+  const cards = sources.locator("[data-testid='evidence-card']");
+  await expect(cards).toHaveCount(2);
+  await expect(cards.nth(0)).toContainText(citation.title);
+  await expect(cards.nth(1)).toContainText(experience.title);
+  await expect(cards.nth(1).getByTestId("experience-badge")).toHaveText(es.demo.experienceBadge);
+  await expect(cards.nth(0).getByTestId("experience-badge")).toHaveCount(0);
+  await expect(sources.getByText(es.demo.sourcesExperienceTitle, { exact: true })).toBeVisible();
+
   expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
   for (const colorScheme of ["light", "dark"] as const) {
     await page.emulateMedia({ colorScheme, reducedMotion: "reduce" });

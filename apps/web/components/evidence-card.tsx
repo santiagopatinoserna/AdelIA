@@ -7,7 +7,9 @@ import type { EvidenceCitation } from "@/lib/chat-types";
 // One source is one row: tag, complete title, institution and year. The
 // literal passage is one tap away, not gone: the product's contract is a
 // verifiable quotation, so it stays in the page (and in the HTML) and only
-// stops pushing the next source down the screen.
+// stops pushing the next source down the screen. An experience source (what
+// other mothers report) carries a badge that says so, on the row itself, so
+// it can never be mistaken for a guideline once the list is open.
 export function EvidenceCard({ citation }: { citation: EvidenceCitation }) {
   const t = useTranslations("demo");
   const attribution = [
@@ -15,13 +17,21 @@ export function EvidenceCard({ citation }: { citation: EvidenceCitation }) {
     citation.year ? `(${citation.year})` : null,
   ].filter(Boolean).join(" ");
   const snippet = citation.snippet?.trim();
+  const experience = citation.tier === "experience";
 
   const row = (
     <div className="flex items-start gap-3">
       <span className="ad-ev-tag mt-0.5 shrink-0">{citation.tag}</span>
       <div className="min-w-0 flex-1">
         <p className="break-words text-sm font-medium leading-snug text-ink">{citation.title}</p>
-        {attribution && <p className="mt-1 text-xs leading-relaxed text-ink-soft">{attribution}</p>}
+        <p className="mt-1 flex flex-wrap items-center gap-x-2 gap-y-1 text-xs leading-relaxed text-ink-soft">
+          {experience && (
+            <span data-testid="experience-badge" className="rounded-full bg-surface-2 px-2 py-0.5 font-medium text-ink-soft ring-1 ring-line">
+              {t("experienceBadge")}
+            </span>
+          )}
+          {attribution && <span>{attribution}</span>}
+        </p>
       </div>
     </div>
   );
@@ -30,7 +40,7 @@ export function EvidenceCard({ citation }: { citation: EvidenceCitation }) {
   // unfold, so the whole row is the link. Never show empty quotation marks.
   if (!snippet) {
     return (
-      <div className="border-t border-line">
+      <div data-testid="evidence-card" className="border-t border-line">
         {citation.url ? (
           <a href={citation.url} target="_blank" rel="noopener noreferrer" className="ad-ev-row flex min-h-11 items-start gap-2">
             <div className="min-w-0 flex-1">{row}</div>
@@ -45,7 +55,7 @@ export function EvidenceCard({ citation }: { citation: EvidenceCitation }) {
   }
 
   return (
-    <details className="group border-t border-line">
+    <details data-testid="evidence-card" className="group border-t border-line">
       <summary className="ad-ev-row flex min-h-11 cursor-pointer list-none items-start gap-2 [&::-webkit-details-marker]:hidden">
         <div className="min-w-0 flex-1">
           {row}

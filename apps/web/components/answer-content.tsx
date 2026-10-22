@@ -1,7 +1,7 @@
 "use client";
 
 import ReactMarkdown, { type Components } from "react-markdown";
-import { Bookmark, CalendarCheck, Eye, Stethoscope } from "lucide-react";
+import { Bookmark, CalendarCheck, Eye, MessageCircle, Stethoscope } from "lucide-react";
 import remarkGfm from "remark-gfm";
 import { useTranslations } from "next-intl";
 
@@ -64,17 +64,21 @@ function Md({ children }: { children: string }) {
   );
 }
 
-const PLAN_KEYS = ["today", "watch", "doctor", "remember"] as const;
+const PLAN_KEYS = ["today", "watch", "doctor", "remember", "mothers"] as const;
 type PlanKey = (typeof PLAN_KEYS)[number];
 type PlanSection = { key: PlanKey; title: string; body: string };
-const PLAN_ICONS = { today: CalendarCheck, watch: Eye, doctor: Stethoscope, remember: Bookmark };
+const PLAN_ICONS = {
+  today: CalendarCheck, watch: Eye, doctor: Stethoscope, remember: Bookmark, mothers: MessageCircle,
+};
 
 /*
  * The answer contract asks for an action plan under four exact headings
- * (apps/api/adelia/services/answer_contract.py, PLAN_HEADINGS). Only those
- * exact headings become plan sections; any other text stays Markdown, in
- * order, so nothing the model wrote is dropped or reworded. A thematic break
- * between sections is layout, not content, and is the one thing removed.
+ * (apps/api/adelia/services/answer_contract.py, PLAN_HEADINGS), plus one
+ * optional fifth, "mothers": what other parents report, from the experience
+ * tier, placed after the four. Only those exact headings become plan
+ * sections; any other text stays Markdown, in order, so nothing the model
+ * wrote is dropped or reworded. A thematic break between sections is layout,
+ * not content, and is the one thing removed.
  */
 export function parsePlan(text: string, titles: Record<PlanKey, string>) {
   const byTitle = new Map(PLAN_KEYS.map((key) => [normalize(titles[key]), key]));
@@ -132,18 +136,26 @@ export function AnswerContent({ children }: { children: string }) {
       {plan.sections.map((section) => {
         const Icon = PLAN_ICONS[section.key];
         const urgent = section.key === "doctor";
+        // Experience, not evidence: a soft neutral tint and a label that says
+        // so, nothing that could be read as a clinical card.
+        const mothers = section.key === "mothers";
         return (
           <section
             key={section.key}
             data-testid={`plan-section-${section.key}`}
             className={urgent
               ? "rounded-xl bg-error-tint px-4 py-3 text-ink"
-              : "border-t border-line pt-4"}
+              : mothers
+                ? "rounded-xl bg-surface-2 px-4 py-3 text-ink"
+                : "border-t border-line pt-4"}
           >
             <h3 className={`flex items-center gap-2 text-base font-semibold leading-snug ${urgent ? "text-error-text" : "text-ink"}`}>
               <Icon className="h-4 w-4 shrink-0" strokeWidth={2} aria-hidden />
               {section.title}
             </h3>
+            {mothers && (
+              <p className="mt-1 text-sm leading-relaxed text-ink-soft">{t("mothersLabel")}</p>
+            )}
             <div className="mt-2 space-y-2 [&>:first-child]:mt-0">
               <Md>{section.body.trim()}</Md>
             </div>
