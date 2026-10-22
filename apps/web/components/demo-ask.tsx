@@ -122,14 +122,16 @@ export function DemoAsk({ suggested, corpusStats }: {
             event.currentTarget.form?.requestSubmit();
           }}
           enterKeyHint="send"
+          placeholder={t("askPlaceholder")}
           aria-label={t("askLabel")}
           aria-describedby="demo-question-help"
-          className="ad-field block w-full resize-y text-base leading-relaxed"
+          className="ad-field block w-full resize-y text-base leading-relaxed placeholder:text-ink-faint"
         />
         <div className="mt-2 flex flex-wrap items-center justify-between gap-x-4 gap-y-2">
-          <p id="demo-question-help" className="sr-only text-xs leading-relaxed text-ink-soft sm:not-sr-only">
-            {question.trim().length > 0 && question.trim().length < 3
-              ? t("uxMinimum") : t("uxKeyboard")}
+          {/* Enter-to-send is the convention of every chat; only an actual
+              blocker (too short to send) earns a line of text. */}
+          <p id="demo-question-help" aria-live="polite" className="text-xs leading-relaxed text-ink-soft">
+            {question.trim().length > 0 && question.trim().length < 3 ? t("uxMinimum") : ""}
           </p>
           <button
             type="submit"

@@ -1036,7 +1036,7 @@
     "recordUnavailable": "We could not load the sample record. You can still ask a question.",
     "askTitle": "Your question",
     "askLabel": "Type your question about Lucía",
-    "askPlaceholder": "Tell me what you’ve noticed…",
+    "askPlaceholder": "For example: she has had a runny nose since yesterday and struggles to fall asleep",
     "askCta": "Ask",
     "uxKeyboard": "Enter to send · Shift+Enter for a new line",
     "uxMinimum": "Enter at least 3 characters",

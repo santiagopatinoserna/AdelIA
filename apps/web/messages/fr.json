@@ -1036,7 +1036,7 @@
     "recordUnavailable": "On n’a pas pu charger le dossier d’exemple. Tu peux quand même poser ta question.",
     "askTitle": "Ta question",
     "askLabel": "Écris ta question à propos de Lucía",
-    "askPlaceholder": "Raconte-moi ce que tu as remarqué…",
+    "askPlaceholder": "Par exemple : elle a le nez qui coule depuis hier et a du mal à s’endormir",
     "askCta": "Poser la question",
     "uxKeyboard": "Entrée pour envoyer · Maj+Entrée pour un saut de ligne",
     "uxMinimum": "Écris au moins 3 caractères",

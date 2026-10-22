@@ -1,6 +1,9 @@
 import { expect, test } from "@playwright/test";
 import { readFileSync } from "node:fs";
 import path from "node:path";
+import es from "../messages/es.json";
+import en from "../messages/en.json";
+import fr from "../messages/fr.json";
 
 const root = process.cwd();
 const homeCss = readFileSync(path.join(root, "app/[locale]/home.module.css"), "utf8");
@@ -86,5 +89,47 @@ for (const width of [375, 390, 430]) {
     await record.locator("summary").click();
     await expect(record).toContainText("creada para que puedas probar AdelIA");
     expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
+  });
+}
+
+const catalogs = { es, en, fr };
+for (const locale of ["es", "en", "fr"] as const) {
+  test(`live ${locale}: a grey example in the empty field, no obvious keyboard instructions`, async ({ page }) => {
+    await page.setViewportSize({ width: 390, height: 844 });
+    await page.goto(`/${locale}`);
+    const field = page.locator("#demo-question");
+    const placeholder = await field.getAttribute("placeholder");
+    expect(placeholder).toBe(catalogs[locale].demo.askPlaceholder);
+    // A concrete example, not another invitation, and not a copy of a suggestion.
+    expect(placeholder).toMatch(/^(Por ejemplo|For example|Par exemple)/);
+    for (const suggestion of await page.locator('[data-testid="demo-ask"] ul button').allInnerTexts()) {
+      expect(suggestion).not.toContain(placeholder!.split(":")[1].trim().slice(0, 20));
+    }
+    const colors = await field.evaluate((el) => ({
+      placeholder: getComputedStyle(el, "::placeholder").color,
+      text: getComputedStyle(el).color,
+    }));
+    expect(colors.placeholder).not.toBe(colors.text);
+    await expect(page.getByText(catalogs[locale].demo.uxKeyboard)).toHaveCount(0);
+  });
+
+  test(`live ${locale}: the logo returns home from an answer, and the page says it is a demo`, async ({ page }) => {
+    await page.route("**/api/demo/ask", (route) => route.fulfill({ json: {
+      kind: "answer", answer: "Texto de prueba [ev_1].", evidence_citations: [], disclaimer: "Aviso.",
+    } }));
+    await page.setViewportSize({ width: 390, height: 844 });
+    await page.goto(`/${locale}`);
+    const header = page.locator("header").first();
+    await expect(header.getByText(catalogs[locale].demo.badge, { exact: true })).toBeVisible();
+    await page.locator("#demo-question").fill("Pregunta de prueba");
+    await page.locator('[data-testid="demo-ask"] button[type="submit"]').click();
+    await expect(page.getByTestId("demo-answer")).toBeVisible();
+    const logo = header.getByRole("link", { name: "AdelIA", exact: true });
+    expect((await logo.boundingBox())!.height).toBeGreaterThanOrEqual(44);
+    await logo.click();
+    await expect(page.getByTestId("demo-answer")).toHaveCount(0);
+    await expect(page.getByRole("heading", { level: 1 })).toBeVisible();
+    await expect(page.locator("#demo-question")).toBeVisible();
+    await expect(page).toHaveURL(new RegExp(`/${locale}/?$`));
   });
 }

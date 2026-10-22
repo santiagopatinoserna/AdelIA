@@ -1036,7 +1036,7 @@
     "recordUnavailable": "No hemos podido cargar el historial de ejemplo. Puedes preguntar igualmente.",
     "askTitle": "Tu pregunta",
     "askLabel": "Escribe tu pregunta sobre Lucía",
-    "askPlaceholder": "Cuéntame qué has notado…",
+    "askPlaceholder": "Por ejemplo: desde ayer tiene mocos y le cuesta dormirse",
     "askCta": "Preguntar",
     "uxKeyboard": "Enter para enviar · Mayús+Enter para nueva línea",
     "uxMinimum": "Escribe al menos 3 caracteres",

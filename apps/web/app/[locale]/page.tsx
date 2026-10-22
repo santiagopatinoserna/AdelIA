@@ -119,9 +119,20 @@ export default async function HomePage() {
       <FunnelVisit />
 
       <header className={styles.header}>
-        <span className="font-display text-2xl font-semibold tracking-tight text-ink">
-          Adel<span className="text-accent-text">IA</span>
-        </span>
+        <div className="flex items-center gap-2">
+          {/* A plain anchor on purpose: a full load clears an answer that is
+              open, so the logo always means "start again", like every site. */}
+          <a
+            href={`/${locale}`}
+            aria-label="AdelIA"
+            className="inline-flex min-h-11 items-center font-display text-2xl font-semibold tracking-tight text-ink"
+          >
+            Adel<span className="text-accent-text">IA</span>
+          </a>
+          <span className="rounded-full bg-accent-tint px-2 py-0.5 text-xs font-medium text-on-accent-tint">
+            {t("demo.badge")}
+          </span>
+        </div>
         <div className="flex items-center gap-3">
           <StartLink
             href="/dashboard"
