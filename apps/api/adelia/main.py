@@ -93,6 +93,44 @@ async def _daily_diary_reminder() -> None:
             logger.exception("daily diary reminder failed")
 
 
+async def load_startup_corpora() -> None:
+    """Load the clinical corpora, then the experience fixture, at boot.
+
+    Clinical evidence: seed plus per-topic `enrichment/data/evidence_*.json`.
+    Idempotent by title, so re-running on every boot is safe; new topics drop
+    in as JSON. Then `enrichment/experience/*.json`, what other mothers say,
+    through its own loader (adelia.enrichment.experience_loader), which is
+    what writes `tier = 'experience'` on every row: a separate directory and a
+    separate glob, so no experience file can ever be swept into the clinical
+    load by matching a name. Each stage swallows its own failure: evidence
+    must never block boot, and experience must never block evidence.
+    """
+    if not settings.mistral_api_key:
+        return
+    try:
+        from pathlib import Path as _Path
+
+        from adelia.enrichment import evidence_loader
+
+        await evidence_loader.load_seed_if_empty()
+        _data_dir = _Path(__file__).parent / "enrichment" / "data"
+        for _f in sorted(_data_dir.glob("evidence_*.json")):
+            if _f.name == "evidence_seed.json":
+                continue
+            try:
+                await evidence_loader.load_evidence_file(_f)
+            except Exception:  # noqa: BLE001 — one bad file must not skip the rest
+                logger.exception("startup evidence load failed for %s", _f.name)
+    except Exception:  # noqa: BLE001 — evidence load must never block boot
+        logger.exception("startup evidence load failed")
+    try:
+        from adelia.enrichment import experience_loader
+
+        await experience_loader.load_experience_dir()
+    except Exception:  # noqa: BLE001 — experience load must never block boot
+        logger.exception("startup experience load failed")
+
+
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     if not settings.auth_secret:
@@ -118,28 +156,7 @@ async def lifespan(app: FastAPI):
             logger.warning("boot reconciliation requeued %d document(s)", len(requeued))
     except Exception:  # noqa: BLE001 — reconciliation must never block boot
         logger.exception("startup document reconciliation failed")
-    # Load clinical evidence corpora (seed + per-topic files). Idempotent by
-    # title, so re-running on every boot is safe; new topics drop in as JSON.
-    if settings.mistral_api_key:
-        try:
-            from pathlib import Path as _Path
-
-            from adelia.enrichment.evidence_loader import (
-                load_evidence_file,
-                load_seed_if_empty,
-            )
-
-            await load_seed_if_empty()
-            _data_dir = _Path(__file__).parent / "enrichment" / "data"
-            for _f in sorted(_data_dir.glob("evidence_*.json")):
-                if _f.name == "evidence_seed.json":
-                    continue
-                try:
-                    await load_evidence_file(_f)
-                except Exception:  # noqa: BLE001 — one bad file must not skip the rest
-                    logger.exception("startup evidence load failed for %s", _f.name)
-        except Exception:  # noqa: BLE001 — evidence load must never block boot
-            logger.exception("startup evidence load failed")
+    await load_startup_corpora()
     sweep_task = asyncio.create_task(_periodic_tombstone_sweep())
     logger.info("periodic blob tombstone sweep scheduled every %ds", SWEEP_INTERVAL_S)
     reminder_task = None

@@ -303,8 +303,14 @@ class LLMMeta(BaseModel):
 
 
 class EvidenceCitation(BaseModel):
-    """Clinical evidence citation (separate namespace from patient Citation)."""
-    tag: str  # e.g. 'ev_1'
+    """Clinical evidence citation (separate namespace from patient Citation).
+
+    `tier` says whether the card is a study or guideline ('evidence', the
+    default so every producer that predates it keeps validating) or what
+    other parents report in public blogs and forums ('experience', tags
+    'ex_N'). The web labels and orders the card by it; see migration 0022.
+    """
+    tag: str  # e.g. 'ev_1', or 'ex_1' for the experience tier
     source_id: str
     chunk_id: str
     title: str
@@ -312,6 +318,7 @@ class EvidenceCitation(BaseModel):
     year: int | None = None
     url: str | None = None
     snippet: str
+    tier: Literal["evidence", "experience"] = "evidence"
 
 
 class BriefingPayload(BaseModel):

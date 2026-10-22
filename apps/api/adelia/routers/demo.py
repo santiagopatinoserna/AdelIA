@@ -41,7 +41,9 @@ from adelia.demo.fixture import (
 from adelia.enrichment.evidence_retrieval import (
     evidence_citations_for_response,
     format_evidence_for_prompt,
+    format_experience_for_prompt,
     retrieve_evidence,
+    retrieve_experience,
 )
 from adelia.services import funnel
 from adelia.services.answer_contract import (
@@ -88,11 +90,20 @@ async def ask_demo(payload: DemoQuestion) -> dict:
     renders citations with the same components:
 
         answer              the text to show (always present)
-        evidence_citations  [ev_N] cards from evidence_chunks, with real URLs
+        evidence_citations  [ev_N] cards from evidence_chunks, with real URLs,
+                            followed by the [ex_N] cards of the experience
+                            tier (what other mothers say), each carrying its
+                            `tier` so the page labels and orders them
         kind                "answer" | "red_flag" | "no_evidence" — what the
                             code decided, so the page can style a referral
                             differently from an answer
         disclaimer          the fixed clinical line, in the visitor's language
+
+    The experience tier (Kenza, 2026-10-22) is read only AFTER the clinical
+    retrieval has decided `kind`: a question with blog posts behind it and no
+    guideline is still refused, and a red flag never gets that far. It feeds
+    one optional section of the plan and nothing else (answer_contract), so a
+    failure looking it up costs the section, not the answer.
     """
     _require_demo()
     locale = (payload.locale or DEFAULT_LOCALE).split("-")[0].lower()
@@ -172,13 +183,31 @@ async def ask_demo(payload: DemoQuestion) -> dict:
         }
 
     citations = evidence_citations_for_response(matches)
-    user_message = "\n\n".join(
-        [
-            f"Pregunta del usuario: {question}\n",
-            f"## Patient data (cite as [N]):\n{demo_patient_context(locale)}",
-            format_evidence_for_prompt(matches),
-        ]
-    )
+
+    # What other mothers say: same engine, the other tier, the same cut-offs.
+    # Best-effort by design, and only now that `kind` is settled.
+    experience: list = []
+    try:
+        async with AsyncSessionLocal() as session:
+            experience = await retrieve_experience(
+                session,
+                query_embedding=embeds[0],
+                top_k=3,
+                max_distance=settings.evidence_max_distance,
+                relative_margin=settings.evidence_relative_margin,
+            )
+    except Exception as exc:  # noqa: BLE001 — the section is optional, the answer is not
+        logger.warning("demo: experience retrieval failed (%s)", type(exc).__name__)
+        experience = []
+
+    blocks = [
+        f"Pregunta del usuario: {question}\n",
+        f"## Patient data (cite as [N]):\n{demo_patient_context(locale)}",
+        format_evidence_for_prompt(matches),
+    ]
+    if experience:
+        blocks.append(format_experience_for_prompt(experience))
+    user_message = "\n\n".join(blocks)
     try:
         answer = await generate_answer(
             chat_system_prompt(locale),
@@ -197,9 +226,15 @@ async def ask_demo(payload: DemoQuestion) -> dict:
             "disclaimer": interface_disclaimer(locale),
         }
 
+    # Experience cards after the clinical ones, labelled by `tier`. The
+    # evidence_only branch above shows the clinical list alone: without an
+    # answer around them to say which is which, a blog post in that list
+    # would read as a guideline.
     return {
         "kind": "answer",
         "answer": answer,
-        "evidence_citations": citations,
+        "evidence_citations": citations + evidence_citations_for_response(
+            experience, tag_prefix="ex", tier="experience"
+        ),
         "disclaimer": interface_disclaimer(locale),
     }
