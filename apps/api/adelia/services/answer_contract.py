@@ -49,17 +49,69 @@ class LocaleContract:
     refusal: str
 
 
+#: The four sections of an action plan, per locale (Kenza, 2026-10-22). The
+#: web renders a section as a plan card only when the model used one of these
+#: exact headings; tests/test_answer_plan.py checks the web catalogues against
+#: this table so the two cannot drift.
+PLAN_HEADINGS: dict[str, dict[str, str]] = {
+    "es": {"today": "Hoy", "watch": "Vigila", "doctor": "Cuándo ir al médico",
+           "remember": "No olvides"},
+    "en": {"today": "Today", "watch": "Watch for", "doctor": "When to see a doctor",
+           "remember": "Don’t forget"},
+    "fr": {"today": "Aujourd’hui", "watch": "À surveiller", "doctor": "Quand consulter",
+           "remember": "À ne pas oublier"},
+}
+
+_H = PLAN_HEADINGS
+
+_PLAN_RULE = {
+    "es": (
+        "Organiza la respuesta como un plan de acción: una frase inicial que responde, y "
+        f"después solo estos apartados, en este orden: \"## {_H['es']['today']}\" (qué hacer "
+        f"ahora), \"## {_H['es']['watch']}\" (qué observar), \"## {_H['es']['doctor']}\" (las "
+        "señales de alarma de las fuentes y con qué urgencia actuar) y "
+        f"\"## {_H['es']['remember']}\" (indicaciones previas del pediatra y lo que conviene "
+        "anotar o preguntar). Omite un apartado si no hay nada respaldado: nunca un apartado "
+        "vacío ni relleno. Cada viñeta es una acción concreta de una frase con su cita. "
+        "En el apartado del médico, usa la urgencia que indica la fuente para cada señal "
+        "(urgencias, hoy, consulta programada): ni la subas ni la bajes. "
+    ),
+    "en": (
+        "Organise the answer as an action plan: one opening sentence that answers, then only "
+        f"these sections, in this order: \"## {_H['en']['today']}\" (what to do now), "
+        f"\"## {_H['en']['watch']}\" (what to observe), \"## {_H['en']['doctor']}\" (the warning "
+        "signs from the sources and how urgently to act) and "
+        f"\"## {_H['en']['remember']}\" (the pediatrician's earlier instructions and what to note "
+        "or ask). Leave out a section when nothing supports it: never an empty section or "
+        "filler. Each bullet is one concrete action in one sentence with its citation. "
+        "In the doctor section, use the urgency the source states for each sign (emergency, "
+        "today, booked visit): neither raise nor lower it. "
+    ),
+    "fr": (
+        "Organise la réponse en plan d’action : une phrase d’ouverture qui répond, puis "
+        f"uniquement ces rubriques, dans cet ordre : \"## {_H['fr']['today']}\" (quoi faire "
+        f"maintenant), \"## {_H['fr']['watch']}\" (quoi observer), \"## {_H['fr']['doctor']}\" "
+        "(les signes d’alerte des sources et avec quelle urgence agir) et "
+        f"\"## {_H['fr']['remember']}\" (les consignes antérieures du pédiatre et ce qu’il faut "
+        "noter ou demander). Omets une rubrique si rien ne l’étaye : jamais de rubrique vide "
+        "ni de remplissage. Chaque puce est une action concrète d’une phrase avec sa citation. "
+        "Dans la rubrique du médecin, garde pour chaque signe l’urgence indiquée par la "
+        "source (urgences, aujourd’hui, consultation programmée), sans l’augmenter ni la "
+        "réduire. "
+    ),
+}
+
 CONTRACTS: dict[str, LocaleContract] = {
     "es": LocaleContract(
         language_rule=(
             "Responde en español. Empieza con una respuesta directa y breve. Usa Markdown "
-            "sencillo. Como máximo 3 viñetas cortas y accionables, solo si la evidencia las "
+            "sencillo. Como máximo 3 viñetas cortas y accionables por apartado, solo si la evidencia las "
             "respalda. Todas las precauciones, condiciones y señales de alarma deben quedar "
             "visibles de inmediato junto al consejo pertinente, no en una explicación posterior. "
             "Nunca omitas seguridad por un límite de palabras o de viñetas: usa texto adicional "
             "si hace falta. Usa párrafos cortos y negrita "
-            "solo para lo esencial. Añade subtítulos solo si ayudan a recorrer una respuesta "
-            "larga. No rellenes secciones ni repitas la pregunta. Mantén cada cita junto a "
+            "solo para lo esencial. " + _PLAN_RULE["es"] + "No rellenes secciones ni repitas la "
+            "pregunta. Mantén cada cita junto a "
             "la afirmación que respalda; el formato no permite añadir consejo sin evidencia. "
             "Escribe para una madre ocupada con un bebé llorando: ayuda directa primero. "
             "Incluye historial personal solo si está realmente en el contexto y cítalo. "
@@ -83,12 +135,12 @@ CONTRACTS: dict[str, LocaleContract] = {
     "en": LocaleContract(
         language_rule=(
             "Answer in English. Start with a short, direct answer. Use simple Markdown: "
-            "At most 3 short, actionable bullets, only if supported by evidence. "
+            "At most 3 short, actionable bullets per section, only if supported by evidence. "
             "All caveats, conditions and warning signs must be immediately visible alongside "
             "the relevant advice, not in a later explanation. Never omit safety for a word or "
             "bullet limit: use additional prose if needed. Use short paragraphs and bold "
-            "only for essentials. Use headings only when they help scan a longer answer. "
-            "Do not pad sections or repeat the question. Keep each citation next to its "
+            "only for essentials. " + _PLAN_RULE["en"] + "Do not pad sections or repeat the "
+            "question. Keep each citation next to its "
             "claim; formatting does not permit adding advice without evidence. "
             "Write for a busy mother with a crying baby: direct help first. Include "
             "personal history only if actually present in context and cite it. "
@@ -111,13 +163,12 @@ CONTRACTS: dict[str, LocaleContract] = {
     "fr": LocaleContract(
         language_rule=(
             "Réponds en français. Commence par une réponse courte et directe. Utilise du "
-            "Markdown simple. Au maximum 3 puces courtes et concrètes, seulement si les preuves "
+            "Markdown simple. Au maximum 3 puces courtes et concrètes par rubrique, seulement si les preuves "
             "les étayent. Toutes les précautions, conditions et signes d’alerte doivent rester "
             "immédiatement visibles avec le conseil concerné, pas dans une explication ultérieure. "
             "Ne sacrifie jamais la sécurité à une limite de mots ou de puces : ajoute du texte "
             "si nécessaire. Utilise des paragraphes courts et le gras seulement pour l’essentiel. "
-            "Ajoute des titres seulement "
-            "pour faciliter une réponse longue. Ne remplis pas de rubriques et ne répète "
+            + _PLAN_RULE["fr"] + "Ne remplis pas de rubriques et ne répète "
             "pas la question. Garde chaque citation près de son affirmation ; la mise en "
             "forme ne permet pas d’ajouter de conseil sans preuve. "
             "Écris pour une mère occupée avec un bébé qui pleure : aide directe d’abord. "

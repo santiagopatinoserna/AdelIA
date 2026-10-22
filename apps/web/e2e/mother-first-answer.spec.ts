@@ -83,3 +83,43 @@ test("emergency and refusal never fold or shorten the original clinical answer",
     await page.unroute("**/api/demo/ask");
   }
 });
+
+test("a plan answer renders as plan sections, keeps every line, and folds only the sources", async ({ page }) => {
+  const plan = es.demo.plan;
+  const answer = [
+    "Respuesta directa de prueba [ev_1].",
+    "",
+    `## ${plan.today}`, "- Acción uno [ev_1].", "- Acción dos [2].",
+    "", "---", "",
+    `## ${plan.watch}`, "- Observación [ev_1].",
+    "",
+    `## ${plan.doctor}`, "- **Urgencias** si aparece la señal de prueba [ev_1].",
+    "",
+    `## ${plan.remember}`, "- Indicación previa del pediatra [4].",
+  ].join("\n");
+  await page.route("**/api/demo/ask", (route) => route.fulfill({ json: {
+    kind: "answer", answer, evidence_citations: [citation], disclaimer: "Aviso clínico siempre visible.",
+  } }));
+  await page.goto("/es");
+  await page.locator("#demo-question").fill("Pregunta de prueba");
+  await page.getByRole("button", { name: "Preguntar", exact: true }).click();
+  const body = page.getByTestId("answer-content");
+  await expect(body.getByTestId("plan-intro")).toHaveText("Respuesta directa de prueba [ev_1].");
+  for (const [key, title] of Object.entries(plan)) {
+    const section = body.getByTestId(`plan-section-${key}`);
+    await expect(section).toBeVisible();
+    await expect(section.getByRole("heading", { level: 3 })).toHaveText(title);
+  }
+  await expect(body.getByTestId("plan-section-today").locator("li")).toHaveText(["Acción uno [ev_1].", "Acción dos [2]."]);
+  await expect(body.getByTestId("plan-section-doctor")).toContainText("Urgencias si aparece la señal de prueba [ev_1].");
+  await expect(body.locator("hr")).toHaveCount(0);
+  await expect(body.locator("details")).toHaveCount(0);
+  await expect(page.getByTestId("answer-depth").locator(":scope > summary")).toContainText(es.demo.readMoreTitle);
+  await expect(page.locator("#demo-answer-title")).toHaveText(es.demo.answerTitle);
+  expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
+  for (const colorScheme of ["light", "dark"] as const) {
+    await page.emulateMedia({ colorScheme, reducedMotion: "reduce" });
+    const audit = await new AxeBuilder({ page }).include('[data-testid="demo-answer"]').analyze();
+    expect(audit.violations, colorScheme).toEqual([]);
+  }
+});
