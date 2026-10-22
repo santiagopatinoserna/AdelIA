@@ -1,0 +1,221 @@
+{
+  "_meta": {
+    "tier": "experience",
+    "topic": "Lo que cuentan otras madres y padres sobre la vida diaria con un bebé: sueño, llanto, cólicos, dientes, destete y comida, baño, porteo y salir de casa",
+    "compiled": "2026-10-23",
+    "method": "Páginas públicas en español (blogs y foros de crianza) leídas una a una; cada entrada es un resumen propio, no una cita, enlazado a su URL",
+    "caveat": "Son resúmenes de lo que otras madres y padres cuentan en blogs y foros públicos. No es evidencia médica: no sirven para dosis, medicamentos, diagnósticos ni señales de alarma, y nunca sustituyen una guía clínica ni al pediatra.",
+    "exclusions": "Se descartaron páginas que mencionan medicamentos o dosis, diagnósticos, suplementos, y cualquier consejo contrario a las guías (miel antes del año, colecho inseguro, cereales en el biberón)."
+  },
+  "entries": [
+    {
+      "id": "malasmadres_bilbao_dormir",
+      "title": "Dormir como un bebé con Álvaro Bilbao (Club de Malasmadres)",
+      "author": "Club de Malasmadres",
+      "url": "https://clubdemalasmadres.com/alvaro-bilbao-dormir-como-bebe/",
+      "year": null,
+      "undated_reason": "la página no muestra fecha de publicación",
+      "topics": ["sleep"],
+      "summary": "La autora cuenta que cada hija ha dormido a su manera: una pedía brazos y mecerla, la otra se mete en la cama de los padres. En la entrevista se propone empezar con muy pocas rutinas al llegar a casa, bajar las persianas y dejar al bebé en un sitio tranquilo cuando duerme de día, y hacer la toma de media mañana junto a la cuna para que asocie el sueño con ella y no solo con el carrito.",
+      "language": "es"
+    },
+    {
+      "id": "malasmadres_olga_marin_sueno",
+      "title": "Consultorio con Olga Marín: el sueño del bebé (Club de Malasmadres)",
+      "author": "Club de Malasmadres",
+      "url": "https://clubdemalasmadres.com/consultorio-con-olga-marin-el-sueno-del-bebe/",
+      "year": null,
+      "undated_reason": "la página no muestra fecha de publicación",
+      "topics": ["sleep", "bath"],
+      "summary": "Una madre describe la tarde de su hijo de 15 meses: cena temprana, juego, baño, biberón y entre media hora y una hora de vueltas en la cuna antes de dormirse. La respuesta la tranquiliza, no lo está haciendo mal, y sugiere adelantar la rutina porque muchos niños tardan tres cuartos de hora en relajarse, probar el baño en otro momento del día si parece activarle, y dejar el juego tranquilo después de cenar, sin pantallas.",
+      "language": "es"
+    },
+    {
+      "id": "bebesymas_rutina_sueno_cinco_pasos",
+      "title": "Rutina de sueño en cinco pasos para que tu bebé duerma mejor (Bebés y más)",
+      "author": "Bebés y más",
+      "url": "https://www.bebesymas.com/consejos/rutina-sueno-cinco-pasos-tu-bebe-duerma-mejor",
+      "year": null,
+      "undated_reason": "la página no muestra fecha de publicación",
+      "topics": ["sleep", "bath"],
+      "summary": "Propone repetir cada noche los mismos pasos para que el bebé los asocie con dormir: baño, masaje, pijama, cena y brazos con mimos. Insiste en que no es magia y que cada familia puede cambiar el orden; lo que importa es que todo lo previo al sueño sea tranquilo, con contacto visual, voz suave, luz tenue y quizá una nana.",
+      "language": "es"
+    },
+    {
+      "id": "serpadres_rituales_despertares",
+      "title": "Rituales para evitar los despertares nocturnos de los niños (Ser Padres)",
+      "author": "Ser Padres",
+      "url": "https://www.serpadres.es/familia/16384.html",
+      "year": null,
+      "undated_reason": "la página no muestra fecha de publicación",
+      "topics": ["sleep", "bath"],
+      "summary": "Reúne los hábitos que las familias cuentan que ayudan: horario regular, respetar las siestas sin alargarlas demasiado, retirar pantallas y juegos movidos antes de acostarse, y un ritual repetido que avise de que llega la hora de dormir. Entre las actividades que se sugieren están un cuento en voz baja con poca luz y un baño templado y tranquilo.",
+      "language": "es"
+    },
+    {
+      "id": "reddit_parenting_dormir_sin_dejar_llorar",
+      "title": "¿Cuándo empezaron vuestros bebés a dormir algo más? Sin dejar llorar (hilo de r/Parenting)",
+      "author": "Padres y madres en Reddit r/Parenting",
+      "url": "https://www.reddit.com/r/Parenting/comments/1u9chee/cu%C3%A1ndo_empezaron_vuestros_beb%C3%A9s_a_dormir_algo_m%C3%A1s/",
+      "year": 2026,
+      "topics": ["sleep"],
+      "summary": "Una madre agotada con un bebé de 4 meses que duerme tramos de dos o tres horas pregunta a otros padres cuándo mejoró, sin querer dejarle llorar. Las respuestas coinciden en que cada bebé es distinto: a unos les llegó sobre los 6 u 8 meses, a otros pasado el año. Varios cuentan que hicieron turnos de noche entre los dos para que cada uno durmiera unas horas seguidas, y que empezaron con rutinas suaves como luz tenue, voz baja o ruido blanco.",
+      "language": "es"
+    },
+    {
+      "id": "bebesymas_siete_maneras_calmar_llanto",
+      "title": "Siete maneras amorosas de calmar el llanto de tu bebé (Bebés y más)",
+      "author": "Bebés y más",
+      "url": "https://www.bebesymas.com/consejos/siete-maneras-amorosas-calmar-llanto-tu-bebe",
+      "year": null,
+      "undated_reason": "la página no muestra fecha de publicación",
+      "topics": ["crying"],
+      "summary": "Antes de nada, propone que la madre o el padre se calmen, porque el bebé nota la tensión, y que repasen lo básico: hambre, pañal, ropa que molesta, frío o calor, horas despierto, gases. Después, las maneras de consolar que cuentan que funcionan son abrazarle, mecerle con un vaivén rítmico, arrullarle y otras formas de contacto y movimiento suave.",
+      "language": "es"
+    },
+    {
+      "id": "bebesymas_por_que_llora_mi_bebe",
+      "title": "¿Por qué llora mi bebé y qué puedo hacer para calmarle? (Bebés y más)",
+      "author": "Bebés y más",
+      "url": "https://www.bebesymas.com/recien-nacido/por-que-llora-mi-bebe-y-que-puedo-hacer-para-calmarle",
+      "year": null,
+      "undated_reason": "la página no muestra fecha de publicación",
+      "topics": ["crying"],
+      "summary": "Cuenta el choque entre el consejo heredado de no cogerle para que no se acostumbre y la experiencia de que los bebés piden brazos de serie. Tras el hambre, señala el sueño y la necesidad de sentirse seguros como motivos frecuentes del llanto. Reconoce lo difícil que es aguantar un llanto largo y anima a pasar el bebé a otra persona o dejarlo un momento en un lugar seguro cuando los nervios se desbordan, antes que zarandearle.",
+      "language": "es"
+    },
+    {
+      "id": "bebesymas_colicos_aliviar_brazos",
+      "title": "Cólicos del lactante: cómo aliviarlos para ayudarle a dejar de llorar (Bebés y más)",
+      "author": "Bebés y más",
+      "url": "https://www.bebesymas.com/recien-nacido/colicos-lactante-como-aliviarlos-para-ayudarle-a-dejar-llorar",
+      "year": null,
+      "undated_reason": "la página no muestra fecha de publicación",
+      "topics": ["colic", "crying", "carrying"],
+      "summary": "Reúne lo que las familias cuentan que alivia el llanto del final del día: cogerle en brazos y acunarle como primera medida, llevarle en portabebé para tener las manos libres y que note el contacto, pasearle despierto apoyado sobre el antebrazo, mover sus piernas como en bicicleta o masajear la tripa en círculos suaves. Salir a dar un paseo al atardecer es otro de los trucos que mencionan.",
+      "language": "es"
+    },
+    {
+      "id": "guiainfantil_colicos_seis_consejos",
+      "title": "El control de los cólicos del lactante en el bebé (Guía Infantil)",
+      "author": "Guía Infantil, Estefanía Esteban",
+      "url": "https://www.guiainfantil.com/salud/cuidadosespeciales/colicos/soluciones.htm",
+      "year": null,
+      "undated_reason": "la página no muestra fecha de publicación",
+      "topics": ["colic", "crying"],
+      "summary": "Parte de que cada bebé es distinto: a unos les calma ir envueltos en una manta y a otros estar libres con ropa ligera, así que ayudar con los cólicos es cuestión de probar y observar. Como primeras medidas describe el contacto piel con piel, acunar, usar una mochila portabebé y moverse con el bebé, en un ambiente silencioso y con los adultos lo más tranquilos posible.",
+      "language": "es"
+    },
+    {
+      "id": "juguijuga_mordedores_guia",
+      "title": "Mordedores para bebés: cuál elegir según la edad y si se pueden enfriar (Juguijuga)",
+      "author": "Juguijuga, Gerard",
+      "url": "https://juguijuga.com/mordedores-para-bebes-guia-completa-para-elegir-el-mas-seguro-segun-la-edad/",
+      "year": 2026,
+      "topics": ["teething"],
+      "summary": "Describe la etapa en que el bebé lo muerde todo, babea más y está irritable, y cómo un mordedor canaliza esa necesidad: al morder, la presión sobre la encía alivia un rato. Cuenta qué tipos existen (silicona blanda, con relieve, refrigerables, madera), que los de nevera gustan más en la fase de incisivos, y que conviene limpiarlos a menudo y revisar que no estén rotos.",
+      "language": "es"
+    },
+    {
+      "id": "beasanchez_limpiar_con_blw",
+      "title": "Limpiar con BLW (blog de Bea Sánchez, madre de mellizos)",
+      "author": "Bea Sánchez",
+      "url": "https://beasanchez.es/2016/07/08/limpiar-con-blw/",
+      "year": 2016,
+      "topics": ["weaning"],
+      "summary": "Una madre de mellizos cuenta que el desorden es lo que más echa atrás a muchas madres con el baby led weaning, y comparte su sistema: retirar primero los trozos con la mano o papel de cocina, pasar un paño de microfibra húmedo por bandeja y trona, y espolvorear harina sobre los restos grasientos del suelo antes de barrer para que no se peguen al cepillo. Al bebé, en verano, le limpia con agua fresca, que además le encanta.",
+      "language": "es"
+    },
+    {
+      "id": "serpadres_bano_del_bebe",
+      "title": "El baño del bebé: relajación, estimulación y diversión (Ser Padres)",
+      "author": "Ser Padres",
+      "url": "https://www.serpadres.es/bebe/16380.html",
+      "year": 2022,
+      "topics": ["bath"],
+      "summary": "Repasa cómo organizan muchas familias el baño diario: preparar antes dos toallas, el jabón y la crema para no separarse del bebé, llenar la bañera poco a poco empezando por el agua fría y comprobar la temperatura con la mano, y meterle despacio empezando por los pies. Cuenta que a los recién nacidos les bastan un par de minutos, que de viaje sirve una piscinita hinchable o el lavabo, y que al salir conviene envolverle enseguida y secar bien los pliegues sin frotar.",
+      "language": "es"
+    },
+    {
+      "id": "bebesymas_miedo_al_bano",
+      "title": "Mi bebé tiene miedo al momento del baño: qué hacer para convertirlo en un momento placentero (Bebés y más)",
+      "author": "Bebés y más, Lola Rovati",
+      "url": "https://www.bebesymas.com/consejos/mi-bebe-tiene-miedo-al-momento-bano-que-puedo-hacer",
+      "year": 2021,
+      "topics": ["bath"],
+      "summary": "Cuenta el caso habitual del bebé que disfrutaba del baño y de pronto llora al oír el grifo o al enjuagarle la cabeza, muchas veces por un susto que los adultos no vieron. Lo que las familias prueban: traerle cuando la bañera ya está llena, aclarar la cabeza con las manos o una esponja en vez de con la ducha, meterse con él en la bañera, juguetes nuevos, su música, cambiar de bañera, y aceptar que un día sin baño no pasa nada. Propone probar un cambio cada vez, con calma.",
+      "language": "es"
+    },
+    {
+      "id": "bebesymas_bano_antes_o_despues_de_cenar",
+      "title": "El baño del bebé, ¿antes o después de cenar? (Bebés y más)",
+      "author": "Bebés y más, Armando Bastida",
+      "url": "https://www.bebesymas.com/consejos/bano-bebe-antes-despues-cenar",
+      "year": 2019,
+      "topics": ["bath", "sleep"],
+      "summary": "Responde a la duda heredada del corte de digestión: da igual bañar al bebé antes o después de la cena. Cuenta que muchas familias lo bañan después porque se queda relajado y se duerme enseguida, y otras antes porque el bebé se duerme con la última toma. Lo único que pide vigilar es la temperatura del agua.",
+      "language": "es"
+    },
+    {
+      "id": "forocrianzanatural_miedo_al_bano",
+      "title": "Miedo al baño (hilo del Foro Crianza Natural)",
+      "author": "Madres del Foro Crianza Natural",
+      "url": "https://www.forocrianzanatural.com/miedo-al-bano_topic198539.html",
+      "year": 2014,
+      "topics": ["bath"],
+      "summary": "Una madre cuenta, desesperada, que su hijo de 12 meses, que antes se bañaba de pie sin problema, ahora llora en cuanto le acercan a la bañera, aunque le encanta chapotear en un cubo o en la orilla de la playa. Explica todo lo que ha probado: meterse con él, cambiar juguetes, con y sin música, agua más fresca o más templada, distintas horas. El hilo es un ejemplo de lo frecuente que es esta fase y de que otras madres la viven igual.",
+      "language": "es"
+    },
+    {
+      "id": "bebesymas_llora_en_el_portabebe",
+      "title": "Mi bebé llora cuando le pongo en el portabebé: qué puedo hacer para que disfrute del porteo (Bebés y más)",
+      "author": "Bebés y más, Silvia Díaz",
+      "url": "https://www.bebesymas.com/consejos/mi-bebe-llora-cuando-le-pongo-portabebe-que-puedo-hacer-disfrute-porteo",
+      "year": 2022,
+      "topics": ["carrying", "crying"],
+      "summary": "Recoge, con una asesora de porteo, por qué algunos bebés se retuercen o lloran al ponerlos en la mochila: no están acostumbrados porque no se les ha porteado desde el principio, el portabebé no es ergonómico o les queda grande, o se han habituado a ir mirando hacia fuera. Lo que proponen es elegir un portabebé que respete su postura recogida, empezar poco a poco y en momentos tranquilos, y colocarle siempre pegado al pecho del adulto.",
+      "language": "es"
+    },
+    {
+      "id": "criarconsentidocomun_portear",
+      "title": "Cómo y cuándo comenzar a portear a tu bebé (Criar con Sentido Común)",
+      "author": "Criar con Sentido Común, María Arenzana",
+      "url": "https://www.criarconsentidocomun.com/blog/portear-bebe",
+      "year": 2024,
+      "topics": ["carrying"],
+      "summary": "Responde a la duda de si se puede portear a un recién nacido: sí, desde el principio, con un portabebé que mantenga su postura natural, espalda ligeramente curvada y rodillas por encima del culete, y que se adapte al cuerpo y a la maña del adulto. Cuenta que el fular no es obligatorio para los más pequeños, que hoy hay muchas opciones, y que conforme el bebé sujeta la cabeza y quiere sacar los brazos la forma de portear cambia un poco.",
+      "language": "es"
+    },
+    {
+      "id": "cosasdealma_mama_koala_porteo",
+      "title": "Soy una mamá koala: mi experiencia con el porteo hasta ahora (El blog de las cosas de Alma)",
+      "author": "El blog de las cosas de Alma",
+      "url": "http://elblogdelascosasdealma.blogspot.com/2016/09/soy-una-mama-koala-mi-experiencia-con.html",
+      "year": 2016,
+      "topics": ["carrying", "going_out"],
+      "summary": "Una madre escribe con su hijo dormido en la mochila y cuenta por qué eligió portear: le da seguridad al bebé, le deja las manos libres y le permite hacer rutas de campo donde el carrito no pasa. Explica que lo primero que buscó fue que los portabebés fueran ergonómicos, con el bebé en postura de ranita, porque muchas mochilas de marcas conocidas no lo son, y describe los que ha ido usando.",
+      "language": "es"
+    },
+    {
+      "id": "bebesymas_pasear_guia",
+      "title": "Pasear con el bebé: guía completa para resolver todas tus dudas (Bebés y más)",
+      "author": "Bebés y más",
+      "url": "https://www.bebesymas.com/n/pasear-con-el-bebe-guia-completa-para-resolver-todas-tus-dudas",
+      "year": null,
+      "undated_reason": "la página no muestra fecha de publicación",
+      "topics": ["going_out"],
+      "summary": "Recoge las dudas habituales sobre el paseo diario: en verano salir a primera hora o al atardecer y evitar las horas centrales, en invierno justo lo contrario, y elegir un momento en que el bebé no tenga hambre ni sueño para que vaya a gusto. Para los bebés que protestan en la silla, cuenta que con paciencia y una rutina diaria suelen acabar asociándola a un rato agradable.",
+      "language": "es"
+    },
+    {
+      "id": "elblogdetubebe_primer_paseo",
+      "title": "Cuándo empezar a salir a pasear con un recién nacido (El blog de tu bebé)",
+      "author": "El blog de tu bebé",
+      "url": "https://www.elblogdetubebe.com/cuando-empezar-salir-pasear-recien-nacido/",
+      "year": 2026,
+      "topics": ["going_out"],
+      "summary": "Cuenta cómo el mito de la cuarentena y los consejos contradictorios dejan a muchos padres primerizos sin saber cuándo salir. Su experiencia es que, si el bebé y la madre están bien y el pediatra no ha dicho lo contrario, se puede salir desde los primeros días con paseos cortos y tranquilos, e ir acostumbrándose a salir con frío, lluvia o calor en lugar de fijarse en una fecha.",
+      "language": "es"
+    }
+  ]
+}
