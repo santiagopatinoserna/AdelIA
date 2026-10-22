@@ -774,7 +774,11 @@ async def test_a_reranker_plugs_into_the_hybrid_evidence_path(corpus, hybrid_on)
 
 
 # The statement evidence_retrieval ran before hybrid existed, verbatim (the
-# concatenation mirrors how the module appended the optional clauses).
+# concatenation mirrors how the module appended the optional clauses), plus
+# the two `tier` additions of migration 0022 (the selected column and the
+# `es.tier = :tier` filter), which are not part of the hybrid flag either:
+# they apply with the flag on and off alike, and the point of this test is
+# that the flag itself changes nothing.
 LEGACY_EVIDENCE_SQL = (
     "\n        SELECT\n"
     "            ec.id AS chunk_id,\n"
@@ -785,10 +789,12 @@ LEGACY_EVIDENCE_SQL = (
     "            es.url,\n"
     "            ec.content,\n"
     "            ec.chunk_index,\n"
-    "            ec.embedding <=> :emb AS distance\n"
+    "            ec.embedding <=> :emb AS distance,\n"
+    "            es.tier\n"
     "        FROM evidence_chunks ec\n"
     "        JOIN evidence_sources es ON es.id = ec.source_id\n"
     "        WHERE ec.embedding <=> :emb < :max_distance\n"
+    "          AND es.tier = :tier\n"
     "    "
     " AND es.specialties ?| :spec_list"
     " ORDER BY distance ASC LIMIT :k"
@@ -805,6 +811,7 @@ async def test_flag_off_evidence_runs_the_old_statement_and_no_lexical_query(cor
     top_k, cutoff = 3, 0.5
     legacy_params = {
         "emb": str(QUERY), "max_distance": cutoff, "spec_list": ["pediatrics"], "k": top_k,
+        "tier": "evidence",
     }
     legacy = text(LEGACY_EVIDENCE_SQL).bindparams(bindparam("spec_list", type_=ARRAY(String)))
     with recorded_sql() as old_log:

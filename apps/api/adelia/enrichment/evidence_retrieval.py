@@ -39,6 +39,15 @@ class EvidenceMatch:
     content: str
     chunk_index: int
     distance: float  # cosine distance, lower = more relevant
+    # 'evidence' or 'experience' (evidence_sources.tier, migration 0022). The
+    # answer surfaces label and place a citation by it, so it travels with
+    # the match rather than being inferred from where the match came from.
+    tier: str = "evidence"
+
+
+#: The two tiers evidence_sources holds. Retrieval reads one at a time.
+EVIDENCE_TIER = "evidence"
+EXPERIENCE_TIER = "experience"
 
 
 #: Most rows the vector query is ever asked for when it has to look past
@@ -127,6 +136,7 @@ async def retrieve_evidence(
     query_text: str | None = None,
     locale: str | None = None,
     reranker: Reranker | None = None,
+    tier: str = EVIDENCE_TIER,
 ) -> list[EvidenceMatch]:
     """Retrieve up to top-K evidence chunks, one per source, ranked by cosine distance.
 
@@ -164,6 +174,12 @@ async def retrieve_evidence(
         reranker: a services.reranker.Reranker applied to the fused pool.
             Defaults to NullReranker, the identity. Only used on the hybrid
             path, see below.
+        tier: which of the two tiers the table holds to read, 'evidence' by
+            default. The filter is on `evidence_sources.tier`, not on the
+            specialty tag, so an experience row tagged 'pediatrics' by
+            mistake still never reaches a clinical answer, and a guideline
+            never shows up as "what other mothers say". Both the vector and
+            the lexical statements carry it. See retrieve_experience.
 
     One citation per source, and no filler (measured on the public demo on
     2026-10-14). The corpus holds several fragments per source, so the top
@@ -233,12 +249,14 @@ async def retrieve_evidence(
             es.url,
             ec.content,
             ec.chunk_index,
-            ec.embedding <=> :emb AS distance
+            ec.embedding <=> :emb AS distance,
+            es.tier
         FROM evidence_chunks ec
         JOIN evidence_sources es ON es.id = ec.source_id
         WHERE ec.embedding <=> :emb < :max_distance
+          AND es.tier = :tier
     """
-    params: dict = {"emb": str(query_embedding), "max_distance": max_distance}
+    params: dict = {"emb": str(query_embedding), "max_distance": max_distance, "tier": tier}
 
     # JSONB array contains-any check via the ?| operator, whose right-hand
     # side is a text[]. `array[:spec_list]` built an array OF the parameter,
@@ -275,6 +293,7 @@ async def retrieve_evidence(
                 content=r["content"],
                 chunk_index=r["chunk_index"],
                 distance=float(r["distance"]),
+                tier=r.get("tier", tier),
             )
             for r in rows
         ]
@@ -299,7 +318,7 @@ async def retrieve_evidence(
         return dedupe_by_source(matches, top_k)
 
     lexical_ids = await lexical_evidence_ranking(
-        session, plan=plan, specialties=spec_list, pool=pool
+        session, plan=plan, specialties=spec_list, pool=pool, tier=tier
     )
     fused = dict(rrf([[str(m.chunk_id) for m in matches], lexical_ids]))
     # Only vector survivors are fused back in: see "reorder, cannot admit".
@@ -322,12 +341,15 @@ async def lexical_evidence_ranking(
     plan: LexicalPlan,
     specialties: list[str] | None,
     pool: int,
+    tier: str = EVIDENCE_TIER,
 ) -> list[str]:
     """Evidence chunk ids ranked by full-text relevance, best first (as str).
 
     The same corpus the vector query searches, narrowed the same way:
       * `specialties` is the identical `?|` filter, so the pediatric-only
         promise holds for this ranking too;
+      * `tier` is the identical `es.tier` filter, so the two tiers stay apart
+        here as well;
       * `ec.language = :language` restricts the match to rows indexed in the
         question's language, since `tsv` was built per row from that column
         (migration 0021) and only the same configuration produces the same
@@ -345,13 +367,14 @@ async def lexical_evidence_ranking(
         CROSS JOIN (
             SELECT to_tsquery(CAST(:ts_config AS regconfig), :tsquery) AS q
         ) lex
-        WHERE ec.language = :language AND ec.tsv @@ lex.q
+        WHERE ec.language = :language AND ec.tsv @@ lex.q AND es.tier = :tier
     """
     params: dict = {
         "ts_config": plan.ts_config,
         "tsquery": plan.tsquery,
         "language": plan.language,
         "k": pool,
+        "tier": tier,
     }
     if specialties:
         stmt_text += " AND es.specialties ?| :spec_list"
@@ -397,14 +420,21 @@ def format_evidence_for_prompt(matches: list[EvidenceMatch]) -> str:
     return "\n".join(lines)
 
 
-def evidence_citations_for_response(matches: list[EvidenceMatch]) -> list[dict]:
+def evidence_citations_for_response(
+    matches: list[EvidenceMatch], *, tag_prefix: str = "ev", tier: str | None = None
+) -> list[dict]:
     """Render evidence matches as a JSON-serializable list for the API response.
 
     Frontend uses this to render 📘 citation badges with click-through URLs.
+    `tier` travels on every citation (schemas.EvidenceCitation defaults it to
+    'evidence', so older clients and the red-flag citation keep working); the
+    experience list is rendered with `tag_prefix="ex"` so its markers can
+    never collide with, or be mistaken for, an [ev_N] in the same answer.
     """
     return [
         {
-            "tag": f"ev_{i}",
+            "tag": f"{tag_prefix}_{i}",
+            "tier": tier or m.tier,
             "source_id": str(m.source_id),
             "chunk_id": str(m.chunk_id),
             "title": m.source_title,
@@ -416,3 +446,63 @@ def evidence_citations_for_response(matches: list[EvidenceMatch]) -> list[dict]:
         }
         for i, m in enumerate(matches, start=1)
     ]
+
+
+async def retrieve_experience(
+    session: AsyncSession,
+    *,
+    query_embedding: list[float],
+    top_k: int = 3,
+    max_distance: float | None = None,
+    relative_margin: float | None = None,
+) -> list[EvidenceMatch]:
+    """What other parents report, for the optional last section of a plan.
+
+    The same engine as retrieve_evidence, read under `tier='experience'` and
+    nothing else: no specialty filter (the tier is the lock), the same
+    absolute cut-off and the same relative margin as the clinical call, so
+    the softer tier is admitted no more generously than the studies are. It
+    is a separate function, not a flag at the call site, so the demo can be
+    tested with one tier stubbed and the other not, and so a reader of the
+    answering path sees two calls where there are two kinds of source.
+
+    It is never consulted before the evidence call decides the `kind` of the
+    answer: a question with experience hits and no evidence is still
+    `no_evidence` (tests/test_demo_experience.py).
+    """
+    return await retrieve_evidence(
+        session,
+        query_embedding=query_embedding,
+        top_k=top_k,
+        max_distance=max_distance,
+        relative_margin=relative_margin,
+        tier=EXPERIENCE_TIER,
+    )
+
+
+def format_experience_for_prompt(matches: list[EvidenceMatch]) -> str:
+    """The experience block of the prompt: labelled, apart, with its own tags.
+
+    The model reads it after the clinical evidence and is told, in the same
+    block it reads the text in, what it is and what it may not be used for.
+    The rule itself (one optional section, never doses, never warning signs,
+    never against a cited guideline) lives in answer_contract with the rest
+    of the contract; this header is the reminder next to the material.
+    """
+    if not matches:
+        return ""
+    lines = [
+        "## What other parents report (cite as [ex_N]; experience, not medical evidence; "
+        "only for the optional last section; never for doses, warning signs or anything a "
+        "cited guideline contradicts):"
+    ]
+    for i, m in enumerate(matches, start=1):
+        attribution = m.source_title
+        if m.organization:
+            attribution = f"{m.organization}: {attribution}"
+        if m.publication_year:
+            attribution = f"{attribution} ({m.publication_year})"
+        lines.append(f"[ex_{i}] {attribution}")
+        lines.append(m.content)
+        lines.append("")
+    return "\n".join(lines)
