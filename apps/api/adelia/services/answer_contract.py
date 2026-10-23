@@ -230,6 +230,65 @@ CONTRACTS: dict[str, LocaleContract] = {
     ),
 }
 
+#: The `question` shape (AGENT_GRAPH, build step 2): the mother asked for a
+#: fact or an explanation, not for what to do, so the answer is one sentence
+#: and at most three cited bullets, with no plan heading. It replaces only the
+#: plan-shaped `language_rule`; every other clause of `answer_contract` stays.
+#: The safety sentence is not decoration: night/brevity cut answers by 45 %
+#: and lost a warning sign in 1 of 9 questions, so brevity here is bounded by
+#: the sources' own warning signs and their urgency.
+_QUESTION_RULE: dict[str, str] = {
+    "es": (
+        "Responde en español. La madre pregunta un dato o una explicación, no qué hacer: "
+        "responde corto, sin plan de acción. Primero una frase que responde directamente, "
+        "con su cita. Después, solo si aportan algo que la frase no dice, hasta 3 viñetas de "
+        "una frase, cada una con su cita ([ev_N], o [N] si es un dato del bebé). Ningún "
+        f"encabezado ni apartado: no escribas \"## {_H['es']['today']}\", "
+        f"\"## {_H['es']['watch']}\", \"## {_H['es']['doctor']}\" ni "
+        f"\"## {_H['es']['remember']}\". Si las fuentes ligan a la pregunta una señal de "
+        "alarma o una condición que cambia la respuesta, dila en una viñeta con la urgencia "
+        "que indica la fuente (urgencias, hoy, consulta programada): la seguridad nunca se "
+        "recorta por brevedad. No repitas la pregunta, no añadas una explicación clínica "
+        "larga y no inventes consejos tranquilizadores. Incluye historial personal solo si "
+        "está realmente en el contexto y cítalo. Usa negrita solo para lo esencial."
+    ),
+    "en": (
+        "Answer in English. The parent is asking for a fact or an explanation, not what to "
+        "do: answer briefly, with no action plan. First one sentence that answers directly, "
+        "with its citation. Then, only if they add something the sentence does not say, up "
+        "to 3 bullets of one sentence, each with its citation ([ev_N], or [N] for the baby's "
+        f"own data). No headings and no sections: do not write \"## {_H['en']['today']}\", "
+        f"\"## {_H['en']['watch']}\", \"## {_H['en']['doctor']}\" or "
+        f"\"## {_H['en']['remember']}\". If the sources tie a warning sign or a condition "
+        "that changes the answer to the question, say it in a bullet with the urgency the "
+        "source states (emergency, today, booked visit): safety is never cut for brevity. "
+        "Do not repeat the question, do not add a long clinical explanation and do not "
+        "invent soothing advice. Include personal history only if it is actually in the "
+        "context, and cite it. Use bold only for essentials."
+    ),
+    "fr": (
+        "Réponds en français. Le parent demande une information ou une explication, pas "
+        "quoi faire : réponds brièvement, sans plan d’action. D’abord une phrase qui répond "
+        "directement, avec sa citation. Ensuite, seulement si elles apportent ce que la "
+        "phrase ne dit pas, jusqu’à 3 puces d’une phrase, chacune avec sa citation ([ev_N], "
+        "ou [N] pour une donnée du bébé). Aucun titre ni rubrique : n’écris pas "
+        f"\"## {_H['fr']['today']}\", \"## {_H['fr']['watch']}\", "
+        f"\"## {_H['fr']['doctor']}\" ni \"## {_H['fr']['remember']}\". Si les sources "
+        "rattachent à la question un signe d’alerte ou une condition qui change la réponse, "
+        "dis-le dans une puce avec l’urgence indiquée par la source (urgences, aujourd’hui, "
+        "consultation programmée) : la sécurité n’est jamais sacrifiée à la brièveté. Ne "
+        "répète pas la question, n’ajoute pas de longue explication clinique et n’invente "
+        "pas de conseils rassurants. N’inclus les antécédents personnels que s’ils figurent "
+        "réellement dans le contexte, et cite-les. Garde le gras pour l’essentiel."
+    ),
+}
+
+#: The answer shapes a surface may ask for. `plan` is the default and the
+#: path with the most safeguards; the graph picks `question` only when the
+#: route node said so (agent/graph.py).
+SHAPES: tuple[str, ...] = ("plan", "question")
+
+
 DEFAULT_LOCALE = "es"
 
 
@@ -247,9 +306,22 @@ def no_evidence_reply(locale: str) -> str:
     return contract_for(locale).refusal
 
 
-def answer_contract(locale: str) -> str:
-    """The clauses every AdelIA answering surface must carry, verbatim."""
+def _language_rule(locale: str, shape: str) -> str:
+    if shape not in SHAPES:
+        raise ValueError(f"unknown answer shape {shape!r}; expected one of {SHAPES}")
+    if shape == "question":
+        return _QUESTION_RULE.get(locale, _QUESTION_RULE[DEFAULT_LOCALE])
+    return contract_for(locale).language_rule
+
+
+def answer_contract(locale: str, *, shape: str = "plan") -> str:
+    """The clauses every AdelIA answering surface must carry, verbatim.
+
+    `shape` swaps only the format clause (plan or short answer); the citation
+    obligation, the refusal and the no-invention clauses are the same text.
+    """
     c = contract_for(locale)
+    language_rule = _language_rule(locale, shape)
     return f"""Reglas de respuesta (obligatorias, idénticas en el chat y en el agente):
 - Toda interpretación, valoración o recomendación clínica DEBE apoyarse en al menos una
   cita de evidencia [ev_1], [ev_2], ... Si NO hay un estudio o guía en el contexto que
@@ -260,22 +332,26 @@ def answer_contract(locale: str) -> str:
   paciente, pero NO los interpretes clínicamente sin una cita [ev_N].
 - Si no tienes ninguna base documental para lo que se te pregunta, dilo con estas
   palabras exactas y no añadas nada más: "{c.refusal}"
-- {c.language_rule}
+- {language_rule}
 - NUNCA inventes datos médicos ni estudios. NUNCA des consejos médicos definitivos.
 - NO escribas ningún descargo de responsabilidad ni "consulta con tu médico" al final:
   la interfaz ya lo muestra de forma fija bajo cada respuesta (auditoría 3.8). Repetirlo
   gasta la línea que el padre sí lee."""
 
 
-def chat_system_prompt(locale: str) -> str:
-    """System prompt of the RAG chat: dual-RAG preamble plus the contract."""
+def chat_system_prompt(locale: str, *, shape: str = "plan") -> str:
+    """System prompt of the RAG chat: dual-RAG preamble plus the contract.
+
+    The demo composes it too. `shape="question"` is the short-answer variant
+    the graph uses when the mother asked for a fact (AGENT_GRAPH, step 2).
+    """
     return f"""Eres el asistente de salud de AdelIA, enfocado en el seguimiento de
 la salud de bebés y niños. Respondes sobre los datos del bebé proporcionados,
 pero TODA interpretación o afirmación clínica debe SUSTENTARSE EXCLUSIVAMENTE en
 los estudios de investigación / guías clínicas provistos en la sección
 "Clinical evidence". No respondes desde tu conocimiento general.
 
-{answer_contract(locale)}
+{answer_contract(locale, shape=shape)}
 
 Además, en el chat:
 - El historial de la conversación ES contexto válido: resuelve referencias ("ese valor",
