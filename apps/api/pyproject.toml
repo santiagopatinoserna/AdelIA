@@ -29,6 +29,7 @@ dependencies = [
     "weasyprint>=69.0",
     "stripe>=11.0",
     "anthropic>=0.40",
+    "langgraph>=1.0",
 ]
 
 [dependency-groups]
