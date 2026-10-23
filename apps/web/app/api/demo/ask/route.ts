@@ -5,7 +5,10 @@ import { NextResponse } from "next/server";
 // works for someone who has no account, and a visitor's identity has no
 // business travelling with a question about a fictional baby.
 //
-// Only the question and the locale are forwarded. The API applies its own
+// Only the question, the locale and, on the second turn of a clarify (AGENT_GRAPH
+// step 3), the button she pressed are forwarded. Until 2026-10-23 the third was
+// dropped here, so every press asked the same question again; the API checks
+// the value against the buttons it wrote. The API applies its own
 // brakes (per-IP rate limit, a daily budget counted in Postgres, a length
 // cap) and this handler adds nothing of its own beyond refusing a body that
 // is not the expected shape.
@@ -28,9 +31,10 @@ export async function POST(request: Request) {
   } catch {
     return NextResponse.json({ detail: "Invalid body" }, { status: 400 });
   }
-  const { question, locale } = (payload ?? {}) as {
+  const { question, locale, clarification } = (payload ?? {}) as {
     question?: unknown;
     locale?: unknown;
+    clarification?: unknown;
   };
   if (typeof question !== "string" || question.trim().length < 3) {
     return NextResponse.json({ detail: "Invalid question" }, { status: 400 });
@@ -43,6 +47,7 @@ export async function POST(request: Request) {
       body: JSON.stringify({
         question: question.trim(),
         locale: typeof locale === "string" ? locale : "es",
+        ...clarificationOf(clarification),
       }),
       cache: "no-store",
     });
@@ -54,4 +59,14 @@ export async function POST(request: Request) {
   } catch {
     return NextResponse.json({ detail: "Demo unavailable" }, { status: 503 });
   }
+}
+
+// Forward a clarification only in the shape the API accepts ({field, value},
+// two short strings); anything else is dropped here rather than relayed.
+function clarificationOf(raw: unknown): { clarification?: { field: string; value: string } } {
+  if (!raw || typeof raw !== "object") return {};
+  const { field, value } = raw as { field?: unknown; value?: unknown };
+  if (typeof field !== "string" || typeof value !== "string") return {};
+  if (field.length > 32 || value.length > 16) return {};
+  return { clarification: { field, value } };
 }
