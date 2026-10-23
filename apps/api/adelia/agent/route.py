@@ -136,6 +136,22 @@ _OWN_DATA = re.compile(
     r"dossier medical|son dossier)\b"
 )
 
+# What only the tools do (build step 5): briefings and profile fixes (write
+# tools, behind a confirmation card), clinical trials and drug interactions
+# (read tools). Not a plan and not a fact question: a contract answer would
+# never run the tool, so these go to the tool loop whatever the classifier
+# says, or fails to say.
+_TOOL_ASK = re.compile(
+    r"\b(?:briefing|"
+    r"(?:prepara|preparame|genera|generame|haz|hazme|crea|creame|make|prepare|fais|faire)"
+    r" (?:\w+ ){0,2}?(?:informe|resumen|summary|report|resume|rapport|compte rendu)|"
+    r"fecha de nacimiento|naci(?:o|do|da) el|date de naissance|date of birth|born on|"
+    r"(?:guarda|guardame|guardar|actualiza|apunta) (?:\w+ ){0,3}?perfil|en su perfil|"
+    r"in (?:her|his) profile|dans son profil|"
+    r"ensayos? clinicos?|clinical trials?|essais? cliniques?|"
+    r"interacci\w+ (?:entre|con)|interactions? (?:between|with|entre|avec))\b"
+)
+
 # Out of scope: the mother or another adult as the patient, a pet, the
 # weather, a joke. Guarded by _BABY_REF: a message that also names the baby
 # is never `other` by rule.
@@ -236,6 +252,8 @@ def route_by_rules(
 
     Order matters and is the contract:
       other   only when nothing names the baby;
+      track   what only the tools do: briefings, profile fixes, trials,
+              interactions (needs an account, otherwise a question);
       record  a measurement reported in the past tense, nothing asked, no worry;
       track   the child's own data (needs an account, otherwise a question);
       clarify the age changes the answer and nobody knows it, or she reports
@@ -251,6 +269,11 @@ def route_by_rules(
 
     if _OUT_OF_SCOPE.search(n) and not _BABY_REF.search(n):
         return RouteDecision(intent="other", confidence=0.85, via="rule")
+
+    if _TOOL_ASK.search(n):
+        if has_account:
+            return RouteDecision(intent="track", confidence=0.9, via="rule")
+        return RouteDecision(intent="question", confidence=0.8, via="rule")
 
     worried = bool(_WORRY.search(n))
     if (
