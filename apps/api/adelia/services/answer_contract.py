@@ -774,3 +774,134 @@ def experience_only_contract(locale: str) -> str:
         "No escribas ningún descargo de responsabilidad ni \"consulta con tu médico\": "
         "la interfaz ya lo muestra bajo cada respuesta."
     )
+
+
+# ---------------------------------------------------------------------------
+# clarify: one question, two or three buttons (AGENT_GRAPH, build step 3)
+#
+# User-facing, returned verbatim by the code, in the parent's language: the
+# question, the buttons and the way out. Two facts only, because each one
+# changes what the sources say: the age (fever under 3 months is an
+# emergency, NICE NG143 1.2.12; milk amounts and sleep depend on it) and the
+# thermometer reading when she says "fiebre" without a number (39 C or more
+# at 3-6 months is an amber sign in the same guideline).
+#
+# The age bands are chosen for the guard: the graph hands it the band's
+# YOUNGEST age (CLARIFY_AGE_FLOOR), so an answer can only make it stricter,
+# and "under 3 months" plus "fiebre" is the referral, not a plan. The
+# temperature labels are written so that `red_flags.temperature_in` reads
+# the band's top value, and the way out ("no la he medido") reads as no
+# number at all. French keeps U+00A0 before its high punctuation and before
+# the degree sign; no em dashes anywhere.
+# ---------------------------------------------------------------------------
+
+def _options(*pairs: tuple[str, str]) -> list[dict[str, str]]:
+    return [{"value": value, "label": label} for value, label in pairs]
+
+
+CLARIFY_QUESTIONS: dict[str, dict[str, dict]] = {
+    "temperature": {
+        "es": {
+            "question": "¿Cuánto ha marcado el termómetro?",
+            "options": _options(("37.5-37.9", "37,5 a 37,9 °C"), ("38-38.9", "38 a 38,9 °C"),
+                                ("39+", "39 °C o más")),
+            "skip": {"value": "unknown", "label": "No la he medido"},
+        },
+        "en": {
+            "question": "What did the thermometer say?",
+            "options": _options(("37.5-37.9", "37.5 to 37.9 °C"), ("38-38.9", "38 to 38.9 °C"),
+                                ("39+", "39 °C or more")),
+            "skip": {"value": "unknown", "label": "I haven’t measured it"},
+        },
+        "fr": {
+            "question": "Combien affichait le thermomètre ?",
+            "options": _options(("37.5-37.9", "37,5 à 37,9 °C"), ("38-38.9", "38 à 38,9 °C"),
+                                ("39+", "39 °C ou plus")),
+            "skip": {"value": "unknown", "label": "Je ne l’ai pas mesurée"},
+        },
+    },
+    "age": {
+        "es": {
+            "question": "¿Cuántos meses tiene?",
+            "options": _options(("0-2", "Menos de 3 meses"), ("3-11", "De 3 a 11 meses"),
+                                ("12+", "12 meses o más")),
+            "skip": {"value": "unknown", "label": "Responder sin la edad"},
+        },
+        "en": {
+            "question": "How old is your baby?",
+            "options": _options(("0-2", "Under 3 months"), ("3-11", "3 to 11 months"),
+                                ("12+", "12 months or more")),
+            "skip": {"value": "unknown", "label": "Answer without the age"},
+        },
+        "fr": {
+            "question": "Quel âge a ton bébé ?",
+            "options": _options(("0-2", "Moins de 3 mois"), ("3-11", "De 3 à 11 mois"),
+                                ("12+", "12 mois ou plus")),
+            "skip": {"value": "unknown", "label": "Répondre sans l’âge"},
+        },
+    },
+}
+
+#: The age the guard and the router see for each band: its youngest month.
+CLARIFY_AGE_FLOOR: dict[str, int] = {"0-2": 0, "3-11": 3, "12+": 12}
+
+_CLARIFY_PREFIX: dict[str, dict[str, str]] = {
+    "es": {"temperature": "Temperatura: ", "age": "Edad: "},
+    "en": {"temperature": "Temperature: ", "age": "Age: "},
+    "fr": {"temperature": "Température : ", "age": "Âge : "},
+}
+
+_CLARIFY_UNKNOWN: dict[str, dict[str, str]] = {
+    "es": {"temperature": "no la he medido", "age": "no indicada"},
+    "en": {"temperature": "not measured", "age": "not given"},
+    "fr": {"temperature": "pas mesurée", "age": "non indiqué"},
+}
+
+
+def clarify_question(field: str, locale: str) -> dict | None:
+    """The question and its buttons for `field`, or None when we have none."""
+    by_locale = CLARIFY_QUESTIONS.get(field)
+    if by_locale is None:
+        return None
+    return by_locale.get(locale, by_locale[DEFAULT_LOCALE])
+
+
+def clarification_sentence(field: str, value: str, locale: str) -> str | None:
+    """Her answer to a clarify question, as a line appended to her message.
+
+    None for a field or a value the question never offered: the client is a
+    browser, and a value we did not write must not reach the guard or the
+    prompt. "unknown" (the way out) is said in words, so no number appears.
+    """
+    q = clarify_question(field, locale)
+    if q is None:
+        return None
+    lang = locale if locale in _CLARIFY_PREFIX else DEFAULT_LOCALE
+    if value == q["skip"]["value"]:
+        label = _CLARIFY_UNKNOWN[lang][field]
+    else:
+        label = next((o["label"] for o in q["options"] if o["value"] == value), None)
+        if label is None:
+            return None
+    return f"{_CLARIFY_PREFIX[lang][field]}{label}"
+
+
+#: The prompt clause for a second turn that still lacks the fact (principle
+#: 2: answer with what there is). Prompt text, read by the model, in Spanish
+#: like the rest of the contract's instructions.
+_MISSING_FACT = {
+    "temperature": "la temperatura que marca el termómetro",
+    "age": "la edad del bebé",
+}
+
+
+def missing_fact_note(fields: list[str]) -> str:
+    """What the model is told when a fact is still missing after the one question."""
+    names = [_MISSING_FACT[f] for f in fields if f in _MISSING_FACT]
+    if not names:
+        return ""
+    return (
+        "Dato que falta y que no vamos a volver a preguntar: " + ", ".join(names) + ". "
+        "Responde con lo que hay y di en una frase qué cambiaría en la respuesta si se "
+        "supiera, con la cita de la fuente que lo dice."
+    )

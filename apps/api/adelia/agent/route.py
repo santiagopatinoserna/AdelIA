@@ -21,7 +21,7 @@ from typing import Literal
 
 from pydantic import BaseModel, Field, ValidationError
 
-from adelia.clinical.red_flags import age_months_in, normalize
+from adelia.clinical.red_flags import age_months_in, normalize, temperature_in
 from adelia.config import settings
 from adelia.enrichment.profile_service import ProfileFacts
 from adelia.llm import content_text, get_mistral_client
@@ -174,6 +174,43 @@ _NEEDS_AGE = re.compile(
 )
 
 
+# A fever reported about the child, with somebody HAVING it, as opposed to a
+# question about fever itself ("a partir de cuantos grados es fiebre", "what
+# is a normal temperature"). Only a report gets asked for the thermometer
+# reading (build step 3): 39 C or more at 3-6 months is an amber sign in
+# NICE NG143, so the number changes the answer. Subject- or verb-anchored on
+# purpose: a bare "con fiebre" or "with a fever" is as often a general
+# question ("can a baby with a fever be bathed?").
+_FEVER_REPORT = re.compile(
+    r"\b(?:(?:tiene|tenia|ha tenido|tuvo|le ha (?:subido|dado|vuelto)|le sube|"
+    r"le esta subiendo|vuelve a tener|sigue con|esta con) (?:\w+ ){0,2}?"
+    r"(?:fiebre|febricula|decimas|temperatura|calentura)"
+    r"|(?:esta|se nota|lo noto|la noto|le noto) (?:muy |un poco |algo )?"
+    r"(?:destemplad\w*|caliente|ardiendo|calenturient\w*)"
+    r"|(?:she|he|baby|son|daughter|it) (?:has|had|has had|is running|got) (?:a |an )?"
+    r"(?:\w+ )?(?:fever|temperature)"
+    r"|(?:she|he|baby|it) (?:feels|is|felt) (?:very |really |a bit )?(?:hot|feverish)"
+    r"|(?:il|elle|bebe|fils|fille) (?:a|avait|a eu|fait) (?:de la |une |un peu de )?"
+    r"(?:\w+ )?(?:fievre|temperature)"
+    r"|(?:il|elle|bebe) (?:est|semble) (?:tres |un peu )?(?:chaud|brulant|fievreux)\w*"
+    r")\b"
+)
+
+# A plausible body temperature written bare ("fiebre de 39, que hago"). The
+# guard's parser (red_flags.temperature_in) rejects a bare number followed by
+# a comma on purpose, to keep ages and weeks out of the fever rules; here the
+# only question is whether she already told us the number, so any 35-42 next
+# to her fever report counts and she is not asked for it again.
+_BARE_READING = re.compile(
+    r"(?<![\d,.])(?:3[5-9]|4[0-2])(?:[.,]\d)?(?![\d])"
+    r"(?!\s*(?:dias?|semanas?|meses|mes\b|horas?|h\b|min|days?|weeks?|months?|hours?|"
+    r"jours?|semaines?|mois|heures?|ml|kg|g\b|cm))"
+)
+
+
+def _has_reading(message: str, n: str) -> bool:
+    return temperature_in(message) is not None or bool(_BARE_READING.search(n))
+
 def _age_is_known(message_n: str, facts: ProfileFacts | None) -> bool:
     if facts is not None and facts.age_months is not None:
         return True
@@ -201,7 +238,9 @@ def route_by_rules(
       other   only when nothing names the baby;
       record  a measurement reported in the past tense, nothing asked, no worry;
       track   the child's own data (needs an account, otherwise a question);
-      clarify the age changes the answer and nobody knows it;
+      clarify the age changes the answer and nobody knows it, or she reports
+              a fever without the thermometer reading (age first: one
+              question per turn);
       plan    an explicit "what do I do" or a symptom with a worry;
       question a fact or an explanation with no worry attached.
     """
@@ -231,6 +270,9 @@ def route_by_rules(
 
     if _NEEDS_AGE.search(n) and not _age_is_known(n, facts):
         return RouteDecision(intent="clarify", confidence=0.9, missing=["age"], via="rule")
+
+    if _FEVER_REPORT.search(n) and not _has_reading(message, n):
+        return RouteDecision(intent="clarify", confidence=0.9, missing=["temperature"], via="rule")
 
     if _PLAN_ASK.search(n) or (worried and _SYMPTOM.search(n)):
         return RouteDecision(intent="plan", confidence=0.9, via="rule")

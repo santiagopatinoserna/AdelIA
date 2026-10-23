@@ -150,14 +150,20 @@ def test_age_dependent_questions_without_an_age_ask_for_it(message):
     assert d is not None and d.intent == "clarify" and d.missing == ["age"]
 
 
+# The messages below carry a thermometer reading since build step 3: a fever
+# reported WITHOUT one now asks for the reading (tests/test_agent_clarify.py),
+# which is a different question from the age these two tests are about.
+
+
 def test_an_age_in_the_message_is_enough():
-    d = route_by_rules("mi bebe de 4 meses tiene fiebre que hago", locale="es",
+    d = route_by_rules("mi bebe de 4 meses tiene 38,5 de fiebre que hago", locale="es",
                        has_account=False, facts=None)
     assert d is not None and d.intent == "plan"
 
 
 def test_an_age_in_the_profile_is_enough():
-    d = route_by_rules("tiene fiebre que hago", locale="es", has_account=True, facts=KNOWN_AGE)
+    d = route_by_rules("tiene 38,5 de fiebre que hago", locale="es", has_account=True,
+                       facts=KNOWN_AGE)
     assert d is not None and d.intent == "plan"
 
 
