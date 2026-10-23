@@ -5,7 +5,7 @@ import { useLocale, useTranslations } from "next-intl";
 import { ArrowUpRight, Loader2, ShieldAlert } from "lucide-react";
 import { AnswerSources } from "@/components/answer-sources";
 import { AnswerContent, type AnswerCorpusStats } from "@/components/answer-content";
-import type { DemoAnswerKind, EvidenceCitation } from "@/lib/chat-types";
+import type { DemoAnswerKind, DemoIntent, EvidenceCitation } from "@/lib/chat-types";
 
 // The public demo has no session and receives one JSON response, not progress
 // events. Never infer retrieval or generation stages from elapsed time.
@@ -14,6 +14,7 @@ import type { DemoAnswerKind, EvidenceCitation } from "@/lib/chat-types";
 // one mothers section under its own title, never as a plan.
 type DemoAnswer = {
   kind: DemoAnswerKind;
+  intent?: DemoIntent | null;
   answer: string;
   evidence_citations: EvidenceCitation[];
   disclaimer: string;
@@ -179,7 +180,8 @@ export function DemoAsk({ suggested, corpusStats }: {
         >
           <h2 id="demo-answer-title" className={`text-xl font-semibold ${result.kind === "red_flag" ? "text-error-text" : "text-ink"}`}>
             {t(result.kind === "red_flag" ? "urgentAnswerTitle"
-              : result.kind === "experience_only" ? "experienceOnlyTitle" : "answerTitle")}
+              : result.kind === "experience_only" ? "experienceOnlyTitle"
+              : isShortAnswer(result) ? "shortAnswerTitle" : "answerTitle")}
           </h2>
           {result.kind === "red_flag" && (
             <p className="mt-4 flex items-start gap-2 rounded-lg bg-error-tint p-4 text-sm leading-relaxed text-error-text">
@@ -197,6 +199,7 @@ export function DemoAsk({ suggested, corpusStats }: {
           <AnswerSources
             citations={result.evidence_citations}
             kind={result.kind}
+            shortAnswer={isShortAnswer(result)}
             answer={result.answer}
             corpusStats={corpusStats}
           />
@@ -238,4 +241,11 @@ export function DemoAsk({ suggested, corpusStats }: {
       </div>
     </div>
   );
+}
+
+// A fact question answered in one sentence is not a plan, and the page must
+// not call it one. Only an `answer` qualifies: a referral or a refusal keeps
+// its own wording whatever the router said.
+function isShortAnswer(result: DemoAnswer): boolean {
+  return result.kind === "answer" && result.intent === "question";
 }

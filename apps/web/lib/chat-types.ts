@@ -30,6 +30,12 @@ export type EvidenceCitation = {
 // and its citations are all tier 'experience'.
 export type DemoAnswerKind = "answer" | "red_flag" | "no_evidence" | "evidence_only" | "experience_only";
 
+// What the route node decided (apps/api/adelia/agent/graph.py, AGENT_GRAPH
+// step 2). "question" is answered with one sentence and a few cited bullets
+// and is titled as an answer; anything else, or nothing (a red flag, an
+// older API), keeps the plan's wording.
+export type DemoIntent = "plan" | "question" | "record" | "track" | "clarify" | "other";
+
 export type ChatMessage = {
   id: string;
   session_id: string;

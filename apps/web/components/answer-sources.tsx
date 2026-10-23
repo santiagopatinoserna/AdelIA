@@ -8,11 +8,13 @@ import type { EvidenceCitation } from "@/lib/chat-types";
 
 // Only supporting documents are folded. The generated answer, its conditions,
 // warnings and the fixed clinical disclaimer never live inside this disclosure.
-export function AnswerSources({ citations, kind, answer, corpusStats }: {
+export function AnswerSources({ citations, kind, answer, corpusStats, shortAnswer = false }: {
   citations: EvidenceCitation[];
   kind: string;
   answer: string;
   corpusStats?: AnswerCorpusStats;
+  // A one-sentence answer to a fact question: its sources back an answer, not a plan.
+  shortAnswer?: boolean;
 }) {
   const t = useTranslations("demo");
   if (!citations.length) return null;
@@ -59,7 +61,8 @@ export function AnswerSources({ citations, kind, answer, corpusStats }: {
       <summary className="flex min-h-14 cursor-pointer list-none items-center gap-3 py-3 text-left [&::-webkit-details-marker]:hidden">
         <BookOpen className="h-5 w-5 shrink-0 text-primary-text" strokeWidth={1.7} aria-hidden />
         <span className="min-w-0 flex-1">
-          <span className="block text-base font-medium text-ink">{t(kind === "experience_only" ? "readMoreTitleExperience" : "readMoreTitle")}</span>
+          <span className="block text-base font-medium text-ink">{t(kind === "experience_only" ? "readMoreTitleExperience"
+            : shortAnswer ? "readMoreTitleAnswer" : "readMoreTitle")}</span>
           <span className="mt-0.5 block text-sm text-ink-soft">{t("readMoreSources", { count: citations.length })}</span>
         </span>
         <ChevronDown className="h-4 w-4 shrink-0 text-ink-soft group-open/depth:rotate-180" aria-hidden />
