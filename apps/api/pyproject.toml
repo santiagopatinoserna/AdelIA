@@ -53,6 +53,9 @@ testpaths = ["tests"]
 # slowest local test takes ~1.4s, so 120s only ever fires on a real hang. A test
 # that legitimately needs longer takes @pytest.mark.timeout(n); do not raise this.
 timeout = 120
+markers = [
+    "live_routing: runs the routing classifier against the real provider (needs a key)",
+]
 
 [tool.ruff]
 line-length = 100

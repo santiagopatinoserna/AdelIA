@@ -189,6 +189,12 @@ LangChain.
 
 1. `route` con reglas + clasificador y su evaluación de 60 mensajes. Sin cambiar
    nada visible: solo registrar la intención en logs y medir.
+   **Hecho** (rama `night/graph`): `agent/route.py`, `tests/data/routing_{es,en,fr}.json`
+   (72 mensajes es + 8 banderas rojas), `scripts/eval_routing.py` para la matriz de
+   confusión. La demo y el chat llaman a `spawn_route_log` tras `guard` y escriben
+   una línea `route intent=... via=... conf=...`; la respuesta no cambia. Reglas solas:
+   96 % en es (69/72 deciden, 0 errores); el modelo (`mistral_routing_model`,
+   `mistral-small-latest`) solo entra cuando abstienen, con plazo de 2 s.
 2. Grafo con `guard → route → retrieve → decide → plan | answer → compose` en
    la demo. Visible: las preguntas de dato dejan de recibir un plan.
 3. `clarify` con botones.

@@ -11,6 +11,7 @@ from uuid import UUID
 
 from adelia.config import settings
 from adelia.llm import content_text, get_mistral_client, reasoning_effort_kwargs
+from adelia.agent.route import spawn_route_log
 from adelia.db import AsyncSessionLocal
 from adelia.enrichment.evidence_retrieval import (
     EvidenceMatch,
@@ -18,6 +19,7 @@ from adelia.enrichment.evidence_retrieval import (
     format_evidence_for_prompt,
     retrieve_evidence,
 )
+from adelia.enrichment.profile_service import ProfileFacts
 from adelia.clinical import red_flags
 from adelia.schemas import ChatCitation
 from adelia.services.answer_contract import (
@@ -314,6 +316,18 @@ async def answer_question_streaming(
             evidence_citations=[red_flags.citation_for(flag)],
         )
         return
+
+    # Agent graph, build step 1 (docs/specs/AGENT_GRAPH.md): the route node
+    # runs after the guard and is only measured. One log line, in the
+    # background; nothing below reads the decision. A real account follows
+    # llm_provider, exactly as the answer does.
+    spawn_route_log(
+        "chat",
+        question,
+        locale=locale,
+        has_account=True,
+        facts=ProfileFacts(profile_id, None, None, None, age_months),
+    )
 
     # Elliptical follow-ups ("¿y ese valor?") embed poorly on their own —
     # augment the retrieval query with the tail of the conversation. Temporal

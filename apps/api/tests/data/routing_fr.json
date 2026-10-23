@@ -1,0 +1,20 @@
+{
+  "_about": "Small French routing set; same shape as routing_es.json.",
+  "default": {"has_account": true, "age_months": 6},
+  "items": [
+    {"text": "elle a le nez bouche et tousse la nuit, que faire", "intent": "plan"},
+    {"text": "il n'arrete pas de pleurer le soir je ne sais plus quoi faire", "intent": "plan"},
+    {"text": "est-ce normal qu'il regurgite apres chaque tetee", "intent": "question"},
+    {"text": "a quel age commencent ils a marcher", "intent": "question"},
+    {"text": "a dormi 3 h cette nuit", "intent": "record"},
+    {"text": "elle a bu 120 ml a 16h", "intent": "record"},
+    {"text": "quels vaccins lui restent a faire", "intent": "track"},
+    {"text": "elle est a quel percentile pour le poids", "intent": "track"},
+    {"text": "il a de la fievre que faire", "intent": "clarify", "has_account": false, "age_months": null},
+    {"text": "combien de ml doit elle boire par biberon", "intent": "clarify", "has_account": false, "age_months": null},
+    {"text": "mon mari a de la fievre et tousse", "intent": "other"},
+    {"text": "raconte moi une blague", "intent": "other"},
+    {"text": "mon bebe de 2 mois a 38,5 de fievre", "intent": "red_flag", "age_months": 2},
+    {"text": "elle devient bleue autour de la bouche", "intent": "red_flag"}
+  ]
+}

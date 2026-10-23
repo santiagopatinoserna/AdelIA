@@ -30,6 +30,7 @@ import re
 from fastapi import APIRouter, HTTPException, Query, status
 from pydantic import BaseModel, Field
 
+from adelia.agent.route import spawn_route_log
 from adelia.clinical import red_flags
 from adelia.config import settings
 from adelia.db import AsyncSessionLocal
@@ -46,6 +47,7 @@ from adelia.enrichment.evidence_retrieval import (
     retrieve_evidence,
     retrieve_experience,
 )
+from adelia.enrichment.profile_service import ProfileFacts
 from adelia.services import funnel
 from adelia.services.answer_contract import (
     PLAN_HEADINGS,
@@ -139,6 +141,19 @@ async def ask_demo(payload: DemoQuestion) -> dict:
             "evidence_citations": [red_flags.citation_for(flag)],
             "disclaimer": interface_disclaimer(locale),
         }
+
+    # Agent graph, build step 1 (docs/specs/AGENT_GRAPH.md): the route node
+    # runs after the guard and is only measured. One log line, in the
+    # background, with the demo's own provider; the answer below does not
+    # read it. The demo baby's age is on the page, so the router knows it.
+    spawn_route_log(
+        "demo",
+        question,
+        locale=locale,
+        has_account=False,
+        facts=ProfileFacts(None, None, None, None, demo_profile(locale)["age_months"]),
+        provider=settings.demo_llm_provider or None,
+    )
 
     # Daily ceiling. Counted with the atomic upsert that returns the new
     # value, so concurrent callers cannot both see "one under the limit".
