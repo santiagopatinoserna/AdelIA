@@ -5,7 +5,7 @@ import { useLocale, useTranslations } from "next-intl";
 import { ArrowUpRight, Loader2, ShieldAlert } from "lucide-react";
 import { AnswerSources } from "@/components/answer-sources";
 import { AnswerContent, type AnswerCorpusStats } from "@/components/answer-content";
-import type { DemoAnswerKind, DemoIntent, EvidenceCitation } from "@/lib/chat-types";
+import type { DemoAnswerKind, DemoClarify, DemoIntent, EvidenceCitation } from "@/lib/chat-types";
 
 // The public demo has no session and receives one JSON response, not progress
 // events. Never infer retrieval or generation stages from elapsed time.
@@ -18,7 +18,10 @@ type DemoAnswer = {
   answer: string;
   evidence_citations: EvidenceCitation[];
   disclaimer: string;
+  clarify?: DemoClarify;
 };
+
+type Clarification = { field: DemoClarify["field"]; value: string };
 
 export function DemoAsk({ suggested, corpusStats }: {
   suggested: string[];
@@ -61,7 +64,7 @@ export function DemoAsk({ suggested, corpusStats }: {
     return () => target.removeEventListener("resize", revealForm);
   }, [typing]);
 
-  async function ask(text: string) {
+  async function ask(text: string, clarification?: Clarification) {
     const trimmed = text.trim();
     if (trimmed.length < 3 || trimmed.length > 300 || pending.current) return;
     const controller = new AbortController();
@@ -79,7 +82,7 @@ export function DemoAsk({ suggested, corpusStats }: {
         headers: { "Content-Type": "application/json" },
         credentials: "omit",
         signal: controller.signal,
-        body: JSON.stringify({ question: trimmed, locale }),
+        body: JSON.stringify({ question: trimmed, locale, ...(clarification ? { clarification } : {}) }),
       });
       if (!res.ok) {
         setError(t(res.status === 429 ? "errorBudget" :
@@ -172,7 +175,48 @@ export function DemoAsk({ suggested, corpusStats }: {
         </div>
       )}
 
-      {result && !busy && (
+      {result && !busy && result.kind === "clarify" && result.clarify && (
+        <section
+          data-testid="demo-clarify"
+          aria-labelledby="demo-clarify-title"
+          className="mt-6 border-t border-line pt-5"
+        >
+          {/* One question, the values as buttons, and a way out that still
+              answers: never a second question, never a dead end. */}
+          <h2 id="demo-clarify-title" className="text-xl font-semibold text-ink">
+            {result.clarify.question}
+          </h2>
+          <div className="mt-4 flex flex-col gap-2" role="group" aria-labelledby="demo-clarify-title">
+            {result.clarify.options.map((option) => (
+              <button
+                key={option.value}
+                data-testid="clarify-option"
+                type="button"
+                onClick={() => {
+                  const field = result.clarify!.field;
+                  void ask(asked, { field, value: option.value });
+                }}
+                className="ad-btn ad-btn-ghost min-h-11 w-full justify-start text-base"
+              >
+                {option.label}
+              </button>
+            ))}
+          </div>
+          <button
+            data-testid="clarify-skip"
+            type="button"
+            onClick={() => {
+              const { field, skip } = result.clarify!;
+              void ask(asked, { field, value: skip.value });
+            }}
+            className="mt-3 inline-flex min-h-11 items-center text-sm font-medium text-primary-text underline underline-offset-4"
+          >
+            {result.clarify.skip.label}
+          </button>
+        </section>
+      )}
+
+      {result && !busy && result.kind !== "clarify" && (
         <section
           data-testid="demo-answer"
           aria-labelledby="demo-answer-title"

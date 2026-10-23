@@ -28,7 +28,19 @@ export type EvidenceCitation = {
 // experience_only: no guideline or study, but the experience tier matched;
 // the answer is a fixed sentence plus one "what other mothers say" section
 // and its citations are all tier 'experience'.
-export type DemoAnswerKind = "answer" | "red_flag" | "no_evidence" | "evidence_only" | "experience_only";
+export type DemoAnswerKind =
+  | "answer" | "red_flag" | "no_evidence" | "evidence_only" | "experience_only" | "clarify";
+
+// kind "clarify" (AGENT_GRAPH step 3): one question, two or three values as
+// buttons and a way out. The labels come from the API in her language; the
+// page sends the pressed value back as `clarification` with the same question.
+export type DemoClarifyOption = { value: string; label: string };
+export type DemoClarify = {
+  field: "age" | "temperature";
+  question: string;
+  options: DemoClarifyOption[];
+  skip: DemoClarifyOption;
+};
 
 // What the route node decided (apps/api/adelia/agent/graph.py, AGENT_GRAPH
 // step 2). "question" is answered with one sentence and a few cited bullets
