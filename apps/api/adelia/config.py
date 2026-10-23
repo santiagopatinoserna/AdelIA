@@ -73,6 +73,11 @@ class Settings(BaseSettings):
     # apps/api/docs/MODELOS.md.
     mistral_extraction_model: str = "mistral-medium-latest"
     mistral_briefing_model: str = "mistral-medium-latest"
+    # The route node's classifier (agent/route.py): one JSON-only call that
+    # only decides which contract applies, so the small model is enough and
+    # keeps the 2 s deadline. Mistral (EU) for real accounts; the demo follows
+    # demo_llm_provider.
+    mistral_routing_model: str = "mistral-small-latest"
     mistral_ocr_model: str = "mistral-ocr-latest"
     # Not a free choice: must be a key of EMBEDDING_MODEL_DIMENSIONS (see above).
     mistral_embed_model: str = "mistral-embed"

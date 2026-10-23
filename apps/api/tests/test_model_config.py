@@ -52,6 +52,8 @@ EXPECTED_DEFAULTS = {
     "openai_chat_model": "gpt-5.1",
     "mistral_extraction_model": "mistral-medium-latest",
     "mistral_briefing_model": "mistral-medium-latest",
+    # The route node's classifier: JSON-only, decides a contract, not an answer.
+    "mistral_routing_model": "mistral-small-latest",
     "mistral_ocr_model": "mistral-ocr-latest",
     "mistral_embed_model": "mistral-embed",
     # The two below are named in docs/legal/dpia-grabacion-consulta.md: changing

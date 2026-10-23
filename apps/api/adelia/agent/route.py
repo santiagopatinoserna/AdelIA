@@ -13,13 +13,20 @@ Two layers, in this order:
 """
 from __future__ import annotations
 
+import asyncio
+import json
+import logging
 import re
 from typing import Literal
 
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, Field, ValidationError
 
 from adelia.clinical.red_flags import age_months_in, normalize
+from adelia.config import settings
 from adelia.enrichment.profile_service import ProfileFacts
+from adelia.llm import content_text, get_mistral_client
+
+logger = logging.getLogger(__name__)
 
 Intent = Literal["plan", "question", "record", "track", "clarify", "other"]
 Via = Literal["rule", "model", "fallback"]
@@ -225,3 +232,165 @@ def route_by_rules(
         return RouteDecision(intent="question", confidence=0.85, via="rule")
 
     return None
+
+
+# --- model ------------------------------------------------------------------
+
+#: Below this the model is not sure enough to pick a contract: ask one thing.
+CONFIDENCE_FLOOR = 0.6
+#: The user-facing path waits at most this long for the classifier.
+MODEL_TIMEOUT_S = 2.0
+
+_FALLBACK = RouteDecision(intent="plan", confidence=0.0, via="fallback")
+
+_LANGUAGE = {"es": "Spanish", "en": "English", "fr": "French"}
+
+_SYSTEM_PROMPT = """You classify ONE message a parent sends to a pediatric assistant.
+Answer with a single JSON object and nothing else: no prose, no markdown.
+
+Schema:
+{{"intent": "<one of {intents}>", "confidence": <0.0 to 1.0>, "missing": [<strings>]}}
+
+Intents:
+- "plan": there is a concern about the baby and the parent wants to know what to do.
+- "question": the parent wants a fact or a short explanation, with no action to take
+  ("is it normal that...", "at what age...", "when...", "what is...").
+- "record": the parent reports something that happened (a temperature, a feed, sleep,
+  a nappy) to leave it noted. Only possible when the parent has an account.
+- "track": the parent asks about THEIR OWN child's data: percentiles, vaccines due,
+  reports, lab results, the record. Only possible when the parent has an account.
+- "clarify": an essential fact is missing and the answer depends on it (no age and the
+  topic is fever, feeding amounts or sleep; "something is wrong" with no symptom).
+  Put the missing fact in "missing" ("age", "symptom", "temperature", "duration").
+- "other": out of scope: an adult, a pet, the weather, small talk, jokes.
+
+The message may be in {language} or any other language. Never explain. JSON only."""
+
+_USER_PROMPT = {
+    "es": "Mensaje: {message}\nLa madre tiene cuenta: {account}\nEdad conocida (meses): {age}",
+    "en": "Message: {message}\nParent has an account: {account}\nKnown age (months): {age}",
+    "fr": "Message : {message}\nLe parent a un compte : {account}\nAge connu (mois) : {age}",
+}
+
+
+def _fence_free(text: str) -> str:
+    text = text.strip()
+    if text.startswith("```"):
+        text = re.sub(r"^```[a-zA-Z]*\s*", "", text)
+        text = re.sub(r"\s*```$", "", text)
+    return text.strip()
+
+
+async def _mistral_json(system: str, user: str) -> str:
+    """One JSON-mode completion from the small routing model. Raises without a key."""
+    if not settings.mistral_api_key:
+        raise RuntimeError("MISTRAL_API_KEY not set")
+    client = get_mistral_client()
+    resp = await client.chat.complete_async(
+        model=settings.mistral_routing_model,
+        messages=[{"role": "system", "content": system}, {"role": "user", "content": user}],
+        response_format={"type": "json_object"},
+        temperature=0,
+    )
+    return content_text(resp.choices[0].message.content)
+
+
+async def _openai_json(system: str, user: str) -> str:
+    if not settings.openai_api_key:
+        raise RuntimeError("OPENAI_API_KEY not set")
+    from openai import AsyncOpenAI
+
+    client = AsyncOpenAI(api_key=settings.openai_api_key)
+    resp = await client.chat.completions.create(
+        model=settings.openai_chat_model,
+        messages=[{"role": "system", "content": system}, {"role": "user", "content": user}],
+        response_format={"type": "json_object"},
+        temperature=0,
+    )
+    return resp.choices[0].message.content or ""
+
+
+async def _complete_json(system: str, user: str, *, provider: str | None = None) -> str:
+    """Same selection as `chat_orchestrator._stream_llm_tokens`: an explicit
+    provider (the demo's `demo_llm_provider`) wins, else `settings.llm_provider`."""
+    if (provider or settings.llm_provider) == "openai":
+        return await _openai_json(system, user)
+    return await _mistral_json(system, user)
+
+
+def _bounded_by_account(decision: RouteDecision, has_account: bool) -> RouteDecision:
+    """Without an account there is nothing to record and no record to read."""
+    if has_account:
+        return decision
+    if decision.intent == "record":
+        return decision.model_copy(update={"intent": "plan"})
+    if decision.intent == "track":
+        return decision.model_copy(update={"intent": "question"})
+    return decision
+
+
+async def route_by_model(
+    message: str,
+    *,
+    locale: str = "es",
+    has_account: bool = False,
+    facts: ProfileFacts | None = None,
+    provider: str | None = None,
+) -> RouteDecision:
+    """One classifier call. Never raises on the model's output: a reply that
+    is not valid JSON for `RouteDecision` is the `plan` fallback. Provider
+    errors (no key, network) DO propagate; `route` turns them into the same
+    fallback under its deadline."""
+    lang = (locale or "es").split("-")[0].lower()
+    system = _SYSTEM_PROMPT.format(
+        intents=", ".join(f'"{i}"' for i in INTENTS),
+        language=_LANGUAGE.get(lang, "Spanish"),
+    )
+    age = facts.age_months if facts is not None else None
+    user = _USER_PROMPT.get(lang, _USER_PROMPT["es"]).format(
+        message=message.strip(),
+        account="si" if has_account else "no",
+        age=age if age is not None else "?",
+    )
+    raw = await _complete_json(system, user, provider=provider)
+    try:
+        data = json.loads(_fence_free(raw))
+        decision = RouteDecision.model_validate({**data, "via": "model"})
+    except (ValueError, ValidationError, TypeError):
+        logger.info("route: model output did not validate (%r)", raw[:120])
+        return _FALLBACK
+    if decision.confidence < CONFIDENCE_FLOOR:
+        decision = decision.model_copy(update={"intent": "clarify"})
+    return _bounded_by_account(decision, has_account)
+
+
+async def route(
+    message: str,
+    *,
+    locale: str = "es",
+    has_account: bool = False,
+    facts: ProfileFacts | None = None,
+    provider: str | None = None,
+    timeout_s: float = MODEL_TIMEOUT_S,
+) -> RouteDecision:
+    """Rules first; the model only when they abstain, under a deadline.
+
+    Never raises and never waits longer than `timeout_s`: the surfaces call
+    this on the user-facing path, where a slow classifier must cost a log
+    line, not a second of the mother's time.
+    """
+    decision = route_by_rules(message, locale=locale, has_account=has_account, facts=facts)
+    if decision is not None:
+        return decision
+    try:
+        return await asyncio.wait_for(
+            route_by_model(
+                message, locale=locale, has_account=has_account, facts=facts, provider=provider
+            ),
+            timeout=timeout_s,
+        )
+    except asyncio.TimeoutError:
+        logger.info("route: model exceeded %.1fs, falling back to plan", timeout_s)
+    except Exception as exc:  # noqa: BLE001 - routing must never break the answer
+        logger.info("route: model unavailable (%s), falling back to plan", type(exc).__name__)
+    return _FALLBACK
