@@ -195,14 +195,19 @@ LangChain.
 4. `record` con confirmación y diario. Solo con cuenta.
 5. `track` migrado al grafo; retirar el bucle antiguo.
 
-## Decisiones que necesita Santiago
+## Decisiones tomadas (23-oct, Santiago delegó la decisión técnica)
 
-1. Clasificador de intención: modelo pequeño de Mistral (UE, datos reales) y en la
-   demo el proveedor de la demo. ¿De acuerdo?
-2. `record` escribe en el diario del día (como Telegram). ¿O una tabla propia de
-   registros estructurados (temperatura, tomas) para poder dibujar curvas después?
-   Recomendación: tabla propia `observations` desde el principio; el diario sigue
-   siendo texto.
-3. Sin evidencia médica pero con experiencias de madres: ¿responder solo con
-   «Lo que cuentan otras madres», marcado como experiencia, o seguir diciendo
-   «no hay evidencia»? Pendiente desde el 23-oct.
+1. **Clasificador**: reglas primero; cuando no deciden, modelo pequeño de Mistral
+   (UE) con cuentas reales y el proveedor de la demo en la demo. Salida JSON
+   estricta validada con Pydantic; si el JSON no valida, `intent = "plan"`
+   (el camino con más salvaguardas), nunca `other`.
+2. **Registro**: tabla propia `observations` (perfil, tipo, valor numérico,
+   unidad, texto, fecha y hora, origen) desde el principio, para curvas y
+   comparaciones; el diario de Telegram sigue siendo texto y no cambia.
+3. **Sin evidencia pero con experiencias**: se responde solo con «Lo que cuentan
+   otras madres», precedido de una frase fija: «No he encontrado guías ni
+   estudios sobre esto. Otras madres cuentan:». `kind` pasa a ser
+   `experience_only`, nunca `answer`; sin apartado de médico; el descargo se
+   mantiene. Solo si `guard` no ha saltado y el tema no es clínico (la
+   experiencia nunca llega a dosis, síntomas ni urgencias por construcción
+   del corpus).
