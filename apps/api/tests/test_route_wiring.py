@@ -1,9 +1,12 @@
-"""Build step 1 of the agent graph: `route` is measured, not obeyed.
+"""Where the route node is wired, surface by surface.
 
-Both surfaces call the route node right after the red-flag check and write
-one log line. The response is byte-for-byte what it was: these tests pin
-that the call happens (with the right context), that a red flag never
-reaches it, and that a dead classifier changes nothing the mother sees.
+Build step 1 measured `route` on both surfaces: one log line after the
+red-flag check, the response untouched. Build step 2 (agent/graph.py) makes
+the demo OBEY it: the same call, awaited as the graph's route node, picks
+the answer contract. The chat still only measures until build step 5. These
+tests pin that the call happens with the right context, that a red flag
+never reaches it, and that a dead classifier changes nothing the mother sees
+(the fallback is the plan, which is what both surfaces answered before).
 """
 from __future__ import annotations
 
@@ -42,6 +45,18 @@ class _Spy:
         return MagicMock()
 
 
+class _AsyncSpy:
+    """Stands in for `log_route` on the demo, where the graph awaits it: records
+    the call and returns the plan, the decision a dead classifier would give."""
+
+    def __init__(self) -> None:
+        self.calls: list[tuple] = []
+
+    async def __call__(self, surface, message, **kwargs):
+        self.calls.append((surface, message, kwargs))
+        return r.RouteDecision(intent="plan", confidence=0.9, via="rule")
+
+
 # --- demo ----------------------------------------------------------------------
 
 
@@ -67,8 +82,8 @@ async def _ask_demo(client, question: str):
 async def test_the_demo_routes_after_the_red_flag_check_with_the_demo_babys_age(
     client, monkeypatch
 ):
-    spy = _Spy()
-    monkeypatch.setattr("adelia.routers.demo.spawn_route_log", spy)
+    spy = _AsyncSpy()
+    monkeypatch.setattr("adelia.routers.demo.log_route", spy)
     monkeypatch.setattr(settings, "demo_llm_provider", "openai")
     resp = await _ask_demo(client, "¿Cómo le ayudo a dormir mejor?")
     assert resp.status_code == 200
@@ -83,8 +98,8 @@ async def test_the_demo_routes_after_the_red_flag_check_with_the_demo_babys_age(
 
 @pg_only
 async def test_the_demo_never_routes_a_red_flag(client, monkeypatch):
-    spy = _Spy()
-    monkeypatch.setattr("adelia.routers.demo.spawn_route_log", spy)
+    spy = _AsyncSpy()
+    monkeypatch.setattr("adelia.routers.demo.log_route", spy)
     resp = await client.post(
         "/demo/ask", json={"question": "Tiene 2 meses y 38,5 de fiebre, ¿qué hago?", "locale": "es"}
     )
