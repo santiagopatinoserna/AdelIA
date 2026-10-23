@@ -184,3 +184,40 @@ async def test_a_slow_model_is_cut_at_the_deadline_and_falls_back():
 
 def test_the_default_deadline_is_two_seconds():
     assert r.MODEL_TIMEOUT_S == 2.0
+
+
+# --- the measure-only hook the surfaces call -----------------------------------
+
+
+async def test_log_route_writes_one_line_with_intent_via_and_confidence(caplog):
+    caplog.set_level("INFO", logger="adelia.agent.route")
+    d = await r.log_route("demo", "que vacunas le tocan", locale="es", has_account=True,
+                          facts=KNOWN_AGE)
+    assert d.intent == "track"
+    line = next(m for m in caplog.messages if m.startswith("route intent="))
+    assert "intent=track" in line and "via=rule" in line and "conf=0.90" in line
+    assert "surface=demo" in line
+    assert "que vacunas" not in line, "the message itself is never logged"
+
+
+async def test_log_route_never_raises(caplog):
+    caplog.set_level("INFO", logger="adelia.agent.route")
+
+    async def _boom(system, user, *, provider=None):
+        raise RuntimeError("down")
+
+    with patch.object(r, "_complete_json", _boom):
+        d = await r.log_route("chat", "hola", locale="es", has_account=True, facts=KNOWN_AGE)
+    assert d.via == "fallback"
+    assert any("via=fallback" in m for m in caplog.messages)
+
+
+async def test_spawn_route_log_runs_in_the_background_and_forgets_the_task(caplog):
+    caplog.set_level("INFO", logger="adelia.agent.route")
+    task = r.spawn_route_log("demo", "que vacunas le tocan", locale="es", has_account=True,
+                             facts=KNOWN_AGE)
+    assert task in r._ROUTE_LOGS, "a strong reference keeps the task alive until it is done"
+    await task
+    await asyncio.sleep(0)
+    assert task not in r._ROUTE_LOGS
+    assert any("intent=track" in m for m in caplog.messages)

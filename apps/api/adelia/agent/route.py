@@ -401,3 +401,61 @@ async def route(
     except Exception as exc:  # noqa: BLE001 - routing must never break the answer
         logger.info("route: model unavailable (%s), falling back to plan", type(exc).__name__)
     return _FALLBACK
+
+
+# --- measure only (build step 1) --------------------------------------------
+#
+# The surfaces call `spawn_route_log` right after the red-flag check and
+# carry on; the decision is logged, never used. When the graph lands the
+# same call site becomes the edge out of `guard`.
+
+_ROUTE_LOGS: set[asyncio.Task] = set()
+
+
+async def log_route(
+    surface: str,
+    message: str,
+    *,
+    locale: str = "es",
+    has_account: bool = False,
+    facts: ProfileFacts | None = None,
+    provider: str | None = None,
+) -> RouteDecision:
+    """Route and write ONE log line. Never raises, never logs the message."""
+    try:
+        decision = await route(
+            message, locale=locale, has_account=has_account, facts=facts, provider=provider
+        )
+    except Exception:  # noqa: BLE001 - a measurement must not become an error
+        decision = _FALLBACK
+    logger.info(
+        "route intent=%s via=%s conf=%.2f surface=%s missing=%s account=%s",
+        decision.intent, decision.via, decision.confidence, surface,
+        ",".join(decision.missing) or "-", "yes" if has_account else "no",
+    )
+    return decision
+
+
+def spawn_route_log(
+    surface: str,
+    message: str,
+    *,
+    locale: str = "es",
+    has_account: bool = False,
+    facts: ProfileFacts | None = None,
+    provider: str | None = None,
+) -> asyncio.Task:
+    """Schedule `log_route` without waiting for it.
+
+    The user-facing path pays nothing: rules settle on the task's first step,
+    and the model layer has its own deadline. The set holds a strong
+    reference until the task is done, as asyncio asks."""
+    task = asyncio.create_task(
+        log_route(
+            surface, message, locale=locale, has_account=has_account, facts=facts,
+            provider=provider,
+        )
+    )
+    _ROUTE_LOGS.add(task)
+    task.add_done_callback(_ROUTE_LOGS.discard)
+    return task
