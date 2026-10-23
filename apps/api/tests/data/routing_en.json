@@ -1,0 +1,20 @@
+{
+  "_about": "Small English routing set; same shape as routing_es.json.",
+  "default": {"has_account": true, "age_months": 6},
+  "items": [
+    {"text": "she keeps spitting up after every feed, what should I do", "intent": "plan"},
+    {"text": "he has had a runny nose for 3 days and coughs at night, worried", "intent": "plan"},
+    {"text": "is it normal that she sneezes a lot", "intent": "question"},
+    {"text": "at what age do babies start crawling", "intent": "question"},
+    {"text": "had 2 bottles of 150 ml today", "intent": "record"},
+    {"text": "slept 4 hours straight last night", "intent": "record"},
+    {"text": "what vaccines are due for her", "intent": "track"},
+    {"text": "what percentile is he for weight", "intent": "track"},
+    {"text": "she has a fever what do I do", "intent": "clarify", "has_account": false, "age_months": null},
+    {"text": "how many ml should she drink per feed", "intent": "clarify", "has_account": false, "age_months": null},
+    {"text": "my husband has a fever and a cough", "intent": "other"},
+    {"text": "tell me a joke", "intent": "other"},
+    {"text": "my 2 month old has a fever of 38.5", "intent": "red_flag", "age_months": 2},
+    {"text": "her lips are turning blue", "intent": "red_flag"}
+  ]
+}

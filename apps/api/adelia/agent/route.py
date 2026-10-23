@@ -64,7 +64,7 @@ _MEASUREMENT = re.compile(
 _PAST_REPORT = re.compile(
     r"\b(?:(?:se |le |me )?(?:ha|he|hemos|han) (?:\w+ ){0,2}?(?:tenido|dormido|comido|tomado|"
     r"bebido|hecho|vomitado|puesto|dado|mamado|subido|bajado|pesado|medido|durado|"
-    r"estado|despertado|llorado|cenado|desayunado|merendado|cagado)\b"
+    r"estado|despertado|llorado|cenado|desayunado|merendado|cagado|mojado|manchado)\b"
     r"|\bhoy (?:ha|se ha|le he|he)\b"
     r"|\b(?:(?:il|elle|on|je|j'|lui) ?)?(?:a|ai|avons|ont) (?:\w+ ){0,2}?"
     r"(?:dormi|bu|mange|eu|fait|pris|vomi|pese|tete|pleure|donne|mis|regurgite)\b"
@@ -76,7 +76,8 @@ _PAST_REPORT = re.compile(
 _PLAN_ASK = re.compile(
     r"\b(?:que hago|que puedo hacer|que debo hacer|que deberia hacer|que podemos hacer|"
     r"como (?:le |lo |la )?(?:ayudo|alivio|calmo|puedo ayudar|puedo aliviar|puedo calmar)\w*|"
-    r"no se que hacer|no sabemos que hacer|que le (?:doy|puedo dar|damos)|"
+    r"no se que hacer|no sabemos que hacer|que le (?:doy|puedo dar|damos|pongo|puedo poner)|"
+    r"debo preocuparme|deberia preocuparme|hago algo|tengo que hacer algo|"
     r"que faire|comment (?:l'|la |le )?(?:aider|soulager|calmer)|"
     r"je ne sais (?:plus|pas) quoi faire|"
     r"what (?:should|can|do) (?:i|we) do|how (?:do|can) (?:i|we) help|"
@@ -140,7 +141,8 @@ _OWN_DATA = re.compile(
 # is never `other` by rule.
 _OUT_OF_SCOPE = re.compile(
     r"\b(?:me duele|me he (?:hecho|cortado|quemado)|me tomo\b|"
-    r"tengo (?:fiebre|tos|dolor|migrana|la regla|ansiedad|insomnio|mocos)\b|"
+    r"tengo (?:mucha |mucho |un poco de |bastante )?(?:fiebre|tos|dolor|migrana|la regla|ansiedad|"
+    r"insomnio|mocos|diarrea|nauseas)\b|"
     r"mi (?:marido|pareja|madre|padre|suegra|suegro|abuela|abuelo|jefe|hermano|hermana|"
     r"amiga|amigo|vecina|vecino) (?:tiene|esta|lleva|se ha|ha)\b|"
     r"mi (?:perro|perra|gato|gata|hamster|conejo|loro)\b|(?:el|al) (?:perro|gato)\b|"
@@ -161,7 +163,7 @@ _BABY_REF = re.compile(
 
 # Topics whose answer changes with the age: fever, how much to feed, sleep.
 _NEEDS_AGE = re.compile(
-    r"\b(?:fiebre|febricula|decimas|temperatura|fever|fievre|"
+    r"\b(?:fiebre|febricula|decimas|temperatura|destemplad\w*|fever|fievre|"
     r"cuant[oa]s? (?:ml|mililitros|onzas|tomas|gramos|biberones|cucharadas)|"
     r"cuanta (?:leche|cantidad)|cuanto (?:tiene que|debe|deberia) (?:comer|tomar|beber)|"
     r"cantidad de (?:leche|biberon)|ml por toma|"
@@ -197,7 +199,7 @@ def route_by_rules(
 
     Order matters and is the contract:
       other   only when nothing names the baby;
-      record  a measurement reported in the past tense, with nothing asked;
+      record  a measurement reported in the past tense, nothing asked, no worry;
       track   the child's own data (needs an account, otherwise a question);
       clarify the age changes the answer and nobody knows it;
       plan    an explicit "what do I do" or a symptom with a worry;
@@ -211,7 +213,13 @@ def route_by_rules(
     if _OUT_OF_SCOPE.search(n) and not _BABY_REF.search(n):
         return RouteDecision(intent="other", confidence=0.85, via="rule")
 
-    if _PAST_REPORT.search(n) and _MEASUREMENT.search(n) and not _asks_something(n):
+    worried = bool(_WORRY.search(n))
+    if (
+        _PAST_REPORT.search(n)
+        and _MEASUREMENT.search(n)
+        and not _asks_something(n)
+        and not worried
+    ):
         if has_account:
             return RouteDecision(intent="record", confidence=0.9, via="rule")
         return RouteDecision(intent="plan", confidence=0.8, via="rule")
@@ -224,7 +232,6 @@ def route_by_rules(
     if _NEEDS_AGE.search(n) and not _age_is_known(n, facts):
         return RouteDecision(intent="clarify", confidence=0.9, missing=["age"], via="rule")
 
-    worried = bool(_WORRY.search(n))
     if _PLAN_ASK.search(n) or (worried and _SYMPTOM.search(n)):
         return RouteDecision(intent="plan", confidence=0.9, via="rule")
 
