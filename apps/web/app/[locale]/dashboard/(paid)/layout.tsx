@@ -1,7 +1,8 @@
 import { redirect } from "next/navigation";
 import { getLocale } from "next-intl/server";
 
-import { billingStatus, onboarding } from "@/lib/api-client";
+import { billingStatus, enrichment, onboarding } from "@/lib/api-client";
+import type { Profile } from "@/lib/enrichment-types";
 import { ProfileProvider } from "@/lib/profile-context";
 
 // The paywall gate, and nothing else. It lives in a route group so it covers
@@ -64,12 +65,19 @@ export default async function PaidDashboardLayout({
   //
   // Fail-OPEN, like the paywall above: a transient API error must not stand
   // between a mother and her baby's records.
+  //
+  // The profile list for ProfileProvider, in flight while the onboarding
+  // status is awaited (fail-open to an empty list, as the browser fetch it
+  // replaces did). It is fetched HERE and handed to the provider as its first
+  // render, not fetched by the provider after mount: see lib/profile-context.
+  const profilesPromise = enrichment.listProfiles().catch((): Profile[] => []);
   try {
     const status = await onboarding.status();
     if (status.needed) redirect(`/${locale}/onboarding`);
   } catch (err) {
     if (isRedirect(err)) throw err;
   }
+  const initialProfiles = await profilesPromise;
 
   // ProfileProvider: ONE active child for every paid surface — the consult
   // recorder, the upload zone, the chat, the briefing form and the agent
@@ -77,5 +85,5 @@ export default async function PaidDashboardLayout({
   // the recorder, which renders a profile selector from this very context,
   // read the empty default: no profiles, activeId null, and an appointment
   // recording filed under no child at all.
-  return <ProfileProvider>{children}</ProfileProvider>;
+  return <ProfileProvider initialProfiles={initialProfiles}>{children}</ProfileProvider>;
 }
