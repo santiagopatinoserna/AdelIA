@@ -9,7 +9,8 @@ Two layers in one JSON payload, honestly labeled:
   doesn't (anything unmappable becomes an ``Observation`` with the original
   type preserved in ``code.text``).
 - ``adelia``: everything FHIR has no slot for, raw and complete: document
-  transcripts/texts, consent events, provenance and confidence per entity.
+  transcripts/texts, consent events, provenance and confidence per entity,
+  and the observations she noted herself (migration 0023).
 
 The export deliberately contains NO embeddings (derived, huge, useless to a
 human or another provider) and no S3 keys (internal).
@@ -23,7 +24,7 @@ from typing import Any
 import sqlalchemy as sa
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from adelia.models import ConsentEvent, Document, Entity, Profile
+from adelia.models import ConsentEvent, Document, Entity, Observation, Profile
 
 EXPORT_FORMAT = "adelia-export-v1"
 
@@ -174,6 +175,17 @@ async def build_export(db: AsyncSession, user_id: uuid.UUID) -> dict[str, Any]:
         .scalars()
         .all()
     )
+    observations = (
+        (
+            await db.execute(
+                sa.select(Observation)
+                .where(Observation.user_id == user_id)
+                .order_by(Observation.observed_at)
+            )
+        )
+        .scalars()
+        .all()
+    )
 
     default_patient_ref = "urn:adelia:profile:default"
     patient_entries: list[dict[str, Any]] = [
@@ -253,6 +265,20 @@ async def build_export(db: AsyncSession, user_id: uuid.UUID) -> dict[str, Any]:
                     "created_at": _iso(c.created_at),
                 }
                 for c in consents
+            ],
+            "observations": [
+                {
+                    "id": str(o.id),
+                    "profile_id": str(o.profile_id) if o.profile_id else None,
+                    "kind": o.kind,
+                    "value": o.value,
+                    "unit": o.unit,
+                    "text": o.text,
+                    "observed_at": _iso(o.observed_at),
+                    "source": o.source,
+                    "created_at": _iso(o.created_at),
+                }
+                for o in observations
             ],
         },
     }

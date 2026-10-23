@@ -434,6 +434,47 @@ class Profile(Base):
     )
 
 
+
+#: Kinds and sources of `observations` (migration 0023). The CHECK constraints
+#: there and these tuples must match; services/observations re-exports them.
+OBSERVATION_KINDS = (
+    "temperature", "feed", "sleep", "stool", "nappy", "weight",
+    "symptom", "medication", "vaccine", "note",
+)
+OBSERVATION_SOURCES = ("agent", "chat", "telegram")
+
+
+class Observation(Base):
+    """One fact a parent noted about her child (AGENT_GRAPH step 4)."""
+
+    __tablename__ = "observations"
+    id = Column(UUID(as_uuid=True), primary_key=True, server_default=text("gen_random_uuid()"))
+    user_id = Column(
+        UUID(as_uuid=True), ForeignKey("users.id", ondelete="CASCADE"), nullable=False, index=True
+    )
+    profile_id = Column(
+        UUID(as_uuid=True), ForeignKey("profiles.id", ondelete="CASCADE"), nullable=True
+    )
+    kind = Column(String(24), nullable=False)
+    value = Column(Float)
+    unit = Column(String(16))
+    text = Column(Text, nullable=False)
+    observed_at = Column(DateTime(timezone=True), nullable=False)
+    source = Column(String(16), nullable=False)
+    created_at = Column(DateTime(timezone=True), server_default=func.now(), nullable=False)
+
+    __table_args__ = (
+        CheckConstraint(
+            "kind IN (" + ", ".join(f"'{k}'" for k in OBSERVATION_KINDS) + ")",
+            name="ck_observations_kind",
+        ),
+        CheckConstraint(
+            "source IN (" + ", ".join(f"'{s}'" for s in OBSERVATION_SOURCES) + ")",
+            name="ck_observations_source",
+        ),
+        Index("ix_observations_profile_kind_time", "profile_id", "kind", "observed_at"),
+    )
+
 # M6 ShareLink already defined at line 145 — uses existing schema from migration 0001:
 # fields: revoked (bool), access_count, last_accessed_at, expires_at, token.
 
