@@ -17,6 +17,10 @@ from adelia.agent import route as r
 from adelia.config import settings
 from adelia.enrichment.profile_service import ProfileFacts
 
+#: These tests drive the model layer themselves (fake completions, fake
+#: clients); conftest's guard against live classifier calls stays out.
+pytestmark = pytest.mark.routing_model_layer
+
 KNOWN_AGE = ProfileFacts(None, "Lucía", None, "F", 6)
 
 

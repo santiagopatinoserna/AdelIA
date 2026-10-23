@@ -56,6 +56,7 @@ testpaths = ["tests"]
 timeout = 120
 markers = [
     "live_routing: runs the routing classifier against the real provider (needs a key)",
+    "routing_model_layer: drives agent/route's model layer with its own fakes (conftest leaves it alone)",
 ]
 
 [tool.ruff]

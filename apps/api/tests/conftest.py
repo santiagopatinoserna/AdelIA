@@ -32,3 +32,27 @@ def _disable_rate_limit():
     ratelimit.reset()
     yield
     settings.rate_limit_enabled = previous
+
+
+@pytest.fixture(autouse=True)
+def _no_live_routing_classifier(request, monkeypatch):
+    """The route node calls a model when its rules abstain, and since build
+    step 2 the demo awaits that call on the request path. Without this, a run
+    with a key in the environment (server-verify with VERIFY_LIVE=1) routes
+    every ambiguous test question by whatever the provider answered that day.
+    With it, the model layer fails fast and `route` falls back to `plan`, the
+    same decision a key-less run makes.
+
+    Exempt: tests marked `live_routing` (they measure the real provider) and
+    modules marked `routing_model_layer` (they drive the model layer with
+    their own fakes)."""
+    if request.node.get_closest_marker("live_routing") or request.node.get_closest_marker(
+        "routing_model_layer"
+    ):
+        return
+    from adelia.agent import route as r
+
+    async def _disabled(system, user, *, provider=None):
+        raise RuntimeError("routing model disabled in tests")
+
+    monkeypatch.setattr(r, "_complete_json", _disabled)
