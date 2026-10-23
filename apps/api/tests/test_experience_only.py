@@ -233,3 +233,24 @@ async def test_a_mothers_heading_in_another_language_is_a_stray_section(client):
     body, _ = await _ask(client, evidence=[], experience=[EXPERIENCE],
                          model_output="## What other mothers say\n- One [ex_1].", locale="es")
     assert body["kind"] == "no_evidence"
+
+
+# ---------------------------------------------------------------------------
+# The web catalogues (drift lock, like test_answer_plan)
+# ---------------------------------------------------------------------------
+
+import json  # noqa: E402
+from pathlib import Path  # noqa: E402
+
+WEB_MESSAGES = Path(__file__).resolve().parents[2] / "web" / "messages"
+
+
+@pytest.mark.parametrize("locale", ["es", "en", "fr"])
+def test_the_web_title_for_experience_only_is_the_mothers_heading(locale):
+    demo = json.loads((WEB_MESSAGES / f"{locale}.json").read_text(encoding="utf-8"))["demo"]
+    assert demo["experienceOnlyTitle"] == PLAN_HEADINGS[locale]["mothers"]
+    assert demo["experienceOnlyTitle"] != demo["answerTitle"]
+    fold = demo["readMoreTitleExperience"]
+    assert fold.strip() and fold != demo["readMoreTitle"]
+    for key in ("experienceOnlyTitle", "readMoreTitleExperience"):
+        assert "—" not in demo[key]

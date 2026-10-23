@@ -19,8 +19,11 @@ export function AnswerSources({ citations, kind, answer, corpusStats }: {
   // Scientific sources first, then what other mothers say under its own
   // title, whatever order the payload came in: the experience tier is a layer
   // under the plan, never a peer of a guideline.
-  const evidence = citations.filter(c => c.tier !== "experience");
+  // experience_only never lists a clinical card, whatever the payload says:
+  // the title above the answer promised experience and nothing else.
+  const evidence = kind === "experience_only" ? [] : citations.filter(c => c.tier !== "experience");
   const experience = citations.filter(c => c.tier === "experience");
+  if (!evidence.length && !experience.length) return null;
   const contents = (
     <>
       <AnswerSourceContext kind={kind} answer={answer} corpusStats={corpusStats} />
@@ -56,7 +59,7 @@ export function AnswerSources({ citations, kind, answer, corpusStats }: {
       <summary className="flex min-h-14 cursor-pointer list-none items-center gap-3 py-3 text-left [&::-webkit-details-marker]:hidden">
         <BookOpen className="h-5 w-5 shrink-0 text-primary-text" strokeWidth={1.7} aria-hidden />
         <span className="min-w-0 flex-1">
-          <span className="block text-base font-medium text-ink">{t("readMoreTitle")}</span>
+          <span className="block text-base font-medium text-ink">{t(kind === "experience_only" ? "readMoreTitleExperience" : "readMoreTitle")}</span>
           <span className="mt-0.5 block text-sm text-ink-soft">{t("readMoreSources", { count: citations.length })}</span>
         </span>
         <ChevronDown className="h-4 w-4 shrink-0 text-ink-soft group-open/depth:rotate-180" aria-hidden />

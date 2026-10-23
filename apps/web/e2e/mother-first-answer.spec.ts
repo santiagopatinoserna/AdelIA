@@ -189,3 +189,64 @@ test("the mothers section renders last, labelled as experience, and its source i
     expect(audit.violations, colorScheme).toEqual([]);
   }
 });
+
+// No evidence, but other mothers have something to say (AGENT_GRAPH, decision
+// 3): kind experience_only. Its own title, the fixed opening sentence, one
+// mothers section and only experience sources. Never a plan, never a doctor
+// card, never the "this answer rests on the sources" line.
+for (const locale of ["es", "en", "fr"] as const) {
+  test(`${locale}: experience_only shows its own title, the mothers section and experience sources only`, async ({ page }) => {
+    const m = copy[locale];
+    const opening = {
+      es: "No he encontrado guías ni estudios sobre esto. Otras madres cuentan:",
+      en: "I found no guidelines or studies on this. Other mothers say:",
+      fr: "Je n’ai trouvé ni recommandation ni étude sur ce sujet. D’autres mères racontent :",
+    }[locale];
+    const bullet = "A otras madres les ayudó adelantar la rutina de la noche [ex_1].";
+    const answer = [opening, "", `## ${m.demo.plan.mothers}`, `- ${bullet}`].join("\n");
+    const experience = {
+      tag: "ex_1", source_id: "exp-source", chunk_id: "exp-chunk", tier: "experience",
+      title: "Hilo de madres sobre el sueño", organization: "Foro de prueba",
+      year: 2026, url: "https://example.org/forum", snippet: "Resumen de lo que cuentan otras madres.",
+    };
+    await page.route("**/api/demo/ask", (route) => route.fulfill({ json: {
+      kind: "experience_only", answer, evidence_citations: [experience],
+      disclaimer: "Aviso clínico siempre visible.",
+    } }));
+    await page.goto(`/${locale}`);
+    await page.locator("#demo-question").fill("Pregunta de prueba");
+    await page.getByRole("button", { name: m.demo.askCta, exact: true }).click();
+    const section = page.getByTestId("demo-answer");
+    await expect(section.getByRole("heading", { level: 2 })).toHaveText(m.demo.experienceOnlyTitle);
+    await expect(page.locator("#demo-answer-title")).not.toHaveText(m.demo.answerTitle);
+    const body = page.getByTestId("answer-content");
+    await expect(body.getByTestId("plan-intro")).toHaveText(opening);
+    const mothers = body.getByTestId("plan-section-mothers");
+    await expect(mothers.getByRole("heading", { level: 3 })).toHaveText(m.demo.plan.mothers);
+    await expect(mothers.getByText(m.demo.mothersLabel, { exact: true })).toBeVisible();
+    await expect(mothers.locator("li")).toHaveText([bullet]);
+    await expect(body.locator("[data-testid^='plan-section-']")).toHaveCount(1);
+    await expect(body.getByTestId("plan-section-doctor")).toHaveCount(0);
+    await expect(section.getByText(m.demo.plan.doctor, { exact: true })).toHaveCount(0);
+    await expect(section.getByText("Aviso clínico siempre visible.", { exact: true })).toBeVisible();
+    await expect(page.getByTestId("answer-source-context")).toHaveCount(0);
+
+    const sources = page.getByTestId("answer-depth");
+    // There is no plan to rest on, so the fold must not say "this plan".
+    await expect(sources.locator(":scope > summary")).toContainText(m.demo.readMoreTitleExperience);
+    await expect(sources.locator(":scope > summary")).not.toContainText(m.demo.readMoreTitle);
+    await sources.locator(":scope > summary").click();
+    const cards = sources.locator("[data-testid='evidence-card']");
+    await expect(cards).toHaveCount(1);
+    await expect(cards.first()).toContainText(experience.title);
+    await expect(cards.first().getByTestId("experience-badge")).toHaveText(m.demo.experienceBadge);
+    await expect(sources.getByText(m.demo.sourcesExperienceTitle, { exact: true })).toBeVisible();
+
+    expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
+    for (const colorScheme of ["light", "dark"] as const) {
+      await page.emulateMedia({ colorScheme, reducedMotion: "reduce" });
+      const audit = await new AxeBuilder({ page }).include('[data-testid="demo-answer"]').analyze();
+      expect(audit.violations, colorScheme).toEqual([]);
+    }
+  });
+}

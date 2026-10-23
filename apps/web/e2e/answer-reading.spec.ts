@@ -122,7 +122,7 @@ test("does not claim history without numeric references or sources", async ({ pa
   await expect(page.getByTestId("answer-library-total")).toHaveCount(0);
 });
 
-for (const kind of ["no_evidence", "evidence_only", "red_flag"]) {
+for (const kind of ["no_evidence", "evidence_only", "red_flag", "experience_only"]) {
   test(`never implies a composed, sourced answer for ${kind}`, async ({ page }) => {
     const original = "Mensaje original completo de prueba [1] [ev_1].";
     await answerWith(page, original, kind);
