@@ -11,22 +11,16 @@ from uuid import UUID
 
 from adelia.config import settings
 from adelia.llm import content_text, get_mistral_client, reasoning_effort_kwargs
-from adelia.agent.route import spawn_route_log
+from adelia.agent.graph import GraphDeps, Retrieved, stream_graph
+from adelia.agent.route import log_route
 from adelia.db import AsyncSessionLocal
 from adelia.enrichment.evidence_retrieval import (
     EvidenceMatch,
-    evidence_citations_for_response,
-    format_evidence_for_prompt,
     retrieve_evidence,
 )
 from adelia.enrichment.profile_service import ProfileFacts
-from adelia.clinical import red_flags
 from adelia.schemas import ChatCitation
-from adelia.services.answer_contract import (
-    chat_system_prompt,
-    no_evidence_reply,
-    red_flag_reply,
-)
+from adelia.services.answer_contract import chat_system_prompt
 from adelia.services.retrieval import retrieve_relevant_chunks
 from adelia.services.scope import Scope
 from adelia.services.structured_query import query_observations_by_name_and_date_range
@@ -256,6 +250,132 @@ async def _retrieve_evidence_for_query(
         return []
 
 
+async def _guarded_stream(
+    system_prompt: str, user_message: str, *, history: list[dict] | None = None
+) -> AsyncIterator[str]:
+    """`_stream_llm_tokens` under the SSE guards: a gap between tokens and a
+    total budget. Abandoning the generator without aclose() leaves the HTTP
+    stream to the provider open until GC, the exact leak these timeouts
+    exist to prevent."""
+    token_iter = _stream_llm_tokens(system_prompt, user_message, history=history).__aiter__()
+    stream_start = time.monotonic()
+    try:
+        while True:
+            remaining = STREAM_TOTAL_TIMEOUT_S - (time.monotonic() - stream_start)
+            if remaining <= 0:
+                raise TimeoutError(
+                    f"chat stream exceeded {STREAM_TOTAL_TIMEOUT_S:.0f}s total budget"
+                )
+            try:
+                token = await asyncio.wait_for(
+                    token_iter.__anext__(), timeout=min(TOKEN_GAP_TIMEOUT_S, remaining)
+                )
+            except StopAsyncIteration:
+                break
+            except asyncio.TimeoutError:
+                raise TimeoutError(
+                    f"chat stream stalled >{TOKEN_GAP_TIMEOUT_S:.0f}s between tokens"
+                )
+            yield token
+    finally:
+        await token_iter.aclose()
+
+
+async def retrieve_for_account(
+    scope: Scope,
+    *,
+    question: str,
+    history: list[dict] | None = None,
+    locale: str = "es",
+) -> Retrieved:
+    """Her own record and the clinical evidence for one question (dual RAG).
+
+    The account surfaces' `retrieve` in the agent graph: the chat lends it,
+    and so does the agent for a plan or a question. Patient chunks (or, for
+    "my glucose curve last year", the structured observations) PLUS the
+    pediatric guidelines, in two citation namespaces:
+
+    - citations: list[ChatCitation] into her documents ([N] markers)
+    - evidence: EvidenceMatch rows, rendered as [ev_N] cards
+
+    Scoped to one child (audit 4.1). Raises when the embedding cannot be
+    computed; the surface turns that into its error event.
+    """
+    citations: list[ChatCitation] = []
+    query_embedding: list[float] | None = None
+
+    # Elliptical follow-ups ("¿y ese valor?") embed poorly on their own —
+    # augment the retrieval query with the tail of the conversation. Temporal
+    # intent detection still runs on the raw question.
+    retrieval_query = question
+    if history:
+        tail = " ".join(m["content"] for m in history[-2:] if isinstance(m.get("content"), str))
+        retrieval_query = f"{tail[-1000:]}\n{question}"
+
+    temporal = detect_temporal_intent(question)
+    if temporal is not None:
+        rows = await query_observations_by_name_and_date_range(
+            scope=scope,
+            name_substring=temporal.entity_name,
+            from_date=temporal.from_date,
+            to_date=temporal.to_date,
+        )
+        patient_context = _format_temporal_context(rows)
+        # Also embed for evidence retrieval (temporal queries benefit from
+        # guidelines about the queried lab — e.g. "HbA1c curve" → ADA targets)
+        try:
+            qe = await embed_texts([retrieval_query])
+            query_embedding = qe[0] if qe else None
+        except Exception as e:
+            logger.warning("embed for evidence failed in temporal path: %s", e)
+        for r in rows:
+            citations.append(
+                ChatCitation(
+                    chunk_id=r["id"],
+                    document_id=r["document_id"],
+                    raw_quote=r["raw_quote"] or "",
+                    page=None,
+                    source_type="entity",
+                )
+            )
+    else:
+        # Standard RAG path
+        query_embeds = await embed_texts([retrieval_query])
+        if not query_embeds:
+            raise RuntimeError("embed_texts returned empty — cannot retrieve chunks")
+        query_embedding = query_embeds[0]
+        chunks = await retrieve_relevant_chunks(
+            scope=scope,
+            query_embedding=query_embedding,
+            top_k=8,
+            max_distance=settings.patient_max_distance,
+            # The lexical half matches the words she just typed. The history
+            # tail in `retrieval_query` is for the embedding, which needs the
+            # conversation to resolve "and at 8 months?"; fed to a keyword
+            # search it would only dilute the question.
+            query_text=question,
+            locale=locale,
+        )
+        patient_context = _format_rag_context(chunks)
+        for c in chunks:
+            citations.append(
+                ChatCitation(
+                    chunk_id=c.chunk_id,
+                    document_id=c.document_id,
+                    raw_quote=c.content,
+                    page=c.page,
+                )
+            )
+
+    # Dual-RAG: parallel evidence retrieval
+    evidence_matches = await _retrieve_evidence_for_query(
+        query_embedding, query_text=question, locale=locale
+    )
+    return Retrieved(
+        evidence=evidence_matches, patient_context=patient_context or None, citations=citations
+    )
+
+
 async def answer_question_streaming(
     *,
     user_id: UUID,
@@ -266,12 +386,13 @@ async def answer_question_streaming(
     country: str | None = None,
     profile_id: UUID | None = None,
 ) -> AsyncIterator[ChatEvent]:
-    """Main orchestrator: red flags → temporal intent → retrieve → stream LLM.
+    """The chat's turn: the agent graph (agent/graph.py, AGENT_GRAPH step 5).
 
-    Dual-RAG: patient chunks (or temporal observations) PLUS clinical guidelines
-    (from evidence_chunks). Citations returned in separate namespaces:
-    - citations: list[ChatCitation] (patient data, linkable to /dashboard/documents)
-    - evidence_citations: list[dict] (guidelines, linkable to source URLs)
+    guard -> route -> retrieve (her record + evidence) -> decide -> plan |
+    answer -> compose, streamed. The chat page shows text and source cards
+    and nothing else, so its graph has no buttons (a fever without a reading
+    is answered with what there is) and no writes (a diary line is answered,
+    not recorded); her own data is a question over her record.
 
     `age_months` is the active profile's age, resolved by the caller (the
     router and the agent both have a session; this function must not open
@@ -282,182 +403,51 @@ async def answer_question_streaming(
 
     `profile_id` is the SAME resolved profile the age came from, and it is
     what keeps the two children of one account apart: retrieval and the
-    temporal query are both scoped to it (audit 4.1). The caller resolves it
-    once (ProfileFacts.profile_id) rather than each read resolving its own,
-    so the answer, its citations and the age all describe one child. None
-    means "the whole account", which is what an account with no profile at
-    all still gets.
+    temporal query are both scoped to it (audit 4.1). None means "the whole
+    account", which is what an account with no profile at all still gets.
+
+    The guarantees the chat carried before the graph are now the graph's:
+    red flags first, ahead of retrieval and any model call (audit 3.3), and
+    the hard refusal in code when nothing survived the cut-offs on either
+    side (no evidence AND nothing of her record).
     """
     scope = Scope(user_id=user_id, profile_id=profile_id)
-    citations: list[ChatCitation] = []
-    evidence_citations: list[dict] = []
-    query_embedding: list[float] | None = None
 
-    # Red flags first, ahead of retrieval and of any model call (audit 3.3).
-    #
-    # This is deliberately the FIRST statement of the answering path, before
-    # the embedding, before the vector search, before the prompt. The
-    # question that makes this necessary ("my 2-month-old is at 38.2, do I
-    # give her paracetamol?") is one retrieval answers beautifully and
-    # wrongly: there is a paracetamol fragment, the model will dose it, and
-    # the answer will carry a citation. Nothing downstream of here can undo
-    # that, so nothing downstream of here runs.
-    flag = red_flags.detect(question, locale=locale, age_months=age_months)
-    if flag is not None:
-        logger.warning(
-            "chat: red flag %s fired (matched=%r, age_months=%s); returning the "
-            "urgent referral without retrieval and without the generative model",
-            flag.code, flag.matched, flag.age_months,
+    # Names are looked up at call time, so the tests' patches on this module
+    # (embed_texts, retrieve_relevant_chunks, _stream_llm_tokens, ...) reach
+    # the graph.
+    async def _route(message: str, **kwargs):
+        return await log_route("chat", message, **kwargs)
+
+    async def _retrieve(state) -> Retrieved:
+        return await retrieve_for_account(
+            scope, question=state["message"], history=history, locale=locale
         )
-        yield ChatEvent(type="token", content=red_flag_reply(flag.code, locale, country=country))
-        yield ChatEvent(
-            type="final",
-            citations=[],
-            evidence_citations=[red_flags.citation_for(flag)],
-        )
-        return
 
-    # Agent graph, build step 1 (docs/specs/AGENT_GRAPH.md): the route node
-    # runs after the guard and is only measured. One log line, in the
-    # background; nothing below reads the decision. A real account follows
-    # llm_provider, exactly as the answer does.
-    spawn_route_log(
-        "chat",
-        question,
-        locale=locale,
-        has_account=True,
-        facts=ProfileFacts(profile_id, None, None, None, age_months),
-    )
+    def _stream(system_prompt: str, user_message: str) -> AsyncIterator[str]:
+        return _guarded_stream(system_prompt, user_message, history=history)
 
-    # Elliptical follow-ups ("¿y ese valor?") embed poorly on their own —
-    # augment the retrieval query with the tail of the conversation. Temporal
-    # intent detection still runs on the raw question.
-    retrieval_query = question
-    if history:
-        tail = " ".join(m["content"] for m in history[-2:])
-        retrieval_query = f"{tail[-1000:]}\n{question}"
-
+    deps = GraphDeps(route=_route, retrieve=_retrieve, stream=_stream, can_ask=False)
+    state = {
+        "surface": "chat",
+        "locale": locale,
+        "country": country,
+        "message": question,
+        "account": True,
+        "facts": ProfileFacts(profile_id, None, None, None, age_months),
+        "history": history or [],
+    }
     try:
-        temporal = detect_temporal_intent(question)
-        if temporal is not None:
-            rows = await query_observations_by_name_and_date_range(
-                scope=scope,
-                name_substring=temporal.entity_name,
-                from_date=temporal.from_date,
-                to_date=temporal.to_date,
-            )
-            patient_context = _format_temporal_context(rows)
-            # Also embed for evidence retrieval (temporal queries benefit from
-            # guidelines about the queried lab — e.g. "HbA1c curve" → ADA targets)
-            try:
-                qe = await embed_texts([retrieval_query])
-                query_embedding = qe[0] if qe else None
-            except Exception as e:
-                logger.warning("embed for evidence failed in temporal path: %s", e)
-            for r in rows:
-                citations.append(
-                    ChatCitation(
-                        chunk_id=r["id"],
-                        document_id=r["document_id"],
-                        raw_quote=r["raw_quote"] or "",
-                        page=None,
-                        source_type="entity",
-                    )
+        async for event in stream_graph(state, deps):
+            if event["type"] == "token":
+                yield ChatEvent(type="token", content=event["content"])
+            elif event["type"] == "final":
+                final = event["state"]
+                yield ChatEvent(
+                    type="final",
+                    citations=list(final.get("citations") or []),
+                    evidence_citations=list(final.get("evidence_citations") or []),
                 )
-        else:
-            # Standard RAG path
-            query_embeds = await embed_texts([retrieval_query])
-            if not query_embeds:
-                raise RuntimeError(
-                    "embed_texts returned empty — cannot retrieve chunks"
-                )
-            query_embedding = query_embeds[0]
-            chunks = await retrieve_relevant_chunks(
-                scope=scope,
-                query_embedding=query_embedding,
-                top_k=8,
-                max_distance=settings.patient_max_distance,
-                # The lexical half matches the words she just typed. The
-                # history tail in `retrieval_query` is for the embedding, which
-                # needs the conversation to resolve "and at 8 months?"; fed to
-                # a keyword search it would only dilute the question.
-                query_text=question,
-                locale=locale,
-            )
-            patient_context = _format_rag_context(chunks)
-            for c in chunks:
-                citations.append(
-                    ChatCitation(
-                        chunk_id=c.chunk_id,
-                        document_id=c.document_id,
-                        raw_quote=c.content,
-                        page=c.page,
-                    )
-                )
-
-        # Dual-RAG: parallel evidence retrieval
-        evidence_matches = await _retrieve_evidence_for_query(
-            query_embedding, query_text=question, locale=locale
-        )
-        evidence_block = format_evidence_for_prompt(evidence_matches)
-        evidence_citations = evidence_citations_for_response(evidence_matches)
-
-        # Hard refusal, in code, before any generative call. Nothing survived
-        # the retrieval cut-offs on either side: no clinical evidence AND no
-        # fragment of this user's own history. Handing that to the LLM is
-        # exactly how a confident, sourceless, wrong answer about a baby gets
-        # produced, and no prompt clause can be trusted to prevent it. So the
-        # model is never called: the refusal is returned by the code itself.
-        if not evidence_matches and not patient_context:
-            logger.info(
-                "chat: no grounding (0 evidence chunks, 0 patient chunks), "
-                "returning the refusal without calling the generative model"
-            )
-            yield ChatEvent(type="token", content=no_evidence_reply(locale))
-            yield ChatEvent(type="final", citations=[], evidence_citations=[])
-            return
-
-        # Compose final user message with both contexts
-        sections = [f"Pregunta del usuario: {question}\n"]
-        if patient_context:
-            sections.append(f"## Patient data (cite as [N]):\n{patient_context}")
-        if evidence_block:
-            sections.append(evidence_block)
-        user_msg = "\n\n".join(sections)
-
-        token_iter = _stream_llm_tokens(
-            _system_prompt(locale), user_msg, history=history
-        ).__aiter__()
-        stream_start = time.monotonic()
-        try:
-            while True:
-                remaining = STREAM_TOTAL_TIMEOUT_S - (time.monotonic() - stream_start)
-                if remaining <= 0:
-                    raise TimeoutError(
-                        f"chat stream exceeded {STREAM_TOTAL_TIMEOUT_S:.0f}s total budget"
-                    )
-                try:
-                    token = await asyncio.wait_for(
-                        token_iter.__anext__(), timeout=min(TOKEN_GAP_TIMEOUT_S, remaining)
-                    )
-                except StopAsyncIteration:
-                    break
-                except asyncio.TimeoutError:
-                    raise TimeoutError(
-                        f"chat stream stalled >{TOKEN_GAP_TIMEOUT_S:.0f}s between tokens"
-                    )
-                yield ChatEvent(type="token", content=token)
-        finally:
-            # Abandoning the generator without aclose() leaves the HTTP
-            # stream to Mistral open until GC — the exact leak these
-            # timeouts exist to prevent.
-            await token_iter.aclose()
-
-        yield ChatEvent(
-            type="final",
-            citations=citations,
-            evidence_citations=evidence_citations,
-        )
     except Exception as exc:  # noqa: BLE001 — surface to client as error event
         logger.exception("answer_question_streaming failed: %s", exc)
         yield ChatEvent(type="error", content=str(exc))

@@ -3,7 +3,7 @@
 Build step 1 measured `route` on both surfaces: one log line after the
 red-flag check, the response untouched. Build step 2 (agent/graph.py) makes
 the demo OBEY it: the same call, awaited as the graph's route node, picks
-the answer contract. The chat still only measures until build step 5. These
+the answer contract; build step 5 does the same for the chat. These
 tests pin that the call happens with the right context, that a red flag
 never reaches it, and that a dead classifier changes nothing the mother sees
 (the fallback is the plan, which is what both surfaces answered before).
@@ -11,7 +11,7 @@ never reaches it, and that a dead classifier changes nothing the mother sees
 from __future__ import annotations
 
 import uuid
-from unittest.mock import MagicMock, patch
+from unittest.mock import patch
 from uuid import uuid4
 
 import pytest
@@ -32,17 +32,6 @@ def _match() -> EvidenceMatch:
         organization="Org", publication_year=2024, url="https://example.org/e",
         content="fragment", chunk_index=0, distance=0.07, tier="evidence",
     )
-
-
-class _Spy:
-    """Stands in for `spawn_route_log`: records the call, logs nothing, schedules nothing."""
-
-    def __init__(self) -> None:
-        self.calls: list[tuple] = []
-
-    def __call__(self, surface, message, **kwargs):
-        self.calls.append((surface, message, kwargs))
-        return MagicMock()
 
 
 class _AsyncSpy:
@@ -138,8 +127,8 @@ async def test_the_chat_routes_with_the_profile_age_and_an_account(
         yield "Respuesta."
     mock_stream.side_effect = fake_stream
     mock_evidence.return_value = [_match()]
-    spy = _Spy()
-    monkeypatch.setattr("adelia.services.chat_orchestrator.spawn_route_log", spy)
+    spy = _AsyncSpy()
+    monkeypatch.setattr("adelia.services.chat_orchestrator.log_route", spy)
     profile_id = uuid4()
 
     events = [
@@ -159,8 +148,8 @@ async def test_the_chat_routes_with_the_profile_age_and_an_account(
 
 
 async def test_the_chat_never_routes_a_red_flag(monkeypatch):
-    spy = _Spy()
-    monkeypatch.setattr("adelia.services.chat_orchestrator.spawn_route_log", spy)
+    spy = _AsyncSpy()
+    monkeypatch.setattr("adelia.services.chat_orchestrator.log_route", spy)
     events = [
         e async for e in answer_question_streaming(
             user_id=uuid4(), question="Tiene 2 meses y 38,5 de fiebre", locale="es",
