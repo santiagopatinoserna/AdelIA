@@ -3,8 +3,9 @@
 What other mothers say may add one optional section at the end of an
 answer. It must not change what the code decides: a red flag still fires
 before anything, a question with experience hits and no clinical evidence
-is still refused, and a failure in the experience lookup costs the section,
-not the answer.
+never becomes an `answer` (it may become `experience_only`, fenced in
+tests/test_experience_only.py), and a failure in the experience lookup costs
+the section, not the answer.
 """
 from __future__ import annotations
 
@@ -57,6 +58,8 @@ async def _ask(client, *, evidence, experience, generate=None):
         prompt["user"] = user_message
         if generate is not None:
             raise generate
+        if "## Clinical evidence" not in user_message:
+            return "## Lo que cuentan otras madres\n- Truco [ex_1]."
         return "Plan de prueba [ev_1].\n\n## Lo que cuentan otras madres\n- Truco [ex_1]."
 
     exp_mock = AsyncMock(side_effect=_retrieve_experience)
@@ -88,15 +91,17 @@ async def test_experience_citations_come_after_the_evidence_and_say_what_they_ar
 
 
 @pg_only
-async def test_experience_alone_is_still_no_evidence_and_is_not_even_consulted(client):
-    """The `kind` decision is the evidence tier's alone. Experience is looked
-    up only once there is something clinical to stand on, so a question the
-    corpus cannot answer is refused without a blog post ever being read."""
+async def test_experience_alone_is_experience_only_never_an_answer(client):
+    """The `kind` decision is still the evidence tier's: with nothing clinical
+    there is no plan and no `answer`. What experience alone may do (AGENT_GRAPH,
+    decision 3) is replace the bare refusal with `experience_only`, which
+    tests/test_experience_only.py fences; the plan contract is never used."""
     body, prompt, exp_mock = await _ask(client, evidence=[], experience=[EXPERIENCE])
-    assert body["kind"] == "no_evidence"
-    assert body["evidence_citations"] == []
-    assert "user" not in prompt, "the model was called"
-    exp_mock.assert_not_called()
+    assert body["kind"] == "experience_only"
+    assert body["kind"] != "answer"
+    assert [c["tier"] for c in body["evidence_citations"]] == ["experience"]
+    assert "## Clinical evidence" not in prompt["user"]
+    exp_mock.assert_called_once()
 
 
 @pg_only
