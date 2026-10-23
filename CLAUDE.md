@@ -7,8 +7,10 @@ AGPL-3.0 medical vault plus AI analysis for parents of babies (0-24 months). It 
   `apps/web`: Next.js 15, next-intl (es/en/fr), Auth.js. Settings in `adelia/config.py`, read from `.env`.
 - Ingestion runs in-process (`routers/documents.py`, steps in `workers/`). There is no durable queue:
   boot reconciliation (`requeue_stuck_documents`) retries whatever a restart killed.
-- Two answering surfaces: the RAG chat (`services/chat_orchestrator.py`) and the agent behind /dashboard
-  (`agent/orchestrator.py`). Both follow `services/answer_contract.py`.
+- Three answering surfaces run one LangGraph graph (`agent/graph.py`, docs/specs/AGENT_GRAPH.md):
+  the public demo (`routers/demo.py`), the RAG chat (`services/chat_orchestrator.py`) and the agent
+  behind /dashboard (`agent/orchestrator.run_turn`). Each lends its capabilities through `GraphDeps`
+  (buttons, cards, writes, the tool loop). All wording follows `services/answer_contract.py`.
 - Red flags are code, not model: `clinical/red_flags.py` runs before the RAG and short-circuits to a
   referral. Empty retrieval returns `no_evidence_reply()` and never reaches the generative model.
 - Every read path takes `Scope(user_id, profile_id)` (`services/scope.py`) so siblings never share a

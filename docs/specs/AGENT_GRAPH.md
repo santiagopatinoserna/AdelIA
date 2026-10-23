@@ -197,9 +197,44 @@ LangChain.
    `mistral-small-latest`) solo entra cuando abstienen, con plazo de 2 s.
 2. Grafo con `guard → route → retrieve → decide → plan | answer → compose` en
    la demo. Visible: las preguntas de dato dejan de recibir un plan.
+   **Hecho y desplegado (23-oct, 272e23d)**: `agent/graph.py`; variante `question` del
+   contrato (`chat_system_prompt(shape="question")`: una frase y hasta 3 viñetas citadas,
+   sin encabezados, sin recortar señales de alarma); la demo devuelve `intent` y titula
+   «Tu respuesta». LangSmith queda apagado al importar el grafo.
 3. `clarify` con botones.
-4. `record` con confirmación y diario. Solo con cuenta.
+   **Hecho y desplegado (23-oct, fa2f9a8 + 87e26d1)**: fiebre contada sin cifra → «¿Cuánto
+   ha marcado el termómetro?» con 3 tramos y «No la he medido»; edad por tramos (el guard
+   recibe la edad más baja del tramo). `absorb` mete la respuesta en el mensaje antes del
+   guard; nunca dos aclaraciones seguidas. El proxy de la demo no reenviaba la respuesta
+   (arreglado en 87e26d1, con un e2e sin mocks).
+4. `record` con confirmación. Solo con cuenta.
+   **Hecho**: tabla `observations` (0023, decisión 2, no el diario de Telegram);
+   `agent/record.py` lee por reglas las 12 líneas `record` del conjunto (el modelo solo
+   para lo que no leen; si falla, nota), guard sobre el valor, tarjeta con la entrada tal
+   cual, validación de nuevo al confirmar, y respuesta de una línea con la anterior
+   («La anterior: ayer, 37,2 °C»). Borrado y exportación RGPD la incluyen.
 5. `track` migrado al grafo; retirar el bucle antiguo.
+   **Hecho**: `run_agent_turn` retirado; `agent/orchestrator.run_turn` ejecuta el grafo y el
+   bucle de herramientas es el nodo `track` (3 pasos). El chat (`answer_question_streaming`)
+   ejecuta el mismo grafo sin botones ni tarjetas. Lo que el router no sabe colocar (o el
+   respaldo cuando el modelo cae) va al bucle de herramientas en el agente, como siempre, y
+   al plan en las demás superficies. Briefings, perfil, ensayos e interacciones van a
+   `track` por regla.
+
+### Medición del clasificador en producción (23-oct, solo lectura)
+
+Con la clave de producción, `mistral-small-latest` respondió 429 (rate limited) a todas las
+llamadas, también espaciadas 2 s; la cuenta no tiene acceso a `mistral-large-latest`.
+En producción hoy el enrutado lo deciden las reglas y, cuando se abstienen, el respaldo.
+
+| Clasificador | Acierto es (72) | p50 | p95 | > 2 s |
+|---|---|---|---|---|
+| Reglas solas | 69/72 (95,8 %), 3 abstenciones | 0 s | 0 s | 0 |
+| `ministral-8b-latest` (Mistral) | 59/72 (81,9 %) | 0,44 s | 0,91 s | 1/72 |
+| `gpt-5.1` (proveedor de la demo) | 67/72 (93,1 %) | 1,31 s | 11,65 s | 12/72 |
+
+En en y fr (12 cada uno) las reglas aciertan 12/12. Las 3 abstenciones en español las
+acierta `gpt-5.1` (3/3) y `ministral-8b` (2/3).
 
 ## Decisiones tomadas (23-oct, Santiago delegó la decisión técnica)
 
