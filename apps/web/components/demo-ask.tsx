@@ -5,12 +5,15 @@ import { useLocale, useTranslations } from "next-intl";
 import { ArrowUpRight, Loader2, ShieldAlert } from "lucide-react";
 import { AnswerSources } from "@/components/answer-sources";
 import { AnswerContent, type AnswerCorpusStats } from "@/components/answer-content";
-import type { EvidenceCitation } from "@/lib/chat-types";
+import type { DemoAnswerKind, EvidenceCitation } from "@/lib/chat-types";
 
 // The public demo has no session and receives one JSON response, not progress
 // events. Never infer retrieval or generation stages from elapsed time.
+// Mirrors the API's `kind` (apps/api/adelia/routers/demo.py): experience_only
+// is "no guideline, but other mothers have something to say" and renders the
+// one mothers section under its own title, never as a plan.
 type DemoAnswer = {
-  kind: "answer" | "red_flag" | "no_evidence" | "evidence_only";
+  kind: DemoAnswerKind;
   answer: string;
   evidence_citations: EvidenceCitation[];
   disclaimer: string;
@@ -175,7 +178,8 @@ export function DemoAsk({ suggested, corpusStats }: {
           className="mt-6 border-t border-line pt-5"
         >
           <h2 id="demo-answer-title" className={`text-xl font-semibold ${result.kind === "red_flag" ? "text-error-text" : "text-ink"}`}>
-            {t(result.kind === "red_flag" ? "urgentAnswerTitle" : "answerTitle")}
+            {t(result.kind === "red_flag" ? "urgentAnswerTitle"
+              : result.kind === "experience_only" ? "experienceOnlyTitle" : "answerTitle")}
           </h2>
           {result.kind === "red_flag" && (
             <p className="mt-4 flex items-start gap-2 rounded-lg bg-error-tint p-4 text-sm leading-relaxed text-error-text">

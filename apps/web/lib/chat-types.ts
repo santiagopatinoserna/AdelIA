@@ -24,6 +24,12 @@ export type EvidenceCitation = {
   tier?: "evidence" | "experience";
 };
 
+// What the public demo decided (apps/api/adelia/routers/demo.py `kind`).
+// experience_only: no guideline or study, but the experience tier matched;
+// the answer is a fixed sentence plus one "what other mothers say" section
+// and its citations are all tier 'experience'.
+export type DemoAnswerKind = "answer" | "red_flag" | "no_evidence" | "evidence_only" | "experience_only";
+
 export type ChatMessage = {
   id: string;
   session_id: string;

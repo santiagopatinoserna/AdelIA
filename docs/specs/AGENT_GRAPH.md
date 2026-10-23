@@ -211,3 +211,13 @@ LangChain.
    mantiene. Solo si `guard` no ha saltado y el tema no es clínico (la
    experiencia nunca llega a dosis, síntomas ni urgencias por construcción
    del corpus).
+   Implementado en la demo (`routers/demo.py`, `experience_only_contract`): la
+   frase inicial la pone el código, el modelo solo escribe las viñetas [ex_N]
+   y el código descarta la salida entera (y rechaza como antes) si trae otro
+   apartado o una cita que no sea [ex_N]. Medido en producción (23-oct,
+   corte 0.19 / margen 0.08, 20 experiencias): ninguna pregunta del grupo B
+   del golden set llegaría a `experience_only`; las que tienen experiencias
+   (B5, B8, B9) tienen también evidencia y siguen el camino de siempre, y
+   la más cercana sin evidencia (B4, horóscopo) queda a 0.1959, fuera del
+   corte. El chat (`chat_orchestrator`, el camino que mide el golden set)
+   no consulta la capa de experiencias.

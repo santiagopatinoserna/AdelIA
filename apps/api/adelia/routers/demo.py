@@ -25,6 +25,7 @@ refused in code, and the same system prompt governs the wording.
 from __future__ import annotations
 
 import logging
+import re
 
 from fastapi import APIRouter, HTTPException, Query, status
 from pydantic import BaseModel, Field
@@ -47,7 +48,10 @@ from adelia.enrichment.evidence_retrieval import (
 )
 from adelia.services import funnel
 from adelia.services.answer_contract import (
+    PLAN_HEADINGS,
     chat_system_prompt,
+    experience_only_contract,
+    experience_only_opening,
     interface_disclaimer,
     no_evidence_reply,
     red_flag_reply,
@@ -94,16 +98,20 @@ async def ask_demo(payload: DemoQuestion) -> dict:
                             followed by the [ex_N] cards of the experience
                             tier (what other mothers say), each carrying its
                             `tier` so the page labels and orders them
-        kind                "answer" | "red_flag" | "no_evidence" — what the
+        kind                "answer" | "red_flag" | "no_evidence" |
+                            "evidence_only" | "experience_only" — what the
                             code decided, so the page can style a referral
                             differently from an answer
         disclaimer          the fixed clinical line, in the visitor's language
 
     The experience tier (Kenza, 2026-10-22) is read only AFTER the clinical
-    retrieval has decided `kind`: a question with blog posts behind it and no
-    guideline is still refused, and a red flag never gets that far. It feeds
-    one optional section of the plan and nothing else (answer_contract), so a
-    failure looking it up costs the section, not the answer.
+    retrieval has decided whether there is evidence, and a red flag never
+    gets that far. With evidence it feeds one optional section of the plan
+    and nothing else (answer_contract), so a failure looking it up costs the
+    section, not the answer. Without evidence (AGENT_GRAPH, decision 3) it is
+    the only thing that may replace the refusal: kind `experience_only`, a
+    fixed opening sentence and that one section, never a plan, never a
+    doctor section, and the code discards the model's output if it strays.
     """
     _require_demo()
     locale = (payload.locale or DEFAULT_LOCALE).split("-")[0].lower()
@@ -173,8 +181,15 @@ async def ask_demo(payload: DemoQuestion) -> dict:
         )
 
     # Nothing in the corpus supports an answer: refuse in code, as the chat
-    # does, rather than let the model improvise about somebody's baby.
+    # does, rather than let the model improvise about somebody's baby. The
+    # one thing that may replace the refusal is what other mothers say
+    # (AGENT_GRAPH, decision 3), and only when that tier has a match.
     if not matches:
+        experience = await _experience_for(embeds[0])
+        if experience:
+            reply = await _experience_only_reply(question, experience, locale)
+            if reply is not None:
+                return reply
         return {
             "kind": "no_evidence",
             "answer": no_evidence_reply(locale),
@@ -186,19 +201,7 @@ async def ask_demo(payload: DemoQuestion) -> dict:
 
     # What other mothers say: same engine, the other tier, the same cut-offs.
     # Best-effort by design, and only now that `kind` is settled.
-    experience: list = []
-    try:
-        async with AsyncSessionLocal() as session:
-            experience = await retrieve_experience(
-                session,
-                query_embedding=embeds[0],
-                top_k=3,
-                max_distance=settings.evidence_max_distance,
-                relative_margin=settings.evidence_relative_margin,
-            )
-    except Exception as exc:  # noqa: BLE001 — the section is optional, the answer is not
-        logger.warning("demo: experience retrieval failed (%s)", type(exc).__name__)
-        experience = []
+    experience = await _experience_for(embeds[0])
 
     blocks = [
         f"Pregunta del usuario: {question}\n",
@@ -237,4 +240,92 @@ async def ask_demo(payload: DemoQuestion) -> dict:
             experience, tag_prefix="ex", tier="experience"
         ),
         "disclaimer": interface_disclaimer(locale),
+    }
+
+
+async def _experience_for(query_embedding: list[float]) -> list:
+    """What other mothers say: same engine, the other tier, the same cut-offs.
+
+    Best-effort by design: a failure here costs the section (or, with no
+    evidence, the chance of an experience-only answer), never the request.
+    """
+    try:
+        async with AsyncSessionLocal() as session:
+            return await retrieve_experience(
+                session,
+                query_embedding=query_embedding,
+                top_k=3,
+                max_distance=settings.evidence_max_distance,
+                relative_margin=settings.evidence_relative_margin,
+            )
+    except Exception as exc:  # noqa: BLE001 — the section is optional, the answer is not
+        logger.warning("demo: experience retrieval failed (%s)", type(exc).__name__)
+        return []
+
+
+_HEADING = re.compile(r"^##\s+(.*?)\s*$", re.MULTILINE)
+_CITATION = re.compile(r"\[([^\]]*)\]")
+_EXPERIENCE_TAG = re.compile(r"^ex_\d+$")
+
+
+def experience_only_body_is_clean(text: str, locale: str) -> bool:
+    """Whether the model's output is exactly one mothers section with [ex_N] bullets.
+
+    The rule the model reads (experience_only_contract) asks for the shape;
+    this is the check that does not depend on the model obeying. Anything
+    else, and the caller refuses as if there were no experience at all:
+    another section (a doctor section above all), any citation that is not
+    [ex_N] (a [ev_N] it was never given, a [N] patient marker), text before
+    the heading, or a bullet with no citation.
+    """
+    text = text.strip()
+    if not text:
+        return False
+    headings = _HEADING.findall(text)
+    if headings != [PLAN_HEADINGS[locale]["mothers"]]:
+        return False
+    if not text.startswith("## "):
+        return False
+    citations = _CITATION.findall(text)
+    if not citations or any(not _EXPERIENCE_TAG.match(c) for c in citations):
+        return False
+    bullets = [ln for ln in text.splitlines()[1:] if ln.strip()]
+    if not bullets or not all(ln.lstrip().startswith(("-", "*")) for ln in bullets):
+        return False
+    return all(_CITATION.search(ln) for ln in bullets)
+
+
+async def _experience_only_reply(question: str, experience: list, locale: str) -> dict | None:
+    """The experience-only answer, or None to fall back to the refusal.
+
+    Kind `experience_only` (AGENT_GRAPH, decision 3): a fixed opening
+    sentence from the contract, then one "Lo que cuentan otras madres"
+    section the model wrote from the [ex_N] fragments and nothing else. No
+    patient data goes into the prompt: there is nothing clinical to relate it
+    to, and a [N] marker in the output is one of the things that discard it.
+    """
+    lang = locale if locale in PLAN_HEADINGS else DEFAULT_LOCALE
+    user_message = "\n\n".join([
+        f"Pregunta del usuario: {question}\n",
+        format_experience_for_prompt(experience),
+    ])
+    try:
+        body = await generate_answer(
+            experience_only_contract(lang),
+            user_message,
+            provider=settings.demo_llm_provider or None,
+        )
+    except Exception as exc:  # noqa: BLE001
+        logger.warning("demo: experience-only generation failed (%s)", exc)
+        return None
+    if not experience_only_body_is_clean(body, lang):
+        logger.info("demo: experience-only output discarded, refusing instead")
+        return None
+    return {
+        "kind": "experience_only",
+        "answer": f"{experience_only_opening(lang)}\n\n{body.strip()}",
+        "evidence_citations": evidence_citations_for_response(
+            experience, tag_prefix="ex", tier="experience"
+        ),
+        "disclaimer": interface_disclaimer(lang),
     }

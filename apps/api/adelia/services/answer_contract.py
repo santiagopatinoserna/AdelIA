@@ -617,3 +617,84 @@ def interface_disclaimer(locale: str) -> str:
     checked against one source instead of drifting apart.
     """
     return contract_for(locale).disclaimer
+
+
+# ---------------------------------------------------------------------------
+# No evidence, but other mothers have something to say (AGENT_GRAPH, decision 3)
+#
+# When the clinical corpus has nothing and the experience tier has a match,
+# the answer is one fixed sentence (code, not model) and one section, "Lo que
+# cuentan otras madres", whose bullets the model writes under the rule below
+# and nothing else. The rule is narrower than the plan's: there is no
+# guideline in the prompt to plan on, so there is no plan, no doctor section
+# and no [ev_N]; the code discards any output that strays (routers/demo).
+# ---------------------------------------------------------------------------
+
+#: User-facing, returned verbatim by the code, in the parent's language. No
+#: em dashes, per the repo's typography rule.
+_EXPERIENCE_ONLY_OPENING: dict[str, str] = {
+    "es": "No he encontrado guías ni estudios sobre esto. Otras madres cuentan:",
+    "en": "I found no guidelines or studies on this. Other mothers say:",
+    "fr": "Je n’ai trouvé ni recommandation ni étude sur ce sujet. D’autres mères racontent :",
+}
+
+_EXPERIENCE_ONLY_RULE: dict[str, str] = {
+    "es": (
+        "El contexto no trae ninguna guía ni estudio: solo fragmentos [ex_N] de lo que "
+        "cuentan otros padres en blogs y foros públicos. Escribe únicamente un apartado, "
+        f"\"## {_H['es']['mothers']}\", con 1 a 3 viñetas; cada viñeta resume una "
+        "experiencia concreta de una frase y cita su [ex_N]. Es experiencia, no evidencia: "
+        "nunca una dosis, nunca un medicamento, nunca interpretes un síntoma, nunca una "
+        "señal de alarma, nunca una urgencia, nunca un consejo que no esté en un fragmento "
+        "[ex_N]. Ningún otro apartado, ninguna frase antes ni después, ninguna cita que no "
+        "sea [ex_N]."
+    ),
+    "en": (
+        "The context carries no guideline and no study: only [ex_N] fragments of what "
+        "other parents report in public blogs and forums. Write exactly one section, "
+        f"\"## {_H['en']['mothers']}\", with 1 to 3 bullets; each bullet sums up one "
+        "concrete experience in one sentence and cites its [ex_N]. It is experience, not "
+        "evidence: never a dose, never a medicine, never interpret a symptom, never a "
+        "warning sign, never an urgency, never advice that is not in an [ex_N] fragment. "
+        "No other section, no sentence before or after, no citation other than [ex_N]."
+    ),
+    "fr": (
+        "Le contexte n’apporte ni recommandation ni étude : seulement des fragments [ex_N] "
+        "de ce que racontent d’autres parents dans des blogs et forums publics. Écris une "
+        f"seule rubrique, \"## {_H['fr']['mothers']}\", de 1 à 3 puces ; chaque puce résume "
+        "une expérience concrète en une phrase et cite son [ex_N]. C’est de l’expérience, "
+        "pas une preuve : jamais de dose, jamais de médicament, n’interprète jamais un "
+        "symptôme, jamais de signe d’alerte, jamais d’urgence, jamais de conseil absent "
+        "des fragments [ex_N]. Aucune autre rubrique, aucune phrase avant ni après, aucune "
+        "citation autre que [ex_N]."
+    ),
+}
+
+_EXPERIENCE_ONLY_LANGUAGE: dict[str, str] = {
+    "es": "Responde en español.",
+    "en": "Answer in English.",
+    "fr": "Réponds en français.",
+}
+
+
+def experience_only_opening(locale: str) -> str:
+    """The fixed first sentence of an experience-only answer, in the parent's language."""
+    return _EXPERIENCE_ONLY_OPENING.get(locale, _EXPERIENCE_ONLY_OPENING[DEFAULT_LOCALE])
+
+
+def experience_only_contract(locale: str) -> str:
+    """System prompt for the bullets of an experience-only answer.
+
+    Deliberately NOT composed from `answer_contract`: that one orders a plan
+    with a doctor section and a refusal sentence, neither of which belongs
+    here. The code has already decided there is no evidence; the model's only
+    job is to sum up the [ex_N] fragments, and the code checks the shape.
+    """
+    lang = locale if locale in _EXPERIENCE_ONLY_RULE else DEFAULT_LOCALE
+    return (
+        "Eres el asistente de AdelIA. En esta respuesta no hay evidencia clínica y no "
+        "debes aportarla desde tu conocimiento.\n\n"
+        f"{_EXPERIENCE_ONLY_LANGUAGE[lang]} {_EXPERIENCE_ONLY_RULE[lang]}\n\n"
+        "No escribas ningún descargo de responsabilidad ni \"consulta con tu médico\": "
+        "la interfaz ya lo muestra bajo cada respuesta."
+    )
