@@ -46,14 +46,30 @@ export function AgentCanvas({ locale, userId }: { locale: string; userId: string
   const [busy, setBusy] = useState(false);
   const abortRef = useRef<AbortController | null>(null);
   const epochRef = useRef(0);
+  // Cards a turn delivered (a clarify question, a record to confirm) must
+  // survive a refresh of the dashboard suggestions. The refresh used to
+  // REPLACE the list, so a suggestions request that finished after the turn
+  // wiped the card she had to answer.
+  const turnCardIds = useRef(new Set<string>());
+  const withSuggestions = (suggested: AgentCard[]) => (prev: AgentCard[]) => {
+    const kept = prev.filter((c) => turnCardIds.current.has(c.id));
+    return [...kept, ...suggested.filter((c) => !turnCardIds.current.has(c.id))];
+  };
 
   useEffect(() => {
     let alive = true;
-    getSuggestions(activeId, locale).then((c) => { if (alive) setCards(c); }).catch(() => {});
+    getSuggestions(activeId, locale).then((c) => { if (alive) setCards(withSuggestions(c)); }).catch(() => {});
     return () => { alive = false; };
   }, [activeId, locale]);
 
-  async function drive(body: { message?: string; card_action?: object }) {
+  // `display` is what her bubble shows when it differs from what the API
+  // gets: a clarify press sends her question again with the value, and the
+  // transcript shows the button she pressed.
+  async function drive(input: {
+    message?: string; card_action?: object; display?: string;
+    clarification?: { field: string; value: string };
+  }) {
+    const { display, ...body } = input;
     const epoch = ++epochRef.current;
     const stale = () => epochRef.current !== epoch;
     abortRef.current?.abort();
@@ -72,7 +88,7 @@ export function AgentCanvas({ locale, userId }: { locale: string; userId: string
     if (body.message)
       setMessages((p) => [
         ...p,
-        { role: "user", content: body.message!, citations: [], evidence_citations: [] },
+        { role: "user", content: display ?? body.message!, citations: [], evidence_citations: [] },
         { role: "assistant", content: "", citations: [], evidence_citations: [] },
       ]);
     try {
@@ -85,7 +101,8 @@ export function AgentCanvas({ locale, userId }: { locale: string; userId: string
           setMessages((p) => { const n = [...p]; const last = n[n.length - 1];
             if (last?.role === "assistant") n[n.length - 1] = { ...last, content: last.content + ev.content }; return n; });
         } else if (ev.type === "card") {
-          setCards((p) => [ev.card, ...p]);
+          turnCardIds.current.add(ev.card.id);
+          setCards((p) => [ev.card, ...p.filter((c) => c.id !== ev.card.id)]);
         } else if (ev.type === "final") {
           setMessages((p) => { const n = [...p]; const last = n[n.length - 1];
             if (last?.role === "assistant")
@@ -112,19 +129,33 @@ export function AgentCanvas({ locale, userId }: { locale: string; userId: string
   }
 
   const onCardAction: CardActionHandler = (intent, card, value) => {
+    turnCardIds.current.delete(card.id);
     if (intent === "cancel") { setCards((p) => p.filter((c) => c.id !== card.id)); return; }
     if (intent === "confirm") {
       const pl = card.payload as { tool_name: string; tool_args: object };
       setCards((p) => p.filter((c) => c.id !== card.id));
       void drive({ card_action: { intent: "confirm", tool_name: pl.tool_name, tool_args: pl.tool_args } });
-      getSuggestions(activeId, locale).then(setCards).catch(() => {});
+      getSuggestions(activeId, locale).then((c) => setCards(withSuggestions(c))).catch(() => {});
+      return;
+    }
+    if (intent === "clarify") {
+      const pl = card.payload as {
+        field: string; message: string;
+        options: { value: string; label: string }[]; skip: { value: string; label: string };
+      };
+      const chosen = [...pl.options, pl.skip].find((o) => o.value === value);
+      setCards((p) => p.filter((c) => c.id !== card.id));
+      void drive({
+        message: pl.message, display: chosen?.label ?? value,
+        clarification: { field: pl.field, value: value ?? pl.skip.value },
+      });
       return;
     }
     if (intent === "answer") {
       const pl = card.payload as { field: string };
       setCards((p) => p.filter((c) => c.id !== card.id));
       void drive({ card_action: { intent: "confirm", tool_name: "completar_perfil", tool_args: { field: pl.field, value } } });
-      getSuggestions(activeId, locale).then(setCards).catch(() => {});
+      getSuggestions(activeId, locale).then((c) => setCards(withSuggestions(c))).catch(() => {});
       return;
     }
     // navigation intents from action cards — no dead LLM messages

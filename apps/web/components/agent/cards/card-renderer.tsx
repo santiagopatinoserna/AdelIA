@@ -8,6 +8,7 @@ import { InsightCard } from "./insight-card";
 import { BriefingCard } from "./briefing-card";
 import { DocumentCard } from "./document-card";
 import { ProfileCard } from "./profile-card";
+import { ClarifyCard } from "./clarify-card";
 
 export type CardActionHandler = (intent: string, card: AgentCard, value?: string) => void;
 
@@ -22,6 +23,7 @@ export function CardRenderer({ card, onAction }: { card: AgentCard; onAction: Ca
     case "briefing": return <BriefingCard {...common} />;
     case "document": return <DocumentCard {...common} />;
     case "profile": return <ProfileCard {...common} />;
+    case "clarify": return <ClarifyCard {...common} />;
     default: return null;
   }
 }

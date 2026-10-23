@@ -6,6 +6,7 @@ export async function* streamAgent(
     profile_id?: string | null;
     locale?: string;
     card_action?: object;
+    clarification?: { field: string; value: string };
     history?: { role: string; content: string }[];
   },
   signal?: AbortSignal,

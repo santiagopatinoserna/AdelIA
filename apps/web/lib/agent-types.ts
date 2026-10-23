@@ -3,7 +3,9 @@
 import type { Citation, EvidenceCitation } from "@/lib/chat-types";
 
 export type AgentCard = {
-  type: "action" | "confirm" | "question" | "lab" | "briefing" | "document" | "profile" | "insight";
+  // "clarify" (AGENT_GRAPH step 3): one question, two or three values as
+  // buttons and a way out; the payload carries her message to send back.
+  type: "action" | "confirm" | "question" | "lab" | "briefing" | "document" | "profile" | "insight" | "clarify";
   id: string;
   payload: Record<string, unknown>;
   actions: { label: string; intent: string }[];
