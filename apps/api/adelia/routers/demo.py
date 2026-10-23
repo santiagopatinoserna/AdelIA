@@ -25,6 +25,7 @@ refused in code, and the same system prompt governs the wording.
 from __future__ import annotations
 
 import logging
+from typing import Literal
 
 from fastapi import APIRouter, HTTPException, Query, status
 from pydantic import BaseModel, Field
@@ -52,9 +53,24 @@ DEMO_DISABLED_DETAIL = "Demo disabled"
 DEMO_BUDGET_DETAIL = "Demo budget exhausted for today"
 
 
+class Clarification(BaseModel):
+    """Her answer to last turn's clarify question (AGENT_GRAPH step 3).
+
+    Only the two facts the graph knows how to ask; the value is checked
+    against the buttons the API wrote (answer_contract.clarification_sentence)
+    and anything else is ignored rather than passed to the guard or the model.
+    """
+
+    field: Literal["age", "temperature"]
+    value: str = Field(min_length=1, max_length=16)
+
+
 class DemoQuestion(BaseModel):
     question: str = Field(min_length=3)
     locale: str = DEFAULT_LOCALE
+    #: Present on the second turn of a clarify: `question` is the first
+    #: turn's question again, and this is the button she pressed.
+    clarification: Clarification | None = None
 
 
 def _require_demo() -> None:
@@ -85,12 +101,15 @@ async def ask_demo(payload: DemoQuestion) -> dict:
                             tier (what other mothers say), each carrying its
                             `tier` so the page labels and orders them
         kind                "answer" | "red_flag" | "no_evidence" |
-                            "evidence_only" | "experience_only" - what the
+                            "evidence_only" | "experience_only" | "clarify" - what the
                             code decided, so the page can style a referral
                             differently from an answer
         intent              what the route node decided ("question" gets the
-                            short answer, "plan" the action plan); absent on
-                            a red flag, which is never routed
+                            short answer, "plan" the action plan, "clarify"
+                            one question); null on a red flag, never routed
+        clarify             only with kind "clarify": {field, question,
+                            options: [{value, label}], skip: {value, label}};
+                            the page sends the value back as `clarification`
         disclaimer          the fixed clinical line, in the visitor's language
 
     The graph lends nothing of the demo's to a real account and vice versa:
@@ -151,6 +170,9 @@ async def ask_demo(payload: DemoQuestion) -> dict:
                 "message": question,
                 "account": False,
                 "facts": ProfileFacts(None, None, None, None, demo_profile(locale)["age_months"]),
+                "clarification": (
+                    payload.clarification.model_dump() if payload.clarification else None
+                ),
             },
             deps,
         )
@@ -158,13 +180,16 @@ async def ask_demo(payload: DemoQuestion) -> dict:
         raise HTTPException(
             status_code=status.HTTP_503_SERVICE_UNAVAILABLE, detail="Demo unavailable"
         )
-    return {
+    response = {
         "kind": out["kind"],
         "intent": out.get("intent") if out["kind"] != "red_flag" else None,
         "answer": out.get("answer", ""),
         "evidence_citations": out.get("evidence_citations", []),
         "disclaimer": out["disclaimer"],
     }
+    if out["kind"] == "clarify":
+        response["clarify"] = out["clarify"]
+    return response
 
 
 async def _admit() -> None:

@@ -122,3 +122,60 @@ async def test_an_embedding_failure_is_still_a_503(client):
     with patch("adelia.routers.demo.embed_texts", side_effect=RuntimeError("no key")):
         resp = await client.post("/demo/ask", json={"question": "¿A qué edad gatean?"})
     assert resp.status_code == 503
+
+
+# --- build step 3: clarify with buttons ------------------------------------------
+
+
+@pg_only
+async def test_a_fever_without_a_reading_gets_one_question_with_buttons(client):
+    with patch("adelia.routers.demo.embed_texts", side_effect=AssertionError("no retrieval")), \
+         patch("adelia.routers.demo.generate_answer", side_effect=AssertionError("no model")):
+        resp = await client.post(
+            "/demo/ask", json={"question": "Tiene fiebre, ¿qué hago?", "locale": "es"}
+        )
+    assert resp.status_code == 200, resp.text
+    body = resp.json()
+    assert body["kind"] == "clarify" and body["intent"] == "clarify"
+    assert body["clarify"]["field"] == "temperature"
+    assert [o["value"] for o in body["clarify"]["options"]] == ["37.5-37.9", "38-38.9", "39+"]
+    assert body["clarify"]["skip"]["value"] == "unknown"
+    assert body["answer"] == body["clarify"]["question"]
+    assert body["evidence_citations"] == [] and body["disclaimer"]
+
+
+@pg_only
+async def test_the_second_turn_answers_even_without_the_reading(client):
+    seen: dict = {}
+
+    async def _retrieve(session, **kwargs):
+        return [_match()]
+
+    async def _no_experience(session, **kwargs):
+        return []
+
+    async def _generate(system_prompt, user_message, **kwargs):
+        seen["user"] = user_message
+        return "Plan [ev_1]."
+
+    with patch("adelia.routers.demo.embed_texts", return_value=[[0.0] * 1024]), patch(
+        "adelia.routers.demo.retrieve_evidence", _retrieve
+    ), patch("adelia.routers.demo.retrieve_experience", _no_experience), patch(
+        "adelia.routers.demo.generate_answer", _generate
+    ):
+        resp = await client.post("/demo/ask", json={
+            "question": "Tiene fiebre, ¿qué hago?", "locale": "es",
+            "clarification": {"field": "temperature", "value": "unknown"},
+        })
+    assert resp.status_code == 200, resp.text
+    assert resp.json()["kind"] == "answer"
+    assert "clarify" not in resp.json()
+    assert "no la he medido" in seen["user"]
+
+
+async def test_a_clarification_for_a_field_we_never_asked_is_refused(client):
+    resp = await client.post("/demo/ask", json={
+        "question": "Tiene fiebre, ¿qué hago?",
+        "clarification": {"field": "weight", "value": "7"},
+    })
+    assert resp.status_code == 422

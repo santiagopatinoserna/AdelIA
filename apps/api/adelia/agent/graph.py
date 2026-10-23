@@ -1,7 +1,11 @@
 """The agent graph (docs/specs/AGENT_GRAPH.md), build step 2: the demo.
 
-    guard -> admit -> route -> retrieve -> decide -> plan | answer | experience_only
-                                                        -> compose
+    absorb -> guard -> admit -> route -> clarify
+                                        | retrieve -> decide -> plan | answer | experience_only
+                                     -> compose
+
+`absorb` folds her answer to a clarify question into the turn (build step
+3); `clarify` asks one question with buttons, never twice in a row.
 
 Until this module every question got the four-section action plan, even
 "¿a qué edad gatean?", and the route node (agent/route.py) was only logged.
@@ -27,6 +31,7 @@ path without a key or a database.
 """
 from __future__ import annotations
 
+import dataclasses
 import logging
 import os
 import re
@@ -54,11 +59,15 @@ from adelia.enrichment.evidence_retrieval import (  # noqa: E402
 )
 from adelia.enrichment.profile_service import ProfileFacts  # noqa: E402
 from adelia.services.answer_contract import (  # noqa: E402
+    CLARIFY_AGE_FLOOR,
     PLAN_HEADINGS,
     chat_system_prompt,
+    clarification_sentence,
+    clarify_question,
     experience_only_contract,
     experience_only_opening,
     interface_disclaimer,
+    missing_fact_note,
     no_evidence_reply,
     red_flag_reply,
 )
@@ -80,6 +89,9 @@ class AgentState(TypedDict, total=False):
     message: str
     account: bool
     facts: ProfileFacts | None
+    #: Her answer to last turn's clarify question: {"field", "value"}.
+    clarification: dict | None
+    clarified: bool
     # Decisions
     flag: Any
     intent: str
@@ -95,6 +107,7 @@ class AgentState(TypedDict, total=False):
     answer: str
     evidence_citations: list[dict]
     disclaimer: str
+    clarify: dict
 
 
 Generate = Callable[[str, str], Awaitable[str]]
@@ -129,6 +142,40 @@ def _lang(state: AgentState) -> str:
 def _age(state: AgentState) -> int | None:
     facts = state.get("facts")
     return facts.age_months if facts is not None else None
+
+
+# --- absorb, guard, admit, route --------------------------------------------
+
+
+async def absorb(state: AgentState) -> dict:
+    """Fold her answer to the clarify question into this turn.
+
+    The line goes INTO the message, so the guard sees it ("Temperatura: 39
+    °C o más") and the model reads it next to her question. An age band
+    fills a missing age with the band's youngest month (CLARIFY_AGE_FLOOR),
+    so the answer can only make the guard stricter; a known age is never
+    overwritten. Any answer, even one we cannot read, spends the turn's one
+    question: `clarified` stops a second.
+    """
+    answer = state.get("clarification")
+    if not answer:
+        return {"clarified": False}
+    field_name, value = str(answer.get("field", "")), str(answer.get("value", ""))
+    locale = state.get("locale") or DEFAULT_LOCALE
+    update: dict = {"clarified": True}
+    sentence = clarification_sentence(field_name, value, locale)
+    if sentence is None:
+        logger.info("graph: unreadable clarification ignored (field=%s)", field_name)
+        return update
+    update["message"] = f"{state['message']}\n{sentence}"
+    facts = state.get("facts")
+    if field_name == "age" and value in CLARIFY_AGE_FLOOR and (facts is None or facts.age_months is None):
+        floor = CLARIFY_AGE_FLOOR[value]
+        update["facts"] = (
+            dataclasses.replace(facts, age_months=floor) if facts is not None
+            else ProfileFacts(None, None, None, None, floor)
+        )
+    return update
 
 
 # --- guard, admit, route ----------------------------------------------------
@@ -168,11 +215,36 @@ async def route_node(state: AgentState, runtime: Runtime[GraphDeps]) -> dict:
         has_account=bool(state.get("account")),
         facts=state.get("facts"),
     )
+    intent, missing = decision.intent, list(decision.missing)
+    if intent == "clarify":
+        # One question, only one we can ask with buttons, and never twice in
+        # a row (principle 2): otherwise answer with what there is.
+        locale = state.get("locale") or DEFAULT_LOCALE
+        askable = [f for f in missing if clarify_question(f, locale) is not None]
+        if state.get("clarified") or not askable:
+            intent = "plan"
+        else:
+            missing = askable[:1]
     return {
-        "intent": decision.intent,
+        "intent": intent,
         "intent_confidence": decision.confidence,
         "intent_via": decision.via,
-        "missing": list(decision.missing),
+        "missing": missing,
+    }
+
+
+def _after_route(state: AgentState) -> str:
+    return "clarify" if state.get("intent") == "clarify" else "retrieve"
+
+
+async def clarify(state: AgentState) -> dict:
+    """One concrete question of one line, with two or three buttons."""
+    field_name = state["missing"][0]
+    question = clarify_question(field_name, state.get("locale") or DEFAULT_LOCALE)
+    return {
+        "kind": "clarify",
+        "answer": question["question"],
+        "clarify": {"field": field_name, **question},
     }
 
 
@@ -239,6 +311,10 @@ def _user_message(state: AgentState, deps: GraphDeps, experience: list) -> str:
     blocks.append(format_evidence_for_prompt(state["evidence"]))
     if experience:
         blocks.append(format_experience_for_prompt(experience))
+    if state.get("clarified") and state.get("missing"):
+        note = missing_fact_note(state["missing"])
+        if note:
+            blocks.append(note)
     return "\n\n".join(blocks)
 
 
@@ -350,7 +426,7 @@ async def compose(state: AgentState) -> dict:
     kind = state["kind"]
     if kind == "red_flag":
         citations = list(state.get("evidence_citations") or [])
-    elif kind == "no_evidence":
+    elif kind in ("no_evidence", "clarify"):
         citations = []
     else:
         citations = []
@@ -369,9 +445,11 @@ async def compose(state: AgentState) -> dict:
 
 def build_graph():
     g = StateGraph(AgentState, context_schema=GraphDeps)
+    g.add_node("absorb", absorb)
     g.add_node("guard", guard)
     g.add_node("admit", admit)
     g.add_node("route", route_node)
+    g.add_node("clarify", clarify)
     g.add_node("retrieve", retrieve)
     g.add_node("decide", decide)
     g.add_node("plan", plan)
@@ -379,10 +457,12 @@ def build_graph():
     g.add_node("experience_only", experience_only)
     g.add_node("compose", compose)
 
-    g.add_edge(START, "guard")
+    g.add_edge(START, "absorb")
+    g.add_edge("absorb", "guard")
     g.add_conditional_edges("guard", _after_guard, ["compose", "admit"])
     g.add_edge("admit", "route")
-    g.add_edge("route", "retrieve")
+    g.add_conditional_edges("route", _after_route, ["clarify", "retrieve"])
+    g.add_edge("clarify", "compose")
     g.add_edge("retrieve", "decide")
     g.add_conditional_edges("decide", _after_decide, ["plan", "answer", "experience_only"])
     for node in ("plan", "answer", "experience_only"):
