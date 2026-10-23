@@ -10,7 +10,7 @@ from sse_starlette.sse import EventSourceResponse
 from adelia import ratelimit
 from adelia.auth import get_current_user_id, require_active_subscription
 from adelia.agent.events import AgentEvent
-from adelia.agent.orchestrator import run_agent_turn
+from adelia.agent.orchestrator import run_turn
 from adelia.agent.suggestions import build_suggestions
 
 router = APIRouter(prefix="/agent", tags=["agent"])
@@ -61,8 +61,19 @@ class AgentMessage(BaseModel):
     def _truncate(cls, v: str) -> str:
         return v[:HISTORY_MAX_CHARS_PER_MESSAGE]
 
+class Clarification(BaseModel):
+    """Her answer to a clarify card (AGENT_GRAPH step 3): the button's value.
+    Checked against the buttons the API wrote (answer_contract)."""
+
+    field: Literal["age", "temperature"]
+    value: str = Field(min_length=1, max_length=16)
+
+
 class AgentTurnRequest(BaseModel):
     message: str = Field(default="", max_length=4000)
+    #: Present when she pressed a clarify button: `message` is the question
+    #: again, and this is the value she chose.
+    clarification: Clarification | None = None
     profile_id: uuid.UUID | None = None
     locale: str = "es"
     card_action: CardAction | None = None
@@ -127,9 +138,11 @@ async def post_turn(payload: AgentTurnRequest,
 
     async def event_publisher():
         yield {"event": "start", "data": json.dumps({})}
-        async for event in run_agent_turn(user_id=user_id, profile_id=payload.profile_id,
-                                          message=payload.message, card_action=card_action,
-                                          history=history, locale=payload.locale):
+        clarification = payload.clarification.model_dump() if payload.clarification else None
+        async for event in run_turn(user_id=user_id, profile_id=payload.profile_id,
+                                    message=payload.message, card_action=card_action,
+                                    history=history, locale=payload.locale,
+                                    clarification=clarification):
             yield _map_event(event)
 
     return EventSourceResponse(event_publisher())

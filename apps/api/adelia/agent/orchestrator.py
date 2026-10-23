@@ -4,19 +4,21 @@ from uuid import UUID, uuid4
 
 from adelia.agent.events import AgentEvent
 from adelia.agent import cards
+from adelia.agent.graph import GraphDeps, Retrieved, WriteOutcome, stream_graph
+from adelia.agent.route import log_route
 from adelia.agent.tools import TOOLS, is_write_tool
 from adelia.agent.executor import execute_tool
 from adelia.agent.provider import get_provider
-from adelia.clinical import red_flags
 from adelia.enrichment.profile_service import load_profile_facts
-from adelia.services.answer_contract import agent_system_prompt, red_flag_reply
+from adelia.services.answer_contract import agent_system_prompt
 from adelia.services.citations import prune_and_renumber
+from adelia.services.scope import Scope
 
-MAX_STEPS = 5
+MAX_STEPS = 3
 
 # Bounds for a history that arrives from a browser. routers/agent.py trims to
 # these same numbers at the door and rejects only a `system` role; this is the
-# second line of defence, because run_agent_turn is also called directly
+# second line of defence, because run_turn is also called directly
 # (tests, future surfaces) and because a `system` turn smuggled into the
 # transcript would override the guardrails below. Now genuinely the pair
 # routers/chat.py:30-31 uses, which the comment always claimed.
@@ -58,101 +60,184 @@ def _system_prompt(locale: str) -> str:
     return agent_system_prompt(locale)
 
 
-async def run_agent_turn(*, user_id: UUID, profile_id: UUID | None, message: str,
-                         history: list[dict] | None = None, card_action: dict | None = None,
-                         locale: str = "es") -> AsyncIterator[AgentEvent]:
-    # The provider is resolved LATE, right before the model loop. It used to
-    # be the first statement of the turn, which meant a missing or broken LLM
-    # key killed the whole stream, red-flag referral included: the one answer
-    # that needs no model was the one a missing model prevented. Verified on
-    # 2026-08-31 against a stack with no key, where "des taches qui ne
-    # s'effacent pas" returned an empty stream instead of the referral.
-    messages: list[dict] = sanitize_history(history)
+async def run_turn(*, user_id: UUID, profile_id: UUID | None, message: str,
+                   history: list[dict] | None = None, card_action: dict | None = None,
+                   locale: str = "es",
+                   clarification: dict | None = None) -> AsyncIterator[AgentEvent]:
+    """One /dashboard turn through the agent graph (AGENT_GRAPH steps 4-5).
+
+    Replaces `run_agent_turn`, the model-and-tools loop that answered every
+    turn here. The graph decides first: a red flag is the referral (no model,
+    no key needed), a plan or a fact question takes the chat's contract path
+    over her record and the evidence, a diary line becomes a confirmation
+    card, a fever without a reading gets one question with buttons, and her
+    own data, or anything the router cannot place, goes to the tool loop
+    below (`_track`), now bounded to MAX_STEPS. A confirmed card goes
+    straight to its write.
+    """
+    from adelia.services import chat_orchestrator
+
+    messages = sanitize_history(history)
     # Who the turn is about, once. Every clinical tool needs the age and the
     # sex, and none of them should open a session to ask (audit 3.5, 3.9).
     facts = await load_profile_facts(user_id=user_id, profile_id=profile_id)
+    pid = facts.profile_id or profile_id
+    scope = Scope(user_id=user_id, profile_id=pid)
+    text_history = [m for m in messages if isinstance(m.get("content"), str)]
 
-    # Red flags before the model, exactly as in the chat (audit 3.3). This is
-    # the screen a parent lands on, so it is the screen where "my 2-month-old
-    # is at 38.2, do I give her paracetamol?" actually gets typed.
-    if message and not card_action:
-        flag = red_flags.detect(message, locale=locale, age_months=facts.age_months)
-        if flag is not None:
-            yield AgentEvent(type="token", content=red_flag_reply(flag.code, locale))
-            yield AgentEvent(
-                type="final",
-                evidence_citations=[red_flags.citation_for(flag)],
-            )
-            return
+    async def _route(text: str, **kwargs):
+        return await log_route("agent", text, **kwargs)
 
-    # A confirm action arriving from the UI = execute the previously-proposed write tool now.
-    if card_action and card_action.get("intent") == "confirm":
-        name = card_action["tool_name"]
-        args = card_action.get("tool_args", {})
-        try:
-            outcome = await _run_write_tool(name, args, user_id=user_id, profile_id=profile_id, locale=locale)
-            if outcome.card:
-                yield AgentEvent(type="card", card=outcome.card)
-            yield AgentEvent(type="token", content=outcome.text)
-            yield AgentEvent(type="final")
-        except Exception as exc:  # noqa: BLE001
-            yield AgentEvent(type="error", content=str(exc))
-        return
+    async def _retrieve(state) -> Retrieved:
+        return await chat_orchestrator.retrieve_for_account(
+            scope, question=state["message"], history=text_history, locale=locale
+        )
 
-    messages.append({"role": "user", "content": message})
+    def _stream(system_prompt: str, user_message: str):
+        return chat_orchestrator._guarded_stream(system_prompt, user_message,
+                                                 history=text_history)
+
+    async def _write_tool(name: str, args: dict) -> WriteOutcome:
+        outcome = await _run_write_tool(name, args, user_id=user_id, profile_id=profile_id,
+                                        locale=locale)
+        return WriteOutcome(text=outcome.text, card=outcome.card)
+
+    def _track_for(state):
+        return _track(state, messages=messages, user_id=user_id, profile_id=profile_id,
+                      locale=locale, facts=facts)
+
+    deps = GraphDeps(
+        route=_route, retrieve=_retrieve, stream=_stream,
+        can_ask=True, can_write=True, record_store=_DbRecordStore(user_id, pid),
+        write_tool=_write_tool, track=_track_for,
+    )
+    state = {
+        "surface": "agent", "locale": locale, "message": message or "", "account": True,
+        "facts": facts, "history": messages, "card_action": card_action,
+        "clarification": clarification,
+    }
+    try:
+        async for event in stream_graph(state, deps):
+            kind = event["type"]
+            if kind == "token":
+                yield AgentEvent(type="token", content=event["content"])
+            elif kind == "card":
+                yield AgentEvent(type="card", card=event["card"])
+            elif kind == "tool_call":
+                yield AgentEvent(type="tool_call", tool_name=event["tool_name"])
+            elif kind == "final":
+                final = event["state"]
+                yield AgentEvent(
+                    type="final",
+                    citations=[_as_dict(c) for c in final.get("citations") or []],
+                    evidence_citations=list(final.get("evidence_citations") or []),
+                )
+    except Exception as exc:  # noqa: BLE001
+        yield AgentEvent(type="error", content=str(exc))
+
+
+def _as_dict(citation) -> dict:
+    return citation.model_dump(mode="json") if hasattr(citation, "model_dump") else citation
+
+
+async def _track(state, *, messages: list[dict], user_id: UUID, profile_id: UUID | None,
+                 locale: str, facts) -> AsyncIterator[dict]:
+    """The graph's `track` node for the agent: the model with the tools, MAX_STEPS at most.
+
+    Her own data (percentiles, vaccines due, her reports and lab results),
+    briefings and profile fixes, and whatever the router could not place.
+    The provider is resolved LATE, here and not when the turn starts: a
+    missing or broken LLM key used to kill the whole stream, red-flag
+    referral included (2026-08-31), and the guard has already run by now.
+    Write tools are never run here: they become a confirmation card and the
+    turn pauses until she confirms (principle 3).
+    """
+    provider = get_provider()
+    convo = list(messages) + [{"role": "user", "content": state["message"]}]
     # Citations accumulated across every tool call of the turn, so the final
     # SSE frame carries one contiguous numbering (services/citations).
     turn_citations: list[dict] = []
     turn_evidence: list[dict] = []
-    try:
-        provider = get_provider()
-        for _ in range(MAX_STEPS):
-            assistant_text = ""
-            tool_calls: list[dict] = []
-            async for ev in provider.stream_step(system=_system_prompt(locale), messages=messages, tools=TOOLS):
-                if ev["type"] == "token":
-                    assistant_text += ev["text"]
-                    yield AgentEvent(type="token", content=ev["text"])
-                elif ev["type"] == "tool_call":
-                    tool_calls.append(ev)
-                elif ev["type"] == "stop":
-                    pass
-            if not tool_calls:
-                yield AgentEvent(type="final", citations=turn_citations,
-                                 evidence_citations=turn_evidence)
+    answer: list[str] = []
+
+    def _result() -> dict:
+        return {"type": "result", "answer": "".join(answer), "citations": turn_citations,
+                "evidence_citations": turn_evidence}
+
+    for _ in range(MAX_STEPS):
+        assistant_text = ""
+        tool_calls: list[dict] = []
+        async for ev in provider.stream_step(system=_system_prompt(locale), messages=convo,
+                                             tools=TOOLS):
+            if ev["type"] == "token":
+                assistant_text += ev["text"]
+                yield {"type": "token", "content": ev["text"]}
+            elif ev["type"] == "tool_call":
+                tool_calls.append(ev)
+        answer.append(assistant_text)
+        if not tool_calls:
+            yield _result()
+            return
+        # record the assistant turn (text + tool_use) for the next model call
+        convo.append({"role": "assistant", "content": _assistant_blocks(assistant_text, tool_calls)})
+        tool_results = []
+        for tc in tool_calls:
+            yield {"type": "tool_call", "tool_name": tc["name"]}
+            if is_write_tool(tc["name"]):
+                confirm = cards.card_confirm(uuid4().hex[:12], _confirm_title(tc["name"], locale),
+                                             tc["name"], tc["args"])
+                yield {"type": "card", "card": confirm}
+                yield _result()  # pause: wait for the user's confirm action
                 return
-            # record the assistant turn (text + tool_use) for the next model call
-            messages.append({"role": "assistant", "content": _assistant_blocks(assistant_text, tool_calls)})
-            tool_results = []
-            for tc in tool_calls:
-                yield AgentEvent(type="tool_call", tool_name=tc["name"])
-                if is_write_tool(tc["name"]):
-                    confirm = cards.card_confirm(uuid4().hex[:12], _confirm_title(tc["name"], locale),
-                                                 tc["name"], tc["args"])
-                    yield AgentEvent(type="card", card=confirm)
-                    yield AgentEvent(type="final")  # pause: wait for the user's confirm action
-                    return
-                outcome = await execute_tool(tc["name"], tc["args"], user_id=user_id,
-                                             profile_id=profile_id, locale=locale,
-                                             facts=facts)
-                if outcome.card:
-                    yield AgentEvent(type="card", card=outcome.card)
-                # Drop the citations the tool's answer never referenced and
-                # continue the turn's numbering, so the markers the model
-                # copies into its reply point at the cards the parent sees.
-                text, kept_citations, kept_evidence = prune_and_renumber(
-                    outcome.text, outcome.citations, outcome.evidence_citations,
-                    citation_offset=len(turn_citations),
-                    evidence_offset=len(turn_evidence),
-                )
-                turn_citations.extend(kept_citations)
-                turn_evidence.extend(kept_evidence)
-                tool_results.append({"type": "tool_result", "tool_use_id": tc["id"], "content": text})
-            messages.append({"role": "user", "content": tool_results})
-        yield AgentEvent(type="final", citations=turn_citations,
-                         evidence_citations=turn_evidence)
-    except Exception as exc:  # noqa: BLE001
-        yield AgentEvent(type="error", content=str(exc))
+            outcome = await execute_tool(tc["name"], tc["args"], user_id=user_id,
+                                         profile_id=profile_id, locale=locale, facts=facts)
+            if outcome.card:
+                yield {"type": "card", "card": outcome.card}
+            # Drop the citations the tool's answer never referenced and
+            # continue the turn's numbering, so the markers the model
+            # copies into its reply point at the cards the parent sees.
+            text, kept_citations, kept_evidence = prune_and_renumber(
+                outcome.text, outcome.citations, outcome.evidence_citations,
+                citation_offset=len(turn_citations),
+                evidence_offset=len(turn_evidence),
+            )
+            turn_citations.extend(kept_citations)
+            turn_evidence.extend(kept_evidence)
+            tool_results.append({"type": "tool_result", "tool_use_id": tc["id"], "content": text})
+        convo.append({"role": "user", "content": tool_results})
+    yield _result()
+
+
+class _DbRecordStore:
+    """Observations for one child of one account (agent/record, migration 0023)."""
+
+    def __init__(self, user_id: UUID, profile_id: UUID | None):
+        self.user_id, self.profile_id = user_id, profile_id
+
+    async def save(self, draft) -> None:
+        from adelia.db import AsyncSessionLocal
+        from adelia.services.observations import add_observation
+
+        async with AsyncSessionLocal() as session:
+            await add_observation(
+                session, user_id=self.user_id, profile_id=self.profile_id, kind=draft.kind,
+                value=draft.value, unit=draft.unit, text=draft.text,
+                observed_at=draft.observed_at, source="agent",
+            )
+            await session.commit()
+
+    async def previous(self, kind: str, before):
+        from adelia.agent.record import as_draft
+        from adelia.db import AsyncSessionLocal
+        from adelia.services.observations import previous_comparable
+
+        async with AsyncSessionLocal() as session:
+            row = await previous_comparable(
+                session, scope=Scope(user_id=self.user_id, profile_id=self.profile_id),
+                kind=kind, before=before,
+            )
+            return as_draft(row) if row is not None else None
+
 
 def _assistant_blocks(text: str, tool_calls: list[dict]) -> list[dict]:
     blocks: list[dict] = []

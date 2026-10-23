@@ -2,7 +2,7 @@ import pytest
 
 from unittest.mock import patch
 from uuid import uuid4
-from adelia.agent.orchestrator import run_agent_turn
+from adelia.agent.orchestrator import run_turn
 
 async def _collect(gen):
     return [e async for e in gen]
@@ -21,7 +21,7 @@ def _fake_provider(steps, seen_systems=None):
 async def test_plain_answer_streams_tokens():
     steps = [[{"type": "token", "text": "Hola"}, {"type": "stop", "stop_reason": "end_turn"}]]
     with patch("adelia.agent.orchestrator.get_provider", return_value=_fake_provider(steps)):
-        events = await _collect(run_agent_turn(user_id=uuid4(), profile_id=None, message="hi"))
+        events = await _collect(run_turn(user_id=uuid4(), profile_id=None, message="hi"))
     assert any(e.type == "token" and e.content == "Hola" for e in events)
     assert events[-1].type == "final"
 
@@ -36,7 +36,7 @@ async def test_read_tool_emits_card_then_final():
     outcome = ToolOutcome(text="Hb baja", card=cards.card_lab("l1", "Hb", 9.0, "g/dL", "low", "12-16", "Bajo"))
     with patch("adelia.agent.orchestrator.get_provider", return_value=_fake_provider(steps)), \
          patch("adelia.agent.orchestrator.execute_tool", return_value=outcome):
-        events = await _collect(run_agent_turn(user_id=uuid4(), profile_id=None, message="¿mi Hb?"))
+        events = await _collect(run_turn(user_id=uuid4(), profile_id=None, message="¿mi Hb?"))
     assert any(e.type == "card" and e.card["type"] == "lab" for e in events)
     assert events[-1].type == "final"
 
@@ -44,7 +44,7 @@ async def test_write_tool_emits_confirm_and_stops():
     steps = [[{"type": "tool_call", "id": "t1", "name": "generar_briefing",
                "args": {"specialty": "peds"}}, {"type": "stop", "stop_reason": "tool_use"}]]
     with patch("adelia.agent.orchestrator.get_provider", return_value=_fake_provider(steps)):
-        events = await _collect(run_agent_turn(user_id=uuid4(), profile_id=None, message="haz el briefing"))
+        events = await _collect(run_turn(user_id=uuid4(), profile_id=None, message="haz el briefing"))
     confirms = [e for e in events if e.type == "card" and e.card["type"] == "confirm"]
     assert confirms and confirms[0].card["payload"]["tool_name"] == "generar_briefing"
 
@@ -61,7 +61,7 @@ async def test_agent_system_prompt_carries_the_answer_contract(locale):
     steps = [[{"type": "token", "text": "Hola"}, {"type": "stop", "stop_reason": "end_turn"}]]
     with patch("adelia.agent.orchestrator.get_provider",
                return_value=_fake_provider(steps, seen)):
-        await _collect(run_agent_turn(user_id=uuid4(), profile_id=None,
+        await _collect(run_turn(user_id=uuid4(), profile_id=None,
                                       message="¿es normal?", locale=locale))
 
     assert len(seen) == 1
@@ -111,7 +111,7 @@ async def test_a_red_flag_answers_without_calling_the_model():
                          sex="F", age_months=2)
     with patch("adelia.agent.orchestrator.get_provider", _exploding_provider), \
          patch("adelia.agent.orchestrator.load_profile_facts", return_value=facts):
-        events = await _collect(run_agent_turn(
+        events = await _collect(run_turn(
             user_id=uuid4(), profile_id=None,
             message="Mi bebé tiene 38,2, ¿le doy paracetamol?"))
     text = "".join(e.content for e in events if e.type == "token")
@@ -124,12 +124,23 @@ async def test_a_red_flag_answers_without_calling_the_model():
 
 
 async def test_an_ordinary_question_still_reaches_the_model():
+    """Since the graph (AGENT_GRAPH step 5) a fact question reaches the model
+    through the chat's contract path, not the tool loop: what matters here
+    is that the guard lets it through."""
     from adelia.enrichment.profile_service import UNKNOWN_PROFILE
+    from tests.test_chat_orchestrator import _evidence_match
 
-    steps = [[{"type": "token", "text": "Claro"}, {"type": "stop", "stop_reason": "end_turn"}]]
-    with patch("adelia.agent.orchestrator.get_provider", return_value=_fake_provider(steps)), \
-         patch("adelia.agent.orchestrator.load_profile_facts", return_value=UNKNOWN_PROFILE):
-        events = await _collect(run_agent_turn(
+    async def fake_stream(*args, **kwargs):
+        yield "Claro"
+
+    with patch("adelia.agent.orchestrator.load_profile_facts", return_value=UNKNOWN_PROFILE), \
+         patch("adelia.services.chat_orchestrator.detect_temporal_intent", return_value=None), \
+         patch("adelia.services.chat_orchestrator.retrieve_relevant_chunks", return_value=[]), \
+         patch("adelia.services.chat_orchestrator.embed_texts", return_value=[[0.1] * 1024]), \
+         patch("adelia.services.chat_orchestrator._retrieve_evidence_for_query",
+               return_value=[_evidence_match()]), \
+         patch("adelia.services.chat_orchestrator._stream_llm_tokens", fake_stream):
+        events = await _collect(run_turn(
             user_id=uuid4(), profile_id=None,
             message="¿cuándo empiezo con la alimentación complementaria?"))
     assert any(e.type == "token" and e.content == "Claro" for e in events)
@@ -176,8 +187,10 @@ async def test_final_event_carries_one_citation_per_marker():
     with patch("adelia.agent.orchestrator.get_provider", return_value=P()), \
          patch("adelia.agent.orchestrator.load_profile_facts", return_value=UNKNOWN_PROFILE), \
          patch("adelia.agent.orchestrator.execute_tool", return_value=outcome):
-        events = await _collect(run_agent_turn(user_id=uuid4(), profile_id=None,
-                                               message="¿es normal que regurgite?"))
+        # Her own record goes to the tool loop (AGENT_GRAPH step 5); a fact
+        # question like "¿es normal que regurgite?" now takes the contract path.
+        events = await _collect(run_turn(user_id=uuid4(), profile_id=None,
+                                         message="¿qué ponía en el último informe del pediatra?"))
 
     final = events[-1]
     assert final.type == "final"
@@ -199,7 +212,7 @@ async def test_a_turn_with_no_tool_call_reports_no_citations():
     steps = [[{"type": "token", "text": "Hola"}, {"type": "stop", "stop_reason": "end_turn"}]]
     with patch("adelia.agent.orchestrator.get_provider", return_value=_fake_provider(steps)), \
          patch("adelia.agent.orchestrator.load_profile_facts", return_value=UNKNOWN_PROFILE):
-        events = await _collect(run_agent_turn(user_id=uuid4(), profile_id=None, message="hola"))
+        events = await _collect(run_turn(user_id=uuid4(), profile_id=None, message="hola"))
     assert events[-1].citations == [] and events[-1].evidence_citations == []
 
 
@@ -215,7 +228,7 @@ async def test_a_red_flag_answers_even_with_no_llm_key_configured():
 
     with patch("adelia.agent.orchestrator.get_provider", _no_key), \
          patch("adelia.agent.orchestrator.load_profile_facts", return_value=UNKNOWN_PROFILE):
-        events = await _collect(run_agent_turn(
+        events = await _collect(run_turn(
             user_id=uuid4(), profile_id=None,
             message="des taches qui ne s'effacent pas quand j'appuie", locale="fr"))
     text = "".join(e.content for e in events if e.type == "token")
@@ -233,6 +246,6 @@ async def test_a_normal_turn_still_surfaces_a_missing_key_as_an_error():
 
     with patch("adelia.agent.orchestrator.get_provider", _no_key), \
          patch("adelia.agent.orchestrator.load_profile_facts", return_value=UNKNOWN_PROFILE):
-        events = await _collect(run_agent_turn(
+        events = await _collect(run_turn(
             user_id=uuid4(), profile_id=None, message="hola"))
     assert any(e.type == "error" for e in events)

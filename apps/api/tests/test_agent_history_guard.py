@@ -22,7 +22,7 @@ from adelia import ratelimit
 from adelia.agent.orchestrator import (
     HISTORY_MAX_CHARS_PER_MESSAGE,
     HISTORY_MAX_MESSAGES,
-    run_agent_turn,
+    run_turn,
     sanitize_history,
 )
 from adelia.main import app
@@ -261,7 +261,7 @@ async def test_injected_system_turn_never_reaches_the_model():
     with patch("adelia.agent.orchestrator.get_provider", return_value=_Provider()):
         events = [
             e
-            async for e in run_agent_turn(
+            async for e in run_turn(
                 user_id=uuid.uuid4(), profile_id=None, message="¿y ahora?",
                 history=poisoned, locale="es",
             )
