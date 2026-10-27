@@ -36,7 +36,18 @@ const HISTORY_MAX_CHARS_PER_MESSAGE = 2000;
 // Telegram-first daily diary: the bot lives outside the app on purpose.
 const TELEGRAM_BOT_URL = `https://t.me/${process.env.NEXT_PUBLIC_TELEGRAM_BOT ?? "Adelia_godiai_bot"}`;
 
-export function AgentCanvas({ locale, userId }: { locale: string; userId: string }) {
+// `today` is the server-rendered "Hoy con <nombre>" card (components/today-card):
+// the page fetches it, the canvas only decides where it sits, under the
+// greeting and before the showcase, and only while the thread is empty.
+export function AgentCanvas({
+  locale,
+  userId,
+  today = null,
+}: {
+  locale: string;
+  userId: string;
+  today?: React.ReactNode;
+}) {
   const t = useTranslations("agent");
   const router = useRouter();
   const { activeId } = useActiveProfile();
@@ -212,6 +223,7 @@ export function AgentCanvas({ locale, userId }: { locale: string; userId: string
               from the content it introduces). Nothing to render when the
               profile has no date of birth. */}
           {messages.length === 0 && growthMark && <GrowthMark label={growthMark} />}
+          {messages.length === 0 && today}
           {/* Capability showcase: an empty canvas tells a new mom nothing.
               Seven concrete doors into the product with three visual weights
               (three first-day rows, four second-week chips; "Ajustes" stays a

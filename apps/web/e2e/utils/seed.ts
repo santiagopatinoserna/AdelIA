@@ -26,7 +26,7 @@ function pool() {
 
 export async function seedProfile(
   userId: string,
-  { displayName, dateOfBirth }: { displayName: string; dateOfBirth: string },
+  { displayName, dateOfBirth }: { displayName: string; dateOfBirth: string | null },
 ): Promise<string> {
   const db = pool();
   const { rows } = await db.query(

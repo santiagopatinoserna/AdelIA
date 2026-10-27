@@ -1083,5 +1083,9 @@
     "signupCta": "Start with my baby",
     "signupNote": "30 days free, no card.",
     "back": "Back to the home page"
+  },
+  "today": {
+    "title": "Today",
+    "titleWithName": "Today with {name}"
   }
 }
