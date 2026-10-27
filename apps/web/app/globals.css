@@ -562,6 +562,11 @@
     transition: border-color 0.15s var(--ease-out-soft), box-shadow 0.15s var(--ease-out-soft);
   }
   textarea.ad-field { min-height: 6.5rem; }
+  /* Overlay that mirrors a field's box so interim dictation can sit after the
+     typed text. Same padding and border width as .ad-field, border invisible. */
+  .ad-field-mirror { padding: 0.75rem 0.875rem; border: 1.5px solid transparent; }
+  /* Room for the 44 px dictation button at the right of the field. */
+  .ad-field-mic { padding-right: 3.5rem; }
   .ad-field::placeholder { color: var(--color-ink-faint); }
   .ad-field:hover { border-color: var(--color-primary-text); }
   .ad-field:focus { border-color: var(--color-primary-text); }

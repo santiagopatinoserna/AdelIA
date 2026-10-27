@@ -22,6 +22,8 @@
 .command:has(:global([data-testid="demo-answer"])) .intro { display:none; }
 .ask { margin-top:16px; }
 .ask :global(textarea) { min-height:96px; border-radius:18px; padding:16px; box-shadow:none; }
+.ask :global(.ad-field-mirror) { padding:16px; }
+.ask :global(.ad-field-mic) { padding-right:60px; }
 .ask :global(button[type="submit"]) { min-height:48px; border-radius:14px; }
 .record { margin-top:20px; }
 .record > details { padding-top:14px; }

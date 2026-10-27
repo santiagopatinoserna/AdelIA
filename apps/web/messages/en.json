@@ -1074,6 +1074,8 @@
     "evidenceOnlyNote": "We could not compose the answer right now. These are the sources we found for your question.",
     "redFlagNote": "I cannot assess your baby remotely. Your baby needs medical attention.",
     "errorGeneric": "Something went wrong. Please try again in a moment.",
+    "dictate": "Dictate the question",
+    "dictateError": "I could not hear you. Type the question.",
     "errorBudget": "The demo has hit its question limit for today. Come back tomorrow, or open your free account.",
     "errorUnavailable": "The demo is not available right now. Please come back later.",
     "signupTitle": "Now with your own baby's record?",

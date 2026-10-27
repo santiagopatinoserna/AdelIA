@@ -1074,6 +1074,8 @@
     "evidenceOnlyNote": "On n’a pas pu rédiger la réponse pour le moment. Voici les sources trouvées pour ta question.",
     "redFlagNote": "Je ne peux pas évaluer ton bébé à distance. Il a besoin d’une prise en charge médicale.",
     "errorGeneric": "Quelque chose a échoué. Réessaie dans un instant.",
+    "dictate": "Dicter la question",
+    "dictateError": "Je n’ai pas pu t’entendre. Écris la question.",
     "errorBudget": "La démo a atteint sa limite de questions pour aujourd’hui. Reviens demain, ou ouvre ton compte gratuit.",
     "errorUnavailable": "La démo n’est pas disponible pour le moment. Reviens un peu plus tard.",
     "signupTitle": "Et avec le dossier de ton bébé ?",

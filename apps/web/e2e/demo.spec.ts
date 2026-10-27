@@ -253,6 +253,13 @@ test.describe("public demo: sending from the keyboard", () => {
     expect(ring, "the field's focus ring is the product's amber").toBe("rgb(163, 110, 31)");
 
     await page.keyboard.press("Tab");
+    // Where the browser offers dictation, its button sits in the field and
+    // takes one Tab before the send button.
+    const dictate = ask.getByRole("button", { name: "Dictar la pregunta", exact: true });
+    if (await dictate.count()) {
+      await expect(dictate).toBeFocused();
+      await page.keyboard.press("Tab");
+    }
     await expect(ask.getByRole("button", { name: "Preguntar" })).toBeFocused();
   });
 

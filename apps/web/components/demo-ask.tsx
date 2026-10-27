@@ -2,10 +2,13 @@
 
 import { useEffect, useRef, useState } from "react";
 import { useLocale, useTranslations } from "next-intl";
-import { ArrowUpRight, Loader2, ShieldAlert } from "lucide-react";
+import { ArrowUpRight, Loader2, Mic, MicOff, ShieldAlert } from "lucide-react";
 import { AnswerSources } from "@/components/answer-sources";
 import { AnswerContent, type AnswerCorpusStats } from "@/components/answer-content";
+import { useDictation } from "@/hooks/use-dictation";
 import type { DemoAnswerKind, DemoClarify, DemoIntent, EvidenceCitation } from "@/lib/chat-types";
+
+const SPEECH_LANG: Record<string, string> = { es: "es-ES", en: "en-GB", fr: "fr-FR" };
 
 // The public demo has no session and receives one JSON response, not progress
 // events. Never infer retrieval or generation stages from elapsed time.
@@ -38,6 +41,15 @@ export function DemoAsk({ suggested, corpusStats }: {
   const [typing, setTyping] = useState(false);
   const form = useRef<HTMLFormElement>(null);
   const pending = useRef<AbortController | null>(null);
+  // Dictated text is appended, never sent: she reads it and fixes a wrong
+  // word before pressing send, as with anything typed.
+  const dictation = useDictation({
+    lang: SPEECH_LANG[locale] ?? locale,
+    onFinal: (text) => setQuestion((current) => {
+      const base = current.trimEnd();
+      return (base ? `${base} ${text}` : text).slice(0, 300);
+    }),
+  });
 
   useEffect(() => () => pending.current?.abort(), []);
 
@@ -115,25 +127,58 @@ export function DemoAsk({ suggested, corpusStats }: {
         >
           {t("askTitle")}
         </label>
-        <textarea
-          id="demo-question"
-          rows={2}
-          maxLength={300}
-          value={question}
-          onChange={(event) => setQuestion(event.target.value)}
-          onFocus={() => setTyping(true)}
-          onBlur={() => setTyping(false)}
-          onKeyDown={(event) => {
-            if (event.key !== "Enter" || event.shiftKey || event.nativeEvent.isComposing) return;
-            event.preventDefault();
-            event.currentTarget.form?.requestSubmit();
-          }}
-          enterKeyHint="send"
-          placeholder={t("askPlaceholder")}
-          aria-label={t("askLabel")}
-          aria-describedby="demo-question-help"
-          className="ad-field block w-full resize-y text-base leading-relaxed placeholder:text-ink-faint"
-        />
+        <div className="relative">
+          <textarea
+            id="demo-question"
+            rows={2}
+            maxLength={300}
+            value={question}
+            onChange={(event) => { dictation.clearError(); setQuestion(event.target.value); }}
+            onFocus={() => setTyping(true)}
+            onBlur={() => setTyping(false)}
+            onKeyDown={(event) => {
+              if (event.key !== "Enter" || event.shiftKey || event.nativeEvent.isComposing) return;
+              event.preventDefault();
+              event.currentTarget.form?.requestSubmit();
+            }}
+            enterKeyHint="send"
+            placeholder={dictation.interim ? "" : t("askPlaceholder")}
+            aria-label={t("askLabel")}
+            aria-describedby="demo-question-help"
+            className={`ad-field block w-full resize-y text-base leading-relaxed placeholder:text-ink-faint${
+              dictation.supported ? " ad-field-mic" : ""}`}
+          />
+          {/* Words still being recognised, greyed after what she has typed. A
+              mirror of the textarea, so the interim text starts where the
+              caret would be; it is decoration until the final result lands. */}
+          {dictation.interim && (
+            <div
+              aria-hidden
+              className="ad-field-mirror pointer-events-none absolute inset-0 overflow-hidden whitespace-pre-wrap break-words ad-field-mic text-base leading-relaxed"
+            >
+              <span className="invisible">{question.trimEnd()}{question.trimEnd() ? " " : ""}</span>
+              <span data-testid="dictation-interim" className="text-ink-soft">{dictation.interim}</span>
+            </div>
+          )}
+          {dictation.supported && (
+            <button
+              type="button"
+              onClick={dictation.toggle}
+              aria-label={t("dictate")}
+              aria-pressed={dictation.listening}
+              disabled={busy}
+              className={`absolute right-1 top-1 inline-flex h-11 w-11 items-center justify-center rounded-full transition-colors ${
+                dictation.listening
+                  ? "bg-primary text-on-primary motion-safe:animate-pulse"
+                  : "text-ink-soft hover:bg-surface-2 hover:text-ink"}`}
+            >
+              {dictation.listening ? <MicOff className="h-5 w-5" aria-hidden /> : <Mic className="h-5 w-5" aria-hidden />}
+            </button>
+          )}
+        </div>
+        {dictation.failed && (
+          <p role="alert" className="mt-2 text-sm leading-relaxed text-error-text">{t("dictateError")}</p>
+        )}
         <div className="mt-2 flex flex-wrap items-center justify-between gap-x-4 gap-y-2">
           {/* Enter-to-send is the convention of every chat; only an actual
               blocker (too short to send) earns a line of text. */}

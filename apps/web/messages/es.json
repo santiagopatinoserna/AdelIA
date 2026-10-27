@@ -1074,6 +1074,8 @@
     "evidenceOnlyNote": "No hemos podido redactar la respuesta ahora mismo. Estas son las fuentes que encontramos para tu pregunta.",
     "redFlagNote": "No puedo valorar a tu bebé a distancia. Necesita atención médica.",
     "errorGeneric": "Algo ha fallado. Vuelve a intentarlo en un momento.",
+    "dictate": "Dictar la pregunta",
+    "dictateError": "No he podido escucharte. Escribe la pregunta.",
     "errorBudget": "La demo ha llegado a su límite de preguntas por hoy. Vuelve mañana o abre tu cuenta gratis.",
     "errorUnavailable": "La demo no está disponible ahora mismo. Vuelve en un rato.",
     "signupTitle": "¿Y con el historial de tu bebé?",
