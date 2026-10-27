@@ -38,4 +38,5 @@ export const ingestion = api.ingestion;
 export const enrichment = api.enrichment;
 export const billingStatus = api.billingStatus;
 export const onboarding = api.onboarding;
-export type { BabyOnboarding, BillingStatus, OnboardingStatus } from "./api-endpoints";
+export const today = api.today;
+export type { BabyOnboarding, BillingStatus, OnboardingStatus, TodayDTO, TodayItem } from "./api-endpoints";

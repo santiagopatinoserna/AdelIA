@@ -1081,5 +1081,9 @@
     "signupCta": "Empezar con mi bebé",
     "signupNote": "30 días gratis, sin tarjeta.",
     "back": "Volver a la portada"
+  },
+  "today": {
+    "title": "Hoy",
+    "titleWithName": "Hoy con {name}"
   }
 }

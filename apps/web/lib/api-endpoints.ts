@@ -57,6 +57,14 @@ export type EmailAliasDTO = {
   instructions: string;
 };
 
+/** One line of the "Hoy con <nombre>" card (GET /today, computed server-side). */
+export type TodayItem = {
+  kind: "vaccine" | "observation" | "remember";
+  text: string;
+  tone: "neutral" | "warn";
+};
+export type TodayDTO = { name: string | null; items: TodayItem[] };
+
 export type Fetcher = (path: string, init?: RequestInit) => Promise<Response>;
 
 /** Whether the baby screen still has to be shown (audit 4.3). */
@@ -86,6 +94,12 @@ export type BillingStatus = {
 
 export function makeApi(fetcher: Fetcher) {
   return {
+    async today(locale: string): Promise<TodayDTO> {
+      const res = await fetcher(`/today?locale=${encodeURIComponent(locale)}`);
+      if (!res.ok) throw new Error(`today: ${res.status}`);
+      return res.json();
+    },
+
     async billingStatus(): Promise<BillingStatus> {
       const res = await fetcher("/billing/status");
       if (!res.ok) throw new Error(`billingStatus: ${res.status}`);
