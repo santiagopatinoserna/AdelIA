@@ -1,5 +1,8 @@
 import AxeBuilder from "@axe-core/playwright";
 import { expect, test, type Browser } from "@playwright/test";
+import { mkdirSync } from "node:fs";
+import { homedir } from "node:os";
+import { join } from "node:path";
 import { Pool } from "pg";
 
 import { isoMonthsAgo, seedProfile } from "./utils/seed";
@@ -12,7 +15,9 @@ import { seedUserAndSessionCookie } from "./utils/session";
 // is no card at all: no empty state, no filler.
 
 const PHONE = { width: 390, height: 844 };
-const SHOTS = "/Users/santiagopatinoserna/dev/adelia-design/shots/companion";
+// Portable like ux-v2.spec.ts: CI has no Mac home, so the folder is created on the fly.
+const SHOTS = join(homedir(), "dev/adelia-design/shots/companion");
+mkdirSync(SHOTS, { recursive: true });
 
 function pgPool() {
   return new Pool({
