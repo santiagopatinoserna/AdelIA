@@ -111,6 +111,76 @@ def test_urgent_care_sources_are_pediatric_and_carry_a_url():
 
 
 # ---------------------------------------------------------------------------
+# The development corpus (0-24 months), 2026-10-27
+#
+# Measured in production: the common "at what age" questions (crawling,
+# sitting, hours of sleep, first tooth, solids, weight, vaccines) found no
+# fragment under the distance cut. This file answers them with public pages
+# of the AEP, AEPap, WHO, CDC, the Spanish and French health ministries,
+# ameli, mpedia, the AAP and UNICEF. It is family guidance about normal
+# development: a fragment that names a drug or a dose does not belong here,
+# because the golden set's "dose" near-misses (B6, B9, B11, B14) must keep
+# finding nothing.
+# ---------------------------------------------------------------------------
+
+DESARROLLO = DATA_DIR / "evidence_desarrollo_0_24m.json"
+
+# One source title per gap question the file was written to close.
+DESARROLLO_TOPICS = {
+    "gateo": "gateo",
+    "sentarse": "sentarse",
+    "horas de sueño": "sueno_horas",
+    "dentición": "denticion",
+    "inicio de sólidos": "cuando_solidos",
+    "peso por edad": "peso_por_edad",
+    "biberón nocturno": "biberon_retirada",
+    "lenguaje a los 12 meses": "lenguaje_12m",
+    "andar": "andar",
+    "vacunas en España": "vacunas_espana",
+    "vacunas en Francia": "vacunas_francia",
+}
+
+# Words that would make a fragment read as medication guidance. "dosis" is
+# allowed only in the vaccine calendars, where it counts injections.
+DESARROLLO_FORBIDDEN = ("paracetamol", "ibuprofeno", "mg/kg", "cetirizina", "melatonina",
+                        "simeticona", "flúor", "cólico", "estreñimiento", "almohada")
+
+
+def test_the_development_corpus_exists_and_is_sized():
+    data = json.loads(DESARROLLO.read_text(encoding="utf-8"))
+    assert 25 <= len(data["sources"]) <= 40, len(data["sources"])
+    assert "paráfrasis" in data["_meta"]["caveat"]
+
+
+@pytest.mark.parametrize("gap,topic", sorted(DESARROLLO_TOPICS.items()))
+def test_every_gap_question_has_a_tagged_source(gap, topic):
+    data = json.loads(DESARROLLO.read_text(encoding="utf-8"))
+    tagged = [s for s in data["sources"] if topic in s.get("topics", [])]
+    assert len(tagged) >= 2, f"{gap!r}: {len(tagged)} source(s) tagged {topic!r}"
+
+
+def test_development_chunks_are_sized_attributed_and_drug_free():
+    data = json.loads(DESARROLLO.read_text(encoding="utf-8"))
+    for source in data["sources"]:
+        assert 2 <= len(source["chunks"]) <= 4, source["title"][:50]
+        assert source.get("topics"), source["title"][:50]
+        assert "pediatrics" in source["specialties"], source["title"][:50]
+        assert source["url"].startswith("https://"), source["title"][:50]
+        assert source["language"] == "es"
+        vaccine = {"vacunas_espana", "vacunas_francia"} & set(source["topics"])
+        for i, chunk in enumerate(source["chunks"]):
+            label = f"{source['title'][:40]} #{i}"
+            assert 300 <= len(chunk) <= 900, f"{label}: {len(chunk)} chars"
+            assert "Tema:" in chunk and "Hallazgo:" in chunk, label
+            assert "—" not in chunk, f"{label}: no em dashes in user-facing text"
+            low = chunk.lower()
+            for word in DESARROLLO_FORBIDDEN:
+                assert word not in low, f"{label} mentions {word!r}"
+            if not vaccine:
+                assert "dosis" not in low, f"{label} mentions a dose outside a vaccine calendar"
+
+
+# ---------------------------------------------------------------------------
 # Display metadata (audit 1.1 follow-up, 2026-10-14)
 #
 # Production held a source whose organization was "https://www" (a cut-off
