@@ -282,3 +282,19 @@ async def test_the_endpoint_answers_for_the_signed_in_mother_only(client):
     # Not "hoy": the API reads the clock in Europe/Madrid and the row was
     # written an hour ago, which just after midnight is yesterday.
     assert body["items"][0]["text"].startswith("Temperatura: ") and "37,8 °C" in body["items"][0]["text"]
+
+
+def test_vaccines_due_the_same_month_are_grouped_once():
+    """Three doses of the same visit read as one line, not three repetitions of
+    'a los 2 meses': the card is scanned by a mother, not parsed by a script."""
+    from adelia.agent.pediatrics import VaccineStatus
+    from adelia.services.today import _vaccine_item
+    statuses = [
+        VaccineStatus(name="Hexavalente DTPa-VPI-Hib-HB, 1.ª dosis", due_month=2, dose=1,
+                      status="overdue"),
+        VaccineStatus(name="Neumococo conjugada, 1.ª dosis", due_month=2, dose=1, status="overdue"),
+        VaccineStatus(name="Meningococo B, 1.ª dosis", due_month=2, dose=1, status="overdue"),
+    ]
+    text = _vaccine_item(statuses, age_months=3, lang="es")["text"]
+    assert text.count("a los 2 meses") == 1
+    assert " · " in text

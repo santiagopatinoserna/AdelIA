@@ -86,7 +86,16 @@ def _vaccine_item(statuses: list[VaccineStatus], age_months: int, lang: str) -> 
         return None
     late = [s for s in soon if s.overdue]
     shown = late or soon
-    names = ", ".join(f"{s.name} ({_AT_MONTHS[lang].format(m=s.due_month)})" for s in shown)
+    # One age per visit, not one per dose: the three doses of the 2-month visit
+    # read as a single line a mother can scan, and the names keep their own
+    # commas, so the separator between names is a middle dot.
+    by_month: dict[int, list[str]] = {}
+    for s in shown:
+        by_month.setdefault(s.due_month, []).append(s.name)
+    names = "; ".join(
+        f"{' · '.join(group)} ({_AT_MONTHS[lang].format(m=month)})"
+        for month, group in sorted(by_month.items())
+    )
     template = _VACCINE_OVERDUE if late else _VACCINE_DUE
     return {"kind": "vaccine", "text": template[lang].format(names=names),
             "tone": "warn" if late else "neutral"}
