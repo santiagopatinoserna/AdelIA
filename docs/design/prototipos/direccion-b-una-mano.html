@@ -1,0 +1,117 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>AdelIA · Dirección B: una mano, de noche</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400..800&display=swap" rel="stylesheet">
+<style>
+/* Dirección B: todo al pulgar. Una sola familia (Hanken), oscuro por defecto,
+   el campo anclado abajo como una hoja, cada apartado del plan en su tarjeta.
+   Prototipo estático para comparar con la dirección A. */
+:root {
+  --canvas:#0b1512; --surface:#13221d; --surface-2:#1b2e27; --line:#2a4239; --line-control:#5f8f80;
+  --ink:#eef3ef; --ink-soft:#b6c7bd; --ink-faint:#9dafa4;
+  --primary:#7ecfae; --on-primary:#06140f; --accent:#eec27a; --on-accent:#1b1205;
+  --urgent:#f0a48d; --on-urgent:#2a0d06; --doctor:#f0a48d; --cite:#8aa197;
+}
+:root[data-theme="light"] {
+  --canvas:#fbfaf7; --surface:#ffffff; --surface-2:#f2f0ea; --line:#e4e0d6; --line-control:#6b8478;
+  --ink:#141a17; --ink-soft:#4e5751; --ink-faint:#5e665f;
+  --primary:#115443; --on-primary:#eef3ef; --accent:#7e5214; --on-accent:#fff;
+  --urgent:#973020; --on-urgent:#fdf1ee; --doctor:#973020; --cite:#646b64;
+}
+* { box-sizing:border-box; margin:0; }
+body { font-family:"Hanken Grotesk",system-ui,sans-serif; background:#02090a; color:var(--ink); padding:24px; }
+:root[data-theme="light"] body { background:#d9d4c7; }
+.bar { display:flex; gap:12px; align-items:center; margin-bottom:20px; font-size:14px; color:#ccc; }
+:root[data-theme="light"] .bar { color:#333; }
+.bar button { min-height:44px; padding:0 16px; border-radius:12px; border:1px solid #888; background:#fff; font:inherit; cursor:pointer; }
+.row { display:flex; gap:24px; flex-wrap:wrap; }
+.frame { width:390px; height:844px; overflow:hidden; background:var(--canvas); border-radius:28px; display:flex; flex-direction:column; position:relative; }
+.cap { width:390px; font-size:13px; margin-top:8px; color:#bbb; }
+:root[data-theme="light"] .cap { color:#333; }
+.scroll { flex:1; overflow:auto; padding:0 20px 20px; }
+header { display:flex; justify-content:space-between; align-items:center; min-height:56px; padding:0 20px; font-weight:800; font-size:20px; }
+header small { font-weight:600; font-size:13px; color:var(--ink-soft); }
+.hero { font-size:34px; line-height:1.08; font-weight:780; letter-spacing:-.03em; margin-top:40px; }
+.sub { font-size:17px; color:var(--ink-soft); margin-top:12px; line-height:1.45; }
+.chips { display:flex; flex-direction:column; gap:10px; margin-top:28px; }
+.chips a { min-height:56px; display:flex; align-items:center; padding:0 18px; border-radius:18px; background:var(--surface); color:var(--ink); font-size:16px; font-weight:600; text-decoration:none; }
+.sheet { background:var(--surface); border-radius:24px 24px 0 0; padding:14px 16px 18px; border-top:1px solid var(--line); }
+.sheet .in { display:flex; gap:10px; align-items:center; }
+.sheet input { flex:1; min-height:56px; border-radius:18px; border:1.5px solid var(--line-control); background:var(--canvas); color:var(--ink); font:inherit; font-size:18px; padding:0 16px; }
+.round { width:56px; height:56px; border-radius:99px; border:0; display:grid; place-items:center; background:var(--primary); color:var(--on-primary); }
+.round.mic { background:var(--accent); color:var(--on-accent); }
+.title { font-size:15px; font-weight:700; letter-spacing:.08em; text-transform:uppercase; color:var(--ink-soft); margin-top:16px; }
+.lead { font-size:22px; line-height:1.35; font-weight:650; margin-top:8px; }
+.card { background:var(--surface); border-radius:20px; padding:16px 18px; margin-top:14px; }
+.card h3 { font-size:15px; font-weight:800; letter-spacing:.06em; text-transform:uppercase; }
+.card.doc h3 { color:var(--doctor); }
+.card li { font-size:18px; line-height:1.55; margin-top:10px; }
+.card ul { padding-left:20px; }
+.cite { font-size:.7em; color:var(--cite); vertical-align:.15em; }
+.urgent { background:var(--urgent); color:var(--on-urgent); border-radius:24px; padding:20px; margin-top:16px; }
+.urgent h2 { font-size:28px; line-height:1.1; font-weight:800; }
+.urgent a { display:flex; align-items:center; justify-content:center; min-height:64px; border-radius:18px; background:var(--on-urgent); color:var(--urgent); font-weight:800; font-size:20px; margin-top:16px; text-decoration:none; }
+.p { font-size:18px; line-height:1.55; margin-top:14px; }
+.today { background:var(--surface); border-radius:24px; padding:18px; margin-top:20px; }
+.today h2 { font-size:26px; font-weight:800; letter-spacing:-.02em; }
+.today li { list-style:none; font-size:17px; line-height:1.45; padding:12px 0; border-top:1px solid var(--line); }
+.tabs { display:flex; justify-content:space-around; height:64px; background:var(--surface); font-size:12px; color:var(--ink-faint); }
+.tabs div { display:flex; align-items:center; justify-content:center; flex:1; }
+.tabs .on { color:var(--primary); font-weight:700; }
+svg { width:24px; height:24px; stroke:currentColor; fill:none; stroke-width:2; stroke-linecap:round; stroke-linejoin:round; }
+</style>
+</head>
+<body>
+<div class="bar">
+  <strong>Dirección B · una mano, de noche</strong>
+  <button type="button" onclick="document.documentElement.dataset.theme = document.documentElement.dataset.theme === 'light' ? 'dark' : 'light'">Oscuro / claro</button>
+  <span>390x844. Descartada: ver REDISENO.md.</span>
+</div>
+<div class="row">
+
+<div><div class="frame">
+  <header>AdelIA <small>Demo · ES</small></header>
+  <div class="scroll">
+    <p class="hero">¿Qué le pasa a tu bebé?</p>
+    <p class="sub">Te digo qué hacer ahora, con pediatría. No sustituye a tu pediatra.</p>
+    <div class="chips"><a href="#">Regurgita después de cada toma</a><a href="#">Come menos que antes</a><a href="#">Tiene fiebre</a></div>
+  </div>
+  <div class="sheet"><div class="in"><input placeholder="Cuéntamelo"><button class="round mic" aria-label="Dictar"><svg viewBox="0 0 24 24"><rect x="9" y="2" width="6" height="12" rx="3"/><path d="M5 10a7 7 0 0 0 14 0M12 17v5"/></svg></button></div></div>
+</div><p class="cap">1. Portada: el campo es una hoja anclada abajo y el micrófono es el botón principal. Choca con la regla medida del campo a menos de 380 px (sobre el teclado).</p></div>
+
+<div><div class="frame">
+  <header>AdelIA <small>Demo · ES</small></header>
+  <div class="scroll">
+    <p class="title">Tu plan</p>
+    <p class="lead">Pueden ser variaciones normales de apetito; ahora lo clave es observar bien <span class="cite">[4]</span>.</p>
+    <section class="card"><h3>Hoy</h3><ul><li>Anota cuánta leche toma en 24 h <span class="cite">[ev_2]</span>.</li><li>Respeta sus señales de hambre <span class="cite">[ev_3]</span>.</li></ul></section>
+    <section class="card"><h3>Vigila</h3><ul><li>Si sigue activa y el sueño es parecido <span class="cite">[ev_2]</span>.</li></ul></section>
+    <section class="card doc"><h3>Cuándo ir al médico</h3><ul><li>Con urgencia si moja menos pañales o está muy somnolienta <span class="cite">[ev_2]</span>.</li></ul></section>
+  </div>
+  <div class="sheet"><div class="in"><input placeholder="Otra pregunta"><button class="round" aria-label="Enviar"><svg viewBox="0 0 24 24"><path d="m22 2-7 20-4-9-9-4z"/></svg></button></div></div>
+</div><p class="cap">2. Plan: una tarjeta por apartado y la hoja de pregunta siempre abajo. Más cajas y 18 px: el mismo plan ocupa un 25 % más de pantallas.</p></div>
+
+<div><div class="frame">
+  <header>AdelIA <small>Demo · ES</small></header>
+  <div class="scroll">
+    <div class="urgent"><h2>Esto no puede esperar</h2><a href="tel:112">Llamar al 112</a></div>
+    <p class="p">Has descrito fiebre en un bebé de menos de 3 meses. A esa edad, 38 °C o más se valora el mismo día.</p>
+  </div>
+</div><p class="cap">3. Urgencia: bloque de color pleno y botón de 64 px. Más fuerte, pero alarma más de lo necesario.</p></div>
+
+<div><div class="frame">
+  <header>AdelIA <small>Nora · 3 meses</small></header>
+  <div class="scroll">
+    <section class="today"><h2>Hoy con Nora</h2><ul style="padding:0;margin-top:8px"><li>Vacunas de los 2 meses sin anotar.</li><li>Temperatura: ayer 37,2 °C.</li><li>Apunta cada toma hasta mañana.</li></ul></section>
+  </div>
+  <div class="sheet"><div class="in"><input placeholder="Cuéntamelo o pregunta"><button class="round mic" aria-label="Dictar"><svg viewBox="0 0 24 24"><rect x="9" y="2" width="6" height="12" rx="3"/><path d="M5 10a7 7 0 0 0 14 0M12 17v5"/></svg></button></div></div>
+  <nav class="tabs"><div class="on">Hoy</div><div>Consulta</div><div>Historial</div><div>Ajustes</div></nav>
+</div><p class="cap">4. Inicio: solo «Hoy con Nora» y la hoja. Obliga a reescribir textos de la API y a quitar la vitrina que hoy fijan las pruebas.</p></div>
+
+</div>
+</body>
+</html>
