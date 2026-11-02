@@ -54,15 +54,15 @@ class Settings(BaseSettings):
     stripe_price_id: str = ""  # the recurring Price (e.g. 8€/mo) the trial is on
     stripe_trial_days: int = 30
 
-    # Generation LLM. Embeddings, OCR and transcription always use Mistral:
-    # neither OpenAI nor Anthropic has an equivalent wired here, and the
-    # embeddings are a migration, not a switch (EMBEDDING_MODEL_DIMENSIONS).
+    # Generation LLM. Embeddings and transcription always use Mistral: Anthropic
+    # offers neither, OpenAI is wired for transcription only (stt_provider), and
+    # the embeddings are a migration, not a switch (EMBEDDING_MODEL_DIMENSIONS).
     #   "mistral"    the working default, and the processor /privacidad names.
     #   "openai"     moves the RAG chat and the route classifier only.
-    #   "anthropic"  moves every text-generation call: the RAG chat and /demo,
+    #   "anthropic"  moves every call Claude can serve: the RAG chat and /demo,
     #                the route classifier, entity extraction, the briefing Q&A,
-    #                the consultation summary, and makes the /dashboard agent
-    #                require ANTHROPIC_API_KEY instead of falling back to
+    #                the consultation summary and OCR, and makes the /dashboard
+    #                agent require ANTHROPIC_API_KEY instead of falling back to
     #                Mistral. It exists so the project can run on Anthropic
     #                API credit. Real families' records then leave the EU for a
     #                processor /privacidad does not name: flipping it outside
@@ -79,6 +79,10 @@ class Settings(BaseSettings):
     anthropic_extraction_model: str = "claude-opus-5-5"
     anthropic_briefing_model: str = "claude-opus-5-5"
     anthropic_routing_model: str = "claude-haiku-5-5"
+    # OCR on Anthropic: Claude reads the PDF or image and copies its text out
+    # (workers/ocr.py). Its text feeds extraction, chunking and embeddings, so
+    # this is the one model change that moves everything downstream with it.
+    anthropic_ocr_model: str = "claude-opus-5-5"
 
     # ---- Every other model name the product sends to a provider ----
     # They used to sit inline in worker code (ocr.py, embed.py, extract.py,

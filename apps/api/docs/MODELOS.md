@@ -32,7 +32,7 @@ es un cambio de nombre de modelo (sección 4.6).
 | Embeddings | `mistral-embed` | `mistral_embed_model` / `MISTRAL_EMBED_MODEL` | `workers/embed.py` | Columnas `Vector(1024)`, índices HNSW, vectores guardados, `evidence_max_distance`. **No es un cambio de configuración, es una migración (4.1).** |
 | Chat RAG y `/demo` | `mistral-medium-latest` | `mistral_chat_model` / `MISTRAL_CHAT_MODEL`, con `LLM_PROVIDER=mistral` | `services/chat_orchestrator.py` | Contrato de respuesta con citas `[ev_N]` y rechazo por código (4.2). Lee `chat_reasoning_effort` (4.5). |
 | Chat RAG alternativo | `gpt-5.1` | `openai_chat_model` / `OPENAI_CHAT_MODEL`, con `LLM_PROVIDER=openai` | `services/chat_orchestrator.py` | Mueve el chat a un proveedor que `/privacidad` no nombra (4.6). |
-| Generación con Anthropic | `claude-opus-5-5` (chat, `/demo`, extracción, briefing, resumen); `claude-haiku-5-5` (clasificador) | `anthropic_chat_model`, `anthropic_extraction_model`, `anthropic_briefing_model`, `anthropic_routing_model`, con `LLM_PROVIDER=anthropic` (o `DEMO_LLM_PROVIDER=anthropic` solo para `/demo`) | `services/chat_orchestrator.py`, `agent/route.py`, `workers/extract.py`, `services/qa_pre_baker.py`, `workers/summarize.py` | Sin medir. Saca datos reales de la UE hacia un proveedor que `/privacidad` no nombra (4.6). Diferencias técnicas en 4.8. |
+| Generación y OCR con Anthropic | `claude-opus-5-5` (chat, `/demo`, extracción, briefing, resumen, OCR); `claude-haiku-5-5` (clasificador) | `anthropic_chat_model`, `anthropic_extraction_model`, `anthropic_briefing_model`, `anthropic_routing_model`, `anthropic_ocr_model`, con `LLM_PROVIDER=anthropic` (o `DEMO_LLM_PROVIDER=anthropic` solo para `/demo`) | `services/chat_orchestrator.py`, `agent/route.py`, `workers/extract.py`, `services/qa_pre_baker.py`, `workers/summarize.py`, `workers/ocr.py` | Sin medir. Saca datos reales de la UE hacia un proveedor que `/privacidad` no nombra (4.6). Diferencias técnicas en 4.8. |
 | Agente de `/dashboard`, Anthropic | `claude-sonnet-5` | `agent_model` / `AGENT_MODEL` | `agent/provider.py` (`AnthropicProvider`) | Se usa si hay `ANTHROPIC_API_KEY`. Envía `thinking={"type": "disabled"}`. Proveedor no nombrado en `/privacidad` (4.6). |
 | Agente de `/dashboard`, respaldo Mistral | el del chat | `mistral_chat_model` | `agent/provider.py` (`MistralProvider`) | Llamadas a herramientas. Lee `chat_reasoning_effort` (4.5). |
 | Extracción de entidades | `mistral-medium-latest` | `mistral_extraction_model` / `MISTRAL_EXTRACTION_MODEL` | `workers/extract.py` | Temperatura 0, `json_object`, filtro de `raw_quote` literal. No lee ningún ajuste de reasoning effort. |
@@ -226,8 +226,10 @@ cambia el proveedor de transcripción.
 **`LLM_PROVIDER=anthropic`** (2 de noviembre de 2026) lleva a Anthropic toda la generación de
 texto: el chat RAG y `/demo`, el clasificador de intención, la extracción de entidades, las
 preguntas del briefing y el resumen de consulta, y hace que el agente exija `ANTHROPIC_API_KEY` en
-vez de caer a Mistral. Siguen en Mistral los embeddings, el OCR y la transcripción, porque
-Anthropic no ofrece ninguno de los tres: `MISTRAL_API_KEY` sigue siendo obligatoria. Con ese valor
+vez de caer a Mistral. Desde el 3 de noviembre de 2026 mueve también el OCR. Siguen en Mistral los
+embeddings y la transcripción, porque Anthropic no ofrece ninguno de los dos: `MISTRAL_API_KEY`
+sigue siendo obligatoria. Sin ella la búsqueda no devuelve nada y el chat contesta por código que
+no hay evidencia, sin llegar a llamar a Claude. Con ese valor
 los historiales de familias reales salen hacia Anthropic, que `/privacidad` no nombra, y la frase
 "siempre dentro de la UE" deja de ser cierta: la documentación de Anthropic leída para este cambio
 solo lista `us` y `global` para `inference_geo`, ninguna región europea. Activarlo fuera de
@@ -277,6 +279,15 @@ al modelo que se ejecutó.
   reintenta y el briefing lanza `QAPrebakerError`. No se activa el reenvío automático a otro
   modelo (`fallbacks`) que ofrece Anthropic: respondería un modelo que nadie ha evaluado aquí
   (sección 1).
+- **El OCR lo hace Claude leyendo el archivo.** Anthropic no tiene un servicio de OCR: el PDF va
+  como bloque `document` y la imagen como bloque `image`, con una instrucción de copiar el texto
+  tal cual, en Markdown, sin resumir, traducir ni corregir (`_ANTHROPIC_OCR_PROMPT` en
+  `workers/ocr.py`). Ese texto es la verdad del historial: la extracción solo guarda una entidad
+  si su cita aparece literal en él, y los fragmentos que cita el chat salen de él. Nadie ha
+  comparado esta transcripción con la de Mistral OCR sobre informes de este corpus (sección 3.1).
+  Límites distintos de los de Mistral: una imagen de más de 10 MB en base64 (unos 7,5 MB de
+  JPEG) o un PDF de más de 32 MB o 600 páginas da error y el documento falla, aunque la subida
+  admita 50 MB.
 - **El agente no cambia de modelo.** Sigue en `agent_model` (`claude-sonnet-5`) con
   `thinking={"type": "disabled"}`. Ese valor da error en `claude-sonnet-5-5` y en
   `claude-opus-5-5`, así que pasar el agente a uno de ellos es otro cambio, con sus pruebas.
@@ -359,3 +370,4 @@ Añadir una fila por cada cambio aprobado, con el resultado de la medición ante
 |---|---|---|---|
 | 2026-10-14 | Ninguno. Los nombres de OCR, embeddings, extracción y briefing pasan a settings con sus valores de siempre. Se añaden `chat_reasoning_effort` y `briefing_reasoning_effort`, sin definir. | No aplica: ningún valor efectivo cambia, y los tests lo fijan. | No aplica |
 | 2026-11-02 | Ninguno por defecto. Se añade `LLM_PROVIDER=anthropic` (sección 4.6) y los cuatro ajustes `anthropic_*_model`. | No aplica: `llm_provider` sigue en `mistral` y los tests lo fijan. Activarlo sí exige medir (sección 3). | No aplica |
+| 2026-11-03 | Ninguno por defecto. `LLM_PROVIDER=anthropic` mueve también el OCR (`anthropic_ocr_model`). | No aplica por defecto. Activarlo exige comparar la transcripción con Mistral OCR sobre informes reales (sección 3.1). | No aplica |

@@ -69,6 +69,7 @@ EXPECTED_DEFAULTS = {
     "anthropic_extraction_model": "claude-opus-5-5",
     "anthropic_briefing_model": "claude-opus-5-5",
     "anthropic_routing_model": "claude-haiku-5-5",
+    "anthropic_ocr_model": "claude-opus-5-5",
     # None means "send no reasoning_effort field", which is today's request.
     "chat_reasoning_effort": None,
     "briefing_reasoning_effort": None,

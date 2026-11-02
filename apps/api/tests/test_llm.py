@@ -18,6 +18,7 @@ from adelia.agent import route as route_mod
 from adelia.config import settings
 from adelia.services import chat_orchestrator, qa_pre_baker
 from adelia.workers import extract as extract_mod
+from adelia.workers import ocr as ocr_mod
 from adelia.workers import summarize as summarize_mod
 
 # ---------------------------------------------------------------------------
@@ -361,3 +362,67 @@ async def test_summary_goes_through_the_sdk_with_the_same_prompt(monkeypatch, an
     assert body["model"] == settings.anthropic_chat_model
     assert body["system"] == summarize_mod._SYSTEM
     assert body["output_config"] == {"effort": "low"}
+
+
+# ---------------------------------------------------------------------------
+# OCR
+# ---------------------------------------------------------------------------
+
+
+def _no_mistral_ocr(monkeypatch):
+    async def no_http(*args, **kwargs):
+        raise AssertionError("OCR must not POST to Mistral with llm_provider=anthropic")
+
+    monkeypatch.setattr(httpx.AsyncClient, "post", no_http)
+
+
+@pytest.mark.parametrize(
+    ("mime_type", "block_type"),
+    [("application/pdf", "document"), ("image/jpeg", "image"), ("image/png", "image")],
+)
+async def test_ocr_sends_the_file_to_claude_as_the_right_block(
+    monkeypatch, anthropic_on, mime_type, block_type
+):
+    wire = _Wire(sse_reply=_sse(["| Glucosa | 95 mg/dL |"]))
+    _wire_into(monkeypatch, wire, ocr_mod)
+    _no_mistral_ocr(monkeypatch)
+
+    text = await ocr_mod.extract_text_from_pdf(b"%PDF-1.4 body", mime_type)
+
+    assert text == "| Glucosa | 95 mg/dL |"
+    body = wire.bodies[0]
+    assert body["model"] == settings.anthropic_ocr_model
+    assert body["output_config"] == {"effort": "low"}
+    assert body["stream"] is True
+    file_block, prompt_block = body["messages"][0]["content"]
+    assert file_block == {
+        "type": block_type,
+        "source": {
+            "type": "base64",
+            "media_type": mime_type,
+            "data": "JVBERi0xLjQgYm9keQ==",
+        },
+    }
+    assert prompt_block["type"] == "text"
+    assert "exactly as it is written" in prompt_block["text"]
+
+
+async def test_ocr_of_a_page_without_text_is_empty(monkeypatch, anthropic_on):
+    """documents.py reads "" as "nothing readable": a caption alone must not
+    turn an unreadable photo into a ready document."""
+    wire = _Wire(sse_reply=_sse(["NO_TEXT"]))
+    _wire_into(monkeypatch, wire, ocr_mod)
+    _no_mistral_ocr(monkeypatch)
+
+    assert await ocr_mod.extract_text_from_pdf(b"\x89PNG", "image/png") == ""
+
+
+async def test_ocr_refusal_fails_the_document_instead_of_storing_nothing(
+    monkeypatch, anthropic_on
+):
+    wire = _Wire(sse_reply=_sse([], stop_reason="refusal"))
+    _wire_into(monkeypatch, wire, ocr_mod)
+    _no_mistral_ocr(monkeypatch)
+
+    with pytest.raises(llm.AnthropicRefusal):
+        await ocr_mod.extract_text_from_pdf(b"%PDF", "application/pdf")
