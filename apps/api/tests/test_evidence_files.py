@@ -8,6 +8,7 @@ This test makes that mistake impossible to push.
 from __future__ import annotations
 
 import json
+import re
 from datetime import date
 from pathlib import Path
 
@@ -44,6 +45,22 @@ def test_evidence_file_respects_db_constraints(path: Path):
         for field, limit in (("organization", 128), ("url", 1024), ("license", 64), ("language", 8)):
             value = s.get(field) or ""
             assert len(value) <= limit, f"{path.name}: {s['title'][:60]!r} {field} longer than {limit}"
+
+
+# A chunk is read by a mother in Spain or France. "Call 111" (NHS advice line),
+# "999" or "911" are numbers that do not exist there, and a model composing an
+# answer passes them on. The source's urgency level is written in words
+# instead ("llamar a emergencias", "consulta urgente el mismo día"). Found on
+# 2026-11-03 in four of the domain files before they reached main.
+FOREIGN_EMERGENCY_NUMBER = re.compile(r"\b(?:111|999|911)\b")
+
+
+@pytest.mark.parametrize("path", FILES, ids=[p.name for p in FILES])
+def test_no_chunk_sends_a_parent_to_a_foreign_emergency_number(path: Path):
+    for s in json.loads(path.read_text(encoding="utf-8"))["sources"]:
+        for i, chunk in enumerate(s["chunks"]):
+            hit = FOREIGN_EMERGENCY_NUMBER.search(chunk)
+            assert not hit, f"{path.name}: {s['title'][:60]!r} #{i} says {hit.group(0)}"
 
 
 # ---------------------------------------------------------------------------
