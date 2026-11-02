@@ -8,7 +8,7 @@
             naming a ramp step in a component is a dark-mode bug.
    Dark is a scheme of its own, built on the deep pine of the brand, not a
    filter and not black: canvas #071813, strong ink #edf3ee, never #ffffff.
-   Verified: 72 text/background pairs, 72 pass (AA 4.5 / 3.0).
+   Verified pair by pair, both schemes: node scripts/check-contrast.mjs (AA 4.5 / 3.0).
    Source of truth: 08_adelia/SPEC_DISENO_ACENTO_VIVO.md (sections 3, 4, 5).
 
    `@theme static`: Tailwind v4 tree-shakes unused theme variables out of
@@ -134,6 +134,16 @@
   --color-info-tint: #e6eff2;
   --color-info-line: #2f6a7c;
 
+  /* Answer roles (docs/design/REDISENO.md). "Cuándo ir al médico" is a calm
+     clay accent, not the error fill: the error red is kept for the real
+     emergency. The filete is decorative (the heading carries the meaning) but
+     still clears 3:1 on the canvas. `cite` is the colour of the literal
+     [ev_N] and [N] markers: they stay in the text, quieter than the text. */
+  --color-doctor-tint: #fbf1ed;
+  --color-doctor-line: #b25a41;
+  --color-today-line: #a36e1f;
+  --color-cite: #646b64;
+
   /* The landing's deep pine band. Dark in BOTH schemes: in dark it steps down
      to surface-2 so it stays a band and never becomes the brightest thing. */
   --color-brand-band: #0a2820;
@@ -162,6 +172,21 @@
      sizes was declared here and never applied to anything, which is worse
      than not having one (.ad-btn-sm / .ad-btn-lg had zero call sites). */
   --tap-md: 2.75rem;  /* 44 px. Every control. */
+  /* 52 px: the one primary action of a phone screen (Preguntar, Llamar,
+     Sí), the thumb's target when the other hand holds the baby. */
+  --tap-lg: 3.25rem;
+
+  /* Reading scale of the answers (REDISENO.md). Tailwind turns each into a
+     `text-*` utility with its own line height. answer: 17/27 px, inside the
+     24-30 px band answer-reading.spec.ts measures. */
+  --text-title: 1.4375rem;
+  --text-title--line-height: 1.25;
+  --text-lead: 1.1875rem;
+  --text-lead--line-height: 1.5;
+  --text-answer: 1.0625rem;
+  --text-answer--line-height: 1.6;
+  --text-micro: 0.78125rem;
+  --text-micro--line-height: 1.35;
 }
 
 /* ============================== DARK SCHEME ================================
@@ -241,6 +266,10 @@
     --color-info-tint: #153d49;
     --color-info-line: #3f7c8f;
 
+    --color-doctor-tint: #2a1a14;
+    --color-today-line: #a98334;
+    --color-cite: #9dafa4;
+
     --color-brand-band: #17332b;
     --color-brand-band-line: #2b5145;
     --color-on-brand-band: #edf3ee;
@@ -315,6 +344,10 @@
   --color-info-text: #8ecadd;
   --color-info-tint: #153d49;
   --color-info-line: #3f7c8f;
+
+  --color-doctor-tint: #2a1a14;
+  --color-today-line: #a98334;
+  --color-cite: #9dafa4;
 
   --color-brand-band: #17332b;
   --color-brand-band-line: #2b5145;
@@ -772,11 +805,13 @@
   }
   :root[data-theme="dark"] .ad-grain::after { display: none; }
 
+  /* Short on purpose: a card she has to answer must not still be sliding in
+     when her thumb gets there (0.7 s / 14 px before the redesign). */
   @keyframes ad-rise {
-    from { opacity: 0; transform: translateY(14px); }
+    from { opacity: 0; transform: translateY(6px); }
     to { opacity: 1; transform: translateY(0); }
   }
-  .ad-rise { animation: ad-rise 0.7s var(--ease-out-soft) both; }
+  .ad-rise { animation: ad-rise 0.32s var(--ease-out-soft) both; }
 
   @keyframes ad-typing {
     0%, 80%, 100% { opacity: 0.25; transform: translateY(0); }

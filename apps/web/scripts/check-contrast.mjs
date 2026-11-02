@@ -65,6 +65,12 @@ const PAIRS = [
   ["error-text", "error-tint", TEXT], ["error-text", "surface", TEXT], ["error-text", "canvas", TEXT],
   ["success-text", "success-tint", TEXT], ["success-text", "surface", TEXT],
   ["warning-text", "warning-tint", TEXT], ["warning-text", "surface", TEXT],
+  // Answer roles of the redesign (docs/design/REDISENO.md).
+  ["error-text", "doctor-tint", TEXT], ["ink", "doctor-tint", TEXT],
+  ["doctor-line", "canvas", NON_TEXT], ["doctor-line", "doctor-tint", NON_TEXT],
+  ["today-line", "canvas", NON_TEXT],
+  ["cite", "canvas", TEXT], ["cite", "surface", TEXT], ["cite", "surface-2", TEXT],
+  ["cite", "doctor-tint", TEXT],
   ["info-text", "info-tint", TEXT], ["info-text", "surface", TEXT], ["info-text", "canvas", TEXT],
   ["on-brand-band", "brand-band", TEXT], ["on-brand-band-soft", "brand-band", TEXT],
   ["brand-band", "on-brand-band", TEXT],
