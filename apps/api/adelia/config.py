@@ -54,12 +54,31 @@ class Settings(BaseSettings):
     stripe_price_id: str = ""  # the recurring Price (e.g. 8€/mo) the trial is on
     stripe_trial_days: int = 30
 
-    # Generation LLM (chat answers + briefings). Embeddings/OCR always use
-    # Mistral — OpenAI has no embeddings parity here. Flip to "openai" once the
-    # OpenAI account has credits; "mistral" is the working default.
-    llm_provider: str = "mistral"  # "mistral" | "openai"
+    # Generation LLM. Embeddings, OCR and transcription always use Mistral:
+    # neither OpenAI nor Anthropic has an equivalent wired here, and the
+    # embeddings are a migration, not a switch (EMBEDDING_MODEL_DIMENSIONS).
+    #   "mistral"    the working default, and the processor /privacidad names.
+    #   "openai"     moves the RAG chat and the route classifier only.
+    #   "anthropic"  moves every text-generation call: the RAG chat and /demo,
+    #                the route classifier, entity extraction, the briefing Q&A,
+    #                the consultation summary, and makes the /dashboard agent
+    #                require ANTHROPIC_API_KEY instead of falling back to
+    #                Mistral. It exists so the project can run on Anthropic
+    #                API credit. Real families' records then leave the EU for a
+    #                processor /privacidad does not name: flipping it outside
+    #                dev is a legal change first (apps/api/docs/MODELOS.md 4.6).
+    llm_provider: str = "mistral"  # "mistral" | "openai" | "anthropic"
     mistral_chat_model: str = "mistral-medium-latest"
     openai_chat_model: str = "gpt-5.1"
+    # Read only with llm_provider="anthropic" (or demo_llm_provider="anthropic").
+    # Separate settings for the same reason the Mistral ones are: pinning the
+    # chat must not move extraction or the briefing with it. The routing model
+    # is the small one because route() has a 2 s deadline and only picks a
+    # contract; the agent keeps its own agent_model above.
+    anthropic_chat_model: str = "claude-opus-5-5"
+    anthropic_extraction_model: str = "claude-opus-5-5"
+    anthropic_briefing_model: str = "claude-opus-5-5"
+    anthropic_routing_model: str = "claude-haiku-5-5"
 
     # ---- Every other model name the product sends to a provider ----
     # They used to sit inline in worker code (ocr.py, embed.py, extract.py,
@@ -263,7 +282,7 @@ class Settings(BaseSettings):
     # than the chat and briefings, which read real records and whose processor
     # (Mistral, EU) the privacy notice and the DPIA name. Moving real data to
     # another provider is a legal change; moving the demo is not.
-    demo_llm_provider: str = ""  # "" | "mistral" | "openai"
+    demo_llm_provider: str = ""  # "" | "mistral" | "openai" | "anthropic"
     # Longest question the demo will embed. A public endpoint with no cap is
     # a way to buy someone else's embeddings by the megabyte.
     demo_max_question_chars: int = 300

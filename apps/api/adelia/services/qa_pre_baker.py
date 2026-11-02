@@ -1,7 +1,8 @@
 """LLM-driven top-5 Q&A pre-baker with anti-hallucination guard.
 
 One Mistral chat.complete_async call with structured output
-(response_format=json_schema).
+(response_format=json_schema), or with settings.llm_provider="anthropic" one
+Anthropic messages.create call with output_config.format json_schema.
 Post-LLM filter: every citation's raw_quote MUST appear verbatim in one of the
 source documents' raw_text. Quotes that fail this check are dropped silently
 with logger.warning. Minimum 3 items returned; never pad with synthetic content.
@@ -23,7 +24,7 @@ logger = logging.getLogger(__name__)
 
 
 class QAPrebakerError(Exception):
-    """Raised when the Mistral call fails irrecoverably."""
+    """Raised when the provider call fails irrecoverably."""
 
 
 _QA_JSON_SCHEMA = {
@@ -148,6 +149,53 @@ async def _llm_structured_call(
     return data, tokens_used
 
 
+async def _anthropic_structured_call(
+    system_prompt: str, user_content: str, model: str
+) -> tuple[dict, int]:
+    """The same call on Anthropic. Returns (parsed_dict, tokens_used).
+
+    _QA_JSON_SCHEMA goes through llm.anthropic_json_schema: the API does not
+    enforce its minLength and maxItems, so they travel in the description and
+    QAItem plus _enforce_raw_quote below still check every item. Effort
+    "medium" is the default model's own default, written down so that a model
+    change does not move it. briefing_reasoning_effort is a Mistral knob and is
+    not read here. Every failure, a refusal included, is a QAPrebakerError, as
+    on Mistral.
+    """
+    import anthropic
+
+    from adelia.llm import anthropic_json_schema, anthropic_text, get_anthropic_client
+
+    try:
+        client = get_anthropic_client()
+    except RuntimeError as e:
+        raise QAPrebakerError("ANTHROPIC_API_KEY not configured") from e
+    try:
+        resp = await client.messages.create(
+            model=model,
+            max_tokens=16000,
+            system=system_prompt,
+            messages=[{"role": "user", "content": user_content}],
+            output_config={
+                "effort": "medium",
+                "format": {"type": "json_schema", "schema": anthropic_json_schema(_QA_JSON_SCHEMA)},
+            },
+        )
+        content = anthropic_text(resp)
+    except anthropic.APIError as e:
+        raise QAPrebakerError(f"Anthropic API error: {e}") from e
+    except Exception as e:
+        raise QAPrebakerError(f"Unexpected error during Anthropic call: {e}") from e
+
+    usage = getattr(resp, "usage", None)
+    tokens_used = (usage.input_tokens + usage.output_tokens) if usage else 0
+    try:
+        data = json.loads(content)
+    except json.JSONDecodeError as e:
+        raise QAPrebakerError(f"Failed to parse JSON from LLM: {e}") from e
+    return data, tokens_used
+
+
 def _enforce_raw_quote(items: list[dict], source_raw_texts: dict[str, str]) -> list[QAItem]:
     """Drop items whose citations don't appear verbatim in any source doc.
 
@@ -215,13 +263,21 @@ async def bake_questions(
     Returns (items, meta). Items may be 0-5 after filter; LLMMeta records cost/tokens.
 
     `model` defaults to settings.mistral_briefing_model ("mistral-medium-latest"
-    today, the literal that used to be the default here); an explicit value wins.
+    today, the literal that used to be the default here), or to
+    settings.anthropic_briefing_model with llm_provider="anthropic"; an explicit
+    value wins.
 
     Async since 2026-08-31: the awaited call inside is the one that used to
     stall the event loop for the length of a briefing (audit 4.5).
     """
-    model = model or settings.mistral_briefing_model
-    client = _build_client()
+    from adelia.llm import uses_anthropic
+
+    anthropic_path = uses_anthropic()
+    if anthropic_path:
+        model = model or settings.anthropic_briefing_model
+    else:
+        model = model or settings.mistral_briefing_model
+        client = _build_client()
     system_prompt = _system_prompt(specialty, specialty_hints, locale)
     user_content = (
         "Patient data (entities + raw_quotes):\n\n"
@@ -230,7 +286,10 @@ async def bake_questions(
         + "\n\n".join(f"--- {doc_id} ---\n{text[:4000]}" for doc_id, text in source_raw_texts.items())
     )
 
-    parsed, tokens_used = await _llm_structured_call(client, system_prompt, user_content, model)
+    if anthropic_path:
+        parsed, tokens_used = await _anthropic_structured_call(system_prompt, user_content, model)
+    else:
+        parsed, tokens_used = await _llm_structured_call(client, system_prompt, user_content, model)
     items_raw = parsed.get("items", [])
     items = _enforce_raw_quote(items_raw, source_raw_texts)
 

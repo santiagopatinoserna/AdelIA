@@ -7,7 +7,7 @@ from mistralai.client.errors import MistralError
 from pydantic import ValidationError
 
 from adelia.config import settings
-from adelia.llm import get_mistral_client
+from adelia.llm import anthropic_text, get_anthropic_client, get_mistral_client, uses_anthropic
 from adelia.schemas import ExtractedEntity, ExtractionReport
 
 logger = logging.getLogger(__name__)
@@ -323,6 +323,27 @@ async def _request_entities(client, system_prompt: str, text: str) -> tuple[str,
     return "json_object", _parse_reply(_reply_text(response))
 
 
+async def _request_entities_anthropic(system_prompt: str, text: str) -> tuple[str, list | None]:
+    """The json_object path, on Anthropic: the reply's shape comes from the prompt.
+
+    Not structured outputs. Anthropic requires every object of the schema to be
+    closed (additionalProperties false), and ExtractedEntity.value is a free-form
+    object ({"value": 6.8, "unit": "%"}, {"dose": "500 mg"}): closed, the only
+    value the schema allows is {}, and every lab reading would be stored empty.
+    SYSTEM_PROMPT already spells the shape out, and the screening that follows
+    (validation, the verbatim quote, duplicates) is the same on every path.
+    """
+    client = get_anthropic_client()
+    response = await client.messages.create(
+        model=settings.anthropic_extraction_model,
+        max_tokens=16000,
+        system=system_prompt,
+        messages=[{"role": "user", "content": f"Document:\n\n{text}"}],
+        output_config={"effort": "medium"},
+    )
+    return "json_object", _parse_reply(anthropic_text(response))
+
+
 async def extract_entities(text: str, *, diary_date: str | None = None) -> ExtractionResult:
     """Extract FHIR-aligned medical entities from raw text via Mistral LLM.
 
@@ -345,19 +366,24 @@ async def extract_entities(text: str, *, diary_date: str | None = None) -> Extra
         discarded. Entities whose raw_quote does NOT appear verbatim in the
         input text are filtered out (anti-hallucination guard per spec 6.1).
 
+    With settings.llm_provider="anthropic" the call goes to Claude instead, on
+    the json_object path only (see _request_entities_anthropic).
+
     Raises:
-        RuntimeError: if MISTRAL_API_KEY is not configured. Configuration error:
-            do NOT retry; alert.
-        mistralai.SDKError: on API failure (transient, caller may retry).
+        RuntimeError: if the provider's API key is not configured, or (as
+            AnthropicRefusal) if Claude declined. Do NOT retry; alert.
+        mistralai.SDKError / anthropic.APIError: on API failure (transient,
+            caller may retry).
         json.JSONDecodeError: the final reply has braces but is not JSON.
     """
-    client = get_mistral_client()
-
     system_prompt = SYSTEM_PROMPT
     if diary_date:
         system_prompt += DIARY_PROMPT_SUFFIX.format(diary_date=diary_date)
 
-    path, raw_items = await _request_entities(client, system_prompt, text)
+    if uses_anthropic():
+        path, raw_items = await _request_entities_anthropic(system_prompt, text)
+    else:
+        path, raw_items = await _request_entities(get_mistral_client(), system_prompt, text)
     report = ExtractionReport(path=path)
     if raw_items is None:
         report.unusable_reply = True
