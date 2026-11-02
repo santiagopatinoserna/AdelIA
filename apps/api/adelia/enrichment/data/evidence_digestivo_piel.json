@@ -1,0 +1,848 @@
+{
+  "_meta": {
+    "topic": "Digestivo y piel de 0 a 24 meses: cólico del lactante y llanto, estreñimiento y disquecia, color y frecuencia de las heces, diarrea y gastroenteritis con signos de deshidratación, vómitos frente a regurgitación, alergia a las proteínas de leche de vaca, dermatitis atópica, costra láctea, dermatitis del pañal, ictericia neonatal, hemangiomas y marcas de nacimiento, protección solar y picaduras",
+    "compiled": "2026-11-02",
+    "method": "Lectura directa de cada página pública (Familia y Salud AEPap, EnFamilia AEP, SEUP, AEDV, HealthyChildren AAP, OMS, NHS, Healthier Together NHS, mpedia.fr) el 2026-11-02; cada cifra y cada signo de alarma procede de la página citada en el propio fragmento",
+    "caveat": "Resúmenes en español de fuentes en español, inglés o francés; los chunks son paráfrasis con las cifras y la urgencia del original, no texto literal. Se han omitido a propósito dosis, nombres de medicamentos y cremas, probióticos e infusiones (salvo cuando la fuente advierte contra ellos). Material de orientación para familias, no sustituye la valoración de un profesional.",
+    "purpose": "Cerrar el hueco medido en la auditoría de cobertura: ninguna fuente sobre cólico, estreñimiento, costra láctea ni hemangiomas, y muy pocas sobre ictericia, APLV, dermatitis atópica, pañal, sol y picaduras. El reflujo y la alimentación ya tienen su propio archivo y no se duplican aquí."
+  },
+  "sources": [
+    {
+      "source_type": "reference",
+      "title": "¿Qué es el cólico del lactante? (Familia y Salud, AEPap)",
+      "organization": "Asociación Española de Pediatría de Atención Primaria (AEPap)",
+      "publication_year": 2022,
+      "url": "https://www.familiaysalud.es/podemos-prevenir/eventos-del-desarrollo/consejo-anticipado/que-es-el-colico-del-lactante",
+      "specialties": [
+        "pediatrics",
+        "gastroenterology"
+      ],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "topics": [
+        "colico",
+        "llanto"
+      ],
+      "chunks": [
+        "¿Qué es el cólico del lactante? (Familia y Salud, AEPap, actualizado 2022). Tema: definición del cólico del lactante y regla de los tres. Hallazgo: no todo llanto fuerte es un cólico. El cólico verdadero son episodios de llanto intenso e inconsolable que se repiten al menos 3 días por semana, durante más de 3 horas al día y a lo largo de al menos 3 semanas, en un bebé que come bien y gana peso con normalidad. Es un motivo de consulta muy frecuente. Suele empezar entre la tercera y la sexta semana de vida y lo habitual es que desaparezca entre los tres y los cuatro meses. Ocurre sobre todo por la tarde-noche, con la cara roja, los puños cerrados, la tripa hinchada, las piernas encogidas y la espalda arqueada.",
+        "¿Qué es el cólico del lactante? (Familia y Salud, AEPap, actualizado 2022). Tema: cuándo estar tranquila y cuándo consultar al pediatra por el llanto. Hallazgo: si el bebé se alimenta bien, crece con normalidad y tiene aspecto sano fuera de los episodios, se puede estar tranquila; el pediatra suele llegar al diagnóstico con la historia clínica, sin análisis ni pruebas de imagen. Hay que consultar si el bebé rechaza las tomas, vomita de forma repetida, se le nota decaído o tiene fiebre. La causa no está aclarada: se habla de inmadurez digestiva, de sobreestimulación o del temperamento, e incluso de una variante de la normalidad.",
+        "¿Qué es el cólico del lactante? (Familia y Salud, AEPap, actualizado 2022). Tema: qué hacer sin medicinas durante una crisis de llanto y el riesgo de zarandear. Hallazgo: no hay ningún tratamiento que se haya demostrado eficaz. Lo primero es mantener la calma y comprobar que el pañal está limpio, que no tiene calor ni frío y que la ropa no aprieta. Se puede probar a cogerlo en brazos, llevarlo en mochila o en la hamaca, hablarle suave o cantarle, pasearlo en coche o ponerle un ruido de fondo constante y bajo (campana extractora, secador). Si nada funciona, pide ayuda para descansar y recuerda que la fase pasa. El principal peligro es perder el control y sacudir al bebé, lo que puede causarle lesiones graves e incluso mortales."
+      ]
+    },
+    {
+      "source_type": "reference",
+      "title": "¿Hay alternativas de tratamiento para el cólico del lactante? (Familia y Salud, AEPap)",
+      "organization": "Asociación Española de Pediatría de Atención Primaria (AEPap)",
+      "publication_year": 2019,
+      "url": "https://www.familiaysalud.es/podemos-prevenir/eventos-del-desarrollo/consejo-anticipado/hay-alternativas-de-tratamiento-para-el",
+      "specialties": [
+        "pediatrics",
+        "gastroenterology"
+      ],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "topics": [
+        "colico",
+        "aplv"
+      ],
+      "chunks": [
+        "¿Hay alternativas de tratamiento para el cólico del lactante? (Familia y Salud, AEPap, actualizado 2019). Tema: medidas de confort y cambios de dieta en el cólico. Hallazgo: el cólico es benigno, no hace enfermar al bebé y se resuelve hacia el final del tercer mes; lo más importante es reducir la ansiedad de los padres y dar tranquilidad al bebé, evitando tratamientos que en su mayoría no han demostrado eficacia. Primero se usan medidas de confort: pasearlo, portearlo, un baño templado con masaje en la tripa, flexionar sus piernas para ayudarle a expulsar gases, llevarlo boca abajo sobre el antebrazo o ponerlo al pecho. Retirar las proteínas de leche de vaca o cambiar de fórmula solo lo indica el pediatra cuando lo anterior ha fallado; no está justificado dejar la lactancia materna si el bebé crece bien, ni retirar la lactosa.",
+        "¿Hay alternativas de tratamiento para el cólico del lactante? (Familia y Salud, AEPap, actualizado 2019). Tema: por qué no se recomiendan infusiones, homeopatía ni osteopatía en el cólico. Hallazgo: las infusiones digestivas que se venden para el cólico no tienen estudios suficientes que avalen su eficacia, pueden interferir con la lactancia y algunas, como el anís estrellado, pueden intoxicar al bebé. Los productos de homeopatía no han demostrado eficacia ni seguridad y algunos contienen alcohol, con posibles efectos adversos graves. La fisioterapia y la osteopatía no tienen estudios con consistencia suficiente para recomendarlas. El pronóstico es bueno: hacia el final del tercer mes el llanto mejora, el sueño nocturno también y el crecimiento y el desarrollo son normales."
+      ]
+    },
+    {
+      "source_type": "reference",
+      "title": "Cólicos del lactante (EnFamilia, AEP)",
+      "organization": "Asociación Española de Pediatría",
+      "publication_year": null,
+      "url": "https://www.aeped.es/enfamilia/salud-en-familia/colicos-lactante",
+      "specialties": [
+        "pediatrics",
+        "gastroenterology"
+      ],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "topics": [
+        "colico",
+        "llanto"
+      ],
+      "chunks": [
+        "Cólicos del lactante (EnFamilia, Asociación Española de Pediatría). Tema: qué son los cólicos, a qué edad aparecen y cómo se reconocen. Hallazgo: es normal que un bebé llore por hambre, calor, frío, el pañal mojado o para pedir contacto, y se calma cuando se atiende esa necesidad; en el cólico sigue llorando. Se definen como episodios repetidos y prolongados de llanto intenso o irritabilidad sin causa aparente que los cuidadores no consiguen calmar. Afectan a cerca de una quinta parte de los bebés, suelen empezar a partir de los 15 días, son más frecuentes hacia el mes y medio y desaparecen hacia los 4 meses. El llanto empieza de golpe, más por la tarde y la noche, con piernas encogidas sobre la tripa, puños cerrados y cara roja; al ceder, el bebé vuelve a su aspecto normal.",
+        "Cólicos del lactante (EnFamilia, Asociación Española de Pediatría). Tema: diagnóstico y cuándo pensar en otra causa del llanto. Hallazgo: normalmente no hace falta ninguna prueba: el diagnóstico se basa en el llanto típico con una exploración normal, en la que el pediatra busca otras causas de dolor como un golpe o una otitis. Si el bebé está muy decaído o tiene fiebre hay que descartar otros problemas, como infecciones o una invaginación intestinal. En una pequeña parte de los casos la alergia a la leche de vaca puede desencadenar el llanto. Los cólicos son un trastorno benigno que desaparece solo tras los primeros meses y no deja secuelas.",
+        "Cólicos del lactante (EnFamilia, Asociación Española de Pediatría). Tema: cómo consolar al bebé con cólicos y cuidar a los padres. Hallazgo: no hay remedios universales. Tras comprobar que está limpio y no tiene hambre, cogerlo en brazos y buscar la postura en la que esté más tranquilo; un masaje suave en espalda o tripa, envolverlo en una manta, mecerlo o pasearlo en el cochecito o en coche pueden ayudar. Si mama con avidez, mantenerlo vertical unos minutos tras la toma para que eructe; con pecho, dejar que vacíe bien uno antes de ofrecer el otro. Consultar con el pediatra antes de cambiar la dieta. Los productos que se venden para el cólico funcionan como un placebo, y las infusiones y la homeopatía no han demostrado más; algunas plantas como el anís estrellado pueden intoxicar. Los padres deben turnarse y pedir apoyo para descansar."
+      ],
+      "undated_reason": "Página divulgativa de EnFamilia sin fecha de publicación visible; consultada el 2026-11-02."
+    },
+    {
+      "source_type": "reference",
+      "title": "Colic (NHS)",
+      "organization": "NHS (National Health Service, Reino Unido)",
+      "publication_year": 2022,
+      "url": "https://www.nhs.uk/conditions/colic/",
+      "specialties": [
+        "pediatrics",
+        "gastroenterology"
+      ],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "topics": [
+        "colico",
+        "llanto"
+      ],
+      "chunks": [
+        "Colic (NHS, Servicio Nacional de Salud del Reino Unido, 2022). Tema: síntomas del cólico y otras razones por las que llora un bebé. Hallazgo: el cólico es cuando un bebé llora mucho sin causa evidente; es frecuente y suele mejorar hacia los 3 o 4 meses. Puede ser cólico si llora más de 3 horas al día, 3 días por semana durante al menos 1 semana y por lo demás está sano, sobre todo por la tarde y la noche, cuesta calmarlo, aprieta los puños, se pone rojo, encoge las rodillas o arquea la espalda y tiene muchos gases. Puede llorar también por hambre, un pañal sucio, gases, reflujo o estreñimiento; si no estás segura, habla con tu enfermera de pediatría o tu médico.",
+        "Colic (NHS, Servicio Nacional de Salud del Reino Unido, 2022). Tema: qué hacer para calmarlo y qué no se recomienda en el cólico. Hallazgo: normalmente no hace falta ir al médico. Las gotas anticólicos y los suplementos de hierbas o probióticos que se venden no se recomiendan y no hay pruebas de que ayuden. Lo que suele aconsejarse: cogerlo en brazos cuando llora mucho, mantenerlo erguido al comer para que no trague aire, ayudarle a expulsar los gases tras la toma, mecerlo sobre el hombro o en la cuna o el carrito, un baño templado y un ruido blanco suave de fondo. Seguir alimentándolo como siempre: si das el pecho no hace falta cambiar tu dieta. No probar manipulaciones de columna ni osteopatía craneal: apenas hay pruebas y pueden hacerle daño.",
+        "Colic (NHS, Servicio Nacional de Salud del Reino Unido, 2022). Tema: cuándo consultar y cuándo ir a urgencias por el llanto. Hallazgo: pide consulta con tu médico si te preocupa el llanto, si tiene cólico y nada funciona, si te cuesta sobrellevarlo, si no crece o no gana peso como se espera o si sigue con síntomas de cólico después de los 4 meses. Ve a urgencias o llama al servicio de emergencias si el llanto es débil o muy agudo, o si no suena como su llanto habitual. Tú eres quien mejor conoce a tu hijo: confía en tu instinto si crees que pasa algo grave. Cuidar de un bebé con cólico es duro pero suele pasar con el tiempo; busca apoyo en familia, amigos o profesionales."
+      ]
+    },
+    {
+      "source_type": "reference",
+      "title": "Consejos para los padres para aliviar el cólico de los bebés (HealthyChildren.org, AAP)",
+      "organization": "American Academy of Pediatrics",
+      "publication_year": 2015,
+      "url": "https://www.healthychildren.org/Spanish/ages-stages/baby/crying-colic/Paginas/Colic.aspx",
+      "specialties": [
+        "pediatrics",
+        "gastroenterology"
+      ],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "topics": [
+        "colico",
+        "llanto"
+      ],
+      "chunks": [
+        "Consejos para los padres para aliviar el cólico de los bebés (HealthyChildren.org, Academia Americana de Pediatría, 2015). Tema: irritabilidad de la tarde frente a cólico. Hallazgo: es muy común que el bebé tenga un rato de irritabilidad cada día, sobre todo entre las 6 de la tarde y la medianoche; suele rondar las tres horas diarias durante unas seis semanas y luego baja a una o dos horas diarias hasta los tres o cuatro meses. Si se calma en unas horas y el resto del día está tranquilo, no hay razón para alarmarse. Si el llanto se intensifica y persiste, puede ser cólico: le pasa a uno de cada cinco bebés, suele empezar entre la segunda y la cuarta semana, lloran sin consuelo, encogen las piernas y expulsan gases, y en general cede a los tres o cuatro meses, aunque puede durar hasta los seis.",
+        "Consejos para los padres para aliviar el cólico de los bebés (HealthyChildren.org, Academia Americana de Pediatría, 2015). Tema: qué probar ante el cólico y nunca sacudir al bebé. Hallazgo: primero consultar al pediatra para descartar un problema médico, como una hernia u otra enfermedad. Luego se puede probar: no sobrealimentarlo, pasearlo en el carrito o en brazos, mecerlo, un sonido constante de fondo (ventilador, aspiradora en la habitación de al lado), sin ponerlo nunca encima de la lavadora o secadora, ofrecer chupete, recostarlo boca abajo sobre las rodillas frotándole la espalda o envolverlo en una manta fina. Si da el pecho, la madre puede comentar con el pediatra retirar lácteos u otros alimentos de su dieta; con fórmula, preguntar por una fórmula hidrolizada. Cuando la tensión aprieta, deja al bebé con alguien de confianza: nunca hay que sacudir a un bebé."
+      ]
+    },
+    {
+      "source_type": "reference",
+      "title": "Qué hacer cuando su bebé llora mucho (HealthyChildren.org, AAP)",
+      "organization": "American Academy of Pediatrics",
+      "publication_year": 2025,
+      "url": "https://www.healthychildren.org/Spanish/ages-stages/baby/crying-colic/Paginas/Responding-to-Your-Babys-Cries.aspx",
+      "specialties": [
+        "pediatrics",
+        "gastroenterology"
+      ],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "topics": [
+        "llanto",
+        "colico"
+      ],
+      "chunks": [
+        "Qué hacer cuando su bebé llora mucho (HealthyChildren.org, Academia Americana de Pediatría, 2025). Tema: cuánto llora un recién nacido y cómo responder. Hallazgo: todos los bebés lloran, a menudo sin causa aparente; los recién nacidos lloran normalmente de 1 a 4 horas al día como parte de su adaptación a la vida fuera del útero, y no es señal de que se esté criando mal. En los primeros meses lo mejor es responder pronto: un bebé pequeño no se malcría con atención y, si se le atiende, llora menos. Primero se atiende la necesidad más urgente (frío, pañal, hambre) y, si el llanto es agudo o de pánico, se revisa si algo le molesta, como una prenda o un pelo enrollado en un dedo.",
+        "Qué hacer cuando su bebé llora mucho (HealthyChildren.org, Academia Americana de Pediatría, 2025). Tema: técnicas para consolar al bebé y las gotas para los gases. Hallazgo: si está seco, abrigado y alimentado y sigue llorando, se puede probar a mecerlo, acariciarle la cabeza o darle palmaditas, envolverlo bien en una manta, cantarle, música suave, pasearlo en brazos o en el cochecito, ruidos suaves y vibraciones rítmicas, ayudarle a eructar o un baño tibio. Las gotas para los gases o el agua para los cólicos no han demostrado funcionar; ayudan más comer despacio, eructar bien y, con biberón, una tetina de flujo más lento. Si está inconsolable, mida la temperatura: si es de 38 grados o más, avise al pediatra. Nunca sacudir ni golpear al bebé; si pierde el control, déjelo en un lugar seguro y pida ayuda."
+      ]
+    },
+    {
+      "source_type": "reference",
+      "title": "Cómo calmar a un bebé irascible o quisquilloso (HealthyChildren.org, AAP)",
+      "organization": "American Academy of Pediatrics",
+      "publication_year": 2016,
+      "url": "https://www.healthychildren.org/Spanish/ages-stages/baby/crying-colic/Paginas/calming-a-fussy-baby.aspx",
+      "specialties": [
+        "pediatrics",
+        "gastroenterology"
+      ],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "topics": [
+        "llanto",
+        "colico"
+      ],
+      "chunks": [
+        "Cómo calmar a un bebé irascible o quisquilloso (HealthyChildren.org, Academia Americana de Pediatría, 2016). Tema: formas de calmar el llanto sin medicinas. Hallazgo: envolverlo en una manta fina; sostenerlo de lado o boca abajo en brazos con un masaje suave en la espalda, acostándolo siempre boca arriba para dormir; sonidos que recuerden al útero como ruido blanco, un ventilador o latidos; pasearlo en portabebé o acunarlo; no sobrealimentarlo; ofrecer chupete o ayudarle a encontrar su dedo, porque muchos se calman succionando. Llevar un diario de sueño, tomas y llanto ayuda a hablar con el pediatra. Si da el pecho y sospecha sensibilidad a un alimento, se puede probar a reducir lácteos o cafeína y volver a la dieta habitual si no cambia nada; con fórmula, preguntar al médico antes de cambiarla.",
+        "Cómo calmar a un bebé irascible o quisquilloso (HealthyChildren.org, Academia Americana de Pediatría, 2016). Tema: otras causas del llanto y cómo tomarse un respiro sin riesgo. Hallazgo: puede llorar por hambre, frío o calor, pañal sucio, exceso de estímulos o aburrimiento. Si regurgita o vomita mucho, se pone irritable tras comer o no gana peso, hay que avisar al médico porque puede no ser cólico. Si es menor de 2 meses y tiene fiebre, llamar al médico de inmediato. Si nada funciona y está a punto de perder la calma, respire, deje al bebé en un lugar seguro como la cuna sin mantas ni peluches, salga 10 a 15 minutos, llame a alguien de apoyo y vuelva a intentarlo; consulte con el pediatra por si hay una razón médica. Nunca sacudir, zarandear ni golpear a un niño."
+      ]
+    },
+    {
+      "source_type": "reference",
+      "title": "Pleurs du soir et coliques du nourrisson : les reconnaître et les apaiser (mpedia.fr, AFPA)",
+      "organization": "mpedia.fr (Association Française de Pédiatrie Ambulatoire, AFPA)",
+      "publication_year": 2026,
+      "url": "https://www.mpedia.fr/art-decoder-les-pleurs-et-coliques/",
+      "specialties": [
+        "pediatrics",
+        "gastroenterology"
+      ],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "topics": [
+        "llanto",
+        "colico"
+      ],
+      "chunks": [
+        "Pleurs du soir et coliques du nourrisson (mpedia.fr, Asociación Francesa de Pediatría Ambulatoria, 2026). Tema: el llanto de la tarde-noche del recién nacido, distinto del cólico. Hallazgo: el llanto de la tarde aparece entre las 18 h y la medianoche, dura hasta unas 3 horas, empieza hacia las 3 semanas, alcanza su máximo hacia las 5 o 6 semanas y se atenúa o desaparece hacia los 3 o 4 meses. El bebé ha comido, está limpio y aun así llora con fuerza, con la cara roja, los puños cerrados y las piernas encogidas. No parece deberse a un problema digestivo ni es signo de enfermedad o dolor: corresponde a un periodo normal de actividad del recién nacido, que ya se observa en el feto a esas horas. Tener gases durante el llanto no significa que los gases lo causen, porque al llorar traga aire.",
+        "Pleurs du soir et coliques du nourrisson (mpedia.fr, Asociación Francesa de Pediatría Ambulatoria, 2026). Tema: cómo calmar el llanto de la tarde y cuándo buscar otra causa. Hallazgo: no hay una solución única: alternar brazos, mecerlo, portearlo, piel con piel, el baño, un masaje, hablarle bajito o cantarle, bajar la luz y reducir estímulos; si sigue gritando, dejarlo tranquilo un rato y volver a intentarlo después. Si da el pecho no hay que dejar la lactancia por el llanto. Si come muy deprisa, hacer pausas para que eructe y dar las tomas en un ambiente tranquilo. Si el llanto aparece a cualquier hora del día y de la noche, o se acompaña de tomas difíciles, problemas de sueño o un crecimiento que se frena, hace falta valoración médica para buscar reflujo con irritación, estreñimiento u otra enfermedad."
+      ]
+    },
+    {
+      "source_type": "reference",
+      "title": "La disquecia del lactante (Familia y Salud, AEPap)",
+      "organization": "Asociación Española de Pediatría de Atención Primaria (AEPap)",
+      "publication_year": 2026,
+      "url": "https://www.familiaysalud.es/sintomas-y-enfermedades/aparato-digestivo/sintomas-digestivos/la-disquecia-del-lactante",
+      "specialties": [
+        "pediatrics",
+        "gastroenterology"
+      ],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "topics": [
+        "estrenimiento",
+        "heces"
+      ],
+      "chunks": [
+        "La disquecia del lactante (Familia y Salud, AEPap, 2026). Tema: el bebé que aprieta, llora y se pone rojo al hacer caca pero hace heces blandas. Hallazgo: eso no es estreñimiento sino disquecia, un proceso normal y pasajero del desarrollo que empieza en los primeros meses, en general antes de los 6. El bebé todavía no coordina la fuerza de la tripa con la relajación del ano, así que llora y se queja antes de hacer, y al final las heces salen blandas o semilíquidas y se tranquiliza. En el estreñimiento, en cambio, las heces son duras y secas y poco frecuentes. La disquecia desaparece sola antes de los 9 meses, no necesita medicación ni deja secuelas.",
+        "La disquecia del lactante (Familia y Salud, AEPap, 2026). Tema: qué hacer en casa con la disquecia y signos de alarma. Hallazgo: paciencia, masajes suaves en círculo sobre la tripa, flexionar las piernas como en bicicleta, portearlo y baños tibios. No estimularle el ano con termómetros ni bastoncillos, porque le cuesta más aprender la coordinación. Hay que acudir al pediatra si las heces son duras o tienen sangre, si hay fiebre, vómitos o tripa hinchada, si pierde peso o rechaza las tomas, o si está irritable y con malestar también entre los episodios."
+      ]
+    },
+    {
+      "source_type": "reference",
+      "title": "Cómo saber si su bebé está estreñido o hace popó lo suficiente (HealthyChildren.org, AAP)",
+      "organization": "American Academy of Pediatrics",
+      "publication_year": 2022,
+      "url": "https://www.healthychildren.org/Spanish/ages-stages/baby/diapers-clothing/Paginas/infant-constipation.aspx",
+      "specialties": [
+        "pediatrics",
+        "gastroenterology"
+      ],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "topics": [
+        "estrenimiento",
+        "heces"
+      ],
+      "chunks": [
+        "Cómo saber si su bebé está estreñido o hace popó lo suficiente (HealthyChildren.org, Academia Americana de Pediatría, 2022). Tema: cuántas veces hace caca un bebé con pecho o con fórmula. Hallazgo: un bebé que toma fórmula suele hacer caca al menos una vez casi todos los días, aunque a veces pasa 1 o 2 días sin hacer. Con lactancia materna depende de la edad: en el primer mes, hacer menos de una vez al día puede indicar que el recién nacido no está comiendo lo suficiente; después del primer mes, un bebé amamantado puede pasar varios días o incluso una semana sin hacer caca porque aprovecha casi toda la leche. Apretar mucho, llorar o ponerse rojo al hacer caca no es necesariamente alarmante: evacuar tumbado boca arriba cuesta esfuerzo.",
+        "Cómo saber si su bebé está estreñido o hace popó lo suficiente (HealthyChildren.org, Academia Americana de Pediatría, 2022). Tema: señales que sugieren estreñimiento real en el bebé y cuándo llamar al pediatra. Hallazgo: conviene preguntarse si está muy irritable, si regurgita más de lo normal, si hace caca bastante más o menos de lo habitual, si las heces son más duras o traen sangre por la dureza, o si se esfuerza más de 10 minutos sin conseguirlo: estos síntomas pueden sugerir estreñimiento. Cuando ya come sólidos se pueden ofrecer verduras y frutas, en especial ciruelas pasas. Si los cambios en la dieta no ayudan, es momento de llamar al pediatra."
+      ]
+    },
+    {
+      "source_type": "reference",
+      "title": "Constipation in children (NHS)",
+      "organization": "NHS (National Health Service, Reino Unido)",
+      "publication_year": 2023,
+      "url": "https://www.nhs.uk/baby/health/constipation-in-children/",
+      "specialties": [
+        "pediatrics",
+        "gastroenterology"
+      ],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "topics": [
+        "estrenimiento"
+      ],
+      "chunks": [
+        "Constipation in children (NHS, Servicio Nacional de Salud del Reino Unido, 2023). Tema: síntomas de estreñimiento en bebés y niños pequeños. Hallazgo: el estreñimiento es frecuente en la infancia, sobre todo durante el aprendizaje del orinal hacia los 2 o 3 años. Puede haber estreñimiento si ha hecho menos de 3 cacas en la última semana, si las heces son grandes y duras o parecen bolitas de conejo, si se esfuerza o le duele al hacer, si sangra un poco durante o después por la dureza de las heces, o si tiene poco apetito o dolor de tripa que mejora tras hacer caca. Si le duele, puede aguantarse las ganas y entrar en un círculo vicioso: cuanto más retiene, más estreñido está.",
+        "Constipation in children (NHS, Servicio Nacional de Salud del Reino Unido, 2023). Tema: cuándo ir al médico y cómo prevenir el estreñimiento en el bebé. Hallazgo: si crees que tu hijo está estreñido, llévalo al médico: el tratamiento depende de la edad y cuanto más dura el estreñimiento más cuesta volver a la normalidad, así que conviene pedir ayuda pronto. Para prevenirlo: que beba suficiente; a los bebés con lactancia materna que aún no comen sólidos, ofrecerles el pecho a menudo; los que toman fórmula pueden tomar agua extra entre tomas, que en menores de 6 meses debe ser agua hervida y enfriada. Ofrecer variedad de alimentos con mucha fruta y verdura, fomentar la actividad física y, cuando use orinal, rutina tras las comidas con los pies apoyados y elogios, sin enfados."
+      ]
+    },
+    {
+      "source_type": "reference",
+      "title": "Los diferentes colores del popó de bebé: cuándo hay que preocuparse (HealthyChildren.org, AAP)",
+      "organization": "American Academy of Pediatrics",
+      "publication_year": 2024,
+      "url": "https://www.healthychildren.org/spanish/ages-stages/baby/paginas/the-many-colors-of-poop.aspx",
+      "specialties": [
+        "pediatrics",
+        "gastroenterology"
+      ],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "topics": [
+        "heces"
+      ],
+      "chunks": [
+        "Los diferentes colores del popó de bebé: cuándo hay que preocuparse (HealthyChildren.org, Academia Americana de Pediatría, 2024). Tema: colores normales de las heces del bebé. Hallazgo: una vez eliminado el meconio negro y pegajoso de los primeros días, todos los tonos de amarillo, marrón e incluso verde se consideran normales. El amarillo mostaza es el más habitual en los bebés que toman leche materna, y el amarillo marrón con manchas verdes en los que toman fórmula. Es normal que el color vaya cambiando, sobre todo cuando empieza a comer sólidos o tiene mocos por un resfriado.",
+        "Los diferentes colores del popó de bebé: cuándo hay que preocuparse (HealthyChildren.org, Academia Americana de Pediatría, 2024). Tema: heces rojas, negras o blancas, cuándo consultar. Hallazgo: tres colores merecen siempre consulta con el médico. Rojo: puede ser sangre; no hay que entrar en pánico, pero la caca con sangre, sea cuanta sea, debe valorarse; a veces es sangre tragada en el parto o de un pezón agrietado de la madre. Negro: la sangre se vuelve negra en el intestino, aunque esto no se aplica al meconio de los primeros días, que es negro y normal. Blanco o muy pálido: es raro, pero hay que avisar al médico lo antes posible porque puede deberse a un problema del hígado, y cuanto antes se valore, mejor."
+      ]
+    },
+    {
+      "source_type": "reference",
+      "title": "Las primeras deposiciones y orina (popó y pipí) del bebé (HealthyChildren.org, AAP)",
+      "organization": "American Academy of Pediatrics",
+      "publication_year": null,
+      "url": "https://www.healthychildren.org/Spanish/ages-stages/baby/Paginas/babys-first-days-bowel-movements-and-urination.aspx",
+      "specialties": [
+        "pediatrics",
+        "gastroenterology"
+      ],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "topics": [
+        "heces",
+        "estrenimiento",
+        "diarrea"
+      ],
+      "chunks": [
+        "Las primeras deposiciones y orina del bebé (HealthyChildren.org, Academia Americana de Pediatría). Tema: meconio y aspecto normal de las heces con pecho o con fórmula. Hallazgo: las primeras deposiciones son el meconio, espeso y negro o verde oscuro; después las heces se vuelven amarillo verdosas. Con lactancia materna, las heces son un líquido amarillo con grumitos como semillas y su consistencia va de muy blanda a líquida hasta que empieza con sólidos. Con fórmula son tostadas o amarillas y algo más firmes, pero no más que la arcilla blanda; las heces verdes tampoco son raras. Las heces duras o muy secas pueden indicar que le falta líquido o que lo pierde por enfermedad, fiebre o calor; con fórmula, hay que comprobar que se prepara según las instrucciones.",
+        "Las primeras deposiciones y orina del bebé (HealthyChildren.org, Academia Americana de Pediatría). Tema: frecuencia normal de las deposiciones y cuándo preocupa una diarrea. Hallazgo: muchos bebés hacen caca poco después de comer por el reflejo gastrocólico. Entre las tres y las seis semanas, algunos bebés amamantados hacen solo una deposición por semana y es normal, siempre que las heces sean blandas y el bebé esté sano, gane peso y coma con regularidad. La diarrea se reconoce por un aumento brusco de la frecuencia, más de una deposición por toma, y heces con mucha agua; lo que más preocupa es la deshidratación. Si hay grandes cantidades de sangre, moco o agua en las heces, hay que llamar al pediatra de inmediato, y también si tiene fiebre de 38 grados y es menor de tres meses."
+      ],
+      "undated_reason": "La página de HealthyChildren.org no muestra fecha de actualización en la copia leída; consultada el 2026-11-02."
+    },
+    {
+      "source_type": "reference",
+      "title": "Enfermedades diarreicas, nota descriptiva (OMS)",
+      "organization": "World Health Organization (WHO)",
+      "publication_year": 2024,
+      "url": "https://www.who.int/es/news-room/fact-sheets/detail/diarrhoeal-disease",
+      "specialties": [
+        "pediatrics",
+        "gastroenterology"
+      ],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "topics": [
+        "diarrea",
+        "deshidratacion"
+      ],
+      "chunks": [
+        "Enfermedades diarreicas, nota descriptiva (Organización Mundial de la Salud, 2024). Tema: qué es la deshidratación por diarrea y cómo se reconocen sus grados. Hallazgo: con la diarrea se pierden agua y sales en las heces líquidas, los vómitos, el sudor, la orina y la respiración; si no se reponen, aparece la deshidratación. La OMS describe tres grados. Grave, con al menos dos de estos signos: letargo o pérdida de conocimiento, ojos hundidos, no poder beber o casi no poder, y piel que tarda 2 segundos o más en volver a su sitio tras pellizcarla. Moderada, con dos o más de: inquietud o irritabilidad, ojos hundidos y sed con ganas de beber. Sin deshidratación cuando no hay signos suficientes de las anteriores.",
+        "Enfermedades diarreicas, nota descriptiva (Organización Mundial de la Salud, 2024). Tema: prevención y tratamiento de la diarrea en niños pequeños. Hallazgo: para prevenirla, agua potable, saneamiento, lavado de manos con jabón, lactancia materna exclusiva los primeros seis meses, higiene de los alimentos y vacuna contra el rotavirus. Para tratarla, las sales de rehidratación oral, una mezcla de agua limpia, sal y azúcar que se absorbe en el intestino y repone el agua y las sales perdidas; líquidos por vena solo en la deshidratación grave. Hay que seguir dando alimentos nutritivos, incluida la leche materna, durante la diarrea, porque así se rompe el círculo entre diarrea y desnutrición. Conviene consultar a un profesional cuando la diarrea se alarga, hay sangre en las heces o signos de deshidratación."
+      ]
+    },
+    {
+      "source_type": "reference",
+      "title": "Gastroenteritis aguda (Familia y Salud, AEPap)",
+      "organization": "Asociación Española de Pediatría de Atención Primaria (AEPap)",
+      "publication_year": 2019,
+      "url": "https://www.familiaysalud.es/sintomas-y-enfermedades/aparato-digestivo/sintomas-digestivos/gastroenteritis-aguda",
+      "specialties": [
+        "pediatrics",
+        "gastroenterology"
+      ],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "topics": [
+        "diarrea",
+        "deshidratacion",
+        "vomitos"
+      ],
+      "chunks": [
+        "Gastroenteritis aguda (Familia y Salud, AEPap, actualizado 2019). Tema: qué es la gastroenteritis y cómo se cuida en casa. Hallazgo: es una diarrea de comienzo brusco, a veces con náuseas, vómitos, fiebre y retortijones, casi siempre causada por virus, que se cura sola en pocos días, aunque en los más pequeños puede durar una o dos semanas. Lo principal es hidratar bien: ofrecer líquido a menudo, en pequeñas cantidades para no provocar vómitos; en los casos más intensos, sobre todo en niños muy pequeños, el agua no basta y hace falta una solución de rehidratación oral de farmacia. En general se evitan las medicinas salvo las que indique el médico: los antibióticos sin indicación pueden alargar la diarrea.",
+        "Gastroenteritis aguda (Familia y Salud, AEPap, actualizado 2019). Tema: cómo alimentar al bebé con diarrea. Hallazgo: hay que ofrecer comida enseguida, sin dejar un periodo de ayuno y sin forzar. En los lactantes no hace falta cambiar nada: los que maman siguen igual y a los que toman biberón no conviene aguar la fórmula. Los que ya toman purés pueden comer cereales, verduras, carne, pescado, lácteos (también leche, no solo yogur) y fruta; se evitan dulces y alimentos grasos. Comer pronto hace que se cure antes, aunque a veces haga caca nada más comer por un reflejo intestinal más activo. Para evitar contagios, lavado de manos tras cambiar pañales y antes de preparar comida; la vacuna del rotavirus se da entre las 6 y las 32 semanas.",
+        "Gastroenteritis aguda (Familia y Salud, AEPap, actualizado 2019). Tema: cómo saber si está deshidratado y cuándo consultar al pediatra. Hallazgo: la mejor guía es el estado general: si está contento, llora con lágrimas, babea, orina lo normal y juega, no está deshidratado. En el lactante hay que consultar si se le nota decaído y no quiere comer, si las heces son muy frecuentes y, sobre todo, si vomita mucho, porque cuesta más reponer lo que pierde y puede hacer falta que un sanitario supervise la rehidratación, siempre que se pueda por boca y poco a poco; el médico valora si necesita sueros por vena en un centro sanitario. En la guardería suele volver cuando las heces quedan contenidas en el pañal y, si traen sangre o moco, mejor esperar a que sean normales."
+      ]
+    },
+    {
+      "source_type": "reference",
+      "title": "Gastroenteritis aguda, información para padres (SEUP)",
+      "organization": "Sociedad Española de Urgencias de Pediatría (SEUP)",
+      "publication_year": null,
+      "url": "https://seup.org/wp-content/uploads/2025/05/16_Gastroente.pdf",
+      "specialties": [
+        "pediatrics",
+        "gastroenterology"
+      ],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "topics": [
+        "diarrea",
+        "deshidratacion",
+        "vomitos"
+      ],
+      "chunks": [
+        "Gastroenteritis aguda, información para padres (Sociedad Española de Urgencias de Pediatría). Tema: qué hacer en casa con un niño con gastroenteritis. Hallazgo: es una infección del tubo digestivo con más deposiciones, blandas o líquidas, que pueden traer pequeñas cantidades de sangre o moco, y a veces dolor de tripa, vómitos y fiebre. Lo más importante es evitar la deshidratación con las soluciones de rehidratación oral ya preparadas, que tienen agua, azúcar y sales en la proporción justa; se ofrecen en pequeñas cantidades y con frecuencia, en la cantidad que haya indicado el médico tras cada deposición líquida o vómito. No se deben usar soluciones caseras, refrescos ni bebidas deportivas, y no hay que darle medicamentos para la diarrea o los vómitos sin consultar con el pediatra. El peligro de deshidratación es mayor cuanto más pequeño es el niño.",
+        "Gastroenteritis aguda, información para padres (Sociedad Española de Urgencias de Pediatría). Tema: alimentación durante la gastroenteritis y signos para volver a urgencias. Hallazgo: no hace falta ayuno; se mantiene una dieta casi normal en tomas más pequeñas y frecuentes, respetando el apetito, sin grasas, dulces ni zumos, sin retirar los lácteos y manteniendo la lactancia materna, incluso más a menudo si la pide. Hay que volver a urgencias si vomita mucho, no tolera sólidos ni líquidos o vomita sin tomar nada; si los vómitos son verdosos, con sangre o como posos de café; si tiene mucha sed, llora sin lágrimas, orina poco o tiene los ojos hundidos; si está muy irritable, adormilado o responde menos; si las deposiciones son tan abundantes que no puede beber al ritmo que pierde; si rechaza comer o beber, o si hay dolor de tripa intenso o persistente o mucha sangre en las heces."
+      ],
+      "undated_reason": "Hoja informativa para padres en PDF sin fecha impresa (publicada en seup.org en 2025); consultada el 2026-11-02."
+    },
+    {
+      "source_type": "reference",
+      "title": "La diarrea en los bebés (HealthyChildren.org, AAP)",
+      "organization": "American Academy of Pediatrics",
+      "publication_year": 2015,
+      "url": "https://www.healthychildren.org/Spanish/ages-stages/baby/diapers-clothing/Paginas/Diarrhea-in-Babies.aspx",
+      "specialties": [
+        "pediatrics",
+        "gastroenterology"
+      ],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "topics": [
+        "diarrea",
+        "deshidratacion",
+        "heces"
+      ],
+      "chunks": [
+        "La diarrea en los bebés (HealthyChildren.org, Academia Americana de Pediatría, 2015). Tema: diferenciar las heces normales del bebé de la diarrea. Hallazgo: la diarrea son heces aguadas que pueden repetirse hasta 12 veces al día, no solo heces sueltas. Con pecho, las heces normales son amarillo claro, sueltas o aguadas, con grumitos como semillas, y puede hacer caca en cada toma; con fórmula son de amarillas a marrón claro y con una firmeza parecida a la crema de cacahuete. Un tinte verdoso es normal. Mientras coma y crezca bien, no hay que preocuparse, salvo si las heces son blanquecinas y arcillosas, muy aguadas y llenas de moco, duras y secas, negras o con sangre: en ese caso hay que llamar al pediatra.",
+        "La diarrea en los bebés (HealthyChildren.org, Academia Americana de Pediatría, 2015). Tema: cuándo llamar al pediatra de inmediato por diarrea y cómo darle líquidos. Hallazgo: un bebé puede deshidratarse rápido. Llame al pediatra inmediatamente si tiene diarrea y es menor de 3 meses, tiene 38 grados rectales o más, está vomitando, está sin energía o irritable y no quiere comer, o tiene signos de deshidratación como boca seca o lleva 3 horas o más sin orinar. Si es mayor de 3 meses y tiene diarrea leve con algo de fiebre más de un día, compruebe que orina lo normal, tómele la temperatura y llame al pediatra. Con pecho, lo habitual es mantener la lactancia como siempre; con fórmula, el pediatra puede indicar una bebida con electrolitos y azúcar de farmacia; las soluciones caseras no deben usarse."
+      ]
+    },
+    {
+      "source_type": "reference",
+      "title": "Diarrhoea and vomiting (NHS)",
+      "organization": "NHS (National Health Service, Reino Unido)",
+      "publication_year": 2023,
+      "url": "https://www.nhs.uk/conditions/diarrhoea-and-vomiting/",
+      "specialties": [
+        "pediatrics",
+        "gastroenterology"
+      ],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "topics": [
+        "diarrea",
+        "vomitos",
+        "deshidratacion"
+      ],
+      "chunks": [
+        "Diarrhoea and vomiting (NHS, Servicio Nacional de Salud del Reino Unido, 2023). Tema: cuidar en casa a un bebé con diarrea y vómitos. Hallazgo: suelen deberse a una infección de estómago y se tratan en casa; lo más importante es tomar muchos líquidos para evitar la deshidratación. Hay que seguir con el pecho o el biberón y, si vomita, probar tomas pequeñas más a menudo de lo habitual; a los bebés que toman fórmula o sólidos se les puede dar sorbitos de agua entre tomas. No dar zumos ni bebidas con gas porque empeoran la diarrea, no preparar la fórmula más diluida de lo normal y no dar medicinas para cortar la diarrea a los niños. La diarrea suele parar en 5 a 7 días y los vómitos en 1 o 2 días; se contagian con facilidad, así que lavado de manos frecuente.",
+        "Diarrhoea and vomiting (NHS, Servicio Nacional de Salud del Reino Unido, 2023). Tema: cuándo pedir ayuda urgente y cuándo ir a urgencias por diarrea o vómitos en un bebé. Hallazgo: llama al servicio de consejo urgente si te preocupa un bebé menor de 12 meses, si deja el pecho o el biberón mientras está enfermo, si tiene signos de deshidratación como menos pañales mojados, si vomita una y otra vez y no retiene líquidos, si tiene diarrea con sangre o sangra por el ano, o si la diarrea dura más de 7 días o los vómitos más de 2. Ve a urgencias o llama a emergencias si vomita sangre o algo como posos de café, si el vómito es verde o amarillo verdoso, si tiene un dolor de tripa intenso y repentino, la piel o los labios azulados, grisáceos, pálidos o con manchas, mucha dificultad para respirar, o si está confuso o no responde como siempre."
+      ]
+    },
+    {
+      "source_type": "reference",
+      "title": "El lactante que vomita (Familia y Salud, AEPap)",
+      "organization": "Asociación Española de Pediatría de Atención Primaria (AEPap)",
+      "publication_year": 2018,
+      "url": "https://www.familiaysalud.es/sintomas-y-enfermedades/aparato-digestivo/sintomas-digestivos/el-lactante-que-vomita",
+      "specialties": [
+        "pediatrics",
+        "gastroenterology"
+      ],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "topics": [
+        "vomitos",
+        "deshidratacion"
+      ],
+      "chunks": [
+        "El lactante que vomita (Familia y Salud, AEPap, actualizado 2018). Tema: diferencia entre vómito y regurgitación y causas de vómitos en el bebé. Hallazgo: el vómito es la expulsión violenta por la boca del contenido del estómago; la regurgitación es la salida del alimento sin esfuerzo, sin esa brusquedad, y en el reflujo suele ser poca cantidad y mejora al crecer sin afectar al peso. Los vómitos pueden deberse a infecciones (gastroenteritis, infección de orina, meningitis), a alergia o intolerancia a las proteínas de leche de vaca o a una obstrucción. La estenosis de píloro aparece entre los 15 días y los 4 meses, con vómitos a chorro poco después de comer; la invaginación intestinal, entre los 5 y los 10 meses, con vómitos y crisis de llanto intenso con las rodillas encogidas, que empeoran y a veces traen heces con sangre.",
+        "El lactante que vomita (Familia y Salud, AEPap, actualizado 2018). Tema: qué hacer cuando el bebé empieza a vomitar y cuándo consultar. Hallazgo: se aconseja empezar la tolerancia con soluciones de rehidratación oral de farmacia, ofrecidas en pequeñas cantidades con cuchara o jeringa y aumentando poco a poco durante unas 3 o 4 horas; se desaconsejan los sueros caseros, las bebidas isotónicas, los zumos y las bebidas azucaradas o con gas. Hay que consultar si sigue vomitando pese a una tolerancia bien hecha, si los vómitos traen sangre o bilis, si hay dolor de tripa intenso, vómitos repetidos, mucha somnolencia o irritabilidad, si no puede tomar suficientes líquidos o si hay signos de deshidratación: boca seca, llanto sin lágrimas, fontanela hundida o menos orina."
+      ]
+    },
+    {
+      "source_type": "reference",
+      "title": "Alergia a las proteínas de leche de vaca (APLV) (Familia y Salud, AEPap)",
+      "organization": "Asociación Española de Pediatría de Atención Primaria (AEPap)",
+      "publication_year": 2026,
+      "url": "https://www.familiaysalud.es/sintomas-y-enfermedades/aparato-digestivo/problemas-con-alimentos/alergia-las-proteinas-de-leche-de",
+      "specialties": [
+        "pediatrics",
+        "gastroenterology"
+      ],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "topics": [
+        "aplv"
+      ],
+      "chunks": [
+        "Alergia a las proteínas de leche de vaca (Familia y Salud, AEPap, actualizado 2026). Tema: qué es la APLV y sus formas inmediata y retardada. Hallazgo: el sistema de defensa reacciona de forma anormal frente a las proteínas de la leche de vaca; afecta al 2 % de los menores de 4 años y es distinta de la intolerancia a la lactosa. En la forma mediada por IgE los síntomas aparecen en las 2 primeras horas: enrojecimiento, habones, hinchazón de labios o párpados, tos, dificultad para respirar, vómitos o decaimiento, y si se combinan puede ser una anafilaxia, grave y potencialmente mortal. En la forma no mediada por IgE aparecen pasadas 2 horas o días después y son sobre todo digestivos: hebras de sangre roja con moco en las heces, diarrea crónica con poca ganancia de peso o vómitos intensos y repetidos con palidez.",
+        "Alergia a las proteínas de leche de vaca (Familia y Salud, AEPap, actualizado 2026). Tema: cómo se diagnostica la APLV y por qué no retirar la leche por tu cuenta. Hallazgo: la forma no mediada por IgE puede parecer reflujo, cólicos o estreñimiento que no responden a las medidas habituales del pediatra. El diagnóstico parte de la historia clínica y la exploración; en la forma IgE se usan pruebas en la piel y análisis de sangre, y en la no IgE no hay prueba de laboratorio: se retira la leche, se observa si los síntomas desaparecen en días o semanas y se comprueba si vuelven al reintroducirla, siempre bajo control del pediatra. Si sospechas APLV, consulta con el pediatra: no se debe eliminar la leche de la dieta sin supervisión médica, porque puede llevar a errores de diagnóstico y a problemas nutricionales.",
+        "Alergia a las proteínas de leche de vaca (Familia y Salud, AEPap, actualizado 2026). Tema: lactancia materna y fórmulas especiales en la APLV, y cómo evoluciona. Hallazgo: en la forma inmediata, casi siempre en bebés con pecho exclusivo que reaccionan a los primeros biberones de fórmula, la madre no tiene que retirar los lácteos de su dieta y, si hace falta suplementar, el pediatra indica una fórmula extensamente hidrolizada o de arroz hidrolizado. En la forma retardada con pecho exclusivo puede ser necesario que la madre elimine la leche de vaca; si los síntomas empezaron con la fórmula, el bebé hace dieta sin lácteos con fórmula hidrolizada. La forma no IgE suele resolverse en los 2 primeros años; se comprueba con una prueba de tolerancia a la edad que indique el pediatra o el alergólogo."
+      ]
+    },
+    {
+      "source_type": "reference",
+      "title": "Alergia a la leche de vaca (EnFamilia, AEP)",
+      "organization": "Asociación Española de Pediatría",
+      "publication_year": null,
+      "url": "https://www.aeped.es/enfamilia/salud-en-familia/alergia-leche-vaca",
+      "specialties": [
+        "pediatrics",
+        "gastroenterology"
+      ],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "topics": [
+        "aplv"
+      ],
+      "chunks": [
+        "Alergia a la leche de vaca (EnFamilia, Asociación Española de Pediatría). Tema: síntomas de la alergia a la leche en el primer año. Hallazgo: es la alergia alimentaria más frecuente en los bebés y suele aparecer en el primer año, al pasar del pecho a una fórmula de leche de vaca. En la forma mediada por IgE los síntomas llegan enseguida o en la primera hora: a veces solo rechazo insistente del biberón, más a menudo rojez y habones alrededor de la boca que pueden extenderse, con hinchazón de labios, párpados u orejas, o vómitos y diarrea en esa primera hora. La dificultad para respirar, tos seca, hinchazón de lengua, ronquera, palidez, labios azulados o decaimiento son signos de anafilaxia, una urgencia que pone en peligro la vida. En la forma no IgE los síntomas son digestivos, horas o días después: vómitos persistentes o diarrea prolongada con moco o sangre.",
+        "Alergia a la leche de vaca (EnFamilia, Asociación Española de Pediatría). Tema: qué hacer ante la sospecha, diagnóstico y evolución de la alergia a la leche. Hallazgo: si aparece alguno de esos síntomas, suspender la leche y los lácteos de vaca o de otro mamífero y consultar al pediatra, que decidirá con qué sustituirla y si deriva a otro especialista. La forma IgE se diagnostica con pruebas en la piel o análisis y, si son dudosas, con una prueba de tolerancia muy controlada; la no IgE es más compleja de diagnosticar. Los niños alérgicos tampoco toleran leche de cabra ni oveja, aunque suelen tolerar la carne de ternera; con pecho, muy pocas veces la madre tiene que dejar los lácteos. La mayoría llega a tolerar la leche antes de los 5 años y el especialista revisa periódicamente si la ha superado."
+      ],
+      "undated_reason": "Página divulgativa de EnFamilia sin fecha de publicación visible; consultada el 2026-11-02."
+    },
+    {
+      "source_type": "reference",
+      "title": "Alergia e intolerancia a la leche de vaca en los niños amamantados (EnFamilia, AEP)",
+      "organization": "Asociación Española de Pediatría",
+      "publication_year": null,
+      "url": "https://www.aeped.es/enfamilia/salud-en-familia/alergia-e-intolerancia-leche-vaca-en-ninos-amamantados",
+      "specialties": [
+        "pediatrics",
+        "gastroenterology"
+      ],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "topics": [
+        "aplv"
+      ],
+      "chunks": [
+        "Alergia e intolerancia a la leche de vaca en los niños amamantados (EnFamilia, Asociación Española de Pediatría). Tema: si un bebé que solo toma pecho puede tener alergia a la leche de vaca. Hallazgo: los bebés amamantados tienen menos probabilidad de alergia, pero las proteínas de la leche de vaca que toma la madre pueden pasar a su leche y provocarla. Si un bebé con pecho tiene síntomas de alergia y existe una relación clara entre los lácteos que toma la madre y la aparición de los síntomas, se suprimen por completo los lácteos de la dieta materna, siempre tras la valoración del pediatra. La madre puede seguir amamantando y obtener el calcio de otros alimentos como legumbres, frutos secos, pescado o marisco; no hace falta tomar leche para producir leche.",
+        "Alergia e intolerancia a la leche de vaca en los niños amamantados (EnFamilia, Asociación Española de Pediatría). Tema: diagnóstico y evolución de la alergia a la leche en el bebé amamantado. Hallazgo: suele aparecer en el primer año al introducir una fórmula durante la lactancia o al sustituir el pecho por fórmula. El primer paso es una historia clínica cuidadosa; la forma IgE se confirma con pruebas en la piel o análisis y, si hay dudas, con una prueba de tolerancia controlada, y la no IgE depende de ver cómo responde el niño al retirar y volver a introducir la leche. En ocasiones la única señal es el rechazo insistente del biberón. Hay que avisar a todas las personas que cuidan al niño, porque pequeñas cantidades pueden causar reacciones graves. La forma no IgE tiende a resolverse antes en la infancia y la IgE puede durar más."
+      ],
+      "undated_reason": "Página divulgativa de EnFamilia sin fecha de publicación visible; consultada el 2026-11-02."
+    },
+    {
+      "source_type": "reference",
+      "title": "Cow Milk Allergy, infant feeding (Healthier Together, NHS)",
+      "organization": "Healthier Together (NHS)",
+      "publication_year": null,
+      "url": "https://www.healthiertogether.nhs.uk/new-parent-and-baby/cow-milk-allergy",
+      "specialties": [
+        "pediatrics",
+        "gastroenterology"
+      ],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "topics": [
+        "aplv"
+      ],
+      "chunks": [
+        "Cow Milk Allergy (Healthier Together, programa del NHS del Reino Unido). Tema: alergia a la leche inmediata y retardada en bebés. Hallazgo: es la alergia alimentaria más común en lactantes, afecta a 1 de cada 50 bebés en el primer año y la mayoría la supera entre los tres y los cinco años. En la reacción rápida, desde enseguida hasta una hora después de tomar lácteos, puede haber erupción con picor, rojez o habones, hinchazón de labios, cara u ojos, dolor de tripa,, vómitos y diarrea; raramente respiración ruidosa o difícil, lengua hinchada, pérdida de conocimiento o un bebé flojo, lo que es una anafilaxia, siempre una emergencia médica que requiere tratamiento inmediato y llamar a una ambulancia. La reacción retardada aparece de 2 a 72 horas después y se confunde con problemas comunes: diarrea, estreñimiento, reflujo, vómitos, moco o sangre en las heces, gases dolorosos o eccema.",
+        "Cow Milk Allergy (Healthier Together, programa del NHS del Reino Unido). Tema: cómo se confirma la alergia a la leche de vaca y en qué se diferencia de la intolerancia a la lactosa. Hallazgo: en la forma rápida el diagnóstico se basa en la historia de la reacción y en pruebas de alergia en la piel o en sangre, que suelen ser positivas. En la forma retardada las pruebas suelen ser negativas: el diagnóstico consiste en retirar la leche y los lácteos durante un periodo de prueba de dos a cuatro semanas, ver si hay una mejoría clara y después hacer una reintroducción planificada en casa para confirmarlo antes de mantener la retirada a largo plazo. La intolerancia a la lactosa es otra cosa: falta la enzima que digiere el azúcar de la leche, causa diarrea, vómitos, dolor y gases, es molesta pero no peligrosa y no produce erupciones ni anafilaxia."
+      ],
+      "undated_reason": "Página de Healthier Together (programa del NHS) sin fecha de revisión visible en la copia leída; consultada el 2026-11-02."
+    },
+    {
+      "source_type": "reference",
+      "title": "Dermatitis atópica (Familia y Salud, AEPap)",
+      "organization": "Asociación Española de Pediatría de Atención Primaria (AEPap)",
+      "publication_year": 2017,
+      "url": "https://www.familiaysalud.es/sintomas-y-enfermedades/la-piel/dermatitis-y-eczemas/dermatitis-atopica",
+      "specialties": [
+        "pediatrics",
+        "dermatology"
+      ],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "topics": [
+        "dermatitis_atopica"
+      ],
+      "chunks": [
+        "Dermatitis atópica (Familia y Salud, AEPap, actualizado 2017). Tema: qué es el eccema atópico del bebé y cuándo empieza. Hallazgo: la dermatitis atópica o eccema es una inflamación crónica de la piel muy frecuente en los niños, que va a brotes y da mucho picor, a veces tanto que interrumpe el sueño. La genética pesa: hasta el 70 % tiene familiares con atopia (dermatitis, asma, urticaria o alergias). La mayoría empieza antes del primer año, casi siempre entre los 3 y los 6 meses, y muchos niños mejoran con la edad. Como norma no hacen falta pruebas: el pediatra la reconoce, y solo se estudia la alergia si el eccema empeora claramente al comer un alimento concreto.",
+        "Dermatitis atópica (Familia y Salud, AEPap, actualizado 2017). Tema: cuidados diarios de la piel atópica y qué evitar. Hallazgo: no hay un tratamiento que la cure; el objetivo es una vida normal con las mínimas lesiones, sin picor, sin inflamación y sin infecciones, con un plan escrito por el pediatra o el dermatólogo para cuando la piel está bien y para los brotes. Hay que evitar el contacto con tejidos que pican como nailon, poliéster, lana, plásticos y gomas, no abrigar en exceso y evitar el tabaco. Para mantener la piel hidratada se usan cremas emolientes después del baño y al menos dos veces en el día, pero no sobre heridas o rascados de un brote. Los padres deben transmitir calma y no regañar al niño por rascarse; los tratamientos naturales alternativos no se aconsejan y el brote se trata pronto siguiendo al médico."
+      ]
+    },
+    {
+      "source_type": "reference",
+      "title": "Decálogo de la dermatitis atópica (Familia y Salud, AEPap)",
+      "organization": "Asociación Española de Pediatría de Atención Primaria (AEPap)",
+      "publication_year": 2016,
+      "url": "https://www.familiaysalud.es/sintomas-y-enfermedades/la-piel/dermatitis-y-eczemas/decalogo-de-la-dermatitis-atopica",
+      "specialties": [
+        "pediatrics",
+        "dermatology"
+      ],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "topics": [
+        "dermatitis_atopica"
+      ],
+      "chunks": [
+        "Decálogo de la dermatitis atópica (Familia y Salud, AEPap, 2016). Tema: diez claves sobre la dermatitis atópica para familias: diagnóstico, alimentos y ropa. Hallazgo: es una enfermedad crónica y recurrente que aparece en los primeros años y a menudo mejora durante la infancia; es mucho más frecuente si los padres la tienen. Da brotes de eccema, zonas ásperas, rojas y que pican, y no es lo mismo tener la piel seca que tener dermatitis atópica. El diagnóstico se hace por los síntomas, sin análisis. Las pruebas de alergia solo se hacen si hay síntomas y no se aconseja quitar ningún alimento de la dieta salvo alergia demostrada. Conviene que la ropa en contacto con la piel sea de algodón y que el niño no sude demasiado.",
+        "Decálogo de la dermatitis atópica (Familia y Salud, AEPap, 2016). Tema: el baño y la hidratación en la piel atópica: la piel sana se hidrata, la piel enferma se trata. Hallazgo: una buena higiene evita que la piel se contamine con bacterias: el baño ha de ser corto, con agua poco caliente y un jabón suave especial para piel atópica, y se seca sin frotar. Es importante mantener la piel bien hidratada, pero cuando aparece un brote hay que usar las cremas de tratamiento que indique el pediatra, de la forma y durante el tiempo que diga. Conviene tener por escrito un plan de tratamiento para cada momento y aprovechar algún taller práctico sobre el cuidado de la piel atópica."
+      ]
+    },
+    {
+      "source_type": "reference",
+      "title": "Guía para pacientes con dermatitis atópica (AEDV, Fundación Piel Sana)",
+      "organization": "Academia Española de Dermatología y Venereología (AEDV)",
+      "publication_year": 2020,
+      "url": "https://aedv.es/wp-content/uploads/2020/06/Gui%CC%81a-dermatitis-ato%CC%81pica-VF.pdf",
+      "specialties": [
+        "pediatrics",
+        "dermatology"
+      ],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "topics": [
+        "dermatitis_atopica"
+      ],
+      "chunks": [
+        "Guía para pacientes con dermatitis atópica (Academia Española de Dermatología y Venereología, 2020). Tema: cómo se ve la dermatitis atópica en el lactante. Hallazgo: la guía describe una fase del lactante, de los 2 meses a los 2 años, con lesiones agudas (enrojecimiento, pequeñas ampollas y costras) sobre todo en la cara, en frente y mejillas respetando el triángulo de nariz y boca, y también en el cuero cabelludo, la cara externa de brazos y piernas, el dorso de manos y pies y el tronco. Son típicas las grietas detrás y debajo de las orejas, que tienden a infectarse, y las marcas de rascado; el área del pañal no suele afectarse. En el bebé el picor se nota como irritabilidad y problemas de sueño.",
+        "Guía para pacientes con dermatitis atópica (Academia Española de Dermatología y Venereología, 2020). Tema: ropa, lavado, baño y desencadenantes en la piel atópica. Hallazgo: toda la ropa en contacto con la piel, incluida la de los familiares que cogen al niño, debe ser preferiblemente de algodón, evitando lana y fibras sintéticas; conviene lavar la ropa nueva antes de usarla, quitar las etiquetas que rozan, lavar con jabón suave y sin suavizante. El agua dura, con mucha cal, irrita la piel atópica. Se recomienda un baño diario de corta duración, porque ayuda a reducir la aspereza y el picor. Entre los factores que pueden empeorarla, la guía cita la contaminación, los cambios de estación y la exposición a gatos. Las cremas hidratantes no curan, pero mantienen la piel en buen estado y espacian los brotes; se ponen después del baño y varias veces durante el día."
+      ]
+    },
+    {
+      "source_type": "reference",
+      "title": "Atopic eczema (NHS)",
+      "organization": "NHS (National Health Service, Reino Unido)",
+      "publication_year": null,
+      "url": "https://www.nhs.uk/conditions/atopic-eczema/",
+      "specialties": [
+        "pediatrics",
+        "dermatology"
+      ],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "topics": [
+        "dermatitis_atopica"
+      ],
+      "chunks": [
+        "Atopic eczema (NHS, Servicio Nacional de Salud del Reino Unido). Tema: cómo reconocer el eccema atópico en bebés y qué lo empeora. Hallazgo: es una afección frecuente que causa picor, más común en niños pequeños; no se cura, pero el tratamiento controla los síntomas y suele mejorar con la edad. En bebés y niños pequeños aparece a menudo en la cara, además de codos, rodillas y manos, con piel seca, agrietada, con costras o escamas, roja o más clara u oscura según el tono de piel. Va en brotes. Es más probable si los padres tienen eccema o hay asma o alergia al polen en la familia. Lo empeoran el jabón, el detergente, mascotas, algunos tejidos, el polen, los ácaros o ciertos alimentos, el calor y los cambios de temperatura, las infecciones de piel y el estrés. No es contagioso.",
+        "Atopic eczema (NHS, Servicio Nacional de Salud del Reino Unido). Tema: cuidados en casa del eccema y cuándo pedir cita urgente. Hallazgo: evitar lo que lo empeora, hidratar la piel con emolientes tan a menudo como se pueda, al menos dos veces en el día, y seguir haciéndolo aunque mejore; lavar con emoliente en vez de jabón, mantenerlo fresco, uñas cortas y manoplas antirrasguños en bebés. No cambiar la dieta salvo indicación médica, tampoco la de la madre que da el pecho. Consultar al médico si tiene síntomas de eccema o el tratamiento no funciona. Pedir cita urgente si el eccema tiene ampollas, costras, supura o tiene granos con pus, si duele, está hinchado o caliente, si empeora o se extiende de repente, o si hay fiebre o malestar general: pueden ser signos de infección o de un eccema herpético, más grave."
+      ],
+      "undated_reason": "La copia leída de la página del NHS no muestra la fecha de revisión; consultada el 2026-11-02."
+    },
+    {
+      "source_type": "reference",
+      "title": "Mi bebé tiene costra láctea (Familia y Salud, AEPap)",
+      "organization": "Asociación Española de Pediatría de Atención Primaria (AEPap)",
+      "publication_year": 2024,
+      "url": "https://www.familiaysalud.es/sintomas-y-enfermedades/la-piel/dermatitis-y-eczemas/mi-bebe-tiene-costra-lactea",
+      "specialties": [
+        "pediatrics",
+        "dermatology"
+      ],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "topics": [
+        "costra_lactea"
+      ],
+      "chunks": [
+        "Mi bebé tiene costra láctea (Familia y Salud, AEPap, 2024). Tema: qué es la costra láctea y por qué aparece. Hallazgo: son escamas o costras amarillentas y grasientas en el cuero cabelludo; es una forma de dermatitis seborreica, que también puede salir detrás de las orejas, en cejas, mejillas, párpados, tronco o zona del pañal. No suele estar al nacer: aparece en las primeras semanas o meses y puede presentarse durante el primer año. Se debe a un exceso de grasa de la piel que deja pegadas las células muertas, con predisposición familiar y más presencia de una levadura de la piel. Es muy frecuente y banal: no suele picar ni molestar, no se contagia y no tiene que ver con falta de higiene ni con alergias. Lo normal es que se cure sola con el tiempo.",
+        "Mi bebé tiene costra láctea (Familia y Salud, AEPap, 2024). Tema: cómo quitar la costra láctea en casa y cuándo consultar. Hallazgo: basta la higiene habitual del cuero cabelludo con un champú suave; se puede poner aceite o vaselina para que las escamas se desprendan y retirarlas con un peine o una gasa, con cuidado de no dañar la piel. Si así no mejora, hay que consultar con el pediatra, que valorará si hace falta otro tratamiento. Las complicaciones son raras, pero si a pesar de la higiene hay supuración, mal olor o inflamación excesiva, se debe acudir al médico para descartar una sobreinfección. En general solo afecta a la estética."
+      ]
+    },
+    {
+      "source_type": "reference",
+      "title": "Cradle cap (NHS)",
+      "organization": "NHS (National Health Service, Reino Unido)",
+      "publication_year": 2025,
+      "url": "https://www.nhs.uk/conditions/cradle-cap/",
+      "specialties": [
+        "pediatrics",
+        "dermatology"
+      ],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "topics": [
+        "costra_lactea"
+      ],
+      "chunks": [
+        "Cradle cap (NHS, Servicio Nacional de Salud del Reino Unido, 2025). Tema: cómo se reconoce la costra láctea del bebé. Hallazgo: es una afección de la piel inofensiva y común en bebés, que suele desaparecer sola en unos meses. Se ven placas de escamas grasientas blancas o amarillas en el cuero cabelludo y la cara que forman una costra que puede desprenderse, y a veces escamitas secas en la zona del pañal o en los pliegues. La piel de alrededor puede verse rosada o roja, o más clara u oscura en pieles morenas o negras. No pica, no duele ni molesta al bebé. La causa no está clara, pero no se contagia de otros bebés.",
+        "Cradle cap (NHS, Servicio Nacional de Salud del Reino Unido, 2025). Tema: qué hacer y qué no con la costra láctea y cuándo ir al médico. Hallazgo: masajear suavemente una crema emoliente o aceite de coco en el cuero cabelludo para ablandar las escamas, cepillar con un cepillo suave y lavar con champú de bebé; es normal que salga algo de pelo con las escamas y vuelve a crecer. No usar aceite de oliva ni aceite de cacahuete (por el riesgo de alergia), ni jabón, champús de adulto o productos con perfume, y no arrancar las costras porque aumenta el riesgo de infección. Consultar al médico si no mejora tras unas semanas de cuidados, si se extiende por todo el cuerpo, si las costras sangran o supuran o si la zona está hinchada: puede ser una infección, un eccema atópico o sarna."
+      ]
+    },
+    {
+      "source_type": "reference",
+      "title": "Cuidados del área del pañal (Familia y Salud, AEPap)",
+      "organization": "Asociación Española de Pediatría de Atención Primaria (AEPap)",
+      "publication_year": 2023,
+      "url": "https://www.familiaysalud.es/salud-y-escuela/educacion-infantil-0/educacion-para-la-salud/cuidados-del-area-del-panal",
+      "specialties": [
+        "pediatrics",
+        "dermatology",
+        "gastroenterology"
+      ],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "topics": [
+        "dermatitis_panal",
+        "heces"
+      ],
+      "chunks": [
+        "Cuidados del área del pañal (Familia y Salud, Grupo de Educación para la Salud de la AEPap, actualizado 2023). Tema: por qué sale la dermatitis del pañal y cómo es la orina y la caca normales. Hallazgo: la piel bajo el pañal es muy delicada y está en contacto con orina y heces; la dermatitis, con piel irritada, roja, descamada y que escuece, es más frecuente si los pañales no se mantienen limpios y secos, y también influyen la diarrea, algunos medicamentos, el roce y la sensibilidad a detergentes o jabones. La orina normal va de clara a más amarilla según lo que beba; si hay sangre hay que consultarlo con el pediatra. Con pecho las heces son blandas, casi líquidas, como mostaza con semillas; con fórmula, más duras y marrones o amarillas. Unos bebés hacen tras cada toma y otros dos o tres veces por semana.",
+        "Cuidados del área del pañal (Familia y Salud, Grupo de Educación para la Salud de la AEPap, actualizado 2023). Tema: cómo cambiar el pañal para prevenir la dermatitis. Hallazgo: revisar el pañal cada 2 o 3 horas y cambiarlo aunque solo esté húmedo; limpiar con suavidad la zona y los pliegues con toallita húmeda, gasa o esponja; no hace falta jabón, porque quita los aceites naturales de la piel; secar con suavidad o dejar secar al aire. Si se cree conveniente, poner una capa fina de crema protectora de la humedad antes del pañal nuevo; evitar el talco, que puede inflamar la piel dañada y es perjudicial si el bebé lo inhala. Cerrar el pañal sin apretar para que no roce. En las niñas, limpiar de delante hacia atrás; en los niños, no forzar el prepucio. Nunca dejar al bebé solo en el cambiador."
+      ]
+    },
+    {
+      "source_type": "reference",
+      "title": "Nappy rash (NHS)",
+      "organization": "NHS (National Health Service, Reino Unido)",
+      "publication_year": 2026,
+      "url": "https://www.nhs.uk/baby/caring-for-a-newborn/nappy-rash/",
+      "specialties": [
+        "pediatrics",
+        "dermatology"
+      ],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "topics": [
+        "dermatitis_panal"
+      ],
+      "chunks": [
+        "Nappy rash (NHS, Servicio Nacional de Salud del Reino Unido, 2026). Tema: síntomas y causas de la dermatitis del pañal. Hallazgo: es frecuente en bebés y suele tratarse en casa. Puede haber zonas rojas o en carne viva en el culito o en toda la zona del pañal, granitos o ampollas, piel seca y descamada, picor o dolor, y el bebé puede estar incómodo. Se produce por el contacto prolongado de la piel con pis o caca, por no limpiar o no cambiar el pañal a menudo, por el roce del pañal, por una reacción a jabones, detergentes o geles de baño, por toallitas con perfume o alcohol, por diarrea, por pañales poco absorbentes o poco transpirables, por algunos medicamentos, o por una infección por hongos.",
+        "Nappy rash (NHS, Servicio Nacional de Salud del Reino Unido, 2026). Tema: cómo tratar y prevenir la dermatitis del pañal en casa y cuándo consultar. Hallazgo: cambiar los pañales mojados o sucios cuanto antes, mantener la piel limpia y seca secando a toquecitos, dejarlo sin pañal cuando se pueda, usar pañales muy absorbentes y bien ajustados, limpiar con agua o toallitas sin perfume ni alcohol y bañarlo a diario, pero no más de dos baños diarios porque reseca la piel. No usar jabones, lociones ni gel de baño, ni polvos de talco o cremas antisépticas, ni cerrar el pañal demasiado apretado ni poner braguitas de plástico encima. En farmacia pueden recomendar una crema barrera en capa fina. Consultar con la enfermera o el médico si la irritación no se va, empeora o se extiende, si el bebé tiene fiebre o si parece muy incómodo."
+      ]
+    },
+    {
+      "source_type": "reference",
+      "title": "Mi bebé está amarillo: ictericia en el recién nacido (Familia y Salud, AEPap)",
+      "organization": "Asociación Española de Pediatría de Atención Primaria (AEPap)",
+      "publication_year": 2018,
+      "url": "https://www.familiaysalud.es/sintomas-y-enfermedades/recien-nacido/mi-bebe-esta-amarillo-ictericia-en-el-recien-nacido",
+      "specialties": [
+        "pediatrics"
+      ],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "topics": [
+        "ictericia"
+      ],
+      "chunks": [
+        "Mi bebé está amarillo: ictericia en el recién nacido (Familia y Salud, AEPap, 2018). Tema: ictericia fisiológica y otros tipos de ictericia del recién nacido. Hallazgo: la ictericia es el color amarillo de la piel y las mucosas por aumento de la bilirrubina. La fisiológica se debe a que el recién nacido rompe muchos glóbulos rojos y su hígado aún es inmaduro: empieza entre el 2.º y el 4.º día, primero en ojos y cabeza y avanza hacia los pies, y desaparece en sentido inverso durante las dos primeras semanas; es normal y pasajera si las cifras no son muy altas. Con lactancia materna puede haber una ictericia precoz por tomar poco, que cede al aumentar las tomas, o una prolongada después de la primera semana que se va entre el mes y los 3 meses. La patológica aparece en las primeras 24 horas o dura más de dos semanas con orina oscura o heces blancas.",
+        "Mi bebé está amarillo: ictericia en el recién nacido (Familia y Salud, AEPap, 2018). Tema: cuándo consultar al pediatra por la ictericia y cómo se trata. Hallazgo: hay que consultar si aparece el primer día o se prolonga más allá de los 15 días de vida, si va en aumento, si le cuesta comer o tiene signos de deshidratación (lengua seca, no orina, ojos hundidos), si está irritable, demasiado dormido o con mal aspecto, si tiene fiebre o si la orina es muy oscura o las heces blancas. La mayoría son leves y se resuelven sin secuelas, pero cifras muy altas pueden dañar el cerebro. Es muy importante que esté bien alimentado: si toma pecho, debe continuar y conviene amamantarlo entre 8 y 12 veces al día los primeros días. En casos leves puede estar en una zona luminosa de la casa, sin exponerlo directamente al sol; si las cifras son altas se ingresa para fototerapia."
+      ]
+    },
+    {
+      "source_type": "reference",
+      "title": "Jaundice in babies (NHS)",
+      "organization": "NHS (National Health Service, Reino Unido)",
+      "publication_year": 2026,
+      "url": "https://www.nhs.uk/conditions/jaundice-in-babies/",
+      "specialties": [
+        "pediatrics"
+      ],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "topics": [
+        "ictericia"
+      ],
+      "chunks": [
+        "Jaundice in babies (NHS, Servicio Nacional de Salud del Reino Unido, 2026). Tema: cómo reconocer la ictericia del recién nacido y cuánto dura. Hallazgo: es frecuente, suele ser inofensiva y mejora sin tratamiento. Se ve amarillo el blanco de los ojos, la piel (empieza por cara y cabeza y puede extenderse), o bajo la lengua y dentro de las mejillas; se aprecia mejor con luz intensa y presionando suavemente la punta de la nariz o la frente, y cuesta más verla en pieles negras o morenas. En la mayoría el amarillo es más visible hacia los 3 días de vida y tarda unas 2 semanas en irse. Se debe a que el hígado del recién nacido aún no funciona del todo y acumula bilirrubina. Ayuda que coma a menudo, unas 8 a 12 tomas diarias, despertándolo si está muy dormido; si necesita tratamiento suele ser fototerapia.",
+        "Jaundice in babies (NHS, Servicio Nacional de Salud del Reino Unido, 2026). Tema: cuándo pedir cita urgente y cuándo ir a urgencias por un bebé amarillo. Hallazgo: si tiene más de 24 horas de vida, pide cita urgente con el médico o la matrona si crees que tiene ictericia, si ya se la diagnosticaron y no mejora o empeora, o si el pis es amarillo oscuro o marrón o la caca de color crema pálido (guarda una muestra para enseñarla). Llama a emergencias o ve a urgencias si tiene ictericia y está más dormido de lo normal o cuesta despertarlo, no come, está flojo o rígido o hace sacudidas, tiene 38 grados o más o 36 grados o menos, no moja pañales, respira con dificultad, con quejido o muy rápido, o si tiene menos de 24 horas de vida."
+      ]
+    },
+    {
+      "source_type": "reference",
+      "title": "A mi bebé le ha salido un bulto rojo en la piel, ¿me preocupo? El hemangioma infantil (Familia y Salud, AEPap)",
+      "organization": "Asociación Española de Pediatría de Atención Primaria (AEPap)",
+      "publication_year": 2023,
+      "url": "https://www.familiaysalud.es/sintomas-y-enfermedades/la-piel/manchas-y-granos/mi-bebe-le-ha-salido-un-bulto-rojo-en-la-piel-me",
+      "specialties": [
+        "pediatrics",
+        "dermatology"
+      ],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "topics": [
+        "hemangioma",
+        "manchas_nacimiento"
+      ],
+      "chunks": [
+        "A mi bebé le ha salido un bulto rojo: el hemangioma infantil (Familia y Salud, AEPap, 2023). Tema: qué es un hemangioma y cómo crece. Hallazgo: es el tumor benigno más frecuente de la infancia y casi siempre se va solo. Lo tienen hasta 1 de cada 10 bebés, más a menudo niñas, prematuros y bebés de bajo peso. Suele aparecer entre la 4.ª y la 6.ª semana de vida, a veces sobre una marca previa al nacer (blanquecina, rosada o con rayitas rojas), sobre todo en cabeza y cuello. Se ve como un bulto rojo vivo, o del color de la piel o azulado si es más profundo. Crece rápido entre el mes y los 4 meses y medio, luego más despacio, alcanza su mayor tamaño hacia el 8.º mes y, a partir del año, se va haciendo más pequeño y claro poco a poco.",
+        "A mi bebé le ha salido un bulto rojo: el hemangioma infantil (Familia y Salud, AEPap, 2023). Tema: cuándo un hemangioma necesita valoración y tratamiento. Hallazgo: ante un posible hemangioma hay que consultar con el pediatra; el diagnóstico suele hacerse por su aspecto y evolución, sin pruebas. Pueden complicarse si se ulceran (lo más frecuente, en zonas de roce o humedad), sangran, se infectan o duelen; si están cerca de los ojos pueden afectar a la visión, en labios o boca a la alimentación y en la zona de la barba a la respiración. Se estudian más a fondo los muy grandes en cara, cabeza, zona lumbar o piernas, los de la barba y cuando hay 5 o más en la piel, porque puede haberlos en el hígado. Casi ninguno necesita tratamiento, pero sí los que afectan a la visión, la alimentación o la respiración, los muy grandes, los ulcerados o los que pueden dejar secuelas estéticas."
+      ]
+    },
+    {
+      "source_type": "reference",
+      "title": "Anomalías vasculares. Hemangiomas y malformaciones vasculares (Familia y Salud, AEPap)",
+      "organization": "Asociación Española de Pediatría de Atención Primaria (AEPap)",
+      "publication_year": 2017,
+      "url": "https://www.familiaysalud.es/sintomas-y-enfermedades/la-piel/manchas-y-granos/anomalias-vasculares-hemangiomas-y-malformaciones",
+      "specialties": [
+        "pediatrics",
+        "dermatology"
+      ],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "topics": [
+        "hemangioma",
+        "manchas_nacimiento"
+      ],
+      "chunks": [
+        "Anomalías vasculares: hemangiomas y malformaciones vasculares (Familia y Salud, AEPap, actualizado 2017). Tema: manchas rojas del recién nacido: mancha salmón, picotazo de cigüeña y mancha en vino de Oporto. Hallazgo: son manchas o pequeños bultos formados por vasos sanguíneos, de tono rojo a violáceo, que el bebé tiene al nacer o aparecen en las primeras semanas; hasta un 12 % de los recién nacidos tiene alguna y la mayoría se quita durante el primer año. Las más conocidas son las manchas salmón, rojo claro, en la nuca (picotazo de cigüeña) o en el entrecejo (beso del ángel). Las malformaciones vasculares, como la mancha en vino de Oporto de la cara, están desde el nacimiento, no desaparecen solas y crecen poco a poco con el niño; son benignas.",
+        "Anomalías vasculares: hemangiomas y malformaciones vasculares (Familia y Salud, AEPap, actualizado 2017). Tema: evolución de un hemangioma y cuándo derivar al dermatólogo. Hallazgo: los hemangiomas siguen tres fases: crecen durante los primeros 5 a 7 meses, a veces deprisa; se mantienen estables entre los 7 y los 14 meses, y a partir del año tienden a desaparecer poco a poco. La mayoría no necesita ningún tratamiento; si hace falta, el pediatra de atención primaria lo envía al dermatólogo para valorarlo. Se tratan los que por su tamaño o su sitio pueden dar complicaciones, como cerca de ojos, nariz o garganta, los que crecen muy rápido y los que se ulceran, se infectan o sangran. Si hay varias manchas vasculares, hay que comprobar si también las hay dentro del cuerpo."
+      ]
+    },
+    {
+      "source_type": "reference",
+      "title": "Birthmarks (NHS)",
+      "organization": "NHS (National Health Service, Reino Unido)",
+      "publication_year": 2023,
+      "url": "https://www.nhs.uk/conditions/birthmarks/",
+      "specialties": [
+        "pediatrics",
+        "dermatology"
+      ],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "topics": [
+        "manchas_nacimiento",
+        "hemangioma"
+      ],
+      "chunks": [
+        "Birthmarks (NHS, Servicio Nacional de Salud del Reino Unido, 2023). Tema: tipos de marcas de nacimiento en el bebé. Hallazgo: la mayoría son inofensivas y desaparecen sin tratamiento. Las manchas salmón son rojas o rosadas en párpados, cabeza o nuca, se notan más cuando llora y en frente y párpados suelen aclararse hacia los 2 años. Los hemangiomas o marcas en fresa son bultos rojos que aparecen poco después de nacer, crecen los primeros 6 a 12 meses y luego se reducen; a veces están bajo la piel y se ven azulados. La mancha en vino de Oporto es roja o morada, suele estar en cara y cuello desde el nacimiento. Las manchas azul grisáceas, como un moratón, en la parte baja de la espalda o las nalgas, son más frecuentes en pieles morenas o negras, no necesitan tratamiento y no indican enfermedad.",
+        "Birthmarks (NHS, Servicio Nacional de Salud del Reino Unido, 2023). Tema: cuándo consultar al médico por una marca de nacimiento. Hallazgo: consulta si te preocupa una marca, si está cerca del ojo, la nariz o la boca, si se ha hecho más grande, más oscura o más abultada, si duele, si tu hijo tiene 6 o más manchas color café con leche o si tiene un lunar congénito grande. Los hemangiomas pueden necesitar tratamiento si afectan a la visión, la respiración o la alimentación. El médico puede pedir que vigiles los cambios o derivar al dermatólogo. La mayoría no necesita tratamiento; cuando hace falta puede ser con medicinas, láser (que funciona mejor si se empieza entre los 6 meses y el año) o cirugía."
+      ]
+    },
+    {
+      "source_type": "reference",
+      "title": "¡Cuidado! El sol quema (Familia y Salud, AEPap)",
+      "organization": "Asociación Española de Pediatría de Atención Primaria (AEPap)",
+      "publication_year": 2016,
+      "url": "https://www.familiaysalud.es/podemos-prevenir/otras-medidas-preventivas/cuidado-con-el-sol/cuidado-el-sol-quema",
+      "specialties": [
+        "pediatrics",
+        "dermatology"
+      ],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "topics": [
+        "proteccion_solar"
+      ],
+      "chunks": [
+        "¡Cuidado! El sol quema (Familia y Salud, AEPap, actualizado 2016). Tema: por qué la piel del bebé es tan sensible al sol. Hallazgo: los niños menores de tres años son más sensibles a la luz solar, y un recién nacido puede sufrir daños en la piel con más de 10 minutos de sol directo en las horas centrales del día. Los rayos ultravioleta producen quemaduras, envejecimiento de la piel, cataratas y cáncer de piel. Al mediodía y en la montaña el sol quema más. Las nubes y el aire dan una falsa sensación de frescor, pero los rayos ultravioleta siguen llegando, y la nieve, la arena, el agua y la hierba los reflejan. La quemadura se ve como piel muy roja, hinchada, dolorosa, con ampollas y descamación; si es extensa o hay ampollas, hay que ir al médico.",
+        "¡Cuidado! El sol quema (Familia y Salud, AEPap, actualizado 2016). Tema: cómo proteger del sol a bebés menores de 6 meses y hasta los 2 años. Hallazgo: los niños de menos de 6 meses no deben exponerse al sol, y hasta los 2 años hay que evitar las horas centrales del día. En general, evitar las exposiciones largas, sobre todo entre las 12 y las 17 horas, y vigilar el golpe de calor; buscar sombra o usar sombrilla; poner gorro con visera, ropa cómoda, suelta, ligera, mejor de algodón y colores claros, y gafas de sol con filtro ultravioleta. Usar fotoprotector de factor 15 o superior y resistente al agua, ponerlo media hora antes de salir y renovarlo cada vez que se moje, se seque, sude mucho o tras un rato largo al sol. Si se quema, que beba muchos líquidos y se pongan compresas frías."
+      ]
+    },
+    {
+      "source_type": "reference",
+      "title": "Cómo proteger a su bebé de las quemaduras del sol (HealthyChildren.org, AAP)",
+      "organization": "American Academy of Pediatrics",
+      "publication_year": 2026,
+      "url": "https://www.healthychildren.org/Spanish/ages-stages/baby/bathing-skin-care/Paginas/baby-sunburn-prevention.aspx",
+      "specialties": [
+        "pediatrics",
+        "dermatology"
+      ],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "topics": [
+        "proteccion_solar"
+      ],
+      "chunks": [
+        "Cómo proteger a su bebé de las quemaduras del sol (HealthyChildren.org, Academia Americana de Pediatría, 2026). Tema: protección solar del bebé menor de 6 meses. Hallazgo: la piel del bebé es más fina y se quema más rápido, incluso en pieles oscuras, y el bebé no puede avisar de que tiene calor o se está quemando. Una quemadura solar grave en un bebé es una emergencia médica que requiere atención inmediata. Evitar quemaduras en los primeros años ayuda a prevenir el cáncer de piel más adelante. Lo ideal es mantener a los bebés a la sombra y lejos del sol directo; los menores de 6 meses deben estar totalmente alejados de la luz solar directa e indirecta por el riesgo de golpe de calor. Usar cochecito con capota y sombrillas con protección ultravioleta, ropa ligera de manga larga, pantalón largo y sombrero de ala ancha, y evitar salir entre las 10 de la mañana y las 4 de la tarde.",
+        "Cómo proteger a su bebé de las quemaduras del sol (HealthyChildren.org, Academia Americana de Pediatría, 2026). Tema: crema solar a partir de los 6 meses: cuál elegir y cómo ponerla. Hallazgo: a los bebés mayores de 6 meses se les pone protector solar con regularidad en las zonas expuestas, como manos y cara. Conviene elegir uno de amplio espectro, que bloquee los rayos UVA y UVB, con factor de protección de al menos 15. Los protectores minerales son la mejor opción para la piel sensible del bebé porque es poco probable que irriten; se prefieren cremas, lociones o barras, y los aerosoles no se recomiendan en bebés. Cualquier protector es mejor que ninguno. Se pone de 15 a 30 minutos antes de salir y se renueva con frecuencia, sobre todo si se mete en el agua, siguiendo las instrucciones del envase."
+      ]
+    },
+    {
+      "source_type": "reference",
+      "title": "En guardia contra las picaduras (Familia y Salud, AEPap)",
+      "organization": "Asociación Española de Pediatría de Atención Primaria (AEPap)",
+      "publication_year": 2016,
+      "url": "https://www.familiaysalud.es/sintomas-y-enfermedades/la-piel/dermatitis-y-eczemas/en-guardia-contra-las-picaduras",
+      "specialties": [
+        "pediatrics",
+        "dermatology"
+      ],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "topics": [
+        "picaduras"
+      ],
+      "chunks": [
+        "En guardia contra las picaduras (Familia y Salud, AEPap, actualizado 2016). Tema: cómo son las picaduras de mosquito, pulga, chinche y avispa en los niños. Hallazgo: son más frecuentes en verano, casi siempre sin importancia, y rara vez dan reacciones alérgicas graves. Moscas, mosquitos y tábanos pican en zonas descubiertas y dejan pupas pequeñas que pican y no suelen estar juntas; en párpados o labios pueden hinchar mucho. Las pulgas dejan pupas en grupos o en fila, sobre todo en brazos, piernas y nalgas; las chinches pican de noche con lesiones en zigzag. Avispas y abejas causan una reacción local dolorosa, y hay que tener cuidado si pican en el cuello o cerca del ojo, si son varias picaduras o si el niño está sensibilizado. Las orugas provocan granitos agrupados que pican mucho.",
+        "En guardia contra las picaduras (Familia y Salud, AEPap, actualizado 2016). Tema: prevención y primeros cuidados de una picadura. Hallazgo: para prevenirlas se usan repelentes en la piel o en la ropa. Los niños sensibilizados a avispas y abejas no deben acercarse a panales, hacer movimientos bruscos, ir descalzos, llevar ropa de colores llamativos ni usar colonias o cosméticos con olor intenso, y sus padres deben tener a mano y saber usar el autoinyector que les haya indicado el médico. Si le pican: lavar la piel con agua y jabón; si son pelos de oruga, retirarlos con esparadrapo; si es avispa o abeja, sacar el aguijón rascando o con pinzas sin apretar la piel, y poner frío local. Si la picadura se infecta por el rascado, o la reacción es intensa, consultar."
+      ]
+    },
+    {
+      "source_type": "reference",
+      "title": "Insect bites and stings (NHS)",
+      "organization": "NHS (National Health Service, Reino Unido)",
+      "publication_year": 2023,
+      "url": "https://www.nhs.uk/conditions/insect-bites-and-stings/",
+      "specialties": [
+        "pediatrics",
+        "dermatology"
+      ],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "topics": [
+        "picaduras"
+      ],
+      "chunks": [
+        "Insect bites and stings (NHS, Servicio Nacional de Salud del Reino Unido, 2023). Tema: cuidados en casa de una picadura de insecto. Hallazgo: las picaduras no suelen ser graves y mejoran en unos días, aunque a veces se infectan o causan una reacción alérgica grave. Producen dolor y un bultito hinchado, a veces rojo, que puede picar. Si queda el aguijón de abeja o avispa, retirarlo raspando de lado con la uña o el borde de una tarjeta, sin pinzas para no exprimir el veneno; las garrapatas se sacan con pinzas finas tirando despacio hacia arriba. Después, lavar con agua y jabón, poner hielo envuelto en un paño o un paño con agua fría al menos 20 minutos si está hinchado y mantener la zona elevada. No rascarse, porque se puede infectar, y no usar remedios caseros como el bicarbonato.",
+        "Insect bites and stings (NHS, Servicio Nacional de Salud del Reino Unido, 2023). Tema: cuándo consultar por una picadura en un bebé y signos de reacción alérgica grave. Hallazgo: si un niño menor de 1 año tiene una picadura de insecto, hay que consultar con el médico. Pide cita urgente si los síntomas empeoran o no mejoran, si la picadura fue en la boca, la garganta o cerca de los ojos, si hay dolor de tripa y vómitos, fiebre con ganglios hinchados, varias picaduras o una reacción alérgica grave previa. Llama a emergencias si se le hinchan de repente labios, boca, garganta o lengua, respira muy rápido o con mucha dificultad, le cuesta tragar, tiene la piel, la lengua o los labios azulados, grises o pálidos, está de repente muy adormilado o confuso, se desmaya, o si el niño está flojo, sin fuerza o no responde como siempre."
+      ]
+    }
+  ]
+}
