@@ -1,0 +1,970 @@
+{
+  "_meta": {
+    "topic": "Desarrollo y cuidados cotidianos de 0 a 24 meses: hitos motores (sentarse, gatear, andar), lenguaje por edades, horas de sueño y siestas, dentición, cuándo empezar los sólidos y dejar el biberón, peso y percentiles, calendarios vacunales de España y Francia",
+    "compiled": "2026-10-27",
+    "method": "Lectura directa de cada página pública (EnFamilia AEP, Familia y Salud AEPap, OMS, CDC, Ministerio de Sanidad, CAV-AEP, Santé publique France, ameli.fr, mpedia.fr, sante.fr, HealthyChildren AAP, UNICEF) el 2026-10-27; cada cifra procede de la página citada en el propio fragmento",
+    "caveat": "Resúmenes en español de fuentes en español, inglés o francés; los chunks son paráfrasis con las cifras del original, no texto literal. Material de orientación para familias sobre desarrollo normal, no sustituye la valoración de un profesional ni contiene pautas de medicación.",
+    "purpose": "Cerrar el hueco medido en producción: preguntas frecuentes sobre edades de desarrollo, sueño, dientes, sólidos, peso y vacunas que no encontraban evidencia"
+  },
+  "sources": [
+    {
+      "source_type": "reference",
+      "title": "Bebé de 8-12 meses: actividad motora, cognición y comunicación (EnFamilia, AEP)",
+      "organization": "Asociación Española de Pediatría",
+      "publication_year": null,
+      "url": "https://www.aeped.es/enfamilia/salud-en-familia/bebe-8-12-meses",
+      "specialties": [
+        "pediatrics",
+        "general_medicine"
+      ],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "topics": [
+        "hitos_motores",
+        "gateo",
+        "andar",
+        "lenguaje_12m",
+        "permanencia_objeto"
+      ],
+      "chunks": [
+        "Bebé de 8-12 meses (EnFamilia, Asociación Española de Pediatría). Tema: hitos motores entre los 8 y los 12 meses, gateo y primeros pasos. Hallazgo: en este tramo el bebé ya se sienta sin apoyo y con la espalda recta todo el tiempo que quiera, y puede girarse sentado para alcanzar objetos. Hacia los 8 meses se sostiene sobre manos y rodillas y, a partir de ahí, muchos niños empiezan a gatear con más o menos habilidad. También se ponen de pie agarrados a un mueble y recorren la habitación sujetos a los muebles; alrededor del año muchos andan de la mano o han dado sus primeros pasos solos. La página aclara que se refiere a niños nacidos a término y que cada niño lleva un ritmo algo distinto.",
+        "Bebé de 8-12 meses (EnFamilia, Asociación Española de Pediatría). Tema: desarrollo cognitivo y manipulación en el último trimestre del primer año. Hallazgo: hasta los 6-7 meses, si se tapa un objeto, el bebé no lo busca; a partir de esa edad lo busca porque entiende que sigue ahí aunque no lo vea (permanencia del objeto). Golpea dos cubos entre sí y adquiere la pinza entre pulgar e índice, lo que le permite coger objetos pequeños con precisión. Con la permanencia del objeto llega el gusto por el cucú y por tirar cosas al suelo para que se las devuelvan.",
+        "Bebé de 8-12 meses (EnFamilia, Asociación Española de Pediatría). Tema: comunicación y lenguaje al final del primer año, angustia de separación. Hallazgo: la comprensión mejora deprisa: reconoce su nombre y algunas palabras y obedece órdenes sencillas acompañadas de gestos. Los balbuceos pasan de bisílabos (ma-ma, da-da) a cadenas de varias sílabas con la entonación de la lengua materna, y a los 12 meses muchos niños dicen mamá o papá y alguna palabra con sentido. En esta etapa aparece la angustia de separación: lloran al separarse de los padres, temen a los extraños y algunos que dormían bien vuelven a despertarse por la noche reclamando compañía."
+      ],
+      "undated_reason": "Página divulgativa de EnFamilia sin fecha de publicación visible; consultada el 2026-10-27."
+    },
+    {
+      "source_type": "reference",
+      "title": "El desarrollo psicomotor normal en la primera infancia (Familia y Salud, AEPap)",
+      "organization": "Asociación Española de Pediatría de Atención Primaria (AEPap)",
+      "publication_year": 2025,
+      "url": "https://www.familiaysalud.es/el-desarrollo-psicomotor-normal-en-la-primera-infancia",
+      "specialties": [
+        "pediatrics",
+        "general_medicine"
+      ],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "topics": [
+        "hitos_motores",
+        "sentarse",
+        "gateo",
+        "andar",
+        "motricidad_fina",
+        "desarrollo_social"
+      ],
+      "chunks": [
+        "El desarrollo psicomotor normal en la primera infancia (Familia y Salud, AEPap, 2025). Tema: hitos motores gruesos de 0 a 6 meses. Hallazgo: al mes, boca abajo, levanta la cabeza unos instantes; en el 2.º mes abre más las manos; en el 3.º mantiene la cabeza erguida; entre el 4.º y el 5.º, boca abajo, levanta cabeza y tórax apoyado en los antebrazos; a partir del 6.º mes empieza a mantenerse sentado con apoyo. En motricidad fina, entre el 3.º y el 4.º mes inicia la prensión, a los 4 meses dirige la mano hacia los objetos y entre el 5.º y el 6.º cambia un objeto de una mano a otra. La secuencia es la misma en todos los niños aunque el momento varía.",
+        "El desarrollo psicomotor normal en la primera infancia (Familia y Salud, AEPap, 2025). Tema: sentarse solo, gateo y marcha entre los 6 y los 12 meses. Hallazgo: el lactante de 9 meses es capaz de sentarse sin apoyo y de girarse sentado; hacia esa edad se sostiene con manos y rodillas y puede arrastrarse o gatear, y algunos niños no gatean nunca y pasan directamente a caminar. A los 12 meses se mantiene de pie sin sujetarse, camina cogido de la mano, puede dar pasos solo y algunos ya caminan. En la mano, entre los 6 y 8 meses coge objetos con toda la mano y el pulgar, a partir de los 9 aparece una pinza pulgar-índice inmadura y a los 12 meses la usa con precisión y señala lo que le interesa.",
+        "El desarrollo psicomotor normal en la primera infancia (Familia y Salud, AEPap, 2025). Tema: hitos de 1 a 2 años: andar, correr, escaleras, taza y cuchara. Hallazgo: en el segundo año empieza a ponerse de pie y a andar, primero con ayuda y luego sin ella. Sobre los 15 meses beben de una taza, sobre los 16 meses suelen caminar solos, algunos corren a los 18 meses y a los 24 meses suben y bajan escaleras. Con 12-13 meses sostienen el biberón solos y empiezan a usar cuchara y tenedor; con 15 meses hacen torres de cubos y a los 2 años apilan seis. Hasta los 2 años no se muestra la preferencia por una mano.",
+        "El desarrollo psicomotor normal en la primera infancia (Familia y Salud, AEPap, 2025). Tema: desarrollo sensorial, afectivo y social en los dos primeros años. Hallazgo: la sonrisa social aparece entre la 4.ª y la 6.ª semana; a los 3-4 meses se calma con la voz de la madre; al mes fija la mirada y a los 3 meses sigue un objeto 180 grados. Hacia los 9 meses aparece la ansiedad ante los extraños, juega al cucú, da palmitas, dice adiós con la mano y responde a su nombre. A los 12 meses acude cuando le llaman, a los 18 meses imita a los adultos en tareas cotidianas y a los 2 años juega en paralelo con otros niños sin compartir aún el juego. Con 1 año hay que consultar si no responde a los sonidos, no se gira al llamarlo o no inicia el lenguaje."
+      ]
+    },
+    {
+      "source_type": "reference",
+      "title": "Desarrollo psicomotor del niño de 1 a 2 años: autonomía y curiosidad (Familia y Salud, AEPap)",
+      "organization": "Asociación Española de Pediatría de Atención Primaria (AEPap)",
+      "publication_year": 2013,
+      "url": "https://www.familiaysalud.es/crecemos/el-segundo-ano/desarrollo-psicomotor-del-nino-de-1-2-anos-autonomia-y-curiosidad-la-vez-un",
+      "specialties": [
+        "pediatrics",
+        "general_medicine"
+      ],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "topics": [
+        "andar",
+        "correr",
+        "lenguaje_12m",
+        "lenguaje_18m",
+        "motricidad_fina"
+      ],
+      "chunks": [
+        "Desarrollo psicomotor del niño de 1 a 2 años (Familia y Salud, AEPap, 2013, actualizado 2018). Tema: marcha y motricidad gruesa en el segundo año. Hallazgo: en esta edad se inicia la bipedestación y la deambulación, primero con ayuda y luego sin ella. Sobre los 15 meses beben de una taza, sobre los 16 meses suelen caminar solos, a los 18 meses algunos ya corren y a los 24 meses suben y bajan escaleras. A partir de los 18 meses pueden ayudar a desnudarse y lanzan una pelota con la mano. La página señala que no gatear o caminar de puntillas puede ser normal.",
+        "Desarrollo psicomotor del niño de 1 a 2 años (Familia y Salud, AEPap, 2013, actualizado 2018). Tema: lenguaje y audición entre los 12 y los 24 meses. Hallazgo: con 12 meses el niño dice palabras con significado como papá o mamá, conoce el significado de muchas palabras y el nombre de sus padres; con 13 meses entiende órdenes sencillas como toma o ven. Entre los 15 y los 18 meses señala partes de su cuerpo cuando se las nombran, con 16 meses da los objetos que se le piden, con 18 meses entiende preguntas sencillas, contesta sí o no y combina dos palabras. Sobre los 2 años pueden decir más de 10 palabras. Si con 1 año no responde a los sonidos ni se gira al llamarlo, hay que acudir al pediatra.",
+        "Desarrollo psicomotor del niño de 1 a 2 años (Familia y Salud, AEPap, 2013, actualizado 2018). Tema: motricidad fina, visión y juego social de 1 a 2 años. Hallazgo: con 12-13 meses toman el biberón solos y empiezan a usar cuchara y tenedor; con 15 meses inician la pinza pulgar-índice fina y hacen torres de cubos, que a los 2 años llegan a seis cubos. La agudeza visual es casi completa a partir de los 18 meses y a los 15-18 meses miran con interés las ilustraciones de los cuentos. Los niños de 12 meses vienen cuando les llaman, a los 18 meses imitan a los adultos (limpiar, barrer) y a los 2 años juegan en paralelo con otros niños. Usar una mano de forma preferente antes de los 2 años debe comentarse con el pediatra."
+      ]
+    },
+    {
+      "source_type": "paper",
+      "title": "Desarrollo psicomotor y signos de alarma (Curso de Actualización Pediatría, AEPap)",
+      "organization": "Asociación Española de Pediatría de Atención Primaria (AEPap)",
+      "publication_year": 2016,
+      "url": "https://www.aepap.org/sites/default/files/2em.1_desarrollo_psicomotor_y_signos_de_alarma.pdf",
+      "specialties": [
+        "pediatrics",
+        "general_medicine"
+      ],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "topics": [
+        "hitos_motores",
+        "sentarse",
+        "andar",
+        "lenguaje_12m",
+        "signos_alarma",
+        "prematuro_edad_corregida"
+      ],
+      "chunks": [
+        "Desarrollo psicomotor y signos de alarma (García Pérez y Martínez Granero, Curso de Actualización Pediatría, AEPap, 2016). Tema: edad media y margen de normalidad de los principales logros madurativos (Tabla 1). Hallazgo: sonrisa social a las 4-6 semanas (margen 1-8 semanas); sostén cefálico a los 3 meses (2-4 meses); acercamiento y prensión del objeto a los 5 meses (4-6 meses); sedestación a los 6-7 meses (margen 4-12 meses); andar sin ayuda a los 13 meses (margen 8-18 meses); palabras con sentido a los 12 meses (margen 8-24 meses); frases a los 21-24 meses (margen 10-36 meses); beber de la taza solo a los 15 meses (9-21 meses). Cuanto más lejos esté un niño del promedio, menos probable es que sea normal.",
+        "Desarrollo psicomotor y signos de alarma (García Pérez y Martínez Granero, Curso de Actualización Pediatría, AEPap, 2016). Tema: cómo interpretar un hito que se retrasa y la edad corregida del prematuro. Hallazgo: el desarrollo psicomotor sigue una dirección céfalo-caudal y de axial a distal, los reflejos primitivos deben desaparecer para que aparezca la actividad voluntaria, y en el prematuro la madurez se valora con la edad corregida (restando las semanas de menos) hasta los 2-3 años. Un signo de alarma es un retraso cronológico significativo, la persistencia de patrones que deberían haber desaparecido (reflejos arcaicos) o un signo anómalo a cualquier edad; no presupone un problema, pero obliga a examen y seguimiento.",
+        "Desarrollo psicomotor y signos de alarma (García Pérez y Martínez Granero, Curso de Actualización Pediatría, AEPap, 2016). Tema: lo normal por trimestres en el primer año y de 12 a 18 meses (Tablas 2-6). Hallazgo: en el segundo trimestre son normales el gorjeo, el alcance del objeto, los volteos y el inicio de la sedestación con apoyo; en el tercer trimestre, la sedestación sólida, pasar a sentado, la bipedestación con apoyo, los desplazamientos laterales con apoyos y el gateo, y el balbuceo imitativo con monosílabos y bisílabos; en el cuarto trimestre, la pinza índice-pulgar, señalar, imitar gestos, bipedestación y marcha independiente. De 12 a 18 meses: torre de 2-3 cubos, 2-10 bisílabos, comprende unas 10 palabras y sube escaleras. Son alarma no alcanzar objetos a los 5-6 meses, no sentarse sin apoyo en el tercer trimestre o no emitir ninguna palabra entre 12 y 18 meses."
+      ]
+    },
+    {
+      "source_type": "paper",
+      "title": "WHO Motor Development Study: ventanas de adquisición de seis hitos motores gruesos (OMS)",
+      "organization": "World Health Organization (WHO)",
+      "publication_year": 2006,
+      "url": "https://www.who.int/tools/child-growth-standards/standards/motor-development-milestones",
+      "specialties": [
+        "pediatrics",
+        "general_medicine"
+      ],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "topics": [
+        "hitos_motores",
+        "sentarse",
+        "gateo",
+        "andar",
+        "oms"
+      ],
+      "chunks": [
+        "WHO Motor Development Study: ventanas de adquisición de seis hitos motores gruesos (Organización Mundial de la Salud, Estudio Multicéntrico de Patrones de Crecimiento, 2006). Tema: a qué edad se sientan, gatean, se ponen de pie y andan los niños sanos. Hallazgo: en 816 niños sanos de Ghana, India, Noruega, Omán, Estados Unidos y Brasil, la mediana fue de 5,9 meses para sentarse sin apoyo, 7,4 meses para ponerse de pie con ayuda, 8,3 meses para gatear sobre manos y rodillas, 9,0 meses para andar con ayuda, 10,8 meses para mantenerse de pie solo y unos 12 meses para andar solo (media 12,1 meses). Las ventanas de normalidad (percentiles 1 a 99) son: sentarse sin apoyo 3,8-9,2 meses, de pie con ayuda 4,8-11,4, gateo 5,2-13,5, andar con ayuda 5,9-13,7, de pie solo 6,9-16,9 y andar solo 8,2-17,6 meses.",
+        "WHO Motor Development Study: ventanas de adquisición de seis hitos motores gruesos (Organización Mundial de la Salud, 2006). Tema: variabilidad normal, niños que no gatean y uso de las ventanas. Hallazgo: cerca del 90 % de los niños alcanzó cinco de los hitos en la misma secuencia, pero un 4,3 % nunca gateó sobre manos y rodillas y pasó de otro modo a la marcha, lo que la OMS describe como variación normal. La ventana más estrecha es la de sentarse sin apoyo (5,4 meses de anchura) y las más amplias las de andar solo (9,4 meses) y mantenerse de pie solo (10,0 meses). Las ventanas sirven para comparar poblaciones y para señalar cuándo conviene una valoración si un niño parece tardío, no como fecha límite individual."
+      ]
+    },
+    {
+      "source_type": "reference",
+      "title": "Indicadores del desarrollo a los 4 y a los 6 meses (Aprenda los signos. Reaccione pronto, CDC)",
+      "organization": "CDC",
+      "publication_year": 2026,
+      "url": "https://www.cdc.gov/act-early/es/milestones/6-months.html",
+      "specialties": [
+        "pediatrics",
+        "general_medicine"
+      ],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "topics": [
+        "hitos_motores",
+        "control_cefalico",
+        "volteo",
+        "cdc"
+      ],
+      "chunks": [
+        "Indicadores del desarrollo a los 4 y 6 meses (programa Aprenda los signos. Reaccione pronto, CDC, páginas en español actualizadas en 2026). Tema: qué hace la mayoría de los bebés (75 % o más) a los 4 meses. Hallazgo: a los 4 meses mantiene la cabeza firme sin apoyo cuando lo tienen en brazos, sujeta un juguete que le ponen en la mano, se lleva las manos a la boca y, boca abajo, se levanta sobre codos y antebrazos. Sonríe para llamar la atención, suelta una risita, gorjea (agú, aahh), responde con sonidos cuando le hablan y gira la cabeza hacia la voz; mira sus propias manos con interés y abre la boca al ver el pecho o el biberón si tiene hambre.",
+        "Indicadores del desarrollo a los 6 meses (programa Aprenda los signos. Reaccione pronto, CDC, 2026). Tema: qué hace la mayoría de los bebés a los 6 meses. Hallazgo: boca abajo se voltea hasta quedar boca arriba, boca abajo se levanta sosteniéndose con los brazos estirados y usa las manos para apoyarse cuando está sentado. Reconoce a las personas conocidas, le gusta mirarse en el espejo y se ríe; se turna para hacer sonidos, hace burbujas con la boca y grititos de alegría; se pone cosas en la boca para explorarlas, estira el brazo para coger el juguete que quiere y cierra los labios cuando no quiere más comida. Los CDC piden hablar con el médico si el bebé no alcanza los indicadores o pierde destrezas."
+      ]
+    },
+    {
+      "source_type": "reference",
+      "title": "Indicadores del desarrollo a los 9 meses y a 1 año (Aprenda los signos. Reaccione pronto, CDC)",
+      "organization": "CDC",
+      "publication_year": 2026,
+      "url": "https://www.cdc.gov/act-early/es/milestones/1-year.html",
+      "specialties": [
+        "pediatrics",
+        "general_medicine"
+      ],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "topics": [
+        "hitos_motores",
+        "sentarse",
+        "andar",
+        "lenguaje_12m",
+        "cdc"
+      ],
+      "chunks": [
+        "Indicadores del desarrollo a los 9 meses (programa Aprenda los signos. Reaccione pronto, CDC, 2026). Tema: qué hace la mayoría de los bebés (75 % o más) a los 9 meses. Hallazgo: se sienta sin ayuda y sin apoyo, usa los dedos para acercar la comida hacia sí y pasa objetos de una mano a la otra. Hace sonidos como mamamama y babababa, levanta los brazos para que lo alcen, busca objetos que caen donde no los ve y golpea un objeto contra otro. Se muestra tímido o asustado con extraños, mira cuando lo llaman por su nombre, reacciona cuando el adulto se va y sonríe con el juego del cucú. A los 9 meses la AAP recomienda una prueba general del desarrollo.",
+        "Indicadores del desarrollo a 1 año (programa Aprenda los signos. Reaccione pronto, CDC, 2026). Tema: qué hace la mayoría de los bebés a los 12 meses. Hallazgo: se agarra a algo para ponerse de pie, camina apoyándose en los muebles, bebe de una taza sin tapa mientras el adulto la sujeta y levanta cosas pequeñas entre el índice y el pulgar. Dice adiós con la mano, llama a sus padres mamá o papá u otro nombre especial y entiende la palabra no. Pone un objeto dentro de un recipiente y busca las cosas que ve esconder. Al año el indicador es caminar apoyado, no caminar solo: ese aparece en la lista de los 15 meses.",
+        "Indicadores del desarrollo a los 15 meses (programa Aprenda los signos. Reaccione pronto, CDC, 2026). Tema: primeros pasos solo y primeras palabras a los 15 meses. Hallazgo: a los 15 meses la mayoría da unos pasos solo y usa los dedos para llevarse alimentos a la boca; intenta decir una o dos palabras además de mamá o papá (ota por pelota), mira un objeto conocido cuando lo nombran, sigue instrucciones acompañadas de un gesto y señala para pedir algo o ayuda. Copia a otros niños al jugar, muestra un objeto que le gusta, aplaude cuando se emociona, abraza un muñeco, usa las cosas de la manera correcta (teléfono, taza, libro) y apila al menos dos objetos pequeños."
+      ]
+    },
+    {
+      "source_type": "reference",
+      "title": "Indicadores del desarrollo a los 18 meses y a los 2 años (Aprenda los signos. Reaccione pronto, CDC)",
+      "organization": "CDC",
+      "publication_year": 2026,
+      "url": "https://www.cdc.gov/act-early/es/milestones/18-months.html",
+      "specialties": [
+        "pediatrics",
+        "general_medicine"
+      ],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "topics": [
+        "andar",
+        "correr",
+        "lenguaje_18m",
+        "lenguaje_24m",
+        "cdc"
+      ],
+      "chunks": [
+        "Indicadores del desarrollo a los 18 meses (programa Aprenda los signos. Reaccione pronto, CDC, 2026). Tema: qué hace la mayoría de los niños (75 % o más) a los 18 meses. Hallazgo: camina sin agarrarse a nadie ni a nada, hace garabatos, bebe de una taza sin tapa aunque derrame, se alimenta con los dedos, intenta usar la cuchara y se sube y baja de un sofá o silla sin ayuda. Intenta decir tres palabras o más además de mamá y papá y sigue instrucciones de un paso sin gestos (le entrega un juguete al decirle dámelo). Imita tareas del adulto como barrer, juega de forma sencilla empujando un carrito, señala para mostrar algo, extiende las manos para que se las laven y ayuda a vestirse pasando los brazos por las mangas. A los 18 meses la AAP recomienda una prueba del desarrollo y una de autismo.",
+        "Indicadores del desarrollo a los 2 años (programa Aprenda los signos. Reaccione pronto, CDC, 2026). Tema: qué hace la mayoría de los niños a los 24 meses. Hallazgo: patea una pelota, corre, sube varios escalones caminando (sin gatear) con o sin ayuda y come con cuchara. Dice al menos dos palabras juntas (más leche), señala las cosas de un libro cuando se le pregunta, señala al menos dos partes del cuerpo y usa más gestos que saludar o señalar, como soplar besos o asentir. Sostiene algo con una mano mientras usa la otra, intenta usar manijas o botones de los juguetes y juega con más de un juguete a la vez. Se da cuenta cuando otra persona está triste y mira la cara del adulto para saber cómo reaccionar ante algo nuevo."
+      ]
+    },
+    {
+      "source_type": "reference",
+      "title": "Le développement psychomoteur entre 9 et 12 mois (mpedia.fr, AFPA)",
+      "organization": "mpedia.fr (Association Française de Pédiatrie Ambulatoire, AFPA)",
+      "publication_year": 2025,
+      "url": "https://www.mpedia.fr/art-developpement-psychomoteur-9-12-mois/",
+      "specialties": [
+        "pediatrics",
+        "general_medicine"
+      ],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "topics": [
+        "hitos_motores",
+        "andar",
+        "gateo",
+        "lenguaje_12m",
+        "francia"
+      ],
+      "chunks": [
+        "Le développement psychomoteur entre 9 et 12 mois (mpedia.fr, Association Française de Pédiatrie Ambulatoire, 2025). Tema: ponerse de pie, gateo y marcha entre los 9 y 12 meses según los pediatras ambulatorios franceses. Hallazgo: entre los 10 y los 12 meses el bebé aprende a mantenerse de pie solo, pasando desde sentado por una posición intermedia de rodillas y equilibrándose con los brazos; antes de eso debe saber sentarse solo desde tumbado y levantarse con apoyo. Aunque no camine aún, se desplaza reptando o a cuatro patas. La posición de sentado aparece de media entre los 6 y los 9 meses y la marcha entre los 12 y los 18 meses; un niño puede andar a los 17 meses sin que haya motivo de inquietud.",
+        "Le développement psychomoteur entre 9 et 12 mois (mpedia.fr, AFPA, 2025). Tema: primeras palabras y motricidad fina hacia el año. Hallazgo: los primeros mots aparecen entre los 9 y los 12 meses, a menudo como onomatopeyas (el coche, los bomberos) o palabras de una o dos sílabas muy deformadas: cuentan como palabra si la misma emisión designa siempre el mismo objeto, y el gesto que la acompaña cuenta como una palabra más. Suelen sorprender porque el no o el espera preceden a veces a papá y mamá. A los 12 meses baila con la música, aprieta botones e interruptores, vacía y vuelve a llenar una bolsa, pasa y rompe páginas, señala las imágenes de los libros, hace rodar cochecitos y apila dos o tres cubos.",
+        "Le développement psychomoteur entre 9 et 12 mois (mpedia.fr, AFPA, 2025). Tema: andar con ayuda y el andador. Hallazgo: la marcha con ayuda es un juego compartido entre el niño y sus padres y nunca debe forzarse: el bebé dispone de otros muchos medios para desplazarse y explorar (a cuatro patas, sentado) y algunos que tardan en andar sorprenden subiendo y bajando escaleras a gatas. Los juguetes correpasillos de montar (camiones, tractores) favorecen el desplazamiento y la coordinación; el andador (trotteur o youpala) se desaconseja por el riesgo importante de accidentes: caídas por escaleras, terrazas o piscinas y quemaduras."
+      ]
+    },
+    {
+      "source_type": "reference",
+      "title": "Des premiers pas jusqu'à l'apprentissage de la marche (mpedia.fr, AFPA)",
+      "organization": "mpedia.fr (Association Française de Pédiatrie Ambulatoire, AFPA)",
+      "publication_year": 2026,
+      "url": "https://www.mpedia.fr/art-apprentissage-marche/",
+      "specialties": [
+        "pediatrics",
+        "general_medicine"
+      ],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "topics": [
+        "andar",
+        "hitos_motores",
+        "cuando_consultar",
+        "francia"
+      ],
+      "chunks": [
+        "Des premiers pas jusqu'à l'apprentissage de la marche (mpedia.fr, Association Française de Pédiatrie Ambulatoire, 2026). Tema: a qué edad empiezan a andar los bebés. Hallazgo: la marcha se adquiere entre los 9 y los 18 meses; la mayoría de los bebés da sus primeros pasos entre los 12 y los 15 meses, pero es normal esperar hasta los 18 meses sin que sea inquietante. Las etapas previas orientativas son: hacia los 4 meses se voltea; hacia los 6 meses aguanta su peso de pie si lo sujetan; hacia los 8-9 meses se sienta solo y se pone de pie apoyado en los muebles; hacia los 10-12 meses camina sujeto a los muebles o a la mano; hacia los 12-15 meses da sus primeros pasos solo; hacia los 18 meses anda bien de forma autónoma; hacia los 2 años empieza a correr y sube y baja escaleras.",
+        "Des premiers pas jusqu'à l'apprentissage de la marche (mpedia.fr, AFPA, 2026). Tema: cuándo consultar por un niño que no anda y variantes normales. Hallazgo: se recomienda consultar a partir de los 18 meses si el bebé no camina solo; conviene pedir una valoración antes si le costó sostener la cabeza, voltearse, reptar, ponerse de pie o coger objetos con las dos manos. Algunos bebés apenas gatean y prefieren ponerse de pie pronto, y otros se desplazan sentados sobre las nalgas antes de andar: son variaciones normales. Las edades son referencias, no obligaciones, y cada niño lleva su propio ritmo.",
+        "Des premiers pas jusqu'à l'apprentissage de la marche (mpedia.fr, AFPA, 2026). Tema: cómo acompañar el aprendizaje de la marcha. Hallazgo: lo mejor es un entorno seguro para explorar libremente: suelo no deslizante, muebles estables donde apoyarse, espacio despejado y esquinas protegidas. Al sujetarle por las manos no hay que levantarle los brazos por encima de los hombros, para guiarle sin cargarlo; dejar que alterne gateo y marcha ayuda a los apoyos y a las transferencias de posición. Caminar descalzo desarrolla la propiocepción y el equilibrio; el calzado flexible solo hace falta en el exterior una vez adquirida la marcha. El andador con asiento se evita porque perjudica el equilibrio y supone riesgo de caída."
+      ]
+    },
+    {
+      "source_type": "reference",
+      "title": "Jugar, amar, compartir: guía para acompañar el desarrollo desde el nacimiento hasta los 5 años (UNICEF Uruguay)",
+      "organization": "UNICEF",
+      "publication_year": null,
+      "url": "https://www.unicef.org/uruguay/media/7141/file/Jugar,%20amar,%20compartir.%20Gu%C3%ADa%20para%20acompa%C3%B1ar%20el%20desarrollo%20desde%20el%20nacimiento%20hasta%20los%205%20a%C3%B1os.pdf",
+      "specialties": [
+        "pediatrics",
+        "general_medicine"
+      ],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "topics": [
+        "gateo",
+        "andar",
+        "lenguaje_12m",
+        "denticion",
+        "unicef"
+      ],
+      "chunks": [
+        "Jugar, amar, compartir: guía para acompañar el desarrollo desde el nacimiento hasta los 5 años (UNICEF Uruguay). Tema: gateo, sentarse y primeros dientes antes del año. Hallazgo: después de lograr mantenerse sentado, el bebé comienza a gatear; hay bebés que no gatean y es normal. Conviene que se desplace libremente sin apurarlo, por ejemplo colocando un objeto cerca y cambiándolo de lugar para animarle a moverse en distintas direcciones. Antes del año dice sílabas como ma, ba, pa, da, actúa con intención e imita gestos como aplaudir o decir chau. Los primeros dientes suelen aparecer alrededor de los 6 meses, aunque a algunos niños les salen alrededor del año, y los primeros son los dos del centro y abajo.",
+        "Jugar, amar, compartir: guía para acompañar el desarrollo desde el nacimiento hasta los 5 años (UNICEF Uruguay). Tema: andar y primeras palabras de 12 a 24 meses. Hallazgo: al cumplir el primer año, el niño comienza con sus primeras palabras aunque sigue usando gestos para comunicarse, y conviene interpretarlo siempre. Algunos niños a esta edad ya han aprendido a caminar, otros están a punto de hacerlo y otros necesitan más tiempo: el tiempo para caminar solo es diferente en cada niño. Cuando camina con estabilidad le interesan los juguetes de arrastre (carritos, una caja de zapatos atada a una cuerda). La guía recomienda que, aunque parezca que le gusta ponerse de pie, no se fuerce esa posición antes de tiempo."
+      ],
+      "undated_reason": "Guía de UNICEF Uruguay sin año de edición en el texto extraído; consultada el 2026-10-27."
+    },
+    {
+      "source_type": "reference",
+      "title": "Desarrollo de la audición y el lenguaje en el primer año y después (EnFamilia, AEP)",
+      "organization": "Asociación Española de Pediatría",
+      "publication_year": null,
+      "url": "https://www.aeped.es/enfamilia/salud-en-familia/desarrollo-audicion-lenguaje",
+      "specialties": [
+        "pediatrics",
+        "general_medicine"
+      ],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "topics": [
+        "lenguaje_12m",
+        "lenguaje_18m",
+        "lenguaje_24m",
+        "audicion"
+      ],
+      "chunks": [
+        "Desarrollo de la audición y el lenguaje (EnFamilia, Asociación Española de Pediatría). Tema: hitos de audición y lenguaje de 0 a 15 meses. Hallazgo: del nacimiento a los 3 meses el bebé se sobresalta ante ruidos fuertes y se despierta o parpadea ante los sonidos; de 3 a 4 meses se tranquiliza con la voz de la madre y busca la fuente de los sonidos nuevos; de 6 a 9 meses disfruta con los juguetes musicales, gorjea con cambios de tono y dice mamá; de 12 a 15 meses responde a su nombre y al no, cumple órdenes sencillas, imita algunos sonidos y tiene un vocabulario de tres a cinco palabras.",
+        "Desarrollo de la audición y el lenguaje (EnFamilia, Asociación Española de Pediatría). Tema: vocabulario y frases entre los 18 meses y los 3 años. Hallazgo: de 18 a 24 meses el niño conoce las partes del cuerpo, tiene un vocabulario de 20 a 50 palabras, dice frases de dos palabras y la mitad de lo que habla es entendible para los extraños. A los 36 meses tiene un vocabulario de unas 500 palabras, dice frases de cuatro o cinco palabras, comprende algunos verbos y un 80 % de su habla es entendible para extraños. Cada niño es único y las dudas deben comentarse con el pediatra."
+      ],
+      "undated_reason": "Página divulgativa de EnFamilia sin fecha de publicación visible; consultada el 2026-10-27."
+    },
+    {
+      "source_type": "reference",
+      "title": "Las primeras palabras: desarrollo del lenguaje infantil (Familia y Salud, AEPap)",
+      "organization": "Asociación Española de Pediatría de Atención Primaria (AEPap)",
+      "publication_year": 2011,
+      "url": "https://www.familiaysalud.es/podemos-prevenir/eventos-del-desarrollo/consejo-anticipado/las-primeras-palabras-desarrollo-del",
+      "specialties": [
+        "pediatrics",
+        "general_medicine"
+      ],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "topics": [
+        "lenguaje_12m",
+        "lenguaje_24m",
+        "balbuceo",
+        "biberon_retirada",
+        "chupete"
+      ],
+      "chunks": [
+        "Las primeras palabras: desarrollo del lenguaje infantil (Familia y Salud, AEPap, 2011, actualizado 2017). Tema: etapas del lenguaje en los dos primeros años. Hallazgo: de 0 a 3 meses el bebé devuelve vocalizaciones (ango) e inicia el balbuceo no imitativo; a los 3-4 meses el balbuceo se alarga; a los 5-6 meses vocaliza cuando se le habla; a los 7-8 meses dice bisílabos (pa-pa, ma-ma, da-da) con el ritmo de la lengua de los padres; a los 9-10 meses se gira al oír su nombre e inicia la preconversación; a los 11-12 meses comprende palabras; de 12 a 18 meses entiende varias palabras y dice algunas inteligibles; de 24 a 30 meses hace frases de dos palabras y empieza a usar la gramática. Hacia los 3 años el lenguaje debe ser comprensible para quien hable con el niño.",
+        "Las primeras palabras: desarrollo del lenguaje infantil (Familia y Salud, AEPap, 2011, actualizado 2017). Tema: variabilidad normal del lenguaje y de la marcha, chupete y biberón. Hallazgo: cada niño tiene su propio ritmo: puede ser normal hacer frases de dos palabras a los 15 meses o a los 24 meses, igual que unos niños andan con 10 meses y otros con 17, aunque lo más habitual es andar a los 12-13 meses. Para estimular el lenguaje se recomienda hablar despacio y con frases cortas, responder a sus balbuceos, contarle historias, enseñarle canciones y no hablar a media lengua imitando al niño. La página recomienda retirar el chupete al año de vida y el biberón a los 2 años."
+      ]
+    },
+    {
+      "source_type": "reference",
+      "title": "El desarrollo del lenguaje y sus alteraciones: cuándo debo preocuparme (Familia y Salud, AEPap)",
+      "organization": "Asociación Española de Pediatría de Atención Primaria (AEPap)",
+      "publication_year": 2014,
+      "url": "https://www.familiaysalud.es/podemos-prevenir/eventos-del-desarrollo/deteccion-precoz/el-desarrollo-del-lenguaje-y-sus",
+      "specialties": [
+        "pediatrics",
+        "general_medicine"
+      ],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "topics": [
+        "lenguaje_12m",
+        "lenguaje_18m",
+        "lenguaje_24m",
+        "signos_alarma_lenguaje"
+      ],
+      "chunks": [
+        "El desarrollo del lenguaje y sus alteraciones: cuándo debo preocuparme (Familia y Salud, AEPap, 2014). Tema: fases normales del lenguaje de 0 a 24 meses. Hallazgo: de 0 a 2 meses aparecen vocalizaciones reflejas y sonidos como arrullos; de 1 a 4 meses, sílabas arcaicas junto con la sonrisa e imitación de melodías; de 3 a 8 meses, el balbuceo inicial con gruñidos y chillidos; de 5 a 10 meses, el balbuceo canónico con sílabas repetidas (mamama, papapa); de 9 a 18 meses, un balbuceo mixto de sílabas y palabras que adquieren significado a partir de los 12-15 meses; de 12 a 24 meses aumenta el léxico una palabra cada vez, sobre todo sustantivos; de 24 a 36 meses asocian dos o más palabras con entonación.",
+        "El desarrollo del lenguaje y sus alteraciones: cuándo debo preocuparme (Familia y Salud, AEPap, 2014). Tema: señales de alarma del lenguaje por edades hasta los 24 meses. Hallazgo: entre 9 y 12 meses, no emitir sílabas ni balbuceos o no orientarse al sonido ni a la voz de los padres; entre 12 y 15 meses, ausencia de balbuceo, no señalar, no responder a gestos como toma, dame o mira y no compartir la atención sobre objetos; entre 18 y 24 meses, usar menos de 6-10 gestos comunicativos, menos de 10 palabras a los 18-20 meses y menos de 50 palabras o comprender menos de 50 a los 24 meses. Un manejo precoz mejora mucho el pronóstico, así que no vale el ya hablará: ante dudas o pérdida de habilidades, consultar con el pediatra."
+      ]
+    },
+    {
+      "source_type": "reference",
+      "title": "Sueño normal: cuánto necesitan dormir los niños y despertares nocturnos (EnFamilia, AEP)",
+      "organization": "Asociación Española de Pediatría",
+      "publication_year": null,
+      "url": "https://www.aeped.es/enfamilia/salud-en-familia/sueno-normal",
+      "specialties": [
+        "pediatrics",
+        "general_medicine"
+      ],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "topics": [
+        "sueno_horas",
+        "despertares_nocturnos",
+        "siestas"
+      ],
+      "chunks": [
+        "Sueño normal (Comité del Sueño y Cronobiología, EnFamilia, Asociación Española de Pediatría). Tema: horas de sueño según la edad en los dos primeros años. Hallazgo: cada niño tiene sus propias necesidades y el tiempo ideal de sueño es el que permite hacer las actividades diarias con normalidad. Los recién nacidos duermen entre 16 y 18 horas al día y a los 2 años el promedio es de 13 horas al día; las horas van disminuyendo según crece el niño y dependen de la edad, la salud y el estado emocional.",
+        "Sueño normal (Comité del Sueño y Cronobiología, EnFamilia, Asociación Española de Pediatría). Tema: despertares nocturnos y siestas en el lactante. Hallazgo: despertarse por la noche es normal: entre el 20 y el 40 % de los menores de 3 años se despiertan, frente al 15 % a los 3 años. Los lactantes se despiertan varias veces y poco a poco los despertares disminuyen, de modo que a los 6 meses suelen dormir hasta 5 horas seguidas sin despertarse. La siesta no es obligatoria: hasta los 18 meses lo habitual es una siesta por la mañana y otra por la tarde, y las siestas son normales hasta los 3-4 años."
+      ],
+      "undated_reason": "Página divulgativa de EnFamilia sin fecha de publicación visible; consultada el 2026-10-27."
+    },
+    {
+      "source_type": "reference",
+      "title": "Sueño en los bebés: patrón a partir de los 3 y de los 6-7 meses y rutina de sueño (EnFamilia, AEP)",
+      "organization": "Asociación Española de Pediatría",
+      "publication_year": null,
+      "url": "https://www.aeped.es/enfamilia/salud-en-familia/recomendaciones-de-sueno-en-lactantes",
+      "specialties": [
+        "pediatrics",
+        "general_medicine"
+      ],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "topics": [
+        "sueno_horas",
+        "siestas",
+        "tomas_nocturnas",
+        "rutina_sueno"
+      ],
+      "chunks": [
+        "Sueño en los bebés (Grupo de Trabajo del Sueño, EnFamilia, Asociación Española de Pediatría). Tema: cuántas horas duerme un bebé de 3 a 12 meses y cuántas siestas hace. Hallazgo: a partir de los 3 meses los bebés suelen dormir entre 10 y 14 horas, pudiendo llegar a dormir de un tirón hasta 5-6 horas seguidas por la noche, con unas 2-3 siestas al día de entre 30 minutos y dos horas. A partir de los 6-7 meses se establece ya un ritmo de vigilia-sueño: un sueño total de unas 14 horas, con unas 12 horas de sueño nocturno interrumpidas por varios despertares breves normales, una primera siesta por la mañana y otra tras el mediodía.",
+        "Sueño en los bebés (Grupo de Trabajo del Sueño, EnFamilia, Asociación Española de Pediatría). Tema: rutina de sueño y tomas nocturnas a partir de los 6 meses. Hallazgo: conviene una rutina diaria de sueño que termine en la cuna, acostando al bebé somnoliento pero aún despierto, con un objeto seguro de compañía y la puerta abierta si ya duerme en su habitación. Si se despierta con hambre se le alimenta, pero de forma breve y aburrida, sin encender la luz ni jugar; a esta edad (6-7 meses), para muchos bebés ya no suele ser necesaria la alimentación nocturna. Se recomienda esperar unos minutos antes de responder a las quejas y consolarlo con caricias y frases cariñosas antes de levantarlo."
+      ],
+      "undated_reason": "Página divulgativa de EnFamilia sin fecha de publicación visible; consultada el 2026-10-27."
+    },
+    {
+      "source_type": "reference",
+      "title": "El sueño en los primeros 6 meses de vida (Familia y Salud, AEPap)",
+      "organization": "Asociación Española de Pediatría de Atención Primaria (AEPap)",
+      "publication_year": 2016,
+      "url": "https://www.familiaysalud.es/crecemos/del-mes-los-seis-meses/el-sueno-en-los-primeros-6-meses-de-vida",
+      "specialties": [
+        "pediatrics",
+        "general_medicine"
+      ],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "topics": [
+        "sueno_horas",
+        "recien_nacido",
+        "despertares_nocturnos",
+        "tomas_nocturnas"
+      ],
+      "chunks": [
+        "El sueño en los primeros 6 meses de vida (Grupo de Sueño, Familia y Salud, AEPap, 2016, actualizado 2026). Tema: cuánto duerme un recién nacido y cómo se organiza su sueño. Hallazgo: los recién nacidos suelen dormir unas 16 horas al día, repartidas por igual entre el día y la noche, y en el primer mes el periodo más largo de sueño es de 3 a 4 horas, indistintamente de día o de noche. Hasta los 3 meses hay tres tipos de sueño (activo, tranquilo e indeterminado); el bebé pasa de despierto a sueño activo, con respiración irregular, muecas y movimientos, y tras 15-20 minutos entra en sueño tranquilo. Hasta los 6 meses cada ciclo dura 60-70 minutos.",
+        "El sueño en los primeros 6 meses de vida (Grupo de Sueño, Familia y Salud, AEPap, 2016, actualizado 2026). Tema: reloj interno, despertares y tomas nocturnas antes de los 6 meses. Hallazgo: hasta los 4 meses el reloj interno del bebé no se organiza del todo, no distingue el día de la noche y es normal que a veces esté más despierto de noche. El recién nacido se despierta cada 1 a 3 horas y hay que darle lo que necesita: comida, cuidados y afecto. Las tomas de noche conviene hacerlas tranquilas, con poca luz y sin estimular, dejándolo en la cuna despierto para que se vuelva a dormir solo; salvo indicación del pediatra, no se despierta al bebé para comer. Debe dormir boca arriba, en colchón firme y sin objetos en la cuna, con la habitación a 18-22 grados."
+      ]
+    },
+    {
+      "source_type": "reference",
+      "title": "El sueño del niño a los 6-12 meses (Familia y Salud, AEPap)",
+      "organization": "Asociación Española de Pediatría de Atención Primaria (AEPap)",
+      "publication_year": 2016,
+      "url": "https://www.familiaysalud.es/crecemos/de-los-seis-los-doce-meses/el-sueno-del-nino-los-6-12-meses",
+      "specialties": [
+        "pediatrics",
+        "general_medicine"
+      ],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "topics": [
+        "sueno_horas",
+        "siestas",
+        "despertares_nocturnos",
+        "tomas_nocturnas",
+        "cuando_consultar"
+      ],
+      "chunks": [
+        "El sueño del niño a los 6-12 meses (Familia y Salud, AEPap, 2016, actualizado 2026). Tema: cuántas horas duerme un bebé de 6 a 12 meses y cuántas siestas hace. Hallazgo: casi todos los bebés de esta edad duermen unas 12-15 horas al día sumando noche y siestas. Lo habitual son 2 siestas al día, una por la mañana y otra después de comer; algunos necesitan todavía una tercera siesta corta por la tarde, que suele desaparecer en torno a los 9 meses. El sueño de día sigue siendo importante y quitar siestas no suele ayudar a dormir mejor por la noche.",
+        "El sueño del niño a los 6-12 meses (Familia y Salud, AEPap, 2016, actualizado 2026). Tema: despertares nocturnos y tomas de noche entre los 6 y 12 meses. Hallazgo: los despertares nocturnos siguen siendo frecuentes y en casi todos los casos forman parte del desarrollo normal; entre ciclos hay pequeños despertares en los que el bebé puede necesitar contacto, alimento o ayuda para volver a dormirse, y la etapa coincide con la angustia de separación. Las tomas nocturnas entre los 6 y los 12 meses siguen siendo frecuentes; los bebés que toman pecho suelen despertarse más sin dormir menos horas en total. Adelantar la alimentación complementaria, añadir cereales al biberón o cambiar a leche artificial rara vez mejoran el sueño de forma importante.",
+        "El sueño del niño a los 6-12 meses (Familia y Salud, AEPap, 2016, actualizado 2026). Tema: qué ayuda a madurar el sueño y cuándo consultar. Hallazgo: la luz natural por la mañana ajusta el reloj biológico y por la tarde y la noche conviene bajar la luz y crear ambientes tranquilos; no se recomiendan pantallas antes de los 6 años; las rutinas sencillas y repetidas dan seguridad. Conviene consultar con el pediatra si el bebé ronca mucho o hace pausas respiratorias, parece tener dolor frecuente, duerme muy poco para su edad, es muy difícil calmarlo también de día, se despierta con gran irritabilidad o hay dudas sobre otros aspectos de su desarrollo."
+      ]
+    },
+    {
+      "source_type": "reference",
+      "title": "La AAP apoya las directrices de la AASM sobre horas de sueño en la infancia (HealthyChildren.org)",
+      "organization": "American Academy of Pediatrics",
+      "publication_year": 2016,
+      "url": "https://www.healthychildren.org/Spanish/news/Paginas/AAP-Supports-Childhood-Sleep-Guidelines.aspx",
+      "specialties": [
+        "pediatrics",
+        "general_medicine"
+      ],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "topics": [
+        "sueno_horas",
+        "rutina_sueno",
+        "aap"
+      ],
+      "chunks": [
+        "La AAP apoya las directrices de la AASM sobre horas de sueño en la infancia (American Academy of Pediatrics, HealthyChildren.org, 2016). Tema: horas de sueño recomendadas cada 24 horas para bebés y niños pequeños. Hallazgo: por consenso de la American Academy of Sleep Medicine, respaldado por la AAP, los bebés de 4 a 12 meses deben dormir de 12 a 16 horas cada 24 horas, incluidas las siestas, y los niños de 1 a 2 años de 11 a 14 horas cada 24 horas, incluidas las siestas, de manera habitual para una salud óptima. Las directrices no fijan una cifra para los menores de 4 meses por la gran variabilidad normal a esa edad.",
+        "La AAP apoya las directrices de la AASM sobre horas de sueño en la infancia (American Academy of Pediatrics, HealthyChildren.org, 2016). Tema: por qué importa dormir lo suficiente y rutina nocturna en bebés. Hallazgo: dormir el tiempo adecuado para la edad de forma habitual se asocia con mejor atención, comportamiento, aprendizaje, memoria, regulación emocional y salud física y mental, y dormir poco con más lesiones, hipertensión, obesidad y depresión. Para los bebés y niños pequeños la AAP recomienda establecer una rutina nocturna, apagar todas las pantallas 30 minutos antes de ir a la cama y no tener televisores ni ordenadores en el dormitorio."
+      ]
+    },
+    {
+      "source_type": "reference",
+      "title": "Faire ses nuits : comment aider bébé à dormir (mpedia.fr, AFPA)",
+      "organization": "mpedia.fr (Association Française de Pédiatrie Ambulatoire, AFPA)",
+      "publication_year": 2026,
+      "url": "https://www.mpedia.fr/art-aider-bebe-faire-ses-nuits/",
+      "specialties": [
+        "pediatrics",
+        "general_medicine"
+      ],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "topics": [
+        "sueno_horas",
+        "tomas_nocturnas",
+        "despertares_nocturnos",
+        "francia"
+      ],
+      "chunks": [
+        "Faire ses nuits : comment aider bébé à dormir (mpedia.fr, Association Française de Pédiatrie Ambulatoire, 2026). Tema: a qué edad los bebés duermen toda la noche. Hallazgo: los recién nacidos pasan a dormir la noche de forma espontánea entre los 4 y los 6 meses de media; antes es completamente normal que se despierten tras dormir de 2 a 4 horas, porque el ritmo vigilia-sueño del recién nacido es un ritmo neurológico impuesto por el cerebro que no tiene que ver con el hambre ni con el estómago. Hacia los 5-6 meses un niño puede perfectamente dormir la noche entera, aunque sigue habiendo despertares breves entre ciclos.",
+        "Faire ses nuits : comment aider bébé à dormir (mpedia.fr, AFPA, 2026). Tema: tomas nocturnas y despertares después de los 6 meses. Hallazgo: un biberón grande por la noche no alarga los ciclos de sueño; con el estómago muy lleno el bebé no duerme más y puede regurgitar. Pasados los 4-6 meses los padres ya no deberían sentirse obligados a acudir de inmediato; más allá de los 6 meses conviene darle la oportunidad de volver a dormirse solo y, si reclama, acariciarlo o mecerlo un poco sin dar sistemáticamente el pecho o el biberón, porque eso organiza los despertares. Antes de los 3-4 meses no se le impone nada: se sigue su ritmo y se le coge en brazos, y la habitación compartida sigue siendo aconsejable."
+      ]
+    },
+    {
+      "source_type": "reference",
+      "title": "Sommeil normal du bébé : de la naissance à 3 ans (Réseau Morphée, sante.fr)",
+      "organization": "Réseau Morphée (sante.fr)",
+      "publication_year": 2019,
+      "url": "https://www.sante.fr/sommeil-normal-du-bebe-de-la-naissance-3-ans",
+      "specialties": [
+        "pediatrics",
+        "general_medicine"
+      ],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "topics": [
+        "sueno_horas",
+        "siestas",
+        "recien_nacido",
+        "francia"
+      ],
+      "chunks": [
+        "Sommeil normal du bébé : de la naissance à 3 ans (Réseau Morphée, publicado en sante.fr, 2019). Tema: horas de sueño por edad de 0 a 3 años. Hallazgo: el recién nacido a término duerme de media 16 a 17 horas al día, en periodos de 3 a 4 horas repartidos por las 24 horas sin distinguir día y noche, con ciclos de 50 a 60 minutos. Entre los 6 meses y el año el total baja a 13-14 horas al año de edad, con unas 12 horas de sueño nocturno y ciclos de unos 70 minutos; entre 1 y 3 años sigue bajando hasta 12-13 horas a los 3 años. Hacia los 4 meses el bebé está preparado para dormir la noche: algunos hacen noches de 8 a 9 horas desde los 4 meses y otros tardan más en encontrar su ritmo.",
+        "Sommeil normal du bébé : de la naissance à 3 ans (Réseau Morphée, sante.fr, 2019). Tema: número de siestas según la edad. Hallazgo: antes de los 6 meses el bebé duerme casi todo el día; a los 6 meses hace 3 siestas (2 a 3 horas por la mañana y 2 a 3 horas por la tarde en dos veces); de 6 meses a 1 año hace 2 siestas de 1 a 2 horas cada una, porque la de final de la tarde desaparece; a los 18 meses es variable, con 1 a 2 horas por la mañana y/o por la tarde, ya que la siesta de la mañana desaparece hacia los 18 meses; de 2 a 3 años queda una sola siesta de unas 2 horas a primera hora de la tarde, que hace el 90 % de los niños. Desde los 12-18 meses el sueño tiene ya la estructura del sueño adulto."
+      ]
+    },
+    {
+      "source_type": "reference",
+      "title": "El sueño del bebé: cómo dormir (UNICEF Uruguay)",
+      "organization": "UNICEF",
+      "publication_year": 2023,
+      "url": "https://www.unicef.org/uruguay/crianza/primeros-anos/el-sueno-del-bebe-como-dormir",
+      "specialties": [
+        "pediatrics",
+        "general_medicine"
+      ],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "topics": [
+        "sueno_horas",
+        "recien_nacido",
+        "sueno_seguro",
+        "unicef"
+      ],
+      "chunks": [
+        "El sueño del bebé: cómo dormir (UNICEF Uruguay, 2023). Tema: cuánto duerme un bebé en sus primeros meses y por qué no coincide con la noche. Hallazgo: en sus primeros meses el bebé duerme entre 10 y 16 horas diarias, en cualquier ambiente y con ruido o luz, y no necesariamente en los horarios de sus padres, porque tarda tiempo en diferenciar el día de la noche. Lo más común en el primer mes es dormir por periodos breves de entre una y tres horas, también de noche, y despertarse por su cuenta al sentir hambre. Pasa de unos 20 minutos de sueño liviano a un sueño cada vez más profundo.",
+        "El sueño del bebé: cómo dormir (UNICEF Uruguay, 2023). Tema: postura segura y qué hacer con el llanto nocturno. Hallazgo: el bebé debe dormir boca arriba, la posición más segura para evitar la muerte súbita, que ocurre sobre todo en los primeros meses. Conviene acostumbrarlo a dormirse con los ruidos habituales de la casa y en su propia cuna. Cuando llora de noche no siempre se ha despertado del todo; con el tiempo se distingue el tipo de llanto y no siempre hay que sacarlo de la cuna: lo indicado es tranquilizarlo primero con la palabra. Si duerme poco, consultar al pediatra y explicarle qué hace cuando no duerme."
+      ]
+    },
+    {
+      "source_type": "reference",
+      "title": "Le están saliendo los dientes a mi bebé (EnFamilia, AEP)",
+      "organization": "Asociación Española de Pediatría",
+      "publication_year": null,
+      "url": "https://www.aeped.es/enfamilia/salud-en-familia/le-estan-saliendo-dientes-mi-bebe",
+      "specialties": [
+        "pediatrics",
+        "general_medicine"
+      ],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "topics": [
+        "denticion",
+        "primer_diente",
+        "fiebre_denticion"
+      ],
+      "chunks": [
+        "Le están saliendo los dientes a mi bebé (Esparza Olcina, PrevInfad, EnFamilia, Asociación Española de Pediatría). Tema: a qué edad salen los primeros dientes. Hallazgo: los primeros dientes de leche salen habitualmente entre los 6 y los 12 meses y casi siempre son los incisivos inferiores (los de delante y en el centro, abajo). No hay reglas fijas: a algunos les salen antes, incluso hay niños que nacen con dientes, y a otros les tardan más; el que es tardío también lo será al cambiar los dientes de leche por los definitivos. Antes de los 3 años suele completarse la erupción de la dentición infantil.",
+        "Le están saliendo los dientes a mi bebé (Esparza Olcina, PrevInfad, EnFamilia, Asociación Española de Pediatría). Tema: síntomas de la dentición y qué no se debe atribuir a los dientes. Hallazgo: muchos niños no notan ninguna molestia; otros están más inquietos y llorones, babean más y muerden todo cuando la encía está hinchada y enrojecida, y a veces aparece un pequeño hematoma en la encía antes de salir el diente, sin importancia. La salida de los dientes no produce fiebre: si hay fiebre o el niño parece enfermo o decaído hay que acudir al pediatra porque esos síntomas no se deben a la dentición, y no hay que restar importancia a fiebre alta, malestar, diarrea o vómitos achacándolos a los dientes.",
+        "Le están saliendo los dientes a mi bebé (Esparza Olcina, PrevInfad, EnFamilia, Asociación Española de Pediatría). Tema: las manos en la boca a los 3 meses y manejo de la dentición. Hallazgo: en torno al tercer mes es muy frecuente que el bebé se meta las manos en la boca y muerda los puños; los padres lo atribuyen a los dientes, pero lo habitual es que esté reconociendo el entorno con la boca, y los dientes, ya formados dentro de la encía, probablemente no saldrán hasta 3 o 4 meses más tarde. La dentición es un hecho normal que no hay que medicalizar ni requiere ir al médico; se pueden ofrecer mordedores o enfriar el chupete y no se deben aplicar productos sobre las encías."
+      ],
+      "undated_reason": "Página divulgativa de EnFamilia sin fecha de publicación visible; consultada el 2026-10-27."
+    },
+    {
+      "source_type": "reference",
+      "title": "Dentición del bebé: qué es normal y qué alteración (Familia y Salud, AEPap)",
+      "organization": "Asociación Española de Pediatría de Atención Primaria (AEPap)",
+      "publication_year": 2011,
+      "url": "https://www.familiaysalud.es/vivimos-sanos/higiene/salud-bucodental/denticion-del-bebe-que-es-normal-y-que-alteracion",
+      "specialties": [
+        "pediatrics",
+        "general_medicine"
+      ],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "topics": [
+        "denticion",
+        "primer_diente",
+        "retraso_denticion",
+        "chupete"
+      ],
+      "chunks": [
+        "Dentición del bebé: qué es normal y qué alteración (Familia y Salud, AEPap, 2011). Tema: cuándo salen los dientes de leche y cuándo se habla de retraso. Hallazgo: los dientes de leche suelen comenzar a salir alrededor de los 6 meses y van saliendo hasta completar la dentición hacia los 2 años y medio o más, en un orden determinado y de forma simétrica, aunque varía mucho entre niños. Algunos bebés nacen con un diente o les sale uno en las primeras semanas. Es más frecuente que salgan tarde: a veces no sale ninguno hasta los 12-13 meses, y eso no es signo de falta de calcio ni de vitaminas. Se considera retraso de la dentición si no ha salido ningún diente hacia los 15-16 meses.",
+        "Dentición del bebé: qué es normal y qué alteración (Familia y Salud, AEPap, 2011). Tema: qué síntomas se asocian de verdad a la salida de los dientes. Hallazgo: no todo lo que le pasa a un bebé tiene que ver con los dientes. Los estudios asocian la erupción, de mayor a menor frecuencia, con inflamación leve de las encías, irritabilidad, babeo, más necesidad de chupar o morder, pérdida leve de apetito, sueño inquieto, moqueo, febrícula (nunca fiebre alta), diarrea y erupción alrededor de la boca, todos ellos leves. La erupción de los dientes no causa fiebre alta ni enfermedades como catarros o gastroenteritis. El hematoma de erupción, un abultamiento morado en la encía frecuente con los molares, no requiere tratamiento; el chupete no debería usarse más allá de los 18-24 meses."
+      ]
+    },
+    {
+      "source_type": "reference",
+      "title": "No le salen los dientes a mi bebé: le faltará alguna vitamina (Familia y Salud, AEPap)",
+      "organization": "Asociación Española de Pediatría de Atención Primaria (AEPap)",
+      "publication_year": 2013,
+      "url": "https://www.familiaysalud.es/vivimos-sanos/higiene/salud-bucodental/no-le-salen-los-dientes-mi-bebe-le-faltara-alguna-vitamina",
+      "specialties": [
+        "pediatrics",
+        "general_medicine"
+      ],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "topics": [
+        "denticion",
+        "primer_diente",
+        "orden_dientes",
+        "retraso_denticion"
+      ],
+      "chunks": [
+        "No le salen los dientes a mi bebé: le faltará alguna vitamina (Esparza Olcina, Familia y Salud, AEPap, 2013, actualizado 2016). Tema: orden y calendario de salida de los dientes de leche. Hallazgo: la salida de los primeros dientes ocurre generalmente entre los seis y los ocho meses, con un rango muy amplio y un calendario propio de cada niño. Primero salen los incisivos centrales de abajo, después los de arriba, luego los incisivos laterales superiores, después los laterales inferiores o las primeras muelas de leche, luego los colmillos y al final las segundas muelas. La dentadura de leche completa, de 20 piezas, se alcanza entre los dos y los tres años; a las niñas suelen salirles antes que a los niños y casi siempre antes los de abajo que los de arriba, por parejas.",
+        "No le salen los dientes a mi bebé: le faltará alguna vitamina (Esparza Olcina, Familia y Salud, AEPap, 2013, actualizado 2016). Tema: cuándo preocuparse si no sale ningún diente y papel de la alimentación. Hallazgo: es normal que a un niño le salgan los dientes más tarde que a otros; si a los 18 meses no tiene ningún diente se debe consultar con el dentista. La ausencia total de dientes es una enfermedad hereditaria muy rara, y la falta de alguna pieza (3,5 a 8 % de la población) no suele retrasar el inicio de la dentición. Salvo la vitamina D, que conviene suplementar en el primer año, los nutrientes que necesitan los dientes están asegurados con una dieta variada normal, y el retraso no se debe a falta de vitaminas."
+      ]
+    },
+    {
+      "source_type": "reference",
+      "title": "Comprendre les poussées dentaires et leurs symptômes (ameli.fr)",
+      "organization": "Assurance Maladie (ameli.fr)",
+      "publication_year": 2024,
+      "url": "https://www.ameli.fr/assure/sante/themes/poussee-dentaire/comprendre-poussee-dents-de-lait",
+      "specialties": [
+        "pediatrics",
+        "general_medicine"
+      ],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "topics": [
+        "denticion",
+        "primer_diente",
+        "fiebre_denticion",
+        "francia"
+      ],
+      "chunks": [
+        "Comprendre les poussées dentaires (Assurance Maladie, ameli.fr, 2024). Tema: a qué edad sale el primer diente según la sanidad pública francesa. Hallazgo: la primera poussée dentaire ocurre casi siempre entre los 4 y los 7 meses; puede aparecer antes, desde los 3 meses, o más tarde, y algunos niños nacen con una o dos dientes. Hay 20 dientes de leche en total, los primeros en salir son por lo general los incisivos centrales inferiores y, en la mayoría de los niños, todos están colocados antes de los 3 años. Las fechas varían de un bebé a otro: que los dientes salgan más tarde no significa que haya un problema.",
+        "Les symptômes de la poussée dentaire (Assurance Maladie, ameli.fr, 2024). Tema: qué molestias produce la dentición y qué no explica. Hallazgo: las primeras erupciones causan molestias pasajeras: dolor, salivación abundante, sueño perturbado con despertares y llantos, irritabilidad, menos apetito, mejillas rojas, ganas de morder objetos duros y encías hinchadas y sensibles, pero el bebé conserva un buen estado general. La página subraya que la dentición no provoca fiebre superior a 38 grados, ni deterioro del estado general, ni diarrea: si el niño tiene mucha fiebre o preocupa, hay que consultar al médico."
+      ]
+    },
+    {
+      "source_type": "reference",
+      "title": "Poussée dentaire chez le bébé : ordre d'apparition des dents de lait (mpedia.fr, AFPA)",
+      "organization": "mpedia.fr (Association Française de Pédiatrie Ambulatoire, AFPA)",
+      "publication_year": 2026,
+      "url": "https://www.mpedia.fr/art-poussees-dentaires/",
+      "specialties": [
+        "pediatrics",
+        "general_medicine"
+      ],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "topics": [
+        "denticion",
+        "orden_dientes",
+        "primer_diente",
+        "francia"
+      ],
+      "chunks": [
+        "Poussée dentaire chez le bébé (mpedia.fr, Association Française de Pédiatrie Ambulatoire, 2026). Tema: edad media del primer diente y orden de salida de los 20 dientes de leche. Hallazgo: de media el primer diente de leche aparece hacia los 5 o 6 meses, aunque puede ser antes o después sin que haya que comparar con otros niños, y entre esa edad y los 3 años el niño adquiere sus 20 dientes temporales. Los incisivos centrales inferiores salen hacia los 6-10 meses, los centrales superiores entre los 8 y 12 meses, los laterales superiores entre los 9 y 13 y los laterales inferiores entre los 10 y 16 meses; los primeros molares entre los 13 y 19 meses arriba y los 18 y 24 abajo, los caninos entre los 16 y 23 meses y los segundos molares completan la dentición entre los 23 y 33 meses.",
+        "Poussée dentaire chez le bébé (mpedia.fr, AFPA, 2026). Tema: llanto y dentición, qué evitar. Hallazgo: antes de atribuir el llanto a los dientes hay que comprobar que el bebé duerme lo suficiente, no tiene fiebre ni diarrea y come bien, y que no ha habido cambios bruscos de rutina; la dentición puede doler de forma episódica pero no justifica todos los llantos ni la fiebre. Se desaconsejan el agua azucarada y los remedios caseros aplicados en las encías por el riesgo de caries, y los collares de ámbar son muy peligrosos; un anillo de dentición para morder es una opción adecuada."
+      ]
+    },
+    {
+      "source_type": "reference",
+      "title": "Alimentación complementaria: cuándo empezar y señales de que el bebé está listo (EnFamilia, AEP)",
+      "organization": "Asociación Española de Pediatría",
+      "publication_year": null,
+      "url": "https://www.aeped.es/enfamilia/salud-en-familia/alimentacion-complementaria-0",
+      "specialties": [
+        "pediatrics",
+        "general_medicine"
+      ],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "topics": [
+        "alimentacion_complementaria",
+        "cuando_solidos",
+        "senales_listo"
+      ],
+      "chunks": [
+        "Alimentación complementaria (Cobo Ruisánchez, EnFamilia, Asociación Española de Pediatría). Tema: a qué edad empezar con otros alimentos además de la leche. Hallazgo: se recomienda lactancia materna exclusiva durante los 6 primeros meses y, a partir de ahí, añadir de forma paulatina el resto de alimentos manteniendo el pecho a demanda. En los no amamantados no hay consenso claro: se puede empezar entre el cuarto y el sexto mes, esperando a que el bebé muestre señales de estar listo: interés activo por la comida, desaparición del reflejo de extrusión, capacidad de coger comida con la mano y llevársela a la boca y mantenerse sentado con apoyo. En el prematuro hay que individualizar.",
+        "Alimentación complementaria (Cobo Ruisánchez, EnFamilia, Asociación Española de Pediatría). Tema: por qué no antes del cuarto mes ni después de las 26 semanas. Hallazgo: la alimentación complementaria no se puede introducir antes del cuarto mes porque una introducción precoz conlleva riesgo de atragantamiento, más infecciones, sustitución de tomas de leche por alimentos menos nutritivos y, a largo plazo, mayor riesgo de obesidad, eccema atópico, diabetes tipo 1 y destete precoz. Tampoco se puede retrasar más allá de las 26 semanas, porque aumenta el riesgo de déficit de hierro y zinc, de alergias e intolerancias, de peor aceptación de texturas y sabores y de alterar las habilidades motoras orales.",
+        "Alimentación complementaria (Cobo Ruisánchez, EnFamilia, Asociación Española de Pediatría). Tema: con qué alimentos empezar y en qué orden. Hallazgo: no existen pautas rígidas ni alimentos mejores que otros para empezar, aunque conviene introducir pronto alimentos ricos en hierro y zinc; se introducen de uno en uno con intervalos de unos días para observar la tolerancia, sin añadir sal, azúcar ni edulcorantes. No hay evidencia de que retrasar los alimentos potencialmente alergénicos (huevo, pescado) más allá de los 6 meses prevenga la alergia; algunos estudios sugieren que introducirlos pronto en pequeñas cantidades la reduce. El gluten se recomienda introducir entre los 4 y los 11 meses."
+      ],
+      "undated_reason": "Página divulgativa de EnFamilia sin fecha de publicación visible; consultada el 2026-10-27."
+    },
+    {
+      "source_type": "reference",
+      "title": "Lactancia materna y alimentación complementaria: cómo se combinan (Familia y Salud, AEPap)",
+      "organization": "Asociación Española de Pediatría de Atención Primaria (AEPap)",
+      "publication_year": 2020,
+      "url": "https://www.familiaysalud.es/vivimos-sanos/lactancia-materna/seguimos-creciendo/lactancia-materna-y-alimentacion-complementaria",
+      "specialties": [
+        "pediatrics",
+        "general_medicine"
+      ],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "topics": [
+        "alimentacion_complementaria",
+        "cuando_solidos",
+        "senales_listo",
+        "prematuro_edad_corregida"
+      ],
+      "chunks": [
+        "Lactancia materna y alimentación complementaria: cómo se combinan (Familia y Salud, AEPap, 2020). Tema: cuándo empezar los sólidos y qué señales indican que el bebé está preparado. Hallazgo: se recomienda lactancia materna exclusiva 6 meses y después añadir el resto de alimentos de forma paulatina manteniendo el pecho a demanda; entre los 4 y 6 meses no se recomienda por norma general y no hay beneficio en adelantarla, aunque por razones laborales, familiares o nutricionales a criterio médico podría ofrecerse antes de los 6 meses, nunca antes de los 4. En torno a los 6 meses la mayoría muestra interés por la comida de la familia, se mantiene sentado con apoyo sujetando la cabeza, coordina ojos, manos y boca y puede tragar sólidos sin empujarlos hacia fuera (reflejo de extrusión). En prematuros se suele considerar la edad corregida de 6 meses.",
+        "Lactancia materna y alimentación complementaria: cómo se combinan (Familia y Salud, AEPap, 2020). Tema: riesgos de empezar demasiado pronto o demasiado tarde. Hallazgo: ofrecer alimentos antes de los 4 meses se ha asociado a más sobrepeso y obesidad, diabetes tipo 1 en la infancia y riesgo de atragantamiento. Retrasarlos después de los 7 meses conlleva riesgo de carencias de calorías, hierro y zinc, y existe una ventana de oportunidad, aproximadamente entre los 6 y los 10 meses, para aprender a masticar y aceptar texturas y sabores nuevos; si no se aprovecha pueden aparecer problemas en la relación con la comida. La alimentación complementaria es una transición que se extiende entre los 6 y los 12 meses y la leche sigue siendo el alimento principal."
+      ]
+    },
+    {
+      "source_type": "reference",
+      "title": "Alimentación entre uno y seis meses (Familia y Salud, AEPap)",
+      "organization": "Asociación Española de Pediatría de Atención Primaria (AEPap)",
+      "publication_year": 2014,
+      "url": "https://www.familiaysalud.es/crecemos/del-mes-los-seis-meses/alimentacion-entre-uno-y-seis-meses",
+      "specialties": [
+        "pediatrics",
+        "general_medicine"
+      ],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "topics": [
+        "cuando_solidos",
+        "ganancia_peso",
+        "peso_por_edad",
+        "lactancia"
+      ],
+      "chunks": [
+        "Alimentación entre uno y seis meses (Familia y Salud, AEPap, 2014, actualizado 2025). Tema: la leche como único alimento hasta los 6 meses y cuándo empezar la alimentación complementaria. Hallazgo: la leche es el único alimento necesario en esta edad; la OMS recomienda lactancia materna exclusiva hasta los 6 meses y prolongarla con otros alimentos hasta los 2 años o más. La alimentación complementaria no se recomienda antes de los 4 meses, porque el bebé no tiene el desarrollo madurativo y psicomotor necesario, ni posponerla después de los 7 meses, por posibles problemas de masticación; los nuevos alimentos se introducen en pequeñas cantidades, sin forzar, priorizando los ricos en hierro, sin sal ni azúcar añadidos.",
+        "Alimentación entre uno y seis meses (Familia y Salud, AEPap, 2014, actualizado 2025). Tema: cuánto engorda un bebé en los primeros meses. Hallazgo: si el bebé moja los pañales con frecuencia y hace deposiciones, recibe suficiente alimento, pero la mejor forma de saberlo es pesarlo en la misma báscula y con la misma ropa, mejor en la consulta. Un bebé engorda más en los primeros 2-3 meses de vida, al menos 140 gramos a la semana, y a partir de los 2-3 meses engorda menos, entre 50 y 80 gramos a la semana. Habitualmente no necesita beber agua: el amamantado aumenta las tomas si tiene sed y al que toma biberón se le puede ofrecer agua en días muy calurosos."
+      ]
+    },
+    {
+      "source_type": "reference",
+      "title": "Alimentación en el segundo año de vida: mesa familiar, leche y abandono del biberón (EnFamilia, AEP)",
+      "organization": "Asociación Española de Pediatría",
+      "publication_year": null,
+      "url": "https://www.aeped.es/enfamilia/salud-en-familia/alimentacion-en-segundo-ano-vida",
+      "specialties": [
+        "pediatrics",
+        "general_medicine"
+      ],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "topics": [
+        "biberon_retirada",
+        "alimentacion_12_24m",
+        "lacteos",
+        "inapetencia"
+      ],
+      "chunks": [
+        "Alimentación en el segundo año de vida (EnFamilia, Asociación Española de Pediatría). Tema: cuándo dejar el biberón y cuánta leche entre los 12 y 24 meses. Hallazgo: a los 12 meses el niño puede comer lo mismo que el resto de la familia (salvo determinados pescados) y en la mesa familiar, bebe en vaso y empieza a usar cubiertos. Si aún toma pecho puede seguir cuantas veces quieran madre e hijo; puede empezar a tomar leche de vaca entera y no necesita leche de crecimiento. El biberón se debe abandonar como muy tarde a los 2 años. Bastan 2-3 porciones de lácteos al día, incluidos quesos y yogures, y tomar lácteos en exceso hace que coma menos de otros alimentos.",
+        "Alimentación en el segundo año de vida (EnFamilia, Asociación Española de Pediatría). Tema: menú variado e inapetencia natural a partir de los 18 meses. Hallazgo: frutas, verduras o legumbres a diario, cereales y feculentos (pan, arroz, patata, pasta) como fuente de energía y carnes, pescados y huevos alternando en comida y cena; importa más la variedad que la cantidad. A partir de los 18 meses comienza una etapa de inapetencia natural porque el niño crece más despacio: se debe respetar la saciedad y nunca forzar a comer ni obligar a terminar la ración. Los zumos envasados solo aportan azúcares y los dulces reducen el apetito por la comida normal."
+      ],
+      "undated_reason": "Página divulgativa de EnFamilia sin fecha de publicación visible; consultada el 2026-10-27."
+    },
+    {
+      "source_type": "reference",
+      "title": "La visita del Programa de Salud Infantil de los 12 a 24 meses (Familia y Salud, AEPap)",
+      "organization": "Asociación Española de Pediatría de Atención Primaria (AEPap)",
+      "publication_year": null,
+      "url": "https://www.familiaysalud.es/crecemos/el-segundo-ano/la-visita-del-programa-de-salud-infantil-de-los-12-24-meses",
+      "specialties": [
+        "pediatrics",
+        "general_medicine"
+      ],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "topics": [
+        "biberon_retirada",
+        "tomas_nocturnas",
+        "alimentacion_12_24m",
+        "revisiones",
+        "crecimiento"
+      ],
+      "chunks": [
+        "La visita del Programa de Salud Infantil de los 12 a 24 meses (Familia y Salud, AEPap). Tema: cuándo retirar el biberón y las tomas nocturnas en el segundo año. Hallazgo: a partir de los 12 meses el niño se incorpora definitivamente a la alimentación familiar, con cinco comidas y sólidos de forma paulatina para favorecer la masticación. Al año puede tomar leche entera de vaca (no semidesnatada ni desnatada antes de los 2 años) y no más de 3 raciones de leche o derivados al día. Se debe evitar el uso prolongado de biberones y la alimentación nocturna; entre los 12 y los 18 meses es un buen momento para pasar al vaso o la taza, retirando los biberones de forma progresiva en vez de todos de golpe.",
+        "La visita del Programa de Salud Infantil de los 12 a 24 meses (Familia y Salud, AEPap). Tema: revisiones, crecimiento y hitos entre el año y los dos años. Hallazgo: habitualmente se recomiendan tres visitas, una entre los 12 y 15 meses, otra entre los 15 y 18 y la tercera de los 18 a los 24 meses, que suelen coincidir con las vacunas y en las que se valoran el desarrollo psicomotor, el crecimiento y la alimentación. De los 12 a los 24 meses los niños crecen muy deprisa y la alimentación es el principal determinante; muchas enfermedades se manifiestan como estancamiento de la curva de peso. En este año adquieren caminar, correr y las primeras frases, entienden más de lo que expresan y se reconocen en el espejo.",
+        "La visita del Programa de Salud Infantil de los 12 a 24 meses (Familia y Salud, AEPap). Tema: seguridad y hábitos entre los 12 y 24 meses. Hallazgo: se desaconsejan los alimentos con riesgo de atragantamiento (frutos secos, uvas, aceitunas, golosinas, salchichas, palomitas), es mejor ofrecer fruta a trozos o aplastada que zumos, y vigilar la sal y el azúcar escondidos en preparados industriales. Las vacunas del calendario oficial de cada comunidad son gratuitas y de recomendación universal. En el coche, sistema de retención infantil en sentido contrario a la marcha el mayor tiempo posible, nunca en el asiento delantero; medicamentos y productos de limpieza fuera del alcance y enchufes protegidos."
+      ],
+      "undated_reason": "Artículo de Familia y Salud sin fecha de publicación en el texto extraído; consultado el 2026-10-27."
+    },
+    {
+      "source_type": "reference",
+      "title": "Tout savoir sur la diversification alimentaire de votre enfant (Santé publique France, sante.fr)",
+      "organization": "Santé publique France",
+      "publication_year": 2025,
+      "url": "https://www.sante.fr/tout-savoir-sur-la-diversification-alimentaire-de-votre-enfant",
+      "specialties": [
+        "pediatrics",
+        "general_medicine"
+      ],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "topics": [
+        "alimentacion_complementaria",
+        "cuando_solidos",
+        "alergenos",
+        "francia"
+      ],
+      "chunks": [
+        "Tout savoir sur la diversification alimentaire de votre enfant (Santé publique France, Manger Bouger, publicado en sante.fr, 2025). Tema: a qué edad empieza la diversificación en Francia. Hallazgo: la diversificación es el paso de una alimentación solo de leche a una alimentación variada; empieza entre los 4 y los 6 meses y continúa gradualmente hasta los 3 años. Un bebé puede descubrir todas las familias de alimentos entre los 4 y los 6 meses, incluidos los que pueden dar alergia (huevo, cacahuete, almendra, avellana) y el gluten, porque cuanto antes los prueba más tolerancia desarrolla; con alergias en la familia se puede pedir consejo al médico. No antes del inicio del 5.º mes, y después de los 6 meses cumplidos la leche sola ya no cubre sus necesidades.",
+        "Tout savoir sur la diversification alimentaire de votre enfant (Santé publique France, sante.fr, 2025). Tema: ritmo del niño, rechazos y cantidades. Hallazgo: cada niño tiene su propio ritmo y el paso de lo líquido a texturas cada vez más sólidas es un aprendizaje; ante una mueca hay que volver a ofrecer el alimento unos días después, a veces hasta 10 veces, sin forzar nunca, distinguiendo el rechazo de lo nuevo de un verdadero disgusto. El niño regula por sí mismo las cantidades de leche y de alimentos que necesita, y no hay que insistir para que termine el biberón."
+      ]
+    },
+    {
+      "source_type": "reference",
+      "title": "Diversification alimentaire bébé : guide complet des aliments et âges (mpedia.fr, AFPA)",
+      "organization": "mpedia.fr (Association Française de Pédiatrie Ambulatoire, AFPA)",
+      "publication_year": 2026,
+      "url": "https://www.mpedia.fr/art-diversification-alimentaire/",
+      "specialties": [
+        "pediatrics",
+        "general_medicine"
+      ],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "topics": [
+        "alimentacion_complementaria",
+        "cuando_solidos",
+        "texturas",
+        "francia"
+      ],
+      "chunks": [
+        "Diversification alimentaire bébé : guide complet (mpedia.fr, Association Française de Pédiatrie Ambulatoire, 2026). Tema: cuándo empezar la diversificación según los pediatras ambulatorios franceses. Hallazgo: la diversificación debe empezar idealmente entre los 4 y los 6 meses en el niño nacido a término y sano, y con consejo médico en prematuros o niños con patologías; se habla de una ventana de tolerancia. Antes de los 4 meses el sistema digestivo e inmunitario es inmaduro y los alimentos no aportan beneficio y pueden aumentar el riesgo de trastornos digestivos y alergias; esperar más allá de los 6 meses expone a carencias, en particular de hierro, que la leche sola ya no cubre. La leche materna o las fórmulas siguen siendo el alimento principal durante la diversificación.",
+        "Diversification alimentaire bébé : guide complet (mpedia.fr, AFPA, 2026). Tema: por qué variar alimentos y texturas entre los 4 y los 12 meses. Hallazgo: entre los 4 y los 12 meses los bebés son especialmente receptivos a nuevos sabores y texturas, y ofrecer gran variedad, incluso lo que no se acepta a la primera, favorece una mejor aceptación alimentaria más adelante. Las texturas evolucionan de purés lisos a preparaciones más espesas y luego a trozos blandos, y comer se vuelve un acto más activo con masticación voluntaria y deglución. Hay que respetar las señales de hambre y saciedad del niño, y las comidas compartidas en familia instalan hábitos y placer de comer."
+      ]
+    },
+    {
+      "source_type": "reference",
+      "title": "Gráficas de crecimiento y percentiles (EnFamilia, AEP)",
+      "organization": "Asociación Española de Pediatría",
+      "publication_year": null,
+      "url": "https://www.aeped.es/enfamilia/salud-en-familia/graficas-crecimiento-percentiles",
+      "specialties": [
+        "pediatrics",
+        "general_medicine"
+      ],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "topics": [
+        "crecimiento",
+        "percentiles",
+        "peso_talla"
+      ],
+      "chunks": [
+        "Gráficas de crecimiento y percentiles (García Aguado, EnFamilia, Asociación Española de Pediatría). Tema: qué se mide en el niño hasta los dos años y de qué depende el crecimiento. Hallazgo: hasta los dos años se miden el peso, la longitud (de pies a cabeza con el niño tumbado) y el perímetro cefálico; a partir de los dos años, el peso y la talla de pie, y es útil el índice de masa corporal. El crecimiento depende sobre todo del potencial genético y del sexo, además de la nutrición, la actividad física y las enfermedades, y refleja el estado global de salud y nutrición. Entre niños sanos hay una gran variabilidad de pesos y tamaños.",
+        "Gráficas de crecimiento y percentiles (García Aguado, EnFamilia, Asociación Española de Pediatría). Tema: qué significa el percentil de peso o talla de un bebé. Hallazgo: cuanto mayor es el número del percentil, más grande es el niño respecto a los de su edad. Estar en el percentil 50 de peso significa que, de 100 niños nacidos el mismo día, 50 pesan más y 50 pesan menos; el del percentil 3 solo tiene 3 que pesan menos y 97 que pesan más, y al contrario en el 97. Las curvas se elaboran midiendo a grupos amplios de niños y su uso se ha popularizado hasta producir a veces una preocupación excesiva por el percentil en el que está un niño."
+      ],
+      "undated_reason": "Página divulgativa de EnFamilia sin fecha de publicación visible; consultada el 2026-10-27."
+    },
+    {
+      "source_type": "reference",
+      "title": "Patrones de crecimiento infantil de la OMS: peso para la edad de 0 a 24 meses, tablas simplificadas (OMS)",
+      "organization": "World Health Organization (WHO)",
+      "publication_year": 2006,
+      "url": "https://www.who.int/tools/child-growth-standards/standards/weight-for-age",
+      "specialties": [
+        "pediatrics",
+        "general_medicine"
+      ],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "topics": [
+        "crecimiento",
+        "peso_por_edad",
+        "percentiles",
+        "oms"
+      ],
+      "chunks": [
+        "Patrones de crecimiento infantil de la OMS: peso para la edad en niños de 0 a 24 meses (Organización Mundial de la Salud, tablas simplificadas de percentiles, 2006). Tema: cuánto pesa un niño varón sano según la edad. Hallazgo: la mediana (percentil 50) de peso de los niños es de 3,3 kg al nacer, 4,5 kg al mes, 5,6 kg a los 2 meses, 6,4 kg a los 3 meses, 7,0 kg a los 4 meses, 7,5 kg a los 5 meses, 7,9 kg a los 6 meses, 8,9 kg a los 9 meses, 9,6 kg a los 12 meses, 10,3 kg a los 15 meses, 10,9 kg a los 18 meses y 12,2 kg a los 24 meses. El rango entre los percentiles 3 y 97 es amplio: a los 4 meses va de 5,6 a 8,6 kg, a los 12 meses de 7,8 a 11,8 kg y a los 24 meses de 9,8 a 15,1 kg.",
+        "Patrones de crecimiento infantil de la OMS: peso para la edad en niñas de 0 a 24 meses (Organización Mundial de la Salud, tablas simplificadas de percentiles, 2006). Tema: cuánto pesa una niña sana según la edad. Hallazgo: la mediana de peso de las niñas es de 3,2 kg al nacer, 4,2 kg al mes, 5,1 kg a los 2 meses, 5,8 kg a los 3 meses, 6,4 kg a los 4 meses, 6,9 kg a los 5 meses, 7,3 kg a los 6 meses, 8,2 kg a los 9 meses, 8,9 kg a los 12 meses, 9,6 kg a los 15 meses, 10,2 kg a los 18 meses y 11,5 kg a los 24 meses. Entre los percentiles 3 y 97, a los 4 meses el peso va de 5,1 a 8,1 kg, a los 12 meses de 7,1 a 11,3 kg y a los 24 meses de 9,2 a 14,6 kg. Las tablas describen el crecimiento de niños sanos amamantados en seis países y sirven de referencia, no de meta individual.",
+        "Patrones de crecimiento infantil de la OMS: peso para la edad (Organización Mundial de la Salud, 2006). Tema: cómo leer las tablas de peso del bebé. Hallazgo: en el primer semestre la mediana de peso casi se duplica (de 3,3 a 7,9 kg en niños y de 3,2 a 7,3 kg en niñas) y al año se ha triplicado aproximadamente (9,6 kg en niños y 8,9 kg en niñas); en el segundo año la ganancia es mucho más lenta, unos 2,6 kg en los doce meses. Un peso aislado dice poco: lo que importa es que el niño siga su propia curva a lo largo del tiempo, y un cambio de percentil se valora en la revisión pediátrica junto con la longitud y el perímetro cefálico."
+      ]
+    },
+    {
+      "source_type": "guideline",
+      "title": "Calendario común de vacunación e inmunización a lo largo de toda la vida 2026 (Ministerio de Sanidad, CISNS)",
+      "organization": "Ministerio de Sanidad (España)",
+      "publication_year": 2025,
+      "url": "https://www.sanidad.gob.es/areas/promocionPrevencion/vacunaciones/calendario/docs/CalendarioVacunacion_Todalavida.pdf",
+      "specialties": [
+        "pediatrics",
+        "general_medicine"
+      ],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "topics": [
+        "vacunas_espana",
+        "calendario_vacunal",
+        "2_4_11_meses",
+        "12_meses",
+        "vrs"
+      ],
+      "chunks": [
+        "Calendario común de vacunación e inmunización a lo largo de toda la vida, calendario recomendado año 2026 (Consejo Interterritorial del Sistema Nacional de Salud, Ministerio de Sanidad, aprobado el 12 de diciembre de 2025). Tema: qué vacunas recibe un bebé en España a los 2, 4 y 11 meses. Hallazgo: a los 2, 4 y 11 meses se administra la vacuna hexavalente (difteria, tétanos, tosferina, poliomielitis, Haemophilus influenzae b y hepatitis B) y la vacuna antineumocócica conjugada; a los 2 y 4 meses la del meningococo B, y a los 4 meses la del meningococo C. La vacuna del rotavirus se da a partir de las 6 semanas de vida, con pauta según la ficha técnica. El calendario insiste en que las dosis de los 2 y 4 meses se administren a tiempo. Las comunidades autónomas adaptan este calendario común.",
+        "Calendario común de vacunación e inmunización a lo largo de toda la vida, calendario recomendado año 2026 (CISNS, Ministerio de Sanidad, 2025). Tema: vacunas a los 12 y 15 meses y refuerzos hasta los 6 años en España. Hallazgo: a los 12 meses se administran la triple vírica (sarampión, rubeola y parotiditis), una dosis de meningococo B y otra de meningococo C; a los 15 meses la primera dosis de varicela; entre los 3 y 4 años la segunda dosis de triple vírica y de varicela, y a los 6 años un refuerzo de difteria, tétanos, tosferina y polio para los vacunados a los 2, 4 y 11 meses. La gripe estacional se recomienda a partir de los 6 meses en cada temporada. Los hijos de madres con hepatitis B reciben una dosis en las primeras 24 horas de vida y siguen la pauta 0, 2, 4 y 11 meses.",
+        "Calendario común de vacunación e inmunización a lo largo de toda la vida, calendario recomendado año 2026 (CISNS, Ministerio de Sanidad, 2025). Tema: inmunización frente al virus respiratorio sincitial y vacunación de la embarazada. Hallazgo: se recomienda inmunizar con un anticuerpo monoclonal, en una sola dosis, a todos los menores de 6 meses antes y durante la temporada de VRS (nacidos entre el 1 de abril y el 31 de marzo siguiente); los nacidos durante la temporada, de octubre a marzo, lo reciben muy pronto, preferiblemente en las primeras 24-48 horas tras el nacimiento. En cada embarazo se administra una dosis de vacuna frente a la tosferina (dTpa) a partir de la semana 27, preferiblemente en las semanas 27 o 28, y la de la gripe y la de COVID-19 en cualquier trimestre durante la temporada."
+      ]
+    },
+    {
+      "source_type": "guideline",
+      "title": "Calendario de vacunaciones e inmunizaciones AEP 2026, versión resumida para familias (CAV-AEP)",
+      "organization": "Asociación Española de Pediatría",
+      "publication_year": 2026,
+      "url": "https://vacunasaep.org/familias/calendario-de-vacunaciones-e-inmunizaciones-aep-2026-version-resumida-para-familias",
+      "specialties": [
+        "pediatrics",
+        "general_medicine"
+      ],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "topics": [
+        "vacunas_espana",
+        "calendario_vacunal",
+        "2_4_11_meses",
+        "12_meses",
+        "15_meses",
+        "gripe"
+      ],
+      "chunks": [
+        "Calendario de vacunaciones e inmunizaciones AEP 2026, versión para familias (Comité Asesor de Vacunas e Inmunizaciones de la Asociación Española de Pediatría, enero de 2026). Tema: pauta de vacunación del lactante en España recomendada por los pediatras. Hallazgo: hexavalente (hepatitis B, difteria, tétanos, tosferina, Haemophilus influenzae b y polio) en pauta 2+1 a los 2, 4 y 11 meses, con refuerzo a los 6 años y otra dosis de tosferina a los 10-12 años; neumococo a los 2, 4 y 11 meses (o 2, 4, 6 y 11 según el preparado); rotavirus en dos o tres dosis empezando entre las 6 y las 12 semanas y completando antes de las 24 o 33 semanas según la vacuna; meningococo B con dos dosis desde los 2 meses separadas por 2 meses y refuerzo a partir de los 12 meses; meningococos ACWY a los 4 y 12 meses y de nuevo a los 12-13 años.",
+        "Calendario de vacunaciones e inmunizaciones AEP 2026, versión para familias (CAV-AEP, 2026). Tema: vacunas del segundo año y gripe en el lactante. Hallazgo: triple vírica (sarampión, rubeola y parotiditis) con la primera dosis a los 12 meses y la segunda a los 24 meses; varicela con la primera dosis a los 15 meses (válida desde los 12) y la segunda a los 24 meses, pudiendo usarse la tetravírica en la segunda; novedad 2026, hepatitis A en dosis única a los 12-15 meses. La AEP recomienda la vacuna de la gripe a todos los niños de 6 meses a 17 años en cada temporada, en una sola dosis a partir de los 6 meses salvo primera vacunación en grupos de riesgo menores de 9 años, y la intranasal preferente desde los 2 años.",
+        "Calendario de vacunaciones e inmunizaciones AEP 2026, versión para familias (CAV-AEP, 2026). Tema: qué está financiado en las comunidades autónomas y protección frente al VRS. Hallazgo: las vacunas del calendario oficial de cada comunidad son gratuitas y de recomendación universal; desde 2023-2025 todas las comunidades financian meningococo B en lactantes, gripe de 6 a 59 meses, rotavirus y el anticuerpo monoclonal nirsevimab frente al VRS para menores de 6 meses (prematuros hasta los 12 meses y grupos de riesgo hasta los 23 meses). La AEP sigue pidiendo la MenACWY a los 4 y 12 meses en todas las comunidades y la segunda dosis de triple vírica y varicela a los 2 años, que Andalucía ya aplica desde 2026. Hay pautas aceleradas para ponerse al día con un calendario retrasado."
+      ]
+    },
+    {
+      "source_type": "guideline",
+      "title": "Nourrissons et enfants de la naissance à 10 ans : vaccinations obligatoires et recommandées (Vaccination Info Service, Santé publique France)",
+      "organization": "Santé publique France",
+      "publication_year": 2026,
+      "url": "https://www.vaccination-info-service.fr/La-vaccination-au-cours-de-la-vie/nourrissons-et-enfants-de-la-naissance-a-10-ans",
+      "specialties": [
+        "pediatrics",
+        "general_medicine"
+      ],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "topics": [
+        "vacunas_francia",
+        "calendario_vacunal",
+        "2_4_11_meses",
+        "12_meses",
+        "ror"
+      ],
+      "chunks": [
+        "Nourrissons et enfants de la naissance à 10 ans (Vaccination Info Service, Santé publique France, actualizado en mayo de 2026). Tema: vacunas obligatorias del bebé en Francia a los 2, 4 y 11 meses. Hallazgo: para los nacidos desde el 1 de enero de 2018 son obligatorias, y se exigen para entrar en guardería o escuela, las vacunas DTCaPHibVHB (difteria, tétanos, tosferina, polio, Haemophilus influenzae b y hepatitis B) en una sola inyección a los 2 y 4 meses con refuerzo a los 11 meses, y la del neumococo a los 2 y 4 meses con refuerzo a los 11 meses. Un refuerzo de difteria, tétanos, tosferina y polio se indica a los 6 años.",
+        "Nourrissons et enfants de la naissance à 10 ans (Vaccination Info Service, Santé publique France, 2026). Tema: sarampión y meningococos en el calendario francés. Hallazgo: la vacuna ROR (sarampión, paperas y rubeola) se administra en dos dosis, una a los 12 meses y la segunda entre los 16 y los 18 meses. Para los nacidos desde el 1 de enero de 2023 son obligatorias las vacunas frente al meningococo B, con dos dosis a los 3 y 5 meses y un refuerzo a los 12 meses, y frente a los meningococos ACWY, que sustituye a la del meningococo C, con una dosis a los 6 meses y un refuerzo a los 12 meses.",
+        "Nourrissons et enfants de la naissance à 10 ans (Vaccination Info Service, Santé publique France, 2026). Tema: vacunas recomendadas, no obligatorias, en el lactante francés. Hallazgo: la vacunación frente a la gastroenteritis por rotavirus se recomienda desde junio de 2022, por vía oral entre los 2 y los 4 meses en dos o tres tomas según la vacuna. La vacuna de la gripe es posible en niños de 2 a 17 años desde febrero de 2023 y se recomienda cada año desde los 6 meses a los niños con riesgo de forma grave. Frente a la bronquiolitis por VRS, si la madre no se vacunó en el embarazo, se recomienda administrar al bebé anticuerpos monoclonales tras el nacimiento. La BCG se reserva desde el primer mes a los niños con alto riesgo de tuberculosis."
+      ]
+    },
+    {
+      "source_type": "guideline",
+      "title": "Les vaccins obligatoires chez le nourrisson, puis recommandés (ameli.fr)",
+      "organization": "Assurance Maladie (ameli.fr)",
+      "publication_year": 2026,
+      "url": "https://www.ameli.fr/assure/sante/themes/vaccination/vaccins-obligatoires",
+      "specialties": [
+        "pediatrics",
+        "general_medicine"
+      ],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "topics": [
+        "vacunas_francia",
+        "calendario_vacunal",
+        "ror",
+        "hepatitis_b"
+      ],
+      "chunks": [
+        "Les vaccins obligatoires chez le nourrisson (Assurance Maladie, ameli.fr, mayo de 2026). Tema: cuántas vacunas son obligatorias en Francia y a qué edades. Hallazgo: hasta finales de 2024 eran obligatorias 11 vacunas en el lactante; desde enero de 2025 se añaden las de los meningococos ACWY, que sustituye a la del meningococo C, y la del meningococo B, para proteger mejor de las meningitis. Difteria, tétanos, tosferina, polio, Haemophilus influenzae b y hepatitis B se administran juntas con dos inyecciones a los 2 y 4 meses y un refuerzo a los 11 meses; los refuerzos de difteria, tétanos, tosferina y polio se recomiendan a los 6 años y entre los 11 y 13 años, y en el adulto a los 25, 45 y 65 años.",
+        "Les vaccins obligatoires chez le nourrisson (Assurance Maladie, ameli.fr, 2026). Tema: vacuna ROR y hepatitis B en el calendario francés. Hallazgo: la vacuna ROR frente a sarampión, rubeola y paperas es obligatoria en el lactante con una dosis a los 12 meses y una segunda entre los 16 y 18 meses; si recibió una dosis antes de los 12 meses necesita dos dosis adicionales. Ante un contacto con un caso de sarampión se recomienda una dosis en las 72 horas siguientes, también en lactantes de 6 a 11 meses. La hepatitis B se vacuna a los 2, 4 y 11 meses dentro de la combinada; los recién nacidos de madre portadora se vacunan desde el nacimiento con pauta de tres dosis (nacimiento, 1 y 6 meses) y los prematuros de menos de 32 semanas o de menos de 2 kg con cuatro dosis."
+      ]
+    }
+  ]
+}
