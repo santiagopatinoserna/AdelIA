@@ -1,0 +1,597 @@
+{
+  "_meta": {
+    "topic": "Salud de la madre y de la familia durante los primeros 24 meses del bebé: tristeza y depresión posparto, psicosis posparto, cansancio extremo y falta de sueño de los padres, llanto inconsolable visto desde los padres, prevención del síndrome del bebé sacudido, vuelta al trabajo manteniendo la lactancia (extracción y conservación de la leche) y celos y preparación de los hermanos mayores",
+    "compiled": "2026-11-02",
+    "method": "Lectura directa el 2026-11-02 de cada página pública (EnFamilia de la AEP, Familia y Salud de la AEPap, HealthyChildren de la AAP en español, NHS y un folleto de un hospital del NHS, información para el público de la guía NICE CG192, OMS, ameli.fr y mpedia.fr); cada cifra, plazo, signo de alarma y nivel de urgencia procede de la página citada en el propio fragmento",
+    "caveat": "Resúmenes en español de fuentes en español, inglés o francés; los fragmentos son paráfrasis con las cifras y la urgencia del original, no texto literal. Los teléfonos y servicios de urgencia que se citan son los del país de cada fuente (España, Reino Unido, Estados Unidos o Francia). Material de orientación para familias: no sustituye la valoración de un profesional ni contiene pautas de medicación.",
+    "purpose": "Dar evidencia citable a las preguntas que las madres y los padres hacen sobre su propia salud y la de la familia (ánimo tras el parto, agotamiento, llanto que desborda, volver al trabajo dando el pecho, celos del hermano mayor), que hasta ahora no encontraban fuente o caían en fragmentos de cólico"
+  },
+  "sources": [
+    {
+      "source_type": "reference",
+      "title": "Depresión postparto (Familia y Salud, AEPap)",
+      "organization": "Asociación Española de Pediatría de Atención Primaria (AEPap)",
+      "publication_year": 2021,
+      "url": "https://www.familiaysalud.es/vivimos-sanos/salud-emocional/emociones-y-familia/afrontamos-los-problemas/depresion-postparto",
+      "specialties": ["pediatrics", "general_medicine"],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "topics": ["depresion_posparto"],
+      "chunks": [
+        "Depresión postparto (Familia y Salud, AEPap, 2021). Tema: diferencia entre la tristeza posparto y la depresión posparto. Hallazgo: la tristeza posparto o «maternity blues» la sufre el 80% de las madres: llanto, irritabilidad, inquietud, problemas de apetito, dolor de cabeza y malestar que empiezan 3-7 días tras el parto y duran de unos días a 2-3 semanas. La depresión posparto la padecen el 10-20% de las mujeres tras dar a luz y dura más de 2 semanas: la madre se siente desesperada, sin fuerzas para cuidar de su hijo ni de sí misma, y puede tener sentimientos negativos hacia quienes la rodean, incluso hacia el bebé. Estar preocupada, cansada o triste tras el parto es normal; lo que debe hacer pensar en algo más serio es sentirse desbordada, no poder cuidar al bebé y perder el interés por lo que antes gustaba.",
+        "Depresión postparto (Familia y Salud, AEPap, 2021). Tema: por qué aparece, cómo se detecta y a quién pedir ayuda. Hallazgo: la página atribuye la depresión posparto a una combinación de cambios hormonales, emocionales, de agotamiento y sociales. En las revisiones tras el parto los profesionales pueden preguntar por el estado de ánimo, y a veces usan la Escala de Edimburgo, un test de 10 preguntas que detecta el riesgo de depresión posparto. Si la madre tiene dudas de presentar algún síntoma de depresión, la recomendación es pedir ayuda a un profesional cuanto antes.",
+        "Depresión postparto (Familia y Salud, AEPap, 2021). Tema: tratamiento y factores que protegen. Hallazgo: la depresión posparto tiene tratamiento, que combina psicoterapia y, cuando el médico lo indica, medicación; parte de esa medicación es compatible con la lactancia, por lo que hay que avisar al médico de que se está dando el pecho antes de empezar. Una buena relación de pareja, un apoyo social sólido, la lactancia materna y los grupos de apoyo posparto reducen el riesgo de que aparezca y, si aparece, mejoran su pronóstico."
+      ]
+    },
+    {
+      "source_type": "reference",
+      "title": "La depresión durante y después del embarazo: usted no está sola (HealthyChildren, AAP)",
+      "organization": "American Academy of Pediatrics",
+      "publication_year": 2022,
+      "url": "https://www.healthychildren.org/Spanish/ages-stages/prenatal/delivery-beyond/Paginas/understanding-motherhood-and-mood-baby-blues-and-beyond.aspx",
+      "specialties": ["pediatrics", "general_medicine"],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "topics": ["depresion_posparto"],
+      "chunks": [
+        "La depresión durante y después del embarazo: usted no está sola (HealthyChildren, American Academy of Pediatrics, 2022). Tema: melancolía del puerperio frente a depresión posparto. Hallazgo: entre el 50% y el 80% de quienes dan a luz tienen los cambios de ánimo llamados «baby blues», y 1 de cada 8 tendrá una depresión posparto más grave. Los cambios de humor son muy frecuentes tras el parto, sobre todo en las primeras 2 semanas; lo que separa la melancolía de la depresión es cuánto dura el malestar y cuánto afecta. La melancolía suele desaparecer tras unos días o semanas, y descansar y aceptar el apoyo de la familia y del entorno ayuda a la mayoría; si la tristeza y la fatiga no se van, puede tratarse de una depresión posparto.",
+        "La depresión durante y después del embarazo: usted no está sola (HealthyChildren, American Academy of Pediatrics, 2022). Tema: cómo se vive la depresión posparto. Hallazgo: la madre siente una tristeza profunda, confusión, falta de energía y desesperanza sobre el futuro, con arrebatos de ira o irritación por todo. Le cuesta dormirse y seguir dormida aunque el bebé duerma, y cambia su apetito: deja de comer o picotea para buscar energía y consuelo. Puede sentirse agitada, desconfiada, culpable o avergonzada hasta creer que no merece ayuda. La ansiedad posparto es tan frecuente como la depresión y pueden darse a la vez; la depresión puede empezar ya en el embarazo y afecta también a madres con hijos previos, a familias adoptivas y a las parejas.",
+        "La depresión durante y después del embarazo: usted no está sola (HealthyChildren, American Academy of Pediatrics, 2022). Tema: dónde pedir ayuda y qué hacer ante pensamientos de hacerse daño. Hallazgo: se puede empezar por el pediatra del bebé, o por el obstetra, el ginecólogo o el médico de cabecera, y contarlo también a alguien de confianza. Conviene buscar ayuda cuanto antes porque la depresión rara vez desaparece sola. El tratamiento puede incluir terapia de conversación, grupos de apoyo, actividad física ligera, yoga o meditación y, si se prescribe, medicación, en muchos casos compatible con la lactancia. Si la madre piensa en hacerse daño o en hacer daño a su bebé, la página lo trata como una emergencia: pedir ayuda de inmediato, llamando a emergencias (112), sin esperar."
+      ]
+    },
+    {
+      "source_type": "reference",
+      "title": "¿Es normal sentirse completamente abrumada después de tener un bebé? (HealthyChildren, AAP)",
+      "organization": "American Academy of Pediatrics",
+      "publication_year": 2022,
+      "url": "https://www.healthychildren.org/Spanish/tips-tools/ask-the-pediatrician/Paginas/is-it-normal-to-feel-completely-overwhelmed-after-having-a-baby.aspx",
+      "specialties": ["pediatrics", "general_medicine"],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "topics": ["depresion_posparto", "cansancio_extremo"],
+      "chunks": [
+        "¿Es normal sentirse completamente abrumada después de tener un bebé? (HealthyChildren, American Academy of Pediatrics, 2022). Tema: el agotamiento de los primeros meses y cuándo deja de ser normal. Hallazgo: sentirse agobiada y cansada tras dar a luz es más frecuente de lo que se cree: se duerme menos, se come de paso, se amamanta y cambian la dinámica familiar y la intimidad con la pareja. Sentirse triste o ansiosa sin motivo de vez en cuando es habitual; si la madre está casi siempre muy triste, ansiosa o desesperanzada y le cuesta sobrellevar el día, pueden ser signos de depresión posparto. La página anima a formar un equipo de apoyo con el propio médico y el pediatra del bebé y a pedir ya toda la ayuda adicional que haga falta.",
+        "¿Es normal sentirse completamente abrumada después de tener un bebé? (HealthyChildren, American Academy of Pediatrics, 2022). Tema: cuánto dura la melancolía, cuánto la depresión y cuándo consultarlo. Hallazgo: la depresión posparto es más intensa que la melancolía del puerperio, que dura aproximadamente dos semanas, y puede prolongarse hasta un año después del nacimiento. Sin tratamiento puede afectar al vínculo y al cuidado del bebé, ser estresante para él y enlentecer el crecimiento de su cerebro y el desarrollo del lenguaje. Ante una tristeza o una preocupación que no se van, la madre puede hablarlo con el pediatra en la próxima revisión del bebé o llamar al consultorio para pedir una cita si no tiene ninguna en las próximas semanas.",
+        "¿Es normal sentirse completamente abrumada después de tener un bebé? (HealthyChildren, American Academy of Pediatrics, 2022). Tema: pensamientos de hacerse daño o de dañar al bebé. Hallazgo: la página deja claro que nunca está bien tener pensamientos de hacerse daño o de hacer daño al bebé y que, si aparecen, hay que pedir ayuda de emergencia lo antes posible, llamando a emergencias (112). Recuerda además que hay medicamentos compatibles con la lactancia y que el pediatra puede ayudar a encontrar una opción que respete a la vez la lactancia y la salud mental de la madre."
+      ]
+    },
+    {
+      "source_type": "reference",
+      "title": "Postnatal depression (NHS)",
+      "organization": "NHS (National Health Service, Reino Unido)",
+      "publication_year": 2026,
+      "url": "https://www.nhs.uk/mental-health/conditions/postnatal-depression/",
+      "specialties": ["pediatrics", "general_medicine"],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "topics": ["depresion_posparto"],
+      "chunks": [
+        "Postnatal depression (NHS, Reino Unido, revisada en 2026). Tema: síntomas de la depresión posnatal y cuándo empieza. Hallazgo: es una afección frecuente tras tener un bebé que suele mejorar con tratamiento. Sus síntomas incluyen ánimo bajo, dificultad para disfrutar de nada, desesperanza o sensación de no poder con todo, culpa o sentirse mal padre o mala madre, miedo o preocupación constante, inquietud o irritabilidad, dificultad para dormir aun teniendo tiempo para descansar, dificultad para concentrarse o decidir, dificultad para vincularse con el bebé y pensamientos de suicidio, de hacerse daño o de hacer daño al bebé. Puede empezar en el embarazo, poco después del parto o hasta un año después del nacimiento.",
+        "Postnatal depression (NHS, Reino Unido, revisada en 2026). Tema: baby blues y cuándo pedir ayuda. Hallazgo: sentirse decaída, ansiosa o irritable unos días tras el parto es muy común y se conoce como baby blues; suele desaparecer en las 2 semanas siguientes al nacimiento, pero si continúa, empeora o la madre no puede con ello, es importante pedir ayuda. Como consulta no urgente, la página indica hablar con el médico de cabecera, la matrona o la enfermera visitadora si se sospecha una depresión posnatal, aunque solo se tengan algunos de los signos. Para una crisis o una emergencia de salud mental remite a su guía de ayuda urgente. Los padres y las parejas también pueden deprimirse tras el nacimiento.",
+        "Postnatal depression (NHS, Reino Unido, revisada en 2026). Tema: tratamiento, duración y miedo a pedir ayuda. Hallazgo: el profesional preguntará cómo se siente la madre y puede pedirle que rellene un cuestionario. Muchas madres temen que les quiten al bebé si cuentan lo que sienten; la página aclara que eso es muy raro y que el equipo dará el apoyo necesario para cuidarlo. El tratamiento incluye terapias psicológicas, como la cognitivo-conductual, y medicación, en muchos casos compatible con la lactancia si se avisa al médico. Suele mejorar en 3 a 6 meses, aunque a veces dura mucho más; ayudan hablar con alguien, pedir ayuda práctica, caminar a diario, los grupos de madres y bebés y descansar, y no se debe recurrir al alcohol ni a otras drogas."
+      ]
+    },
+    {
+      "source_type": "reference",
+      "title": "Postpartum psychosis (NHS)",
+      "organization": "NHS (National Health Service, Reino Unido)",
+      "publication_year": 2023,
+      "url": "https://www.nhs.uk/mental-health/conditions/post-partum-psychosis/",
+      "specialties": ["pediatrics", "general_medicine", "emergency_medicine"],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "topics": ["depresion_posparto"],
+      "chunks": [
+        "Postpartum psychosis (NHS, Reino Unido, revisada en 2023). Tema: qué es la psicosis posparto y en qué se diferencia del baby blues. Hallazgo: es una enfermedad mental grave que afecta a alrededor de 1 de cada 1.000 madres tras el parto y que debe tratarse como una emergencia médica; no tiene nada que ver con el baby blues, que es leve y dura unos días. Los síntomas suelen empezar de golpe en las 2 primeras semanas, a menudo en horas o días, y rara vez varias semanas después: alucinaciones, delirios, manía (euforia, hablar o pensar muy deprisa, inquietud, desinhibición), ánimo bajo, cambios rápidos de humor y confusión marcada. La madre puede no darse cuenta de que está enferma, por eso la pareja, la familia o los amigos pueden tener que actuar.",
+        "Postpartum psychosis (NHS, Reino Unido, revisada en 2023). Tema: a quién acudir y con qué urgencia. Hallazgo: si se sospechan síntomas en una misma o en otra persona, hay que ver al médico de cabecera de inmediato y pedir una valoración urgente ese mismo día; si no se le localiza o no se sabe qué hacer, el NHS indica igualmente pedir ayuda médica urgente el mismo día, y la matrona o la enfermera visitadora también pueden facilitar la atención. Quien ya tiene un plan de cuidados por alto riesgo debe llamar a su equipo de crisis. Si una misma o alguien cercano puede estar en peligro inminente de sufrir daño, llamar a emergencias (112) o ir a urgencias. La enfermedad puede empeorar con rapidez y poner en riesgo la seguridad de la madre y del bebé.",
+        "Postpartum psychosis (NHS, Reino Unido, revisada en 2023). Tema: tratamiento, recuperación y cómo puede ayudar la familia. Hallazgo: suele tratarse en el hospital, idealmente en una unidad madre-bebé donde la madre ingresa con su hijo. Los síntomas más graves duran de 2 a 12 semanas y la recuperación completa puede llevar de 6 a 12 meses o más, pero con tratamiento y apoyo la mayoría se recupera del todo. Tras un episodio hay alrededor de 1 posibilidad entre 2 de que se repita en un embarazo posterior, por lo que conviene planificar la atención con antelación. La pareja y la familia ayudan escuchando con calma, encargándose de la casa, la comida, el cuidado del bebé y las tomas nocturnas, protegiendo el sueño de la madre y limitando las visitas."
+      ]
+    },
+    {
+      "source_type": "guideline",
+      "title": "Recognising mental health problems (CG192 Information for the public, NICE)",
+      "organization": "National Institute for Health and Care Excellence (NICE)",
+      "publication_year": 2020,
+      "url": "https://www.nice.org.uk/guidance/cg192/ifp/chapter/Recognising-mental-health-problems",
+      "specialties": ["pediatrics", "general_medicine"],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "topics": ["depresion_posparto"],
+      "chunks": [
+        "Recognising mental health problems (CG192 Information for the public, National Institute for Health and Care Excellence; guía publicada en 2014 y actualizada en 2020). Tema: qué deben preguntar los profesionales durante el embarazo y el año posterior al parto. Hallazgo: la información para el público de la guía NICE de salud mental prenatal y posnatal pide que la enfermera visitadora, la matrona o el médico de familia que atienden a la mujer en el embarazo y en el año siguiente al parto dediquen tiempo a hablar de cómo se siente, comprendan que puede costarle contar sus problemas y le hagan algunas preguntas para comprobar que no tiene depresión ni una ansiedad fuera de lo habitual. Si hace falta, pueden derivarla a su médico de familia o a un especialista.",
+        "Recognising mental health problems (CG192 Information for the public, National Institute for Health and Care Excellence; guía actualizada en 2020). Tema: antecedentes que elevan el riesgo de psicosis después del parto. Hallazgo: en la primera visita del embarazo y en la primera tras el parto deben preguntar si la mujer ha tenido alguna enfermedad mental grave (psicosis, esquizofrenia o trastorno bipolar), si la han tratado servicios especializados o ha estado ingresada por ello, y si su madre o una hermana tuvieron una enfermedad mental grave en torno al parto. Estos antecedentes aumentan el riesgo, por ejemplo de psicosis en las primeras semanas tras dar a luz, y justifican revisiones más frecuentes en el embarazo y en esas primeras semanas, además de la derivación a un servicio especializado si hay o se sospecha una enfermedad grave."
+      ]
+    },
+    {
+      "source_type": "guideline",
+      "title": "After you've had your baby (CG192 Information for the public, NICE)",
+      "organization": "National Institute for Health and Care Excellence (NICE)",
+      "publication_year": 2020,
+      "url": "https://www.nice.org.uk/guidance/cg192/ifp/chapter/After-youve-had-your-baby",
+      "specialties": ["pediatrics", "general_medicine"],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "topics": ["depresion_posparto"],
+      "chunks": [
+        "After you've had your baby (CG192 Information for the public, National Institute for Health and Care Excellence; guía actualizada en 2020). Tema: urgencia ante síntomas psicóticos tras el parto y seguimiento de la madre. Hallazgo: si después de dar a luz aparecen alucinaciones, delirios o manía, la mujer debe ser derivada a un servicio especializado para una valoración inmediata, en un plazo de 4 horas. Si tuvo un problema de salud mental en el embarazo o hay riesgo de que lo desarrolle, su médico debe programar visitas regulares en las primeras semanas tras el parto. Si existe riesgo de que se haga daño, los profesionales deben aconsejarle a ella, a su pareja y a su familia que pidan más ayuda cuando la necesiten.",
+        "After you've had your baby (CG192 Information for the public, National Institute for Health and Care Excellence; guía actualizada en 2020). Tema: lactancia y relación con el bebé cuando la madre tiene un problema de salud mental. Hallazgo: los profesionales deben animar a dar el pecho si es posible y explicar qué tratamientos son compatibles con la lactancia; si la madre no puede amamantar por el tipo de medicación que necesita, o porque le resulta demasiado difícil o estresante, debe recibir apoyo y no se la debe hacer sentir culpable. Muchas madres temen que su problema afecte a la relación con su bebé; si ocurre, suele mejorar al tratar el problema de salud mental, y a quien siga con dificultades se le debe ofrecer ayuda específica."
+      ]
+    },
+    {
+      "source_type": "reference",
+      "title": "Après l'accouchement : baby blues et dépression du post partum (ameli.fr)",
+      "organization": "Assurance Maladie (ameli.fr)",
+      "publication_year": 2025,
+      "url": "https://www.ameli.fr/assure/sante/devenir-parent/accouchement-nouveau-ne-et-retour-la-maison/baby-blues-depression-post-partum-grossesse",
+      "specialties": ["pediatrics", "general_medicine"],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "topics": ["depresion_posparto"],
+      "chunks": [
+        "Après l'accouchement : baby blues et dépression du post partum (ameli.fr, Assurance Maladie, 2025). Tema: baby blues, frecuencia, duración y cuándo consultar. Hallazgo: es un trastorno pasajero del ánimo que afecta, según los estudios, al 50-80% de las mujeres que han dado a luz. Aparece entre el 2.º y el 5.º día tras el parto, con un pico el 3.er día, y desaparece por completo en dos semanas sin necesidad de medicación. Se manifiesta con irritabilidad, cambios bruscos de humor, problemas de sueño, cansancio, ansiedad, sensación de abandono y miedo a no saber cuidar al bebé. La página aconseja vigilar cómo evoluciona y consultar si es muy intenso o si los síntomas duran más de dos semanas, para descartar una depresión posparto.",
+        "Après l'accouchement : baby blues et dépression du post partum (ameli.fr, Assurance Maladie, 2025). Tema: depresión posparto, cuándo aparece y cómo reconocerla. Hallazgo: afecta al 16,7% de las mujeres dos meses después del parto según la encuesta nacional perinatal francesa de 2021, y aparece en el año siguiente al nacimiento, con más riesgo entre el 2.º y el 6.º mes; puede seguir a un baby blues que no pasa y empeora. Entre sus signos: sentirse mala madre y culpable, dificultad para crear vínculo con el bebé, sensación de no poder cuidarlo y miedo a hacerle daño, irritabilidad o rechazo hacia el niño, ansiedad, gran tristeza y aislamiento. Necesita atención rápida, porque puede alterar el apego. Más del 10% de los padres tendría síntomas depresivos en los 2 meses siguientes al nacimiento.",
+        "Après l'accouchement : baby blues et dépression du post partum (ameli.fr, Assurance Maladie, 2025). Tema: psicosis posparto y a quién recurrir. Hallazgo: el episodio psicótico tras el parto es raro (1 a 2 mujeres de cada 1.000 que dan a luz), suele darse en las 4 semanas siguientes con un pico hacia el 10.º día, y es una urgencia psiquiátrica por el riesgo de suicidio o de daño al bebé, que justifica tratarlo en el hospital, si es posible en una unidad madre-hijo. Para el baby blues o la depresión se puede hablar con el personal de la maternidad, la matrona, el médico de cabecera, los profesionales de la PMI o en la consulta posnatal; en Francia, el 3114 atiende gratis las 24 horas a personas en sufrimiento psíquico."
+      ]
+    },
+    {
+      "source_type": "reference",
+      "title": "Dépression post partum, baby blues ou psychose puerpérale : comment reconnaître et surmonter les troubles après la naissance ? (mpedia.fr, AFPA)",
+      "organization": "mpedia.fr (Association Française de Pédiatrie Ambulatoire, AFPA)",
+      "publication_year": 2026,
+      "url": "https://www.mpedia.fr/art-baby-blues-et-depression-post-partum-les-reconnaitre-pour-les-surmonter/",
+      "specialties": ["pediatrics", "general_medicine"],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "topics": ["depresion_posparto", "cansancio_extremo"],
+      "chunks": [
+        "Dépression post partum, baby blues ou psychose puerpérale (mpedia.fr, Association Française de Pédiatrie Ambulatoire, actualizado en 2026). Tema: síntomas y duración del baby blues. Hallazgo: según la Haute Autorité de Santé, el baby blues afecta al 70-80% de las madres en los primeros días tras el parto; suele aparecer entre el segundo y el quinto día y dura de media de unos días a una semana. Se manifiesta con llanto frecuente sin motivo aparente, gran emotividad, tristeza pasajera, irritabilidad, problemas de sueño, cansancio intenso y sensación de vacío pese a tener al bebé. Son signos que desconciertan, pero no son patológicos ni duraderos y hay que distinguirlos de la depresión posparto, más profunda y persistente.",
+        "Dépression post partum, baby blues ou psychose puerpérale (mpedia.fr, Association Française de Pédiatrie Ambulatoire, actualizado en 2026). Tema: cómo atravesar el baby blues y el cansancio de las primeras semanas. Hallazgo: el cansancio extremo, la falta de sueño por los cuidados continuos y a veces un parto difícil fragilizan a la madre. La página aconseja reconocer lo que se siente sin culpa, hablarlo con la pareja, una persona de confianza o la matrona, y priorizar el descanso aunque sea a ratos. Pedir ayuda con las tareas de casa o con los cuidados del bebé no es una debilidad, sino una forma de mantener el equilibrio. El vínculo con el bebé puede tardar en aparecer y cada madre lleva su ritmo; las consultas posnatales son un buen momento para hablar de ello.",
+        "Dépression post partum, baby blues ou psychose puerpérale (mpedia.fr, Association Française de Pédiatrie Ambulatoire, actualizado en 2026). Tema: señales de depresión posparto y psicosis puerperal. Hallazgo: la depresión posparto afecta a alrededor del 15% de las madres, con un pico hacia el sexto mes; debe alertar cuando los síntomas duran más de dos semanas o se intensifican: tristeza persistente, falta de motivación, ideas negras, sensación de fracaso como madre, gran fatiga, aislamiento, problemas de sueño que van más allá de los despertares del bebé o dificultad para crear vínculo. Hay que hablarlo con el médico de cabecera, la matrona, el pediatra o el ginecólogo. La psicosis puerperal, rara (1 a 2 mujeres de cada 1.000), aparece de forma brusca con desorganización del pensamiento, alucinaciones o ideas delirantes y es una urgencia médica que requiere hospitalización inmediata."
+      ]
+    },
+    {
+      "source_type": "reference",
+      "title": "Mensajes del Día Mundial de la Salud 2025 (OMS)",
+      "organization": "World Health Organization (WHO)",
+      "publication_year": null,
+      "url": "https://www.who.int/es/campaigns/world-health-day/2025/key-messages",
+      "specialties": ["pediatrics", "general_medicine"],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "topics": ["depresion_posparto", "cansancio_extremo", "vuelta_trabajo"],
+      "chunks": [
+        "Mensajes del Día Mundial de la Salud 2025 (Organización Mundial de la Salud). Tema: cambios emocionales tras el parto, depresión y psicosis posparto. Hallazgo: en los días posteriores al parto es habitual sentir una mezcla de emociones, como melancolía o tristeza, por los cambios hormonales; si estos sentimientos son demasiado intensos o duran más de dos semanas, hay que pedir asesoramiento. Una de cada cinco mujeres sufre depresión o ansiedad posparto, situaciones frecuentes que se pueden tratar con ayuda profesional. En casos poco frecuentes aparece de repente una psicosis posparto, con alucinaciones, delirios o cambios bruscos de ánimo, que es una emergencia médica y requiere atención urgente.",
+        "Mensajes del Día Mundial de la Salud 2025 (Organización Mundial de la Salud). Tema: cansancio y recuperación de la madre después del parto. Hallazgo: muchas mujeres se sienten cansadas tras el parto, además de tener pérdidas de sangre, calambres o molestias. La OMS recomienda reposar siempre que se pueda, no sobrecargarse durante las primeras semanas, aliviar el dolor si hace falta y pedir ayuda mientras se aprende a cuidar al bebé; también tomarse tiempo para descansar y buscar asistencia médica si la madre se siente muy desbordada, triste o ansiosa. Hay que buscar ayuda de inmediato ante hemorragia intensa o coágulos grandes, enrojecimiento o hinchazón de las piernas, dolor de cabeza persistente, fiebre alta o vómitos, heridas que no cicatrizan, dolor en el pecho, dificultad para respirar o convulsiones.",
+        "Mensajes del Día Mundial de la Salud 2025 (Organización Mundial de la Salud). Tema: conciliación, permiso de maternidad y lactancia en el trabajo. Hallazgo: según los cálculos de la OMS, el 20% de las nuevas madres sufre depresión o ansiedad posparto, por lo que pide un enfoque que una la salud física, la salud mental y el apoyo social. Considera fundamentales las políticas y leyes de conciliación familiar, que incluyen una baja por maternidad remunerada de al menos 18 semanas, aunque lo ideal es que sea de 6 meses o más, y garantías jurídicas y apoyo en el lugar de trabajo para la lactancia materna. Recuerda también que un profesional cualificado puede ayudar a resolver muchos de los problemas habituales al amamantar."
+      ],
+      "undated_reason": "Página de la campaña del Día Mundial de la Salud 2025 sin fecha de publicación visible; consultada el 2026-11-02."
+    },
+    {
+      "source_type": "reference",
+      "title": "Sleep and tiredness after having a baby (NHS)",
+      "organization": "NHS (National Health Service, Reino Unido)",
+      "publication_year": 2026,
+      "url": "https://www.nhs.uk/baby/support-and-services/sleep-and-tiredness-after-having-a-baby/",
+      "specialties": ["pediatrics", "general_medicine"],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "topics": ["cansancio_extremo", "depresion_posparto"],
+      "chunks": [
+        "Sleep and tiredness after having a baby (NHS, Reino Unido, revisada en 2026). Tema: consejos prácticos para dormir o descansar más con un bebé. Hallazgo: en los primeros meses es normal estar cansada porque el bebé se despierta varias veces por la noche. La página propone dormir cuando el bebé duerme, aunque las tareas de casa esperen, y poner una alarma si da miedo dormirse demasiado. Repartir las noches: con biberón, la pareja puede encargarse de tomas; si se da el pecho, la pareja puede cambiar pañales o vestir al bebé por la mañana para que la madre vuelva a dormir y, cuando la lactancia está bien establecida, darle alguna vez de noche un biberón de leche materna extraída.",
+        "Sleep and tiredness after having a baby (NHS, Reino Unido, revisada en 2026). Tema: pedir ayuda y cuándo el cansancio es motivo de consulta. Hallazgo: se puede pedir a un familiar o a una amiga que cuide al bebé mientras la madre duerme una siesta, o, si está sola, que alguien se quede unos días. Los despertares frecuentes no duran siempre: el bebé duerme tramos más largos a medida que crece. El ejercicio regular, como un paseo diario con el bebé, reduce el cansancio. Si la madre está realmente agotada y no puede con todo, debe hablar con el médico de cabecera o la enfermera visitadora; y si no consigue dormir cuando el bebé duerme, está cansada todo el tiempo, se siente decaída o sin esperanza o ya no disfruta de nada, puede ser una depresión posnatal y conviene consultarlo cuanto antes."
+      ]
+    },
+    {
+      "source_type": "reference",
+      "title": "Regalos invaluables para padres primerizos con falta de sueño (HealthyChildren, AAP)",
+      "organization": "American Academy of Pediatrics",
+      "publication_year": 2024,
+      "url": "https://www.healthychildren.org/Spanish/ages-stages/baby/sleep/Paginas/for-sleep-deprived-new-parents-these-gifts-can-be-priceless.aspx",
+      "specialties": ["pediatrics", "general_medicine"],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "topics": ["cansancio_extremo"],
+      "chunks": [
+        "Regalos invaluables para padres primerizos con falta de sueño (HealthyChildren, American Academy of Pediatrics, 2024). Tema: por qué la falta de sueño de los padres es también un problema de seguridad. Hallazgo: los recién nacidos no tienen todavía rutinas de sueño regulares, y alimentarlos, cambiarlos y consolarlos las 24 horas del día agota a los padres. Un adulto muy cansado puede quedarse dormido mientras sostiene al bebé o saltarse pasos que reducen el riesgo de muerte súbita e inesperada del lactante, que es más frecuente en los primeros meses; los prematuros, además, suelen despertarse más a menudo. Por eso unos padres descansados están mejor preparados para acostar al bebé de forma segura.",
+        "Regalos invaluables para padres primerizos con falta de sueño (HealthyChildren, American Academy of Pediatrics, 2024). Tema: la ayuda práctica que alivia a unos padres agotados. Hallazgo: la página sugiere a familiares y amigos regalar tiempo, avisando antes de ir: cuidar al bebé una o dos horas para que los padres descansen, llevarse a los hermanos mayores al parque o a la biblioteca, sacar al bebé de paseo, lavar y doblar la ropa, ocuparse de otras tareas de casa, llevar comida preparada o hacer recados. La falta de sueño y la presión del cuidado aumentan el riesgo de depresión posparto, que puede afectar a cualquier padre o madre, biológico o adoptivo; conviene escuchar sin juzgar y, si hace falta, cuidar al bebé para que pueda acudir a sus citas médicas."
+      ]
+    },
+    {
+      "source_type": "reference",
+      "title": "Cómo lidiar con los desafíos de ser una nueva madre (HealthyChildren, AAP)",
+      "organization": "American Academy of Pediatrics",
+      "publication_year": 2020,
+      "url": "https://www.healthychildren.org/Spanish/ages-stages/baby/Paginas/Challenges-of-Being-a-New-Mom.aspx",
+      "specialties": ["pediatrics", "general_medicine"],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "topics": ["cansancio_extremo", "llanto_inconsolable", "hermanos", "depresion_posparto"],
+      "chunks": [
+        "Cómo lidiar con los desafíos de ser una nueva madre (HealthyChildren, American Academy of Pediatrics, 2020). Tema: cuánto llora y cuánto duerme un recién nacido. Hallazgo: en las primeras seis semanas los bebés lloran de media entre 2 y 3 horas al día; la mayoría empieza a llorar mucho hacia las dos semanas de vida y sigue así unos dos meses. Para calmarlo se puede probar a cogerlo, alimentarlo, envolverlo, mecerlo suavemente o cantarle, y a menudo hay que repetir varias cosas. Si nada funciona, se puede acostar boca arriba en un entorno de sueño seguro, y muchos padres se sorprenden de lo rápido que se duermen. Los bebés no tienen ciclos de sueño regulares hasta cerca de los seis meses y algunos solo duermen de 1 a 2 horas seguidas.",
+        "Cómo lidiar con los desafíos de ser una nueva madre (HealthyChildren, American Academy of Pediatrics, 2020). Tema: cuidar de la madre agotada. Hallazgo: es normal sentirse frustrada y agotada, sobre todo si el bebé llora mucho o no duerme. La página aconseja descansar, dormir cuando el bebé duerme o pedir a la pareja u otro adulto responsable que lo cuide un rato, olvidar la presión por ser perfecta, hablar con otros adultos y buscar un grupo de madres. La tristeza o la depresión son comunes tras tener un bebé y el riesgo de depresión posparto es mayor si hubo depresión antes del embarazo; el pediatra puede ayudar y se le puede llamar siempre que haga falta. Cuidar de un bebé bajo los efectos del alcohol no es seguro.",
+        "Cómo lidiar con los desafíos de ser una nueva madre (HealthyChildren, American Academy of Pediatrics, 2020). Tema: rivalidad entre hermanos tras la llegada del bebé. Hallazgo: si hay otros niños en casa, no debe sorprender que tengan rabietas o se pongan agresivos de vez en cuando mientras se acostumbran al nuevo bebé. La página recomienda explicarles con claridad cómo tratar al bebé, elogiarles cuando ayudan, tener a mano muchas distracciones para ellos y que la madre intente controlar su propio carácter cuando las cosas no salen como esperaba. También sugiere implicar a los hermanos mayores como ayudantes especiales, en tareas adecuadas para su edad."
+      ]
+    },
+    {
+      "source_type": "reference",
+      "title": "Pleurs de mon enfant, les comprendre et les calmer (mpedia.fr, AFPA)",
+      "organization": "mpedia.fr (Association Française de Pédiatrie Ambulatoire, AFPA)",
+      "publication_year": 2026,
+      "url": "https://www.mpedia.fr/art-pleurs-de-mon-bebe/",
+      "specialties": ["pediatrics", "general_medicine"],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "topics": ["llanto_inconsolable", "cansancio_extremo"],
+      "chunks": [
+        "Pleurs de mon enfant, les comprendre et les calmer (mpedia.fr, Association Française de Pédiatrie Ambulatoire, actualizado en 2026). Tema: cuánto llora un bebé y el llanto de la tarde. Hallazgo: en los primeros meses todos los bebés lloran, de media unas dos horas cada 24 horas sumando día y noche, a veces más; es su principal forma de comunicarse y lo primero es consolarlo en brazos, que no lo hará dependiente. Existe además el llanto de la tarde o de descarga, que suele empezar hacia el final de la segunda semana, alcanza su máximo hacia el mes y medio y se atenúa al final del primer trimestre; muchos bebés tienen entonces ratos de llanto difícil o imposible de consolar, a veces durante horas, muy duros para los padres, que deben pasarse el relevo si pueden.",
+        "Pleurs de mon enfant, les comprendre et les calmer (mpedia.fr, Association Française de Pédiatrie Ambulatoire, actualizado en 2026). Tema: cuando los padres ya no soportan el llanto. Hallazgo: no soportar el llanto es un sentimiento normal, pero con la falta de sueño y el estrés de las primeras semanas puede llevar a la exasperación, el agotamiento o incluso la depresión, y en el peor caso al maltrato o al bebé sacudido. Ayuda recordar que el llanto es mayor entre la 6.ª y la 8.ª semana y luego se atenúa, vivir al ritmo del bebé (dormir cuando duerme), delegar las tareas de casa, dejar de lado la culpa y mantener la calma. Si la madre o el padre están al límite, pueden dejar al bebé un momento en su cuna, seguro, salir a otra habitación, respirar y pasar el relevo a la pareja o a otra persona de confianza.",
+        "Pleurs de mon enfant, les comprendre et les calmer (mpedia.fr, Association Française de Pédiatrie Ambulatoire, actualizado en 2026). Tema: cuándo consultar por el llanto y por el propio malestar. Hallazgo: si el llanto persiste pese a los esfuerzos por calmarlo, conviene consultar a un pediatra o a un médico habituado a recién nacidos para comprobar que el bebé está bien y que no hay un problema médico detrás; también si el llanto se vuelve muy frecuente o distinto de lo habitual. Si el malestar de los padres continúa, la página aconseja hablarlo con un profesional (matrona, médico de cabecera, ginecólogo, pediatra o psicólogo) y sacar el tema del llanto en la entrevista posnatal; reconocer los propios límites es una fortaleza, no una debilidad."
+      ]
+    },
+    {
+      "source_type": "reference",
+      "title": "Soothing a crying baby (NHS)",
+      "organization": "NHS (National Health Service, Reino Unido)",
+      "publication_year": 2026,
+      "url": "https://www.nhs.uk/baby/caring-for-a-newborn/soothing-a-crying-baby/",
+      "specialties": ["pediatrics", "general_medicine"],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "topics": ["llanto_inconsolable", "bebe_sacudido"],
+      "chunks": [
+        "Soothing a crying baby (NHS, Reino Unido, revisada en 2026). Tema: por qué llora un bebé y qué probar para calmarlo. Hallazgo: puede llorar por hambre, pañal sucio o mojado, cansancio, ganas de brazos, gases, calor o frío, aburrimiento o exceso de estímulos; el llanto suele aumentar hacia las 2 semanas de vida y disminuir poco a poco hacia los 3 meses. Ideas que propone: ofrecer el pecho si se amamanta, ruido suave de fondo, llevarlo en brazos o en portabebés moviéndose, meciéndolo, hablándole o cantándole, pasear en el cochecito o en coche (si se duerme en la silla del coche, pasarlo cuanto antes a una superficie firme y plana), música o un móvil para mirar, acariciarle la espalda o un baño templado, que a unos los calma y a otros los altera.",
+        "Soothing a crying baby (NHS, Reino Unido, revisada en 2026). Tema: está bien dejar al bebé seguro y salir unos minutos; nunca sacudirlo. Hallazgo: si nadie puede relevarte y el llanto te supera, deja al bebé en su cuna o en el cochecito, comprueba que está seguro, cierra la puerta y ve a otra habitación a calmarte; ponte un límite de tiempo, por ejemplo 10 minutos, y vuelve. Por muy frustrada que te sientas, nunca hay que sacudir a un bebé: el movimiento violento de la cabeza puede causarle daño cerebral. A muchos padres les pasa sentir que no pueden más; no hay que avergonzarse de pedir ayuda a una amiga, a la enfermera visitadora o al médico de cabecera. Apuntar cuándo y cuánto llora ayuda a buscar una causa y a saber cuándo se necesita más apoyo.",
+        "Soothing a crying baby (NHS, Reino Unido, revisada en 2026). Tema: cuándo el llanto es motivo de consulta y con qué urgencia. Hallazgo: si llora sin parar y no se le puede consolar ni distraer, o el llanto no suena como el suyo habitual, puede estar enfermo. Si tiene signos de enfermedad, como temperatura alta o desinterés por comer, el NHS indica pedir ayuda médica urgente el mismo día. Llamar a emergencias (112) y pedir una ambulancia si tiene una convulsión; piel, labios o lengua azulados, grisáceos, pálidos o con manchas; no responde, está flácido o le cuesta despertarse más de lo normal; respira con dificultad, con quejido o hundiendo el abdomen bajo las costillas, o muy deprisa; vomita con fuerza y a menudo; tiene temperatura muy alta o muy baja; una erupción que no desaparece al presionarla o no ha mojado el pañal en las últimas 8 horas."
+      ]
+    },
+    {
+      "source_type": "reference",
+      "title": "Prolonged (PURPLE) Crying in Babies: Information for Parents and Carers (Hull University Teaching Hospitals, NHS)",
+      "organization": "NHS (National Health Service, Reino Unido)",
+      "publication_year": 2025,
+      "url": "https://www.hey.nhs.uk/patient-leaflet/prolonged-purple-crying-in-babies-information-for-parents-and-carers/",
+      "specialties": ["pediatrics", "general_medicine"],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "topics": ["llanto_inconsolable"],
+      "chunks": [
+        "Prolonged (PURPLE) Crying in Babies: Information for Parents and Carers (Hull University Teaching Hospitals NHS Trust, actualizado en 2025). Tema: qué es el llanto prolongado o PURPLE. Hallazgo: algunos bebés sanos lloran durante horas sin que se les pueda calmar; afecta hasta a uno de cada cinco, suele empezar en las primeras semanas y a menudo cesa hacia los cuatro a seis meses. Las letras PURPLE lo describen: pico en el segundo mes y menos llanto entre el tercer y el quinto; aparece y desaparece sin motivo; resiste a todo intento de calmarlo; cara de dolor aunque no lo haya; puede durar cinco horas al día o más; más frecuente al final de la tarde y por la noche. Aunque el bebé parezca muy angustiado, no le hace daño, sigue comiendo y ganando peso y no tiene efectos a largo plazo.",
+        "Prolonged (PURPLE) Crying in Babies: Information for Parents and Carers (Hull University Teaching Hospitals NHS Trust, actualizado en 2025). Tema: cómo mantener la calma ante un llanto que no cede. Hallazgo: es normal que un llanto largo estrese. El folleto aconseja mantener las primeras semanas lo más tranquilas posible, aceptar toda la ayuda de familia y amigos, recordar que no es culpa de los padres y no compararse con otros. Cuando ya se ha probado todo y la frustración aprieta, hay que tomarse un descanso: si no hay otro cuidador de confianza, dejar al bebé en un lugar seguro, alejarse unos minutos para calmarse y volver a ver cómo está. Nunca se debe sacudir a un bebé, porque puede causarle daño cerebral, y si cuesta sobrellevarlo hay que pedir ayuda al médico o a la enfermera visitadora sin vergüenza.",
+        "Prolonged (PURPLE) Crying in Babies: Information for Parents and Carers (Hull University Teaching Hospitals NHS Trust, actualizado en 2025). Tema: cuándo buscar ayuda médica. Hallazgo: si el llanto es continuo y no se le puede consolar ni distraer, o no suena como su llanto habitual, puede estar enfermo: si preocupa mucho, pedir ayuda médica urgente el mismo día al médico o al servicio de fuera de horario. Llamar a emergencias (112) y pedir una ambulancia si tiene un llanto débil, agudo y continuo; está flácido al cogerlo; es menor de tres meses con temperatura de más de 38 °C o tiene entre tres y seis meses con más de 39 °C; tiene fiebre con manos y pies fríos; la fontanela abombada; ha tenido una convulsión; se pone azulado, moteado o muy pálido; respira con dificultad, deprisa o con quejido, o tiene manchas morado-rojizas en cualquier parte del cuerpo."
+      ]
+    },
+    {
+      "source_type": "reference",
+      "title": "Síndrome del niño zarandeado (EnFamilia, AEP)",
+      "organization": "Asociación Española de Pediatría",
+      "publication_year": null,
+      "url": "https://www.aeped.es/enfamilia/salud-en-familia/sindrome-nino-zarandeado",
+      "specialties": ["pediatrics", "general_medicine", "emergency_medicine"],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "topics": ["bebe_sacudido", "llanto_inconsolable"],
+      "chunks": [
+        "Síndrome del niño zarandeado (EnFamilia, Asociación Española de Pediatría). Tema: qué es y por qué sacudir a un bebé es tan peligroso. Hallazgo: es el conjunto de lesiones cerebrales que se producen al sacudir con fuerza a un bebé; se estima una incidencia mundial de 20-25 casos por cada 100.000 niños menores de dos años, y en España, de unos 450.000 nacimientos al año, unos 100 niños podrían sufrirlo. La cabeza del bebé supone casi el 25% de su peso, los músculos del cuello son débiles y el cerebro es más blando y con vasos más frágiles. Al zarandearlo, el cerebro golpea contra el cráneo y causa inflamación o sangrado cerebral, sangrado en la retina y lesiones de la médula a la altura del cuello; menos de cinco segundos bastan, y el daño es mayor si termina con un golpe contra el colchón o el sofá.",
+        "Síndrome del niño zarandeado (EnFamilia, Asociación Española de Pediatría). Tema: cuándo ocurre, qué se ve y qué secuelas deja. Hallazgo: al principio el bebé puede estar adormilado o poco reactivo o, al revés, irritable, y puede vomitar o convulsionar. El motivo más frecuente es un llanto inconsolable y prolongado que frustra y enfada al cuidador; otro es intentar «reanimarlo» ante algo que parece amenazar su vida, como un espasmo del sollozo, un atragantamiento o un ataque de tos. Deja secuelas con frecuencia: uno de cada diez niños con un zarandeo grave fallece y la mitad de los supervivientes queda con secuelas graves e irreversibles, como parálisis cerebral, discapacidad intelectual, ceguera o epilepsia; con sacudidas menos intensas pero repetidas pueden aparecer problemas de lenguaje, de coordinación o de aprendizaje.",
+        "Síndrome del niño zarandeado (EnFamilia, Asociación Española de Pediatría). Tema: cómo prevenirlo. Hallazgo: se puede prevenir en todos los casos; aunque no haya intención de hacer daño, la fuerza de un adulto basta para lesionar gravemente a un bebé. Si se queda «sin respiración» por un espasmo del sollozo, un ataque de tos o un atragantamiento, hay que cogerlo boca abajo o sentado e inclinado hacia delante sujetándole la cabeza, y frotarle la espalda o darle golpecitos suaves con la mano abierta, nunca agitarlo. Ante el llanto, buscar la causa (hambre, pañal, cansancio, dolor o el inicio de una enfermedad) y tranquilizarlo en brazos, acariciándolo, hablándole bajito o meciéndolo; si el llanto se prolonga, aplicar medidas que alivien al bebé y eviten que el cuidador pierda la paciencia. Nunca se debe zarandear a un niño."
+      ],
+      "undated_reason": "Página divulgativa de EnFamilia sin fecha de publicación visible; consultada el 2026-11-02."
+    },
+    {
+      "source_type": "reference",
+      "title": "Síndrome del niño zarandeado: lo que todos deberíamos saber (Familia y Salud, AEPap)",
+      "organization": "Asociación Española de Pediatría de Atención Primaria (AEPap)",
+      "publication_year": 2018,
+      "url": "https://www.familiaysalud.es/podemos-prevenir/prevencion-de-accidentes/como-prevenir/sindrome-del-nino-zarandeado-lo-que-todos",
+      "specialties": ["pediatrics", "general_medicine", "emergency_medicine"],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "topics": ["bebe_sacudido", "llanto_inconsolable"],
+      "chunks": [
+        "Síndrome del niño zarandeado: lo que todos deberíamos saber (Familia y Salud, AEPap y Grupo PrevInfad, actualizado en 2018). Tema: qué es y qué daño causa. Hallazgo: también llamado trauma craneal no accidental, es una de las formas más frecuentes de maltrato infantil y ocurre al zarandear violentamente a un bebé, con movimientos bruscos de la cabeza hacia delante y hacia atrás. Suele darse en menores de 2 años, con la cabeza proporcionalmente grande y el cuello débil, cuando el bebé llora mucho y el cuidador pierde el control; se estiman hasta 20 casos por cada 100.000 niños. El cerebro se mueve dentro del cráneo y se rompen vasos: hemorragias e infartos cerebrales, lesiones oculares con hemorragias, desprendimiento de retina o ceguera, y fracturas de costillas si se le aprieta. El 30% fallece y el 80% de los supervivientes queda con secuelas neurológicas graves.",
+        "Síndrome del niño zarandeado: lo que todos deberíamos saber (Familia y Salud, AEPap y Grupo PrevInfad, actualizado en 2018). Tema: síntomas y qué hacer ante una sospecha. Hallazgo: los síntomas pueden no aparecer enseguida, pero el daño neurológico aumenta con cada episodio: somnolencia, vómitos, fontanela abombada, aumento del perímetro de la cabeza, crisis epilépticas o parada cardiorrespiratoria. Si un niño está en peligro inmediato por maltrato o descuido, hay que llamar al 112 o al 116111, el teléfono de atención al menor; si deja de respirar antes de que llegue la ayuda, iniciar la reanimación cardiopulmonar básica. Para prevenirlo: no sacudir nunca a un bebé, ni jugando, ni por enfado, ni para que se calle, y explicar este riesgo a todas las personas que lo cuidan; los juegos suaves y las caídas accidentales desde menos de 1,5 metros no causan estas lesiones.",
+        "Síndrome del niño zarandeado: lo que todos deberíamos saber (Familia y Salud, AEPap y Grupo PrevInfad, actualizado en 2018). Tema: plan para cuando el bebé llora sin consuelo. Hallazgo: no hay una técnica infalible, que llore no significa que se esté haciendo mal y el llanto no daña al bebé. Mantener la calma y, si hace falta, pedir a otra persona que tome el relevo. Atenderlo pronto y comprobar si tiene hambre, frío o calor, el pañal sucio, dolor o fiebre; probar a pasearlo, el contacto piel con piel, el chupete o un ruido blanco. Si nada funciona, dejarlo boca arriba en la cuna, salir de la habitación, cerrar la puerta si hace falta y relajarse. Volver a mirar cómo está cada 10-15 minutos. Consultar al pediatra si no deja de llorar, por si hubiera una causa médica."
+      ]
+    },
+    {
+      "source_type": "reference",
+      "title": "Síndrome del bebé sacudido: proteja a su bebé de los traumatismos craneales por abuso (HealthyChildren, AAP)",
+      "organization": "American Academy of Pediatrics",
+      "publication_year": 2025,
+      "url": "https://www.healthychildren.org/Spanish/safety-prevention/at-home/Paginas/abusive-head-trauma-shaken-baby-syndrome.aspx",
+      "specialties": ["pediatrics", "general_medicine", "emergency_medicine"],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "topics": ["bebe_sacudido", "llanto_inconsolable"],
+      "chunks": [
+        "Síndrome del bebé sacudido: proteja a su bebé de los traumatismos craneales por abuso (HealthyChildren, American Academy of Pediatrics, 2025). Tema: qué es el traumatismo craneal por abuso y qué consecuencias tiene. Hallazgo: los bebés todavía no pueden sostener del todo su cabeza, que pesa mucho, de modo que las sacudidas o los golpes violentos les lesionan el cerebro; el traumatismo craneal por abuso, que incluye el síndrome del bebé sacudido, es una lesión grave y una forma de maltrato infantil. Con demasiada frecuencia causa la muerte del niño y además puede dejar daño cerebral, sangrado alrededor del cerebro, ceguera, pérdida de audición, trastornos del habla o del aprendizaje, convulsiones, discapacidad intelectual y parálisis cerebral.",
+        "Síndrome del bebé sacudido: proteja a su bebé de los traumatismos craneales por abuso (HealthyChildren, American Academy of Pediatrics, 2025). Tema: plan para cuando el llanto hace perder el control. Hallazgo: el llanto es la única forma que tiene el bebé de expresar lo que necesita, no un rechazo; los bebés sanos y bien cuidados pueden llorar 1 o 2 horas al día y algunos más. Si nota que se enfada, respire hondo y cuente hasta 10; deje al bebé en un lugar seguro, como la cuna o un corralito sin mantas ni peluches, salga de la habitación y déjelo llorar solo unos 10 a 15 minutos mientras se calma. Si pasado ese tiempo no se ha calmado, vaya a verlo, pero no lo coja hasta sentirse tranquilo; luego cójalo y vuelva a intentar calmarlo. Llame al médico si cree que llora por un motivo médico. Nunca es seguro sacudir, lanzar, golpear o zarandear a un niño.",
+        "Síndrome del bebé sacudido: proteja a su bebé de los traumatismos craneales por abuso (HealthyChildren, American Academy of Pediatrics, 2025). Tema: elegir cuidadores y señales de alerta. Hallazgo: antes de dejar al bebé con otras personas conviene observar cómo juegan con él y cómo calman su llanto, y hablar con ellas sobre el llanto y la frustración; todos los que cuidan al niño, también hermanos mayores, abuelos o vecinos, deben conocer el peligro de sacudir o golpear la cabeza de un bebé. Los bebés que aún no se ponen de pie rara vez tienen moratones: incluso uno pequeño puede ser la primera señal de maltrato y debe verlo un médico. Las víctimas pueden presentar irritabilidad, letargo o dificultad para mantenerse despiertas, problemas para respirar, vómitos, convulsiones, menor estado de alerta o coma."
+      ]
+    },
+    {
+      "source_type": "reference",
+      "title": "Syndrome du bébé secoué (ameli.fr)",
+      "organization": "Assurance Maladie (ameli.fr)",
+      "publication_year": 2026,
+      "url": "https://www.ameli.fr/assure/sante/urgence/bebe-enfant/syndrome-bebe-secoue",
+      "specialties": ["pediatrics", "general_medicine", "emergency_medicine"],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "topics": ["bebe_sacudido", "llanto_inconsolable"],
+      "chunks": [
+        "Syndrome du bébé secoué (ameli.fr, Assurance Maladie, 2026). Tema: qué es, a quién afecta y qué secuelas deja. Hallazgo: es un traumatismo craneal no accidental causado al sacudir violentamente a un bebé, casi siempre agarrándolo por el tórax o los brazos; es un maltrato y una urgencia médica, y suele repetirse varias veces. Ocurre en general cuando quien cuida está exasperado por el llanto, muy estresado o agotado. En Francia lo sufren cada año varios cientos de niños, sobre todo varones menores de un año y, en unos dos tercios de los casos, menores de 6 meses. Aun sin golpe en la cabeza, las sacudidas lesionan el cerebro, los ojos y la médula; causa la muerte en más del 10% de los casos y secuelas que requieren cuidados específicos en el 75%.",
+        "Syndrome du bébé secoué (ameli.fr, Assurance Maladie, 2026). Tema: síntomas tras una sacudida y qué hacer de inmediato. Hallazgo: los síntomas aparecen justo después: somnolencia inusual o alteración de la conciencia, rigidez o pérdida de tono, movimientos anormales o convulsiones, dificultad para respirar o pausas respiratorias; y otros que también deben alertar: menos apetito, rechazo de la comida o vómitos sin motivo, pérdida de las sonrisas o del balbuceo, peor contacto, irritabilidad extrema, llanto inhabitual y alteraciones de los ojos (movimientos anormales, pupilas desiguales, estrabismo o no sigue con la mirada). Ante estos síntomas hay que llamar a emergencias (112) de inmediato; mientras llegan, si convulsiona o vomita, ponerlo de lado en posición lateral de seguridad. Si el bebé no respira, nunca sacudirlo: llamar a emergencias (112) y seguir sus indicaciones.",
+        "Syndrome du bébé secoué (ameli.fr, Assurance Maladie, 2026). Tema: qué hacer cuando el llanto agota. Hallazgo: un bebé sano puede llorar de 2 a 3 horas al día por hambre, pañal mojado, mala postura, ganas de brazos, aburrimiento o cansancio. Primero comprobar que no tiene fiebre, hambre, sed, el pañal sucio o demasiada o poca ropa; luego cogerlo en brazos, frotarle suavemente la barriga, bajar la luz y los estímulos, música suave, pasearlo o mecerlo despacio, el chupete o un baño a 37 °C. El llanto no es un capricho. Si ya no se puede más, acostarlo seguro boca arriba en su cuna, salir unos minutos y cerrar la puerta; respirar hondo, ducharse o llamar a alguien de confianza. Aceptar ayuda solo de personas fiables y, si se teme llegar a sacudirlo, llamar al 119 en Francia; también se puede hablar con el pediatra o el médico de cabecera."
+      ]
+    },
+    {
+      "source_type": "reference",
+      "title": "Bébé Secoué : définition et prévention du Syndrome du Bébé Secoué (mpedia.fr, AFPA)",
+      "organization": "mpedia.fr (Association Française de Pédiatrie Ambulatoire, AFPA)",
+      "publication_year": 2025,
+      "url": "https://www.mpedia.fr/art-syndrome-bebe-secoue-prevention/",
+      "specialties": ["pediatrics", "general_medicine", "emergency_medicine"],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "topics": ["bebe_sacudido", "llanto_inconsolable"],
+      "chunks": [
+        "Bébé Secoué : définition et prévention du Syndrome du Bébé Secoué (mpedia.fr, Association Française de Pédiatrie Ambulatoire, actualizado en 2025). Tema: qué es y con qué frecuencia ocurre. Hallazgo: cada año en Francia más de 200 bebés serían víctimas de este maltrato; el 75% quedará con secuelas irreversibles y el 20% fallecerá. Es un traumatismo craneal grave causado por una o varias sacudidas muy violentas: el adulto, casi siempre exasperado por el llanto, pierde el control, agarra al bebé (en el 66% de los casos de 0 a 6 meses) y lo agita adelante y atrás para que se calle. El cerebro se zarandea dentro del cráneo, se rompen vasos y quedan lesiones irreversibles o la muerte. El autor lo repite en el 55% de los casos. Las secuelas pueden ser intelectuales, de conducta, visuales, motoras o psicológicas.",
+        "Bébé Secoué : définition et prévention du Syndrome du Bébé Secoué (mpedia.fr, Association Française de Pédiatrie Ambulatoire, actualizado en 2025). Tema: síntomas que deben alertar. Hallazgo: de conducta: irritabilidad, gritos incesantes, letargo, menos contacto o falta de respuesta, retroceso del desarrollo (deja de sonreír o de balbucear); motores: menos tono en el tronco o las extremidades, retraso en sentarse o ponerse de pie, problemas de coordinación o para agarrar; físicos: palidez extrema, aumento rápido del perímetro de la cabeza, fontanela abombada, vómitos en escopetazo, paradas respiratorias, convulsiones, pérdida de conciencia, mirada fija o estrabismo. Si un bebé tiene varios de estos síntomas, o ante la menor duda, hay que acudir a un profesional sanitario.",
+        "Bébé Secoué : définition et prévention du Syndrome du Bébé Secoué (mpedia.fr, Association Française de Pédiatrie Ambulatoire, actualizado en 2025). Tema: prevención cuando el llanto desborda. Hallazgo: casi siempre lo provoca un adulto agotado por un llanto intenso y prolongado, así que importa entender el llanto, descansar y decir al médico o a la familia si se está cansada, triste o cada vez más impaciente. Ante el llanto, cogerlo, ofrecerle el pecho o el biberón si tiene hambre, cambiarle el pañal y comprobar que no tiene calor ni frío; después brazos, piel con piel, nanas, masajes o un paseo, y aceptar que a veces llorará sin que se pueda hacer nada: los bebés lloran normalmente unas 2 horas al día sumando todos los ratos. Si se está al límite: dejarlo en un lugar seguro, salir de la habitación a recuperar la calma, buscar relevo y pedir ayuda. Nunca hay que sacudir a un bebé."
+      ]
+    },
+    {
+      "source_type": "reference",
+      "title": "Estoy amamantando y voy a volver a trabajar (EnFamilia, AEP)",
+      "organization": "Asociación Española de Pediatría",
+      "publication_year": null,
+      "url": "https://www.aeped.es/enfamilia/salud-en-familia/estoy-amamantando-voy-volver-trabajar",
+      "specialties": ["pediatrics", "general_medicine"],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "topics": ["vuelta_trabajo"],
+      "chunks": [
+        "Estoy amamantando y voy a volver a trabajar (EnFamilia, Asociación Española de Pediatría). Tema: derechos laborales de la madre que da el pecho en España. Hallazgo: al volver al trabajo quizá no se mantengan todas las tomas, pero los beneficios de la lactancia siguen; otras madres, los grupos de apoyo y los sindicatos informan de los derechos. Según la página, la legislación española reconoce hasta los 9 meses del bebé el derecho a 1 hora de permiso retribuido por lactancia, aunque no se dé el pecho, que puede tomarse como una hora en la jornada, dos medias horas, entrando media hora más tarde y saliendo media hora antes, o acumulado para alargar la baja. Caben también la reducción de jornada con menos sueldo o la excedencia, y si el puesto expone a sustancias que pasan a la leche, pedir un cambio de puesto o una baja por riesgo durante la lactancia.",
+        "Estoy amamantando y voy a volver a trabajar (EnFamilia, Asociación Española de Pediatría). Tema: cómo mantener la lactancia tras la incorporación y preparar al cuidador. Hallazgo: según la distancia, se puede llevar al bebé al trabajo o salir a darle el pecho en la hora de lactancia o en los descansos, o extraerse leche en casa o en el trabajo para que el cuidador se la ofrezca. En las semanas previas a la vuelta conviene que la persona que cuidará al bebé se familiarice con el manejo de la leche materna y con cómo dársela. Ayuda mantener tomas frecuentes cuando la madre está en casa (fines de semana, noches), ofrecer el pecho justo antes de salir y nada más volver y, en mayores de 6 meses, darle otros alimentos adecuados a su edad mientras la madre trabaja. Descansar fuera del trabajo todo lo posible y delegar tareas favorece la producción de leche."
+      ],
+      "undated_reason": "Página divulgativa de EnFamilia sin fecha de publicación visible; consultada el 2026-11-02."
+    },
+    {
+      "source_type": "reference",
+      "title": "Estoy amamantando y voy a volver a trabajar (Familia y Salud, AEPap)",
+      "organization": "Asociación Española de Pediatría de Atención Primaria (AEPap)",
+      "publication_year": 2021,
+      "url": "https://www.familiaysalud.es/vivimos-sanos/lactancia-materna/lactancia-materna-y-familia/estoy-amamantando-y-voy-volver-trabajar",
+      "specialties": ["pediatrics", "general_medicine"],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "topics": ["vuelta_trabajo"],
+      "chunks": [
+        "Estoy amamantando y voy a volver a trabajar (Familia y Salud, AEPap, actualizado en 2021). Tema: organizarse según la edad del bebé y elegir cuidador. Hallazgo: si el bebé tiene menos de 17 semanas solo puede tomar leche: lactancia directa si la madre puede darle el pecho en el trabajo o desplazarse (teletrabajo, cercanía, hora de lactancia), que es lo menos probable; diferida, con leche extraída antes y ofrecida en su ausencia; o, en algunos bebés, esperar unas pocas horas hasta la siguiente toma al pecho; si nada es posible, leche artificial de inicio. Con más de 17 semanas podría empezar la alimentación complementaria, aunque lo ideal es esperar a los 6 meses. Cuanto más individual sea el cuidado, mejor: tras la madre, el padre, luego un familiar o persona de confianza, o la guardería; quien lo cuide debe familiarizarse con el bebé y con la leche materna (vaso, cuchara o biberón).",
+        "Estoy amamantando y voy a volver a trabajar (Familia y Salud, AEPap, actualizado en 2021). Tema: preparar un banco de leche en casa. Hallazgo: conviene empezar en cuanto se sepa la fecha de vuelta, porque al principio se obtiene mucha menos leche de la esperada y es normal. Se puede extraer a mano o con sacaleches, manual o eléctrico (preferible si se hacen varias extracciones al día); son más eficaces las extracciones frecuentes que las largas, también las nocturnas, y extraer de un pecho mientras el bebé mama del otro. No hay que entrenar al bebé con el biberón ni quitarle tomas de pecho para acostumbrarlo: mientras esté con su madre, pecho a demanda. En el trabajo, la leche extraída aguanta a temperatura ambiente entre 4 y 10 horas según la temperatura, y en una nevera portátil con acumuladores de frío, a unos 15 °C, hasta 24 horas.",
+        "Estoy amamantando y voy a volver a trabajar (Familia y Salud, AEPap, actualizado en 2021). Tema: tiempos de conservación y descongelación de la leche materna. Hallazgo: mejor en envases de cristal aptos para alimentos, pequeños, rotulados con la fecha de extracción, usando primero los más antiguos y dejando unos 2 cm libres al congelar. En la nevera (2-6 °C), no más de 72 horas y nunca en la puerta; en el congelador dentro de la nevera, 2 semanas; en un congelador con puerta separada tipo combi, 3-4 meses; en un congelador independiente de 3 estrellas o más, a -19 °C o menos, 6 meses. Lo mejor es descongelarla en la nevera y tomarla en las 24 horas siguientes; si hay prisa, al baño María en agua templada (37-40 °C) sin hervir. Nunca en el microondas, porque reparte el calor de forma irregular, y nunca volver a congelar leche descongelada."
+      ]
+    },
+    {
+      "source_type": "reference",
+      "title": "Ya me he sacado la leche, y ahora ¿qué hago con ella? (Familia y Salud, AEPap)",
+      "organization": "Asociación Española de Pediatría de Atención Primaria (AEPap)",
+      "publication_year": 2018,
+      "url": "https://www.familiaysalud.es/vivimos-sanos/lactancia-materna/resolviendo-dudas/ya-me-he-sacado-la-leche-y-ahora-que-hago-con-ella",
+      "specialties": ["pediatrics", "general_medicine"],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "topics": ["vuelta_trabajo"],
+      "chunks": [
+        "Ya me he sacado la leche, y ahora ¿qué hago con ella? (Familia y Salud, AEPap, 2018). Tema: recipientes y etiquetado de la leche extraída. Hallazgo: hay que usar recipientes aptos para alimentos y sin bisfenol A; los botes de orina no sirven. Las bolsas de congelación son baratas y ocupan poco, pero pueden romperse y contaminar la leche; las botellas rígidas de polipropileno resisten mejor y los frascos de cristal son reutilizables y la conservan bien. Al principio conviene congelar porciones pequeñas y después la cantidad que el bebé toma en cada toma. Hay que dejar unos 2 cm libres porque la leche aumenta de volumen al congelarse, anotar la cantidad y la fecha de extracción y gastar primero la más antigua.",
+        "Ya me he sacado la leche, y ahora ¿qué hago con ella? (Familia y Salud, AEPap, 2018). Tema: cuánto tiempo se conserva la leche materna. Hallazgo: a temperatura ambiente (26-32 °C) las bacterias crecen deprisa, así que hay que refrigerarla cuanto antes: unas 4 horas sería el máximo razonable. En una nevera portátil con acumuladores de frío, a unos 15 °C, puede mantenerse 6-8 horas. En la nevera doméstica (2-6 °C), no más de 72 horas, al fondo, nunca en la puerta y separada del pescado. En el congelador de tres estrellas (-18 °C), hasta 3 meses; a -20 °C, propio de congeladores industriales, hasta 6 meses. Algunas guías hablan de 12 meses a -20 °C, pero hay pocos estudios y la página no lo recomienda.",
+        "Ya me he sacado la leche, y ahora ¿qué hago con ella? (Familia y Salud, AEPap, 2018). Tema: descongelar, templar y aprovechar los restos. Hallazgo: lo mejor es descongelarla en la nevera, o a temperatura ambiente vigilando que no pase mucho tiempo fuera; si no da tiempo, al baño María en agua templada (37-40 °C), nunca hirviendo, y nunca en el microondas, que reparte el calor de forma irregular. Para dársela al bebé se puede templar al baño María, bajo el grifo de agua caliente o con las manos. Una vez descongelada se toma antes de 24 horas y se guarda en la nevera; no se puede volver a congelar. Lo que sobre tras una toma puede quedar como máximo 2 horas a temperatura ambiente. El olor a rancio tras congelarla es normal, no afecta a su calidad y no se recomienda escaldarla antes."
+      ]
+    },
+    {
+      "source_type": "reference",
+      "title": "Mi hijo empieza la guardería, ¿podré seguir dándole el pecho? (Familia y Salud, AEPap)",
+      "organization": "Asociación Española de Pediatría de Atención Primaria (AEPap)",
+      "publication_year": 2023,
+      "url": "https://www.familiaysalud.es/vivimos-sanos/lactancia-materna/seguimos-creciendo/mi-hijo-empieza-la-guarderia-podre-seguir-dandole",
+      "specialties": ["pediatrics", "general_medicine"],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "topics": ["vuelta_trabajo"],
+      "chunks": [
+        "Mi hijo empieza la guardería, ¿podré seguir dándole el pecho? (Familia y Salud, AEPap, actualizado en 2023). Tema: seguir con la lactancia al volver al trabajo y empezar la guardería. Hallazgo: la madre puede seguir dando el pecho aunque vuelva a trabajar; puede pedir a la guardería un tiempo y un lugar tranquilo para amamantar o, si no puede ir, extraerse la leche en casa, a mano o con sacaleches, para que el centro la guarde y se la dé. Ante dudas del centro, la página aconseja pedir una entrevista con la dirección y llevar información sobre las ventajas de la lactancia. Momentos útiles para el pecho: al dejar al bebé, a media mañana si el trabajo está cerca y antes de salir de la guardería, para que vaya relajado a casa.",
+        "Mi hijo empieza la guardería, ¿podré seguir dándole el pecho? (Familia y Salud, AEPap, actualizado en 2023). Tema: cómo llevar y conservar la leche en la guardería. Hallazgo: la leche debe ir refrigerada en una neverita portátil o bolsa isotérmica con acumuladores de frío que no toquen directamente el recipiente, y debe haberse extraído o descongelado ese mismo día o el anterior. Se lleva la cantidad de todo el día repartida en tantos biberones como tomas, cada uno marcado con la fecha de consumo y el nombre y los dos apellidos del bebé. El centro la guarda en la nevera entre 0 y 4 °C y la calienta sumergiendo el recipiente en agua caliente; los envases se lavan con agua caliente y jabón, se aclaran y se dejan secar al aire.",
+        "Mi hijo empieza la guardería, ¿podré seguir dándole el pecho? (Familia y Salud, AEPap, actualizado en 2023). Tema: dificultades frecuentes y hasta cuándo seguir. Hallazgo: si la guardería alega una norma que impide recibir alimentos de las familias, se recomienda pedir una reunión con la dirección. Si el bebé rechaza la leche en biberón puede ser porque echa de menos el pecho: conviene seguir dándole el pecho a demanda cuando estén juntos, y no pasa nada si rechaza el biberón, porque la leche extraída puede añadirse a las papillas de cereales o tomarse en vasito. La OMS y UNICEF aconsejan lactancia materna exclusiva los seis primeros meses y seguir con ella dos años o más junto a otros alimentos; según la página, se puede continuar mientras la madre quiera."
+      ]
+    },
+    {
+      "source_type": "reference",
+      "title": "Consejos para congelar y refrigerar la leche materna (HealthyChildren, AAP)",
+      "organization": "American Academy of Pediatrics",
+      "publication_year": 2024,
+      "url": "https://www.healthychildren.org/Spanish/ages-stages/baby/breastfeeding/Paginas/storing-and-preparing-expressed-breast-milk.aspx",
+      "specialties": ["pediatrics", "general_medicine"],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "topics": ["vuelta_trabajo"],
+      "chunks": [
+        "Consejos para congelar y refrigerar la leche materna (HealthyChildren, American Academy of Pediatrics, 2024). Tema: higiene, etiquetado y restos de un biberón. Hallazgo: hay que lavarse bien las manos y lavar los recipientes antes de extraer la leche, y etiquetar cada recipiente con la fecha de extracción y, si se lleva a la guardería, con el nombre del bebé. Conviene guardarla en pequeñas cantidades para no desperdiciarla. Lo que quede en un biberón después de una toma debe usarse en las 2 horas siguientes o, si se refrigera enseguida, en la siguiente toma. La AAP recomienda la leche materna como único alimento durante unos 6 meses y seguir amamantando, ya con sólidos, mientras madre y bebé quieran, 2 años o más.",
+        "Consejos para congelar y refrigerar la leche materna (HealthyChildren, American Academy of Pediatrics, 2024). Tema: tiempos de conservación de la leche materna. Hallazgo: a temperatura ambiente (hasta 25 °C), hasta 4 horas, o de 6 a 8 horas si se extrajo con mucha limpieza, aunque es mejor refrigerarla cuanto antes. En la parte trasera del frigorífico (4 °C o menos), mejor usarla en 4 días. Hay que congelarla si no se va a usar en 48-72 horas, sin llenar el recipiente hasta arriba y al fondo del congelador, no en la puerta: en un congelador de puerta independiente (-18 °C), hasta 9 meses; en un arcón o congelador de muy baja temperatura (-20 °C), hasta 12 meses. Para recordarlo, la «regla de los 4»: 4 horas a temperatura ambiente y 4 días en la nevera.",
+        "Consejos para congelar y refrigerar la leche materna (HealthyChildren, American Academy of Pediatrics, 2024). Tema: descongelar y calentar la leche materna. Hallazgo: se puede pasar al frigorífico la noche anterior, o poner bajo un chorro de agua tibia o en un recipiente con agua tibia. Una vez descongelada se guarda en la nevera y es mejor usarla en las 24 horas siguientes, aunque la página admite su uso dentro de las 48 a 72 horas. Para calentarla, un recipiente con agua tibia o un chorro de agua tibia; nunca el microondas, porque el bebé puede quemarse con la leche. Los hospitales pueden tener normas propias para prematuros o bebés ingresados, por lo que en esos casos hay que consultar con el pediatra o el hospital."
+      ]
+    },
+    {
+      "source_type": "reference",
+      "title": "Breastfeeding and going back to work (NHS)",
+      "organization": "NHS (National Health Service, Reino Unido)",
+      "publication_year": 2024,
+      "url": "https://www.nhs.uk/baby/breastfeeding-and-bottle-feeding/breastfeeding-and-lifestyle/back-to-work/",
+      "specialties": ["pediatrics", "general_medicine"],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "topics": ["vuelta_trabajo"],
+      "chunks": [
+        "Breastfeeding and going back to work (NHS, Reino Unido, revisada en 2024). Tema: opciones y preparación para volver al trabajo dando el pecho. Hallazgo: se recomienda lactancia materna exclusiva durante unos 6 primeros meses y después seguir con ella junto a la comida sólida, así que muchas madres siguen amamantando al volver al trabajo. Se puede buscar cuidado cerca del trabajo para dar el pecho en los descansos o antes y después de la jornada, extraer la leche a mano o con sacaleches para que otra persona se la dé, pedir horario flexible o combinar pecho y biberón. Antes de volver conviene avisar pronto a la empresa, etiquetar y fechar la leche para que el cuidador use primero la más antigua y hacer una prueba previa con el cuidado elegido. En la nevera se conserva hasta 5 días a 4 °C o menos; si no se sabe la temperatura o supera los 4 °C, usarla en 3 días.",
+        "Breastfeeding and going back to work (NHS, Reino Unido, revisada en 2024). Tema: qué debe ofrecer la empresa en el Reino Unido. Hallazgo: según la página, antes de volver la madre debe comunicar por escrito a su empresa que está dando el pecho, y la empresa debe hacer entonces una evaluación de riesgos específica y ofrecer un lugar adecuado para descansar. El organismo británico de seguridad laboral recomienda un espacio privado, sano y seguro para extraer y guardar la leche, y deja claro que el baño no es un lugar adecuado. El apoyo recomendado incluye pausas para la extracción, una sala limpia, cálida y privada, una nevera limpia y segura para la leche y horarios flexibles. Volver al trabajo no obliga a dejar de amamantar: cuánto tiempo seguir lo decide la madre."
+      ]
+    },
+    {
+      "source_type": "reference",
+      "title": "Expressing breast milk (NHS)",
+      "organization": "NHS (National Health Service, Reino Unido)",
+      "publication_year": 2026,
+      "url": "https://www.nhs.uk/baby/breastfeeding-and-bottle-feeding/breastfeeding/expressing-breast-milk/",
+      "specialties": ["pediatrics", "general_medicine"],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "topics": ["vuelta_trabajo"],
+      "chunks": [
+        "Expressing breast milk (NHS, Reino Unido, revisada en 2026). Tema: conservar la leche extraída, por ejemplo al volver al trabajo. Hallazgo: extraerse leche es útil cuando hay que separarse del bebé, por ejemplo porque está ingresado o porque la madre vuelve al trabajo. Se guarda en un recipiente esterilizado o en bolsas especiales: al fondo del frigorífico hasta 8 días a 4 °C o menos, y si no se sabe la temperatura o el frigorífico está entre 5 y 10 °C, usarla en 3 días; 2 semanas en el compartimento congelador del frigorífico; hasta 6 meses en un congelador a -18 °C o menos. La leche ya enfriada en la nevera puede transportarse en una bolsa isotérmica con acumuladores de frío hasta 24 horas. Conviene guardarla en cantidades pequeñas para no desperdiciar y etiquetarla con la fecha antes de congelarla.",
+        "Expressing breast milk (NHS, Reino Unido, revisada en 2026). Tema: descongelar, calentar y restos. Hallazgo: lo mejor es descongelarla despacio en el frigorífico; si se necesita ya, en una jarra de agua templada o bajo el grifo de agua templada. Una vez descongelada, agitarla suavemente si se ha separado y usarla enseguida; no volver a congelarla. Cuando el bebé ya ha bebido de un biberón de leche materna, hay que usarlo en 1 hora y tirar lo que sobre. Se le puede dar fría si la acepta o templarla a temperatura corporal en agua templada, pero nunca calentarla ni descongelarla en el microondas o en el fuego, porque se forman puntos muy calientes que pueden quemarle la boca. El sacaleches y los recipientes deben estar limpios y esterilizados; si el bebé es prematuro o está enfermo, preguntar al personal del hospital cómo conservarla."
+      ]
+    },
+    {
+      "source_type": "reference",
+      "title": "Allaiter et travailler : quelle organisation ? (mpedia.fr, AFPA)",
+      "organization": "mpedia.fr (Association Française de Pédiatrie Ambulatoire, AFPA)",
+      "publication_year": 2025,
+      "url": "https://www.mpedia.fr/art-allaiter-travailler-organisation/",
+      "specialties": ["pediatrics", "general_medicine"],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "topics": ["vuelta_trabajo"],
+      "chunks": [
+        "Allaiter et travailler : quelle organisation ? (mpedia.fr, Association Française de Pédiatrie Ambulatoire, actualizado en 2025). Tema: elegir entre lactancia mixta y lactancia exclusiva al volver al trabajo. Hallazgo: cada familia decide según sus condiciones laborales. En la lactancia mixta se mantienen las tomas cuando la madre está (mañana, tarde al volver, fines de semana) y se sustituyen las demás por leche de fórmula; no hace falta empezar mucho antes, basta con unos días, y el bebé no se desorienta por tener un ritmo distinto en casa y en la guardería. La OMS recomienda lactancia exclusiva hasta los seis meses, y la página advierte que introducir biberones demasiado pronto, antes de las 6 semanas, puede hacer bajar la producción; si el trabajo aprieta mucho, 4 meses de lactancia exclusiva ya son muy beneficiosos.",
+        "Allaiter et travailler : quelle organisation ? (mpedia.fr, Association Française de Pédiatrie Ambulatoire, actualizado en 2025). Tema: lactancia exclusiva con extractor y lo que hay que explicar al cuidador. Hallazgo: para mantener la lactancia exclusiva hace falta un buen sacaleches; conviene empezar cuanto antes a hacer pequeñas reservas congeladas, sabiendo que las primeras veces sale muy poca leche y es normal. La página aconseja esperar a que la lactancia esté bien instaurada, hacia el mes de vida, antes de congelar reservas. Hay que lavarse las manos antes de cada extracción y dar al cuidador los tiempos de conservación y cómo calentarla: templada a unos 37 °C en agua tibia o en un calentador sin pasar de 40 °C, nunca en el microondas, y removiéndola en círculos con suavidad. Si el bebé no se la termina, lo que sobre se tira pasada 1 hora.",
+        "Allaiter et travailler : quelle organisation ? (mpedia.fr, Association Française de Pédiatrie Ambulatoire, actualizado en 2025). Tema: extraer y conservar la leche en el trabajo en Francia. Hallazgo: según la página, el derecho laboral francés permite a la trabajadora dar el pecho o extraerse leche durante la jornada hasta que el bebé cumple un año, por ejemplo en dos periodos de 30 minutos, a media mañana y a mediodía o a mediodía y a media tarde; ese tiempo no se paga y se reduce si la empresa dispone de un local para la lactancia. Con un extractor doble, cada sesión no debería pasar de 20 minutos. La leche extraída se conserva en la nevera o en una nevera portátil hasta 48 horas y se lleva a casa en una bolsa isotérmica con acumuladores de frío sin que supere los 15 °C. La leche descongelada nunca se vuelve a congelar."
+      ]
+    },
+    {
+      "source_type": "reference",
+      "title": "Celos en los niños... casi normales (EnFamilia, AEP)",
+      "organization": "Asociación Española de Pediatría",
+      "publication_year": null,
+      "url": "https://www.aeped.es/enfamilia/salud-en-familia/celos-en-ninoscasi-normales",
+      "specialties": ["pediatrics", "general_medicine"],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "topics": ["hermanos"],
+      "chunks": [
+        "Celos en los niños... casi normales (EnFamilia, Asociación Española de Pediatría). Tema: por qué aparecen los celos ante un hermano. Hallazgo: los celos entre hermanos son tan normales que casi habría que preocuparse si no aparecieran, aunque conviene limitarlos para evitar sufrimiento. Nacen de una pérdida de afecto imaginada y sentida, sobre todo del cariño de la madre, con la llegada del hermano y la aparente preferencia por él. Son más frecuentes en primogénitos, cuando hay mucha diferencia de edad, en niños sobreprotegidos y en casas con mucha rivalidad entre los adultos; los favorecen la falta de iniciativa, la dependencia, las comparaciones, los cambios bruscos de actitud de la madre tras el nacimiento o una mala preparación para el nuevo hermano.",
+        "Celos en los niños... casi normales (EnFamilia, Asociación Española de Pediatría). Tema: cómo se manifiestan los celos, incluida la regresión. Hallazgo: puede haber hostilidad hacia el hermano, con golpes, mordiscos, pellizcos o empujones, sobre todo cuando el pequeño está solo, a veces alternando con gestos de protección. Hacia la madre puede verse desobediencia sistemática, mal humor o frases agresivas, o una agresividad no consciente: dejar de controlar el pipí o la caca, desgana o tics. También cambios de carácter: pegarse mucho a la madre o vigilarla, aislarse, hablar poco o conductas de regresión, como pedir ayuda para comer o para asearse.",
+        "Celos en los niños... casi normales (EnFamilia, Asociación Española de Pediatría). Tema: qué hacer antes del parto, en el nacimiento y al volver a casa. Hallazgo: antes del nacimiento, informar con calma y sin chantajes emocionales (nunca frases como querer más al hermanito si no se porta bien) y vigilar lo que dicen terceros. En esos días es mejor no sacar al niño de casa: si hace falta ayuda, que un familiar vaya a casa. No dramatizar el parto y, salvo complicaciones, dejarle ir al hospital el mismo día a ver al bebé y a su madre, idealmente acompañado por el padre y con un rato de intimidad. Conviene volver a casa cuando el mayor esté fuera, dejarle ver y tocar al bebé, y animarle a ayudar como un juego, sin presión ni culpas si se equivoca.",
+        "Celos en los niños... casi normales (EnFamilia, Asociación Española de Pediatría). Tema: los primeros días y qué hacer si aparecen los celos. Hallazgo: no es momento de hacer cambios en su vida, como empezar la guardería o el colegio o cambiarle de habitación. Si las visitas traen regalos al bebé, no conviene hacerle al mayor regalos «de compensación», porque premian los celos. Si quiere volver a costumbres del pequeño, como el biberón o el chupete, negárselo con firmeza pero sin darle importancia ni humillarle, y no reírle las «gracias» regresivas. Si aparecen los celos, no prestarle más atención por ello; tratar a cada hijo según lo que es y necesita, para que cada uno encuentre su propia identidad."
+      ],
+      "undated_reason": "Página divulgativa de EnFamilia sin fecha de publicación visible; consultada el 2026-11-02."
+    },
+    {
+      "source_type": "reference",
+      "title": "¿Cómo saber si mi niño tiene celos? (Familia y Salud, AEPap)",
+      "organization": "Asociación Española de Pediatría de Atención Primaria (AEPap)",
+      "publication_year": 2016,
+      "url": "https://www.familiaysalud.es/vivimos-sanos/salud-emocional/emociones-y-familia/afrontamos-los-problemas/como-saber-si-mi-nino",
+      "specialties": ["pediatrics", "general_medicine"],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "topics": ["hermanos"],
+      "chunks": [
+        "¿Cómo saber si mi niño tiene celos? (Familia y Salud, AEPap, actualizado en 2016). Tema: señales de celos ante el nuevo hermano. Hallazgo: la página enumera varias: desobediencia para molestar y llamar la atención, aunque sea a base de riñas; retraimiento o indiferencia, que relaciona con una caída de la autoestima; interrumpir o alborotar justo cuando se atiende al bebé; llanto y rabietas, muy eficaces para conseguir atención; conductas para fastidiar al bebé, como despertarlo, quitarle el chupete o agobiarlo a mimos; y cambios en el sueño o en la comida, como pesadillas, insomnio, terrores nocturnos o falta de apetito.",
+        "¿Cómo saber si mi niño tiene celos? (Familia y Salud, AEPap, actualizado en 2016). Tema: agresividad, regresión y cómo responder. Hallazgo: pueden aparecer irritabilidad, insultos o golpes contra sí mismo, contra otros o contra las cosas del bebé; regresión a hábitos ya superados, como hablar como un bebé, volver al chupete o a la cuna o dejar de controlar esfínteres, para recuperar el cariño y la atención que siente perdidos; molestias sin causa clara, como dolor de barriga o de cabeza, vómitos o diarrea; y también colaboración en el cuidado del hermano, que conviene reforzar. Ante todo ello: mucha paciencia, mantener los límites y explicarle lo que siente, sin reforzar el llanto como forma de contacto y premiando los momentos en que pide las cosas bien."
+      ]
+    },
+    {
+      "source_type": "reference",
+      "title": "¿Por qué no tiramos al bebé a la basura? Los celos: un sentimiento natural (Familia y Salud, AEPap)",
+      "organization": "Asociación Española de Pediatría de Atención Primaria (AEPap)",
+      "publication_year": 2016,
+      "url": "https://www.familiaysalud.es/vivimos-sanos/salud-emocional/emociones-y-familia/afrontamos-los-problemas/por-que-no-tiramos-al",
+      "specialties": ["pediatrics", "general_medicine"],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "topics": ["hermanos"],
+      "chunks": [
+        "¿Por qué no tiramos al bebé a la basura? Los celos: un sentimiento natural (Familia y Salud, AEPap, actualizado en 2016). Tema: qué son los celos y a qué edad son más frecuentes. Hallazgo: los celos son emociones complejas que mezclan miedo, tristeza, rabia y autocrítica, y aparecen cuando el niño deja de ser el centro de atención con el nacimiento de un hermano; son sentimientos legítimos y naturales, y forman parte del desarrollo normal entre los 12 y los 24 meses. Son más frecuentes desde los 2 hasta los 4 años, porque a esa edad el niño aún depende mucho de su madre y el vínculo se altera con facilidad cuando llega el «intruso». Cuando los hermanos se llevan más de 3 años es más difícil que haya celos, porque el mayor ya tiene cierta independencia.",
+        "¿Por qué no tiramos al bebé a la basura? Los celos: un sentimiento natural (Familia y Salud, AEPap, actualizado en 2016). Tema: qué favorece y qué mantiene los celos. Hallazgo: influyen la edad y la diferencia de edad, la composición familiar, el temperamento y la baja tolerancia a la frustración, la relación previa con la madre, el estado emocional de la madre después del parto y el tipo de vínculo; el desencadenante principal es el nacimiento del hermano. Los mantienen las comparaciones entre hermanos, aumentar de golpe las órdenes y exigencias al mayor, dar una atención excesiva al pequeño, que sean del mismo sexo y que los padres intervengan demasiado en sus conflictos, así que conviene evitar esas conductas."
+      ]
+    },
+    {
+      "source_type": "reference",
+      "title": "¡¡¡¡Ya está aquiiiiii!!! El nacimiento de un hermano, ¿cómo debemos actuar? (Familia y Salud, AEPap)",
+      "organization": "Asociación Española de Pediatría de Atención Primaria (AEPap)",
+      "publication_year": 2016,
+      "url": "https://www.familiaysalud.es/vivimos-sanos/salud-emocional/emociones-y-familia/afrontamos-los-problemas/ya-esta-aquiiiiii-el",
+      "specialties": ["pediatrics", "general_medicine"],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "topics": ["hermanos"],
+      "chunks": [
+        "¡¡¡¡Ya está aquiiiiii!!! El nacimiento de un hermano, ¿cómo debemos actuar? (Familia y Salud, AEPap, actualizado en 2016). Tema: preparar al hijo mayor durante el embarazo. Hallazgo: según la página, el 90% de los niños muestra algún grado de celos ante el nacimiento de un hermano, incluso en las mejores condiciones, y la situación puede aprovecharse para educar. Antes del parto conviene hablarle del bebé y dejar que lo sienta, anunciar con mucha antelación cualquier cambio de habitación para que no lo asocie al recién llegado, explicarle que la familia seguirá unida y nadie quedará abandonado, y mantener sus rutinas de sueño, aseo y comida. Recuerda además que no se tiene un segundo hijo para complacer al primero.",
+        "¡¡¡¡Ya está aquiiiiii!!! El nacimiento de un hermano, ¿cómo debemos actuar? (Familia y Salud, AEPap, actualizado en 2016). Tema: el primer encuentro y la convivencia diaria. Hallazgo: cuando el mayor vea al recién nacido por primera vez, mejor que el bebé no esté en brazos de la madre; dejarle verlo, tocarlo y acariciarlo junto a sus padres, y algunos autores proponen que reciba un regalo de parte del hermano. Después importa más la calidad del tiempo que la cantidad, con ratos sin interrupciones, y que ambos padres se impliquen. Hay que enseñarles a convivir, compartir y esperar turno, reforzarlo cuando lo hacen e ignorar en lo posible las conductas inadecuadas por celos; si hace falta una sanción, explicar el motivo y qué debe hacer, con calma, sin fuerza ni humillaciones.",
+        "¡¡¡¡Ya está aquiiiiii!!! El nacimiento de un hermano, ¿cómo debemos actuar? (Familia y Salud, AEPap, actualizado en 2016). Tema: recomendaciones para limitar los celos. Hallazgo: ayudar al niño a poner nombre a lo que siente y explicarle que es normal, aunque haya que superarlo; no ridiculizarle delante de otros, sobre todo de otros niños; evitar las comparaciones entre hermanos; no aumentar de repente las órdenes y exigencias al mayor; dejar que resuelvan sus conflictos entre ellos salvo que haya riesgo físico, y dedicar cada día unos minutos en exclusiva al hermano mayor, sin el bebé delante."
+      ]
+    },
+    {
+      "source_type": "reference",
+      "title": "¿Cómo debemos preparar a nuestros hijos mayores para su nuevo hermanito o hermanita? (HealthyChildren, AAP)",
+      "organization": "American Academy of Pediatrics",
+      "publication_year": 2019,
+      "url": "https://www.healthychildren.org/Spanish/ages-stages/prenatal/Paginas/preparing-your-family-for-a-new-baby.aspx",
+      "specialties": ["pediatrics", "general_medicine"],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "topics": ["hermanos"],
+      "chunks": [
+        "¿Cómo debemos preparar a nuestros hijos mayores para su nuevo hermanito o hermanita? (HealthyChildren, American Academy of Pediatrics, 2019). Tema: hermanos mayores de 1 a 2 años. Hallazgo: a esta edad no entienden del todo qué significa tener un hermano, pero perciben la emoción de los padres. Es probable que no se pueda atender a los dos niños todo el tiempo, así que conviene pedir ayuda a la pareja, la familia y los amigos. Leerle libros ilustrados sobre la llegada de un bebé le familiariza con palabras como hermana, hermano o nuevo bebé. Cuando nazca, conviene hacer algo especial con el mayor: un regalo, un rato a solas con papá, la abuela u otro adulto especial, o una salida a un sitio que le guste.",
+        "¿Cómo debemos preparar a nuestros hijos mayores para su nuevo hermanito o hermanita? (HealthyChildren, American Academy of Pediatrics, 2019). Tema: hermanos mayores de 2 años, hasta los 4 años, y la regresión. Hallazgo: están muy apegados a sus padres y pueden sentirse amenazados y celosos. Conviene contárselo cuando se note el embarazo o empiecen las compras del bebé, ser sinceros sobre que el bebé llorará y necesitará mucha atención, asegurarle que se le seguirá queriendo, incluirlo en los preparativos, enseñarle sus fotos de bebé y darle un muñeco para cuidar. Los grandes cambios, como dejar el pañal o pasar a una cama, mejor antes del parto o con el bebé ya en casa. Hay que esperar pequeños retrocesos, como escapes de pipí o pedir biberón: son normales y su manera de asegurarse el cariño, así que en vez de reñirle, darle atención y elogiarle cuando actúe como un niño mayor.",
+        "¿Cómo debemos preparar a nuestros hijos mayores para su nuevo hermanito o hermanita? (HealthyChildren, American Academy of Pediatrics, 2019). Tema: hermanos a partir de los 5 años y el tiempo a solas. Hallazgo: los niños a partir de los 5 años suelen sentirse menos amenazados, aunque pueden tener celos de la atención que recibe el bebé. Conviene explicarles los cambios en un lenguaje que entiendan, dejarles ayudar a preparar la habitación o la ropa, llevarlos al hospital poco después del parto si es posible y, ya en casa, darles un papel en el cuidado, como cogerlo con permiso, elogiándoles cuando son cariñosos. Con cualquier edad, no olvidar sus necesidades y actividades, decirle cuánto se le quiere y pasar a solas con el mayor un rato cada día."
+      ]
+    },
+    {
+      "source_type": "reference",
+      "title": "Cómo lidiar con los hermanos mayores mientras se amamanta al bebé (HealthyChildren, AAP)",
+      "organization": "American Academy of Pediatrics",
+      "publication_year": 2015,
+      "url": "https://www.healthychildren.org/Spanish/ages-stages/baby/breastfeeding/Paginas/managing-older-siblings-while-breastfeeding.aspx",
+      "specialties": ["pediatrics", "general_medicine"],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "topics": ["hermanos"],
+      "chunks": [
+        "Cómo lidiar con los hermanos mayores mientras se amamanta al bebé (HealthyChildren, American Academy of Pediatrics, 2015). Tema: incluir al hermano mayor durante las tomas. Hallazgo: es normal que los hermanos sientan curiosidad por la lactancia y quieran mirar; explicarla con palabras sencillas y responder con realismo a sus preguntas la convierte en un rato familiar positivo. Si se acercan o intentan subirse al regazo, se les puede incluir: contarles cómo se les amamantaba a ellos, abrazarlos con el brazo libre, leerles un cuento o mirarlos mientras dibujan o juegan, o escuchar juntos música o cuentos. También pueden ayudar doblando la ropa al lado, trayendo un vaso de agua o sosteniendo al bebé mientras la madre se prepara.",
+        "Cómo lidiar con los hermanos mayores mientras se amamanta al bebé (HealthyChildren, American Academy of Pediatrics, 2015). Tema: cuando el mayor quiere mamar o aún toma el pecho. Hallazgo: si un hermano pequeño o en edad preescolar pide probar, la decisión es de la madre; la mayoría lo encuentra demasiado raro para repetir, no recuerda cómo hacerlo y pierde el interés tras un intento. Si el mayor todavía mama y no quiere dejarlo, o no es momento de destetar, se puede amamantar a los dos, avisando al pediatra del recién nacido para vigilar su crecimiento. El bebé depende por completo de la leche materna, así que se le ofrece el pecho primero y al mayor después; la madre debe cuidar su alimentación y descansar más, y su leche sigue adaptada a las necesidades del recién nacido."
+      ]
+    },
+    {
+      "source_type": "reference",
+      "title": "Avant la naissance : comment préparer l'aîné à la venue du petit frère ou de la petite sœur ? (mpedia.fr, AFPA)",
+      "organization": "mpedia.fr (Association Française de Pédiatrie Ambulatoire, AFPA)",
+      "publication_year": 2025,
+      "url": "https://www.mpedia.fr/art-preparer-laine-avant-la-naissance/",
+      "specialties": ["pediatrics", "general_medicine"],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "topics": ["hermanos"],
+      "chunks": [
+        "Avant la naissance : comment préparer l'aîné à la venue du petit frère ou de la petite sœur ? (mpedia.fr, Association Française de Pédiatrie Ambulatoire, actualizado en 2025). Tema: cómo y cuándo anunciar el embarazo al hijo mayor. Hallazgo: los celos entre hermanos que llegan a ser un problema son raros, y es natural que el niño piense que ya no basta a sus padres. Conviene anunciárselo no demasiado pronto, esperando al final del primer trimestre, pero antes de que se entere por otra persona; no hablar del tema sin parar e integrarle en el proyecto, como el bebé de la familia. Usar un lenguaje sencillo, con una referencia de tiempo que entienda, como las próximas vacaciones, y repetirle que se le seguirá queriendo igual. Los libros sobre la llegada de un bebé le ayudan a ver que lo que siente es normal.",
+        "Avant la naissance : comment préparer l'aîné à la venue du petit frère ou de la petite sœur ? (mpedia.fr, Association Française de Pédiatrie Ambulatoire, actualizado en 2025). Tema: si no le hace ilusión o hace una regresión. Hallazgo: si se muestra agresivo, se le puede decir que es normal sentir celos, miedo o rabia, y que no está obligado a querer al bebé que llega. Si vuelve a chuparse el dedo, pide biberón o vuelve a mojar la cama, la comprensión de los padres le ayudará a aceptar al bebé; solo hay que consultar si la situación persiste. Puede dormir peor durante un tiempo. Si todavía usa pañal, no es buen momento para quitárselo. Ayuda hacerle partícipe de la espera: hablar al bebé, tocar la barriga y contarle cómo se le esperaba a él."
+      ]
+    },
+    {
+      "source_type": "reference",
+      "title": "Aîné : comment l'aider à accueillir son petit frère ou sa petite sœur (mpedia.fr, AFPA)",
+      "organization": "mpedia.fr (Association Française de Pédiatrie Ambulatoire, AFPA)",
+      "publication_year": 2026,
+      "url": "https://www.mpedia.fr/art-nouveau-ne-place-de-laine/",
+      "specialties": ["pediatrics", "general_medicine"],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "topics": ["hermanos"],
+      "chunks": [
+        "Aîné : comment l'aider à accueillir son petit frère ou sa petite sœur (mpedia.fr, Association Française de Pédiatrie Ambulatoire, actualizado en 2026). Tema: el hermano mayor durante la estancia en la maternidad y al perder protagonismo. Hallazgo: mientras la madre está en la maternidad, los otros hijos necesitan sentirse atendidos y tranquilos; la presencia del padre es esencial y lo ideal es que abuelos, tíos o amigos cercanos vengan unos días a dedicarles tiempo. Con la llegada del bebé el mayor nota enseguida que ya no es el centro: el recién nacido acapara la atención, sobre todo si mama, y todavía no juega ni habla. Sentir celos es comprensible, aunque no obligatorio, y los hermanos a menudo se quieren mucho y se vuelven cómplices.",
+        "Aîné : comment l'aider à accueillir son petit frère ou sa petite sœur (mpedia.fr, Association Française de Pédiatrie Ambulatoire, actualizado en 2026). Tema: regresión y tiempo para el mayor. Hallazgo: si hace una regresión durante un tiempo (mojar la cama, dormir mal, volver al biberón), no hay que preocuparse: debería pasar rápido, y solo hay que consultar al médico si dura más de unas semanas. El padre puede ocuparse del bebé para que la madre dedique tiempo al mayor, o encargarse del mayor mientras ella da el pecho. Si la madre está sola, puede invitar al mayor a acurrucarse a su lado mientras amamanta y contarle que él también vivió esos momentos, y mirar juntos sus fotos y vídeos de cuando era bebé.",
+        "Aîné : comment l'aider à accueillir son petit frère ou sa petite sœur (mpedia.fr, Association Française de Pédiatrie Ambulatoire, actualizado en 2026). Tema: cómo darle un papel y evitar favoritismos. Hallazgo: tener un hermano le enseña a compartir y a convivir. Se le puede responsabilizar dejándole traer juguetes al bebé, cogerlo un poco bien sentado en el sofá y siempre vigilado, ayudar a cambiarlo o hablarle; felicitarle cuando ayuda, pero también por cosas que no tienen que ver con el bebé; dejar de vez en cuando al bebé con otra persona para pasar tiempo a solas con el mayor; no favorecer a ninguno cuando surge la rivalidad y enseñar a ambos a respetar el espacio del otro; poner en voz alta lo que el mayor siente, y preparar un pequeño regalo para él «de parte» del bebé."
+      ]
+    }
+  ]
+}
