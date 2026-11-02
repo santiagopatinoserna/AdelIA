@@ -257,13 +257,28 @@ async def test_another_mothers_profile_id_yields_nothing():
     assert payload == {"name": None, "items": []}
 
 
-async def test_the_endpoint_answers_for_the_signed_in_mother_only(client):
+class _ClockAtNow(datetime):
+    """The router's `datetime.now(LOCAL_TZ)`, frozen at NOW.
+
+    `_well_vaccinated_child` is 9 months old at NOW. Against the real clock the
+    test passed until 2026-11-01, when she turned 10 and the 11-month doses
+    came due within the card's one-month window: the date of birth was pinned
+    to NOW, the endpoint's clock was not.
+    """
+
+    @classmethod
+    def now(cls, tz=None):
+        return NOW.astimezone(tz)
+
+
+async def test_the_endpoint_answers_for_the_signed_in_mother_only(client, monkeypatch):
     from adelia.auth import get_current_user_id
     from adelia.main import app
 
+    monkeypatch.setattr("adelia.routers.today.datetime", _ClockAtNow)
     user_id = await make_user()
     child = await _well_vaccinated_child(user_id)
-    await _observe(user_id, child.id, 37.8, datetime.now(timezone.utc) - timedelta(hours=1))
+    await _observe(user_id, child.id, 37.8, NOW - timedelta(hours=1))
     unauthenticated = await client.get("/today")
     assert unauthenticated.status_code == 401
 
@@ -279,9 +294,9 @@ async def test_the_endpoint_answers_for_the_signed_in_mother_only(client):
     body = res.json()
     assert body["name"] == "Nora"
     assert [i["kind"] for i in body["items"]] == ["observation"]
-    # Not "hoy": the API reads the clock in Europe/Madrid and the row was
-    # written an hour ago, which just after midnight is yesterday.
-    assert body["items"][0]["text"].startswith("Temperatura: ") and "37,8 °C" in body["items"][0]["text"]
+    # With the clock pinned the day word is known: the reading an hour before
+    # NOW is 16:10 in Madrid, the same day.
+    assert body["items"][0]["text"] == "Temperatura: hoy 37,8 °C."
 
 
 def test_vaccines_due_the_same_month_are_grouped_once():
