@@ -145,7 +145,7 @@ export function DemoAsk({ suggested, corpusStats }: {
             placeholder={dictation.interim ? "" : t("askPlaceholder")}
             aria-label={t("askLabel")}
             aria-describedby="demo-question-help"
-            className={`ad-field block w-full resize-y text-base leading-relaxed placeholder:text-ink-faint${
+            className={`ad-field block w-full resize-none text-base leading-relaxed placeholder:text-ink-faint${
               dictation.supported ? " ad-field-mic" : ""}`}
           />
           {/* Words still being recognised, greyed after what she has typed. A
@@ -167,10 +167,13 @@ export function DemoAsk({ suggested, corpusStats }: {
               aria-label={t("dictate")}
               aria-pressed={dictation.listening}
               disabled={busy}
-              className={`absolute right-1 top-1 inline-flex h-11 w-11 items-center justify-center rounded-full transition-colors ${
+              // Bottom right of the field: next to "Preguntar" and inside the
+              // thumb's reach, where the top corner was not. Tinted so it
+              // reads as a way in for someone who cannot type right now.
+              className={`absolute bottom-1.5 right-1.5 inline-flex h-11 w-11 items-center justify-center rounded-full transition-colors ${
                 dictation.listening
                   ? "bg-primary text-on-primary motion-safe:animate-pulse"
-                  : "text-ink-soft hover:bg-surface-2 hover:text-ink"}`}
+                  : "bg-primary-tint text-on-primary-tint hover:bg-surface-2"}`}
             >
               {dictation.listening ? <MicOff className="h-5 w-5" aria-hidden /> : <Mic className="h-5 w-5" aria-hidden />}
             </button>
@@ -189,7 +192,7 @@ export function DemoAsk({ suggested, corpusStats }: {
             type="submit"
             disabled={busy || question.trim().length < 3}
             aria-busy={busy}
-            className="ad-btn ad-btn-primary w-full text-base sm:w-auto sm:min-w-36"
+            className="ad-btn ad-btn-primary ad-btn-lg w-full sm:w-auto sm:min-w-36"
           >
             {busy && <Loader2 className="h-4 w-4 motion-safe:animate-spin" aria-hidden />}
             {busy ? t("askBusy") : t("askCta")}
@@ -200,7 +203,8 @@ export function DemoAsk({ suggested, corpusStats }: {
       {/* Short, persistent live region, rather than announcing every citation. */}
       <div role="status" aria-atomic="true" className="text-sm leading-relaxed text-ink-soft">
         {busy && (
-          <p data-testid="demo-loading" className="mt-4">
+          <p data-testid="demo-loading" className="mt-4 flex items-center gap-2.5 text-base text-ink">
+            <span className="ad-pulse-dot shrink-0" aria-hidden />
             {slow ? t("uxWaitingLong") : t("uxWaiting")}
           </p>
         )}
@@ -307,7 +311,9 @@ export function DemoAsk({ suggested, corpusStats }: {
         </section>
       )}
 
-      <div className="mt-5" hidden={Boolean(result)}>
+      {/* Gone while she waits, not just disabled: three greyed questions under
+          "Pensando…" were the only thing on the screen to read. */}
+      <div className="mt-5" hidden={Boolean(result) || busy}>
         <ul className="mt-1 flex flex-col">
           {suggested.map((suggestion, index) => (
             <li key={suggestion} className="border-t border-line first:border-t-0">
