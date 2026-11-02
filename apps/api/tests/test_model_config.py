@@ -63,6 +63,13 @@ EXPECTED_DEFAULTS = {
     "mistral_stt_model": "voxtral-mini-latest",
     "openai_stt_model": "whisper-1",
     "llm_provider": "mistral",
+    # Read only with llm_provider="anthropic"; the routing one is the small model
+    # because route() has a 2 s deadline.
+    "anthropic_chat_model": "claude-opus-5-5",
+    "anthropic_extraction_model": "claude-opus-5-5",
+    "anthropic_briefing_model": "claude-opus-5-5",
+    "anthropic_routing_model": "claude-haiku-5-5",
+    "anthropic_ocr_model": "claude-opus-5-5",
     # None means "send no reasoning_effort field", which is today's request.
     "chat_reasoning_effort": None,
     "briefing_reasoning_effort": None,

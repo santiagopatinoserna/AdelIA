@@ -24,7 +24,13 @@ from pydantic import BaseModel, Field, ValidationError
 from adelia.clinical.red_flags import age_months_in, normalize, temperature_in
 from adelia.config import settings
 from adelia.enrichment.profile_service import ProfileFacts
-from adelia.llm import content_text, get_mistral_client
+from adelia.llm import (
+    anthropic_text,
+    content_text,
+    get_anthropic_client,
+    get_mistral_client,
+    uses_anthropic,
+)
 
 logger = logging.getLogger(__name__)
 
@@ -382,9 +388,28 @@ async def _openai_json(system: str, user: str) -> str:
     return resp.choices[0].message.content or ""
 
 
+async def _anthropic_json(system: str, user: str) -> str:
+    """JSON by instruction, not by schema: the reply is validated against
+    RouteDecision anyway and an invalid one is the `plan` fallback. Effort "low"
+    because the whole call has to fit the 2 s deadline, and not thinking
+    "disabled", which some Claude models answer with a 400: a 400 here would
+    turn every message into the fallback without anyone noticing."""
+    client = get_anthropic_client()
+    resp = await client.messages.create(
+        model=settings.anthropic_routing_model,
+        max_tokens=1024,
+        system=system,
+        messages=[{"role": "user", "content": user}],
+        output_config={"effort": "low"},
+    )
+    return anthropic_text(resp)
+
+
 async def _complete_json(system: str, user: str, *, provider: str | None = None) -> str:
     """Same selection as `chat_orchestrator._stream_llm_tokens`: an explicit
     provider (the demo's `demo_llm_provider`) wins, else `settings.llm_provider`."""
+    if uses_anthropic(provider):
+        return await _anthropic_json(system, user)
     if (provider or settings.llm_provider) == "openai":
         return await _openai_json(system, user)
     return await _mistral_json(system, user)

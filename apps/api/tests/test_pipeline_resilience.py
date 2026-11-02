@@ -30,6 +30,31 @@ async def test_with_retry_exhausts_and_raises(monkeypatch):
     assert call.await_count == 2  # 1 + 1 retry
 
 
+async def test_with_retry_covers_anthropic_errors(monkeypatch):
+    """With LLM_PROVIDER=anthropic, extraction and the summary raise the SDK's
+    own errors, which are not httpx ones: without this a dropped connection to
+    Claude failed the document on the first attempt."""
+    import anthropic
+
+    monkeypatch.setattr(docs_mod, "RETRY_DELAYS", (0.0, 0.0))
+    dropped = anthropic.APIConnectionError(
+        request=httpx.Request("POST", "https://api.anthropic.com/v1/messages")
+    )
+    call = AsyncMock(side_effect=[dropped, "entidades"])
+    assert await _with_retry("extract", call) == "entidades"
+    assert call.await_count == 2
+
+
+async def test_with_retry_does_not_retry_a_refusal(monkeypatch):
+    from adelia.llm import AnthropicRefusal
+
+    monkeypatch.setattr(docs_mod, "RETRY_DELAYS", (0.0, 0.0))
+    call = AsyncMock(side_effect=AnthropicRefusal("declined"))
+    with pytest.raises(AnthropicRefusal):
+        await _with_retry("extract", call)
+    assert call.await_count == 1
+
+
 async def test_with_retry_does_not_retry_config_errors(monkeypatch):
     monkeypatch.setattr(docs_mod, "RETRY_DELAYS", (0.0, 0.0))
     call = AsyncMock(side_effect=RuntimeError("MISTRAL_API_KEY not set"))

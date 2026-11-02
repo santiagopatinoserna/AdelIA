@@ -11,6 +11,7 @@ import sqlalchemy as sa
 import httpx
 from botocore.exceptions import ClientError, EndpointConnectionError
 from fastapi import APIRouter, BackgroundTasks, Depends, File, Form, HTTPException, UploadFile, status, Query
+from anthropic import APIError as AnthropicAPIError
 from mistralai.client.errors import MistralError
 from openai import APIError as OpenAIAPIError
 from pydantic import BaseModel, field_validator
@@ -108,8 +109,9 @@ async def schedule_audio_deletion(session, s3_key: str, grace: timedelta) -> Non
 
 
 # Transient-failure retry for external API stages (Mistral OCR/extract/embed,
-# Whisper). Bounded in-process backoff — the v0.1.1 alternative to a Celery
-# queue. Tests can shrink RETRY_DELAYS to keep runs fast.
+# Whisper, and Claude for extract/summary with LLM_PROVIDER=anthropic).
+# Bounded in-process backoff, the v0.1.1 alternative to a Celery queue.
+# Tests can shrink RETRY_DELAYS to keep runs fast.
 RETRY_DELAYS: tuple[float, ...] = (1.0, 4.0)
 
 
@@ -122,7 +124,10 @@ async def _with_retry(stage: str, make_call):
     for attempt, delay in enumerate((*RETRY_DELAYS, None)):
         try:
             return await make_call()
-        except (httpx.HTTPError, MistralError, ClientError, EndpointConnectionError, OpenAIAPIError) as exc:
+        except (
+            httpx.HTTPError, MistralError, ClientError, EndpointConnectionError, OpenAIAPIError,
+            AnthropicAPIError,
+        ) as exc:
             last_exc = exc
             if delay is None:
                 break
@@ -454,7 +459,10 @@ async def _process_document_inner(document_id: uuid.UUID, mime_type: str, is_con
                         "entity_ids": sc.entity_ids,
                     },
                 ))
-    except (RuntimeError, httpx.HTTPError, MistralError, ClientError, EndpointConnectionError, OpenAIAPIError) as exc:
+    except (
+        RuntimeError, httpx.HTTPError, MistralError, ClientError, EndpointConnectionError,
+        OpenAIAPIError, AnthropicAPIError,
+    ) as exc:
         logger.exception("process_document failed for document_id=%s: %s", document_id, exc)
         raw_text, entities, chunks = _text_after_failure(mime_type, raw_text), [], []
         extraction_report = None  # nothing was persisted, so there is nothing to explain

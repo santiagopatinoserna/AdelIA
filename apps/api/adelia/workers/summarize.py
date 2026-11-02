@@ -1,8 +1,9 @@
 """Post-consultation essence: a few strict bullets from the transcript.
 
-Same REST pattern as ocr.py (httpx, no SDK surface). The prompt is
-deliberately narrow: only what was actually said, no advice, no invention,
-answer in the transcript's own language. A missing/failed summary must
+Same REST pattern as ocr.py (httpx, no SDK surface) on Mistral; with
+settings.llm_provider="anthropic" it goes through the Anthropic SDK instead,
+same prompt. The prompt is deliberately narrow: only what was actually said,
+no advice, no invention, answer in the transcript's own language. A missing/failed summary must
 never block the pipeline — the transcript is the product, the summary is
 a courtesy.
 """
@@ -11,6 +12,7 @@ from __future__ import annotations
 import httpx
 
 from adelia.config import settings
+from adelia.llm import anthropic_text, get_anthropic_client, uses_anthropic
 
 MISTRAL_CHAT_URL = "https://api.mistral.ai/v1/chat/completions"
 
@@ -29,10 +31,13 @@ async def summarize_consultation(transcript: str) -> str:
     """Summarize a diarized consultation transcript into a few bullets.
 
     Raises:
-        RuntimeError: MISTRAL_API_KEY not set. Config error, do NOT retry.
-        httpx.HTTPStatusError: non-2xx from the API. May be transient,
-            caller retries with backoff (_with_retry covers httpx.HTTPError).
+        RuntimeError: the provider's API key not set, or (AnthropicRefusal)
+            Claude declined. Do NOT retry.
+        httpx.HTTPStatusError / anthropic.APIError: error from the API. May be
+            transient, caller retries with backoff (_with_retry covers both).
     """
+    if uses_anthropic():
+        return await _summarize_anthropic(transcript)
     if not settings.mistral_api_key:
         raise RuntimeError("MISTRAL_API_KEY not set")
 
@@ -56,3 +61,19 @@ async def summarize_consultation(transcript: str) -> str:
     if not choices:
         return ""
     return (choices[0].get("message", {}).get("content") or "").strip()
+
+
+async def _summarize_anthropic(transcript: str) -> str:
+    """Effort "low": a few bullets copied out of the transcript need no
+    deliberation. max_tokens is well above the 400 the Mistral call caps at
+    because the model may think first and that counts against the same limit;
+    the prompt, not the cap, is what keeps the summary short."""
+    client = get_anthropic_client()
+    resp = await client.messages.create(
+        model=settings.anthropic_chat_model,
+        max_tokens=4000,
+        system=_SYSTEM,
+        messages=[{"role": "user", "content": transcript[:12000]}],
+        output_config={"effort": "low"},
+    )
+    return anthropic_text(resp).strip()

@@ -10,7 +10,14 @@ from uuid import UUID
 
 
 from adelia.config import settings
-from adelia.llm import content_text, get_mistral_client, reasoning_effort_kwargs
+from adelia.llm import (
+    content_text,
+    get_anthropic_client,
+    get_mistral_client,
+    raise_on_refusal,
+    reasoning_effort_kwargs,
+    uses_anthropic,
+)
 from adelia.agent.graph import GraphDeps, Retrieved, stream_graph
 from adelia.agent.route import log_route
 from adelia.db import AsyncSessionLocal
@@ -91,14 +98,19 @@ async def _stream_llm_tokens(
     """Stream generation tokens from the configured provider.
 
     Provider is selected by `provider` when given, else by settings.llm_provider
-    ("mistral" | "openai"). Only the public demo passes one (settings
-    .demo_llm_provider); the chat and briefings never do, so they keep following
-    llm_provider. Embeddings/OCR always use Mistral regardless — only generation
-    is pluggable. history: prior turns ({"role","content"}), oldest first; the
-    RAG context lives only in the final user message.
+    ("mistral" | "openai" | "anthropic"). Only the public demo passes one
+    (settings.demo_llm_provider); the chat and briefings never do, so they keep
+    following llm_provider. Embeddings/OCR always use Mistral regardless; only
+    generation is pluggable. history: prior turns ({"role","content"}), oldest
+    first; the RAG context lives only in the final user message.
 
     Raises RuntimeError if the selected provider's API key is missing.
     """
+    if uses_anthropic(provider):
+        async for piece in _stream_anthropic_tokens(system_prompt, user_message, history):
+            yield piece
+        return
+
     messages: list[dict] = [{"role": "system", "content": system_prompt}]
     messages.extend(history or [])
     messages.append({"role": "user", "content": user_message})
@@ -137,6 +149,45 @@ async def _stream_mistral_tokens(messages: list[dict]) -> AsyncIterator[str]:
             piece = content_text(getattr(delta, "content", "") or "")
             if piece:
                 yield piece
+
+
+def _anthropic_history(history: list[dict] | None) -> list[dict]:
+    """The prior turns as Anthropic accepts them: user and assistant only, and
+    starting with a user turn. routers/chat keeps the LAST N messages of a
+    session, so the window can open on an assistant reply, which Mistral takes
+    and Anthropic answers with a 400. The system prompt travels apart."""
+    turns = [m for m in history or [] if m.get("role") in ("user", "assistant")]
+    while turns and turns[0]["role"] != "user":
+        turns.pop(0)
+    return turns
+
+
+async def _stream_anthropic_tokens(
+    system_prompt: str, user_message: str, history: list[dict] | None
+) -> AsyncIterator[str]:
+    """Raises RuntimeError if ANTHROPIC_API_KEY missing, AnthropicRefusal on a refusal.
+
+    Thinking is on by default on the current Claude models and cannot be turned
+    off on the default one; effort "medium" (its default, set explicitly so a
+    model change does not move it) bounds it. text_stream yields only text
+    deltas, so the reasoning is never streamed to the parent. No temperature:
+    the current Claude models reject sampling parameters with a 400.
+    """
+    client = get_anthropic_client()
+    async with client.messages.stream(
+        model=settings.anthropic_chat_model,
+        max_tokens=16000,
+        system=system_prompt,
+        messages=[*_anthropic_history(history), {"role": "user", "content": user_message}],
+        output_config={"effort": "medium"},
+    ) as stream:
+        async for piece in stream.text_stream:
+            if piece:
+                yield piece
+        final = await stream.get_final_message()
+    # A refusal can arrive after some text; raising ends the turn as an error,
+    # not as an answer that stops mid-sentence.
+    raise_on_refusal(final)
 
 
 async def _stream_openai_tokens(messages: list[dict]) -> AsyncIterator[str]:
