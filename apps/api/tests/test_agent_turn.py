@@ -109,22 +109,31 @@ async def test_confirming_the_card_writes_one_row_for_that_child_and_compares():
         await session.commit()
         await session.refresh(child)
     facts = ProfileFacts(child.id, "Lucía", None, "F", 6)
-    now = datetime.now(MADRID)
+    # A fixed afternoon, not the wall clock: run at 00:03, "five minutes ago"
+    # is yesterday and the reply rightly says "ayer", which failed this test
+    # every night in the first minutes after midnight.
+    now = datetime(2026, 10, 27, 16, 10, tzinfo=MADRID)
     yesterday = rec.RecordDraft("temperature", 37.2, "°C", now - timedelta(days=1), "37,2")
     today = rec.RecordDraft("temperature", 37.8, "°C", now - timedelta(minutes=5), "37,8")
+
+    class _Frozen(datetime):
+        @classmethod
+        def now(cls, tz=None):
+            return now if tz is None else now.astimezone(tz)
 
     async def _confirm(draft):
         action = {"intent": "confirm", "tool_name": rec.RECORD_TOOL,
                   "tool_args": rec.draft_args(draft)}
         with patch("adelia.agent.orchestrator.get_provider", _exploding_provider), \
-             patch("adelia.agent.orchestrator.load_profile_facts", return_value=facts):
+             patch("adelia.agent.orchestrator.load_profile_facts", return_value=facts), \
+             patch("adelia.agent.graph.datetime", _Frozen):
             return await _collect(run_turn(user_id=user_id, profile_id=child.id, message="",
                                            card_action=action))
 
     await _confirm(yesterday)
     events = await _confirm(today)
     text = "".join(e.content for e in events if e.type == "token")
-    assert text.startswith("Anotado: 37,8 °C, hoy a las")
+    assert text.startswith("Anotado: 37,8 °C, hoy a las 16:05")
     assert text.endswith("La anterior: ayer, 37,2 °C.")
     async with AsyncSessionLocal() as session:
         rows = (await session.execute(
