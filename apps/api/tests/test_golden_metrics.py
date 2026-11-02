@@ -189,6 +189,20 @@ def test_the_refusal_and_the_referral_count_as_refusals(locale):
     assert not is_refusal("Según la guía [ev_1], son 10 mg/kg.", locale)
 
 
+@pytest.mark.parametrize("locale", ["es", "en", "fr"])
+def test_an_answer_that_mentions_112_is_still_an_answer(locale):
+    """The referral counts by its fixed opening, not by the number in it.
+
+    Until 2026-11-03 any "112" made an answer a refusal. The domain corpora
+    carry the number in their warning signs ("llamar al 112 si dura más de 5
+    minutos"), so a model answering a group B question from one of them
+    would have passed the gate while answering.
+    """
+    answer = "Lavados nasales y tomas cortas [ev_1]. Si le cuesta respirar, llama al 112 [ev_2]."
+    assert not is_refusal(answer, locale)
+    assert is_refusal(red_flag_reply("choking", locale, country="FR"), locale)
+
+
 def test_a_refusal_in_the_wrong_language_is_not_a_refusal():
     """An English refusal does not satisfy a French question."""
     assert not is_refusal(no_evidence_reply("en"), "fr")

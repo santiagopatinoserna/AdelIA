@@ -706,6 +706,16 @@ def red_flag_reply(code: str, locale: str, *, country: str | None = None) -> str
     )
 
 
+def red_flag_opening(locale: str) -> str:
+    """The first sentence of every red-flag reply, which no model answer writes.
+
+    `golden.is_refusal` recognizes the coded referral by it. The emergency
+    number cannot do that job: the corpus prints it in its warning signs.
+    """
+    lang = locale if locale in _RED_FLAG_TEMPLATE else DEFAULT_LOCALE
+    return _RED_FLAG_TEMPLATE[lang].split("\n\n", 1)[0]
+
+
 def interface_disclaimer(locale: str) -> str:
     """The fixed disclaimer the UI paints under every answer (audit 3.8).
 
