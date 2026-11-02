@@ -17,7 +17,9 @@ import { seedUserAndSessionCookie } from "../../e2e/utils/session";
 // is synthetic. The selectors are the ones the redesign keeps, so the same
 // file captures "before" and "after".
 
-const PHASE = process.env.SHOTS_PHASE ?? "before";
+// Required: a run without it once wrote the redesign over the "before" set.
+const PHASE = process.env.SHOTS_PHASE;
+if (!PHASE) throw new Error("SHOTS_PHASE=before|after is required");
 const OUT = join(homedir(), "dev/adelia-design/shots/redesign", PHASE);
 mkdirSync(join(OUT, "metrics"), { recursive: true });
 
