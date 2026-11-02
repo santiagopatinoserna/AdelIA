@@ -12,6 +12,7 @@ import httpx
 from botocore.exceptions import ClientError, EndpointConnectionError
 from fastapi import APIRouter, BackgroundTasks, Depends, File, Form, HTTPException, UploadFile, status, Query
 from anthropic import APIError as AnthropicAPIError
+from anthropic import APIStatusError as AnthropicStatusError
 from mistralai.client.errors import MistralError
 from openai import APIError as OpenAIAPIError
 from pydantic import BaseModel, field_validator
@@ -115,10 +116,30 @@ async def schedule_audio_deletion(session, s3_key: str, grace: timedelta) -> Non
 RETRY_DELAYS: tuple[float, ...] = (1.0, 4.0)
 
 
+# Claude answers these the same way however often it is asked. Everything else
+# from the SDK (a dropped connection, a timeout, 408, 409, 429, 5xx, 529
+# overloaded) can succeed on a later attempt.
+_ANTHROPIC_RETRYABLE_STATUSES = frozenset({408, 409, 429})
+
+
+def _is_permanent(exc: Exception) -> bool:
+    """A Claude 4xx that is not about timing: a PDF it cannot read, a request it
+    rejects, a bad key. Retried, it fails again after the backoff. On the first
+    boot with LLM_PROVIDER=anthropic (2026-11-03) reconciliation sent each
+    unreadable PDF stuck in the dev database three times and held the pipeline
+    slot for the full 5 s of backoff."""
+    return (
+        isinstance(exc, AnthropicStatusError)
+        and exc.status_code < 500
+        and exc.status_code not in _ANTHROPIC_RETRYABLE_STATUSES
+    )
+
+
 async def _with_retry(stage: str, make_call):
     """Run make_call() retrying RETRY_DELAYS times on transient errors.
 
-    Non-transient errors (RuntimeError = misconfiguration) propagate at once.
+    Non-transient errors (RuntimeError = misconfiguration, a permanent Claude
+    4xx) propagate at once.
     """
     last_exc: Exception | None = None
     for attempt, delay in enumerate((*RETRY_DELAYS, None)):
@@ -128,6 +149,8 @@ async def _with_retry(stage: str, make_call):
             httpx.HTTPError, MistralError, ClientError, EndpointConnectionError, OpenAIAPIError,
             AnthropicAPIError,
         ) as exc:
+            if _is_permanent(exc):
+                raise
             last_exc = exc
             if delay is None:
                 break
