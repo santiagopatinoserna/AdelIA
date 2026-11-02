@@ -133,6 +133,42 @@ def test_the_client_refuses_to_start_without_a_key(monkeypatch):
         llm.get_anthropic_client()
 
 
+def test_the_workspace_header_rides_on_every_client_when_set(monkeypatch):
+    """A key linked to the organization, not to a workspace, is answered with a
+    400 on every call that does not name the workspace."""
+    monkeypatch.setattr(settings, "anthropic_api_key", "test-key")
+    monkeypatch.setattr(settings, "anthropic_workspace_id", "")
+    assert "default_headers" not in llm.anthropic_client_kwargs()
+
+    monkeypatch.setattr(settings, "anthropic_workspace_id", "wrkspc_test")
+    assert llm.anthropic_client_kwargs() == {
+        "api_key": "test-key",
+        "default_headers": {"anthropic-workspace-id": "wrkspc_test"},
+    }
+
+
+async def test_the_workspace_header_reaches_the_wire(monkeypatch, anthropic_on):
+    from anthropic import AsyncAnthropic
+
+    monkeypatch.setattr(settings, "anthropic_workspace_id", "wrkspc_test")
+    seen: list[str | None] = []
+
+    def handler(request: httpx.Request) -> httpx.Response:
+        seen.append(request.headers.get("anthropic-workspace-id"))
+        return httpx.Response(200, json=_message("ok"))
+
+    client = AsyncAnthropic(
+        **llm.anthropic_client_kwargs(),
+        max_retries=0,
+        http_client=httpx.AsyncClient(transport=httpx.MockTransport(handler)),
+    )
+    monkeypatch.setattr(summarize_mod, "get_anthropic_client", lambda: client)
+
+    await summarize_mod.summarize_consultation("texto")
+
+    assert seen == ["wrkspc_test"]
+
+
 def test_anthropic_json_schema_closes_objects_and_leaves_the_mistral_schema_alone():
     """The Mistral briefing call keeps sending _QA_JSON_SCHEMA as it is, so the
     rewrite must work on a copy."""

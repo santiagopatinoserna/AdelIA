@@ -131,13 +131,26 @@ def uses_anthropic(provider: str | None = None) -> bool:
     return (provider or settings.llm_provider) == "anthropic"
 
 
+def anthropic_client_kwargs() -> dict[str, Any]:
+    """Constructor arguments every AsyncAnthropic in the app shares.
+
+    The workspace header is set on the client, not per call, so no surface can
+    forget it: with a key linked to the organization instead of a workspace,
+    one call without it is a 400.
+    """
+    kwargs: dict[str, Any] = {"api_key": settings.anthropic_api_key}
+    if settings.anthropic_workspace_id:
+        kwargs["default_headers"] = {"anthropic-workspace-id": settings.anthropic_workspace_id}
+    return kwargs
+
+
 def get_anthropic_client() -> AsyncAnthropic:
     global _anthropic_client, _anthropic_client_loop
     if not settings.anthropic_api_key:
         raise RuntimeError("ANTHROPIC_API_KEY not set")
     loop = _running_loop()
     if _anthropic_client is None or _anthropic_client_loop is not loop:
-        _anthropic_client = AsyncAnthropic(api_key=settings.anthropic_api_key)
+        _anthropic_client = AsyncAnthropic(**anthropic_client_kwargs())
         _anthropic_client_loop = loop
     return _anthropic_client
 

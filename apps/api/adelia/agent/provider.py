@@ -30,9 +30,11 @@ class AnthropicProvider:
     def __init__(self) -> None:
         from anthropic import AsyncAnthropic
 
+        from adelia.llm import anthropic_client_kwargs
+
         if not settings.anthropic_api_key:
             raise RuntimeError("ANTHROPIC_API_KEY not set")
-        self._client = AsyncAnthropic(api_key=settings.anthropic_api_key)
+        self._client = AsyncAnthropic(**anthropic_client_kwargs())
 
     async def stream_step(
         self, *, system: str, messages: list[dict], tools: list[dict]

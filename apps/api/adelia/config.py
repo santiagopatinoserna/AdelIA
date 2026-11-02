@@ -44,6 +44,12 @@ class Settings(BaseSettings):
     mistral_api_key: str = ""
     openai_api_key: str = ""
     anthropic_api_key: str = ""
+    # Required when the key is not scoped to a workspace: the Console's
+    # identity-backed keys linked to the whole organization are answered with a
+    # 400 unless every request names the workspace (anthropic-workspace-id).
+    # A wrkspc_ ID, not a secret. Empty sends no header, which is what a
+    # workspace-scoped key needs.
+    anthropic_workspace_id: str = ""
     agent_model: str = "claude-sonnet-5"
 
     # Stripe billing — 30-day free trial then a recurring subscription. Card is
