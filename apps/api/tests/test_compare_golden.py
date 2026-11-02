@@ -50,7 +50,7 @@ def report(*, a=None, b=None, c=None, orphans=0, dosage=0) -> dict:
     return r.as_dict()
 
 
-ALL_PASS_B = {"B1": True, "B2": True, "B3": True, "B4": True, "B5": True}
+ALL_PASS_B = {"B1": True, "B2": True, "B3": True, "B4": True, "B6": True}
 ALL_PASS_C = {"C1": True, "C2": True, "C3": True, "C4": True, "C5": True}
 ALL_PASS_A = {f"A{i}": True for i in range(1, 7)}
 
@@ -74,11 +74,11 @@ def test_identical_reports_are_not_a_regression():
 
 def test_a_group_b_question_that_newly_fails_blocks_the_change():
     base = report(b=ALL_PASS_B)
-    cand = report(b={**ALL_PASS_B, "B5": False})
+    cand = report(b={**ALL_PASS_B, "B6": False})
     comparison, status, text = run(base, cand)
     assert status == 1
-    assert [c.id for c in comparison.regressions()] == ["B5"]
-    assert "BLOQUEADO" in text and "B5" in text
+    assert [c.id for c in comparison.regressions()] == ["B6"]
+    assert "BLOQUEADO" in text and "B6" in text
 
 
 def test_a_group_c_question_that_newly_fails_blocks_the_change():
@@ -92,16 +92,16 @@ def test_a_group_c_question_that_newly_fails_blocks_the_change():
 def test_a_regression_blocks_even_when_the_aggregate_does_not_move():
     """One B question newly passes while another newly fails: the rate is flat.
 
-    The base had B3 failing and B5 passing; the candidate has them the other
+    The base had B3 failing and B6 passing; the candidate has them the other
     way round. refusal_rate is 0.8 in both, so any aggregate comparison says
-    "unchanged". B5 is a safety question that broke.
+    "unchanged". B6 is a safety question that broke.
     """
     base = report(b={**ALL_PASS_B, "B3": False})
-    cand = report(b={**ALL_PASS_B, "B5": False})
+    cand = report(b={**ALL_PASS_B, "B6": False})
     assert base["refusal_rate"] == cand["refusal_rate"] == 0.8
     comparison, status, text = run(base, cand)
     assert status == 1
-    assert [c.id for c in comparison.regressions()] == ["B5"]
+    assert [c.id for c in comparison.regressions()] == ["B6"]
     assert [c.id for c in comparison.changes if c.fixed] == ["B3"]
     assert "pasan ahora (antes fallaban): 1" in text
     assert "fallan ahora (antes pasaban): 1" in text
@@ -118,11 +118,11 @@ def test_a_regression_blocks_when_the_aggregate_still_clears_a_threshold():
 
 
 def test_improvements_alone_do_not_block():
-    base = report(b={**ALL_PASS_B, "B2": False, "B5": False}, c=ALL_PASS_C)
+    base = report(b={**ALL_PASS_B, "B2": False, "B6": False}, c=ALL_PASS_C)
     cand = report(b=ALL_PASS_B, c=ALL_PASS_C)
     comparison, status, text = run(base, cand)
     assert status == 0
-    assert sorted(c.id for c in comparison.changes if c.fixed) == ["B2", "B5"]
+    assert sorted(c.id for c in comparison.changes if c.fixed) == ["B2", "B6"]
     assert "pasan ahora (antes fallaban): 2" in text
 
 
@@ -196,19 +196,19 @@ def test_a_group_the_baseline_did_not_run_cannot_regress():
 def test_dropping_a_safety_question_blocks():
     """The cheapest way to make a regression disappear is to delete the question."""
     base = report(b=ALL_PASS_B)
-    cand = report(b={k: v for k, v in ALL_PASS_B.items() if k != "B5"})
+    cand = report(b={k: v for k, v in ALL_PASS_B.items() if k != "B6"})
     comparison, status, text = run(base, cand)
-    assert [c.id for c in comparison.dropped] == ["B5"]
+    assert [c.id for c in comparison.dropped] == ["B6"]
     assert status == 1 and "ya no está en el candidato" in text
 
 
 def test_a_new_failing_safety_question_is_a_warning_not_a_regression():
-    base = report(b={k: v for k, v in ALL_PASS_B.items() if k != "B5"})
-    cand = report(b={**ALL_PASS_B, "B5": False})
+    base = report(b={k: v for k, v in ALL_PASS_B.items() if k != "B6"})
+    cand = report(b={**ALL_PASS_B, "B6": False})
     comparison, status, text = run(base, cand)
-    assert [c.id for c in comparison.new_failing] == ["B5"]
+    assert [c.id for c in comparison.new_failing] == ["B6"]
     assert status == 0
-    assert "ADVERTENCIA B5" in text
+    assert "ADVERTENCIA B6" in text
 
 
 # --- reports from before the per-question field -------------------------------

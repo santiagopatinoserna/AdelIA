@@ -94,13 +94,15 @@ def test_the_original_fifteen_are_still_the_first_fifteen_in_spanish():
     assert [q.id for q in questions("C")][:5] == list(ORIGINAL_IDS[10:])
 
 
-def test_the_set_is_forty_six_questions_in_three_groups():
-    # 42 until A13-A16 were added from the 2026-10-14 demo measurement.
-    assert len(GOLDEN_SET) == 46
-    assert len(questions("A")) == 16
+def test_the_set_is_forty_eight_questions_in_three_groups():
+    # 42 until A13-A16 were added from the 2026-10-14 demo measurement; 46
+    # until B5 and B10 moved to A17 and A18 and B16 and B17 took their place
+    # in group B (2026-11-03, the digestive and skin corpus answers them).
+    assert len(GOLDEN_SET) == 48
+    assert len(questions("A")) == 18
     assert len(questions("B")) == 15
     assert len(questions("C")) == 15
-    assert len({q.id for q in GOLDEN_SET}) == 46
+    assert len({q.id for q in GOLDEN_SET}) == 48
 
 
 def test_every_group_speaks_all_three_locales():
@@ -120,7 +122,7 @@ def test_the_count_per_group_and_locale_is_the_published_table():
         for loc in LOCALES
     }
     assert table == {
-        ("A", "es"): 10, ("A", "en"): 3, ("A", "fr"): 3,
+        ("A", "es"): 11, ("A", "en"): 4, ("A", "fr"): 3,
         ("B", "es"): 9, ("B", "en"): 3, ("B", "fr"): 3,
         ("C", "es"): 5, ("C", "en"): 5, ("C", "fr"): 5,
     }
@@ -597,12 +599,12 @@ async def test_the_gate_passes_with_canned_perfect_answers_and_publishes_every_q
     await module.test_groups_a_and_b_meet_the_deploy_gate()
     data = json.loads(path.read_text(encoding="utf-8"))
     assert data["recall_at_4"] == 1.0 and data["refusal_rate"] == 1.0 and data["red_flag_rate"] == 1.0
-    assert data["questions_run"] == {"A": 16, "B": 15, "C": 15}
+    assert data["questions_run"] == {"A": 18, "B": 15, "C": 15}
     assert set(data["results"]) == {q.id for q in GOLDEN_SET}
     assert all(r["passed"] for r in data["results"].values())
     assert data["questions_run_by_locale"] == {
-        "es": {"A": 10, "B": 9, "C": 5},
-        "en": {"A": 3, "B": 3, "C": 5},
+        "es": {"A": 11, "B": 9, "C": 5},
+        "en": {"A": 4, "B": 3, "C": 5},
         "fr": {"A": 3, "B": 3, "C": 5},
     }
     assert data["blind_spots"], "the report must carry the blind-spots section"
@@ -630,13 +632,14 @@ async def test_an_a_question_whose_source_is_missing_is_recorded_as_a_miss(monke
     # Three French misses were enough to trip recall@4 >= 0.8 while group A had
     # twelve questions (9/12 = 0.75). With A13-A16 it has sixteen, three misses
     # are 13/16 = 0.8125 and the gate rightly lets them pass, so A16 joins them:
-    # 12/16 is the same 0.75 and the same failure.
+    # 12/16 is the same 0.75 and the same failure. With A17 and A18 (2026-11-03)
+    # the same four misses are 14/18, about 0.78: still under the bar.
     path, module = _drive_the_gate(monkeypatch, tmp_path, bad_a=("A10", "A11", "A12", "A16"))
     with pytest.raises(AssertionError):
         await module.test_groups_a_and_b_meet_the_deploy_gate()
     data = json.loads(path.read_text(encoding="utf-8"))
-    assert data["recall_at_4"] == 0.75
-    assert data["rates_by_locale"]["A"] == {"en": 1.0, "es": 0.9, "fr": 0.0}
+    assert data["recall_at_4"] == pytest.approx(14 / 18)
+    assert data["rates_by_locale"]["A"] == {"en": 1.0, "es": round(10 / 11, 4), "fr": 0.0}
 
 
 @pytest.mark.asyncio
