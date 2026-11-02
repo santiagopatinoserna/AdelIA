@@ -1,0 +1,628 @@
+{
+  "_meta": {
+    "topic": "Respiratorio y sueño de 0 a 24 meses: catarro y mocos, lavados nasales, tos, bronquiolitis, laringitis, sibilancias, otitis media, respiración normal y periódica del recién nacido, pausas y BRUE, ronquido y apnea del sueño, muerte súbita y sueño seguro, colecho y chupete",
+    "compiled": "2026-11-02",
+    "method": "Lectura directa de cada página pública (EnFamilia y Comité de Lactancia Materna de la AEP, Familia y Salud de la AEPap, hojas informativas de la SEUP, HealthyChildren de la AAP en español, NHS y NHS Healthier Together) el 2026-11-02; cada cifra, edad, signo de alarma y nivel de urgencia procede de la página citada en su propio fragmento, y cuando dos fuentes difieren (por ejemplo, el vapor en la laringitis o la temperatura de la habitación) cada una se atribuye por separado",
+    "caveat": "Resúmenes en español de fuentes en español e inglés; los chunks son paráfrasis con las cifras y los niveles de urgencia del original, no texto literal. Material de orientación para familias, no sustituye la valoración de un profesional ni contiene pautas de medicación: no nombra medicamentos ni dosis y solo menciona clases de remedios para desaconsejarlas.",
+    "purpose": "Cubrir las preguntas respiratorias y de sueño de las familias con bebés: cuándo un catarro, una tos, una bronquiolitis, una laringitis o una otitis se cuidan en casa, cuándo pedir cita y cuándo ir a urgencias o llamar al 112, qué respiración y qué pausas son normales en el recién nacido, y cómo dormir seguro (posición, cuna, colecho, chupete), calibrando la urgencia solo con lo que dice cada fuente"
+  },
+  "sources": [
+    {
+      "source_type": "reference",
+      "title": "Catarro o resfriado (EnFamilia, AEP)",
+      "organization": "Asociación Española de Pediatría",
+      "publication_year": null,
+      "url": "https://www.aeped.es/enfamilia/salud-en-familia/catarro-resfriado",
+      "specialties": ["pediatrics", "general_medicine"],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "topics": ["resfriado_mocos", "lavados_nasales"],
+      "chunks": [
+        "Catarro o resfriado (EnFamilia, Asociación Española de Pediatría). Tema: qué es un catarro y cuánto dura en bebés y niños pequeños. Hallazgo: el catarro o infección respiratoria alta es cada episodio de nariz tapada, más mocos y tos, causado casi siempre por virus (más de 200 tipos, sobre todo rinovirus). Se cura solo en pocos días, habitualmente de 7 a 10, sin dejar secuelas, y la fiebre es más frecuente cuanto más pequeño es el niño. Si hay fiebre, no suele pasar de 3 días; la nariz y la garganta mejoran en una semana y la tos puede durar 2 o 3 semanas. Los niños pequeños se acatarran tanto porque conviven con otros niños y su sistema de defensa aún no conoce estos virus; no se resfrían por salir al patio, sino por contagio en lugares cerrados.",
+        "Catarro o resfriado (EnFamilia, Asociación Española de Pediatría). Tema: el color de los mocos y qué ayuda al bebé acatarrado. Hallazgo: el moco empieza como agüilla, se espesa, se vuelve blanquecino y después amarillo o verdoso durante unos días; la página aclara que este cambio es la evolución habitual y no indica complicación ni necesidad de antibiótico. Una de las medidas más eficaces para aliviar al niño acatarrado es el lavado nasal con suero fisiológico, en los bebés sobre todo antes de las tomas y antes de acostarlos. Tratar un catarro con antibióticos no acorta su duración ni evita complicaciones y favorece las resistencias, y los medicamentos para la tos y los anticatarrales no están indicados y pueden ser perjudiciales.",
+        "Catarro o resfriado (EnFamilia, Asociación Española de Pediatría). Tema: cuándo llevar al pediatra a un niño acatarrado. Hallazgo: los catarros sin complicaciones se curan solos y no necesitan medicinas, así que la vigilancia de los padres se centra en detectar complicaciones, sobre todo bacterianas, como otitis, sinusitis, conjuntivitis purulenta o neumonía. La página considera síntomas de alarma, que deben consultarse con el pediatra, la fiebre que dura más de 3 días, el dolor de oídos, la dificultad para respirar, la mucosidad nasal espesa amarilla o verdosa que persiste más de 10 días y el decaimiento. También aconseja consultar cuando el sentido común o una duda lo pidan, y recuerda que el lavado de manos frecuente es uno de los mejores hábitos para evitar el contagio."
+      ],
+      "undated_reason": "Página divulgativa de EnFamilia sin fecha de publicación visible; consultada el 2026-11-02."
+    },
+    {
+      "source_type": "reference",
+      "title": "Lavados nasales (EnFamilia, AEP)",
+      "organization": "Asociación Española de Pediatría",
+      "publication_year": null,
+      "url": "https://www.aeped.es/enfamilia/salud-en-familia/lavados-nasales",
+      "specialties": ["pediatrics", "general_medicine"],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "topics": ["lavados_nasales"],
+      "chunks": [
+        "Lavados nasales (EnFamilia, Asociación Española de Pediatría). Tema: por qué y cuántas veces lavar la nariz a un bebé con mocos. Hallazgo: los bebés no saben respirar por la boca, así que con mocos respiran con dificultad y los lavados nasales pueden ayudarles. La página describe el suero fisiológico como el pañuelo de los niños pequeños que aún no saben sonarse: hay que hacer tantos lavados como hagan falta para que el niño esté más cómodo y respire mejor, y en los bebés conviene hacerlos antes de dormir y antes de las tomas. Cualquier sistema de farmacia sirve si se usa bien; los envases pequeños evitan que un mismo frasco se contamine catarro tras catarro, y cada niño debe tener el suyo para no pasarse los virus.",
+        "Lavados nasales (EnFamilia, Asociación Española de Pediatría). Tema: cómo hacer el lavado nasal paso a paso y cuándo usar el aspirador. Hallazgo: el suero a temperatura ambiente resulta menos desagradable. Se puede hacer con el niño tumbado, boca arriba o boca abajo según se le sujete mejor, con la cabeza girada a un lado y sin que se eche hacia atrás, o sentado con la cabeza algo inclinada hacia delante. Se echa el suero con decisión por el orificio que queda arriba, dirigiendo el chorro hacia el otro; después se le sienta para que expulse las secreciones y se repite girando la cabeza al lado contrario. Si la nariz está muy taponada, se puede echar un poco, masajear y volver a echar. Que se trague parte del moco es normal. Los aspiradores no conviene usarlos a menudo porque pueden molestar en el oído y resecar la mucosa: solo si hay mucho moco visible y sin brusquedad."
+      ],
+      "undated_reason": "Página divulgativa de EnFamilia sin fecha de publicación visible; consultada el 2026-11-02."
+    },
+    {
+      "source_type": "reference",
+      "title": "Cosas que debes saber sobre la tos (EnFamilia, AEP)",
+      "organization": "Asociación Española de Pediatría",
+      "publication_year": null,
+      "url": "https://www.aeped.es/enfamilia/salud-en-familia/tos",
+      "specialties": ["pediatrics", "general_medicine"],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "topics": ["tos"],
+      "chunks": [
+        "Cosas que debes saber sobre la tos (EnFamilia, Asociación Española de Pediatría). Tema: tipos de tos en niños pequeños y cuál es la tos buena del catarro. Hallazgo: la tos es un reflejo de defensa que limpia de secreciones las vías respiratorias. La tos seca, que no mueve secreciones, es la típica del inicio del resfriado. La tos ronca o perruna es propia de la laringitis o crup y puede acompañarse de ronquera y de un ruido áspero al coger aire, el estridor, que indica que el paso del aire está estrechado. La tos blanda o productiva arrastra las flemas, que los niños suelen tragar y luego vomitan o digieren; cuando dura poco, hasta 3 semanas, y no hay dificultad para respirar, es la de los catarros normales y la página la llama una tos buena porque ayuda a curarse.",
+        "Cosas que debes saber sobre la tos (EnFamilia, Asociación Española de Pediatría). Tema: ataques de tos y si hay que dar medicinas para la tos. Hallazgo: un ataque de tos repentino en un niño pequeño que estaba bien y sin vigilancia puede indicar que ha aspirado un cuerpo extraño, como una pieza de juguete o un fruto seco. La tosferina produce ataques de tos intensos, con un gallo al coger aire entre las tandas, y puede ser grave en los más pequeños. Como la tos es una respuesta defensiva, la página no ve justificado tomar medicinas para eliminarla: los medicamentos habituales para la tos en niños no han demostrado su eficacia y en algunas ocasiones han causado intoxicaciones. Los vahos son un remedio controvertido, que a unos niños les ayuda y a otros les perjudica.",
+        "Cosas que debes saber sobre la tos (EnFamilia, Asociación Española de Pediatría). Tema: cuándo consultar al pediatra por la tos. Hallazgo: la página aconseja consultar con el pediatra cuando la tos se acompaña de dificultad para respirar; cuando hay estridor al coger aire, sobre todo si hay fatiga o si aparece en un bebé; si se sospecha que el niño ha aspirado un cuerpo extraño; si la tos persiste más de 3 semanas; si hay tos con fiebre prolongada; y si la tos llega en accesos con cambios de color, con labios o cara azulados. Añade que se consulte siempre que el sentido común lo aconseje."
+      ],
+      "undated_reason": "Página divulgativa de EnFamilia sin fecha de publicación visible; consultada el 2026-11-02."
+    },
+    {
+      "source_type": "reference",
+      "title": "Bronquiolitis (EnFamilia, AEP)",
+      "organization": "Asociación Española de Pediatría",
+      "publication_year": null,
+      "url": "https://www.aeped.es/enfamilia/salud-en-familia/bronquiolitis-1",
+      "specialties": ["pediatrics", "general_medicine", "pulmonology"],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "topics": ["bronquiolitis"],
+      "chunks": [
+        "Bronquiolitis (EnFamilia, Asociación Española de Pediatría). Tema: qué es la bronquiolitis y a qué bebés afecta. Hallazgo: es la inflamación de los bronquiolos, las vías respiratorias más finas, por una infección vírica; es más frecuente en menores de 2 años y sobre todo en menores de 6 meses. El virus principal es el virus respiratorio sincitial (VRS), propio en España de los meses fríos, de noviembre a marzo. La mayoría son leves y se parecen a un catarro que se resuelve en pocos días; otras veces, tras 3 o 4 días de mocos y tos, aparecen dificultad para respirar y pitos en el pecho, con febrícula o fiebre, menos apetito, vómitos con moco o dificultad para comer. Puede ser grave en prematuros, en menores de 3 meses y en niños con problemas de corazón, pulmón, músculos o defensas. El diagnóstico es clínico, sin análisis ni radiografía.",
+        "Bronquiolitis (EnFamilia, Asociación Española de Pediatría). Tema: cuidados en casa y alimentación del bebé con bronquiolitis. Hallazgo: la mayoría se pasan en casa en unos 7 a 10 días, aunque la tos puede durar algo más, y el tratamiento es de los síntomas. La página recomienda retirar el moco de la nariz con lavados de suero fisiológico, colocar al bebé semiincorporado elevando el cabecero, ofrecer agua para evitar la deshidratación y, si toma pecho, ofrecerlo con frecuencia. Como puede tener menos apetito y cansarse en las tomas, aconseja ofrecer menos cantidad y más a menudo, y si hay fiebre, no abrigarle de más. No son útiles los antibióticos, que no actúan frente a los virus, ni los jarabes para la tos, los mucolíticos o los corticoides, y no se deben usar medicamentos que no haya recetado el pediatra.",
+        "Bronquiolitis (EnFamilia, Asociación Española de Pediatría). Tema: signos de empeoramiento por los que consultar. Hallazgo: la página pide vigilar al bebé y consultar con su pediatra si tiene dificultad para respirar (se le marcan las costillas, hincha el abdomen, le suena mucho el pecho con pitos o respira muy deprisa); si está pálido o tiene los labios y las uñas azulados; si hace pausas de apnea, es decir, deja de respirar unos segundos; si tiene quejido o está muy agitado; si está decaído, no quiere comer o vomita con frecuencia; o si tiene fiebre alta difícil de controlar. Para prevenir el contagio recuerda el lavado de manos, los pañuelos desechables, no llevarlo a la guardería mientras esté enfermo, alejarlo de adultos acatarrados, del humo de tabaco y de los lugares concurridos, y la lactancia materna, que protege frente a la bronquiolitis."
+      ],
+      "undated_reason": "Página divulgativa de EnFamilia sin fecha de publicación visible; consultada el 2026-11-02."
+    },
+    {
+      "source_type": "reference",
+      "title": "Laringitis aguda (EnFamilia, AEP)",
+      "organization": "Asociación Española de Pediatría",
+      "publication_year": null,
+      "url": "https://www.aeped.es/enfamilia/salud-en-familia/laringitis-aguda",
+      "specialties": ["pediatrics", "general_medicine"],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "topics": ["laringitis"],
+      "chunks": [
+        "Laringitis aguda (EnFamilia, Asociación Española de Pediatría). Tema: qué es la laringitis o crup y cómo se reconoce. Hallazgo: es una inflamación sobre todo de las cuerdas vocales, también llamada crup o laringitis estridulosa, que afecta en general a niños desde los 6 meses hasta los 6 años y es más frecuente en otoño y al principio del invierno. Casi siempre la causan virus. Empieza como un resfriado, a menudo con fiebre, y lo característico es una tos seca y fuerte parecida al ladrido de un perro, con ronquera o afonía. Según la inflamación puede oírse un ruido ronco y agudo al coger aire, el estridor, que aumenta cuando el niño llora o se agita. Suele empeorar por la noche. Se diagnostica por los síntomas y la exploración del pediatra, sin radiografías ni análisis.",
+        "Laringitis aguda (EnFamilia, Asociación Española de Pediatría). Tema: qué hacer en casa con un niño con laringitis. Hallazgo: a algunos niños les alivia respirar aire húmedo: depósitos de agua en los radiadores, un humidificador, o llenar el baño de vapor con el grifo de agua caliente y sentarse con el niño fuera de la ducha entre 10 y 20 minutos. El aire frío también puede mejorar los síntomas, por ejemplo asomándolo bien abrigado a la ventana en los meses fríos. Conviene mantenerlo sentado, ofrecerle líquidos sin forzarle a comer y vigilar su respiración. No necesita antibiótico porque es una infección vírica; no se deben usar collarines de agua y alcohol, que no funcionan e irritan la piel; no hay que darle jarabes ni supositorios para la tos sin consultar al pediatra, y no se debe fumar en casa.",
+        "Laringitis aguda (EnFamilia, Asociación Española de Pediatría). Tema: cuándo buscar atención médica inmediata y cómo evoluciona. Hallazgo: la página indica buscar atención médica inmediata si en cualquier momento el niño empeora, en concreto si hace ruido al coger aire (estridor) estando tranquilo; si tiene dificultad respiratoria, respira cada vez más deprisa, se le marcan las costillas, mueve mucho el abdomen, se le hunde el pecho o estira el cuello; si aparece un color blanquecino o azulado alrededor de la boca; si le cuesta tragar o babea mucho; o si los síntomas empeoran. La mayoría de las laringitis son leves y se resuelven en pocos días, aunque pueden durar hasta una semana, y menos del 5 por ciento de los niños con laringitis aguda necesitan ingreso. Las más graves deben valorarse siempre en un centro sanitario."
+      ],
+      "undated_reason": "Página divulgativa de EnFamilia sin fecha de publicación visible; consultada el 2026-11-02."
+    },
+    {
+      "source_type": "reference",
+      "title": "Otitis media aguda (EnFamilia, AEP)",
+      "organization": "Asociación Española de Pediatría",
+      "publication_year": null,
+      "url": "https://www.aeped.es/enfamilia/salud-en-familia/otitis-media-aguda",
+      "specialties": ["pediatrics", "general_medicine"],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "topics": ["otitis"],
+      "chunks": [
+        "Otitis media aguda (EnFamilia, Asociación Española de Pediatría). Tema: qué es la otitis media y cómo aparece en el niño pequeño. Hallazgo: es la infección aguda del oído medio, justo detrás del tímpano, y una de las infecciones infantiles más frecuentes: entre un 80 y un 90 % de los niños tendrán al menos un episodio en los primeros años de vida. Una secuencia típica es un catarro con mucha mucosidad y, a los pocos días, dolor de oído. Lo más frecuente es el dolor, con o sin fiebre, en un niño que antes tenía síntomas de resfriado, y el médico confirma el diagnóstico mirando el oído con un otoscopio. En los países desarrollados suele ser una enfermedad leve, y complicaciones que antes eran frecuentes hoy son raras en niños sanos.",
+        "Otitis media aguda (EnFamilia, Asociación Española de Pediatría). Tema: cuándo se usa o no el antibiótico en la otitis. Hallazgo: un 80 % de las otitis se resuelven solas y no necesitan antibiótico; los estudios recientes muestran que tomarlo o no tomarlo da un porcentaje de curaciones parecido, aunque el antibiótico mejora algo los síntomas y acorta un poco su duración. La página describe dos posturas que se deciden con el médico: tratar solo el dolor y la fiebre y observar la evolución 2 o 3 días, que es lo más habitual y en la mayoría de los casos los síntomas desaparecen; o, en situaciones que no son las más frecuentes (estado general afectado, más de tres días sin mejoría, afectación de los dos oídos o supuración por una pequeña perforación del tímpano), que el médico indique antibiótico desde el diagnóstico."
+      ],
+      "undated_reason": "Página divulgativa de EnFamilia sin fecha de publicación visible; consultada el 2026-11-02."
+    },
+    {
+      "source_type": "reference",
+      "title": "Mi hijo ronca. ¿Es grave doctor? (EnFamilia, AEP)",
+      "organization": "Asociación Española de Pediatría",
+      "publication_year": null,
+      "url": "https://www.aeped.es/enfamilia/salud-en-familia/mi-hijo-ronca-es-grave-doctor",
+      "specialties": ["pediatrics", "general_medicine"],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "topics": ["ronquido_apnea"],
+      "chunks": [
+        "Mi hijo ronca. ¿Es grave doctor? (EnFamilia, Asociación Española de Pediatría). Tema: por qué roncan los niños pequeños y si es frecuente. Hallazgo: roncar es el ruido del aire al pasar por una vía respiratoria superior estrecha durante el sueño, y los niños pueden roncar desde los pocos meses de vida. La mayoría lo hace de forma leve y ocasional, coincidiendo con los resfriados, y el ruido desaparece cuando pasa el catarro; aproximadamente uno de cada 10 niños ronca a diario. Se asocia a resfriados, alergia, regurgitaciones en los lactantes y humo de tabaco, aunque lo más habitual es que el paso del aire esté obstaculizado por unas vegetaciones (adenoides) o unas amígdalas grandes, o por la forma de la boca y la mandíbula.",
+        "Mi hijo ronca. ¿Es grave doctor? (EnFamilia, Asociación Española de Pediatría). Tema: señales de apnea del sueño en un niño que ronca y a quién consultar. Hallazgo: si el niño ronca hay que fijarse en los signos del síndrome de apnea-hipopnea del sueño (SAHS), la forma más grave de los trastornos respiratorios del sueño, que sufrirán aproximadamente un 20 % de los niños que roncan: si parece luchar para respirar dormido, si a veces deja de respirar unos segundos haciendo esfuerzo para respirar (apnea obstructiva), si suda mucho o si adopta posturas extrañas al dormir. Ante estos signos la página indica comentárselo a su pediatra, porque las consecuencias de un SAHS son más serias que las del ronquido solo. El pediatra explora al niño, puede pedir que se grabe en vídeo su sueño y, si hace falta, un estudio del sueño (polisomnografía), que no es doloroso.",
+        "Mi hijo ronca. ¿Es grave doctor? (EnFamilia, Asociación Española de Pediatría). Tema: consecuencias y tratamiento del ronquido con apneas. Hallazgo: el ronquido frecuente puede hacer el sueño menos reparador; los niños que roncan tienen más a menudo terrores nocturnos, pesadillas y otras parasomnias, y pueden estar somnolientos o demasiado inquietos de día. Las consecuencias del SAHS incluyen problemas de atención y de conducta, falta de apetito, hipertensión arterial y falta de crecimiento. A veces basta con que el pediatra trate la causa, como una rinitis o el reflujo; cuando se confirma un SAHS, en la mayoría de los casos hay que operar: el otorrinolaringólogo extirpa vegetaciones y amígdalas, lo que resuelve el problema en 7 u 8 de cada 10 niños, aunque los síntomas pueden reaparecer meses o años después."
+      ],
+      "undated_reason": "Página divulgativa de EnFamilia sin fecha de publicación visible (artículo compartido con Famiped, de la AEPap); consultada el 2026-11-02."
+    },
+    {
+      "source_type": "reference",
+      "title": "Síndrome de muerte súbita del lactante (EnFamilia, AEP)",
+      "organization": "Asociación Española de Pediatría",
+      "publication_year": null,
+      "url": "https://www.aeped.es/enfamilia/salud-en-familia/sindrome-muerte-subita-lactante",
+      "specialties": ["pediatrics", "general_medicine"],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "topics": ["muerte_subita_sueno_seguro"],
+      "chunks": [
+        "Síndrome de muerte súbita del lactante (EnFamilia, Asociación Española de Pediatría). Tema: qué es la muerte súbita del lactante y en qué postura debe dormir el bebé. Hallazgo: es la muerte repentina e inexplicable de un niño menor de un año, en general mientras duerme, y solo se diagnostica tras descartar otras causas; en España es una de las principales causas de mortalidad en el primer año de vida. Para prevenirla hasta los 12 meses, el bebé debe acostarse boca arriba: dormir boca abajo duplica el riesgo y de lado tampoco es seguro. La postura boca arriba es para dormir; cuando está despierto y vigilado conviene que pase cada día un rato boca abajo para favorecer su desarrollo motor.",
+        "Síndrome de muerte súbita del lactante (EnFamilia, Asociación Española de Pediatría). Tema: dónde y cómo debe dormir el bebé para reducir el riesgo. Hallazgo: la página señala la cuna en la habitación de los padres como el lugar más seguro para dormir, con un colchón firme y sin sábanas o edredones sueltos, almohadas ni juguetes blandos en la cuna. Recomienda no fumar, beber ni consumir drogas en el embarazo ni después del parto y que nadie fume cerca del bebé; darle el pecho si es posible, porque la lactancia materna reduce el riesgo; y no abrigarle demasiado, ya que el exceso de ropa o una habitación muy caliente aumentan el riesgo. Pide compartir estos consejos con todas las personas que cuiden del bebé durante su primer año."
+      ],
+      "undated_reason": "Página divulgativa de EnFamilia sin fecha de publicación visible; consultada el 2026-11-02."
+    },
+    {
+      "source_type": "reference",
+      "title": "Colecho. ¿Es malo compartir la cama con el bebé? (EnFamilia, AEP)",
+      "organization": "Asociación Española de Pediatría",
+      "publication_year": null,
+      "url": "https://www.aeped.es/enfamilia/salud-en-familia/colecho-es-malo-compartir-cama-con-bebe",
+      "specialties": ["pediatrics", "general_medicine"],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "topics": ["colecho"],
+      "chunks": [
+        "Colecho. ¿Es malo compartir la cama con el bebé? (EnFamilia, Comité de Lactancia Materna de la Asociación Española de Pediatría). Tema: por qué el colecho es habitual y qué papel tiene en la lactancia. Hallazgo: el artículo, elaborado por el Comité de Lactancia Materna de la AEP, explica que los niños han dormido con sus padres a lo largo de la historia y que se llama colecho a compartir la misma cama. La cercanía entre madre y bebé facilita mantener la lactancia materna, que protege frente al síndrome de muerte súbita del lactante, y el colecho es más frecuente en los bebés amamantados. Al crecer, los bebés se despiertan más por la noche, no menos, y hacia el año pueden tener pesadillas y buscar consuelo junto a sus padres; la página insiste en que no hay soluciones mágicas para los despertares.",
+        "Colecho. ¿Es malo compartir la cama con el bebé? (EnFamilia, Comité de Lactancia Materna de la Asociación Española de Pediatría). Tema: la recomendación de la AEP sobre dónde dormir antes de los seis meses. Hallazgo: la decisión de dormir con los hijos corresponde a los padres, y a los profesionales les toca informar de las circunstancias que aumentan el riesgo si se practica el colecho, sobre todo en menores de 6 meses. La forma más segura de dormir para los lactantes menores de seis meses es en su cuna, boca arriba, cerca de la cama de sus padres. Aunque el colecho favorece la lactancia, también se considera un factor que aumenta el riesgo de muerte súbita, por lo que en ciertos casos no debe recomendarse. Los padres que quieran estar más cerca pueden poner la cuna junto a la cama o usar una cuna tipo sidecar, adosada a la cama, que facilita la lactancia."
+      ],
+      "undated_reason": "Página divulgativa de EnFamilia sin fecha de publicación visible; consultada el 2026-11-02."
+    },
+    {
+      "source_type": "protocol",
+      "title": "Colecho, síndrome de muerte súbita del lactante y lactancia materna. Recomendaciones actuales de consenso (Comité de Lactancia Materna, AEP)",
+      "organization": "Asociación Española de Pediatría",
+      "publication_year": 2014,
+      "url": "https://static.aeped.es/201406_colecho_muerte_subita_1b82538455.pdf",
+      "specialties": ["pediatrics", "general_medicine", "neonatology"],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "topics": ["colecho", "muerte_subita_sueno_seguro"],
+      "chunks": [
+        "Colecho, síndrome de muerte súbita del lactante y lactancia materna. Recomendaciones actuales de consenso (Comité de Lactancia Materna y Grupo de Trabajo de Muerte Súbita Infantil, Asociación Española de Pediatría, 2014). Tema: dónde es más seguro que duerma un bebé menor de seis meses. Hallazgo: el documento de consenso de la AEP establece que la forma más segura de dormir para los lactantes menores de seis meses es en su cuna, boca arriba, cerca de la cama de sus padres, y señala que hay evidencia científica de que esta práctica reduce el riesgo de síndrome de muerte súbita del lactante (SMSL) en más del 50 %. Pide que los padres estén informados de las circunstancias que aumentan el riesgo si se practica el colecho, sobre todo en menores de 6 meses.",
+        "Colecho, síndrome de muerte súbita del lactante y lactancia materna. Recomendaciones actuales de consenso (Comité de Lactancia Materna y Grupo de Trabajo de Muerte Súbita Infantil, Asociación Española de Pediatría, 2014). Tema: en qué casos la AEP dice que no debe recomendarse el colecho. Hallazgo: la lactancia materna protege frente al SMSL y el colecho favorece mantenerla, pero también se considera un factor que aumenta el riesgo de SMSL, por lo que no debe recomendarse en: lactantes menores de tres meses; prematuridad y bajo peso al nacer; padres que consumen tabaco, alcohol, drogas o fármacos sedantes; situaciones de cansancio, sobre todo de cansancio extremo como el posparto inmediato; colecho sobre superficies blandas, colchones de agua, sofás o sillones; y cuando se comparte la cama con otros familiares, otros niños o varias personas."
+      ]
+    },
+    {
+      "source_type": "reference",
+      "title": "Chupete (EnFamilia, AEP)",
+      "organization": "Asociación Española de Pediatría",
+      "publication_year": null,
+      "url": "https://www.aeped.es/enfamilia/salud-en-familia/chupete",
+      "specialties": ["pediatrics", "general_medicine"],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "topics": ["chupete"],
+      "chunks": [
+        "Chupete (EnFamilia, Asociación Española de Pediatría). Tema: beneficios y riesgos del chupete y cuándo empezar a usarlo. Hallazgo: el chupete tiene beneficios y riesgos. Sus dos beneficios demostrados son acortar la estancia en el hospital de los prematuros y reducir el riesgo de muerte súbita infantil. Uno de sus inconvenientes durante el sueño en menores de un año es que puede interferir con el establecimiento de la lactancia materna, aunque estudios recientes parecen descartar que acorte su duración. En los niños amamantados se recomienda ofrecerlo cuando la lactancia está claramente establecida, generalmente tras el primer mes de vida; con biberón se puede usar desde los primeros días. Si a un bebé no le gusta, no hay que empeñarse.",
+        "Chupete (EnFamilia, Asociación Española de Pediatría). Tema: cuándo retirar el chupete y cómo usarlo con seguridad. Hallazgo: la página recomienda retirarlo al cumplir el año, porque a partir de esa edad la muerte súbita del lactante es excepcional, el chupete ya no aporta un beneficio claro y puede aumentar el riesgo de otitis media; su uso a partir de los 2 años se asocia a problemas de posición de los dientes y de mordida. Para usarlo con seguridad debe ser sólido, sin piezas que se suelten ni pegatinas, con agujeros de ventilación en el disco, y nunca debe colgarse de una cinta alrededor del cuello: las cadenas largas tienen riesgo de estrangulación y las pinzas también pueden soltarse. Se lava con agua y jabón, se aclara bien y se cambia si se agrieta o se deteriora."
+      ],
+      "undated_reason": "Página divulgativa de EnFamilia sin fecha de publicación visible; consultada el 2026-11-02."
+    },
+    {
+      "source_type": "protocol",
+      "title": "Uso del chupete y lactancia materna (Comité de Lactancia Materna, AEP)",
+      "organization": "Asociación Española de Pediatría",
+      "publication_year": 2011,
+      "url": "https://static.aeped.es/201103_chupete_lactancia_67e6a5a6f4.pdf",
+      "specialties": ["pediatrics", "general_medicine", "neonatology"],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "topics": ["chupete"],
+      "chunks": [
+        "Uso del chupete y lactancia materna (Comité de Lactancia Materna, Asociación Española de Pediatría, 2011). Tema: qué se sabe del chupete y por qué es un tema controvertido. Hallazgo: el comité recuerda que el chupete calma el llanto, ayuda a conciliar el sueño y reduce el estrés y el dolor, pero se ha relacionado con un tiempo de amamantamiento más corto y dificultades en la lactancia, con más otitis media, problemas dentales y riesgo de accidentes. Estudios recientes relacionan su uso, sobre todo durante el sueño, con un menor riesgo de síndrome de muerte súbita del lactante (SMSL), y su efecto calmante del dolor y el estímulo de la succión no nutritiva están bien demostrados. Por eso pide a los profesionales dar a los padres una información equilibrada, porque la decisión final es de los padres.",
+        "Uso del chupete y lactancia materna (Comité de Lactancia Materna, Asociación Española de Pediatría, 2011). Tema: recomendaciones de la AEP sobre cuándo ofrecer y hasta cuándo usar el chupete. Hallazgo: en los recién nacidos amamantados se debe evitar el chupete durante los primeros días de vida, y no se desaconseja cuando la lactancia está bien establecida, habitualmente a partir del mes de vida. En los niños alimentados con fórmula, el chupete durante el sueño es especialmente importante para reducir el riesgo de SMSL. Para evitar otros efectos adversos, el comité recomienda en todos los niños limitar su uso hasta los 12 meses, edad que incluye la de máximo riesgo de SMSL y la de mayor necesidad de succión. Añade que a veces el chupete es una señal de dificultades con la lactancia que los profesionales deben ayudar a resolver."
+      ]
+    },
+    {
+      "source_type": "reference",
+      "title": "Bronquiolitis, ni truco ni trato (Familia y Salud, AEPap)",
+      "organization": "Asociación Española de Pediatría de Atención Primaria (AEPap)",
+      "publication_year": 2024,
+      "url": "https://www.familiaysalud.es/sintomas-y-enfermedades/sistema-respiratorio/bronquios-y-pulmones/bronquiolitis-ni-truco-ni-trato",
+      "specialties": ["pediatrics", "general_medicine", "pulmonology"],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "topics": ["bronquiolitis"],
+      "chunks": [
+        "Bronquiolitis, ni truco ni trato (Familia y Salud, AEPap, 2024). Tema: qué es la bronquiolitis y cómo empieza. Hallazgo: es una infección de los bronquiolos, la parte más pequeña del árbol respiratorio, que se da en menores de 2 años, casi siempre por un virus y sobre todo en otoño e invierno; el principal es el VRS. Suele empezar como un catarro con tos, mocos y a veces fiebre; en los días siguientes empeora la tos y aparece más dificultad para respirar: respiran más rápido, mueven más el abdomen, se les marcan las costillas o hacen pitos al respirar. En los casos más graves el bebé parece dejar de respirar en algún momento (pausas de apnea), y la página dice que es un signo por el que se debe consultar de forma urgente. No hacen falta análisis de sangre ni radiografías para diagnosticarla.",
+        "Bronquiolitis, ni truco ni trato (Familia y Salud, AEPap, 2024). Tema: cuidados en casa, alimentación y tratamientos que no sirven. Hallazgo: no hay un tratamiento concreto; los cuidados consisten en lavados nasales con suero fisiológico si hay moco, sobre todo antes de las tomas, mantener al niño semiincorporado, ofrecer alimento y líquidos en tomas más pequeñas y frecuentes para que no se fatigue ni se deshidrate, y evitar el humo de tabaco y la contaminación. Los antibióticos no son útiles porque solo actúan frente a bacterias, y como ningún fármaco cambia el curso de la enfermedad no se recomiendan corticoides, broncodilatadores, mucolíticos, antigripales ni antitusígenos. Se aconseja que el bebé no vaya a la guardería y evite a las personas de riesgo durante los primeros siete días.",
+        "Bronquiolitis, ni truco ni trato (Familia y Salud, AEPap, 2024). Tema: evolución y signos de alarma. Hallazgo: la mayoría de los niños tienen un cuadro leve que mejora en casa; solo 1 de cada 5 niños que acuden a urgencias necesita ingreso, sobre todo bebés de menos de un mes, con pausas de apnea o que precisan oxígeno o suero. El cuadro suele durar de 7 a 10 días, puede empeorar entre el segundo y el tercer día y la tos puede durar hasta 4 semanas. La página pide a padres y cuidadores adelantar la cita con su pediatra o acudir a un centro sanitario si el bebé hace pausas largas al respirar, tiene mal estado general, se queda más dormido o llora mucho, respira más rápido, le cuesta respirar, o come menos de la mitad de lo normal o vomita."
+      ]
+    },
+    {
+      "source_type": "reference",
+      "title": "Laringitis (Familia y Salud, AEPap)",
+      "organization": "Asociación Española de Pediatría de Atención Primaria (AEPap)",
+      "publication_year": 2017,
+      "url": "https://www.familiaysalud.es/sintomas-y-enfermedades/sistema-respiratorio/vias-respiratorias-altas/laringitis",
+      "specialties": ["pediatrics", "general_medicine"],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "topics": ["laringitis"],
+      "chunks": [
+        "Laringitis (Familia y Salud, AEPap, 2017). Tema: síntomas y evolución de la laringitis. Hallazgo: es una inflamación de la laringe casi siempre debida a un virus; suele ser leve, mejora con rapidez y en algunos niños se repite. Da tos, voz ronca o afonía y casi siempre un sonido característico al respirar, el estridor laríngeo. Suele empeorar por la noche: el niño se acuesta bien y de pronto se despierta con tos perruna y dificultad para respirar; de día está bien, pero puede empeorar de nuevo la noche siguiente. Lo más probable es que la tos desaparezca en un par de días, aunque algunos niños siguen tosiendo hasta 7 días, y a veces le sigue una tos blanda con mocos.",
+        "Laringitis (Familia y Salud, AEPap, 2017). Tema: qué hacer en casa y qué remedios no sirven. Hallazgo: la página aconseja ofrecer líquidos frescos; si empieza el estridor, abrir la ventana del dormitorio para que respire aire frío entre 5 y 10 minutos; evitar el ambiente seco, porque el aire húmedo hace los mocos menos espesos y le da confort; y, lo más importante, calmar al niño y hablarle con tranquilidad y en voz baja, porque la calma le ayuda a respirar mejor. No sirven los collarines de agua y alcohol, que además irritan la piel; no hay que darle antibiótico, ni supositorios o jarabes para la tos, y hay que evitar los vapores de eucalipto, mentol u otros olores fuertes.",
+        "Laringitis (Familia y Salud, AEPap, 2017). Tema: cuándo acudir a urgencias con un niño con laringitis. Hallazgo: lo más importante es vigilar si tiene dificultad para respirar, mirando y escuchando de vez en cuando su respiración con el pecho desnudo. La página indica acudir a un servicio de urgencias si el estridor se oye todo el tiempo, aunque el niño esté tranquilo, y no solo cuando llora o está a disgusto; si al respirar se le hunde el tórax entre las costillas o el hueco que hay bajo la nuez, respira cada vez más deprisa, mueve mucho el abdomen o estira el cuello; si está somnoliento o muy irritable; si tiene la cara o los labios azulados; o si le cuesta tragar o babea mucho."
+      ]
+    },
+    {
+      "source_type": "reference",
+      "title": "¿Qué son las sibilancias recurrentes del niño pequeño? (Familia y Salud, AEPap)",
+      "organization": "Asociación Española de Pediatría de Atención Primaria (AEPap)",
+      "publication_year": 2017,
+      "url": "https://www.familiaysalud.es/sintomas-y-enfermedades/sistema-respiratorio/bronquios-y-pulmones/que-son-las-sibilancias",
+      "specialties": ["pediatrics", "general_medicine", "pulmonology"],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "topics": ["sibilancias"],
+      "chunks": [
+        "¿Qué son las sibilancias recurrentes del niño pequeño? (Familia y Salud, AEPap, 2017). Tema: qué son los pitos y por qué los tienen los niños pequeños. Hallazgo: las sibilancias son los pitos que se oyen al respirar, casi siempre por un problema en los bronquios, que se estrechan o se llenan de moco; no hay que confundirlas con los ruidos que vienen de la nariz o de la garganta, y para saberlo hay que auscultar al niño. En los niños pequeños la causa más frecuente son las infecciones por virus, tanto en niños con asma como en otros con bronquios más sensibles, sobre todo si han tenido una bronquiolitis o respiran humo de tabaco. Si el niño es menor de un año, solo tiene pitos con infecciones víricas y no hay otros antecedentes, es más probable que desaparezcan en el futuro.",
+        "¿Qué son las sibilancias recurrentes del niño pequeño? (Familia y Salud, AEPap, 2017). Tema: qué hace pensar en asma y qué esperar de la consulta. Hallazgo: en un niño pequeño con pitos que se repiten es muy difícil saber si tiene asma; hacen pensar en ello tener padres con asma, dermatitis atópica o alergia en el niño, y pitos que empiezan a partir del segundo año de vida. La página desaconseja nombrar el problema con términos como bronquitis espástica, asma del lactante o hiperreactividad bronquial. El pediatra pregunta y explora al niño; no suele pedir análisis y solo hace radiografía si está grave o los síntomas duran muchos días. A veces hacen falta varias consultas para llegar al diagnóstico, y lo más probable es que mejore o que los pitos desaparezcan en los años siguientes.",
+        "¿Qué son las sibilancias recurrentes del niño pequeño? (Familia y Salud, AEPap, 2017). Tema: cuándo consultar al pediatra y cuándo ir a urgencias. Hallazgo: en los niños pequeños los pitos suelen empezar con un catarro, y el pediatra dará un plan escrito sobre qué hacer en casa. Según la página, hay que consultar si la tos persiste o aumenta y le dificulta dormir o comer, si tiene pitos o le duran varios días, o si respira con dificultad: se le hunden las costillas, se le abren las aletas de la nariz, jadea o respira muy rápido, no por los mocos sino porque los bronquios están cerrados. Si empeora y le cuesta más respirar, está agitado o somnoliento, pálido, o tiene los labios o las uñas azulados, hay que ir a urgencias. Para prevenir, la página cita la lactancia materna al menos 4 meses, evitar el humo de tabaco, lavarse las manos y ventilar las habitaciones."
+      ]
+    },
+    {
+      "source_type": "reference",
+      "title": "Infección de los oídos: Otitis media aguda (Familia y Salud, AEPap)",
+      "organization": "Asociación Española de Pediatría de Atención Primaria (AEPap)",
+      "publication_year": 2018,
+      "url": "https://www.familiaysalud.es/sintomas-y-enfermedades/organos-de-los-sentidos/oidos/infeccion-de-los-oidos-otitis-media-aguda",
+      "specialties": ["pediatrics", "general_medicine"],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "topics": ["otitis"],
+      "chunks": [
+        "Infección de los oídos: Otitis media aguda (Familia y Salud, AEPap, 2018). Tema: cómo sospechar una otitis en un bebé que aún no habla y si es urgente. Hallazgo: la otitis media aguda es frecuente en los niños que todavía no han aprendido a hablar; hay que sospecharla cuando lloran más de lo normal, se frotan o se tiran de las orejas, no duermen bien o están muy irritables, y en muchos casos tienen fiebre. A veces sale secreción por el oído (otorrea). Los resfriados inflaman la nariz y la inflamación llega al oído medio por la trompa de Eustaquio; la gran mayoría de las otitis medias agudas son de origen vírico. La página indica que, en general, la consulta puede esperar 24 horas y que no es necesario acudir de urgencia; mientras tanto, se pueden aliviar el dolor y la fiebre.",
+        "Infección de los oídos: Otitis media aguda (Familia y Salud, AEPap, 2018). Tema: cuándo no hacen falta antibióticos y cuidados en casa. Hallazgo: como la mayoría son víricas, suele bastar con tratar el dolor y la fiebre y observar la evolución, y la gran mayoría se resuelven en pocos días sin secuelas. Según la página, la mayoría de los pacientes evolucionan bien aunque no tomen antibióticos y en 24 a 48 horas ya están mejor; los antibióticos no son necesarios salvo en menores de 6 meses, en otitis que no mejoran en los 2 o 3 primeros días y en las de evolución más intensa. Ayudan el calor seco sobre el oído, cuidar la higiene nasal, evitar que entre agua si supura y evitar cambios bruscos de presión como los viajes en avión. Su médico lo volverá a ver si no mejora en 48 horas o aparecen síntomas nuevos.",
+        "Infección de los oídos: Otitis media aguda (Familia y Salud, AEPap, 2018). Tema: seguimiento y prevención de las otitis. Hallazgo: la gran mayoría de las otitis que se curan bien se revisan a los 2 o 3 meses para comprobar que el oído ha vuelto a la normalidad, y solo excepcionalmente dejan secuelas, como una disminución de la audición o una perforación del tímpano. Para prevenirlas, la página cita la lactancia materna, que disminuye el riesgo de infecciones del oído; que los bebés que toman biberón, sobre todo los menores de 2 años, no lo hagan tumbados; y que no estén en espacios donde se fume."
+      ]
+    },
+    {
+      "source_type": "reference",
+      "title": "Cómo manejar la tos: qué hacer cuando mi hijo tose (Familia y Salud, AEPap)",
+      "organization": "Asociación Española de Pediatría de Atención Primaria (AEPap)",
+      "publication_year": 2020,
+      "url": "https://www.familiaysalud.es/sintomas-y-enfermedades/sistema-respiratorio/vias-respiratorias-altas/como-manejar-la-tos-que-hacer",
+      "specialties": ["pediatrics", "general_medicine"],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "topics": ["tos"],
+      "chunks": [
+        "Cómo manejar la tos: qué hacer cuando mi hijo tose (Familia y Salud, AEPap, 2020). Tema: por qué la tos no siempre suena igual. Hallazgo: la tos es un reflejo de defensa que casi nunca indica un problema de salud importante. Si la infección afecta a la nariz y la faringe la tos es irritativa; si afecta a la laringe es ruidosa y metálica (tos perruna) y suele acompañarse de ronquera; y un silbido al expulsar el aire indica que están afectadas las vías bajas, como en la bronquiolitis, el asma o un cuerpo extraño. Al principio es seca, molesta y poco eficaz, y luego se vuelve blanda, con moco; en los primeros años los niños no saben echar el moco con la tos y se lo tragan, y a veces tosen tanto que acaban vomitando.",
+        "Cómo manejar la tos: qué hacer cuando mi hijo tose (Familia y Salud, AEPap, 2020). Tema: cuándo consultar con el pediatra por la tos. Hallazgo: la página aconseja consultar si además de la tos hay dificultad o esfuerzo para respirar o respira más deprisa de lo habitual; labios, cara o lengua azulados u oscuros; estridor al coger aire; silbidos al expulsarlo, salvo que ya tenga pautas para el asma; fiebre, por poca que sea, en menores de 3 meses; fiebre de más de 72 horas; dolor o supuración de oídos, irritabilidad o decaimiento; tos en sus primeras 72 horas en menores de 6 meses, sobre todo de noviembre a marzo; sospecha de cuerpo extraño; tos que le impide dormir o comer; mocos con tos durante más de 10 a 14 días; o dudas.",
+        "Cómo manejar la tos: qué hacer cuando mi hijo tose (Familia y Salud, AEPap, 2020). Tema: cómo aliviar la tos en casa y por qué no se dan medicinas. Hallazgo: la tos es un síntoma y hay que tratar su causa, casi siempre una infección vírica sin tratamiento específico, así que irá cediendo poco a poco y puede durar varias semanas. Por eso, en la infancia los medicamentos para la tos no son necesarios: pueden ayudar a toser menos, pero no tratan la causa y pueden tener efectos secundarios. Alivian los lavados nasales con suero fisiológico, la humedad ambiental o un humidificador de vapor frío si el aire de casa es seco, salir un momento al aire fresco, el vapor de la ducha para la tos de perro de la laringitis y las bebidas frescas, que mantienen al niño hidratado, evitando refrescos con gas y zumo de naranja."
+      ]
+    },
+    {
+      "source_type": "reference",
+      "title": "Mi hijo siempre tiene mocos. ¿Y si le “bajan al pecho”? (Familia y Salud, AEPap)",
+      "organization": "Asociación Española de Pediatría de Atención Primaria (AEPap)",
+      "publication_year": 2023,
+      "url": "https://www.familiaysalud.es/sintomas-y-enfermedades/sistema-respiratorio/vias-respiratorias-altas/mi-hijo-siempre-tiene-mocos-y",
+      "specialties": ["pediatrics", "general_medicine"],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "topics": ["resfriado_mocos", "respiracion_normal", "sibilancias"],
+      "chunks": [
+        "Mi hijo siempre tiene mocos. ¿Y si le “bajan al pecho”? (Familia y Salud, AEPap, 2023). Tema: por qué los niños pequeños siempre tienen mocos. Hallazgo: los niños tienen de media de 5 a 8 infecciones respiratorias al año, más cuanto más pequeños son. Los mocos son una defensa muy eficaz: limpian las vías aéreas y arrastran los gérmenes pegados a ellos. Los mocos de la nariz llegan hasta la garganta y ahí la tos impide que entren en los bronquios, de modo que los mocos de la nariz y la garganta no pueden bajar al pecho. Lo que sí puede ocurrir es que los virus de los catarros inflamen también la tráquea y los bronquios, como el VRS, que causa la bronquiolitis en invierno.",
+        "Mi hijo siempre tiene mocos. ¿Y si le “bajan al pecho”? (Familia y Salud, AEPap, 2023). Tema: ruidos en el pecho con los mocos y cuándo se inflaman los bronquios. Hallazgo: en los catarros de nariz y garganta pueden oírse, y notarse con las manos sobre el pecho, unos ruidos de vías altas que van y vienen y desaparecen con la tos o al cambiar la postura del cuello. Cuando de verdad se inflaman los bronquios, la tos cambia: se vuelve más frecuente y a menudo más seca, el niño respira más rápido, se le marcan las costillas y, en los bebés pequeños, les cuesta más comer. Esos son los cambios que la página pide vigilar.",
+        "Mi hijo siempre tiene mocos. ¿Y si le “bajan al pecho”? (Familia y Salud, AEPap, 2023). Tema: pitos en el pecho con cada catarro. Hallazgo: en niños con bronquios más sensibles, alérgicos o cuyos padres fuman, los virus del catarro pueden inflamar los bronquios, estrecharlos y producir pitos. Si el bebé tiene una bronquiolitis en los primeros meses, es frecuente que sus bronquios estén más sensibles durante los 2 o 3 primeros años. Uno de cada tres niños menores de 5 años tendrá alguna vez pitos en el pecho (sibilancias); la mayoría no volverá a tenerlos y solo uno de cada cinco tendrá asma de mayor. Para prevenir, la página aconseja lavarse las manos, evitar el contacto con personas resfriadas, sobre todo con bebés pequeños, y que nadie fume delante del niño."
+      ]
+    },
+    {
+      "source_type": "reference",
+      "title": "Lavados nasales: ¿cómo y cuándo realizarlos? (Familia y Salud, AEPap)",
+      "organization": "Asociación Española de Pediatría de Atención Primaria (AEPap)",
+      "publication_year": 2023,
+      "url": "https://www.familiaysalud.es/medicinas/normas-de-uso-de/lavados-nasales-como-y-cuando-realizarlos",
+      "specialties": ["pediatrics", "general_medicine"],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "topics": ["lavados_nasales"],
+      "chunks": [
+        "Lavados nasales: ¿cómo y cuándo realizarlos? (Familia y Salud, AEPap, 2023). Tema: cuándo hace falta lavar la nariz a un bebé. Hallazgo: con los resfriados a los bebés se les tapona la nariz enseguida y, como no saben respirar por la boca ni sonarse, el moco les dificulta respirar y a veces comer y dormir. Aun así, no hace falta hacer lavados siempre que esté acatarrado: si tiene mocos y no le molestan, no es necesario, porque el moco es un mecanismo de defensa y nunca hay que eliminarlo del todo. Se piensa en el lavado cuando el moco dificulta la alimentación o el niño está incómodo, sobre todo antes de comer y antes de dormir, y se puede repetir todas las veces que haga falta. Sin mocos no hay por qué hacerlos.",
+        "Lavados nasales: ¿cómo y cuándo realizarlos? (Familia y Salud, AEPap, 2023). Tema: técnica del lavado nasal en el bebé. Hallazgo: con el niño tumbado de lado y sin echar la cabeza hacia atrás, se introduce la solución salina por el orificio que queda mirando al techo, con presión intermedia pero decidida y sin chorro fuerte, para que no llegue al oído; luego se incorpora al niño, se le limpia la nariz con una gasa o un pañuelo y se repite del otro lado. Hacerlo boca arriba puede empujar el moco hacia el oído y favorecer una otitis. Es normal que tosa o estornude después, y si se traga el suero y el moco no pasa nada. Si sangra la nariz, conviene revisar la técnica y ablandar antes las secreciones con un poco de suero y un pequeño masaje.",
+        "Lavados nasales: ¿cómo y cuándo realizarlos? (Familia y Salud, AEPap, 2023). Tema: suero o agua de mar, envases y aspiradores. Hallazgo: el suero fisiológico y la solución salina hipertónica (agua de mar) son igual de eficaces si se usan bien; la hipertónica puede servir si el moco es muy espeso, aunque que arrastre más moco no está demostrado. Ningún formato es mejor que otro (espray, monodosis o bote grande con jeringa): depende de con cuál se manejen mejor los padres. Para evitar contaminaciones, cada niño debe tener su envase y su jeringa, sin reutilizarlos de un catarro a otro. En general no se recomiendan los aspiradores nasales, porque pueden inflamar la mucosa y producir más moco; solo sirven para sacar el moco que se ve y que no sale con el lavado."
+      ]
+    },
+    {
+      "source_type": "reference",
+      "title": "¿Qué es un BRUE? (Familia y Salud, AEPap)",
+      "organization": "Asociación Española de Pediatría de Atención Primaria (AEPap)",
+      "publication_year": 2024,
+      "url": "https://www.familiaysalud.es/podemos-prevenir/prevencion-de-accidentes/lesiones-infantiles-que-hacer/que-es-un-brue",
+      "specialties": ["pediatrics", "general_medicine", "emergency_medicine"],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "topics": ["pausas_brue"],
+      "chunks": [
+        "¿Qué es un BRUE? (Familia y Salud, AEPap, 2024). Tema: qué se llama BRUE y cómo es el episodio. Hallazgo: BRUE son las siglas en inglés de evento breve, resuelto e inexplicado; suele ocurrir en bebés pequeños, con una edad media de aparición en torno a los 2 meses. Los padres consultan porque, de forma brusca y breve, el bebé ha cambiado de color (pálido o azulado), ha dejado de respirar o respira de manera rara, ha estado flojo como desmayado o no responde de forma normal. Para hablar de BRUE el episodio dura menos de 1 minuto, casi siempre menos de 20 a 30 segundos, no ha tenido otros parecidos, ha cedido solo al coger al bebé y estimularlo con suavidad, y el bebé está sano, sin antecedentes y con una exploración normal. A diferencia de la muerte súbita, el niño ya está bien cuando llega a la consulta o a urgencias.",
+        "¿Qué es un BRUE? (Familia y Salud, AEPap, 2024). Tema: qué se hace tras un BRUE de bajo riesgo y qué bebés necesitan estudio. Hallazgo: probablemente no ha pasado nada grave, y el término busca evitar pruebas, ingresos o monitores innecesarios. Aun así, la página considera lógico dejar al bebé unas horas en observación en urgencias, hacerle un electrocardiograma, recomendar un control con su pediatra en las 24 horas siguientes y ofrecer a la familia aprender reanimación básica; si no está vacunado de tosferina, puede descartarse. En los casos de bajo riesgo el BRUE no se asocia con la muerte súbita y no se recomienda monitorizar en casa. Si no cumple todos los criterios, se ingresa; siempre se estudian algunos prematuros, niños con problemas neurológicos, cardiacos o metabólicos, hermanos de niños fallecidos por muerte súbita, la sospecha de maltrato y los episodios largos."
+      ]
+    },
+    {
+      "source_type": "reference",
+      "title": "Prevención del síndrome de muerte súbita del lactante (Familia y Salud, AEPap)",
+      "organization": "Asociación Española de Pediatría de Atención Primaria (AEPap)",
+      "publication_year": 2016,
+      "url": "https://www.familiaysalud.es/podemos-prevenir/otras-medidas-preventivas/en-el-bebe/prevencion-del-sindrome-de-muerte-subita-del",
+      "specialties": ["pediatrics", "general_medicine"],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "topics": ["muerte_subita_sueno_seguro", "chupete"],
+      "chunks": [
+        "Prevención del síndrome de muerte súbita del lactante (Familia y Salud, AEPap, PrevInfad, 2016). Tema: qué es la muerte súbita del lactante, cuándo ocurre y la postura para dormir. Hallazgo: es la muerte repentina de un niño menor de un año, sin explicación ni causa conocida, y suele ocurrir en los primeros meses de vida. La página la sitúa como la primera causa de muerte entre el mes y el año de vida en los países desarrollados; la mayor parte de los casos ocurren durante el sueño, entre la medianoche y las 9 de la mañana, y hay más en los meses fríos y húmedos. Dormir boca abajo tiene mucho riesgo, de lado algo menos pero también, y dormir boca arriba es el factor protector más importante; además hay que evitar que la cabeza quede cubierta durante el sueño.",
+        "Prevención del síndrome de muerte súbita del lactante (Familia y Salud, AEPap, PrevInfad, 2016). Tema: tabaco, colchón, temperatura y chupete. Hallazgo: el mayor factor de riesgo es que la madre fume, sobre todo en el embarazo, y nadie debe fumar cerca del bebé; la lactancia materna protege. No se deben usar colchones muy blandos ni de lana, almohadas, cojines ni colgantes al cuello, y hay que tener cuidado con cintas o cordones cerca de la cuna. La habitación debe estar entre 20 y 22 ºC, sin arropar mucho al bebé, sobre todo si tiene fiebre. El chupete puede proteger: durante el primer año es bueno ofrecerlo para dormir, con el bebé boca arriba, sin volver a ponérselo si se le cae ni forzarle si no lo quiere, y en los que maman es mejor esperar a que la lactancia esté bien establecida. Tener todas las vacunas puestas también protege."
+      ]
+    },
+    {
+      "source_type": "reference",
+      "title": "Trastornos del sueño en el niño de 6 a 12 meses (Familia y Salud, AEPap)",
+      "organization": "Asociación Española de Pediatría de Atención Primaria (AEPap)",
+      "publication_year": 2026,
+      "url": "https://www.familiaysalud.es/vivimos-sanos/sueno/trastornos-del-sueno/trastornos-del-sueno-en-el-nino-de-6-12-meses",
+      "specialties": ["pediatrics", "general_medicine"],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "topics": ["ronquido_apnea"],
+      "chunks": [
+        "Trastornos del sueño en el niño de 6 a 12 meses (Familia y Salud, AEPap, 2026). Tema: ronquido y pausas respiratorias durante el sueño del bebé de 6 a 12 meses. Hallazgo: la página explica que antes del año los verdaderos trastornos del sueño son poco frecuentes y que la mayoría de los despertares o del sueño inquieto forman parte del desarrollo normal. Los trastornos respiratorios que alteran el sueño también son poco frecuentes en el primer año, pero algunos bebés los tienen, y las señales que deben llamar la atención son el ronquido habitual, la respiración por la boca mientras duerme, las pausas respiratorias, un sueño muy inquieto y la sudoración intensa durante la noche. En esos casos aconseja consultar con el pediatra para valorar si hay algún problema respiratorio que afecte al descanso.",
+        "Trastornos del sueño en el niño de 6 a 12 meses (Familia y Salud, AEPap, 2026). Tema: cuándo consultar con el pediatra por el sueño del bebé de 6 a 12 meses. Hallazgo: según la página, habría que consultar con el pediatra si el bebé ronca de forma habitual o hace pausas respiratorias, si parece tener dolor frecuente, duerme muy poco para su edad, es muy difícil de calmar incluso durante el día, tiene movimientos repetitivos muy intensos o hay dudas sobre su desarrollo. Entre sus ideas clave recuerda que los problemas respiratorios durante el sueño requieren valoración médica y que las infecciones respiratorias, las otitis o la dermatitis atópica pueden empeorar el sueño durante un tiempo sin que haya un trastorno del sueño."
+      ]
+    },
+    {
+      "source_type": "reference",
+      "title": "Problemas en el sueño del niño entre 1 y 2 años (Familia y Salud, AEPap)",
+      "organization": "Asociación Española de Pediatría de Atención Primaria (AEPap)",
+      "publication_year": 2016,
+      "url": "https://www.familiaysalud.es/vivimos-sanos/sueno/trastornos-del-sueno/problemas-en-el-sueno-del-nino-entre-1-y-2-anos",
+      "specialties": ["pediatrics", "general_medicine"],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "topics": ["ronquido_apnea"],
+      "chunks": [
+        "Problemas en el sueño del niño entre 1 y 2 años (Familia y Salud, AEPap, 2016). Tema: apnea del sueño en niños de 1 a 2 años y a quién consultar. Hallazgo: la página explica que el síndrome de apnea-hipopnea durante el sueño se describe con más frecuencia en niños mayores de 2 años, pero que también puede observarse en niños más pequeños. Sus rasgos principales son los ronquidos frecuentes, los problemas para respirar durante la noche, la somnolencia durante el día, la dificultad para prestar atención y los problemas de conducta. Si los padres detectan alguno de estos síntomas, la página indica comentárselo a su pediatra por si fuese necesario hacer algún estudio complementario.",
+        "Problemas en el sueño del niño entre 1 y 2 años (Familia y Salud, AEPap, 2016). Tema: movimientos rítmicos al dormir entre 1 y 2 años. Hallazgo: a esta edad pueden verse movimientos anormales durante el sueño que empiezan antes de los 12 meses, generalmente no necesitan tratamiento y se resuelven con el crecimiento, alrededor de los 5 años: golpear la cabeza contra la almohada o el colchón estando boca abajo, girar la cabeza de un lado a otro estando boca arriba, balancear todo el cuerpo apoyado en manos y rodillas o rodar de un lado a otro. Lo habitual es que basten medidas de seguridad, como barras o protectores en la cuna, para que no se haga daño."
+      ]
+    },
+    {
+      "source_type": "reference",
+      "title": "¿Cuándo tengo que ir a Urgencias con mi hijo? (Familia y Salud, AEPap)",
+      "organization": "Asociación Española de Pediatría de Atención Primaria (AEPap)",
+      "publication_year": 2020,
+      "url": "https://www.familiaysalud.es/temas-sociales/relacion-con-nuestros-pacientes/organizacion-asistencial/cuando-tengo-que-ir",
+      "specialties": ["pediatrics", "general_medicine", "emergency_medicine"],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "topics": ["respiracion_normal", "pausas_brue", "tos"],
+      "chunks": [
+        "¿Cuándo tengo que ir a Urgencias con mi hijo? (Familia y Salud, AEPap, 2020). Tema: cuántas respiraciones por minuto son demasiadas según la edad. Hallazgo: la página explica que la respiración hay que valorarla con el niño tranquilo, sin fiebre y sin mocos, y que a veces conviene lavarle antes la nariz para verla mejor. Considera que respira más rápido de lo normal un bebé menor de 2 meses con más de 60 respiraciones por minuto, uno de 2 a 12 meses con más de 50, y un niño desde el año hasta los 5 años con más de 40. La dificultad para respirar, es decir, respirar más rápido o agitado, marcar las costillas o los músculos del cuello, hundir el esternón, hacer silbidos o ruidos fuertes y roncos o tener sensación de ahogo, figura entre los motivos para ir a urgencias.",
+        "¿Cuándo tengo que ir a Urgencias con mi hijo? (Familia y Salud, AEPap, 2020). Tema: cuándo llamar al 112 y cuándo basta con pedir cita por la respiración o la tos. Hallazgo: según la página, hay que llamar al 112 o acudir a urgencias de forma inmediata si al niño le cuesta mucho respirar o respira con pausas largas, si tiene muy mal color (muy pálido, piel moteada, azul o grisácea), si se ha atragantado y tiene mucha dificultad para respirar, o si está aletargado, no responde a estímulos o está muy somnoliento. En cambio, una tos de varios días que no mejora y sin dificultad para respirar es motivo para pedir cita con el pediatra de atención primaria. La página recuerda la norma de que cuanto más pequeño es el niño, antes hay que consultar."
+      ]
+    },
+    {
+      "source_type": "reference",
+      "title": "Bronquiolitis, información para padres (SEUP)",
+      "organization": "Sociedad Española de Urgencias de Pediatría (SEUP)",
+      "publication_year": null,
+      "url": "https://seup.org/wp-content/uploads/2026/01/4_Bronquiolitis.pdf",
+      "specialties": ["pediatrics", "general_medicine", "emergency_medicine"],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "topics": ["bronquiolitis"],
+      "chunks": [
+        "Bronquiolitis, información para padres (hoja informativa de la Sociedad Española de Urgencias de Pediatría). Tema: qué es, cómo empieza y qué hacer en casa. Hallazgo: es una infección de los bronquios pequeños por virus, sobre todo el VRS, que aparece en epidemias de octubre a marzo y afecta mayoritariamente a menores de 2 años. Empieza como un catarro con tos y mocos y a veces fiebre; a los 2 a 4 días puede aparecer dificultad para respirar: respiran más deprisa, están irritables, les cuesta comer, se oyen ruidos en el pecho o se les marcan las costillas. En casa la hoja recomienda lavados nasales, tomas pequeñas y frecuentes, posición semiincorporada, antitérmico si hay fiebre, evitar de forma estricta el humo de tabaco y lavarse mucho las manos. No son útiles los antibióticos, los jarabes para la tos, los mucolíticos ni los corticoides.",
+        "Bronquiolitis, información para padres (hoja informativa de la Sociedad Española de Urgencias de Pediatría). Tema: evolución y signos de urgencia. Hallazgo: la mayoría son leves y se manejan con medidas generales y seguimiento por el pediatra de atención primaria; son más vulnerables los menores de 3 meses, los prematuros y los niños con problemas de salud previos, que a veces necesitan oxígeno en el hospital. Ningún medicamento la cura y suele mejorar en 2 semanas, aunque la tos dura más. En casa se vigilan la respiración, las tomas, el color, el estado general y la fiebre. La hoja indica consultar en un servicio de urgencias si respira cada vez peor o más deprisa, si deja de respirar unos segundos o se le ponen los labios azul morado, si le cuesta hacer las tomas, las rechaza o vomita, si no moja el pañal y tiene la boca seca, si está muy decaído o quejoso, o si tiene fiebre muy alta."
+      ],
+      "undated_reason": "Hoja informativa en PDF de la SEUP sin fecha de publicación visible en el documento; consultada el 2026-11-02."
+    },
+    {
+      "source_type": "reference",
+      "title": "Laringitis, información para padres (SEUP)",
+      "organization": "Sociedad Española de Urgencias de Pediatría (SEUP)",
+      "publication_year": null,
+      "url": "https://seup.org/wp-content/uploads/2025/05/19_Laringitis.pdf",
+      "specialties": ["pediatrics", "general_medicine", "emergency_medicine"],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "topics": ["laringitis"],
+      "chunks": [
+        "Laringitis, información para padres (hoja informativa de la Sociedad Española de Urgencias de Pediatría). Tema: qué es la laringitis y cómo se manifiesta. Hallazgo: la laringitis o crup laríngeo es una inflamación aguda de la laringe, donde están las cuerdas vocales; al pasar el aire por la laringe inflamada se oye un ruido llamado estridor. La causan distintos virus y es más frecuente desde los 6 meses hasta los 6 años, en otoño y a principios de invierno. Lo típico es un niño acatarrado que de repente, por la noche, empieza con una tos metálica que recuerda a un perro o a una foca, a veces con afonía; el ruido parece empeorar si está nervioso o llora. Casi todas son leves, las complicaciones son poco frecuentes y los síntomas se resuelven en pocos días, aunque pueden durar hasta una semana.",
+        "Laringitis, información para padres (hoja informativa de la Sociedad Española de Urgencias de Pediatría). Tema: cuidados en casa y cuándo ir a urgencias. Hallazgo: la hoja aconseja evitar el ambiente seco con depósitos de agua en los radiadores; la humedad puede mejorar los síntomas, por ejemplo con el niño en el baño con los grifos de agua caliente abiertos, o respirando aire fresco bien abrigado en la ventana o la terraza. Es normal que coma poco: no hay que forzarle y sí ofrecerle líquidos. No necesita antibiótico, y no se le deben dar jarabes ni supositorios para la tos sin consultar al pediatra. Hay que consultar en un servicio de urgencias si hace ruido al coger aire aunque esté tranquilo, si la dificultad para respirar empeora (respira más deprisa, se le marcan las costillas, mueve mucho el abdomen, se le hunde el pecho o estira el cuello) o si le cuesta tragar o babea mucho."
+      ],
+      "undated_reason": "Hoja informativa en PDF de la SEUP sin fecha de publicación visible en el documento; consultada el 2026-11-02."
+    },
+    {
+      "source_type": "reference",
+      "title": "Otitis media aguda, información para padres (SEUP)",
+      "organization": "Sociedad Española de Urgencias de Pediatría (SEUP)",
+      "publication_year": null,
+      "url": "https://seup.org/wp-content/uploads/2025/05/21_Otitis_media.pdf",
+      "specialties": ["pediatrics", "general_medicine", "emergency_medicine"],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "topics": ["otitis", "chupete"],
+      "chunks": [
+        "Otitis media aguda, información para padres (hoja informativa de la Sociedad Española de Urgencias de Pediatría). Tema: síntomas y evolución de la otitis. Hallazgo: es la infección e inflamación del oído medio, detrás del tímpano, que suele aparecer como complicación de un catarro con mucha mucosidad y es una de las infecciones más frecuentes en menores de 2 años. El síntoma principal es el dolor de oído, de inicio más o menos brusco y peor por la noche; los lactantes pueden estar irritables y frotarse o tirarse de la oreja, y puede haber fiebre, oír peor, vómitos y falta de apetito. A veces se perfora un poco el tímpano y sale pus o sangre por el oído, y después suele mejorar el dolor. Habitualmente los síntomas se resuelven en 48 a 72 horas tratando el dolor, y en general no hace falta antibiótico.",
+        "Otitis media aguda, información para padres (hoja informativa de la Sociedad Española de Urgencias de Pediatría). Tema: cuidados en casa, cuándo ver al pediatra y cuándo ir a urgencias. Hallazgo: tratar el dolor es fundamental; no hay que echar nada en el oído ni mojarlo si ha supurado, y en lactantes conviene hacer lavados nasales con suero. La hoja aconseja consultar con el pediatra, que decidirá si hace falta antibiótico, si el niño es menor de 6 meses, tiene mal estado general, fiebre de 39 ºC o más o supuración, ha tenido otitis antes o no mejora tras 48 a 72 horas de analgésico. Indica acudir a urgencias si tiene mal estado general, dolor de cabeza intenso, está decaído, somnoliento o muy irritable, o si detrás de la oreja hay enrojecimiento, dolor o hinchazón o la oreja se desplaza hacia delante. El humo de tabaco y el chupete a partir de los 6 meses favorecen las otitis."
+      ],
+      "undated_reason": "Hoja informativa en PDF de la SEUP sin fecha de publicación visible en el documento; consultada el 2026-11-02."
+    },
+    {
+      "source_type": "reference",
+      "title": "Catarro de vías altas, información para padres (SEUP)",
+      "organization": "Sociedad Española de Urgencias de Pediatría (SEUP)",
+      "publication_year": null,
+      "url": "https://seup.org/wp-content/uploads/2025/05/5_Catarro.pdf",
+      "specialties": ["pediatrics", "general_medicine", "emergency_medicine"],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "topics": ["resfriado_mocos", "lavados_nasales"],
+      "chunks": [
+        "Catarro de vías altas, información para padres (hoja informativa de la Sociedad Española de Urgencias de Pediatría). Tema: qué es un catarro, cuántos son normales y qué hacer en casa. Hallazgo: es una infección vírica de nariz y garganta muy frecuente en los primeros años de vida: es normal tener entre 6 y 8 catarros al año, o más si el niño va a la guardería. Da mocos, estornudos, tos y a veces fiebre. En casa conviene que beba muchos líquidos; en los más pequeños se pueden hacer lavados nasales antes de las tomas y de dormir, preferiblemente con suero salino y nunca con agua del grifo; y hay que alejarlo del humo. Es normal que tenga poco apetito y no hay que forzarle. No se debe dar miel a menores de un año, y no se deben usar anticatarrales como mucolíticos, descongestivos o jarabes para la tos, sobre todo en menores de 6 años.",
+        "Catarro de vías altas, información para padres (hoja informativa de la Sociedad Española de Urgencias de Pediatría). Tema: cuánto dura un catarro y cuándo ir a urgencias. Hallazgo: la duración es muy variable; en general los mocos pueden durar hasta una semana, la fiebre, si la hay, suele ceder en 2 o 3 días y la tos puede durar más de una semana. No existen medicamentos que curen el catarro, y los antibióticos no lo curan ni evitan sus complicaciones. En casa hay que vigilar el estado general y la aparición de dificultad para respirar, como marcar las costillas, hundirse el pecho o respirar rápido. La hoja indica consultar en un servicio de urgencias si empeora el estado general y el niño está decaído, somnoliento o muy irritable, o cuando aparece dificultad para respirar. Para prevenirlo, lavarse las manos a menudo y cubrirse al toser o estornudar."
+      ],
+      "undated_reason": "Hoja informativa en PDF de la SEUP sin fecha de publicación visible en el documento; consultada el 2026-11-02."
+    },
+    {
+      "source_type": "reference",
+      "title": "La AAP recomienda un nuevo término para eventos breves e inexplicables que ocurren en los recién nacidos sin problemas de salud subyacentes o riesgos del síndrome de la muerte súbita del lactante (HealthyChildren, AAP)",
+      "organization": "American Academy of Pediatrics",
+      "publication_year": 2016,
+      "url": "https://www.healthychildren.org/Spanish/news/Paginas/AAP-Recommends-New-Term-for-Brief-Unexplained-Events-in-Newborns-with-No-Underlying-Health.aspx",
+      "specialties": ["pediatrics", "general_medicine", "emergency_medicine"],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "topics": ["pausas_brue"],
+      "chunks": [
+        "La AAP recomienda un nuevo término para eventos breves e inexplicables que ocurren en los recién nacidos sin problemas de salud subyacentes o riesgos del síndrome de la muerte súbita del lactante (HealthyChildren, American Academy of Pediatrics, 2016). Tema: qué es un BRUE según la guía de la AAP de 2016. Hallazgo: la guía de práctica clínica de la AAP sustituyó el término ALTE (evento de aparente riesgo para la vida) por BRUE, evento breve resuelto de causa inexplicable. Se aplica a bebés de hasta 12 meses que parecen estar bien y sufren un episodio de menos de un minuto que se resuelve por sí solo, con uno o más de estos signos: piel pálida o azulada, ausencia de respiración o respiración irregular, un cambio marcado del tono muscular o un nivel de respuesta alterado.",
+        "La AAP recomienda un nuevo término para eventos breves e inexplicables que ocurren en los recién nacidos sin problemas de salud subyacentes o riesgos del síndrome de la muerte súbita del lactante (HealthyChildren, American Academy of Pediatrics, 2016). Tema: pruebas tras un BRUE. Hallazgo: antes, un bebé llevado al hospital tras un episodio así podía ser ingresado y sometido a estudios de imagen y otras pruebas que tienen sus propios riesgos y no siempre llevan a un diagnóstico. Según la guía, salvo que el bebé tenga otros factores de riesgo identificables, como fiebre o antecedentes médicos, no es necesario ni útil hacer pruebas de detección. El nuevo nombre refleja que son episodios pasajeros, sin causa clara, que muy rara vez ponen la vida en peligro."
+      ]
+    },
+    {
+      "source_type": "reference",
+      "title": "9 maneras de disminuir el riesgo de muerte súbita y asfixia del bebé (HealthyChildren, AAP)",
+      "organization": "American Academy of Pediatrics",
+      "publication_year": 2026,
+      "url": "https://www.healthychildren.org/Spanish/ages-stages/baby/sleep/Paginas/preventing-sids.aspx",
+      "specialties": ["pediatrics", "general_medicine"],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "topics": ["muerte_subita_sueno_seguro", "colecho", "chupete"],
+      "chunks": [
+        "9 maneras de disminuir el riesgo de muerte súbita y asfixia del bebé (HealthyChildren, American Academy of Pediatrics, 2026). Tema: postura y superficie para dormir del bebé hasta 1 año. Hallazgo: las recomendaciones valen para bebés sanos de hasta 1 año. Hay que acostarlo boca arriba para la siesta y por la noche; si ya se gira solo en ambos sentidos, puede dejarse en la postura que adopte. Si se duerme en la silla del coche, el carrito, una hamaca o un portabebés, hay que pasarlo cuanto antes a una superficie firme y no inclinada. La cuna o el moisés deben tener una sábana bien ajustada y nada blando: almohadas, colchas, edredones, protectores de cuna o peluches pueden asfixiarlo. Nunca debe dormir en un sofá, un sillón, una cama de agua o un almohadón, y el adulto no debe quedarse dormido en el sofá con el bebé en brazos.",
+        "9 maneras de disminuir el riesgo de muerte súbita y asfixia del bebé (HealthyChildren, American Academy of Pediatrics, 2026). Tema: compartir habitación sin compartir cama. Hallazgo: la AAP recomienda que el bebé duerma en la misma habitación que los padres pero no en la misma cama, durante al menos 6 meses y preferiblemente hasta que cumpla 1 año, con la cuna o el moisés al alcance de la mano para vigilarlo y amamantarlo con facilidad. Explica que los bebés que duermen en la cama de sus padres corren riesgo de muerte súbita, asfixia o estrangulación, porque un adulto puede girarse sobre ellos o pueden enredarse en sábanas o mantas, y que hacen falta más estudios para recomendar o desaconsejar las camas colecho o las cunas que se colocan dentro de la cama.",
+        "9 maneras de disminuir el riesgo de muerte súbita y asfixia del bebé (HealthyChildren, American Academy of Pediatrics, 2026). Tema: lactancia, tabaco, calor, vacunas y chupete. Hallazgo: amamantar todo lo posible reduce el riesgo, igual que alejar al bebé del humo de tabaco, también al aire libre, y acudir a las revisiones para recibir las vacunas. Hay que evitar que pase calor: habitación a temperatura cómoda, como mucho una capa de ropa más que el adulto, sin mantas ni ropa pesada ni gorro dentro de casa, y mejor un saco de dormir que mantas sueltas. Ofrecer el chupete en la siesta y al dormir ayuda a reducir el riesgo; si toma pecho, conviene esperar a que la lactancia esté encauzada y el bebé gane peso. No hay que volver a ponérselo si se le cae dormido, ni usar chupetes sujetos a la ropa, mantas o peluches."
+      ]
+    },
+    {
+      "source_type": "reference",
+      "title": "Sueño seguro: la mejor posición es boca arriba, evite la ropa de cama suave, las superficies inclinadas y compartir la cama (HealthyChildren, AAP)",
+      "organization": "American Academy of Pediatrics",
+      "publication_year": 2022,
+      "url": "https://www.healthychildren.org/Spanish/news/Paginas/safe-sleep-back-is-best-avoid-soft-bedding-inclined-surfaces-and-bedsharing.aspx",
+      "specialties": ["pediatrics", "general_medicine"],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "topics": ["colecho", "muerte_subita_sueno_seguro"],
+      "chunks": [
+        "Sueño seguro: la mejor posición es boca arriba, evite la ropa de cama suave, las superficies inclinadas y compartir la cama (HealthyChildren, American Academy of Pediatrics, 2022). Tema: posición de la AAP sobre compartir la cama con el bebé. Hallazgo: en su actualización de 2022 de las recomendaciones de sueño seguro, que se aplican a bebés de hasta 1 año, la AAP reconoce que muchos padres eligen compartir la cama, por ejemplo para facilitar la lactancia o por preferencia cultural, pero afirma que la evidencia muestra que aumenta mucho el riesgo de que el bebé se lesione o muera y que por eso no puede apoyar compartir la cama bajo ninguna circunstancia. Recomienda que los padres duerman en la misma habitación pero no en la misma cama que el bebé, preferiblemente durante al menos los primeros seis meses.",
+        "Sueño seguro: la mejor posición es boca arriba, evite la ropa de cama suave, las superficies inclinadas y compartir la cama (HealthyChildren, American Academy of Pediatrics, 2022). Tema: cuánto aumenta el riesgo según cómo se comparte el sueño. Hallazgo: según la AAP, el riesgo de muerte relacionada con el sueño es hasta 67 veces mayor si se duerme con el bebé en un sofá, un sillón blando o un cojín, y 10 veces mayor si se duerme con una persona cansada, que ha tomado sedantes, alcohol o drogas, o que fuma. Compartir la superficie de sueño multiplica además el riesgo de 5 a 10 veces si el bebé tiene menos de cuatro meses, si la otra persona no es uno de los padres o si es prematuro o de bajo peso. Pide una superficie firme y plana, no usar sillas ni portabebés para el sueño habitual y no fiarse de monitores ni de productos que prometen evitar la muerte súbita."
+      ]
+    },
+    {
+      "source_type": "reference",
+      "title": "Uso de chupos o chupetes y chuparse el pulgar (HealthyChildren, AAP)",
+      "organization": "American Academy of Pediatrics",
+      "publication_year": 2021,
+      "url": "https://www.healthychildren.org/Spanish/ages-stages/baby/crying-colic/Paginas/pacifiers-and-thumb-sucking.aspx",
+      "specialties": ["pediatrics", "general_medicine"],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "topics": ["chupete"],
+      "chunks": [
+        "Uso de chupos o chupetes y chuparse el pulgar (HealthyChildren, American Academy of Pediatrics, 2021). Tema: cuándo y cómo ofrecer el chupete al bebé. Hallazgo: si el bebé necesita succionar más de lo que le dan el pecho o el biberón, el chupete puede cubrir esa necesidad. La AAP aconseja ofrecerlo en la siesta y a la hora de dormir porque ayuda a disminuir el riesgo de síndrome de muerte súbita del lactante; si se amamanta, conviene esperar a que la lactancia vaya bien, lo que suele llevar unas 3 a 4 semanas. No debe usarse para sustituir o retrasar una toma, no hay que obligar al bebé si no lo quiere y nunca debe atarse a la cuna, al cuello o a la mano, porque puede causar lesiones graves o la muerte. Si depende del chupete para dormirse, puede despertarse cuando se le cae.",
+        "Uso de chupos o chupetes y chuparse el pulgar (HealthyChildren, American Academy of Pediatrics, 2021). Tema: elegir un chupete seguro y cuándo la succión se vuelve un problema. Hallazgo: conviene un modelo de una sola pieza con tetina blanda y un protector de al menos 3,81 cm de ancho, de plástico duro y con orificios para el aire, revisarlo de vez en cuando y cambiarlo si la goma cambia de color o se rompe; no hay que usar la tetina de un biberón como chupete. Hasta los 6 meses se recomienda limpiarlo a menudo, hirviéndolo o en el lavavajillas. La succión intensa del chupete o del dedo a partir de los 2 a 4 años puede afectar a la forma de la boca y a la alineación de los dientes; la mayoría de los niños lo dejan solos, y las burlas o los castigos no ayudan."
+      ]
+    },
+    {
+      "source_type": "reference",
+      "title": "Reflejos y comportamiento del recién nacido (HealthyChildren, AAP)",
+      "organization": "American Academy of Pediatrics",
+      "publication_year": null,
+      "url": "https://www.healthychildren.org/Spanish/tips-tools/symptom-checker/Paginas/symptomviewer.aspx?symptom=Reflejos+y+comportamiento+del+reci%C3%A9n+nacido",
+      "specialties": ["pediatrics", "general_medicine", "neonatology"],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "topics": ["respiracion_normal", "respiracion_periodica", "pausas_brue"],
+      "chunks": [
+        "Reflejos y comportamiento del recién nacido (HealthyChildren, American Academy of Pediatrics). Tema: respiración periódica y otras irregularidades normales de la respiración del recién nacido. Hallazgo: la guía describe como normal una pausa respiratoria pasajera de menos de 10 segundos, llamada respiración periódica, a la que a menudo sigue una respiración más rápida para ponerse al día; es normal si el bebé está cómodo durante la pausa, la frecuencia normal debe ser inferior a 60 respiraciones por minuto y suele resolverse hacia el mes de edad. También son normales las respiraciones rápidas y cada vez más profundas que se normalizan en un minuto, la respiración paradójica (el pecho se hunde cuando el abdomen se expande) y los bostezos o suspiros. Aconseja llamar al médico si respira rápido o se pone azul, si le cuesta respirar o si la respiración se para más de 10 segundos.",
+        "Reflejos y comportamiento del recién nacido (HealthyChildren, American Academy of Pediatrics). Tema: ruidos normales al respirar y al dormir en el recién nacido. Hallazgo: los gorgoteos de la garganta, por el paso del aire a través de la saliva o de la leche regurgitada, son comunes durante el sueño y van desapareciendo cuando el bebé aprende a tragar más a menudo. Los ruidos de la nariz suelen deberse a moco seco y no a un resfriado; como la nariz tapada dificulta mamar, hay que ayudarle a despejarla con suero salino y, si hace falta, un aspirador de pera, nunca con bastoncillos. Durante el sueño también son normales gemidos, gruñidos y otros ruidos extraños, que suelen preocupar a los padres que usan un monitor. Hay que llamar al médico si los lavados no funcionan o si el bebé tiene dificultad para respirar.",
+        "Reflejos y comportamiento del recién nacido (HealthyChildren, American Academy of Pediatrics). Tema: cuándo es urgente un problema de respiración en el recién nacido. Hallazgo: la guía indica llamar a emergencias (112) o ir a urgencias de inmediato si el bebé tiene mucha dificultad para respirar y se esfuerza en cada respiración, si empieza a gemir o gruñir con cada respiración, si tiene ahora los labios, la lengua o la cara azulados o grises, si no logra despertarse o si no se mueve o está muy débil. Indica llamar al médico o buscar atención médica en ese momento si la respiración se detuvo durante más de 10 segundos y ahora es normal, si tiene problemas para respirar que no son graves o si es menor de 1 mes y su aspecto o comportamiento son anormales."
+      ],
+      "undated_reason": "Guía de síntomas de HealthyChildren (Barton Schmitt, Schmitt Pediatric Guidelines) sin fecha de publicación; solo muestra copyright 2000-2025; consultada el 2026-11-02."
+    },
+    {
+      "source_type": "reference",
+      "title": "Cómo detectar el síndrome de apnea del sueño (HealthyChildren, AAP)",
+      "organization": "American Academy of Pediatrics",
+      "publication_year": 2015,
+      "url": "https://www.healthychildren.org/Spanish/ages-stages/baby/sleep/Paginas/Sleep-Apnea-Detection.aspx",
+      "specialties": ["pediatrics", "general_medicine", "pulmonology"],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "topics": ["ronquido_apnea"],
+      "chunks": [
+        "Cómo detectar el síndrome de apnea del sueño (HealthyChildren, American Academy of Pediatrics, 2015). Tema: síntomas de apnea del sueño en niños y qué hacer. Hallazgo: la página dice que la apnea del sueño es un problema común que afecta a cerca de un 2 % de los niños, muchos sin diagnosticar, y que sin tratamiento puede llevar a problemas de corazón, de conducta, de aprendizaje y de crecimiento. Sus síntomas son los ronquidos frecuentes, los problemas para respirar durante la noche, la somnolencia durante el día, la dificultad para prestar atención y los problemas de conducta. Si se nota alguno de ellos, aconseja comunicarse con el pediatra cuanto antes, que puede pedir un estudio del sueño nocturno (polisomnograma) en un hospital o centro médico grande.",
+        "Cómo detectar el síndrome de apnea del sueño (HealthyChildren, American Academy of Pediatrics, 2015). Tema: tratamiento de la apnea del sueño en niños. Hallazgo: muchos niños con apnea del sueño tienen amígdalas y adenoides grandes, y el tratamiento más común es extirparlas (amigdalectomía y adenoidectomía), que según la página es muy eficaz. Otra opción eficaz es la presión continua de aire por la nariz (CPAP) con una mascarilla durante el sueño, que suele usarse en niños que no mejoran tras la operación o no pueden operarse. Los niños con síndrome de Down, parálisis cerebral o malformaciones del cráneo y de la cara tienen más predisposición y pueden necesitar tratamiento adicional, igual que los niños con sobrepeso. Ante estos síntomas, la página insiste en hablar con el pediatra."
+      ]
+    },
+    {
+      "source_type": "reference",
+      "title": "Difficulty Breathing (Healthier Together, NHS)",
+      "organization": "NHS (National Health Service, Reino Unido)",
+      "publication_year": 2026,
+      "url": "https://www.healthiertogether.nhs.uk/new-parent-and-baby/difficulty-breathing",
+      "specialties": ["pediatrics", "general_medicine", "emergency_medicine"],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "topics": ["respiracion_normal", "respiracion_periodica", "pausas_brue", "colecho"],
+      "chunks": [
+        "Difficulty Breathing (Healthier Together, NHS, Servicio Nacional de Salud del Reino Unido, 2026). Tema: cómo respira normalmente un bebé recién nacido. Hallazgo: la página explica que los bebés respiran más rápido que los adultos y que los niños mayores, y que es normal que un recién nacido haga pequeñas pausas en la respiración de unos pocos segundos o respire deprisa durante un rato corto; hacia las 6 semanas de edad su respiración debería ser más regular. Si está enfermo, la frecuencia puede subir durante más tiempo y se le nota más esfuerzo; como comer es lo que más le cansa, a menudo se nota primero en las tomas, y si le falta tanto el aire que no puede comer necesita que lo vea un profesional con urgencia. Una causa frecuente de dificultad para respirar en los bebés es la bronquiolitis.",
+        "Difficulty Breathing (Healthier Together, NHS, Servicio Nacional de Salud del Reino Unido, 2026). Tema: niveles de urgencia ante la dificultad para respirar en el bebé. Hallazgo: la página pide llamar a emergencias (112) o ir a urgencias si el bebé respira muy rápido o su respiración se para o hace pausas, si emite un quejido cada vez que suelta el aire, si tiene estridor todo el tiempo aunque esté tranquilo, si se pone pálido, azulado, moteado o muy frío, si cuesta despertarlo, si tiene un llanto débil, agudo y continuo o si tiene una convulsión. Pide consejo médico urgente el mismo día si se esfuerza para respirar y se le hunden los músculos bajo las costillas, si tiene estridor solo al llorar, si toma menos de la mitad de lo habitual, si no ha mojado el pañal en 8 horas o si está muy irritable.",
+        "Difficulty Breathing (Healthier Together, NHS, Servicio Nacional de Salud del Reino Unido, 2026). Tema: cuidados en casa para un bebé con dificultad para respirar. Hallazgo: la página aconseja seguir poniendo al bebé boca arriba para dormir, mantener plana la superficie de sueño sin inclinar ni elevar el colchón, la cuna ni al bebé salvo indicación de un profesional, no hacer colecho mientras el bebé esté enfermo con bronquiolitis o una infección respiratoria, y evitar el humo de tabaco, que empeora la respiración y se queda en la ropa aunque se fume fuera. Si no aparece ningún signo de alarma, se puede seguir cuidándolo en casa vigilando cualquier cambio y, si sigue la preocupación, pedir consejo a la enfermera de salud infantil o a la farmacia."
+      ]
+    },
+    {
+      "source_type": "reference",
+      "title": "Sudden infant death syndrome (SIDS) (NHS)",
+      "organization": "NHS (National Health Service, Reino Unido)",
+      "publication_year": 2025,
+      "url": "https://www.nhs.uk/baby/caring-for-a-newborn/sudden-infant-death-syndrome-sids/",
+      "specialties": ["pediatrics", "general_medicine"],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "topics": ["muerte_subita_sueno_seguro", "colecho", "chupete"],
+      "chunks": [
+        "Sudden infant death syndrome (SIDS) (NHS, Servicio Nacional de Salud del Reino Unido, 2025). Tema: qué es la muerte súbita del lactante y cómo acostar al bebé. Hallazgo: es la muerte repentina e inexplicada de un bebé aparentemente sano de hasta 12 meses, más probable en los primeros 6 meses y posible en cualquier sueño, de día o de noche. Tienen más riesgo los nacidos antes de las 37 semanas o con menos de 2,5 kg. El NHS aconseja acostarlo siempre boca arriba con los pies tocando el extremo de la cuna, volver a ponerlo boca arriba si se gira hasta que sepa girarse solo en los dos sentidos, y que duerma en su propia cuna o moisés en la habitación de los padres en todos los sueños al menos los primeros 6 meses, con colchón firme y plano y sin almohadas, edredones, protectores, mantas sueltas, peluches ni nidos.",
+        "Sudden infant death syndrome (SIDS) (NHS, Servicio Nacional de Salud del Reino Unido, 2025). Tema: tabaco, temperatura, chupete y vacunas. Hallazgo: el NHS pide amamantar si es posible, pensar en el chupete para dormirlo, porque algunos estudios sugieren que reduce el riesgo, y tener las vacunas al día. No hay que dormir con el bebé en un sofá o un sillón, ni fumar en el embarazo o cerca del bebé. La habitación debe estar entre 16 y 20 ºC; la temperatura del bebé se comprueba tocando el pecho o la nuca, no las manos ni los pies, y se le quita ropa o ropa de cama si está caliente o suda. Nunca debe dormir con bolsa de agua caliente o manta eléctrica, junto a un radiador o al sol. Si se duerme en la silla del coche durante un viaje, hay que sacarlo al llegar.",
+        "Sudden infant death syndrome (SIDS) (NHS, Servicio Nacional de Salud del Reino Unido, 2025). Tema: posición del NHS sobre el colecho y cuándo llamar a emergencias. Hallazgo: el lugar más seguro es una cuna o moisés propio sin juguetes, mantas ni almohadas. Si se comparte la cama en algún momento, el NHS pide hacerlo de forma más segura: bebé boca arriba en colchón firme y plano, sin almohadas ni mantas cerca, sin envolverlo, sin otros niños ni mascotas en la cama, nunca solo en una cama de adulto y sin riesgo de caída. No es seguro si fue prematuro o pesó menos de 2,5 kg, ni si un adulto fuma, ha tomado 2 o más unidades de alcohol, drogas o medicamentos que dan sueño. El NHS indica llamar a emergencias (112) o ir a urgencias si el bebé deja de respirar, no se despierta o lucha por respirar."
+      ]
+    },
+    {
+      "source_type": "reference",
+      "title": "Croup (NHS)",
+      "organization": "NHS (National Health Service, Reino Unido)",
+      "publication_year": 2023,
+      "url": "https://www.nhs.uk/conditions/croup/",
+      "specialties": ["pediatrics", "general_medicine"],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "topics": ["laringitis"],
+      "chunks": [
+        "Croup (NHS, Servicio Nacional de Salud del Reino Unido, 2023). Tema: síntomas del crup y a quién consultar. Hallazgo: el crup es una enfermedad frecuente que afecta sobre todo a las vías respiratorias de bebés y niños pequeños; suele ser leve, pero el NHS indica pedir consejo médico urgente el mismo día si se sospecha, porque puede necesitar tratamiento. Da tos perruna que puede sonar como una foca, voz ronca, dificultad para respirar y un sonido agudo y áspero al coger aire. Suele empezar con síntomas de catarro, aparece a los pocos días y a menudo empeora por la noche. Pide ese consejo urgente si se cree que es crup o si empeora o no mejora tras la consulta; a veces se deriva al hospital, sobre todo si está más grave o es menor de 3 meses.",
+        "Croup (NHS, Servicio Nacional de Salud del Reino Unido, 2023). Tema: cuidados en casa del crup leve y cuándo llamar a emergencias. Hallazgo: suele mejorar solo en 48 horas. Si un profesional confirma que es un crup leve, el NHS aconseja mantener al niño sentado y erguido, calmarlo porque el llanto empeora los síntomas, darle muchos líquidos y vigilarlo a menudo, también de noche, y desaconseja ponerlo en una habitación con vapor o hacerle inhalar vapor. Indica llamar a emergencias (112) o ir a urgencias si lucha por respirar (quejido, se le hunde la tripa bajo las costillas), tiene la piel, los labios o la lengua azulados, grises, pálidos o con manchas, está más dormido de lo normal o cuesta despertarlo, está flojo o no responde, está muy agitado sin poder calmarse y con dificultad para respirar, o babea más de lo normal, le cuesta tragar o quiere estar sentado."
+      ]
+    },
+    {
+      "source_type": "reference",
+      "title": "Bronchiolitis (NHS)",
+      "organization": "NHS (National Health Service, Reino Unido)",
+      "publication_year": 2026,
+      "url": "https://www.nhs.uk/conditions/bronchiolitis/",
+      "specialties": ["pediatrics", "general_medicine", "pulmonology"],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "topics": ["bronquiolitis"],
+      "chunks": [
+        "Bronchiolitis (NHS, Servicio Nacional de Salud del Reino Unido, 2026). Tema: síntomas y curso de la bronquiolitis. Hallazgo: es una infección del pecho frecuente que afecta a bebés y niños menores de 2 años; suele ser leve y tratarse en casa, pero puede ser grave. Empieza como un catarro con estornudos, nariz que moquea o tapada y algo de fiebre, y después puede aparecer tos, respiración más rápida, dificultad para comer, respiración ruidosa con pitos o crepitantes e irritabilidad. Los síntomas suelen ser peores entre los días 3 y 5, y la tos suele mejorar en 3 semanas. Tienen más riesgo de enfermar gravemente los menores de 6 meses, los prematuros y los niños con defensas bajas o enfermedades de pulmón o de corazón.",
+        "Bronchiolitis (NHS, Servicio Nacional de Salud del Reino Unido, 2026). Tema: cuándo llamar a emergencias y cuándo pedir consejo urgente. Hallazgo: el NHS indica llamar a emergencias (112) o ir a urgencias si el niño tiene dificultad para respirar (quejidos, se le hunde la tripa bajo las costillas o respira deprisa), si hace pausas al respirar, si tiene la piel, la lengua o los labios azulados o grises, o si está flojo y no se despierta o no se mantiene despierto. Indica pedir consejo médico urgente el mismo día si el catarro empeora, si come mucho menos de lo normal, si lleva 12 horas o más con el pañal seco u otros signos de deshidratación, si es menor de 3 meses con 38 ºC o mayor de 3 meses con 39 ºC o más, si está muy cansado o irritable, o si los padres están preocupados.",
+        "Bronchiolitis (NHS, Servicio Nacional de Salud del Reino Unido, 2026). Tema: cuidados en casa y prevención de la bronquiolitis. Hallazgo: no hay un tratamiento específico; suele curarse sola y se puede cuidar al niño en casa. El NHS aconseja mantenerlo lo más erguido posible cuando está despierto para que respire mejor, vigilarlo a menudo también de noche y que beba muchos líquidos, en los bebés con tomas más pequeñas y más frecuentes. No hay que fumar cerca de él, porque los niños que respiran humo tienen más riesgo de bronquiolitis grave, ni intentar bajar la fiebre con agua fría o desnudándolo. Para prevenirla: lavarse las manos, limpiar juguetes y superficies, no compartir cubiertos ni vasos, usar pañuelos desechables y alejar a los recién nacidos de personas con catarro o gripe."
+      ]
+    },
+    {
+      "source_type": "reference",
+      "title": "Ear infections (NHS)",
+      "organization": "NHS (National Health Service, Reino Unido)",
+      "publication_year": 2025,
+      "url": "https://www.nhs.uk/conditions/ear-infections/",
+      "specialties": ["pediatrics", "general_medicine"],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "topics": ["otitis", "chupete"],
+      "chunks": [
+        "Ear infections (NHS, Servicio Nacional de Salud del Reino Unido, 2025). Tema: síntomas de otitis en bebés y cuánto duran. Hallazgo: las infecciones de oído son muy frecuentes en los niños y a menudo mejoran solas en 3 días, aunque a veces duran hasta una semana. La del oído medio suele afectar a niños y la causan virus como los del catarro y la gripe. Los bebés y niños pequeños con otitis pueden frotarse o tirarse de la oreja, no reaccionar a algunos sonidos, estar irritables o inquietos, comer peor o perder el equilibrio, además de dolor, fiebre, oír peor o supuración. Para aliviar, el NHS aconseja analgésicos, limpiar la supuración con algodón por fuera y no meter nada en el oído, y no usar descongestivos ni antihistamínicos porque no hay pruebas de que ayuden.",
+        "Ear infections (NHS, Servicio Nacional de Salud del Reino Unido, 2025). Tema: cuándo ver al médico si un bebé tiene otitis. Hallazgo: el NHS indica pedir cita con el médico, sin urgencia, si un niño menor de 12 meses parece tener una otitis, si el dolor no mejora en 3 días o si las otitis se repiten. Indica pedir consejo médico urgente el mismo día si además se encuentra mal en general, tiene fiebre muy alta o escalofríos, hinchazón alrededor del oído, le sale líquido del oído, cambia su audición o vomita, o si es menor de 12 meses y le duelen los dos oídos. Para prevenir las otitis aconseja tener las vacunas al día, evitar los ambientes con humo y procurar no darle chupete después de los 6 meses."
+      ]
+    }
+  ]
+}
