@@ -28,8 +28,9 @@ DPIA = REPO_ROOT / "docs" / "legal" / "dpia-grabacion-consulta.md"
 LOCALES = ["es", "en", "fr"]
 
 #: Everyone `privacy.whereBody` names as a processor today. Telegram is
-#: optional for the user but is still a party the data crosses.
-PROCESSORS = ["Mistral", "Stripe", "Resend", "Cloudflare", "Telegram"]
+#: optional for the user but is still a party the data crosses. Anthropic was
+#: added on 2026-11-03, before LLM_PROVIDER=anthropic was switched on in prod.
+PROCESSORS = ["Anthropic", "Mistral", "Stripe", "Resend", "Cloudflare", "Telegram"]
 
 #: The closing sentence per locale, with the number as a word.
 CLOSING = {
@@ -47,6 +48,19 @@ CLOUDFLARE_ROLE = {
     "es": ["TLS", "red de distribución", "túnel", "Marco de Privacidad de Datos", "cláusulas contractuales tipo"],
     "en": ["TLS", "content delivery network", "tunnel", "Data Privacy Framework", "standard contractual clauses"],
     "fr": ["TLS", "réseau de diffusion", "tunnel", "Data Privacy Framework", "clauses contractuelles types"],
+}
+#: What Anthropic does, where, and why the transfer is lawful, per locale.
+ANTHROPIC_ROLE = {
+    "es": ["Claude", "fuera de la UE", "cláusulas contractuales tipo", "entrenar"],
+    "en": ["Claude", "outside the EU", "standard contractual clauses", "train"],
+    "fr": ["Claude", "hors de l’UE", "clauses contractuelles types", "entraîner"],
+}
+#: The sentence /profesionales carried while every model ran in the EU. With the
+#: consultation summary and extraction on Claude it is false, so it must be gone.
+PROFESSIONALS_EU_ONLY = {
+    "es": "se alojan y procesan en la Unión Europea",
+    "en": "hosted and processed in the European Union",
+    "fr": "hébergées et traitées dans l'Union européenne",
 }
 #: The phrase the audit asked to bring into the block, per locale.
 NOT_A_SUBSTITUTE = {
@@ -89,18 +103,36 @@ def test_cloudflare_is_declared_with_its_real_role_and_transfer_basis(locale):
     assert not missing, f"the Cloudflare passage ({locale}) lacks {missing}"
 
 
-#: The month the policy carries after the Cloudflare change, per locale.
-UPDATED_MONTH = {"es": "octubre", "en": "October", "fr": "octobre"}
+#: The month the policy carries after the Anthropic change, per locale.
+UPDATED_MONTH = {"es": "noviembre", "en": "November", "fr": "novembre"}
 
 
 @pytest.mark.parametrize("locale", LOCALES)
 def test_the_policy_date_moves_with_the_policy(locale):
-    # The Cloudflare declaration changed the policy on 2026-10-14. A policy that
-    # changes under an older "last updated" date is itself a misstatement.
+    # The Cloudflare declaration changed the policy on 2026-10-14 and the
+    # Anthropic one on 2026-11-03. A policy that changes under an older "last
+    # updated" date is itself a misstatement.
     updated = _catalog(locale)["privacy"]["updated"]
-    assert "14" in updated and "2026" in updated and UPDATED_MONTH[locale] in updated, (
-        f"privacy.updated ({locale}) does not carry the 2026-10-14 change: {updated}"
+    assert re.search(r"\b3\b", updated) and "2026" in updated and UPDATED_MONTH[locale] in updated, (
+        f"privacy.updated ({locale}) does not carry the 2026-11-03 change: {updated}"
     )
+
+
+@pytest.mark.parametrize("locale", LOCALES)
+def test_anthropic_is_declared_with_its_role_location_and_transfer_basis(locale):
+    body = _catalog(locale)["privacy"]["whereBody"]
+    start = body.index("Anthropic")
+    # The Anthropic passage ends where the Mistral one starts.
+    passage = body[start : body.index("Mistral", start)]
+    missing = [term for term in ANTHROPIC_ROLE[locale] if term not in passage]
+    assert not missing, f"the Anthropic passage ({locale}) lacks {missing}"
+
+
+@pytest.mark.parametrize("locale", LOCALES)
+def test_the_professionals_page_no_longer_promises_eu_only_processing(locale):
+    body = _catalog(locale)["professionals"]["whereBody"]
+    assert "Anthropic" in body and "Mistral" in body
+    assert PROFESSIONALS_EU_ONLY[locale] not in body
 
 
 def test_the_dpia_declares_cloudflare_and_dates_the_change():
@@ -110,6 +142,13 @@ def test_the_dpia_declares_cloudflare_and_dates_the_change():
     assert "## 7. Actualizaciones posteriores al cierre" in text
     assert text.index("## 7. Actualizaciones posteriores al cierre") > text.index("Firmado:")
     assert "2026-10-14" in text
+
+
+def test_the_dpia_declares_anthropic_and_dates_the_change():
+    text = DPIA.read_text(encoding="utf-8")
+    updates = text.split("## 7. Actualizaciones posteriores al cierre")[-1]
+    assert "Anthropic" in text.split("## 1. Descripción del tratamiento")[0]
+    assert "2026-11-03" in updates and "Anthropic" in updates
 
 
 @pytest.mark.parametrize("locale", LOCALES)
@@ -126,6 +165,10 @@ def test_the_landing_day_block_carries_its_own_medical_notice(locale):
 @pytest.mark.parametrize("locale", LOCALES)
 def test_new_legal_prose_has_no_em_dash(locale):
     cat = _catalog(locale)
-    for text in (cat["privacy"]["whereBody"], cat["home"]["day"]["disclaimer"]):
+    for text in (
+        cat["privacy"]["whereBody"],
+        cat["professionals"]["whereBody"],
+        cat["home"]["day"]["disclaimer"],
+    ):
         assert "—" not in text
     assert "—" not in DPIA.read_text(encoding="utf-8").split("## 7. Actualizaciones")[-1]
