@@ -5,6 +5,52 @@ import { Bookmark, CalendarCheck, Eye, MessageCircle, Stethoscope } from "lucide
 import remarkGfm from "remark-gfm";
 import { useTranslations } from "next-intl";
 
+// A remark plugin that wraps the literal citation markers of an answer,
+// [ev_N], [ex_N] and [N], in <span class="ad-cite">. The text is untouched,
+// character for character: the marker is still there to read and to verify
+// (UX_PRINCIPLES 11), it just stops weighing what the sentence weighs.
+// mdast-util-to-hast turns a node's data.hName into the element it emits, so
+// no raw HTML is involved and the markdown stays inert. It lives in this file,
+// not in lib/, because answer-reading.spec.ts compiles this module with a
+// plain require that does not know the @/ alias.
+type MdNode = {
+  type: string;
+  value?: string;
+  children?: MdNode[];
+  data?: Record<string, unknown>;
+};
+
+const MARKER = /(\[(?:ev_\d+|ex_\d+|\d+)\])/;
+
+function split(value: string): MdNode[] {
+  return value
+    .split(MARKER)
+    .filter((part) => part !== "")
+    .map((part) =>
+      MARKER.test(part)
+        ? { type: "text", value: part, data: { hName: "span", hProperties: { className: ["ad-cite"] } } }
+        : { type: "text", value: part },
+    );
+}
+
+function walk(node: MdNode) {
+  if (!node.children) return;
+  const children: MdNode[] = [];
+  for (const child of node.children) {
+    if (child.type === "text" && child.value && MARKER.test(child.value)) {
+      children.push(...split(child.value));
+    } else {
+      walk(child);
+      children.push(child);
+    }
+  }
+  node.children = children;
+}
+
+export function remarkCiteMarkers() {
+  return (tree: MdNode) => walk(tree);
+}
+
 export type AnswerCorpusStats = { sources: number; chunks: number };
 
 // Only a composed answer may claim to draw on sources. Numeric record markers
@@ -58,7 +104,7 @@ const markdownComponents: Components = {
 
 function Md({ children }: { children: string }) {
   return (
-    <ReactMarkdown remarkPlugins={[remarkGfm]} components={markdownComponents}>
+    <ReactMarkdown remarkPlugins={[remarkGfm, remarkCiteMarkers]} components={markdownComponents}>
       {children}
     </ReactMarkdown>
   );

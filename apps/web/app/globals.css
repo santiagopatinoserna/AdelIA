@@ -583,6 +583,51 @@
   }
   .ad-btn-on-band:hover { box-shadow: var(--shadow-lift); }
 
+  /* The one primary action of a phone screen: 52 px, a thumb's target. */
+  .ad-btn-lg { min-height: var(--tap-lg); font-size: 1.0625rem; border-radius: 0.875rem; }
+
+  /* A short choice in a row (the plan map): a pill, 44 px tall. */
+  .ad-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.375rem;
+    min-height: var(--tap-md);
+    padding-inline: 0.875rem;
+    border-radius: 999px;
+    border: 1px solid var(--color-line-strong);
+    background: var(--color-surface);
+    color: var(--color-ink);
+    font-size: 0.9375rem;
+    font-weight: 560;
+    line-height: 1.2;
+    -webkit-tap-highlight-color: transparent;
+    touch-action: manipulation;
+    transition: background-color 0.15s var(--ease-out-soft), border-color 0.15s var(--ease-out-soft);
+  }
+  .ad-pill:hover { background: var(--color-surface-2); border-color: var(--color-line-control); }
+
+  /* An action that stays under the thumb while a long answer is read, and
+     settles at the end of its own section (sticky, not fixed: it never covers
+     the footer or another section). */
+  .ad-sticky-action {
+    position: sticky;
+    bottom: calc(0.75rem + env(safe-area-inset-bottom));
+    z-index: 10;
+  }
+  .ad-sticky-action > .ad-btn { box-shadow: var(--shadow-lift); }
+
+  /* A literal citation marker, [ev_2] or [3]. It stays in the text, verbatim
+     and verifiable, but it no longer weighs what the sentence weighs: a plan
+     carries 25 to 30 of them (docs/design/AUDITORIA_UX.md, problem 4). */
+  .ad-cite {
+    font-size: 0.72em;
+    font-weight: 500;
+    letter-spacing: 0.01em;
+    color: var(--color-cite);
+    vertical-align: 0.12em;
+    line-height: 1;
+  }
+
   /* Text field. A control, so its boundary is line-control (3:1), not the
      decorative hairline of a card. */
   .ad-field {

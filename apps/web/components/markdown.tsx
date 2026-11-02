@@ -1,6 +1,7 @@
 "use client";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
+import { remarkCiteMarkers } from "./answer-content";
 
 // Render assistant answers as real markdown (bold, lists, headings, tables)
 // instead of literal "**asterisks**". Raw HTML is NOT enabled (react-markdown
@@ -12,7 +13,7 @@ export function Markdown({ children }: { children: string }) {
   return (
     <div className="space-y-2.5 leading-relaxed [&_:first-child]:mt-0 [&_:last-child]:mb-0">
       <ReactMarkdown
-        remarkPlugins={[remarkGfm]}
+        remarkPlugins={[remarkGfm, remarkCiteMarkers]}
         components={{
           p: ({ node, ...p }) => <p className="leading-relaxed" {...p} />,
           strong: ({ node, ...p }) => <strong className="font-semibold text-ink" {...p} />,
