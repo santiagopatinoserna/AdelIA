@@ -35,6 +35,24 @@ def _disable_rate_limit():
 
 
 @pytest.fixture(autouse=True)
+def _generation_provider_is_mistral(request, monkeypatch):
+    """The suite runs on Mistral whatever the developer's .env says.
+
+    Settings reads apps/api/.env, so a dev box with LLM_PROVIDER=anthropic and
+    a real ANTHROPIC_API_KEY would send every test that stubs a Mistral call
+    (extraction, briefing, OCR, summary) to Claude instead: the fake is never
+    reached, the assertion fails, and the run spends real credit. Tests about
+    the Anthropic path set the provider themselves (tests/test_llm.py); tests
+    marked `live_routing` measure whatever provider is configured."""
+    if request.node.get_closest_marker("live_routing"):
+        return
+    from adelia.config import settings
+
+    monkeypatch.setattr(settings, "llm_provider", "mistral")
+    monkeypatch.setattr(settings, "demo_llm_provider", "")
+
+
+@pytest.fixture(autouse=True)
 def _no_live_routing_classifier(request, monkeypatch):
     """The route node calls a model when its rules abstain, and since build
     step 2 the demo awaits that call on the request path. Without this, a run
