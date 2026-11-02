@@ -1,5 +1,6 @@
 "use client";
 
+import { useId } from "react";
 import ReactMarkdown, { type Components } from "react-markdown";
 import { Bookmark, CalendarCheck, Eye, MessageCircle, Stethoscope } from "lucide-react";
 import remarkGfm from "remark-gfm";
@@ -151,13 +152,27 @@ function normalize(value: string) {
   return value.replace(/[*_:]/g, "").replace(/[’']/g, "'").trim().toLowerCase();
 }
 
-const CONTENT_CLASS = "mt-4 max-w-[62ch] space-y-4 break-words text-base leading-[1.7] text-ink [&>:first-child]:mt-0 [&>:last-child]:mb-0";
+const CONTENT_CLASS = "mt-4 max-w-[62ch] break-words text-answer text-ink [&>:first-child]:mt-0 [&>:last-child]:mb-0";
+
+// Section looks (docs/design/REDISENO.md). "Hoy" is what to do now: a honey
+// rule. "Cuándo ir al médico" is visible and distinct but calm: a clay rule
+// on a soft tint, its heading in the error text colour; the full error fill
+// is kept for the emergency. "Lo que cuentan otras madres" is experience,
+// not evidence: a neutral tint and a label that says so.
+const SECTION_CLASS: Record<PlanKey, string> = {
+  today: "border-l-[3px] border-today-line pl-4",
+  watch: "",
+  doctor: "rounded-r-2xl border-l-[3px] border-doctor-line bg-doctor-tint py-3 pl-4 pr-4",
+  remember: "",
+  mothers: "rounded-xl bg-surface-2 px-4 py-3",
+};
 
 // Presentation only: never infer clinical sections or rewrite the model's text.
 // Like Markdown in chat, use the parser's safe URL transform and no raw-HTML plugin.
 // The surrounding answer owns h2, so supplied headings begin at h3.
 export function AnswerContent({ children }: { children: string }) {
   const t = useTranslations("demo");
+  const uid = useId();
   const titles = Object.fromEntries(PLAN_KEYS.map((key) => [key, t(`plan.${key}`)])) as Record<PlanKey, string>;
   const plan = parsePlan(children, titles);
 
@@ -165,38 +180,64 @@ export function AnswerContent({ children }: { children: string }) {
     return (
       <div
         data-testid="answer-content"
-        className={`${CONTENT_CLASS} [&>p:first-child]:text-lg [&>p:first-child]:font-medium [&>p:first-child]:leading-relaxed`}
+        className={`${CONTENT_CLASS} space-y-4 [&>p:first-child]:text-lead [&>p:first-child]:font-medium`}
       >
         <Md>{children}</Md>
       </div>
     );
   }
 
+  const sectionId = (key: PlanKey) => `${uid}-plan-${key}`;
+  // The map of the plan: one tap to "Cuándo ir al médico" instead of 1.6 to
+  // 1.9 screens of scrolling (AUDITORIA_UX.md, problem 3). It hides nothing:
+  // every section stays open below it. Only the clinical sections are listed;
+  // what other mothers say is for later and sits last anyway.
+  const mapped = plan.sections.filter((section) => section.key !== "mothers");
+  function jump(key: PlanKey) {
+    const target = document.getElementById(sectionId(key));
+    if (!target) return;
+    const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    target.scrollIntoView({ block: "start", behavior: reduce ? "auto" : "smooth" });
+    target.querySelector<HTMLElement>("h3")?.focus({ preventScroll: true });
+  }
+
   return (
-    <div data-testid="answer-content" className={CONTENT_CLASS}>
+    <div data-testid="answer-content" className={`${CONTENT_CLASS} space-y-6`}>
       {plan.intro && (
-        <div data-testid="plan-intro" className="text-lg font-medium leading-relaxed [&>p]:whitespace-pre-wrap">
+        <div data-testid="plan-intro" className="text-lead font-medium [&>p]:whitespace-pre-wrap">
           <Md>{plan.intro}</Md>
         </div>
       )}
+      {mapped.length > 1 && (
+        <nav aria-label={t("planMap")} data-testid="plan-map" className="-mt-2 flex flex-wrap gap-2">
+          {mapped.map((section) => (
+            <button
+              key={section.key}
+              type="button"
+              onClick={() => jump(section.key)}
+              className={`ad-pill ${section.key === "doctor" ? "!border-doctor-line text-error-text" : ""}`}
+            >
+              {section.title}
+            </button>
+          ))}
+        </nav>
+      )}
       {plan.sections.map((section) => {
         const Icon = PLAN_ICONS[section.key];
-        const urgent = section.key === "doctor";
-        // Experience, not evidence: a soft neutral tint and a label that says
-        // so, nothing that could be read as a clinical card.
+        const doctor = section.key === "doctor";
         const mothers = section.key === "mothers";
         return (
           <section
             key={section.key}
+            id={sectionId(section.key)}
             data-testid={`plan-section-${section.key}`}
-            className={urgent
-              ? "rounded-xl bg-error-tint px-4 py-3 text-ink"
-              : mothers
-                ? "rounded-xl bg-surface-2 px-4 py-3 text-ink"
-                : "border-t border-line pt-4"}
+            className={`scroll-mt-4 text-ink ${SECTION_CLASS[section.key]}`}
           >
-            <h3 className={`flex items-center gap-2 text-base font-semibold leading-snug ${urgent ? "text-error-text" : "text-ink"}`}>
-              <Icon className="h-4 w-4 shrink-0" strokeWidth={2} aria-hidden />
+            <h3
+              tabIndex={-1}
+              className={`flex items-center gap-2 text-lg font-semibold leading-snug ${doctor ? "text-error-text" : "text-ink"}`}
+            >
+              <Icon className="h-5 w-5 shrink-0" strokeWidth={2} aria-hidden />
               {section.title}
             </h3>
             {mothers && (
