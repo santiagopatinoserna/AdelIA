@@ -306,6 +306,26 @@ def no_evidence_reply(locale: str) -> str:
     return contract_for(locale).refusal
 
 
+#: The scope sentence for a question about a child of 3 or more
+#: (clinical/age_scope, handoff 4.1). User-facing, no em dashes.
+_OUT_OF_SCOPE_AGE: dict[str, str] = {
+    "es": "AdelIA está pensada para bebés de 0 a 24 meses.",
+    "en": "AdelIA is built for babies from 0 to 24 months.",
+    "fr": "AdelIA est conçue pour les bébés de 0 à 24 mois.",
+}
+
+
+def out_of_scope_age_reply(locale: str) -> str:
+    """One sentence of scope, then the coded refusal.
+
+    The refusal is kept whole so `golden.is_refusal` counts the answer as one:
+    the age filter refuses for the same reason retrieval would, there is no
+    evidence for this child in the library.
+    """
+    scope = _OUT_OF_SCOPE_AGE.get(locale, _OUT_OF_SCOPE_AGE[DEFAULT_LOCALE])
+    return f"{scope} {no_evidence_reply(locale)}"
+
+
 def _language_rule(locale: str, shape: str) -> str:
     if shape not in SHAPES:
         raise ValueError(f"unknown answer shape {shape!r}; expected one of {SHAPES}")

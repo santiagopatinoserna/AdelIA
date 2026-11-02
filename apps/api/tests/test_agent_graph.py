@@ -22,12 +22,14 @@ import pytest
 
 from adelia.agent.graph import GraphDeps, GraphUnavailable, run_graph
 from adelia.agent.route import RouteDecision
+from adelia.clinical.golden import is_refusal
 from adelia.enrichment.evidence_retrieval import EvidenceMatch
 from adelia.enrichment.profile_service import ProfileFacts
 from adelia.services.answer_contract import (
     chat_system_prompt,
     experience_only_contract,
     no_evidence_reply,
+    out_of_scope_age_reply,
 )
 
 
@@ -119,6 +121,34 @@ async def test_a_red_flag_stops_at_the_guard():
     assert out["answer"].startswith("Esto no puede esperar")
     assert out["evidence_citations"] and out["evidence_citations"][0]["title"]
     assert fakes.calls == [], "no gate, no route, no embedding, no model"
+
+
+async def test_a_child_of_three_or_more_stops_at_the_guard_with_the_refusal():
+    """Handoff 4.1: golden B12 named a 7-year-old and reached an infant sleep
+    fragment under the cut. The guard refuses in code, before the gate, the
+    router and the embedding, and the gate counts the answer as a refusal."""
+    fakes = Fakes()
+    out = await _run(fakes, "How many hours of sleep does my 7-year-old need?", locale="en")
+    assert out["kind"] == "no_evidence"
+    assert out["answer"] == out_of_scope_age_reply("en")
+    assert is_refusal(out["answer"], "en")
+    assert out["evidence_citations"] == [] and out["citations"] == []
+    assert fakes.calls == [], "no gate, no route, no embedding, no model"
+
+
+async def test_a_red_flag_about_an_older_child_still_gets_the_referral():
+    """The red flags run first: a choking child is a referral at any age."""
+    fakes = Fakes()
+    out = await _run(fakes, "Mi hijo de 5 años se atragantó con una canica y no puede toser")
+    assert out["kind"] == "red_flag"
+    assert fakes.calls == []
+
+
+async def test_an_older_sibling_next_to_the_baby_reaches_retrieval():
+    fakes = Fakes(intent="question")
+    out = await _run(fakes, "Mi hijo de 4 años tiene muchos celos del bebé, ¿qué hago?")
+    assert out["kind"] == "answer"
+    assert "embed" in fakes.names()
 
 
 async def test_a_question_gets_the_short_answer_and_never_the_plan():

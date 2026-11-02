@@ -66,6 +66,7 @@ from langgraph.runtime import Runtime  # noqa: E402
 from adelia.agent import record as rec  # noqa: E402
 from adelia.agent.route import RouteDecision  # noqa: E402
 from adelia.clinical import red_flags  # noqa: E402
+from adelia.clinical.age_scope import child_outside_scope  # noqa: E402
 from adelia.config import settings  # noqa: E402
 from adelia.db import AsyncSessionLocal  # noqa: E402
 from adelia.enrichment.evidence_retrieval import (  # noqa: E402
@@ -85,6 +86,7 @@ from adelia.services.answer_contract import (  # noqa: E402
     interface_disclaimer,
     missing_fact_note,
     no_evidence_reply,
+    out_of_scope_age_reply,
     red_flag_reply,
 )
 
@@ -117,6 +119,8 @@ class AgentState(TypedDict, total=False):
     clarified: bool
     # Decisions
     flag: Any
+    #: The guard refused a question about a child of 3 or more (age_scope).
+    out_of_scope: bool
     intent: str
     intent_confidence: float
     intent_via: str
@@ -306,16 +310,31 @@ def _referral(state: AgentState, flag) -> dict:
 
 
 async def guard(state: AgentState) -> dict:
-    """Red flags, in code, before anything else (audit 3.3)."""
+    """Red flags, in code, before anything else (audit 3.3); then the age scope.
+
+    A child of 3 or more with no baby in the message is refused here, after
+    the red flags so a choking 5-year-old still gets the referral, and before
+    any embedding so the infant corpus is never cited for him (handoff 4.1,
+    clinical/age_scope).
+    """
     flag = red_flags.detect(state["message"], locale=_locale(state), age_months=_age(state))
-    if flag is None:
-        return {"flag": None}
-    logger.info("graph: red flag %s fired (surface=%s)", flag.code, state.get("surface"))
-    return _referral(state, flag)
+    if flag is not None:
+        logger.info("graph: red flag %s fired (surface=%s)", flag.code, state.get("surface"))
+        return _referral(state, flag)
+    if child_outside_scope(state["message"]):
+        logger.info("graph: child of 3 or more, refused (surface=%s)", state.get("surface"))
+        return {
+            "flag": None,
+            "out_of_scope": True,
+            "kind": "no_evidence",
+            "answer": out_of_scope_age_reply(_locale(state)),
+        }
+    return {"flag": None}
 
 
 def _after_guard(state: AgentState) -> str:
-    return "compose" if state.get("flag") is not None else "admit"
+    stop = state.get("flag") is not None or state.get("out_of_scope")
+    return "compose" if stop else "admit"
 
 
 async def admit(state: AgentState, runtime: Runtime[GraphDeps]) -> dict:

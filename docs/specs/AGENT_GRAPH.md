@@ -94,6 +94,10 @@ class AgentState(TypedDict):
 Determinista, sin modelo (`clinical/red_flags.detect`). Entrada: mensaje y, si
 `record` ya extrajo un valor, también ese valor normalizado. Salida `flag`.
 Respuesta fija por código de bandera (`red_flag_reply`). Nunca se salta.
+Después de las banderas, el ámbito de edad (`clinical/age_scope`, relevo 4.1): si el
+mensaje nombra un niño de 3 años o más y ningún bebé, `kind = "no_evidence"` con una
+frase de ámbito más el rechazo (`out_of_scope_age_reply`), sin pasar por la puerta de
+gasto, el enrutado ni el embedding. Cubre B7, B12, B13 y B15 del golden.
 
 ### `route`
 Dos capas, en este orden:
