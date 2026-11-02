@@ -1,0 +1,822 @@
+{
+  "_meta": {
+    "topic": "Prevención de lesiones y qué hacer tras un accidente leve de 0 a 24 meses: caídas y golpes en la cabeza, quemaduras, intoxicaciones, ahogamiento, objetos pequeños y pilas de botón, silla del coche, juguetes, sol y calor, pantallas",
+    "compiled": "2026-11-02",
+    "method": "Lectura directa el 2026-11-02 de cada página pública (EnFamilia y comités de la AEP, Plan Digital Familiar de la AEP, Familia y Salud de la AEPap, hojas para padres de la SEUP, Ministerio de Sanidad, OMS, HealthyChildren.org de la AAP en español y NHS); cada cifra, edad, teléfono y signo de alarma procede de la página citada en el propio fragmento, con el nivel de urgencia que esa página da",
+    "caveat": "Resúmenes en español de fuentes en español e inglés; los chunks son paráfrasis con las cifras y los niveles de urgencia del original, no texto literal. Orientación para familias sobre prevención y accidentes leves, no sustituye la valoración de un profesional ni contiene pautas de medicación. Cuando dos fuentes difieren (minutos de agua en una quemadura, altura de la valla de la piscina) cada fragmento conserva la cifra de su propia página.",
+    "purpose": "Cubrir el hueco de prevención de accidentes: preguntas sobre el cambiador, el andador, el agua del baño, los productos de limpieza, la piscina, las pilas de botón, la silla a contramarcha, los juguetes, el calor y las pantallas, y sobre qué vigilar tras un golpe o una quemadura leve, no encontraban evidencia"
+  },
+  "sources": [
+    {
+      "source_type": "reference",
+      "title": "Caídas, muy frecuentes y a veces peligrosas (EnFamilia, AEP)",
+      "organization": "Asociación Española de Pediatría",
+      "publication_year": null,
+      "url": "https://www.aeped.es/enfamilia/salud-en-familia/caidas-muy-frecuentes-veces-peligrosas",
+      "specialties": [
+        "pediatrics",
+        "general_medicine"
+      ],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "topics": [
+        "caidas"
+      ],
+      "chunks": [
+        "Caídas, muy frecuentes y a veces peligrosas (EnFamilia, Asociación Española de Pediatría). Tema: cómo se caen los menores de dos años y el cambiador. Hallazgo: las caídas son la causa más común de lesiones en la infancia y, aunque la mayoría no deja secuelas, en la Unión Europea son la tercera causa de muerte y la primera de ingreso por accidente en menores de 19 años. En los menores de dos años lo más habitual es caerse desde un mueble o desde los brazos de quien los cuida. El lugar más seguro para cambiar al bebé es una colchoneta en el suelo: muchas caídas desde el cambiador o la cama ocurren porque el adulto se aparta unos segundos a por un pañal, una toalla o la ropa que no había dejado a mano.",
+        "Caídas, muy frecuentes y a veces peligrosas (EnFamilia, Asociación Española de Pediatría). Tema: el andador o tacatá. Hallazgo: todos los grupos de expertos en prevención de lesiones desaconsejan su uso, aunque se sigue utilizando. Muchos padres creen que con él el niño está más seguro y aprenderá antes a andar, cuando ocurre lo contrario: con el andador se mueve más y más deprisa, y aumenta el peligro de accidente. Si a pesar de todo se compra uno, la página pide comprobar que cumple la norma europea de homologación, que tiene una base amplia y estable y que no cabe por las puertas, para que el niño no pueda pasar de una habitación a otra.",
+        "Caídas, muy frecuentes y a veces peligrosas (EnFamilia, Asociación Española de Pediatría). Tema: escaleras, trona, ventanas y muebles. Hallazgo: en viviendas de más de una planta se recomiendan barreras al pie y en lo alto de cada tramo de escalera, siempre cerradas; la de arriba debe ir atornillada a la pared, y la página indica que solo se recomiendan en menores de 24 meses, porque después el peso y la fuerza del niño desaconsejan su uso. La trona debe ser pesada, de base ancha y con cinturón y correa entre las piernas, y el niño no debe quedarse solo en ella. No se ponen muebles a los que pueda trepar delante de una ventana, conviene que esta solo se abra en parte, y las estanterías y muebles altos se fijan a la pared. En el carrito del supermercado, arnés siempre y nunca solo."
+      ],
+      "undated_reason": "Página divulgativa de EnFamilia sin fecha de publicación visible; consultada el 2026-11-02. Autora: María Jesús Esparza Olcina (PrevInfad)."
+    },
+    {
+      "source_type": "reference",
+      "title": "Traumatismo craneal, información para padres (SEUP)",
+      "organization": "Sociedad Española de Urgencias de Pediatría (SEUP)",
+      "publication_year": null,
+      "url": "https://seup.org/wp-content/uploads/2025/08/24_Traumatismo-craneal_nueva.pdf",
+      "specialties": [
+        "pediatrics",
+        "general_medicine",
+        "emergency_medicine"
+      ],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "topics": [
+        "caidas"
+      ],
+      "chunks": [
+        "Traumatismo craneal, información para padres (Sociedad Española de Urgencias de Pediatría). Tema: qué hacer en casa tras un golpe en la cabeza. Hallazgo: la hoja recuerda que la mayoría de los traumatismos craneales en niños son leves, no representan un peligro y por lo general no necesitan ninguna prueba. Los síntomas más habituales son dolor de cabeza, confusión, pérdida de memoria pasajera, mareo, náuseas, vómitos y somnolencia. En casa hay que vigilar al niño durante las primeras 24 horas tras el golpe para detectar signos de gravedad. Puede dormir, aunque en los golpes más importantes se recomienda despertarlo cada 4 horas, y puede seguir con su alimentación habitual según su apetito.",
+        "Traumatismo craneal, información para padres (Sociedad Española de Urgencias de Pediatría). Tema: signos de empeoramiento y cuándo acudir a urgencias. Hallazgo: hay que consultar en urgencias si aparece dolor de cabeza intenso, progresivo o que no mejora con la medicación habitual, vómitos repetidos, desorientación o confusión (en los niños muy pequeños, irritabilidad o dificultad para despertarlos), cambios en su comportamiento habitual, dificultad para hablar o caminar, o salida de sangre o de líquido claro por la nariz o los oídos, y también ante cualquier actitud que preocupe. La SEUP aconseja acudir además siempre que el niño tenga menos de tres meses o la caída haya sido desde una altura de más de un metro.",
+        "Traumatismo craneal, información para padres (Sociedad Española de Urgencias de Pediatría). Tema: reposo, vuelta a la guardería y prevención de golpes. Hallazgo: aunque la exploración médica sea normal, se recomienda reposo físico y mental de 24 a 48 horas según la gravedad del golpe, sin actividad deportiva ni dispositivos electrónicos (tabletas, videojuegos o móviles), y después volver a la guardería y a la actividad habitual de forma gradual. Para prevenir estos golpes la hoja pide no dejar sin vigilancia a los niños pequeños, usar en el coche sillas de seguridad homologadas con el niño bien sujeto y proteger ventanas y escaleras con barreras de seguridad para evitar caídas."
+      ],
+      "undated_reason": "Hoja informativa para padres de la SEUP sin fecha visible en el documento; consultada el 2026-11-02."
+    },
+    {
+      "source_type": "reference",
+      "title": "Los andadores para bebés: una elección peligrosa (HealthyChildren, AAP)",
+      "organization": "American Academy of Pediatrics",
+      "publication_year": 2022,
+      "url": "https://www.healthychildren.org/Spanish/safety-prevention/at-home/Paginas/Baby-Walkers-A-Dangerous-Choice.aspx",
+      "specialties": [
+        "pediatrics",
+        "general_medicine"
+      ],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "topics": [
+        "caidas"
+      ],
+      "chunks": [
+        "Los andadores para bebés: una elección peligrosa (HealthyChildren.org, American Academy of Pediatrics, 2022). Tema: qué lesiones causan los andadores. Hallazgo: los andadores o caminadores llevan cada año a miles de niños a urgencias. La lesión más común es la caída por las escaleras, que puede romper huesos y causar lesiones graves en la cabeza. Además el bebé llega a objetos altos: puede tirar de un mantel o derramar un café caliente, agarrar el mango de una olla o tocar un radiador y quemarse, caer en una piscina o una bañera, o alcanzar productos tóxicos. La mayoría de estas lesiones ocurren con un adulto mirando, porque un niño en andador puede recorrer más de un metro en un segundo y nadie reacciona a tiempo.",
+        "Los andadores para bebés: una elección peligrosa (HealthyChildren.org, American Academy of Pediatrics, 2022). Tema: no ayudan a andar y qué usar en su lugar. Hallazgo: los andadores no ofrecen ningún beneficio; no adelantan la marcha y pueden retrasarla. Los cambios de diseño (que no pasen por la mayoría de las puertas o frenen en el borde del escalón) no bastan, porque siguen teniendo ruedas, y la AAP ha pedido que se prohíba su fabricación y venta; en Canadá ya están prohibidos. La recomendación es deshacerse del andador, comprobar que tampoco se usa donde cuidan al bebé y optar por centros de actividad fijos sin ruedas, corralitos o sillas altas con juguetes en la bandeja."
+      ]
+    },
+    {
+      "source_type": "reference",
+      "title": "Head injury and concussion (NHS)",
+      "organization": "NHS (National Health Service, Reino Unido)",
+      "publication_year": 2025,
+      "url": "https://www.nhs.uk/conditions/head-injury-and-concussion/",
+      "specialties": [
+        "pediatrics",
+        "general_medicine",
+        "emergency_medicine"
+      ],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "topics": [
+        "caidas"
+      ],
+      "chunks": [
+        "Head injury and concussion (NHS, National Health Service, Reino Unido, 2025). Tema: cuándo un golpe en la cabeza exige llamar a emergencias. Hallazgo: la mayoría de los golpes en la cabeza no son graves. El NHS indica llamar a emergencias (112) o ir a urgencias si tras el golpe el niño ha perdido el conocimiento y no se despierta, no consigue mantenerse despierto, tiene una convulsión, se ha caído desde más de un metro o más de cinco escalones, tiene problemas de visión u oído, le sale líquido claro por los oídos o la nariz, sangra por los oídos, ha cambiado su conducta (más irritable o sin interés por lo que le rodea) o, si es menor de 1 año, tiene un chichón, una hinchazón o un corte grande en la cabeza.",
+        "Head injury and concussion (NHS, National Health Service, Reino Unido, 2025). Tema: consejo urgente y cuidado de un golpe leve en casa. Hallazgo: si después del golpe vomita, está mareado o tiene cualquier otro síntoma que preocupe, el NHS indica pedir consejo médico urgente el mismo día, y lo subraya para los menores de 5 años. Un golpe leve suele cuidarse en casa: aplicar frío envuelto en un paño a ratos cortos durante los primeros días para bajar la hinchazón, dejarle descansar (no hace falta mantenerlo despierto si tiene sueño), que un adulto esté con él al menos las primeras 24 horas y evitar los juegos bruscos unos días. Si los síntomas duran más de 2 semanas, hay que pedir cita con el pediatra."
+      ]
+    },
+    {
+      "source_type": "reference",
+      "title": "Baby and toddler safety (NHS)",
+      "organization": "NHS (National Health Service, Reino Unido)",
+      "publication_year": 2026,
+      "url": "https://www.nhs.uk/baby/first-aid-and-safety/safety/baby-and-toddler-safety/",
+      "specialties": [
+        "pediatrics",
+        "general_medicine"
+      ],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "topics": [
+        "caidas",
+        "intoxicaciones",
+        "ahogamiento",
+        "atragantamiento_objetos"
+      ],
+      "chunks": [
+        "Baby and toddler safety (NHS, National Health Service, Reino Unido, 2026). Tema: evitar caídas del bebé y del niño que empieza a gatear y andar. Hallazgo: cambiar el pañal sobre un cambiador en el suelo y no dejar nunca al bebé solo en una cama, un sofá o un cambiador, ni un segundo, porque puede girarse y caer. Las hamacas y las sillas de coche van en el suelo, no sobre una mesa o una encimera. Usar arnés de cinco puntos en la trona y el carrito, poner barreras de seguridad en las escaleras y mantenerlas al menos hasta los 2 años, tapar los huecos de barandillas de más de 6,5 cm, apartar los muebles bajos de las ventanas y limitar su apertura a menos de 6,5 cm con cierres de seguridad.",
+        "Baby and toddler safety (NHS, National Health Service, Reino Unido, 2026). Tema: intoxicaciones en casa. Hallazgo: en los menores de 5 años los medicamentos son la causa más frecuente de ingreso por intoxicación, sobre todo los analgésicos de uso común, así que todos se guardan bajo llave o en alto, fuera de la vista y del alcance. Los productos de limpieza, también los del inodoro, van en alto o en armarios con cierre de seguridad, y las cápsulas de detergente para lavadora y lavavajillas pueden intoxicar y causar quemaduras químicas en ojos, nariz o boca. El NHS recuerda que un envase de seguridad solo frena al niño, no lo impide, y pide guardar lejos los cigarrillos electrónicos y sus recargas, porque la nicotina es tóxica.",
+        "Baby and toddler safety (NHS, National Health Service, Reino Unido, 2026). Tema: ahogamiento en la bañera y en el jardín. Hallazgo: un bebé puede ahogarse en apenas 5 cm de agua, y el ahogamiento suele ser silencioso, sin ruido ni forcejeo. La bañera es uno de los lugares donde más ocurre: hay que quedarse con el bebé todo el tiempo que esté en el agua, sin apartarse ni un momento, aunque haya un hermano mayor con él. El asiento de baño no es un dispositivo de seguridad. La bañera y la piscina hinchable se vacían en cuanto el niño sale, y un estanque del jardín se valla, se rellena o se cubre de forma segura.",
+        "Baby and toddler safety (NHS, National Health Service, Reino Unido, 2026). Tema: objetos pequeños, pilas de botón e imanes. Hallazgo: los niños pequeños se meten en la boca objetos con los que pueden atragantarse, así que botones, monedas y piezas pequeñas de juguetes deben quedar fuera de su alcance, igual que los juguetes pensados para niños mayores. Las pilas de botón deben estar muy lejos de bebés y niños pequeños porque, si se tragan, pueden causar quemaduras internas graves. Los juguetes magnéticos con piezas pequeñas también se apartan de ellos: si se tragan, los imanes pueden pegarse entre sí dentro del intestino y hacer daño."
+      ]
+    },
+    {
+      "source_type": "reference",
+      "title": "Prevención de accidentes en niños menores de 2 años (EnFamilia, AEP)",
+      "organization": "Asociación Española de Pediatría",
+      "publication_year": null,
+      "url": "https://www.aeped.es/enfamilia/salud-en-familia/prevencion-accidentes-en-ninos-menores-2-anos",
+      "specialties": [
+        "pediatrics",
+        "general_medicine"
+      ],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "topics": [
+        "quemaduras",
+        "intoxicaciones",
+        "juguetes",
+        "atragantamiento_objetos",
+        "ahogamiento"
+      ],
+      "chunks": [
+        "Prevención de accidentes en niños menores de 2 años (EnFamilia, Asociación Española de Pediatría). Tema: cocina, enchufes y productos peligrosos en casa. Hallazgo: para un niño de menos de 2 años la página aconseja proteger los enchufes y no dejarlos visibles, vigilar que no esté cerca mientras se plancha y, mejor aún, que no esté en la cocina mientras se cocina. Al cocinar, usar los fuegos interiores con el mango del cazo o la sartén hacia dentro, y cuidado con el horno, porque las puertas transparentes llaman su atención y puede quemarse. Los productos de limpieza se retiran de su alcance y nunca se guardan en botellas de refresco, y los medicamentos van bajo llave, porque a menudo tienen formas y colores que recuerdan a los caramelos.",
+        "Prevención de accidentes en niños menores de 2 años (EnFamilia, Asociación Española de Pediatría). Tema: juguetes, objetos pequeños, bolsas y baño. Hallazgo: darle juguetes adecuados a su edad, evitar los objetos pequeños o desmontables y vigilar los juguetes de los hermanos; las maquinitas llevan pilas del tamaño de una lenteja. No dejar a su alcance monedas ni botones, no darle caramelos ni frutos secos hasta los 3 años y no dejar que juegue con bolsas de plástico, porque podría meter la cabeza dentro y sofocarse. Un niño solo en el baño corre peligro de resbalar, golpearse o ahogarse, y hay que vigilarlo cuando esté cerca de una piscina. La página resume que los niños no tienen conciencia del peligro y que los adultos deben tenerla por ellos."
+      ],
+      "undated_reason": "Página divulgativa de EnFamilia sin fecha de publicación visible; consultada el 2026-11-02."
+    },
+    {
+      "source_type": "reference",
+      "title": "Quemaduras (EnFamilia, AEP)",
+      "organization": "Asociación Española de Pediatría",
+      "publication_year": null,
+      "url": "https://www.aeped.es/enfamilia/salud-en-familia/quemaduras",
+      "specialties": [
+        "pediatrics",
+        "general_medicine",
+        "emergency_medicine"
+      ],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "topics": [
+        "quemaduras"
+      ],
+      "chunks": [
+        "Quemaduras (EnFamilia, Asociación Española de Pediatría). Tema: por qué se queman los bebés y a qué edad más. Hallazgo: la quemadura más frecuente en los niños es la escaldadura por líquido caliente. En los primeros meses suele ocurrir en el baño o al tomar alimentos muy calientes, y cuando el niño empieza a gatear o a andar el riesgo crece mucho, por eso son muy frecuentes entre los 12 y los 24 meses. Su piel es más fina que la de un adulto y se quema con temperaturas menos altas y más profundidad. Para calcular la extensión sirve la palma de la mano del niño, que equivale al 1% de su superficie corporal; las leves, de menos del 10%, se pueden tratar en casa.",
+        "Quemaduras (EnFamilia, Asociación Española de Pediatría). Tema: primeros auxilios y lo que no se debe hacer. Hallazgo: hay que enfriar la quemadura enseguida con agua fresca durante 10-20 minutos (las químicas, un mínimo de 20 minutos), sin usar hielo. Si arde la ropa, se apagan las llamas cubriendo al niño con una manta o haciéndolo rodar por el suelo. Se retira la ropa que no esté pegada a la piel. Si la quemadura supura, se cubre sin apretar con una gasa estéril o un paño limpio y se consulta con el pediatra. No frotar, no romper las ampollas, no quitar la ropa pegada y no poner pomadas, pasta de dientes ni mantequilla: los remedios caseros pueden empeorar las lesiones.",
+        "Quemaduras (EnFamilia, Asociación Española de Pediatría). Tema: cuándo consultar y cómo prevenirlas. Hallazgo: hay que consultar si una quemadura pequeña se pone cada vez más roja e inflamada (puede haberse infectado) o si supura, y de forma urgente si es profunda (no duele), tiene muchas ampollas o son grandes, es extensa o afecta a manos, cuello, articulaciones, genitales o planta del pie, y también si la causó la electricidad, un cáustico o el fuego. En caso de duda, llamar al 112 y seguir sus instrucciones. Para prevenirlas: cuidado con el café o el té cerca del niño, lejos de radiadores, planchas, mecheros y cerillas, comprobar el agua del baño y no tener a los pequeños en la cocina mientras se guisa."
+      ],
+      "undated_reason": "Página divulgativa de EnFamilia sin fecha de publicación visible; consultada el 2026-11-02. Autora: Mercedes de la Torre Espí."
+    },
+    {
+      "source_type": "reference",
+      "title": "Las quemaduras: accidentes domésticos muy frecuentes (Familia y Salud, AEPap)",
+      "organization": "Asociación Española de Pediatría de Atención Primaria (AEPap)",
+      "publication_year": 2016,
+      "url": "https://www.familiaysalud.es/podemos-prevenir/prevencion-de-accidentes/como-prevenir/las-quemaduras-accidentes-domesticos-muy",
+      "specialties": [
+        "pediatrics",
+        "general_medicine"
+      ],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "topics": [
+        "quemaduras"
+      ],
+      "chunks": [
+        "Las quemaduras: accidentes domésticos muy frecuentes (Familia y Salud, AEPap, 2016). Tema: escaldaduras con el agua del baño y los líquidos calientes. Hallazgo: las escaldaduras son el tipo de quemadura más frecuente en menores de 5 años, sobre todo por debajo de los dos años, y en los bebés suceden sin que el niño haga nada para quemarse. Para evitarlas se recomienda graduar el agua doméstica, si se puede, a un máximo de 50 ºC, comprobar la temperatura del baño antes de meter al niño (mejor con un termómetro), poner protectores en los grifos, no tenerlo cerca cuando se mueve comida caliente, dejar los líquidos calientes en el centro de la mesa y remover bien lo que se calienta en el microondas antes de probarlo.",
+        "Las quemaduras: accidentes domésticos muy frecuentes (Familia y Salud, AEPap, 2016). Tema: cocina, enchufes y estufas. Hallazgo: en la cocina conviene usar los fuegos de atrás con los mangos de sartenes y cazos hacia atrás, vigilar la puerta del horno a la altura del niño y evitar que toque la plancha o su enchufe. Si mete los dedos en un enchufe o coge una alargadera enchufada puede sufrir una quemadura eléctrica, por eso los enchufes que no se usan deben estar tapados y nunca se deja una alargadera conectada a la pared con el otro extremo libre. Delante de chimeneas, estufas y radiadores se aconseja una barrera protectora, y las cerillas y los mecheros deben estar lejos de su alcance y de su vista.",
+        "Las quemaduras: accidentes domésticos muy frecuentes (Familia y Salud, AEPap, 2016). Tema: qué hacer si el niño se acaba de quemar. Hallazgo: la página indica meter la zona quemada en agua fría y mantenerla así unos 10-15 minutos. Si hay ropa pegada a la zona quemada, no hay que intentar arrancarla. Si la quemadura es profunda o extensa, hay que acudir inmediatamente a un centro sanitario. Recuerda además que la piel de los niños es más fina que la de los adultos, por lo que se queman más y sus quemaduras son más graves, y que en los bebés son siempre los padres quienes deben impedir que ocurran."
+      ]
+    },
+    {
+      "source_type": "reference",
+      "title": "Qué hacer ante una quemadura (Familia y Salud, AEPap)",
+      "organization": "Asociación Española de Pediatría de Atención Primaria (AEPap)",
+      "publication_year": 2022,
+      "url": "https://www.familiaysalud.es/podemos-prevenir/prevencion-de-accidentes/lesiones-infantiles-que-hacer/que-hacer-ante-una-quemadura",
+      "specialties": [
+        "pediatrics",
+        "general_medicine"
+      ],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "topics": [
+        "quemaduras"
+      ],
+      "chunks": [
+        "Qué hacer ante una quemadura (Familia y Salud, AEPap, 2022). Tema: primeros pasos en casa. Hallazgo: lo primero es enfriar la zona con agua fría durante 10-20 minutos, sin aplicar hielo directo, y retirar la ropa salvo que esté muy pegada a la quemadura. Si la causa es un producto químico, se quita la ropa y se lava con mucha agua; si es eléctrica, hay que separar muy rápido al niño del contacto y desconectar la corriente. Una quemadura pequeña y superficial se cubre con una gasa suave, se vigila y se protege del sol. No se deben usar remedios caseros como aceite, mantequilla, vinagre o pasta de dientes, que podrían empeorarla, ni romper las ampollas, porque podrían infectarse.",
+        "Qué hacer ante una quemadura (Familia y Salud, AEPap, 2022). Tema: cuándo ir a urgencias. Hallazgo: la página pide acudir a urgencias si la quemadura es más profunda, no duele, tiene muchas ampollas o son grandes; si es muy extensa o afecta a zonas de mayor riesgo como la cara, el cuello, las manos, los pies, los genitales, el periné o los pliegues; si hay signos de infección (más enrojecimiento, más inflamación o pus), o si la produjo el fuego, la electricidad o un producto químico. Explica que la edad de mayor riesgo es entre los 12 y los 24 meses, cuando el niño empieza a andar y llega a la cocina, y que las leves (superficiales y de menos del 10% del cuerpo) pueden tratarse en casa.",
+        "Qué hacer ante una quemadura (Familia y Salud, AEPap, 2022). Tema: prevención en el baño y en la cocina. Hallazgo: comprobar siempre con el codo la temperatura del agua del baño, que nunca debe pasar de 50 ºC, removiéndola antes de meter al niño; comprobar la temperatura de la comida y removerla bien al sacarla del microondas; mantener a los niños lejos de la cocina cuando se manipulan alimentos o líquidos calientes, cocinar en los fuegos de atrás con los mangos hacia dentro y tener un extintor en la cocina. También tapar los enchufes que no se usan, no dejar a mano planchas, cables, calefactores ni secadores y poner una barrera delante de chimeneas o estufas."
+      ]
+    },
+    {
+      "source_type": "reference",
+      "title": "Burns and scalds (NHS)",
+      "organization": "NHS (National Health Service, Reino Unido)",
+      "publication_year": 2026,
+      "url": "https://www.nhs.uk/conditions/burns-and-scalds/",
+      "specialties": [
+        "pediatrics",
+        "general_medicine",
+        "emergency_medicine"
+      ],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "topics": [
+        "quemaduras"
+      ],
+      "chunks": [
+        "Burns and scalds (NHS, National Health Service, Reino Unido, 2026). Tema: qué hacer ante una quemadura o una escaldadura. Hallazgo: todas deben tratarse de inmediato. El NHS indica poner la zona bajo agua fresca corriente durante 20 minutos, cuanto antes y dentro de las 3 horas siguientes; si no hay grifo, sirve agua embotellada fresca o una toalla mojada. Se quitan la ropa y las joyas cercanas, pero no lo que esté pegado a la piel. Una vez enfriada, se puede cubrir con film transparente colocado por encima, sin enrollarlo. No se deben poner cremas, aceites ni mantequilla, no usar tiritas ni apósitos adhesivos y no reventar las ampollas.",
+        "Burns and scalds (NHS, National Health Service, Reino Unido, 2026). Tema: cuándo es una urgencia. Hallazgo: el NHS indica llamar a emergencias (112) o ir a urgencias si la quemadura es muy grande o profunda, si está en la cara, los genitales o las nalgas, o si la ha causado un ácido, un producto químico o la electricidad, y pide no conducir uno mismo hasta el hospital. Si el niño se ha quemado y no se sabe qué hacer, indica pedir consejo médico urgente el mismo día, también para los menores de 5 años. Las quemaduras pequeñas suelen curarse en casa en unas 2 semanas; las grandes o profundas pueden necesitar tratamiento en el hospital."
+      ]
+    },
+    {
+      "source_type": "reference",
+      "title": "Intoxicaciones, información para padres (SEUP)",
+      "organization": "Sociedad Española de Urgencias de Pediatría (SEUP)",
+      "publication_year": null,
+      "url": "https://seup.org/wp-content/uploads/2025/05/18_Intoxicacion.pdf",
+      "specialties": [
+        "pediatrics",
+        "general_medicine",
+        "emergency_medicine"
+      ],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "topics": [
+        "intoxicaciones"
+      ],
+      "chunks": [
+        "Intoxicaciones, información para padres (Sociedad Española de Urgencias de Pediatría). Tema: qué hacer en casa si el niño se ha tragado un producto tóxico. Hallazgo: separar al niño de la sustancia y, si tiene algo sólido en la boca que se ve y está accesible, quitárselo, nunca a ciegas, porque podría empeorar la situación. No intentar provocar el vómito ni darle agua, leche, aceite ni ningún otro alimento. Intentar saber qué cantidad ha tomado y llamar al teléfono de Información Toxicológica, el 91 562 04 20, disponible todos los días las 24 horas, o al 112 si el niño no responde con normalidad, no respira bien o tiene mal color.",
+        "Intoxicaciones, información para padres (Sociedad Española de Urgencias de Pediatría). Tema: piel, ojos, humo y cuándo ir a urgencias. Hallazgo: si el tóxico ha tocado la piel o los ojos, hay que quitarle toda la ropa contaminada y lavarlo con abundante agua templada a chorro, en la ducha, durante 15-20 minutos. Si ha respirado gases o humo, abrir las ventanas, salir al aire libre lo antes posible y llamar a Emergencias. La hoja indica acudir a urgencias cuando lo digan el Instituto Nacional de Toxicología o Emergencias, cuando haya medicamentos, drogas o productos de limpieza, del jardín o del coche, cuando el niño tenga síntomas o queden dudas por teléfono, y hacerlo lo antes posible llevando el envase del producto.",
+        "Intoxicaciones, información para padres (Sociedad Española de Urgencias de Pediatría). Tema: prevención en casa. Hallazgo: guardar medicamentos y productos tóxicos fuera del alcance y de la vista de los niños (en alto, bajo llave o con cierre de seguridad), también justo después de usarlos; conservarlos en su envase y con la etiqueta original, sin pasarlos a recipientes que se confundan con bebidas, con tapón de seguridad bien cerrado. Tener en casa los menos fármacos posibles, no tomarlos delante de los niños, vigilar bolsos y abrigos de invitados, no decir que un medicamento es un caramelo, no mezclar productos del hogar y, con niños menores de 6 años, usar detergente líquido o en polvo y evitar las cápsulas. Revisar el gas y las calderas."
+      ],
+      "undated_reason": "Hoja informativa para padres de la SEUP sin fecha visible en el documento; consultada el 2026-11-02."
+    },
+    {
+      "source_type": "reference",
+      "title": "Las intoxicaciones por medicamentos en la infancia (Familia y Salud, AEPap)",
+      "organization": "Asociación Española de Pediatría de Atención Primaria (AEPap)",
+      "publication_year": 2026,
+      "url": "https://www.familiaysalud.es/podemos-prevenir/prevencion-de-accidentes/lesiones-infantiles-que-hacer/las-intoxicaciones-por",
+      "specialties": [
+        "pediatrics",
+        "general_medicine"
+      ],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "topics": [
+        "intoxicaciones"
+      ],
+      "chunks": [
+        "Las intoxicaciones por medicamentos en la infancia (Familia y Salud, AEPap, 2026). Tema: por qué ocurren y cómo prevenirlas. Hallazgo: son una de las causas más frecuentes de consulta en las urgencias de pediatría y casi nunca son graves, aunque algunas sí suponen un riesgo. Ocurren por la curiosidad del niño (envases y colores que recuerdan a dulces), por medicamentos guardados a su alcance en cajones, mesitas, mochilas o bolsos, y por errores o tomas repetidas. La página aconseja guardarlos en un lugar alto y seguro, mejor bajo llave o en un armario cerrado, no llamarlos caramelos ni chuches, no cambiarlos de envase, usar tapón de seguridad y el medidor correcto, y leer las instrucciones antes de usarlos.",
+        "Las intoxicaciones por medicamentos en la infancia (Familia y Salud, AEPap, 2026). Tema: síntomas y qué hacer ante una sospecha. Hallazgo: los síntomas dependen del medicamento, pero los más frecuentes son más sueño o dificultad para despertarse, vómitos repetidos, convulsiones, problemas para respirar y cambios de color de la piel (pálida, amarillenta, azulada o muy roja). Ante la sospecha hay que mantener la calma, no provocar el vómito, identificar el medicamento, cuánto ha tomado y cuándo, llamar al centro de toxicología (915 620 420) o acudir a urgencias de inmediato y llevar el envase al hospital; para emergencias, el 112. Advierte que algunos fármacos de adultos son muy peligrosos incluso en cantidades pequeñas."
+      ]
+    },
+    {
+      "source_type": "reference",
+      "title": "Prevención de accidentes en casa: intoxicaciones por medicamentos (EnFamilia, AEP)",
+      "organization": "Asociación Española de Pediatría",
+      "publication_year": null,
+      "url": "https://www.aeped.es/enfamilia/salud-en-familia/prevencion-de-accidents-en-casa-intoxicaciones-por-medicamentos",
+      "specialties": [
+        "pediatrics",
+        "general_medicine"
+      ],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "topics": [
+        "intoxicaciones"
+      ],
+      "chunks": [
+        "Prevención de accidentes en casa: intoxicaciones por medicamentos (EnFamilia, Asociación Española de Pediatría). Tema: cómo guardar y manejar los medicamentos en casa. Hallazgo: los medicamentos son una de las causas más frecuentes de intoxicación en la infancia; la mayoría de estos accidentes ocurren en casa y se pueden prevenir. Se guardan fuera de la vista y del alcance, mejor en un armario o cajón cerrado, nunca sobre mesas, mesitas, bolsos o mochilas, siempre en su envase original y con cierre de seguridad. Al usarlos hay que comprobar el medicamento y la concentración, usar la jeringa o el dosificador que corresponde, no hacerlo a oscuras y no decir que son caramelos. Conviene revisar el botiquín, retirar lo caducado y llevarlo al punto de recogida de la farmacia.",
+        "Prevención de accidentes en casa: intoxicaciones por medicamentos (EnFamilia, Asociación Española de Pediatría). Tema: casa de los abuelos y otros productos que intoxican. Hallazgo: los medicamentos de los adultos pueden ser muy tóxicos incluso en pequeñas cantidades, y también pueden intoxicar los suplementos, las vitaminas, los productos de herbolario, las cremas y los medicamentos sin receta. En casa de los abuelos u otros familiares puede haber más medicamentos y algunos especialmente peligrosos, como los que se usan para dormir, para el corazón o para la tensión, así que si el niño va con frecuencia conviene comprobar dónde se guardan. La página insiste en que un envase seguro no sustituye la vigilancia del adulto.",
+        "Prevención de accidentes en casa: intoxicaciones por medicamentos (EnFamilia, Asociación Española de Pediatría). Tema: qué hacer y cuándo acudir a un centro sanitario. Hallazgo: ante una posible intoxicación, mantener la calma, no provocar el vómito y no darle leche, alimentos, bebidas ni otros productos sin indicación profesional. Guardar el envase, intentar saber qué cantidad pudo tomar y a qué hora y consultar con el Servicio de Información Toxicológica (91 562 04 20), el 112 o un centro sanitario; si hubo contacto con la piel, la boca o los ojos, lavar con abundante agua. Hay que pedir atención urgente si aparece cualquier síntoma, sobre todo somnolencia, cambios de conducta o de conciencia, dificultad para respirar, vómitos persistentes, dolor importante o cambios de color de la piel."
+      ],
+      "undated_reason": "Página divulgativa de EnFamilia sin fecha de publicación visible; consultada el 2026-11-02."
+    },
+    {
+      "source_type": "reference",
+      "title": "Prevención de ahogamientos en el agua (EnFamilia, AEP)",
+      "organization": "Asociación Española de Pediatría",
+      "publication_year": null,
+      "url": "https://www.aeped.es/enfamilia/salud-en-familia/prevencion-ahogamientos-en-agua-0",
+      "specialties": [
+        "pediatrics",
+        "general_medicine"
+      ],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "topics": [
+        "ahogamiento"
+      ],
+      "chunks": [
+        "Prevención de ahogamientos en el agua (EnFamilia, Asociación Española de Pediatría). Tema: con qué poca agua se ahoga un niño pequeño y dónde ocurre. Hallazgo: en los niños pequeños el ahogamiento puede ocurrir con apenas 2 cm de agua en el fondo de un cubo, una bañera, una piscina portátil o un pozo. En los menores de 5 años se produce sobre todo en piscinas particulares o de comunidades privadas, donde el vallado reglamentario puede reducir las muertes hasta en un 95%. Un momento de riesgo habitual es la llegada al lugar de vacaciones: mientras los adultos descargan el coche, los niños exploran y pueden encontrar una piscina sin proteger. En Europa son la segunda causa de muerte accidental desde el nacimiento hasta los 19 años.",
+        "Prevención de ahogamientos en el agua (EnFamilia, Asociación Española de Pediatría). Tema: vigilancia y medidas en la bañera y la piscina. Hallazgo: la estrategia esencial con niños pequeños es la vigilancia, con el menor a una distancia de una brazada del cuidador, aunque haya socorrista. Nunca se deja al niño solo o al cuidado de otro menor en la bañera, la piscina, un spa o cerca de una boca de riego, y los asientos de baño para bebés no sustituyen la vigilancia, porque el bebé puede escurrirse. Hay que vaciar cualquier recipiente con agua después de usarlo, como el cubo de la fregona, y no usar flotadores que se puedan deshinchar, como los manguitos: son preferibles los chalecos salvavidas.",
+        "Prevención de ahogamientos en el agua (EnFamilia, Asociación Española de Pediatría). Tema: cercado de la piscina y preparación de los adultos. Hallazgo: la piscina debe estar cercada en todo su perímetro, con una valla lo bastante alta para que no se pueda trepar ni saltar, a menos de 10 cm del suelo y con el cierre de la puerta a 134 cm del suelo como mínimo, para que los pequeños no lo abran; idealmente con alarmas y una lona o estructura que aguante el peso de un adulto. El adulto que vigila debería saber nadar, hacer un rescate, iniciar la reanimación y pedir ayuda. La página recuerda que las clases de natación son una estrategia más, no una garantía, y que nunca debe bajarse la vigilancia por muchas medidas que haya."
+      ],
+      "undated_reason": "Página divulgativa de EnFamilia sin fecha de publicación visible; consultada el 2026-11-02."
+    },
+    {
+      "source_type": "reference",
+      "title": "Ahogamientos en la infancia: un riesgo silencioso y prevenible (EnFamilia, AEP)",
+      "organization": "Asociación Española de Pediatría",
+      "publication_year": null,
+      "url": "https://www.aeped.es/enfamilia/salud-en-familia/ahogamientos-infancia-un-riesgo-silencioso-y-prevenible",
+      "specialties": [
+        "pediatrics",
+        "general_medicine"
+      ],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "topics": [
+        "ahogamiento"
+      ],
+      "chunks": [
+        "Ahogamientos en la infancia: un riesgo silencioso y prevenible (EnFamilia, Asociación Española de Pediatría). Tema: el riesgo en casa con muy poca agua. Hallazgo: la mayoría de los ahogamientos infantiles ocurre en verano, en piscinas, mar, ríos, lagos o embalses, pero el peligro no está solo en las grandes masas de agua: los niños pequeños, sobre todo los menores de 4 años, pueden ahogarse en menos de 6 cm de agua. Por eso el riesgo aparece donde menos se espera, en la bañera, un cubo, una piscina hinchable, una fuente o cualquier recipiente con agua de casa. En España mueren cada año entre 70 y 150 niños ahogados, la mayoría en piscinas privadas y muchas veces en un momento de descuido.",
+        "Ahogamientos en la infancia: un riesgo silencioso y prevenible (EnFamilia, Asociación Española de Pediatría). Tema: qué vigilar después de un susto en el agua. Hallazgo: tras un episodio de ahogamiento o casi ahogamiento los signos varían según la gravedad, y la página pide vigilar si el niño tiene dificultad para respirar, tos persistente o vómitos, color azulado en labios o piel, o agitación o, al contrario, somnolencia excesiva: ante cualquiera de estos síntomas se debe buscar atención médica urgente. Si hay que actuar, sacarlo del agua de inmediato, ponerlo de lado si respira y está consciente, empezar la reanimación si no respira, llamar al 112 lo antes posible, quitarle la ropa mojada y abrigarlo, y no hacer maniobras abdominales para sacar el agua.",
+        "Ahogamientos en la infancia: un riesgo silencioso y prevenible (EnFamilia, Asociación Española de Pediatría). Tema: medidas clave de prevención. Hallazgo: la supervisión activa y constante es la medida más eficaz: un adulto vigila siempre y sin distracciones como el móvil o las conversaciones, y nunca se deja a otros menores al cargo en el agua. Saber nadar o llevar flotador no elimina el riesgo. Las piscinas deben estar valladas en todo su perímetro, con puertas de cierre automático y seguro, y hay que vaciar cubos, bañeras y piscinas hinchables después de usarlos. La página anima a familiarizar pronto a los niños con el agua, enseñarles a flotar y a que todos los cuidadores aprendan técnicas básicas de reanimación."
+      ],
+      "undated_reason": "Página divulgativa de EnFamilia sin fecha de publicación visible; consultada el 2026-11-02."
+    },
+    {
+      "source_type": "reference",
+      "title": "Flotadores de cuello: mejor no (EnFamilia, AEP)",
+      "organization": "Asociación Española de Pediatría",
+      "publication_year": null,
+      "url": "https://www.aeped.es/enfamilia/salud-en-familia/flotadores-cuello-mejor-no",
+      "specialties": [
+        "pediatrics",
+        "general_medicine"
+      ],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "topics": [
+        "ahogamiento"
+      ],
+      "chunks": [
+        "Flotadores de cuello: mejor no (EnFamilia, Asociación Española de Pediatría). Tema: flotadores de cuello para bebés. Hallazgo: se han comercializado flotadores que se colocan alrededor del cuello del bebé, y la página señala que no hay estudios que demuestren que aporten ningún beneficio, ni para prevenir ahogamientos ni para el desarrollo. Pueden dar una falsa sensación de seguridad, y algunas publicaciones sugieren que mantener al bebé vertical en el agua con la cabeza sujeta por una estructura semirrígida puede comprimir su cuello y tensar ligamentos y músculos, sobre todo en los más pequeños. La forma más segura de bañar a un bebé es en brazos de un adulto, siempre sujeto y vigilado.",
+        "Flotadores de cuello: mejor no (EnFamilia, Asociación Española de Pediatría). Tema: vigilancia al alcance del brazo y otros dispositivos. Hallazgo: cuando un bebé o un niño pequeño está en el agua o cerca de ella debe estar al alcance de un adulto con experiencia, a menos de la longitud de su brazo. Los flotadores o manguitos hinchables no son una protección eficaz, y si se usa chaleco salvavidas debe ser de su talla, estar homologado y llevarse siempre cerca del agua. Haber hecho un curso de natación no elimina el riesgo; se aconseja que aprendan a nadar a partir de los 4 años, aunque la decisión debe ser individual. Cada año mueren en España entre 70 y 150 niños ahogados y el 86% de los casos ocurre en piscinas domésticas."
+      ],
+      "undated_reason": "Página divulgativa de EnFamilia sin fecha de publicación visible; consultada el 2026-11-02."
+    },
+    {
+      "source_type": "reference",
+      "title": "Prevención de los ahogamientos infantiles (Familia y Salud, AEPap)",
+      "organization": "Asociación Española de Pediatría de Atención Primaria (AEPap)",
+      "publication_year": 2026,
+      "url": "https://www.familiaysalud.es/prevencion-de-los-ahogamientos-infantiles",
+      "specialties": [
+        "pediatrics",
+        "general_medicine"
+      ],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "topics": [
+        "ahogamiento"
+      ],
+      "chunks": [
+        "Prevención de los ahogamientos infantiles (Familia y Salud, AEPap, 2026). Tema: vigilancia de los niños pequeños cerca del agua. Hallazgo: los niños deben estar supervisados siempre que estén cerca del agua y el adulto no debe perder nunca el contacto visual: el móvil o una conversación bastan para dejar de mirar unos segundos peligrosos. Los bebés se ahogan en menos de 2 cm de agua (bañeras, charcos, cubos) y los niños pequeños nunca deben quedar al cuidado de otros niños. Aunque haya socorrista, sepa nadar o lleve chaleco, lo más seguro es que el adulto esté a menos de un brazo. Hay más descuidos al llegar a un alojamiento, en celebraciones y en sobremesas junto a la piscina, por lo que conviene organizar turnos de vigilancia.",
+        "Prevención de los ahogamientos infantiles (Familia y Salud, AEPap, 2026). Tema: piscinas privadas, valla y chaleco. Hallazgo: en España son la segunda causa de muerte accidental en menores de 14 años, tras los accidentes de tráfico, y se estima que hasta el 80% de los ahogamientos infantiles ocurre en piscinas de viviendas o de pequeñas urbanizaciones, donde aún no hay norma obligatoria. Se aconseja una valla alrededor de al menos 122 cm de altura, a menos de 10 cm del suelo y entre las uniones, con la puerta cerrada con un sistema seguro, y proteger los desagües para evitar atrapamientos por succión. Los sistemas de flotación deben cumplir las normas europeas, y el chaleco salvavidas con cinta entre las piernas es el más seguro.",
+        "Prevención de los ahogamientos infantiles (Familia y Salud, AEPap, 2026). Tema: el corte de digestión y cómo reconocer a quien se ahoga. Hallazgo: el llamado corte de digestión es en realidad una hidrocución por un cambio brusco de temperatura, y no obliga a esperar 2 o 3 horas tras comer: basta con mojarse primero la piel, entrar poco a poco y salir si aparece mareo o frío intenso. Quien se ahoga suele estar en silencio, intentando sacar la cabeza para respirar, y puede parecer un juego. Hay que avisar enseguida a los socorristas o al 112 y lanzarle algo que flote. Ya fuera del agua, no se intenta sacar el agua de los pulmones y, si no respira, se inicia la reanimación cardiopulmonar."
+      ]
+    },
+    {
+      "source_type": "reference",
+      "title": "Peligro de la ingesta de pilas de botón (EnFamilia, AEP)",
+      "organization": "Asociación Española de Pediatría",
+      "publication_year": null,
+      "url": "https://www.aeped.es/enfamilia/salud-en-familia/peligro-ingesta-pilas-boton",
+      "specialties": [
+        "pediatrics",
+        "general_medicine",
+        "emergency_medicine"
+      ],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "topics": [
+        "atragantamiento_objetos"
+      ],
+      "chunks": [
+        "Peligro de la ingesta de pilas de botón (EnFamilia, Comité de Seguridad y Prevención de Lesiones no intencionadas en la Infancia, Asociación Española de Pediatría). Tema: por qué una pila de botón tragada es tan grave. Hallazgo: estas pilas están en muchos objetos cotidianos y, si se tragan, pueden lesionar gravemente el esófago. Las de litio de 20 mm, muy usadas en mandos a distancia, son las que más daño hacen: por su tamaño se quedan en el esófago y en menos de dos horas producen quemaduras graves por las reacciones químicas que desencadenan. Los primeros síntomas pueden ser poco específicos y casi nunca se ve la ingestión, lo que retrasa el diagnóstico. También se han descrito perforaciones del tabique nasal al meterse la pila en la nariz.",
+        "Peligro de la ingesta de pilas de botón (EnFamilia, Comité de Seguridad y Prevención de Lesiones no intencionadas en la Infancia, Asociación Española de Pediatría). Tema: prevención y qué hacer ante la sospecha. Hallazgo: en el estudio que cita la página, los menores de 6 años habían sacado ellos mismos la pila del juguete u objeto en el 61,8% de los casos. Por eso se recomienda mantener las pilas de botón y los aparatos que las llevan fuera del alcance de los niños, comprobar que la tapa del compartimento cierra bien (si está rota, asegurarla con cinta adhesiva resistente), no dejar ninguna pila suelta, tampoco las usadas, y no dejar que los niños jueguen con ellas. Si hay sospecha de que ha tragado una pila de botón, hay que acudir a un centro sanitario lo antes posible."
+      ],
+      "undated_reason": "Página divulgativa de EnFamilia sin fecha de publicación visible; consultada el 2026-11-02. Autor: Comité de Seguridad y Prevención de Lesiones no intencionadas en la Infancia de la AEP."
+    },
+    {
+      "source_type": "reference",
+      "title": "Ingesta de pilas (Familia y Salud, AEPap)",
+      "organization": "Asociación Española de Pediatría de Atención Primaria (AEPap)",
+      "publication_year": 2026,
+      "url": "https://www.familiaysalud.es/podemos-prevenir/prevencion-de-accidentes/lesiones-infantiles-que-hacer/ingesta-de-pilas",
+      "specialties": [
+        "pediatrics",
+        "general_medicine",
+        "emergency_medicine"
+      ],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "topics": [
+        "atragantamiento_objetos"
+      ],
+      "chunks": [
+        "Ingesta de pilas (Familia y Salud, AEPap, 2026). Tema: por qué las pilas, y sobre todo las de botón, son tan peligrosas. Hallazgo: no son los objetos que más se tragan, pero sí de los más peligrosos. Dentro del cuerpo la pila puede romperse y sus componentes producen quemaduras y heridas muy graves, con un efecto parecido al de la lejía, y las de botón son las peores, también si se meten en los oídos o la nariz. Ningún niño debe tener acceso a pilas, ni nuevas ni gastadas: hay que revisar juguetes, mandos, relojes y linternas, que el niño no pueda abrir la tapa (si puede, reforzarla con cinta adhesiva o retirar el aparato) y guardar las gastadas en un lugar seguro.",
+        "Ingesta de pilas (Familia y Salud, AEPap, 2026). Tema: si se mete la pila en la boca o no está claro si la ha tragado. Hallazgo: hablarle con calma y pedirle que la escupa; si se ve en la boca, sacarla con el dedo meñique en forma de gancho por un lado, con un barrido de atrás hacia fuera, y comprobar que no tiene más pilas en la mano o en la ropa. Gritarle puede asustarle y hacer que se atragante. Si no se sabe si la ha tragado, buscar por toda la habitación y contar las que faltan en el aparato; si quedan dudas, es mejor acudir a urgencias, donde se puede hacer una radiografía. Nunca hay que provocar el vómito: la pila podría irse al pulmón.",
+        "Ingesta de pilas (Familia y Salud, AEPap, 2026). Tema: si se ha tragado la pila, cuándo ir a urgencias. Hallazgo: si la pila es de botón, siempre hay que ir a urgencias sin esperar, porque hay que sacarla. Con otras pilas, ir lo más rápido posible a urgencias si el niño no puede tragar, babea o se queja de la garganta, o si tiene dolor, vómitos u otro síntoma que preocupe; si tose, hace ruido o le cuesta respirar, avisar al 112. Si está bien, se suele aconsejar mirar las heces cada día, volver a consultar si en esos días tiene fiebre, vómitos, dolor de barriga o poco apetito, y pedir cita con el médico si la pila no ha salido en las heces después de una semana."
+      ]
+    },
+    {
+      "source_type": "reference",
+      "title": "Qué lesiones pueden provocar las pilas de botón en niños (HealthyChildren, AAP)",
+      "organization": "American Academy of Pediatrics",
+      "publication_year": 2021,
+      "url": "https://www.healthychildren.org/Spanish/safety-prevention/at-home/Paginas/button-battery-injuries-in-children-a-growing-risk.aspx",
+      "specialties": [
+        "pediatrics",
+        "general_medicine",
+        "emergency_medicine"
+      ],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "topics": [
+        "atragantamiento_objetos"
+      ],
+      "chunks": [
+        "Qué lesiones pueden provocar las pilas de botón en niños (HealthyChildren.org, American Academy of Pediatrics, 2021). Tema: cómo dañan las pilas de botón. Hallazgo: miles de niños llegan cada año a urgencias tras tragar pilas de botón o de litio tipo moneda, pequeñas, brillantes y atractivas, presentes en mandos, juegos, juguetes, zapatos, ropa o bisutería. Al contacto con los líquidos del cuerpo la pila genera una corriente que produce una sustancia parecida a la lejía; si se atasca, quema un agujero en esa zona. En el esófago puede dañar la tráquea, los pulmones y los grandes vasos y causar sangrados graves e incluso la muerte, y en la nariz o el oído puede lesionar el tabique o el tímpano. Los síntomas pueden ser casi nulos o parecer una infección.",
+        "Qué lesiones pueden provocar las pilas de botón en niños (HealthyChildren.org, American Academy of Pediatrics, 2021). Tema: prevención y qué hacer si se sospecha. Hallazgo: no hay que dar por hecho que los aparatos con pila de casa son seguros: se cierran o se sellan con cinta los compartimentos, las pilas sueltas o de repuesto se guardan bajo llave y los aparatos que las llevan, fuera del alcance. Una pila gastada aún tiene carga suficiente para hacer daño, y cuanto mayor es su voltaje (3V frente a 1,5V), más rápido. Si se sospecha que el niño ha tragado una, no hay que ofrecerle comida ni bebida y hay que llevarlo de inmediato a urgencias; tras confirmarla con una radiografía, el tratamiento es sacarla con urgencia."
+      ]
+    },
+    {
+      "source_type": "reference",
+      "title": "Ingesta de cuerpo extraño, ¿qué tengo que hacer? (Familia y Salud, AEPap)",
+      "organization": "Asociación Española de Pediatría de Atención Primaria (AEPap)",
+      "publication_year": 2016,
+      "url": "https://www.familiaysalud.es/podemos-prevenir/prevencion-de-accidentes/lesiones-infantiles-que-hacer/ingesta-de-cuerpo-extrano",
+      "specialties": [
+        "pediatrics",
+        "general_medicine"
+      ],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "topics": [
+        "atragantamiento_objetos"
+      ],
+      "chunks": [
+        "Ingesta de cuerpo extraño, ¿qué tengo que hacer? (Familia y Salud, AEPap, 2016). Tema: qué objetos se tragan y cómo evitarlo. Hallazgo: ocurre sobre todo en menores de 5 años, que por curiosidad se llevan todo a la boca. Los objetos más implicados son frutos secos, monedas, alfileres, agujas, pilas de botón, piezas pequeñas de juguetes, canicas, botones y huesos o espinas; las pilas de botón, además, pueden causar quemaduras químicas. Para prevenirlo, no dejar a su alcance objetos pequeños, que los juguetes de los menores de 5 años no tengan piezas pequeñas o desmontables, leer las advertencias del fabricante y mantener lejos mandos y maquinitas con pila de botón, con las tapas bien cerradas, por ejemplo con cinta adhesiva resistente.",
+        "Ingesta de cuerpo extraño, ¿qué tengo que hacer? (Familia y Salud, AEPap, 2016). Tema: qué hacer si se ha tragado un objeto. Hallazgo: mantener la calma, porque alrededor del 80% de los objetos tragados se expulsan con las heces, y no provocar el vómito. Hay que acudir al pediatra, que decidirá si hace falta una radiografía, y mirar cada día las heces; si en 2 semanas no ha salido, volver al pediatra. También hay que ir al pediatra si aparece dolor abdominal intenso, dificultad o dolor al tragar o vómitos persistentes. Si tose bien, se le anima a seguir tosiendo; si no puede toser, le cuesta respirar o está inconsciente, hay que llamar al 112."
+      ]
+    },
+    {
+      "source_type": "reference",
+      "title": "Atragantamiento (Comité de Soporte Vital, AEP)",
+      "organization": "Asociación Española de Pediatría",
+      "publication_year": null,
+      "url": "https://static.aeped.es/atragantamiento_csvaep_final_6bd02592cf.pdf",
+      "specialties": [
+        "pediatrics",
+        "general_medicine"
+      ],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "topics": [
+        "atragantamiento_objetos",
+        "juguetes"
+      ],
+      "chunks": [
+        "Atragantamiento (Comité de Soporte Vital, Asociación Española de Pediatría). Tema: juguetes y objetos pequeños que pueden atragantar. Hallazgo: la mejor medida preventiva es la supervisión constante, sobre todo cuando juegan juntos niños de distintas edades: los mayores no deben prestar juguetes con piezas pequeñas a los hermanos menores de 3 años. Los juguetes para menores de 3 años no pueden contener piezas de menos de 3 cm de diámetro y 6 cm de largo, porque a esa edad se llevan a la boca lo que encuentran. Hay que comprobar que no tengan partes que se desprendan (ojos, nariz, pilas, botones) y tener especial cuidado con los objetos redondos y lisos, como las canicas, que pueden bloquear por completo la vía aérea.",
+        "Atragantamiento (Comité de Soporte Vital, Asociación Española de Pediatría). Tema: globos, peluches, bolsas y compra de juguetes. Hallazgo: los globos son peligrosos porque, si se aspiran al intentar hincharlos o al morderlos y romperse, se adaptan a la forma de la vía aérea y pueden obstruirla por completo. Los peluches deben tener costuras firmes y pelo corto, sin relleno de bolitas ni semillas, y no se debe dejar jugar con bolsas de plástico, monedas o botones. El comité aconseja comprar juguetes con el marcado CE en tiendas con todos los permisos, respetar la edad y las instrucciones, evitar hasta los 3-5 años las piezas pequeñas, incluidas las pilas de botón, y revisar a menudo los juguetes por si tienen piezas sueltas o tapas de pilas abiertas."
+      ],
+      "undated_reason": "Documento para familias del Comité de Soporte Vital de la AEP sin fecha visible; consultado el 2026-11-02."
+    },
+    {
+      "source_type": "reference",
+      "title": "Sistemas de retención infantil: viajar a contramarcha salva vidas (EnFamilia, AEP)",
+      "organization": "Asociación Española de Pediatría",
+      "publication_year": null,
+      "url": "https://www.aeped.es/enfamilia/salud-en-familia/sistemas-retencion-infantil-viajar-contramarcha",
+      "specialties": [
+        "pediatrics",
+        "general_medicine"
+      ],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "topics": [
+        "silla_coche"
+      ],
+      "chunks": [
+        "Sistemas de retención infantil: viajar a contramarcha salva vidas (EnFamilia, Asociación Española de Pediatría). Tema: qué exige la ley en España. Hallazgo: los menores que midan 135 cm o menos deben viajar obligatoriamente con un sistema de retención infantil homologado y adaptado a su talla y peso y, como norma general, en los asientos traseros. Aunque la obligación llega hasta los 135 cm, por seguridad se recomienda mantener algún sistema de elevación hasta que el cinturón del coche quede bien colocado, habitualmente hacia los 150 cm. La silla debe estar homologada, ser compatible con el vehículo, instalarse según las instrucciones del fabricante y llevar al niño bien sujeto, sin holguras en el arnés y sin abrigo grueso.",
+        "Sistemas de retención infantil: viajar a contramarcha salva vidas (EnFamilia, Asociación Española de Pediatría). Tema: por qué y hasta cuándo viajar a contramarcha. Hallazgo: la cabeza del bebé es grande y pesada para su cuerpo y su cuello aún se está desarrollando; en un choque frontal, mirando hacia delante, la cabeza sale proyectada y el cuello soporta una gran tensión, mientras que a contramarcha la silla recoge y reparte la fuerza por la espalda, la cabeza y el cuello. La norma europea i-Size (R129) establece viajar a contramarcha al menos hasta los 15 meses, pero la recomendación preventiva más segura es ir más allá de ese mínimo legal, idealmente hasta los 4 años o mientras la silla lo permita por altura y peso.",
+        "Sistemas de retención infantil: viajar a contramarcha salva vidas (EnFamilia, Asociación Española de Pediatría). Tema: mitos y errores frecuentes. Hallazgo: los niños pequeños no necesitan mirar hacia delante para viajar tranquilos, el mareo no depende solo de la orientación de la silla, llevar las piernas dobladas no les resulta incómodo y muchos accidentes ocurren en trayectos cortos, así que la silla se usa siempre. Entre los errores más comunes están girar demasiado pronto al niño hacia delante, pasarlo antes de tiempo al elevador o al cinturón, dejar flojo el arnés, instalar mal la silla o usar una de segunda mano sin conocer su historia: una silla que ha sufrido un accidente puede haber perdido capacidad de protección aunque parezca intacta."
+      ],
+      "undated_reason": "Página divulgativa de EnFamilia sin fecha de publicación visible; consultada el 2026-11-02."
+    },
+    {
+      "source_type": "reference",
+      "title": "El recién nacido y el bebé en el coche, siempre bien sujetos (Familia y Salud, AEPap)",
+      "organization": "Asociación Española de Pediatría de Atención Primaria (AEPap)",
+      "publication_year": 2020,
+      "url": "https://www.familiaysalud.es/podemos-prevenir/prevencion-de-accidentes/prevencion-y-seguridad-vial/el-recien-nacido-y-el-bebe-en",
+      "specialties": [
+        "pediatrics",
+        "general_medicine"
+      ],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "topics": [
+        "silla_coche"
+      ],
+      "chunks": [
+        "El recién nacido y el bebé en el coche, siempre bien sujetos (Familia y Salud, AEPap, 2020). Tema: el primer viaje y lo que dice la ley. Hallazgo: el uso correcto de la sillita es probablemente la medida preventiva aislada que más vidas salva en los niños, y debe usarse siempre, en todos los trayectos por cortos que sean, empezando por el viaje de la maternidad a casa, que hay que preparar con antelación. Los menores de 18 años que midan menos de 135 cm viajan detrás con un dispositivo homologado para su talla y peso. Solo podrían ir delante si no hay asientos traseros o están ocupados por otros menores de esa estatura, y si la silla va en sentido contrario a la marcha hay que desactivar el airbag.",
+        "El recién nacido y el bebé en el coche, siempre bien sujetos (Familia y Salud, AEPap, 2020). Tema: capazo y sillas para los más pequeños. Hallazgo: el capazo o cuco (grupo 0, de 0 a 10 kg) va en el asiento trasero, en posición transversal y con la cabeza del bebé hacia el interior, y conviene pasar pronto al grupo 0+, siempre antes de los 3 meses. La sillita del grupo 0+ (de 0 a 13 kg) va siempre en sentido contrario a la marcha para proteger cabeza, cuello y columna, las zonas más vulnerables entre los 0 y los 2 años; como el bebé va semisentado, se recomiendan paradas frecuentes, cada hora y media, para que se mueva y se estire. Es mejor mantener al niño todo lo posible en el sistema anterior, que es más seguro.",
+        "El recién nacido y el bebé en el coche, siempre bien sujetos (Familia y Salud, AEPap, 2020). Tema: dónde va más seguro y cómo usar bien la silla. Hallazgo: lo más seguro es que el niño viaje en el asiento central trasero y en sentido contrario a la marcha mientras la longitud de sus piernas lo permita; las sillas i-Size de 40 a 105 cm suelen mantenerse a contramarcha hasta los 105 cm, que son unos 4 años. Usar mal la sillita multiplica por 4 el riesgo de muerte infantil en un accidente, por eso hay que seguir estrictamente las instrucciones del fabricante, ajustarla según crece y evitar holguras en arneses y cinturón. Tampoco debe haber objetos sueltos en el coche, como botellas, y los adultos deben llevar el cinturón puesto."
+      ]
+    },
+    {
+      "source_type": "reference",
+      "title": "Asientos orientados hacia atrás para bebés y niños pequeños (HealthyChildren, AAP)",
+      "organization": "American Academy of Pediatrics",
+      "publication_year": 2021,
+      "url": "https://www.healthychildren.org/Spanish/safety-prevention/on-the-go/Paginas/rear-facing-car-seats-for-infants-toddlers.aspx",
+      "specialties": [
+        "pediatrics",
+        "general_medicine"
+      ],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "topics": [
+        "silla_coche"
+      ],
+      "chunks": [
+        "Asientos orientados hacia atrás para bebés y niños pequeños (HealthyChildren.org, American Academy of Pediatrics, 2021). Tema: hasta cuándo mirando hacia atrás. Hallazgo: la AAP recomienda que todos los bebés viajen orientados hacia atrás desde el primer viaje a casa desde el hospital, y que bebés y niños pequeños sigan así hasta alcanzar el peso o la estatura máximos que permita el fabricante de su silla. La mayoría de las sillas convertibles permiten ir hacia atrás 2 años o más; cuando el bebé ya no cabe en la silla que solo va hacia atrás, se pasa a una convertible o todo en uno, todavía orientada hacia atrás. Que sus pies toquen el respaldo no es un problema: las lesiones de piernas son muy poco frecuentes en los niños que viajan así.",
+        "Asientos orientados hacia atrás para bebés y niños pequeños (HealthyChildren.org, American Academy of Pediatrics, 2021). Tema: airbag, arnés y ropa de abrigo. Hallazgo: nunca se coloca una silla orientada hacia atrás en el asiento delantero de un coche con el airbag del pasajero activo: si se inflara golpearía la silla justo donde está la cabeza del bebé y podría causar lesiones graves o la muerte. Las correas salen a la altura de los hombros o por debajo, el arnés debe quedar tan ajustado que no se pueda pellizcar la correa y el broche del pecho va a la altura de las axilas; la silla no debe moverse más de una pulgada por la zona del cinturón. Los abrigos abultados dejan las correas flojas: mejor capas finas y una manta por encima del arnés ya abrochado."
+      ]
+    },
+    {
+      "source_type": "reference",
+      "title": "Choosing a baby car seat (NHS)",
+      "organization": "NHS (National Health Service, Reino Unido)",
+      "publication_year": 2026,
+      "url": "https://www.nhs.uk/baby/first-aid-and-safety/safety/choosing-a-baby-car-seat/",
+      "specialties": [
+        "pediatrics",
+        "general_medicine"
+      ],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "topics": [
+        "silla_coche"
+      ],
+      "chunks": [
+        "Choosing a baby car seat (NHS, National Health Service, Reino Unido, 2026). Tema: comprar la silla antes del parto y elegir la adecuada. Hallazgo: se recomienda comprar la silla antes de que nazca el bebé, que encaje en el coche y sirva para un recién nacido, y practicar su instalación antes del parto, porque hará falta para el viaje del hospital a casa. Conviene probar varias en el propio coche, comprobar si tiene anclajes Isofix y elegir siempre una silla adecuada a la talla y el peso actuales del niño. El NHS desaconseja comprarla de segunda mano, porque puede haber sufrido un accidente o faltarle piezas o instrucciones, y solo aceptar una de familiares o amigos si se conoce su historia, no es muy antigua y conserva las instrucciones.",
+        "Choosing a baby car seat (NHS, National Health Service, Reino Unido, 2026). Tema: contramarcha y airbag. Hallazgo: con las sillas i-Size (R129), que se eligen por altura, el niño debe ir a contramarcha hasta los 15 meses como mínimo. Las sillas del grupo 0+ van de espaldas y sirven hasta unos 15 meses o 13 kg, y las combinadas del grupo 0+/1 sirven desde el nacimiento hasta que pesa unos 18 kg o tiene unos 4 años. El NHS aconseja usar la silla a contramarcha mientras el niño quepa en ella, porque protege mejor en caso de accidente. Llevar una silla de espaldas en el asiento del copiloto con el airbag activo es peligroso e ilegal, y siempre es más seguro que los niños viajen detrás."
+      ]
+    },
+    {
+      "source_type": "reference",
+      "title": "Juguetes que sean apropiados y seguros para los niños (EnFamilia, AEP)",
+      "organization": "Asociación Española de Pediatría",
+      "publication_year": null,
+      "url": "https://www.aeped.es/enfamilia/salud-en-familia/juguetes-que-sean-apropiados-seguros-para-ninos",
+      "specialties": [
+        "pediatrics",
+        "general_medicine"
+      ],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "topics": [
+        "juguetes",
+        "atragantamiento_objetos"
+      ],
+      "chunks": [
+        "Juguetes que sean apropiados y seguros para los niños (EnFamilia, Asociación Española de Pediatría). Tema: marcado CE y edad del juguete. Hallazgo: cada año algunos niños acaban en urgencias por lesiones relacionadas con juguetes. Deben llevar el marcado CE y cumplir la Directiva 2009/48/CE sobre seguridad de los juguetes, y hay que comprarlos apropiados a la edad del niño, mirando la recomendación del envoltorio. La advertencia de que un juguete no es adecuado para menores de 36 meses es importante, porque puede tener piezas pequeñas con las que un niño pequeño podría ahogarse. Conviene separar y guardar en sitios distintos los juguetes de los menores de 3 años y los de los niños mayores.",
+        "Juguetes que sean apropiados y seguros para los niños (EnFamilia, Asociación Española de Pediatría). Tema: piezas pequeñas, globos, cuerdas y pilas. Hallazgo: las piezas pequeñas, como las pilas, y los objetos lisos y redondos, como canicas, imanes, pelotas pequeñas y monedas, deben quedar fuera del suelo y lejos de los menores de 3 años, que tienden a llevarse a la boca lo que encuentran. Sonajeros, mordedores y juguetes para apretar deben ser tan grandes que no quepan en su boca. Los globos desinflados pueden asfixiar si se tragan: hay que vigilar el juego y recoger los trozos enseguida. Se tiran los embalajes, sobre todo los plásticos, se comprueba que las cuerdas no sean tan largas como para enrollarse al cuello y que el niño no pueda sacar las pilas.",
+        "Juguetes que sean apropiados y seguros para los niños (EnFamilia, Asociación Española de Pediatría). Tema: revisar los juguetes en casa. Hallazgo: hay que revisar periódicamente los juguetes por si tienen astillas, piezas sueltas o la tapa de las pilas abierta, comprobar que las piezas que se mueven no le pillen los dedos y que el juguete soporte el peso del niño. Si el juguete tiene pintura, barniz u otra capa, hay que verificar que no es tóxica y que está pensada para niños, y cuando existan medidas de seguridad, como cascos o protectores, utilizarlas. La página extrae estas recomendaciones de la guía de seguridad de productos infantiles y las dirige sobre todo a las compras de Navidad y Reyes."
+      ],
+      "undated_reason": "Página divulgativa de EnFamilia sin fecha de publicación visible; consultada el 2026-11-02."
+    },
+    {
+      "source_type": "reference",
+      "title": "Vamos a regalar juguetes, ¡que sean seguros! (Familia y Salud, AEPap)",
+      "organization": "Asociación Española de Pediatría de Atención Primaria (AEPap)",
+      "publication_year": 2018,
+      "url": "https://www.familiaysalud.es/vivimos-sanos/ocio-y-actividad-fisica/juegos-y-juguetes/vamos-regalar-juguetes-que-sean-seguros",
+      "specialties": [
+        "pediatrics",
+        "general_medicine"
+      ],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "topics": [
+        "juguetes"
+      ],
+      "chunks": [
+        "Vamos a regalar juguetes, ¡que sean seguros! (Familia y Salud, AEPap, 2018). Tema: qué debe figurar en un juguete seguro. Hallazgo: un juguete puede causar heridas, estrangulamiento, asfixia, descargas eléctricas, incendios o intoxicaciones, y los embalajes, cintas y plásticos también son peligrosos y deben retirarse pronto. Al comprar hay que buscar la marca CE de Conformidad Europea, la edad mínima aconsejada, que debe constar obligatoriamente, las instrucciones y avisos en el idioma del país y el nombre y la dirección del fabricante. En mercadillos, bazares y compras por internet es más probable el fraude, incluso con la marca CE falsificada. Si el juguete se rompe, se oxida o la tapa de la pila no cierra, los padres deben retirarlo.",
+        "Vamos a regalar juguetes, ¡que sean seguros! (Familia y Salud, AEPap, 2018). Tema: consejos para el primer año y para cuando empiezan a jugar fuera de casa. Hallazgo: en el primer año todo se lo meten en la boca: hay que quitar envases y embalajes enseguida, revisar juguetes viejos y nuevos por si tienen bordes agudos o partes pequeñas que se desprendan y guardar aparte los de los pequeños y los de los mayores; se sugieren gimnasios para bebés, mantas de juego y muñecos blandos que suenan. Cuando empiezan a jugar fuera de casa siguen teniendo riesgo de asfixia con piezas pequeñas, cintas y cadenas, y hay que comprobar que no puedan abrir el compartimento de las pilas; encajan bien los bloques grandes, los juguetes de arrastre y los libros."
+      ]
+    },
+    {
+      "source_type": "reference",
+      "title": "Cómo comprar juguetes seguros (HealthyChildren, AAP)",
+      "organization": "American Academy of Pediatrics",
+      "publication_year": 2021,
+      "url": "https://www.healthychildren.org/Spanish/safety-prevention/at-home/Paginas/How-to-Buy-Safe-Toys.aspx",
+      "specialties": [
+        "pediatrics",
+        "general_medicine"
+      ],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "topics": [
+        "juguetes"
+      ],
+      "chunks": [
+        "Cómo comprar juguetes seguros (HealthyChildren.org, American Academy of Pediatrics, 2021). Tema: consejos para elegir un juguete seguro. Hallazgo: la mayoría de las lesiones por juguetes son cortes, rasguños y moratones leves, pero a veces son graves, cuando el juguete es peligroso o se usa mal. La AAP aconseja leer la etiqueta y la edad para la que es seguro, pensar en grande (todas las piezas más grandes que la boca del niño), evitar los juguetes que disparan objetos y los muy ruidosos, elegir peluches bien cosidos y lavables, sin cintas sueltas ni relleno de bolitas, y juguetes de plástico resistente y no tóxicos, y vigilar las pilas de botón y los imanes de alta potencia que puedan soltarse y acabar en la boca, la nariz o los oídos.",
+        "Cómo comprar juguetes seguros (HealthyChildren.org, American Academy of Pediatrics, 2021). Tema: juguetes de cuna y juguetes retirados del mercado. Hallazgo: los cordeles o cables que cuelgan de la cuna deben ser cortos para evitar estrangulamientos, y los móviles y gimnasios colgantes deben quedar fuera de su alcance y retirarse cuando el bebé pueda incorporarse o ponerse a gatas, o al cumplir 5 meses, lo que ocurra primero, porque pueden estrangularlo. Los juguetes retirados del mercado, por ejemplo por plomo o por riesgo de atragantamiento, se desechan de inmediato, y si se sospecha que el niño ha estado expuesto a un juguete con plomo conviene pedir al pediatra un análisis de sangre."
+      ]
+    },
+    {
+      "source_type": "reference",
+      "title": "Golpe de calor (EnFamilia, AEP)",
+      "organization": "Asociación Española de Pediatría",
+      "publication_year": null,
+      "url": "https://www.aeped.es/enfamilia/salud-en-familia/golpe-calor",
+      "specialties": [
+        "pediatrics",
+        "general_medicine"
+      ],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "topics": [
+        "sol_calor"
+      ],
+      "chunks": [
+        "Golpe de calor (EnFamilia, Asociación Española de Pediatría). Tema: por qué los bebés son los más vulnerables al calor. Hallazgo: la exposición a temperaturas altas puede elevar en exceso la temperatura corporal y es una urgencia extrema. Los menores de 4 años, y sobre todo los menores de 1 año, son los más vulnerables porque su temperatura sube más rápido que la de un adulto: tienen menos reserva de agua, sudan menos y su aparato respiratorio es inmaduro. Puede pasar con calor y humedad sin protección ni hidratación adecuadas, también en días nublados o en ambientes con sombra. Dejar a un niño solo en un coche a pleno sol es una causa frecuente que se repite cada año.",
+        "Golpe de calor (EnFamilia, Asociación Española de Pediatría). Tema: síntomas y qué hacer mientras se llega al hospital. Hallazgo: puede dar mareos, vómitos, fiebre de más de 40 ºC, dolor de cabeza o irritabilidad y pulso acelerado, piel seca y muy caliente, cansancio o respiración rápida, y en los casos graves desmayo o pérdida de conciencia. Es una urgencia médica extrema que avanza en minutos y lo primordial es llevar al niño a un hospital. Mientras, tumbarlo boca arriba a la sombra en un sitio fresco, aflojarle la ropa, poner compresas de agua fría (no hielo) en cabeza, cara, cuello, nuca y pecho, no sumergirlo en agua helada ni frotarlo con alcohol, darle agua fría si está consciente y sin vómitos y, si está inconsciente, avisar al 112.",
+        "Golpe de calor (EnFamilia, Asociación Española de Pediatría). Tema: prevención en los días de mucho calor. Hallazgo: lo principal es anticiparse. Hay que ofrecer líquidos con frecuencia sin esperar a que los pidan (el pecho en los lactantes), preparar comidas ligeras con fruta y verdura fresca, evitar el ejercicio en las horas centrales del día, vestirlos con ropa transpirable, ligera, holgada y de colores claros, con un gorro ligero, y mantenerlos a la sombra, con aire acondicionado o ventilador si es posible, mojándolos con frecuencia. Nunca se deja a un niño solo en el coche, ni al sol ni a la sombra, aunque las ventanillas estén abiertas, y si se ve a un niño solo en un coche hay que llamar al 112 de inmediato."
+      ],
+      "undated_reason": "Página divulgativa de EnFamilia sin fecha de publicación visible; consultada el 2026-11-02. Revisada por el Comité de Promoción de la Salud de la AEP."
+    },
+    {
+      "source_type": "reference",
+      "title": "Prevenga las muertes de niños en vehículos calientes (HealthyChildren, AAP)",
+      "organization": "American Academy of Pediatrics",
+      "publication_year": 2025,
+      "url": "https://www.healthychildren.org/Spanish/safety-prevention/on-the-go/Paginas/Prevent-Child-Deaths-in-Hot-Cars.aspx",
+      "specialties": [
+        "pediatrics",
+        "general_medicine"
+      ],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "topics": [
+        "sol_calor"
+      ],
+      "chunks": [
+        "Prevenga las muertes de niños en vehículos calientes (HealthyChildren.org, American Academy of Pediatrics, 2025). Tema: por qué un coche cerrado es tan peligroso. Hallazgo: un niño que se queda dentro de un vehículo caliente, o que se mete en un coche abierto sin que nadie lo note, puede morir de golpe de calor en muy poco tiempo; es la primera causa de muerte relacionada con vehículos, sin contar los choques, en menores de 15 años. El cuerpo de un niño se calienta de 3 a 5 veces más rápido que el de un adulto, y en solo 10 minutos un coche puede subir más de 20 grados Fahrenheit. Dejar el aire acondicionado puesto o la ventanilla entreabierta con el coche apagado apenas ayuda, y puede ocurrir incluso con 13,8 ºC en el exterior.",
+        "Prevenga las muertes de niños en vehículos calientes (HealthyChildren.org, American Academy of Pediatrics, 2025). Tema: cómo no olvidar a un niño en el coche y qué hacer si se ve uno solo. Hallazgo: cualquier padre, incluso el más atento, puede olvidar a un niño en el asiento de atrás, sobre todo con un cambio de rutina. La AAP aconseja mirar siempre el asiento trasero antes de cerrar y alejarse, dejar allí el móvil o el bolso, pedir a la guardería que llame si el niño se retrasa más de 10 minutos, y tener el coche cerrado y las llaves fuera de su alcance. Si se ve a un niño solo en un coche hay que llamar de inmediato a emergencias (112); si no responde o parece sufrir, sacarlo del coche y mojarlo con agua fresca, no fría ni con hielo, y si responde, quedarse a su lado hasta que llegue la ayuda."
+      ]
+    },
+    {
+      "source_type": "reference",
+      "title": "Calor extremo: cómo evitar el golpe de calor en niños (HealthyChildren, AAP)",
+      "organization": "American Academy of Pediatrics",
+      "publication_year": 2026,
+      "url": "https://www.healthychildren.org/Spanish/safety-prevention/at-home/Paginas/protecting-children-from-extreme-heat-information-for-parents.aspx",
+      "specialties": [
+        "pediatrics",
+        "general_medicine"
+      ],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "topics": [
+        "sol_calor"
+      ],
+      "chunks": [
+        "Calor extremo: cómo evitar el golpe de calor en niños (HealthyChildren.org, American Academy of Pediatrics, 2026). Tema: hidratación del bebé y del niño cuando hace mucho calor. Hallazgo: el calor puede enfermar muy rápido a los niños con deshidratación, agotamiento, calambres o golpe de calor, que es una emergencia médica. Hay que animarles a beber agua a menudo, incluso antes de que la pidan, y llevar agua al salir. En los bebés, la página precisa que en días de calor a los que toman leche materna en biberón se les puede ofrecer más leche materna, pero no agua, sobre todo en los primeros 6 meses de vida, y a los que toman fórmula, más fórmula. Ropa ligera, holgada y de colores claros, descansos frecuentes para refrescarse y baños o rociados de agua fresca ayudan.",
+        "Calor extremo: cómo evitar el golpe de calor en niños (HealthyChildren.org, American Academy of Pediatrics, 2026). Tema: signos de enfermedad por calor y cuándo llamar al pediatra. Hallazgo: la AAP pide contactar de inmediato con el pediatra si, tras mucho tiempo expuesto al calor, el niño tiene síntomas que no mejoran rápido en un lugar fresco: sensación de desmayo o cansancio extremo (sueño inusual o dificultad para despertarlo), confusión, pérdida de coordinación, dolor de cabeza inusual o intenso, fiebre, sed intensa, no orinar durante muchas horas, náuseas o vómitos, respiración más rápida o más profunda de lo normal, entumecimiento u hormigueo de la piel, o dolores y espasmos musculares.",
+        "Calor extremo: cómo evitar el golpe de calor en niños (HealthyChildren.org, American Academy of Pediatrics, 2026). Tema: casa, ventiladores y coche en una ola de calor. Hallazgo: si la casa no tiene aire acondicionado, conviene buscar un edificio cercano que lo tenga, como una biblioteca o un centro comercial; en casa se cierran persianas y cortinas, y las plantas bajas suelen ser más frescas. Los ventiladores ayudan, pero deben estar a distancia de los niños y no apuntar directamente a nadie cuando la temperatura pase de 32 ºC, porque el aire seco aumenta la deshidratación. Con calor extremo es mejor salir poco rato o quedarse dentro con juegos tranquilos, y nunca se deja a un niño en el coche, que se calienta peligrosamente en poco tiempo aunque las ventanillas estén abiertas."
+      ]
+    },
+    {
+      "source_type": "reference",
+      "title": "En verano protégete del calor (Ministerio de Sanidad)",
+      "organization": "Ministerio de Sanidad (España)",
+      "publication_year": 2025,
+      "url": "https://www.sanidad.gob.es/areas/promocionPrevencion/lesiones/temperaturasExtremas/docs/TemperaturasExtremas_ProtegetedelCalor.pdf",
+      "specialties": [
+        "pediatrics",
+        "general_medicine"
+      ],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "topics": [
+        "sol_calor"
+      ],
+      "chunks": [
+        "En verano protégete del calor (Ministerio de Sanidad, España, 2025). Tema: grupos de riesgo y prevención ante las altas temperaturas. Hallazgo: el folleto del Ministerio, dirigido a toda la población, sitúa a los lactantes y menores de 4 años entre las personas con mayor riesgo y resume la prevención en hidratarse, cubrirse y refrescarse: beber agua aunque no se tenga sed, comer ligero y con frecuencia, evitar las horas más calurosas, buscar lugares frescos y a la sombra, vestir ropa ligera y poco ajustada y usar gorro y gafas de sol. Recuerda que cada verano se activa el Plan de actuaciones preventivas de los efectos del exceso de temperaturas sobre la salud y que conviene informarse en fuentes oficiales.",
+        "En verano protégete del calor (Ministerio de Sanidad, España, 2025). Tema: agotamiento por calor frente a golpe de calor. Hallazgo: el agotamiento da dolor de cabeza, náuseas, mareo, vómitos, cansancio, sudor, piel fría, pálida y húmeda, pulso rápido y débil y fiebre de menos de 40 ºC: se bebe agua a sorbitos, se afloja la ropa, se busca un lugar fresco con paños húmedos o un baño de agua fría, y se pide atención sanitaria de inmediato si hay vómitos o los síntomas empeoran o duran más de una hora. El golpe de calor, con piel caliente y roja, fiebre de más de 40 ºC, convulsiones, cambios de conducta o alteración de la conciencia, es una urgencia vital: llamar inmediatamente al 112, llevar a la persona a un lugar fresco, bajarle la temperatura con paños fríos o agua fría y no darle nada de beber."
+      ]
+    },
+    {
+      "source_type": "reference",
+      "title": "Keeping your baby safe in the sun (NHS)",
+      "organization": "NHS (National Health Service, Reino Unido)",
+      "publication_year": 2024,
+      "url": "https://www.nhs.uk/baby/first-aid-and-safety/safety/safety-in-the-sun/",
+      "specialties": [
+        "pediatrics",
+        "general_medicine"
+      ],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "topics": [
+        "sol_calor"
+      ],
+      "chunks": [
+        "Keeping your baby safe in the sun (NHS, National Health Service, Reino Unido, 2024). Tema: bebés menores de 6 meses y el sol directo. Hallazgo: los bebés menores de 6 meses deben mantenerse fuera de la luz solar directa, y los mayores también lo más posible, sobre todo en verano y entre las 11 y las 15 horas, cuando el sol es más fuerte. Si se sale con calor, se pone una sombrilla o un parasol en el carrito y no se tapa con una manta, porque el bebé puede sobrecalentarse; hay que comprobar a menudo que no tenga demasiado calor. No se le pone demasiada ropa: prendas ligeras y holgadas y un sombrero de ala ancha o con faldón que proteja la cabeza, las orejas y el cuello.",
+        "Keeping your baby safe in the sun (NHS, National Health Service, Reino Unido, 2024). Tema: líquidos en días de calor según la edad. Hallazgo: los bebés con lactancia materna exclusiva no necesitan agua hasta que empiezan a comer sólidos, aunque con calor pueden querer mamar más de lo habitual. A los que toman biberón, además de sus tomas de leche, se les puede ofrecer un poco de agua hervida y enfriada. Desde que empiezan los sólidos, hacia los 6 meses, se les ofrecen sorbos de agua en vaso con las comidas, y con calor algo más fuera de las comidas, aunque la leche materna o de fórmula sigue siendo su bebida principal el primer año. Desde los 12 meses, sus bebidas principales son agua, leche materna o leche entera de vaca.",
+        "Keeping your baby safe in the sun (NHS, National Health Service, Reino Unido, 2024). Tema: mantener fresco al bebé dentro y fuera de casa. Hallazgo: no se deja a bebés ni a niños en espacios pequeños y cerrados, como un coche aparcado, porque se calientan muy deprisa. Una piscina hinchable a la sombra y con vigilancia constante, o un baño fresco antes de dormir, ayudan a refrescarlos. Durante el día se cierran las persianas o cortinas del dormitorio y se puede usar un ventilador para mover el aire, sin apuntarlo directamente al niño porque podría deshidratarle. Por la noche, poca ropa de dormir y de cama (puede llevar solo el pañal), y la habitación, idealmente, entre 16 y 20 ºC."
+      ]
+    },
+    {
+      "source_type": "guideline",
+      "title": "Para crecer sanos, los niños tienen que pasar menos tiempo sentados y jugar más (OMS)",
+      "organization": "World Health Organization (WHO)",
+      "publication_year": 2019,
+      "url": "https://www.who.int/es/news/item/24-04-2019-to-grow-up-healthy-children-need-to-sit-less-and-play-more",
+      "specialties": [
+        "pediatrics",
+        "general_medicine"
+      ],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "topics": [
+        "pantallas"
+      ],
+      "chunks": [
+        "Para crecer sanos, los niños tienen que pasar menos tiempo sentados y jugar más (Organización Mundial de la Salud, OMS, 2019). Tema: pantallas y tiempo sujeto en menores de un año. Hallazgo: las directrices de la OMS para menores de 5 años piden que los lactantes estén activos varias veces al día, sobre todo con juego interactivo en el suelo, incluidos al menos 30 minutos boca abajo repartidos durante el día si todavía no se desplazan. No deben pasar más de una hora seguida sujetos en carritos, sillitas, tronas o a la espalda de un cuidador, y no se recomienda que pasen tiempo frente a pantallas; en los ratos de inactividad se aconseja que un cuidador les lea o les cuente cuentos.",
+        "Para crecer sanos, los niños tienen que pasar menos tiempo sentados y jugar más (Organización Mundial de la Salud, OMS, 2019). Tema: pantallas entre 1 y 2 años. Hallazgo: los niños de 1 a 2 años deben hacer al menos 180 minutos al día de actividad física de cualquier intensidad, repartidos a lo largo del día, y no pasar más de una hora seguida sujetos ni sentados durante mucho tiempo. Para los niños de 1 año no se recomienda ningún tiempo sedentario ante una pantalla (ver la televisión o vídeos o jugar en el ordenador); a los 2 años no debe pasar de una hora, y cuanto menos, mejor. La OMS subraya que el tiempo tranquilo con un cuidador y sin pantallas, como leer, contar cuentos, cantar o hacer puzles, es muy importante para su desarrollo."
+      ]
+    },
+    {
+      "source_type": "reference",
+      "title": "Plan digital familiar de la Asociación Española de Pediatría (AEP)",
+      "organization": "Asociación Española de Pediatría",
+      "publication_year": null,
+      "url": "https://plandigitalfamiliar.aeped.es/plandigitalfamiliar.php",
+      "specialties": [
+        "pediatrics",
+        "general_medicine"
+      ],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "topics": [
+        "pantallas"
+      ],
+      "chunks": [
+        "Plan digital familiar de la Asociación Española de Pediatría (Plan Digital Familiar, Asociación Española de Pediatría). Tema: pantallas hasta los 6 años. Hallazgo: el plan recomienda evitar el uso de pantallas hasta los 6 años, porque no hay un tiempo seguro, y reducirlo todo lo posible en esta etapa. Explica que los primeros 6 años son de rápido desarrollo neurológico, que el niño aprende por los sentidos, la imitación y la repetición, y que las pantallas desplazan los estímulos adecuados para su desarrollo; el ruido de fondo y estar solo ante una pantalla interfieren en la memoria. Como excepción, limita el uso digital a videollamadas cortas con familiares y amigos con una finalidad concreta (cantar, leer un cuento, saludar), lejos de las comidas y del sueño.",
+        "Plan digital familiar de la Asociación Española de Pediatría (Plan Digital Familiar, Asociación Española de Pediatría). Tema: dispositivos cuidadores, soportes y pantallas encendidas. Hallazgo: el plan desaconseja dejar al niño con el móvil o la tableta para que se entretenga sin un adulto, lo que llama dispositivos cuidadores, y usar la pantalla como chupete emocional ante las rabietas, que son normales a esta edad. Pide evitar los soportes de pantallas para el carrito o el coche, porque los menores de 6 años no deberían estar expuestos y les impiden atender a su entorno; en los trayectos pueden dormir, escuchar música o mirar el paisaje. También aconseja apagar los aparatos que nadie usa, porque como ruido de fondo distraen el aprendizaje del vocabulario, la atención y el juego."
+      ],
+      "undated_reason": "Web del Plan Digital Familiar de la AEP sin fecha visible en la página; consultada el 2026-11-02."
+    },
+    {
+      "source_type": "reference",
+      "title": "¿Puede mi hijo menor de dos años usar los smartphones, tabletas y la televisión? (Familia y Salud, AEPap)",
+      "organization": "Asociación Española de Pediatría de Atención Primaria (AEPap)",
+      "publication_year": 2023,
+      "url": "https://www.familiaysalud.es/vivimos-sanos/ocio-y-actividad-fisica/nuevas-tecnologias/puede-mi-hijo-menor-de-dos-anos-usar-los",
+      "specialties": [
+        "pediatrics",
+        "general_medicine"
+      ],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "topics": [
+        "pantallas"
+      ],
+      "chunks": [
+        "¿Puede mi hijo menor de dos años usar los smartphones, tabletas y la televisión? (Familia y Salud, AEPap, 2023). Tema: por qué no hay un tiempo seguro de pantalla antes de los 2 años. Hallazgo: los dos primeros años son de desarrollo físico y neurológico muy rápido, la atención y la memoria son inmaduras y no se sabe si las pantallas ayudan a aprender más que el juego y la imitación; sí se sabe que afectan al sueño, aumentan el riesgo de obesidad y afectan al lenguaje y al manejo de la frustración. En esta edad no hay un tiempo seguro de uso. La televisión es pasiva, con cambios de imagen y ruido que un niño pequeño no puede procesar, y con el móvil o la tableta el niño imita movimientos pero no entiende el contenido.",
+        "¿Puede mi hijo menor de dos años usar los smartphones, tabletas y la televisión? (Familia y Salud, AEPap, 2023). Tema: pantallas niñera y alternativas. Hallazgo: en los menores de dos años las pantallas sirven para entretener, no para aprender, y las llamadas pantallas niñera deberían ser un último recurso tras agotar otras opciones. Lo que más les ayuda es el suelo para moverse en el primer año, los juguetes y objetos cotidianos, que les hablen y les canten, el contacto con otros niños y con la naturaleza y, desde el año o los 18 meses, el juego libre que dirige el propio niño. Los libros son una alternativa excelente. Si se usan pantallas, en ratos cortos, siempre acompañados y nunca durante las comidas ni en la hora antes de dormir."
+      ]
+    },
+    {
+      "source_type": "reference",
+      "title": "La American Academy of Pediatrics publica nuevas recomendaciones para el consumo mediático de los niños (HealthyChildren, AAP)",
+      "organization": "American Academy of Pediatrics",
+      "publication_year": 2016,
+      "url": "https://www.healthychildren.org/Spanish/news/Paginas/aap-announces-new-recommendations-for-childrens-media-use.aspx",
+      "specialties": [
+        "pediatrics",
+        "general_medicine"
+      ],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "topics": [
+        "pantallas"
+      ],
+      "chunks": [
+        "La American Academy of Pediatrics publica nuevas recomendaciones para el consumo mediático de los niños (HealthyChildren.org, American Academy of Pediatrics, 2016). Tema: pantallas antes de los 18 meses y de 18 a 24 meses. Hallazgo: la AAP recomienda evitar los medios digitales en los menores de 18 meses, salvo las videollamadas. Si los padres de niños de 18 a 24 meses quieren introducir contenido digital, deben elegir programas de alta calidad y verlos con ellos para ayudarles a entender lo que ven. Aconseja dar prioridad a la creatividad y al juego sin aparatos, porque los problemas empiezan cuando las pantallas desplazan la actividad física, la exploración y la relación cara a cara, y el exceso de pantalla puede afectar al sueño.",
+        "La American Academy of Pediatrics publica nuevas recomendaciones para el consumo mediático de los niños (HealthyChildren.org, American Academy of Pediatrics, 2016). Tema: plan familiar de medios y momentos sin pantallas. Hallazgo: la AAP pide que cada familia cree un plan de uso de medios que tenga en cuenta la salud, la educación y el ocio de cada hijo y de toda la familia, con horarios sin pantallas, como las comidas o los trayectos en coche, y zonas de la casa sin pantallas, como los dormitorios. Considera que lo más importante que pueden hacer los padres es ser los guías de sus hijos en el uso de los medios, y para ello ofrece una herramienta en línea con la que preparar ese plan familiar."
+      ]
+    }
+  ]
+}
