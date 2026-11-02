@@ -24,6 +24,7 @@ import pytest
 from adelia.clinical.golden import contains_dosage
 from adelia.enrichment import evidence_loader
 from adelia.enrichment.evidence_hygiene import canonical_organization
+from tests import evidence_corpus_checks as checks
 
 PATH = Path(__file__).resolve().parents[1] / "adelia" / "enrichment" / "data" / "evidence_digestivo_piel.json"
 
@@ -183,3 +184,21 @@ def test_the_loader_reads_it(monkeypatch):
     assert added == len(data["sources"])
     assert chunks == sum(len(s["chunks"]) for s in data["sources"])
     assert seen["origin"] == PATH.name and seen["tier"] == "evidence"
+
+
+# The rules every domain file shares (tests/evidence_corpus_checks.py). The
+# tests above are this file's own and stay as they are; these hold it to the
+# same bar as its siblings, which are stricter on a few points (URLs shared
+# with another file, a named drug anywhere, a remedy class outside a warning).
+
+
+def test_no_title_or_url_is_already_in_another_file():
+    checks.check_disjoint_from_other_files(PATH)
+
+
+def test_sources_follow_the_shared_shape():
+    checks.check_source_shape(_data(), SUBTOPICS)
+
+
+def test_no_chunk_names_a_medicine_by_name_or_a_banned_remedy():
+    checks.check_no_medicine(_data())
