@@ -30,6 +30,7 @@ from typing import Literal
 from fastapi import APIRouter, HTTPException, Query, status
 from pydantic import BaseModel, Field
 
+from adelia.agent.corpus_query import corpus_query
 from adelia.agent.graph import GraphDeps, GraphUnavailable, run_graph
 from adelia.agent.route import log_route
 from adelia.config import settings
@@ -156,6 +157,9 @@ async def ask_demo(payload: DemoQuestion) -> dict:
         # a first name is not clinical content and, measured, it pushed the
         # demo's own first suggestion past the relevance cut-off (fixture.py).
         retrieval_text=lambda message: retrieval_query(message, locale),
+        # A French or English question is searched in Spanish, the corpus's
+        # language; the model still answers the original (corpus_query.py).
+        corpus_text=lambda text, lang: corpus_query(text, lang, provider=provider),
     )
     # The red flag runs before the gate, deliberately: a referral costs one
     # regex and nothing else, so a parent who arrives frightened must never

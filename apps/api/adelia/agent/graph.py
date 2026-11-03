@@ -189,6 +189,9 @@ class GraphDeps:
     admit: Callable[[], Awaitable[None]] | None = None
     patient_context: str | None = None
     retrieval_text: Callable[[str], str] = field(default=lambda message: message)
+    #: The retrieval text rendered for the Spanish corpus, given the locale
+    #: (agent/corpus_query.py). Never raises. None embeds the retrieval text.
+    corpus_text: Callable[[str, str], Awaitable[str]] | None = None
     # Account surfaces
     retrieve: Callable[["AgentState"], Awaitable[Retrieved]] | None = None
     stream: Stream | None = None
@@ -455,8 +458,11 @@ async def retrieve(state: AgentState, runtime: Runtime[GraphDeps]) -> dict:
             "patient_context": found.patient_context,
             "citations": list(found.citations),
         }
+    text = deps.retrieval_text(state["message"])
+    if deps.corpus_text is not None:
+        text = await deps.corpus_text(text, _locale(state))
     try:
-        embeds = await deps.embed([deps.retrieval_text(state["message"])])
+        embeds = await deps.embed([text])
     except Exception as exc:  # noqa: BLE001 - no key, no network, provider down
         logger.warning("graph: embedding failed (%s)", type(exc).__name__)
         raise GraphUnavailable("embedding failed") from exc

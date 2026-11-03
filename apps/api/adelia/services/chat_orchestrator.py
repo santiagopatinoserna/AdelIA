@@ -18,6 +18,7 @@ from adelia.llm import (
     reasoning_effort_kwargs,
     uses_anthropic,
 )
+from adelia.agent.corpus_query import corpus_query
 from adelia.agent.graph import GraphDeps, Retrieved, stream_graph
 from adelia.agent.route import log_route
 from adelia.db import AsyncSessionLocal
@@ -351,9 +352,14 @@ async def retrieve_for_account(
 
     Scoped to one child (audit 4.1). Raises when the embedding cannot be
     computed; the surface turns that into its error event.
+
+    The two halves embed different text when she writes in French or English:
+    her documents are searched with what she wrote, the Spanish corpus with
+    its Spanish rendering (agent/corpus_query.py). Both go in one embedding
+    call, so the second vector costs no extra round trip.
     """
     citations: list[ChatCitation] = []
-    query_embedding: list[float] | None = None
+    evidence_embedding: list[float] | None = None
 
     # Elliptical follow-ups ("¿y ese valor?") embed poorly on their own —
     # augment the retrieval query with the tail of the conversation. Temporal
@@ -362,6 +368,7 @@ async def retrieve_for_account(
     if history:
         tail = " ".join(m["content"] for m in history[-2:] if isinstance(m.get("content"), str))
         retrieval_query = f"{tail[-1000:]}\n{question}"
+    corpus_text = await corpus_query(retrieval_query, locale)
 
     temporal = detect_temporal_intent(question)
     if temporal is not None:
@@ -375,8 +382,8 @@ async def retrieve_for_account(
         # Also embed for evidence retrieval (temporal queries benefit from
         # guidelines about the queried lab — e.g. "HbA1c curve" → ADA targets)
         try:
-            qe = await embed_texts([retrieval_query])
-            query_embedding = qe[0] if qe else None
+            qe = await embed_texts([corpus_text])
+            evidence_embedding = qe[0] if qe else None
         except Exception as e:
             logger.warning("embed for evidence failed in temporal path: %s", e)
         for r in rows:
@@ -391,10 +398,14 @@ async def retrieve_for_account(
             )
     else:
         # Standard RAG path
-        query_embeds = await embed_texts([retrieval_query])
+        texts = [retrieval_query]
+        if corpus_text != retrieval_query:
+            texts.append(corpus_text)
+        query_embeds = await embed_texts(texts)
         if not query_embeds:
             raise RuntimeError("embed_texts returned empty — cannot retrieve chunks")
         query_embedding = query_embeds[0]
+        evidence_embedding = query_embeds[1] if len(texts) == 2 else query_embedding
         chunks = await retrieve_relevant_chunks(
             scope=scope,
             query_embedding=query_embedding,
@@ -420,7 +431,7 @@ async def retrieve_for_account(
 
     # Dual-RAG: parallel evidence retrieval
     evidence_matches = await _retrieve_evidence_for_query(
-        query_embedding, query_text=question, locale=locale
+        evidence_embedding, query_text=question, locale=locale
     )
     return Retrieved(
         evidence=evidence_matches, patient_context=patient_context or None, citations=citations

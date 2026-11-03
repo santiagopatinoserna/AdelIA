@@ -228,6 +228,24 @@ async def test_the_embedding_carries_the_retrieval_text_not_the_message():
     assert texts == ["¿Es normal que el bebé estornude?"]
 
 
+async def test_the_corpus_is_searched_with_the_corpus_text_and_the_model_reads_the_original():
+    """agent/corpus_query.py: a French question is embedded in Spanish, after
+    the name is neutralised, and the model still answers what she wrote."""
+    fakes = Fakes(intent="question")
+    seen: list = []
+
+    async def _corpus_text(text, locale):
+        seen.append((text, locale))
+        return "¿Es normal que el bebé estornude? (es)"
+
+    await _run(fakes, "Est-ce normal que Lucía éternue ?", locale="fr", corpus_text=_corpus_text)
+    assert seen == [("Est-ce normal que el bebé éternue ?", "fr")]
+    (_, texts), = [c for c in fakes.calls if c[0] == "embed"]
+    assert texts == ["¿Es normal que el bebé estornude? (es)"]
+    (_, _, user_message), = [c for c in fakes.calls if c[0] == "generate"]
+    assert "Est-ce normal que Lucía éternue ?" in user_message
+
+
 async def test_a_dead_classifier_falls_back_to_the_plan_path():
     fakes = Fakes(intent="plan", via="fallback")
     out = await _run(fakes, "hola, una cosa")
