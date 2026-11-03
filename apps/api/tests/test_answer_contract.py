@@ -60,6 +60,30 @@ def test_contract_forbids_clinical_claims_without_a_citation(locale):
 
 
 @pytest.mark.parametrize("locale", LOCALES)
+@pytest.mark.parametrize("shape", ("plan", "question"))
+def test_the_uncovered_half_of_a_question_gets_the_coded_refusal(locale, shape):
+    """Golden B9 and B14 (2026-11-03, Claude on the prod corpus): the contract
+    asked for no_info_phrase on the uncovered half, the model declined the dose
+    in those words, and `golden.is_refusal` saw an answer. The clause now asks
+    for the refusal verbatim, the text the gate looks for, and names the old
+    phrase only as what not to write."""
+    clauses = answer_contract(locale, shape=shape)
+    partial = next(ln for ln in clauses.split("\n- ") if ln.startswith("Si solo una parte"))
+    assert f'"{no_evidence_reply(locale)}"' in partial
+    assert f"en lugar de {CONTRACTS[locale].no_info_phrase}" in partial
+    assert "ni una cifra, ni una pauta" in partial
+    assert f"di {CONTRACTS[locale].no_info_phrase}" not in clauses
+
+
+@pytest.mark.parametrize("locale", LOCALES)
+def test_a_source_for_another_age_backs_nothing_for_this_baby(locale):
+    """Golden B8: a newborn jaundice guideline was applied to a 4-month-old."""
+    clauses = answer_contract(locale)
+    assert "edad que no incluye la del bebé" in clauses
+    assert "no respalda nada para este bebé" in clauses
+
+
+@pytest.mark.parametrize("locale", LOCALES)
 def test_both_surfaces_embed_the_same_clauses(locale):
     clauses = answer_contract(locale)
     assert clauses in chat_system_prompt(locale)

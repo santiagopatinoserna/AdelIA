@@ -339,17 +339,34 @@ def answer_contract(locale: str, *, shape: str = "plan") -> str:
 
     `shape` swaps only the format clause (plan or short answer); the citation
     obligation, the refusal and the no-invention clauses are the same text.
+
+    The half-covered question ("how many times do I offer vegetables, and what
+    dose of melatonin?") gets the coded refusal for its uncovered half. Until
+    2026-11-03 the contract asked for `no_info_phrase` there, so a model that
+    obeyed (Claude, measured on the prod corpus: B9 and B14 of the golden set)
+    declined the dose in its own words and `golden.is_refusal` could not see
+    it. The same run had Claude apply a newborn jaundice guideline to a
+    4-month-old (B8), hence the clause on a source for another age.
     """
     c = contract_for(locale)
     language_rule = _language_rule(locale, shape)
     return f"""Reglas de respuesta (obligatorias, idénticas en el chat y en el agente):
 - Toda interpretación, valoración o recomendación clínica DEBE apoyarse en al menos una
   cita de evidencia [ev_1], [ev_2], ... Si NO hay un estudio o guía en el contexto que
-  respalde la respuesta clínica, di {c.no_info_phrase} y explica que no hay evidencia de
-  investigación que la sustente. NO interpretes ni aconsejes sin respaldo de investigación.
+  respalde una afirmación clínica, no la hagas.
+  NO interpretes ni aconsejes sin respaldo de investigación.
 - Puedes reportar los datos del bebé como hechos (valores, fechas, qué dijo cada médico)
   citándolos con marcadores numéricos [1], [2], ... del orden de los fragmentos del
   paciente, pero NO los interpretes clínicamente sin una cita [ev_N].
+- Una fuente que trata una edad que no incluye la del bebé (una guía de recién nacidos
+  ante un bebé de 4 meses) no respalda nada para este bebé: no la apliques ni la uses
+  para responder.
+- Si solo una parte de la pregunta tiene respaldo en las fuentes (por ejemplo, una pauta
+  que sí está y una dosis que ningún fragmento menciona), responde esa parte con su cita
+  y, para la otra, escribe un párrafo aparte que nombre el tema en negrita y siga con
+  estas palabras exactas, en lugar de {c.no_info_phrase} u otra frase tuya:
+  "{c.refusal}" Sobre esa parte no añadas nada más: ni una cifra, ni una pauta, ni nada
+  de tu conocimiento general.
 - Si no tienes ninguna base documental para lo que se te pregunta, dilo con estas
   palabras exactas y no añadas nada más: "{c.refusal}"
 - {language_rule}
