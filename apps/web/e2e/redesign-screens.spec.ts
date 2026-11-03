@@ -13,6 +13,7 @@ import { seedUserAndSessionCookie } from "./utils/session";
 // Demo answers are synthetic and mocked; only their fixed frames (the
 // red-flag "Llama al 112") mirror what the API writes.
 const PHONE = { width: 390, height: 844 };
+const WIDE = { width: 1280, height: 800 };
 const copy = { es, en, fr };
 const citation = {
   tag: "ev_1", source_id: "redesign-source", chunk_id: "redesign-chunk",
@@ -134,12 +135,13 @@ async function insertDocument(userId: string) {
   }
 }
 
-async function openAs(browser: Browser, tag: string) {
+async function openAs(browser: Browser, tag: string, viewport = PHONE) {
   const { cookie, userId } = await seedUserAndSessionCookie(
     `e2e-rd-${tag}-${Date.now()}-${Math.random().toString(36).slice(2, 8)}@adelia.test`,
   );
   seededUserIds.push(userId);
-  const context = await browser.newContext({ viewport: PHONE, isMobile: true, hasTouch: true });
+  const phone = viewport.width < 768;
+  const context = await browser.newContext({ viewport, isMobile: phone, hasTouch: phone });
   await context.addCookies([cookie]);
   return { context, page: await context.newPage(), userId };
 }
@@ -166,6 +168,25 @@ test("Historial opens on the documents, the five tools in one row", async ({ bro
   expect(new Set(links.map(Math.round)).size, "the tools wrap onto more than one row").toBe(1);
   const card = await page.locator('a[href*="/dashboard/documents/"]').first().boundingBox();
   expect(card!.y + 40).toBeLessThanOrEqual(await tabBarTop(page));
+  await context.close();
+});
+
+test("Historial on a wide screen leaves the tools to the header", async ({ browser }) => {
+  const { context, page, userId } = await openAs(browser, "historial-wide", WIDE);
+  await insertDocument(userId);
+  await page.goto("/es/dashboard/overview");
+  await expect(page.getByRole("heading", { level: 1, name: es.dashboard.title })).toBeVisible();
+  const tools = page.locator(`nav[aria-label="${es.dashboard.toolsLabel}"]`);
+  await expect(tools).toHaveCount(1);
+  await expect(tools).toBeHidden();
+  // Nothing lost its door: the header names the same five, with labels at this width.
+  const header = page.getByRole("navigation", { name: "Secciones" });
+  for (const path of ["chat", "questionnaire", "briefings", "enrichment", "ingestion"]) {
+    await expect(header.locator(`a[href="/es/dashboard/${path}"]`)).toBeVisible();
+  }
+  // Below lg the header shows bare icons, so the labelled row comes back.
+  await page.setViewportSize({ width: 900, height: 800 });
+  await expect(tools).toBeVisible();
   await context.close();
 });
 

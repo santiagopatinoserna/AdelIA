@@ -141,10 +141,13 @@ export default async function DashboardOverview({
 
         {/* One row: wrapped, the five pills took three rows (300 px) of a
             390 px phone. It scrolls sideways under the gutter, so the cut
-            pill at the edge says there is more; from sm up it wraps. */}
+            pill at the edge says there is more; from sm up it wraps. From
+            lg up the header's section nav names the same five, labelled,
+            so the row only repeated it (rule 18); between md and lg that
+            nav shows bare icons and the row stays. */}
         <nav
           aria-label={t("toolsLabel")}
-          className="-mx-5 mt-4 flex gap-2 overflow-x-auto px-5 pb-1 [scrollbar-width:none] sm:mx-0 sm:flex-wrap sm:overflow-visible sm:px-0 [&::-webkit-scrollbar]:hidden"
+          className="-mx-5 mt-4 flex gap-2 overflow-x-auto px-5 pb-1 [scrollbar-width:none] sm:mx-0 sm:flex-wrap sm:overflow-visible sm:px-0 lg:hidden [&::-webkit-scrollbar]:hidden"
         >
           {tools.map((item) => (
             <Link key={item.href} href={item.href} className="ad-pill shrink-0">
