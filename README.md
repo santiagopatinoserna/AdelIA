@@ -172,6 +172,8 @@ Self-hosting AdelIA makes **you** the data controller (*responsable del tratamie
 
 The transcription provider is also part of that footing: `STT_PROVIDER` defaults to `mistral` (Voxtral, with speaker diarization, EU data residency), and can be switched to `openai` (`whisper-1` against the EU-residency endpoint, no diarization). Whichever you pick becomes *your* processor (*encargado del tratamiento*) for that audio — self-hosters choose their own processor and must reflect that choice in their own privacy information, not assume the SaaS DPIA's Mistral-specific terms carry over.
 
+The generation provider is part of it too. `LLM_PROVIDER=anthropic` sends the chat context, uploaded documents (OCR), entity extraction, briefings and consultation summaries to Anthropic, which offers no European region, so that data leaves the EU; embeddings and transcription stay on Mistral. The hosted SaaS declares it in `/privacidad`, `/profesionales` and the DPIA since 2026-11-03. A self-hoster who turns it on must say so in their own privacy information.
+
 ### Backups
 
 A `backup` sidecar runs `pg_dump` (custom format, compressed) every 24h into the `pgbackups` volume, pruning dumps older than 14 days (`BACKUP_INTERVAL_SECONDS` / `BACKUP_RETENTION_DAYS`). Restore:

@@ -213,11 +213,10 @@ con una cadena (el caso de hoy) devuelve la misma cadena. Lo cubren `test_chat_n
 
 ### 4.6 Cambiar de proveedor
 
-El texto de `/privacidad` (`privacy.whereBody`) nombra cinco encargados: Mistral AI, Stripe,
-Resend, Cloudflare y Telegram, y dice: "Ningún dato va más allá de estos cinco" (Cloudflare se
-declaró el 14 de octubre de 2026, auditoría 1.12). Con `LLM_PROVIDER=openai`
-el contexto del chat, y con `ANTHROPIC_API_KEY` el del agente, salen hacia un proveedor que ese
-texto no nombra. Qué proveedor sirve de verdad el chat y el agente en una instalación se decide
+El texto de `/privacidad` (`privacy.whereBody`) nombra seis encargados: Anthropic, Mistral AI,
+Stripe, Resend, Cloudflare y Telegram, y dice: "Ningún dato va más allá de estos seis" (Cloudflare
+se declaró el 14 de octubre de 2026, auditoría 1.12; Anthropic, el 3 de noviembre de 2026). Con
+`LLM_PROVIDER=openai` el contexto del chat sale hacia un proveedor que ese texto no nombra. Qué proveedor sirve de verdad el chat y el agente en una instalación se decide
 solo por variables de entorno, así que este repositorio no lo dice: quien apruebe un cambio debe
 comprobarlo en esa instalación, y si es OpenAI o Anthropic, el texto publicado, el contrato del
 art. 28 RGPD y la DPIA tienen que reflejarlo. El mismo texto promete avisar a las familias si
@@ -230,11 +229,14 @@ vez de caer a Mistral. Desde el 3 de noviembre de 2026 mueve también el OCR. Si
 embeddings y la transcripción, porque Anthropic no ofrece ninguno de los dos: `MISTRAL_API_KEY`
 sigue siendo obligatoria. Sin ella la búsqueda no devuelve nada y el chat contesta por código que
 no hay evidencia, sin llegar a llamar a Claude. Con ese valor
-los historiales de familias reales salen hacia Anthropic, que `/privacidad` no nombra, y la frase
-"siempre dentro de la UE" deja de ser cierta: la documentación de Anthropic leída para este cambio
-solo lista `us` y `global` para `inference_geo`, ninguna región europea. Activarlo fuera de
-desarrollo exige antes el texto publicado, el contrato del art. 28 RGPD y la DPIA, como dice el
-párrafo anterior, y el golden set de la sección 3 pasado con Claude.
+los historiales de familias reales salen de la UE hacia Anthropic: la documentación de Anthropic
+leída para este cambio solo lista `us` y `global` para `inference_geo`, ninguna región europea.
+Lo que eso exige se hizo el 3 de noviembre de 2026, antes de activarlo en producción:
+`privacy.whereBody` y `professionals.whereBody` nombran a Anthropic Ireland, Limited (quien
+contrata con clientes del EEE), el procesamiento fuera de la UE, las cláusulas contractuales tipo
+de su adenda de tratamiento de datos (que sus condiciones comerciales incorporan, art. 28 RGPD) y
+la prohibición contractual de entrenar con estos datos; la DPIA lo anota en su §7, pendiente de la
+firma del responsable. Sigue pendiente el golden set de la sección 3 pasado con Claude.
 
 ### 4.7 Los alias `-latest` se mueven
 
