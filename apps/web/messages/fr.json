@@ -1,7 +1,7 @@
 {
   "common": {
     "appName": "AdelIA",
-    "tagline": "Le coffre-fort santé de ton bébé, avec une IA fondée sur la science",
+    "tagline": "La santé de ton bébé, avec la pédiatrie et ses sources",
     "loading": "Chargement…",
     "errorTitle": "Une erreur s'est produite",
     "errorBody": "Une erreur inattendue s'est produite. Réessaie ou reviens à l'accueil.",
@@ -282,7 +282,7 @@
   },
   "onboarding": {
     "title": "De qui allons-nous prendre soin ?",
-    "subtitle": "Avec un prénom et une date de naissance, AdelIA applique les repères de son âge. Tu peux passer cette étape et la compléter quand tu veux.",
+    "subtitle": "Avec son prénom et sa date de naissance, les réponses s’adaptent à son âge. Tu peux le faire plus tard.",
     "nameLabel": "Prénom du bébé",
     "namePlaceholder": "Adel",
     "dobLabel": "Date de naissance",
@@ -322,7 +322,7 @@
   },
   "signin": {
     "emailPlaceholder": "toi@exemple.com",
-    "sendMagicLink": "Recevoir mon magic link",
+    "sendMagicLink": "Recevoir le lien",
     "emailLabel": "Adresse e-mail",
     "heading": "Connecte-toi avec ton email",
     "instr": "Entre ton email : on t'envoie un lien privé pour te connecter, sans mot de passe.",

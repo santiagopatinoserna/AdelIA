@@ -1,7 +1,7 @@
 {
   "common": {
     "appName": "AdelIA",
-    "tagline": "El vault de salud de tu bebé, con IA basada en la ciencia",
+    "tagline": "La salud de tu bebé, con pediatría y con fuentes",
     "loading": "Cargando…",
     "errorTitle": "Algo salió mal",
     "errorBody": "Hubo un error inesperado. Puedes reintentar o volver al inicio.",
@@ -282,7 +282,7 @@
   },
   "onboarding": {
     "title": "¿De quién vamos a cuidar?",
-    "subtitle": "Con el nombre y la fecha de nacimiento, AdelIA aplica las guías que corresponden a su edad. Puedes saltar este paso y completarlo cuando quieras.",
+    "subtitle": "Con su nombre y su fecha de nacimiento, las respuestas se ajustan a su edad. Puedes hacerlo luego.",
     "nameLabel": "Nombre del bebé",
     "namePlaceholder": "Adel",
     "dobLabel": "Fecha de nacimiento",
@@ -322,7 +322,7 @@
   },
   "signin": {
     "emailPlaceholder": "tu@email.com",
-    "sendMagicLink": "Enviar magic link",
+    "sendMagicLink": "Enviarme el enlace",
     "emailLabel": "Correo electrónico",
     "heading": "Entra con tu email",
     "instr": "Escribe tu correo y te enviamos un enlace privado para entrar, sin contraseña.",

@@ -1,7 +1,7 @@
 {
   "common": {
     "appName": "AdelIA",
-    "tagline": "Your baby's health vault, with science-backed AI",
+    "tagline": "Your baby's health, with paediatric guidance and sources",
     "loading": "Loading…",
     "errorTitle": "Something went wrong",
     "errorBody": "An unexpected error occurred. You can retry or go back home.",
@@ -282,7 +282,7 @@
   },
   "onboarding": {
     "title": "Who are we looking after?",
-    "subtitle": "With a name and a date of birth, AdelIA applies the guidance for that age. You can skip this step and fill it in whenever you like.",
+    "subtitle": "With a name and a date of birth, the answers fit your baby's age. You can do this later.",
     "nameLabel": "Baby's name",
     "namePlaceholder": "Adel",
     "dobLabel": "Date of birth",
@@ -322,7 +322,7 @@
   },
   "signin": {
     "emailPlaceholder": "you@email.com",
-    "sendMagicLink": "Send magic link",
+    "sendMagicLink": "Email me the link",
     "emailLabel": "Email",
     "heading": "Sign in with your email",
     "instr": "Enter your email and we'll send a private link to log in: no password.",
