@@ -231,9 +231,15 @@ for (const locale of LOCALES) {
 
       // Task tests: the four questions of the brief.
       const tasks: Record<string, unknown> = {};
+      // The first element matching a target, in document order, is what she
+      // reaches: the map's doctor pill or the call button when the page has
+      // them, the section or the paragraph that says it when it does not.
       for (const [task, key, target] of [
         ["regurgita", "plan_reflux", '[data-testid="plan-section-today"] li'],
-        ["fiebre-2m", "red_flag", '[data-testid="answer-content"] p:nth-of-type(3)'],
+        ["regurgita-medico", "plan_reflux",
+          '[data-testid="plan-map"] button:nth-child(3), [data-testid="plan-section-doctor"]'],
+        ["fiebre-2m", "red_flag",
+          '[data-testid="call-emergency"], [data-testid="answer-content"] p:nth-of-type(3)'],
         ["gatean", "short", '[data-testid="answer-content"] p'],
       ] as const) {
         await page.unrouteAll({ behavior: "ignoreErrors" });
@@ -241,8 +247,12 @@ for (const locale of LOCALES) {
         await askDemo(page, locale, fx);
         await page.locator('[data-testid="demo-answer"]').waitFor();
         await page.evaluate(() => scrollTo(0, 0));
+        const viaControl = await page.evaluate((sel) => {
+          const el = document.querySelector(sel);
+          return el ? el.tagName === "BUTTON" || el.tagName === "A" : false;
+        }, target);
         tasks[task] = {
-          taps: 2, typed: fx.question.length,
+          taps: 2, typed: fx.question.length, viaControl,
           ...(await positions(page, { target, doctor: ANSWER_SELECTORS.doctor, title: ANSWER_SELECTORS.title }, target)),
         };
       }
