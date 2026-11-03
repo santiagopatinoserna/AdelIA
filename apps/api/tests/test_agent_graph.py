@@ -178,6 +178,39 @@ async def test_a_plan_gets_the_plan_and_reads_experience_after_the_evidence():
     ]
 
 
+async def test_an_answer_carries_only_the_cards_it_cites_with_their_tags():
+    """Audit 3.7, measured on 2026-11-03: Claude cited two of four fragments
+    and the other two went out as cards under an answer that never names
+    them (23 orphans on the prod corpus). The tags stay as the model wrote
+    them, because a streamed answer has already sent its markers."""
+    second, third = _match("evidence", "Second"), _match("evidence", "Third")
+    fakes = Fakes(intent="question", evidence=[EVIDENCE, second, third],
+                  output="Sí [ev_1], y conviene vigilarlo [ev_3].")
+    out = await _run(fakes, "¿Es normal que regurgite tras cada toma?")
+    assert out["kind"] == "answer"
+    assert [(c["tag"], c["title"]) for c in out["evidence_citations"]] == [
+        ("ev_1", "A real guideline"), ("ev_3", "Third"),
+    ]
+
+
+async def test_an_answer_that_cites_nothing_shows_no_clinical_card():
+    """A card under an uncited answer is the "looks sourced" shape itself:
+    better no card than one the parent cannot trace to a sentence."""
+    fakes = Fakes(intent="question", output="Una respuesta sin ninguna cita.")
+    out = await _run(fakes, "¿Es normal que regurgite tras cada toma?")
+    assert out["kind"] == "answer"
+    assert out["evidence_citations"] == []
+
+
+async def test_evidence_only_still_shows_every_fragment():
+    """No answer to cite them: the fragments ARE the answer (unchanged)."""
+    second = _match("evidence", "Second")
+    fakes = Fakes(evidence=[EVIDENCE, second], generate_error=RuntimeError("down"))
+    out = await _run(fakes, "Le cuesta dormirse, ¿cómo le ayudo?")
+    assert out["kind"] == "evidence_only"
+    assert [c["tag"] for c in out["evidence_citations"]] == ["ev_1", "ev_2"]
+
+
 async def test_the_order_is_guard_gate_route_then_retrieval():
     fakes = Fakes(intent="question")
     await _run(fakes, "¿A qué edad gatean?")
