@@ -89,6 +89,7 @@ from adelia.services.answer_contract import (  # noqa: E402
     out_of_scope_age_reply,
     red_flag_reply,
 )
+from adelia.services.citations import markers_in  # noqa: E402
 
 logger = logging.getLogger(__name__)
 
@@ -633,6 +634,23 @@ async def experience_only(state: AgentState, runtime: Runtime[GraphDeps]) -> dic
 # --- compose ----------------------------------------------------------------
 
 
+def _cited_only(cards: list[dict], answer: str) -> list[dict]:
+    """The clinical cards the model's answer actually cites, tags unchanged.
+
+    Retrieval hands the model up to four fragments and it may use two. The
+    other two used to go out as cards under an answer that never cites them,
+    the shape audit 3.7 calls "looks sourced, is not" and the golden gate
+    counts as orphan citations (threshold zero). Measured with Claude against
+    the prod corpus on 2026-11-03 there were 23. The tags are kept rather than
+    renumbered
+    (`citations.prune_and_renumber`) because a streamed answer has already
+    sent its [ev_N] markers to the parent.
+    """
+    _, used = markers_in(answer)
+    tags = {f"ev_{i}" for i in used}
+    return [c for c in cards if c.get("tag") in tags]
+
+
 async def compose(state: AgentState) -> dict:
     """The response the surfaces send: citations by kind, and the fixed disclaimer.
 
@@ -653,6 +671,8 @@ async def compose(state: AgentState) -> dict:
         evidence = []
         if kind in ("answer", "evidence_only"):
             evidence = evidence_citations_for_response(state.get("evidence") or [])
+        if kind == "answer":
+            evidence = _cited_only(evidence, state.get("answer", ""))
         if kind in ("answer", "experience_only") and state.get("experience"):
             evidence += evidence_citations_for_response(
                 state["experience"], tag_prefix="ex", tier="experience"

@@ -424,7 +424,9 @@ async def test_the_answer_cites_each_source_once_and_quotes_what_the_model_read(
 
     async def _fake_stream(system, user_msg, history=None):
         prompts.append(user_msg)
-        yield "Respuesta [ev_1]."
+        # Cites all three: since 2026-11-03 a card goes out only under an answer
+        # that cites it (graph._cited_only), and this test is about the three.
+        yield "Respuesta [ev_1] [ev_2] [ev_3]."
 
     with patch("adelia.services.chat_orchestrator._stream_llm_tokens", _fake_stream):
         events = await _collect(

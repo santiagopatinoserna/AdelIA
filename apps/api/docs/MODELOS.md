@@ -293,6 +293,14 @@ al modelo que se ejecutó.
 - **El agente no cambia de modelo.** Sigue en `agent_model` (`claude-sonnet-5`) con
   `thinking={"type": "disabled"}`. Ese valor da error en `claude-sonnet-5-5` y en
   `claude-opus-5-5`, así que pasar el agente a uno de ellos es otro cambio, con sus pruebas.
+- **Claude declina con sus palabras y cita solo lo que usa.** Medido en el golden set el 3 de
+  noviembre de 2026, con el corpus de producción y los vectores grabados: en una pregunta mixta
+  (una pauta con fuente y una dosis sin ella) respondía la mitad cubierta y declinaba la dosis
+  con la frase `no_info_phrase` del contrato, que `golden.is_refusal` no cuenta como rechazo; y
+  de cuatro fragmentos citaba dos, así que los otros dos salían como tarjetas huérfanas. El
+  contrato pide ahora el rechazo literal para la parte sin fuente y para una fuente de otra
+  edad, y `graph._cited_only` deja bajo la respuesta solo las tarjetas que cita. Cifras en la
+  sección 7.
 
 ## 5. Transcripción: un cambio técnico y legal a la vez
 
@@ -373,3 +381,4 @@ Añadir una fila por cada cambio aprobado, con el resultado de la medición ante
 | 2026-10-14 | Ninguno. Los nombres de OCR, embeddings, extracción y briefing pasan a settings con sus valores de siempre. Se añaden `chat_reasoning_effort` y `briefing_reasoning_effort`, sin definir. | No aplica: ningún valor efectivo cambia, y los tests lo fijan. | No aplica |
 | 2026-11-02 | Ninguno por defecto. Se añade `LLM_PROVIDER=anthropic` (sección 4.6) y los cuatro ajustes `anthropic_*_model`. | No aplica: `llm_provider` sigue en `mistral` y los tests lo fijan. Activarlo sí exige medir (sección 3). | No aplica |
 | 2026-11-03 | Ninguno por defecto. `LLM_PROVIDER=anthropic` mueve también el OCR (`anthropic_ocr_model`). | No aplica por defecto. Activarlo exige comparar la transcripción con Mistral OCR sobre informes reales (sección 3.1). | No aplica |
+| 2026-11-03 | Producción pasa a `LLM_PROVIDER=anthropic`. Después, el contrato pide el rechazo literal para la parte sin fuente y para una fuente de otra edad, y una respuesta lleva solo las tarjetas que cita (sección 4.8). | Golden set con el corpus de producción, dentro del contenedor y solo lectura. Claude con el contrato anterior: A 0,94, B 0,80 (B8, B9 y B14 no se cuentan como rechazo), C 1,00, 23 citas huérfanas. Claude con el contrato nuevo, dos muestras iguales: A 0,94, B 1,00, C 1,00, 1 cita huérfana. Esa es A6, la tarjeta de la derivación por deshidratación, que no pasa por el modelo y también sale con Mistral. A16 falla en las tres por recuperación. No hay base de Mistral: su chat devuelve 429 con la clave de producción. La OCR sigue sin comparar (sección 3.1). | Santiago Patiño Serna, la activación |
