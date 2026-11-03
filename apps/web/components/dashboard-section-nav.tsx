@@ -15,13 +15,15 @@ import {
 // page (before, you had to go back to the dashboard hub first). The active
 // section shows its label; the rest stay compact icons. Desktop only: on
 // mobile this bar has no room (it was getting squeezed to zero width), so
-// phones navigate with MobileBottomNav instead.
+// phones navigate with MobileBottomNav instead. From lg up it is the only door
+// to these sections (Historial hides its row of pills there), so its names
+// come from the catalog: it said "Briefings" and "Secciones" in every locale.
 export function DashboardSectionNav() {
   const pathname = usePathname();
   const t = useTranslations();
   const items = [
     { href: "/dashboard/chat", icon: MessagesSquare, label: "Chat" },
-    { href: "/dashboard/briefings", icon: ClipboardList, label: "Briefings" },
+    { href: "/dashboard/briefings", icon: ClipboardList, label: t("briefing.navLabel") },
     { href: "/dashboard/questionnaire", icon: Baby, label: t("questionnaire.navLabel") },
     { href: "/dashboard/consulta", icon: Stethoscope, label: t("consulta.navLabel") },
     { href: "/dashboard/ingestion", icon: Download, label: t("dashboard.navImport") },
@@ -30,7 +32,7 @@ export function DashboardSectionNav() {
 
   return (
     <nav
-      aria-label="Secciones"
+      aria-label={t("dashboard.sectionsLabel")}
       className="-mx-1 hidden items-center gap-0.5 overflow-x-auto px-1 [scrollbar-width:none] md:flex [&::-webkit-scrollbar]:hidden"
     >
       {items.map((it) => {

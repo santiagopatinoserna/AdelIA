@@ -180,10 +180,12 @@ test("Historial on a wide screen leaves the tools to the header", async ({ brows
   await expect(tools).toHaveCount(1);
   await expect(tools).toBeHidden();
   // Nothing lost its door: the header names the same five, with labels at this width.
-  const header = page.getByRole("navigation", { name: "Secciones" });
+  const header = page.getByRole("navigation", { name: es.dashboard.sectionsLabel });
   for (const path of ["chat", "questionnaire", "briefings", "enrichment", "ingestion"]) {
     await expect(header.locator(`a[href="/es/dashboard/${path}"]`)).toBeVisible();
   }
+  // Same names as the row it replaces, in her language.
+  await expect(header.locator('a[href="/es/dashboard/briefings"]')).toHaveText(es.briefing.navLabel);
   // Below lg the header shows bare icons, so the labelled row comes back.
   await page.setViewportSize({ width: 900, height: 800 });
   await expect(tools).toBeVisible();
