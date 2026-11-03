@@ -110,6 +110,11 @@ todo (regla global ya existente).
 | Anotar | Su frase · «¿Lo anoto así?» · la entrada en grande · Sí ancho y No · nada más hasta que conteste |
 | Chat | Una cabecera · la respuesta como plan · al terminar no salta a las fuentes |
 | Alta | «Entra con tu email» · campo · «Enviarme el enlace» |
+| Historial | Aviso del día (si toca) · «Mis documentos» y el número · una fila de herramientas (Chat, Control reflujo, Resúmenes, Insights, Importar) · la lista. Subir y Consulta no se repiten: están en la barra |
+| Subir | Título · una frase · «Elige un archivo» (52 px) · formatos. En el móvil sin zona de arrastre; desde sm, la zona y «o arrástralo aquí» |
+| Consulta | Título · una frase · «¿Qué acaba de decir el médico?» · campo con el ejemplo y el micrófono dentro · «Generar preguntas» a lo ancho · respuesta como en el chat · «Grabar la consulta» como fila final |
+| Grabar | El guion para el profesional · la fila entera del consentimiento como objetivo · nota legal · «Grabar» (52 px) |
+| Ajustes | Título y email · una sección por ajuste bajo un filete, con su título · zona de peligro en su caja |
 
 ## Lo que no cambia
 Contenido clínico, prompts, textos de la API, orden de los apartados, el descargo, la regla de

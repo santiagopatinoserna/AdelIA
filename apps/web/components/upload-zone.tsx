@@ -76,9 +76,12 @@ export function UploadZone({ locale }: { locale: string }) {
     }
   }
 
+  // On a phone there is nothing to drag a file onto, so the dashed zone, its
+  // icon tile and "Toca para elegir un archivo" only repeated the button
+  // (redesign audit, screen 14). From sm up the zone and the drag hint stay.
   return (
     <div>
-      <p className="mb-4 text-center text-ink-soft">{t("intro")}</p>
+      <p className="mb-6 text-ink-soft">{t("intro")}</p>
       <div
         onDragOver={(e) => {
           e.preventDefault();
@@ -92,39 +95,37 @@ export function UploadZone({ locale }: { locale: string }) {
           if (f) upload(f);
         }}
         aria-busy={busy}
-        className={`ad-card rounded-2xl border-2 border-dashed px-6 py-12 text-center transition-colors sm:py-16 ${
+        className={`ad-card text-center transition-colors max-sm:border-0 max-sm:bg-transparent max-sm:shadow-none sm:rounded-2xl sm:border-2 sm:border-dashed sm:px-6 sm:py-16 ${
           dragging
             ? "border-primary-text bg-primary-tint/60"
             : "border-line-control bg-surface-2/60 hover:border-primary-tint-line"
         }`}
       >
-        <span className="mx-auto inline-flex h-14 w-14 items-center justify-center rounded-2xl bg-primary-tint text-primary-text ring-1 ring-primary-tint-line">
+        <span className="mx-auto mb-5 hidden h-14 w-14 items-center justify-center rounded-2xl bg-primary-tint text-primary-text ring-1 ring-primary-tint-line sm:inline-flex">
           <UploadCloud className="h-7 w-7" strokeWidth={1.8} />
         </span>
-        <p className="mt-5 text-ink-soft">{dragging ? t("dropActive") : t("drop")}</p>
-        <p className="mt-1 hidden text-sm text-ink-faint sm:block">{t("dropDesktop")}</p>
-        <label className="ad-btn ad-btn-primary mt-5 inline-flex min-h-[48px] w-full cursor-pointer items-center justify-center px-5 py-3 text-sm aria-disabled:cursor-not-allowed aria-disabled:opacity-50 sm:w-auto">
-          {t("browse")}
-          <input
-            type="file"
-            accept={ACCEPT}
-            disabled={busy || done}
-            aria-label={t("browse")}
-            className="hidden"
-            onChange={(e) => {
-              const f = e.target.files?.[0];
-              if (f) upload(f);
-              e.target.value = ""; // allow re-selecting the same file after an error
-            }}
-          />
-        </label>
-        <p className="mt-4 text-xs text-ink-faint">{t("hint")}</p>
-        <details className="mx-auto mt-3 max-w-sm text-left">
-          <summary className="cursor-pointer text-center text-xs text-primary-text hover:text-primary-text-hover">
-            {t("examplesToggle")}
-          </summary>
-          <p className="mt-2 text-center text-xs leading-relaxed text-ink-faint">{t("examples")}</p>
-        </details>
+        <div>
+          <label className="ad-btn ad-btn-primary ad-btn-lg w-full cursor-pointer px-6 aria-disabled:cursor-not-allowed aria-disabled:opacity-50 sm:w-auto">
+            <UploadCloud className="h-5 w-5 sm:hidden" strokeWidth={2.2} aria-hidden />
+            {t("browse")}
+            <input
+              type="file"
+              accept={ACCEPT}
+              disabled={busy || done}
+              aria-label={t("browse")}
+              className="hidden"
+              onChange={(e) => {
+                const f = e.target.files?.[0];
+                if (f) upload(f);
+                e.target.value = ""; // allow re-selecting the same file after an error
+              }}
+            />
+          </label>
+        </div>
+        <p className="mt-2 hidden text-ink-soft sm:block">
+          {dragging ? t("dropActive") : t("dropDesktop")}
+        </p>
+        <p className="mt-4 text-sm text-ink-soft">{t("hint")}</p>
         {busy && (
           <p className="mt-4 flex items-center justify-center gap-1.5 text-accent-text" role="status">
             <Loader2 className="h-4 w-4 animate-spin" strokeWidth={2.2} />
@@ -140,7 +141,7 @@ export function UploadZone({ locale }: { locale: string }) {
             <button
               type="button"
               onClick={() => router.push(`/${locale}/dashboard`)}
-              className="ad-btn ad-btn-primary px-5 py-2.5 text-sm"
+              className="ad-btn ad-btn-primary ad-btn-lg w-full px-6 sm:w-auto"
             >
               {t("goDashboard")}
             </button>

@@ -25,7 +25,7 @@ export default async function GrabarConsultaPage({
   if (!session) redirect(`/${locale}/signin`);
 
   return (
-    <main className="mx-auto max-w-lg px-6 py-10">
+    <main className="mx-auto max-w-lg px-4 py-6 sm:px-6 sm:py-10">
       <ConsultaRecorder />
     </main>
   );

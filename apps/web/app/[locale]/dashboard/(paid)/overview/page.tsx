@@ -16,7 +16,6 @@ import {
   Sparkles,
   UploadCloud,
   Baby,
-  Stethoscope,
 } from "lucide-react";
 
 export async function generateMetadata({
@@ -40,7 +39,6 @@ export default async function DashboardOverview({
 
   const t = await getTranslations("dashboard");
   const tq = await getTranslations("questionnaire");
-  const tcons = await getTranslations("consulta");
   const tb = await getTranslations("briefing");
   let docs: DocumentDTO[] = [];
   try {
@@ -50,18 +48,16 @@ export default async function DashboardOverview({
     docs = [];
   }
 
-  // Progressive disclosure: surface the 3 core actions prominently, tuck the
-  // more advanced ones under a visually lighter "Más opciones" group. Nothing
-  // is removed — every feature stays one tap away.
-  const primaryNav = [
+  // What she can do WITH her records. Upload and Modo Consulta used to head
+  // this list too, as big cards, but the tab bar (phone) and the header
+  // (desktop) already carry both: the menu filled the first screen and pushed
+  // "Mis documentos" below the fold (redesign audit, screens 13 to 17). These
+  // five have no other door on the phone, so they stay, one tap away, as a
+  // quiet row under the title.
+  const tools = [
     { href: "/dashboard/chat", icon: MessagesSquare, label: "Chat" },
-    { href: "/dashboard/upload", icon: UploadCloud, label: t("navUpload") },
     { href: "/dashboard/questionnaire", icon: Baby, label: tq("navLabel") },
-  ];
-
-  const moreNav = [
     { href: "/dashboard/briefings", icon: ClipboardList, label: tb("navLabel") },
-    { href: "/dashboard/consulta", icon: Stethoscope, label: tcons("navLabel") },
     { href: "/dashboard/enrichment", icon: Sparkles, label: t("navInsights") },
     { href: "/dashboard/ingestion", icon: Download, label: t("navImport") },
   ];
@@ -130,56 +126,33 @@ export default async function DashboardOverview({
   // shifted the whole page (CLS 0.138 on a phone).
   const checkinIndex = checkinIndexFromCookie((await cookies()).get(CHECKIN_COOKIE)?.value);
 
-  // Returning user (has documents): full quick-access nav + document list.
+  // Returning user (has documents): the list first, the tools one row above it.
   return (
-    <main className="mx-auto max-w-5xl px-6 py-10">
+    <main className="mx-auto max-w-5xl px-5 py-8 sm:px-6 sm:py-10">
         <InstallPrompt />
         {checkinIndex !== null && <CheckInPrompt initialIndex={checkinIndex} />}
 
-        {/* Core actions — big and obvious for a first-time mom. */}
-        <nav aria-label={t("navPrimaryLabel")} className="grid grid-cols-1 gap-3 sm:grid-cols-3">
-          {primaryNav.map((item, i) => (
-            <Link
-              key={item.href}
-              href={item.href}
-              className="ad-card ad-card-hover ad-rise flex min-w-0 items-center gap-3 px-5 py-4"
-              style={{ animationDelay: `${i * 60}ms` }}
-            >
-              <span className="inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-primary-tint text-primary-text ring-1 ring-primary-tint-line">
-                <item.icon className="h-5 w-5" strokeWidth={2} />
-              </span>
-              <span className="min-w-0 truncate text-base font-medium text-ink">{item.label}</span>
-            </Link>
-          ))}
-        </nav>
-
-        {/* Advanced features — lighter, grouped, never in the way. */}
-        <div className="mt-7">
-          <p className="ad-eyebrow text-ink-faint">{t("navMoreLabel")}</p>
-          <nav
-            aria-label={t("navMoreLabel")}
-            className="mt-3 grid grid-cols-2 gap-2.5 sm:grid-cols-4"
-          >
-            {moreNav.map((item, i) => (
-              <Link
-                key={item.href}
-                href={item.href}
-                className="ad-card ad-card-hover ad-rise flex min-w-0 items-center gap-2.5 bg-surface-2/40 px-3.5 py-3"
-                style={{ animationDelay: `${(primaryNav.length + i) * 60}ms` }}
-              >
-                <item.icon className="h-4 w-4 shrink-0 text-ink-faint" strokeWidth={2} />
-                <span className="min-w-0 text-sm leading-snug text-ink-soft">{item.label}</span>
-              </Link>
-            ))}
-          </nav>
-        </div>
-
-        <div className="mt-12 flex min-w-0 items-baseline justify-between gap-3">
-          <h1 className="min-w-0 text-2xl text-ink">{t("title")}</h1>
-          <span className="shrink-0 font-mono text-xs text-ink-faint">
+        <div className="flex min-w-0 items-baseline justify-between gap-3">
+          <h1 className="min-w-0 text-title text-ink">{t("title")}</h1>
+          <span className="shrink-0 text-sm text-ink-soft">
             {t("documentsCount", { count: docs.length })}
           </span>
         </div>
+
+        {/* One row: wrapped, the five pills took three rows (300 px) of a
+            390 px phone. It scrolls sideways under the gutter, so the cut
+            pill at the edge says there is more; from sm up it wraps. */}
+        <nav
+          aria-label={t("toolsLabel")}
+          className="-mx-5 mt-4 flex gap-2 overflow-x-auto px-5 pb-1 [scrollbar-width:none] sm:mx-0 sm:flex-wrap sm:overflow-visible sm:px-0 [&::-webkit-scrollbar]:hidden"
+        >
+          {tools.map((item) => (
+            <Link key={item.href} href={item.href} className="ad-pill shrink-0">
+              <item.icon className="h-4 w-4 shrink-0 text-primary-text" strokeWidth={2} aria-hidden />
+              {item.label}
+            </Link>
+          ))}
+        </nav>
 
         {/* Same minmax(0,1fr) rule: this list was 404px wide on a 390px
             phone (a long file name's min-content) and pushed the tab bar. */}
