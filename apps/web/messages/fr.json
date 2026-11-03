@@ -718,7 +718,7 @@
   "consulta": {
     "title": "Mode Consultation",
     "subtitle": "Pendant le rendez-vous : écrivez ou dictez ce que dit le médecin et AdelIA vous donne des questions argumentées et des signes à surveiller, cités.",
-    "placeholder": "Écrivez ou dictez ce que le médecin vient de dire…",
+    "placeholder": "Ex. : « Le poids est un peu bas, on commence le lait infantile »",
     "listen": "Dicter",
     "listening": "Écoute…",
     "generate": "Générer des questions",
@@ -732,7 +732,6 @@
     "regenerate": "Régénérer",
     "copy": "Copier",
     "copied": "Copié",
-    "example": "Exemple : « Le médecin dit que le poids est un peu bas et veut commencer le lait infantile. » AdelIA te donne des questions argumentées et des signaux à surveiller.",
     "generatingHint": "On analyse ce qu'a dit le médecin et on le croise avec les études… quelques secondes.",
     "listenIn": "Dicter en {lang}",
     "listeningTap": "J'écoute… (touche pour arrêter)",

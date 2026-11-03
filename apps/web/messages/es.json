@@ -718,7 +718,7 @@
   "consulta": {
     "title": "Modo Consulta",
     "subtitle": "Durante la cita: escribe o dicta lo que dice el médico y AdelIA te da preguntas con argumento y señales a vigilar, citadas.",
-    "placeholder": "Escribe o dicta lo que acaba de decir el médico…",
+    "placeholder": "Ej.: el peso está algo bajo y quiere empezar con fórmula",
     "listen": "Dictar",
     "listening": "Escuchando…",
     "generate": "Generar preguntas",
@@ -732,7 +732,6 @@
     "regenerate": "Regenerar",
     "copy": "Copiar",
     "copied": "Copiado",
-    "example": "Ejemplo: «El médico dice que el peso está algo bajo y quiere empezar con fórmula». AdelIA te dará preguntas con fundamento y señales a vigilar.",
     "generatingHint": "Analizando lo que dijo el médico y cruzándolo con estudios… unos segundos.",
     "listenIn": "Dictar en {lang}",
     "listeningTap": "Escuchando… (toca para parar)",

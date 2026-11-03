@@ -718,7 +718,7 @@
   "consulta": {
     "title": "Appointment mode",
     "subtitle": "During the visit: type or dictate what the doctor says and AdelIA gives you argued questions and red flags to watch, cited.",
-    "placeholder": "Type or dictate what the doctor just said…",
+    "placeholder": "E.g. “The weight is a bit low, let’s start formula”",
     "listen": "Dictate",
     "listening": "Listening…",
     "generate": "Generate questions",
@@ -732,7 +732,6 @@
     "regenerate": "Regenerate",
     "copy": "Copy",
     "copied": "Copied",
-    "example": "Example: “The doctor says the weight is a bit low and wants to start formula.” AdelIA gives you grounded questions and flags to watch.",
     "generatingHint": "Reading what the doctor said and cross-checking it with studies… just a few seconds.",
     "listenIn": "Dictate in {lang}",
     "listeningTap": "Listening… (tap to stop)",

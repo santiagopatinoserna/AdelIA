@@ -462,7 +462,7 @@ export function ConsultaRecorder() {
   if (phase === "gate") {
     return (
       <div className="ad-card space-y-4 p-6">
-        <h1 className="text-xl font-semibold text-ink">{t("title")}</h1>
+        <h1 className="text-title text-ink">{t("title")}</h1>
         {profiles.length > 1 && (
           <label className="block space-y-1">
             <span className="text-sm font-medium">{t("profileLabel")}</span>
@@ -478,22 +478,28 @@ export function ConsultaRecorder() {
           </label>
         )}
         <div>
-          <p className="text-sm font-medium">{t("scriptLabel")}</p>
-          <p className="mt-1 text-lg">{t("scriptText")}</p>
+          <p className="text-sm font-medium text-ink-soft">{t("scriptLabel")}</p>
+          <p className="mt-1 text-lead text-ink">{t("scriptText")}</p>
         </div>
-        <label className="flex items-start gap-3">
+        {/* The whole row is the target: one thumb, phone in the other hand
+            while the doctor waits. */}
+        <label className="flex min-h-[52px] cursor-pointer items-start gap-3 rounded-xl border border-line-control px-4 py-3">
           <input
             type="checkbox"
             checked={informed}
             onChange={(e) => setInformed(e.target.checked)}
-            className="mt-1 h-5 w-5"
+            className="mt-0.5 h-6 w-6 shrink-0 accent-primary"
           />
-          <span>{t("checkboxLabel")}</span>
+          <span className="text-ink">{t("checkboxLabel")}</span>
         </label>
-        <Link href="/profesionales" target="_blank" className="block text-sm underline">
+        <Link
+          href="/profesionales"
+          target="_blank"
+          className="inline-flex min-h-11 items-center text-sm text-ink underline underline-offset-2"
+        >
           {t("showInfo")}
         </Link>
-        <p className="text-xs opacity-70">{legalNote}</p>
+        <p className="text-sm text-ink-soft">{legalNote}</p>
         {error && (
           <p role="alert" className="flex items-center gap-2 text-sm text-error-text">
             <AlertCircle className="h-4 w-4" /> {error}
@@ -501,7 +507,7 @@ export function ConsultaRecorder() {
         )}
         <button
           type="button"
-          className="ad-btn ad-btn-primary min-h-[48px] w-full"
+          className="ad-btn ad-btn-primary ad-btn-lg w-full"
           disabled={!informed || starting}
           onClick={start}
         >
@@ -512,7 +518,7 @@ export function ConsultaRecorder() {
           )}
           {t("start")}
         </button>
-        {!informed && <p className="text-center text-xs opacity-70">{t("startDisabledHint")}</p>}
+        {!informed && <p className="text-center text-sm text-ink-soft">{t("startDisabledHint")}</p>}
       </div>
     );
   }
@@ -537,8 +543,8 @@ export function ConsultaRecorder() {
           </span>
         </div>
         {elapsed < 15 && <p className="text-sm">{t("askNow")}</p>}
-        <p className="text-xs opacity-70">{t("keepScreenOn")}</p>
-        <button type="button" className="ad-btn ad-btn-primary min-h-[48px] w-full" onClick={stop}>
+        <p className="text-sm text-ink-soft">{t("keepScreenOn")}</p>
+        <button type="button" className="ad-btn ad-btn-primary ad-btn-lg w-full" onClick={stop}>
           <Square className="h-5 w-5" /> {t("stop")}
         </button>
       </div>

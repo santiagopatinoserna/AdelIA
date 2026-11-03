@@ -1,10 +1,11 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useId, useRef, useState } from "react";
 import { useTranslations, useLocale } from "next-intl";
 import {
-  Stethoscope,
+  ChevronRight,
   Mic,
+  MicOff,
   Sparkles,
   Loader2,
   RotateCcw,
@@ -15,7 +16,7 @@ import {
 
 import { streamChat, type Citation } from "@/lib/chat-client-browser";
 import { Link } from "@/lib/navigation";
-import { Markdown } from "./markdown";
+import { AnswerContent } from "./answer-content";
 import { CitationCard } from "./citation-card";
 
 // Minimal shape of the Web Speech API (no DOM lib types ship for it).
@@ -65,6 +66,7 @@ export function ConsultaMode() {
   const [micSupported, setMicSupported] = useState(false);
   const [copied, setCopied] = useState(false);
   const [hydrated, setHydrated] = useState(false);
+  const fieldId = useId();
 
   // Survive a reload: a parent uses this mid-appointment, where the phone can
   // lock/reload — don't lose the argued questions. A consulta is point-in-time
@@ -181,97 +183,76 @@ export function ConsultaMode() {
     }
   }
 
+  const micLabel = listening
+    ? t("listeningTap")
+    : t("listenIn", { lang: MIC_LABEL[locale] ?? MIC_LABEL.es });
+
+  // One job first: what the doctor just said, with the mic inside the field
+  // at the thumb, as on the home. Recording the whole visit is the other way
+  // in and used to sit above the field as a card with its own amber button,
+  // so two tools competed for the first look (redesign audit, screen 15).
+  // It now closes the page as a quiet row.
   return (
-    <main className="mx-auto max-w-2xl px-6 py-10">
-      <div className="flex items-start gap-3">
-        <span className="inline-flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-primary-tint text-primary-text ring-1 ring-primary-tint-line">
-          <Stethoscope className="h-6 w-6" strokeWidth={1.9} />
-        </span>
-        <div>
-          <h1 className="text-2xl text-ink">{t("title")}</h1>
-          <p className="mt-1 text-sm text-ink-soft">{t("subtitle")}</p>
-        </div>
-      </div>
+    <main className="mx-auto max-w-2xl px-5 py-8 sm:px-6 sm:py-10">
+      <h1 className="text-title text-ink">{t("title")}</h1>
+      <p className="mt-2 text-ink-soft">{t("subtitle")}</p>
 
-      {/* Entry point: record the live visit instead of typing what the
-          doctor said after the fact. */}
-      <Link
-        href="/dashboard/consulta/grabar"
-        className="ad-card ad-card-hover ad-rise mt-6 block p-4"
-      >
-        <div className="flex items-center gap-3">
-          <span className="inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-accent-tint text-accent-text ring-1 ring-accent-tint-line">
-            <Mic className="h-5 w-5" strokeWidth={1.9} />
-          </span>
-          <div className="min-w-0 flex-1">
-            <p className="font-medium text-ink">{t("record.entryTitle")}</p>
-            <p className="text-sm text-ink-soft">{t("record.entryBody")}</p>
-          </div>
-          <span className="ad-btn ad-btn-accent shrink-0 px-4 py-2 text-sm" aria-hidden="true">
-            {t("record.start")}
-          </span>
-        </div>
-      </Link>
-
-      {/* Input */}
-      <div className="ad-card mt-6 p-4">
-        <label className="ad-eyebrow normal-case tracking-normal">{t("emptyPrompt")}</label>
-        <textarea
-          rows={3}
-          value={input}
-          onChange={(e) => setInput(e.target.value)}
-          placeholder={t("placeholder")}
-          aria-label={t("placeholder")}
-          disabled={busy}
-          className="mt-2 w-full resize-y rounded-xl border border-line-control bg-surface px-3 py-2.5 text-base leading-relaxed text-ink placeholder:text-ink-faint focus:border-primary-text disabled:opacity-60"
-        />
-        {!input.trim() && !answer && (
-          <p className="mt-2 rounded-lg bg-surface-2 px-3 py-2 text-xs leading-relaxed text-ink-soft">
-            {t("example")}
-          </p>
-        )}
-        <div className="mt-3 flex items-center justify-between gap-2">
-          {micSupported ? (
+      <div className="mt-6">
+        <label htmlFor={fieldId} className="block text-lg font-semibold text-ink">
+          {t("emptyPrompt")}
+        </label>
+        <div className="relative mt-3">
+          <textarea
+            id={fieldId}
+            rows={4}
+            value={input}
+            onChange={(e) => setInput(e.target.value)}
+            placeholder={t("placeholder")}
+            disabled={busy}
+            className={`block min-h-[120px] w-full resize-none rounded-2xl border border-line-control bg-surface px-4 py-3 text-base leading-relaxed text-ink placeholder:text-ink-faint focus:border-primary-text disabled:opacity-60 ${
+              micSupported ? "pr-16" : ""
+            }`}
+          />
+          {micSupported && (
             <button
               type="button"
               onClick={toggleMic}
               aria-pressed={listening}
-              aria-label={listening ? t("listeningTap") : t("listenIn", { lang: MIC_LABEL[locale] ?? MIC_LABEL.es })}
-              className={`ad-btn min-h-[44px] px-3 py-2 text-sm ${
+              aria-label={micLabel}
+              title={micLabel}
+              className={`absolute bottom-1.5 right-1.5 inline-flex h-11 w-11 items-center justify-center rounded-full transition-colors ${
                 listening
-                  ? "bg-accent-tint text-accent-text ring-1 ring-accent-tint-line hover:bg-accent-tint-line"
-                  : "ad-btn-ghost"
+                  ? "bg-primary text-on-primary motion-safe:animate-pulse"
+                  : "bg-primary-tint text-on-primary-tint hover:bg-surface-2"
               }`}
             >
-              <Mic className={`h-4 w-4 ${listening ? "animate-pulse" : ""}`} strokeWidth={2} />
-              <span>
-                {listening
-                  ? t("listeningTap")
-                  : t("listenIn", { lang: MIC_LABEL[locale] ?? MIC_LABEL.es })}
-              </span>
+              {listening ? <MicOff className="h-5 w-5" aria-hidden /> : <Mic className="h-5 w-5" aria-hidden />}
             </button>
-          ) : (
-            <span />
           )}
-          <button
-            type="button"
-            onClick={generate}
-            disabled={!input.trim() || busy}
-            className="ad-btn ad-btn-primary px-5 py-2 text-sm disabled:cursor-not-allowed disabled:opacity-50"
-          >
-            {busy ? (
-              <Loader2 className="h-4 w-4 animate-spin" strokeWidth={2.2} />
-            ) : (
-              <Sparkles className="h-4 w-4" strokeWidth={2.2} />
-            )}
-            {t("generate")}
-          </button>
         </div>
+        {listening && (
+          <p role="status" className="mt-2 text-sm text-ink-soft">
+            {t("listeningTap")}
+          </p>
+        )}
+        <button
+          type="button"
+          onClick={generate}
+          disabled={!input.trim() || busy}
+          className="ad-btn ad-btn-primary ad-btn-lg mt-4 w-full disabled:cursor-not-allowed disabled:opacity-50"
+        >
+          {busy ? (
+            <Loader2 className="h-5 w-5 animate-spin" strokeWidth={2.2} aria-hidden />
+          ) : (
+            <Sparkles className="h-5 w-5" strokeWidth={2.2} aria-hidden />
+          )}
+          {t("generate")}
+        </button>
       </div>
 
       {/* Output */}
       {(busy || answer) && (
-        <div ref={outputRef} className="ad-card ad-rise mt-4 scroll-mt-28 p-5">
+        <div ref={outputRef} className="ad-rise mt-8 scroll-mt-20 border-t border-line pt-6">
           {busy && !answer && (
             <div className="flex items-center gap-3 py-2">
               <Loader2 className="h-6 w-6 shrink-0 animate-spin text-primary-text" strokeWidth={2} />
@@ -281,11 +262,7 @@ export function ConsultaMode() {
               </div>
             </div>
           )}
-          {answer && (
-            <div className="text-[15px] text-ink">
-              <Markdown>{answer}</Markdown>
-            </div>
-          )}
+          {answer && <AnswerContent level={2}>{answer}</AnswerContent>}
           {citations.length > 0 && (
             <div className="mt-4 border-t border-line pt-3">
               <div className="ad-eyebrow">{t("sourcesLabel")}</div>
@@ -297,30 +274,30 @@ export function ConsultaMode() {
             </div>
           )}
           {!busy && answer && (
-            <div className="mt-4 flex items-center justify-between gap-3 border-t border-line pt-3">
-              <p className="flex items-center gap-1.5 text-xs text-ink-faint">
-                <ShieldCheck className="h-3.5 w-3.5 text-primary-text" strokeWidth={2} />
+            <div className="mt-4 border-t border-line pt-3">
+              <p className="flex items-start gap-1.5 text-sm text-ink-soft">
+                <ShieldCheck className="mt-0.5 h-4 w-4 shrink-0 text-primary-text" strokeWidth={2} aria-hidden />
                 {t("disclaimer")}
               </p>
-              <div className="flex shrink-0 gap-2">
+              <div className="mt-3 flex flex-wrap gap-2">
                 <button
                   type="button"
                   onClick={copyOutput}
-                  className="ad-btn ad-btn-ghost px-3 py-1.5 text-xs"
+                  className="ad-btn ad-btn-ghost min-h-11 px-3.5 text-sm"
                 >
                   {copied ? (
-                    <Check className="h-3.5 w-3.5 text-primary-text" strokeWidth={2.4} />
+                    <Check className="h-4 w-4 text-primary-text" strokeWidth={2.4} aria-hidden />
                   ) : (
-                    <Copy className="h-3.5 w-3.5" strokeWidth={2} />
+                    <Copy className="h-4 w-4" strokeWidth={2} aria-hidden />
                   )}
                   {copied ? t("copied") : t("copy")}
                 </button>
                 <button
                   type="button"
                   onClick={generate}
-                  className="ad-btn ad-btn-ghost px-3 py-1.5 text-xs"
+                  className="ad-btn ad-btn-ghost min-h-11 px-3.5 text-sm"
                 >
-                  <RotateCcw className="h-3.5 w-3.5" strokeWidth={2} />
+                  <RotateCcw className="h-4 w-4" strokeWidth={2} aria-hidden />
                   {t("regenerate")}
                 </button>
               </div>
@@ -334,6 +311,18 @@ export function ConsultaMode() {
           {t("error")}
         </div>
       )}
+
+      <Link
+        href="/dashboard/consulta/grabar"
+        className="mt-8 flex min-h-[52px] items-center gap-3 rounded-2xl border border-line bg-surface px-4 py-3 text-left transition-colors hover:bg-surface-2"
+      >
+        <Mic className="h-5 w-5 shrink-0 text-accent-text" strokeWidth={2} aria-hidden />
+        <span className="min-w-0 flex-1">
+          <span className="block font-medium text-ink">{t("record.entryTitle")}</span>
+          <span className="block text-sm text-ink-soft">{t("record.entryBody")}</span>
+        </span>
+        <ChevronRight className="h-5 w-5 shrink-0 text-ink-faint" aria-hidden />
+      </Link>
     </main>
   );
 }
