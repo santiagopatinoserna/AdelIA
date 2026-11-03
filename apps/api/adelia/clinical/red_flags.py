@@ -52,6 +52,12 @@ from the fever rule), "dos meses" written as words, and a Fahrenheit reading.
 Each is now a pattern or a parser rule, and the test file keeps at least two
 parent-written positives per flag per language so the next flag cannot ship
 in one language only.
+
+Calibration. Over-triggering stops only where the sources say the answer is
+a visit, not 112. One case so far: a pause in the sleep of a snoring child of
+6 months or more, with no acute illness, no long pause and no other alarm
+sign, goes to the RAG, whose sleep sources send it to the pediatrician
+(`_sleep_pause_only`).
 """
 from __future__ import annotations
 
@@ -118,6 +124,18 @@ def normalize(text: str) -> str:
 # picks the language of the ANSWER (answer_contract.red_flag_reply).
 # --------------------------------------------------------------------------
 
+# Breathing that stops. Part of respiratory_distress, kept apart because one
+# context the sources give turns it from 112 into a visit to the pediatrician:
+# see _sleep_pause_only.
+_PAUSES: tuple[str, ...] = (
+    # es
+    r"\bapnea\w*\b", r"\bdej(?:a|o|aba) de respirar\b", r"\bpar(?:a|o|aba) de respirar\b",
+    # en
+    r"\bapnoea\w*\b", r"\bapnea\w*\b", r"\bstop(?:s|ped)? breathing\b",
+    # fr
+    r"\bapnee\w*\b", r"\barret(?:e|ait) de respirer\b",
+)
+
 _PATTERNS: dict[str, tuple[str, ...]] = {
     "choking": (
         # es
@@ -181,22 +199,22 @@ _PATTERNS: dict[str, tuple[str, ...]] = {
         r"\bquejido\w*\b", r"\bse queja al respirar\b", r"\btiraje\b", r"\bretraccion\w*\b",
         r"\baleteo nasal\b", r"\bse le marcan las costillas\b", r"\bhunde (?:el pecho|las costillas)\b",
         r"\b(?:le cuesta|no puede|dificultad para) respirar\b", r"\brespira (?:muy )?(?:rapid|agitad)\w*",
-        r"\bdistres respiratori\w*", r"\bapnea\w*\b", r"\bdeja de respirar\b",
-        r"\bno respira\b",
+        r"\bdistres respiratori\w*", r"\bno respira\b",
         # en
         r"\bgrunting\b", r"\bchest (?:in)?drawing\b", r"\bretractions?\b", r"\bnasal flaring\b",
         r"\b(?:struggling|working hard|difficulty) (?:to )?breath\w*",
-        r"\bcan(?:'?t|not| not) breathe\b", r"\bapnoea\b", r"\bapnea\b", r"\bstops breathing\b",
+        r"\bcan(?:'?t|not| not) breathe\b",
         r"\bribs (?:are )?(?:showing|sucking in)\b",
         r"\bbreathing (?:really |very |so |too |extremely )?(?:fast|quickly|rapidly)\b",
         r"\b(?:skin|belly|tummy|chest|stomach)\b[^.,;]{0,25}\b(?:pull|suck|sink|draw)\w* in\b",
         # fr
         r"\bgeignement\w*\b", r"\bgeint\b", r"\btirage\b", r"\bbattement des ailes du nez\b",
         r"\b(?:du mal|difficulte\w*) a respirer\b", r"\bne respire (?:plus|pas)\b",
-        r"\bapnee\w*\b", r"\bdetresse respiratoire\b",
+        r"\bdetresse respiratoire\b",
         r"\bgemi\w*", r"\bn'?arrive (?:plus|pas) a respirer\b",
         r"\brespire (?:tres |trop |si )?(?:vite|rapidement)\b",
         r"\b(?:ventre|cotes|thorax)\b[^.,;]{0,20}\bse (?:creus|rentr)\w*",
+        *_PAUSES,
     ),
     "non_blanching_rash": (
         # es
@@ -442,6 +460,66 @@ def _hours_in(text: str) -> int | None:
     return max(values) if values else None
 
 
+# --- pauses in a snoring child's sleep --------------------------------------
+
+#: From this age the sleep sources treat snoring with pauses as a consult
+#: (Familia y Salud, "Trastornos del sueño en el niño de 6 a 12 meses"). Below
+#: it the newborn guidance treats a pause as urgent (HealthyChildren, NHS
+#: Healthier Together) and NICE NG9 1.2.3 counts under 3 months as a risk.
+SLEEP_PAUSE_MIN_AGE_MONTHS = 6
+
+# "tos ronca", "voz ronca" and "esta ronca" are a croupy cough and a hoarse
+# voice, which only share the word with snoring.
+_SNORING = re.compile(
+    r"(?<!tos )(?<!voz )(?<!esta )(?<!quedado )\bronc(?:a|an|aba|aban|ar|ando)\b|\bronquid\w*"
+    r"|\bsnor\w*|\bronfl\w*"
+)
+
+# What keeps the pause under the emergency rule even in a snoring child: an
+# acute respiratory illness (NICE NG9 1.2.1 sends apnoea in bronchiolitis by
+# ambulance, and croup and a cold are how it starts) and a long pause
+# (Familia y Salud "respira con pausas largas", HealthyChildren "más de 10
+# segundos"). Fever is checked with _FEVER_WORDS.
+_PAUSE_STAYS_URGENT = re.compile(
+    # es
+    r"\bbronquiolit\w*|\blaringit\w*|\bestridor\b|\btos\b|\bcatarr\w*|\bresfriad\w*"
+    r"|\bconstipad\w*|\bmocos?\b"
+    r"|\bpausas? (?:muy |bastante )?larg\w*|\blarg\w* pausas?\b"
+    r"|\bmas de (?:10|diez|\d{2}) segundos\b"
+    # en
+    r"|\bbronchiolit\w*|\bcroup\b|\bstridor\b|\bcough\w*|\bcold\b|\bflu\b"
+    r"|\blong (?:pause|gap)s?\b|\bmore than (?:10|ten|\d{2}) seconds\b"
+    # fr
+    r"|\blaryngit\w*|\btoux\b|\btouss\w*|\brhume\b|\benrhum\w*"
+    r"|\blongues? pauses?\b|\bpauses? (?:tres |trop )?longues?\b"
+    r"|\bplus de (?:10|dix|\d{2}) secondes\b"
+    # es, en, fr
+    r"|\bminut\w*"
+)
+
+_DISTRESS_WITHOUT_PAUSES: tuple[re.Pattern[str], ...] = tuple(
+    re.compile(p) for p in _PATTERNS["respiratory_distress"] if p not in _PAUSES
+)
+
+
+def _sleep_pause_only(n: str, age: int | None) -> bool:
+    """True when the only distress in `n` is a pause in a snoring child's sleep.
+
+    Handoff section 5: "ronca y a veces para de respirar" at 18 months got the
+    112 answer. The sleep sources in evidence_respiratorio_sueno.json all send
+    it to the pediatrician: AEP EnFamilia ("Mi hijo ronca", "comentárselo a su
+    pediatra"), Familia y Salud for 6-12 months and for 1-2 years, and
+    HealthyChildren on sleep apnoea ("cuanto antes"). The question then goes to
+    the RAG, which holds those sources. Without an age the flag stays: this
+    module fails towards the phone call.
+    """
+    if age is None or age < SLEEP_PAUSE_MIN_AGE_MONTHS:
+        return False
+    if not _SNORING.search(n) or _PAUSE_STAYS_URGENT.search(n) or _FEVER_WORDS.search(n):
+        return False
+    return not any(p.search(n) for p in _DISTRESS_WITHOUT_PAUSES)
+
+
 def detect(
     question: str,
     *,
@@ -473,6 +551,9 @@ def detect(
         hours = _hours_in(n)
         if hours is not None and hours < 12:
             hits.pop("no_wet_nappy_12h")
+
+    if "respiratory_distress" in hits and _sleep_pause_only(n, age):
+        hits.pop("respiratory_distress")
 
     if (fever := _fever_flag(question, age)) is not None:
         hits["fever_under_3_months"] = fever

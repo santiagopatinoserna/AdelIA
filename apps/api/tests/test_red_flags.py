@@ -116,6 +116,52 @@ def test_priority_puts_the_minutes_before_the_hours():
     assert flag is not None and flag.code == "choking"
 
 
+# --- snoring with pauses is a consult, not 112 ------------------------------
+#
+# Handoff section 5: "ronca y a veces para de respirar" at 18 months went to
+# 112. The sleep sources in evidence_respiratorio_sueno.json send it to the
+# pediatrician instead (AEP EnFamilia "Mi hijo ronca", Familia y Salud 6-12
+# months and 1-2 years, HealthyChildren on sleep apnoea). The same sources keep
+# 112 for a young baby, long pauses or bronchiolitis (NICE NG9 1.2.1).
+
+
+@pytest.mark.parametrize("question,age", [
+    ("Mi hijo de 18 meses ronca y a veces deja de respirar unos segundos mientras duerme", 18),
+    ("Mi hijo de 18 meses ronca y a veces para de respirar", 18),
+    ("Mi hija ronca todas las noches y creo que tiene apneas", 10),
+    ("My 14-month-old snores every night and sometimes stops breathing for a few seconds", 14),
+    ("She snores loudly and I think she has sleep apnea", 20),
+    ("Mon fils de 18 mois ronfle et fait des apnées la nuit", 18),
+    ("Elle ronfle beaucoup et s'arrête de respirer quelques secondes", 9),
+])
+def test_snoring_with_pauses_from_six_months_is_a_consult(question, age):
+    assert detect(question, age_months=age) is None, question
+
+
+@pytest.mark.parametrize("question,age", [
+    ("Mi bebé de 2 meses ronca y a veces deja de respirar", 2),
+    ("Mi bebé de 4 meses ronca y deja de respirar", 18),
+    ("Mi bebé ronca y deja de respirar", None),
+    ("My 3-month-old snores and stops breathing", 3),
+    ("Mi hija de 8 meses tiene bronquiolitis, ronca y a veces deja de respirar", 8),
+    ("Il a une bronchiolite, il ronfle et fait des apnées", 18),
+    ("Tiene fiebre, ronca y a ratos deja de respirar", 12),
+    ("Ronca y hace pausas largas, deja de respirar", 18),
+    ("Ronca y deja de respirar más de 10 segundos", 12),
+    ("He snores and has long pauses where he stops breathing", 15),
+    ("Ronca, deja de respirar y se pone morado", 18),
+    ("Ronca, deja de respirar y le cuesta respirar también despierto", 18),
+    ("Tiene tos ronca y deja de respirar", 18),
+    ("Mi hijo de 18 meses deja de respirar", 18),
+    ("Mi bebé de 2 meses a veces para de respirar", 2),
+    ("Mon bébé de 2 mois s'arrête de respirer", 2),
+])
+def test_pauses_that_stay_a_red_flag(question, age):
+    """Under 6 months, without an age, in an acute illness, long, with another
+    alarm sign, without snoring, or a croupy cough that only sounds like it."""
+    assert detect(question, age_months=age) is not None, question
+
+
 # --- and the ordinary questions do not fire --------------------------------
 
 
