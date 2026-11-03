@@ -61,14 +61,29 @@ export function ChatPageClient({
   const abortRef = useRef<AbortController | null>(null);
 
   const [atBottom, setAtBottom] = useState(true);
+  // What the next render of the thread should scroll to, set by whoever
+  // changes it: a question she just sent goes to the top of the view and the
+  // answer is read from its first line down; a conversation opened from the
+  // history starts at its end. Streaming tokens never move the view: following
+  // them used to land her on the source list instead of on "Hoy"
+  // (AUDITORIA_UX.md, problem 8).
+  const scrollIntentRef = useRef<"question" | "end" | null>(null);
 
-  // Only follow new content when the user is already near the bottom — don't
-  // yank them down while they're reading earlier messages.
   useEffect(() => {
-    if (atBottom) {
-      scrollRef.current?.scrollTo({ top: scrollRef.current.scrollHeight, behavior: "smooth" });
+    const intent = scrollIntentRef.current;
+    const el = scrollRef.current;
+    if (!intent || !el) return;
+    scrollIntentRef.current = null;
+    if (intent === "end") {
+      el.scrollTo({ top: el.scrollHeight });
+      return;
     }
-  }, [messages, busy, atBottom]);
+    const questions = el.querySelectorAll<HTMLElement>('[data-chat-role="user"]');
+    const latest = questions[questions.length - 1];
+    if (!latest) return;
+    const offset = latest.getBoundingClientRect().top - el.getBoundingClientRect().top;
+    el.scrollTo({ top: Math.max(0, el.scrollTop + offset - 16) });
+  }, [messages]);
 
   function onScroll() {
     const el = scrollRef.current;
@@ -84,6 +99,7 @@ export function ChatPageClient({
     streamEpochRef.current += 1;
     setActiveId(id);
     const detail = await getChatSession(id);
+    scrollIntentRef.current = "end";
     setMessages(
       detail.messages.map((m) => ({
         role: m.role,
@@ -116,6 +132,7 @@ export function ChatPageClient({
     abortRef.current = controller;
     setBusy(true);
     const userMsg: LocalMsg = { role: "user", content: text, citations: [], evidence_citations: [] };
+    scrollIntentRef.current = "question";
     setMessages((prev) => [
       ...prev,
       userMsg,
@@ -264,9 +281,11 @@ export function ChatPageClient({
                 </div>
               </div>
             ) : (
-              <div className="space-y-3">
+              <div className="space-y-4">
                 {messages.map((m, i) => (
-                  <ChatMessageBubble key={i} message={m} locale={locale} />
+                  <div key={i} data-chat-role={m.role}>
+                    <ChatMessageBubble message={m} locale={locale} />
+                  </div>
                 ))}
               </div>
             )}

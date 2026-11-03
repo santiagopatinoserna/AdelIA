@@ -337,7 +337,7 @@
     "title": "Demander à AdelIA",
     "newSession": "Nouvelle conversation",
     "emptyHistory": "Pas encore de conversations",
-    "placeholder": "Ex : Mon bébé dort mal et régurgite après les repas.",
+    "placeholder": "Ex. : Mon bébé dort mal",
     "send": "Envoyer",
     "thinking": "Réflexion…",
     "noContext": "Je n’ai pas assez d’informations.",
@@ -872,10 +872,10 @@
     "subscribeNowCta": "M’abonner maintenant"
   },
   "agent": {
-    "greeting": "Comment je peux t’aider pour la santé de ton bébé ?",
-    "greetingWithName": "Comment va {name} ?",
+    "greeting": "Comment je peux t’aider pour la santé de ton bébé ?",
+    "greetingWithName": "Comment va {name} ?",
     "inputLabel": "Écris ou touche le micro…",
-    "placeholder": "Écris, ex. : il a eu 37,8",
+    "placeholder": "Écris, ex. : il a eu 37,8",
     "send": "Envoyer",
     "stop": "Stop",
     "listen": "Dictée vocale",
