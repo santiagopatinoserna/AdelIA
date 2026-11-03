@@ -1,0 +1,581 @@
+{
+  "_meta": {
+    "topic": "Neonatal, de 0 a 3 meses: primeras semanas en casa, cordón umbilical y granuloma, ictericia del recién nacido y cuándo se alarga, prueba del talón, cribado auditivo neonatal, pérdida de peso inicial y recuperación del peso de nacimiento, deposiciones del recién nacido",
+    "compiled": "2026-11-02",
+    "method": "Lectura directa de cada página pública el 2026-11-02 (Familia y Salud AEPap, Ministerio de Sanidad, NHS, HealthyChildren AAP con su guía de síntomas KidsDoc, ameli.fr, HAS y OMS); cada cifra, edad, signo de alarma y nivel de urgencia procede de la página citada en el propio fragmento. Las páginas de aeped.es, seup.org, nice.org.uk y mpedia.fr respondieron 403 a la lectura y no se usaron.",
+    "caveat": "Resúmenes en español de fuentes en español, inglés o francés; los fragmentos son paráfrasis con las cifras y el nivel de urgencia del original, no texto literal. Orientación para familias sobre el recién nacido, no sustituye la valoración de un profesional ni contiene pautas de medicación; la vitamina K se nombra sin cantidades. Lo que dicen sobre la ictericia se refiere a los primeros días y semanas de vida, con la edad que da cada página.",
+    "purpose": "Cerrar el hueco del recién nacido: el corpus no tenía nada sobre el cordón umbilical, la prueba del talón, el cribado auditivo, la pérdida de peso de los primeros días ni las deposiciones del recién nacido, y solo dos páginas sobre ictericia"
+  },
+  "sources": [
+    {
+      "source_type": "reference",
+      "title": "Cuidados del cordón umbilical (Familia y Salud, AEPap)",
+      "organization": "Asociación Española de Pediatría de Atención Primaria (AEPap)",
+      "publication_year": 2023,
+      "url": "https://www.familiaysalud.es/sintomas-y-enfermedades/recien-nacido/cuidados-del-cordon-umbilical",
+      "specialties": ["pediatrics", "general_medicine", "neonatology"],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "topics": ["cordon_umbilical"],
+      "chunks": [
+        "Cuidados del cordón umbilical (Familia y Salud, AEPap, actualizado en 2023). Tema: cuándo se cae el cordón y cómo limpiarlo en casa en el recién nacido. Hallazgo: el resto del cordón se seca y se desprende, normalmente entre los 5 y los 15 días de vida, y puede tardar más en bebés nacidos por cesárea, con un cordón grueso o si se han usado antisépticos. Basta con lavarlo con agua templada y jabón neutro y secarlo bien: lavarse antes las manos, retirar la gasa (humedecida con suero si está pegada), limpiar con una gasa nueva y dejar el cordón al aire o rodeado de una gasa limpia, con el pañal doblado por debajo y cambiado tras cada pis o caca. Se puede bañar al bebé aunque el cordón no se haya caído, siempre que después se seque bien.",
+        "Cuidados del cordón umbilical (Familia y Salud, AEPap, actualizado en 2023). Tema: productos que no se deben poner en el ombligo del recién nacido. Hallazgo: la página desaconseja los antisépticos yodados, porque pueden alterar el tiroides del recién nacido; la mercromina, porque puede producir eccemas y ocultar signos de infección o inflamación; los polvos de talco, que pueden favorecer granulomas o un secado excesivo; y las mezclas tradicionales de hierbas, ceniza, leche materna o aceites, por el riesgo de tétanos. Solo en países con condiciones higiénicas deficientes se plantea usar un antiséptico; en el resto basta con agua, jabón y mantener el cordón limpio y seco para evitar infecciones."
+      ]
+    },
+    {
+      "source_type": "reference",
+      "title": "Granuloma umbilical (Familia y Salud, AEPap)",
+      "organization": "Asociación Española de Pediatría de Atención Primaria (AEPap)",
+      "publication_year": 2020,
+      "url": "https://www.familiaysalud.es/sintomas-y-enfermedades/recien-nacido/granuloma-umbilical",
+      "specialties": ["pediatrics", "general_medicine", "neonatology"],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "topics": ["cordon_umbilical"],
+      "chunks": [
+        "Granuloma umbilical (Familia y Salud, AEPap, actualizado en 2020). Tema: qué es el granuloma umbilical de las primeras semanas de vida. Hallazgo: es un crecimiento de tejido que se forma mientras cicatrizan los restos del cordón en las primeras semanas de vida; se ve como un bultito rosado o rojizo, húmedo y carnoso, a veces con una secreción clara o amarillenta. La página subraya que no es una infección del ombligo y que su causa se desconoce: depende de cómo cicatriza el tejido y de cómo se separa el cordón, no de cómo se cuidó tras el parto. No es grave y suele curarse solo, pero se aconseja tratarlo porque la secreción afea el ombligo y, sin tratamiento, puede crecer y ser una puerta de entrada para una infección.",
+        "Granuloma umbilical (Familia y Salud, AEPap, actualizado en 2020). Tema: cómo se trata el granuloma y cuándo consultar por el ombligo. Hallazgo: el personal sanitario explica cómo tratarlo; el método casero que recoge hoy la página es la sal común de cocina, puesta sobre el granuloma con las manos limpias y tapada con una gasa según las indicaciones del pediatra o la enfermera, y en dos o tres días debería encogerse, cambiar de color y curar; si no ocurre, se comenta en la siguiente visita. Antes se usaba un producto que seca la lesión pero puede causar quemaduras superficiales. Hay que consultar al pediatra si aparece enrojecimiento alrededor del ombligo, mal olor o pus, fiebre o llanto al tocarlo, porque son signos de posible infección (onfalitis)."
+      ]
+    },
+    {
+      "source_type": "reference",
+      "title": "Onfalitis (Familia y Salud, AEPap)",
+      "organization": "Asociación Española de Pediatría de Atención Primaria (AEPap)",
+      "publication_year": 2021,
+      "url": "https://www.familiaysalud.es/sintomas-y-enfermedades/recien-nacido/onfalitis",
+      "specialties": ["pediatrics", "general_medicine", "neonatology"],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "topics": ["cordon_umbilical"],
+      "chunks": [
+        "Onfalitis (Familia y Salud, AEPap, actualizado en 2021). Tema: la infección del ombligo en el recién nacido y sus signos. Hallazgo: la onfalitis es la infección del ombligo y de los tejidos que lo rodean. Los gérmenes del canal del parto y de las manos de quienes cuidan al bebé llegan al ombligo en los primeros 2 días de vida. Sus signos son enrojecimiento, hinchazón, secreción y mal olor, y también puede haber fiebre, irritabilidad, vómitos o decaimiento. Suele ser leve pero puede complicarse, por lo que la página indica acudir al médico siempre que aparezca enrojecimiento, hinchazón, secreción o mal olor en el ombligo.",
+        "Onfalitis (Familia y Salud, AEPap, actualizado en 2021). Tema: factores de riesgo de onfalitis y cómo se previene en las primeras semanas. Hallazgo: aumentan el riesgo el parto prolongado o en casa, la infección del líquido amniótico, la rotura prematura de la bolsa, un cuidado inadecuado del cordón, el bajo peso al nacer, los problemas de defensas y haber necesitado un catéter en el ombligo. El diagnóstico es sobre todo clínico, a veces con cultivo de la secreción y análisis de sangre si se sospecha una infección más grave. La medida más adecuada es mantener el cordón limpio y seco; no se recomiendan los antibióticos en crema sobre el ombligo porque su utilidad no está clara, y los casos moderados y graves se tratan en el hospital."
+      ]
+    },
+    {
+      "source_type": "reference",
+      "title": "Las cacas del recién nacido sano (Familia y Salud, AEPap)",
+      "organization": "Asociación Española de Pediatría de Atención Primaria (AEPap)",
+      "publication_year": 2024,
+      "url": "https://www.familiaysalud.es/sintomas-y-enfermedades/recien-nacido/las-cacas-del-recien-nacido-sano",
+      "specialties": ["pediatrics", "general_medicine", "gastroenterology"],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "topics": ["deposiciones_recien_nacido"],
+      "chunks": [
+        "Las cacas del recién nacido sano (Familia y Salud, AEPap, actualizado en 2024). Tema: meconio y heces de transición en los primeros días de vida. Hallazgo: la primera caca del recién nacido, el meconio, debe salir en las primeras 48 horas; es negra, espesa y pegajosa y puede durar 2 o 3 días. Después llegan las heces de transición, de color verde oscuro y semilíquidas, que pueden durar de 3 a 5 días según lo a menudo que coma el bebé. Los colores normales son el amarillo, el mostaza y el verde. Que el bebé no haya expulsado el meconio en las primeras 48 horas es motivo para consultar al pediatra.",
+        "Las cacas del recién nacido sano (Familia y Salud, AEPap, actualizado en 2024). Tema: cuántas cacas hace un recién nacido con pecho o con biberón. Hallazgo: con lactancia materna las cacas son más frecuentes, a veces tras cada toma (de 6 a 8 al día), casi sin olor, líquidas o semilíquidas y con pequeños grumos. Con leche de fórmula son menos frecuentes, unas 3 o 4 al día o una cada 2 días o más, más pastosas y de olor más fuerte. La frecuencia y el aspecto varían de un bebé a otro según el tipo de leche, la cantidad y lo a menudo que coma. No hacer caca todos los días no es por sí mismo un problema si la caca no es dura, sale sin dolor ni esfuerzo y no hay vómitos, rechazo de tomas, llanto ni problemas para ganar peso.",
+        "Las cacas del recién nacido sano (Familia y Salud, AEPap, actualizado en 2024). Tema: colores de la caca y otras situaciones por las que consultar en el recién nacido. Hallazgo: la página indica consultar al pediatra, sin graduar la urgencia, si hay hilos de sangre roja en las cacas, cacas negras después de los 7 días de vida, cacas blancas con la piel amarillenta, vómitos, rechazo de las tomas, pérdida de peso o falta de ganancia, inquietud con cacas duras, secas y escasas y llanto al hacerlas, ausencia de meconio en las primeras 48 horas o cacas más frecuentes y menos consistentes (diarrea). A un bebé nunca se le deben dar zumos, laxantes ni infusiones, ni estimularle el ano."
+      ]
+    },
+    {
+      "source_type": "reference",
+      "title": "Cribado metabólico neonatal. ¿Qué es la prueba del talón? (Familia y Salud, AEPap)",
+      "organization": "Asociación Española de Pediatría de Atención Primaria (AEPap)",
+      "publication_year": 2026,
+      "url": "https://www.familiaysalud.es/podemos-prevenir/cribados-neonatales/cribado-metabolico-neonatal-que-es-la-prueba-del-talon",
+      "specialties": ["pediatrics", "general_medicine", "neonatology"],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "topics": ["prueba_talon"],
+      "chunks": [
+        "Cribado metabólico neonatal. ¿Qué es la prueba del talón? (Familia y Salud, AEPap, actualizado en 2026). Tema: cuándo y cómo se hace la prueba del talón. Hallazgo: forma parte del programa de cribado neonatal y se ofrece a todos los recién nacidos para detectar enfermedades raras pero potencialmente graves antes de que den síntomas, cuando un tratamiento precoz cambia su evolución. La muestra se toma habitualmente entre las 24 y las 72 horas de vida, una vez iniciada la alimentación: un pequeño pinchazo en el talón y una muestra de sangre en una tarjeta especial que se envía a un laboratorio de referencia. En algunas circunstancias hay que repetirla. Para aliviar las molestias ayudan el pecho durante la prueba, hablarle con suavidad o cantarle una nana.",
+        "Cribado metabólico neonatal. ¿Qué es la prueba del talón? (Familia y Salud, AEPap, actualizado en 2026). Tema: qué enfermedades detecta la prueba del talón en España en 2026. Hallazgo: la cartera común del Sistema Nacional de Salud incluye 21 enfermedades: hipotiroidismo congénito, fenilcetonuria, fibrosis quística, deficiencias de acil-CoA deshidrogenasa de cadena media, larga y muy larga, acidemia glutárica tipo I, anemia falciforme, leucinosis (enfermedad de la orina con olor a arce), déficit de biotinidasa, hiperplasia suprarrenal congénita, homocistinuria, tirosinemia tipo 1, acidemias metilmalónicas, acidemia propiónica, deficiencia primaria de carnitina, acidemia isovalérica, aciduria 3-hidroxi-3-metilglutárica, inmunodeficiencia combinada grave, atrofia muscular espinal y adrenoleucodistrofia ligada al cromosoma X. Algunas comunidades autónomas estudian otras más.",
+        "Cribado metabólico neonatal. ¿Qué es la prueba del talón? (Familia y Salud, AEPap, actualizado en 2026). Tema: qué significa un resultado positivo y si la prueba es obligatoria. Hallazgo: un resultado positivo indica sospecha, no diagnóstico: hacen falta otras pruebas para confirmar o descartar la enfermedad, y la mayoría de los recién nacidos con un cribado alterado no la tienen. Si se necesitan más pruebas, el equipo sanitario contacta con la familia lo antes posible. La prueba no es obligatoria: como cualquier procedimiento sanitario requiere información y consentimiento, aunque se recomienda para todos los recién nacidos. Además de la prueba del talón, en España son universales el cribado de la audición y la pulsioximetría para detectar cardiopatías congénitas críticas."
+      ]
+    },
+    {
+      "source_type": "reference",
+      "title": "Pruebas de cribado neonatal: audición (Familia y Salud, AEPap)",
+      "organization": "Asociación Española de Pediatría de Atención Primaria (AEPap)",
+      "publication_year": 2024,
+      "url": "https://www.familiaysalud.es/podemos-prevenir/cribados-neonatales/pruebas-de-cribado-neonatal-audicion",
+      "specialties": ["pediatrics", "general_medicine", "neonatology"],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "topics": ["cribado_auditivo"],
+      "chunks": [
+        "Pruebas de cribado neonatal: audición (Familia y Salud, AEPap, actualizado en 2024). Tema: por qué se hace el cribado auditivo a todos los recién nacidos. Hallazgo: entre 1 y 2 de cada 1000 recién nacidos tienen una sordera moderada a profunda, y entre 3 y 5 de cada 1000 una sordera leve o de un solo oído. Sin tratamiento precoz, no oír impide adquirir el lenguaje y dificulta el desarrollo emocional e intelectual. Con el cribado la hipoacusia puede diagnosticarse antes de los 6 meses, mientras que sin él el diagnóstico llega de media a los 2 años. En España se recomienda cribar a todos los recién nacidos desde 1999, y en 2003 el Ministerio y las comunidades autónomas aprobaron un programa estatal.",
+        "Pruebas de cribado neonatal: audición (Familia y Salud, AEPap, actualizado en 2024). Tema: cómo y cuándo se hace la prueba y qué significa pasarla o no pasarla. Hallazgo: se usan las otoemisiones acústicas, un pequeño adaptador en el oído que registra la respuesta de la cóclea, o los potenciales auditivos evocados del tronco cerebral, con sensores en la cabeza; ambas son indoloras y se hacen con el bebé tranquilo o dormido. Lo habitual es hacerla entre las 12 y las 48 horas de vida, antes del alta, y siempre dentro del primer mes. Pasarla significa que oye bien en ese momento, pero no descarta una sordera que aparezca después, así que hay que vigilar cómo oye, sobre todo en los tres primeros años. Si no la pasa, otorrinolaringología confirma o descarta el resultado, y la mayoría de esos bebés oyen bien."
+      ]
+    },
+    {
+      "source_type": "reference",
+      "title": "Las primeras 48 horas de mi bebé (Familia y Salud, AEPap)",
+      "organization": "Asociación Española de Pediatría de Atención Primaria (AEPap)",
+      "publication_year": 2023,
+      "url": "https://www.familiaysalud.es/sintomas-y-enfermedades/recien-nacido/las-primeras-48-horas-de-mi-bebe",
+      "specialties": ["pediatrics", "general_medicine", "neonatology"],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "topics": ["primeras_semanas", "perdida_peso_inicial", "deposiciones_recien_nacido"],
+      "chunks": [
+        "Las primeras 48 horas de mi bebé (Familia y Salud, AEPap, actualizado en 2023). Tema: sueño, llanto y temperatura del recién nacido en sus dos primeros días. Hallazgo: al nacer el bebé suele estar activo y con un reflejo de succión fuerte; a las pocas horas tiende a dormir y descansar durante unas 6 horas, lo que es normal, y si no se despierta pasado ese tiempo conviene estimularlo y ponerlo al pecho. El llanto de estos días se debe sobre todo al hambre, y el calostro es muy nutritivo y estimula la subida de la leche. Los recién nacidos regulan mal la temperatura y deben estar arropados sin sobrecalentarlos: las manos y los pies pueden estar fríos por la circulación periférica, y basta con manoplas y calcetines.",
+        "Las primeras 48 horas de mi bebé (Familia y Salud, AEPap, actualizado en 2023). Tema: pérdida de peso, meconio y pañales en las primeras 48 horas. Hallazgo: todos los recién nacidos pierden peso en los dos primeros días de vida, hasta un 9 % de su peso al nacer, y el pediatra lo valora antes del alta. Lo normal es que el meconio, heces negras y pegajosas, se elimine en las primeras 24 horas de vida; si no ocurre, hay que avisar a la enfermera. Después las heces se vuelven verdosas y luego amarillas, líquidas y con grumos. Los pañales mojados indican que el bebé come suficiente: si están secos o tienen manchitas de color naranja, necesita más líquido y hay que avisar a la enfermera.",
+        "Las primeras 48 horas de mi bebé (Familia y Salud, AEPap, actualizado en 2023). Tema: hallazgos normales del recién nacido que preocupan a los padres. Hallazgo: la cabeza alargada por el parto se normaliza en unos días, igual que el caput o el cefalohematoma tras fórceps, espátulas o ventosa, que el pediatra revisa al alta. Es frecuente que la piel tome un color algo amarillento por la bilirrubina, y si los niveles son muy altos se trata con fototerapia. El eritema tóxico afecta al 50 % de los nacidos a término y puede durar semanas sin necesitar tratamiento, y el milium de la cara se resuelve en un mes. Las niñas pueden tener un flujo vaginal claro o con algo de sangre por las hormonas maternas, que desaparece en unos días. El cordón no necesita cuidados especiales: agua, jabón y mantenerlo seco."
+      ]
+    },
+    {
+      "source_type": "reference",
+      "title": "Fototerapia: cuando mi bebé tiene ictericia (Familia y Salud, AEPap)",
+      "organization": "Asociación Española de Pediatría de Atención Primaria (AEPap)",
+      "publication_year": 2023,
+      "url": "https://www.familiaysalud.es/sintomas-y-enfermedades/recien-nacido/fototerapia-cuando-mi-bebe-tiene-ictericia",
+      "specialties": ["pediatrics", "general_medicine", "neonatology"],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "topics": ["ictericia_neonatal"],
+      "chunks": [
+        "Fototerapia: cuando mi bebé tiene ictericia (Familia y Salud, AEPap, 2023). Tema: qué es la ictericia del recién nacido y por qué a veces se trata. Hallazgo: la ictericia es el color amarillo de la piel y las mucosas, bastante frecuente en el recién nacido, y se produce al aumentar la bilirrubina en la sangre; entre sus causas la página cita el exceso de glóbulos rojos y una alimentación escasa. La mayoría de los casos son leves, pero con cifras muy altas la bilirrubina puede depositarse en el cerebro y dañarlo. La fototerapia empieza cuando la bilirrubina alcanza valores considerados potencialmente peligrosos, y ese umbral depende de la edad gestacional, de las horas de vida del recién nacido y de situaciones como la incompatibilidad de grupo sanguíneo.",
+        "Fototerapia: cuando mi bebé tiene ictericia (Familia y Salud, AEPap, 2023). Tema: cómo es la fototerapia en el recién nacido y qué efectos tiene. Hallazgo: se coloca al recién nacido bajo una lámpara especial, solo con el pañal y con protectores opacos en los ojos, y se le cambia de postura para exponer más piel; la luz azul es la más eficaz. La bilirrubina absorbe la luz y se transforma en sustancias que se eliminan por la bilis y la orina. La duración es difícil de prever y la bilirrubina se controla con análisis de sangre, porque los medidores por la piel son menos fiables sobre piel tratada. Los efectos secundarios suelen ser leves: diarrea, erupciones, aumento de la temperatura, deshidratación o el llamado síndrome del niño bronceado, que desaparece al terminar."
+      ]
+    },
+    {
+      "source_type": "reference",
+      "title": "Atresia de vías biliares (Familia y Salud, AEPap)",
+      "organization": "Asociación Española de Pediatría de Atención Primaria (AEPap)",
+      "publication_year": 2025,
+      "url": "https://www.familiaysalud.es/sintomas-y-enfermedades/aparato-digestivo/enfermedades-digestivas/atresia-de-vias-biliares",
+      "specialties": ["pediatrics", "general_medicine", "gastroenterology"],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "topics": ["ictericia_neonatal", "deposiciones_recien_nacido"],
+      "chunks": [
+        "Atresia de vías biliares (Familia y Salud, AEPap, 2025). Tema: la ictericia que dura más de 2 semanas y la atresia de vías biliares. Hallazgo: la atresia de vías biliares es una obstrucción de los conductos biliares del hígado; la bilis se acumula y daña el hígado de forma progresiva, hasta la cirrosis, si no se trata. Es la principal causa de colestasis en el recién nacido y el motivo más frecuente de trasplante hepático en niños; en Europa nace con ella aproximadamente 1 de cada 18.000 bebés. La página indica que todo bebé con una ictericia que se prolonga más allá de las 2 primeras semanas de vida debe ser valorado para descartarla, sin precisar más la urgencia.",
+        "Atresia de vías biliares (Familia y Salud, AEPap, 2025). Tema: heces pálidas o blancas y orina oscura en el lactante de pocas semanas. Hallazgo: el signo más frecuente es la ictericia, el color amarillo de la piel y los tejidos; a medida que avanza aparecen heces pálidas o blancas (hipocolia), orina oscura (coluria), un hígado aumentado de tamaño y un deterioro progresivo del estado general y de la nutrición. Una cirugía en las primeras semanas de vida, la técnica de Kasai, puede restablecer el paso de la bilis, limitar el daño hepático y mejorar el pronóstico, por lo que el diagnóstico precoz es clave. Las pruebas incluyen análisis de sangre y una ecografía abdominal en todos los casos."
+      ]
+    },
+    {
+      "source_type": "reference",
+      "title": "La piel del recién nacido: ¿qué es normal? (Familia y Salud, AEPap)",
+      "organization": "Asociación Española de Pediatría de Atención Primaria (AEPap)",
+      "publication_year": 2024,
+      "url": "https://www.familiaysalud.es/sintomas-y-enfermedades/recien-nacido/la-piel-del-recien-nacido-que-es-normal",
+      "specialties": ["pediatrics", "general_medicine", "neonatology"],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "topics": ["primeras_semanas"],
+      "chunks": [
+        "La piel del recién nacido: ¿qué es normal? (Familia y Salud, AEPap, actualizado en 2024). Tema: descamación, vérnix, lanugo y color de la piel en los primeros días. Hallazgo: la mayoría de los nacidos a término se descaman a las 24-48 horas, empezando por tobillos, manos y tronco; en los prematuros ocurre a las 2-3 semanas y en los nacidos después de la semana 42 es mayor, incluso con grietas. El vérnix, una sustancia blanca y cremosa de axilas, ingles y genitales, se desprende en los primeros 3 días y se retira mojándolo en el baño, sin frotar. El lanugo, vello fino de hombros, orejas y espalda, desaparece en las primeras semanas. La piel moteada azulada con el frío o el llanto y las manos, pies y labios azulados por frío desaparecen al calentar al bebé.",
+        "La piel del recién nacido: ¿qué es normal? (Familia y Salud, AEPap, actualizado en 2024). Tema: granitos y manchas benignas del recién nacido. Hallazgo: el eritema tóxico afecta a más de la mitad de los nacidos a término, aparece entre el día 1 y el 4 como manchas o granitos de 1-3 mm, a veces con pústulas, dura de días a semanas y no necesita tratamiento. Los milia, granitos blancos de 1-2 mm en la cara, afectan al 40 % y se resuelven en un mes; las perlas de Epstein del paladar (85 %) pueden tardar meses. La miliaria o sudamina aparece en pliegues y zonas muy abrigadas por el calor o el exceso de ropa. La mancha salmón, en cerca del 50 %, suele desaparecer en el primer año, aunque la de la nuca puede persistir. Ante cualquier duda, la página aconseja consultar al pediatra."
+      ]
+    },
+    {
+      "source_type": "reference",
+      "title": "Mi bebé tiene manchas naranjas en el pañal (Familia y Salud, AEPap)",
+      "organization": "Asociación Española de Pediatría de Atención Primaria (AEPap)",
+      "publication_year": 2021,
+      "url": "https://www.familiaysalud.es/sintomas-y-enfermedades/recien-nacido/mi-bebe-tiene-manchas-naranjas-en-el-panal",
+      "specialties": ["pediatrics", "general_medicine", "neonatology"],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "topics": ["primeras_semanas"],
+      "chunks": [
+        "Mi bebé tiene manchas naranjas en el pañal (Familia y Salud, AEPap, 2021). Tema: los uratos del pañal durante la primera semana de vida. Hallazgo: las manchas de color naranja o teja en el pañal suelen ser uratos, sales del ácido úrico concentradas que forman cristales en la orina. Son normales en la primera semana de vida: en los primeros 2-3 días el recién nacido elimina mucha orina en relación con lo que toma, sobre todo si es amamantado, y el calostro puede acidificar la orina. Se distinguen de la sangre porque la sangre deja una mancha roja u oscura grande, mientras que los uratos parecen arenilla color teja al enfriarse la orina y se deshacen entre los dedos. Si hay dudas, se consulta al pediatra.",
+        "Mi bebé tiene manchas naranjas en el pañal (Familia y Salud, AEPap, 2021). Tema: cuándo los uratos indican que el bebé puede estar deshidratado. Hallazgo: pasada la primera semana de vida, los uratos pueden ser un signo de cierta deshidratación. Son señales de alerta la irritabilidad o el sueño excesivo, pasar varias horas sin mojar el pañal o sin hacer caca, los labios secos y la pérdida de peso o una ganancia escasa; en ese caso la página aconseja aumentar la toma de líquido y consultar pronto con el pediatra. Si los uratos persisten o hay dudas, conviene que el pediatra valore al bebé. En las recién nacidas, otra causa frecuente de manchas rojizas en el pañal es un pequeño sangrado vaginal por las hormonas de la madre."
+      ]
+    },
+    {
+      "source_type": "reference",
+      "title": "¿Tengo suficiente leche? (Familia y Salud, AEPap)",
+      "organization": "Asociación Española de Pediatría de Atención Primaria (AEPap)",
+      "publication_year": 2019,
+      "url": "https://www.familiaysalud.es/vivimos-sanos/lactancia-materna/los-inicios-son-importantes/tengo-suficiente-leche",
+      "specialties": ["pediatrics", "general_medicine", "neonatology"],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "topics": ["perdida_peso_inicial", "deposiciones_recien_nacido"],
+      "chunks": [
+        "¿Tengo suficiente leche? (Familia y Salud, AEPap, actualizado en 2019). Tema: cómo debe evolucionar el peso del recién nacido amamantado. Hallazgo: todos los recién nacidos pierden algo de peso los primeros días; desde el día 4 empiezan a ganar peso y el día 10 deben pesar igual o más que al nacer. La página aconseja pedir ayuda si el bebé no gana peso después del cuarto día, si el día 10 pesa menos que al nacer o si gana menos de 20 g al día, y también si nunca parece satisfecho, está muy inquieto al pecho o le cuesta engancharse. Insiste en que los problemas que se resuelven pronto se resuelven mejor, así que ante cualquier duda conviene consultar.",
+        "¿Tengo suficiente leche? (Familia y Salud, AEPap, actualizado en 2019). Tema: pañales mojados y cacas que indican que el recién nacido toma suficiente. Hallazgo: los días 1 y 2 hay meconio, negro y pegajoso, y la orina es escasa y concentrada, rosada o amarillo fuerte. Entre los días 2 y 4 aparecen las cacas de transición, de verde oscuro a marrón. Desde el día 3 la orina es abundante y casi transparente, más de 4 pañales mojados al día, y desde el día 4 las cacas son amarillo mostaza, líquidas y grumosas, más de 4 al día. Tener cacas verdes o marrones o una orina que no es clara después del día 5 es motivo para pedir ayuda. El bebé debe tener buen aspecto y color, algo amarillento pero no amarillo hasta los pies."
+      ]
+    },
+    {
+      "source_type": "reference",
+      "title": "Consejos para el primer mes de vida del bebé (Familia y Salud, AEPap)",
+      "organization": "Asociación Española de Pediatría de Atención Primaria (AEPap)",
+      "publication_year": 2022,
+      "url": "https://www.familiaysalud.es/crecemos/el-primer-mes/el-recien-nacido-consejos-para-el-primer-mes-de-vida",
+      "specialties": ["pediatrics", "general_medicine", "neonatology"],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "topics": ["primeras_semanas", "cordon_umbilical"],
+      "chunks": [
+        "Consejos para el primer mes de vida del bebé (Familia y Salud, AEPap, actualizado en 2022). Tema: sueño, ruidos y postura del recién nacido durante el primer mes. Hallazgo: el recién nacido duerme unas 16 a 18 horas al día y se despierta para comer; es normal que pierda algo de peso los primeros días y, cuando la ganancia de peso se establece, puede dormir 5 o 6 horas seguidas por la noche, aunque hay casos distintos. Los ruidos al respirar durante el sueño son frecuentes, igual que los gases o el hipo, que suele ceder al mamar. Debe dormir boca arriba durante los primeros seis meses para reducir el riesgo de muerte súbita, alternando el lado de apoyo de la cabeza para evitar deformidades.",
+        "Consejos para el primer mes de vida del bebé (Familia y Salud, AEPap, actualizado en 2022). Tema: cordón, piel, paseos y fiebre en el primer mes. Hallazgo: el cordón se limpia como una herida, con agua y jabón, vigilando el mal olor, la humedad, el pus o el enrojecimiento alrededor; no hace falta alcohol ni otros productos. La descamación de la piel es normal, sobre todo en los nacidos después de las 40 semanas. La frecuencia del baño la deciden los padres una vez que el bebé regula su temperatura, lo que ocurre tras las primeras horas. Los bebés pueden y deben salir a la calle. La temperatura solo se toma si parece enfermo o caliente, mejor en la axila con termómetro digital, y la fiebre en un menor de tres meses es motivo para llamar al pediatra."
+      ]
+    },
+    {
+      "source_type": "reference",
+      "title": "Ictericia y lactancia materna: todo lo que hay que saber (Familia y Salud, AEPap)",
+      "organization": "Asociación Española de Pediatría de Atención Primaria (AEPap)",
+      "publication_year": 2024,
+      "url": "https://www.familiaysalud.es/vivimos-sanos/lactancia-materna/resolviendo-dudas/ictericia-y-lactancia-materna-todo-lo-que-hay-que",
+      "specialties": ["pediatrics", "general_medicine", "neonatology"],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "topics": ["ictericia_neonatal"],
+      "chunks": [
+        "Ictericia y lactancia materna: todo lo que hay que saber (Familia y Salud, AEPap, 2024). Tema: por qué se ponen amarillos los recién nacidos en los primeros días. Hallazgo: la ictericia es el tinte amarillento de la piel y los ojos por exceso de bilirrubina en la sangre; afecta a una gran parte de los recién nacidos y es más frecuente en los amamantados. Sus causas en los primeros días de vida son la inmadurez del hígado, la incompatibilidad de grupo sanguíneo entre la madre y el bebé, los hematomas grandes y los problemas de lactancia con poca toma de leche y algo de deshidratación; estas causas suelen resolverse en los primeros días. La lactancia no causa la ictericia; como mucho puede hacer que dure algo más.",
+        "Ictericia y lactancia materna: todo lo que hay que saber (Familia y Salud, AEPap, 2024). Tema: la ictericia por leche materna, cuánto dura y si hay que dejar el pecho. Hallazgo: es una ictericia prolongada en bebés que maman: empieza entre el día 3 y el día 7 de vida, alcanza su máximo hacia la tercera semana y puede durar hasta las 8 a 12 semanas. Su causa se desconoce y las cifras de bilirrubina vuelven a la normalidad con el paso de las semanas aunque se siga dando el pecho. No hay que suspender la lactancia: las tomas frecuentes ayudan a eliminar la bilirrubina y sus beneficios superan con mucho cualquier riesgo mínimo. Casi todas estas ictericias son inofensivas y solo necesitan vigilancia.",
+        "Ictericia y lactancia materna: todo lo que hay que saber (Familia y Salud, AEPap, 2024). Tema: cuándo se estudia una ictericia que sigue más allá de las 4 semanas de vida. Hallazgo: si la ictericia continúa más allá de las 4 semanas (la página también habla de alrededor de un mes), el pediatra puede pedir análisis de sangre y de orina para medir la bilirrubina y descartar otras causas. Hay que consultar al pediatra si las cacas son pálidas o blancas y la orina oscura, del color de un refresco de cola, y también si la piel se ve cada vez más amarilla, si rechaza las tomas, si no gana bien peso o si llora mucho. La página trata la ictericia de las primeras semanas de vida del bebé amamantado."
+      ]
+    },
+    {
+      "source_type": "reference",
+      "title": "¿Qué es lo que se le va a hacer a nuestro bebé en su primer mes de vida? (Familia y Salud, AEPap)",
+      "organization": "Asociación Española de Pediatría de Atención Primaria (AEPap)",
+      "publication_year": 2022,
+      "url": "https://www.familiaysalud.es/crecemos/el-primer-mes/que-es-lo-que-se-le-va-hacer-nuestro-bebe-en-su-primer-mes-de-vida-primeros",
+      "specialties": ["pediatrics", "general_medicine", "neonatology"],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "topics": ["primeras_semanas", "perdida_peso_inicial", "prueba_talon", "cribado_auditivo"],
+      "chunks": [
+        "¿Qué es lo que se le va a hacer a nuestro bebé en su primer mes de vida? (Familia y Salud, AEPap, actualizado en 2022). Tema: lo que se hace al recién nacido en el parto y en las primeras horas. Hallazgo: tras el nacimiento se pone al bebé piel con piel sobre el abdomen de la madre y el cordón se pinza tras un par de minutos, también en la cesárea; la primera toma espontánea puede tardar de 50 a 120 minutos. Después se le pesa y mide, se le pone una pomada en los ojos para prevenir infecciones y vitamina K intramuscular para prevenir hemorragias. En las primeras horas el meconio es oscuro y pegajoso, y el hipo, las pequeñas regurgitaciones y la orina rojiza o anaranjada son normales.",
+        "¿Qué es lo que se le va a hacer a nuestro bebé en su primer mes de vida? (Familia y Salud, AEPap, actualizado en 2022). Tema: pérdida de peso, cribados y alta en los primeros días. Hallazgo: desde el segundo día puede bajar el peso, sobre todo por pérdida de líquidos, y es normal mientras no supere el 10 % del peso al nacer; lo vigilan el hospital y el centro de salud. Antes del alta se hacen el cribado auditivo, para comprobar que oye bien, y el cribado metabólico o prueba del talón, que detecta pronto enfermedades tratables. La ictericia se vigila en el hospital y después en el centro de salud. El alta suele darse el segundo día tras un parto vaginal y el tercero o cuarto tras una cesárea, cuando el bebé orina y hace caca con normalidad.",
+        "¿Qué es lo que se le va a hacer a nuestro bebé en su primer mes de vida? (Familia y Salud, AEPap, actualizado en 2022). Tema: primera visita al centro de salud y evolución del peso en el primer mes. Hallazgo: antes del alta se pide cita para las 48 a 72 horas siguientes con la matrona, el pediatra o ambos: la matrona observa una toma y comprueba que la pérdida de peso es normal, y el pediatra explora de nuevo al bebé y repasa los informes del hospital. El cordón se mantiene limpio y seco, sin que suelan hacer falta alcohol ni desinfectantes. El pediatra vuelve a verlo como tarde al final de la primera semana. La mayoría de los bebés recuperan el peso del nacimiento durante la primera semana y luego ganan peso de forma constante."
+      ]
+    },
+    {
+      "source_type": "reference",
+      "title": "Programa de cribado neonatal de enfermedades congénitas en prueba de talón: información general (Ministerio de Sanidad)",
+      "organization": "Ministerio de Sanidad (España)",
+      "publication_year": 2026,
+      "url": "https://www.sanidad.gob.es/areas/promocionPrevencion/cribado/cribadoNeonatal/enfermedadesEndocrinoMetabolicas/infoGeneral.htm",
+      "specialties": ["pediatrics", "general_medicine", "neonatology"],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "topics": ["prueba_talon"],
+      "chunks": [
+        "Programa de cribado neonatal de enfermedades congénitas en prueba de talón (Ministerio de Sanidad, actualizado en 2026). Tema: en qué consiste la prueba del talón y cuándo se toma la muestra. Hallazgo: el programa, antes llamado de cribado de enfermedades endocrino-metabólicas, busca identificar y tratar de forma precoz a los recién nacidos con alguna de las enfermedades incluidas. Con un pequeño pinchazo en el talón se recoge sangre en un papel especial que se envía al laboratorio. La muestra se toma entre las 24 y las 72 horas de vida y en algunos casos, como la prematuridad, hace falta una segunda muestra. Es gratuita, se ofrece a todos los recién nacidos, en hospital o en casa, y es voluntaria, con consentimiento expreso de la madre, el padre o el tutor.",
+        "Programa de cribado neonatal de enfermedades congénitas en prueba de talón (Ministerio de Sanidad, actualizado en 2026). Tema: qué enfermedades busca el cribado y cómo llegan los resultados. Hallazgo: muchas de las enfermedades incluidas afectan al desarrollo del cerebro y causan discapacidad intelectual, y otras afectan al hígado, los pulmones o el corazón; la mayoría tienen base genética y todas las del programa tienen tratamiento, como la dieta especial en la fenilcetonuria. Si el resultado es normal, la familia recibe una carta en casa durante el primer mes de vida, habitualmente hacia las 3 semanas. Un resultado alterado se considera positivo pero no significa que el bebé tenga la enfermedad: se contacta de inmediato con la familia para pruebas de confirmación y, si se confirma, un pediatra especialista hace el diagnóstico y empieza el tratamiento."
+      ]
+    },
+    {
+      "source_type": "reference",
+      "title": "Programa de cribado neonatal de hipoacusia: información general (Ministerio de Sanidad)",
+      "organization": "Ministerio de Sanidad (España)",
+      "publication_year": 2026,
+      "url": "https://www.sanidad.gob.es/areas/promocionPrevencion/cribado/cribadoNeonatal/hipoacusia/infoGeneral.htm",
+      "specialties": ["pediatrics", "general_medicine", "neonatology"],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "topics": ["cribado_auditivo"],
+      "chunks": [
+        "Programa de cribado neonatal de hipoacusia (Ministerio de Sanidad, actualizado en 2026). Tema: qué es el cribado auditivo neonatal y cuándo se hace. Hallazgo: el programa busca detectar y tratar de forma precoz la hipoacusia del recién nacido, una disminución de la audición presente al nacer o que aparece en los primeros días de vida, para evitar sus efectos sobre el desarrollo cognitivo, del lenguaje, del aprendizaje y social. Se ofrece a todos los bebés, nacidos en hospital o en casa, y es gratuito y voluntario, con consentimiento expreso. Debe hacerse antes del mes de vida y habitualmente se hace a las 24-48 horas, antes del alta de la maternidad; si el parto fue en casa o el bebé se fue sin la prueba, los padres deben pedirla a su pediatra.",
+        "Programa de cribado neonatal de hipoacusia (Ministerio de Sanidad, actualizado en 2026). Tema: pruebas que se usan y qué pasa si el resultado no es normal. Hallazgo: se estudian los dos oídos con otoemisiones acústicas, una sonda en el conducto auditivo que mide la respuesta de la cóclea, o con potenciales evocados auditivos, sensores en la cabeza que recogen la respuesta del cerebro a los sonidos; las dos son válidas, no duelen y se intenta que el bebé esté dormido o tranquilo. Si el resultado no es normal se hacen más pruebas para confirmar el diagnóstico. Si se confirma la hipoacusia, el tratamiento y el seguimiento empiezan pronto con otorrinolaringología infantil y Atención Temprana, con audífonos o implantes según el caso, y a veces se buscan causas como el citomegalovirus."
+      ]
+    },
+    {
+      "source_type": "reference",
+      "title": "Newborn blood spot test (NHS)",
+      "organization": "NHS (National Health Service, Reino Unido)",
+      "publication_year": 2024,
+      "url": "https://www.nhs.uk/baby/newborn-screening/blood-spot-test/",
+      "specialties": ["pediatrics", "general_medicine", "neonatology"],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "topics": ["prueba_talon"],
+      "chunks": [
+        "Newborn blood spot test (NHS, Reino Unido, revisado en 2024). Tema: cuándo se hace la prueba del talón en el Reino Unido y qué detecta. Hallazgo: se recomienda a todos los bebés y normalmente se hace cuando el bebé tiene 5 días, aunque puede ser antes o después; un profesional pincha el talón y recoge sangre en una tarjeta que se envía a analizar, casi siempre en casa por la matrona comunitaria. Busca 11 enfermedades: fibrosis quística, enfermedad de células falciformes, hipotiroidismo congénito, siete enfermedades metabólicas hereditarias (fenilcetonuria, MCADD, leucinosis, acidemia isovalérica, aciduria glutárica tipo 1, homocistinuria y tirosinemia tipo 1) y, solo en algunas zonas de Inglaterra, atrofia muscular espinal. Si llora, ayudan el pecho, los brazos y mantenerlo caliente.",
+        "Newborn blood spot test (NHS, Reino Unido, revisado en 2024). Tema: resultados de la prueba del talón y repetición de la muestra. Hallazgo: a veces hay que repetir la prueba; alguien contactará para explicar el motivo, y la página aclara que no significa necesariamente que algo vaya mal. Los resultados deben llegar antes de que el bebé tenga 6 semanas, por carta, por teléfono o en persona, y anotarse en el libro de salud del niño; si a las 6 semanas no han llegado, hay que contactar con la matrona, el visitador de salud o el médico de cabecera. La mayoría de los bebés no tiene ninguna enfermedad sospechada. Un resultado de portador indica que no tiene la enfermedad pero puede transmitirla, y si se sospecha una enfermedad se deriva a un especialista."
+      ]
+    },
+    {
+      "source_type": "reference",
+      "title": "Newborn hearing test (NHS)",
+      "organization": "NHS (National Health Service, Reino Unido)",
+      "publication_year": 2026,
+      "url": "https://www.nhs.uk/baby/newborn-screening/hearing-test/",
+      "specialties": ["pediatrics", "general_medicine", "neonatology"],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "topics": ["cribado_auditivo"],
+      "chunks": [
+        "Newborn hearing test (NHS, Reino Unido, revisado en 2026). Tema: cuándo se hace la prueba de audición del recién nacido. Hallazgo: se ofrece habitualmente antes de que el bebé cumpla 4 semanas y puede hacerse hasta los 3 meses de edad. La prueba dura unos minutos y el resultado se da en el momento. Se coloca en el oído un pequeño auricular blando que emite clics suaves para ver cómo responde; se hace con el bebé tranquilo o dormido, no es molesta y no tiene riesgos conocidos. Su objetivo es encontrar a los bebés con pérdida auditiva, que es poco frecuente, para que la familia reciba pronto apoyo con el lenguaje y el habla.",
+        "Newborn hearing test (NHS, Reino Unido, revisado en 2026). Tema: qué significa una respuesta clara o no clara en la prueba auditiva. Hallazgo: si la respuesta es clara en los dos oídos, es poco probable que haya pérdida auditiva. Si no es clara en uno o ambos oídos, se repite la prueba o se ofrece otra con tres sensores en la frente, el cuello y el hombro y unos auriculares; si sigue sin ser clara, se deriva a una consulta de audiología, normalmente en un plazo de 4 semanas, con una cita que suele durar de 1 a 2 horas. Un resultado claro no descarta toda pérdida auditiva, porque la prueba no detecta todos los tipos y puede aparecer más adelante: hay que vigilar la audición del niño al crecer y comentar cualquier duda con el visitador de salud o el médico."
+      ]
+    },
+    {
+      "source_type": "reference",
+      "title": "Early days (After the birth, NHS)",
+      "organization": "NHS (National Health Service, Reino Unido)",
+      "publication_year": 2026,
+      "url": "https://www.nhs.uk/pregnancy/labour-and-birth/after-the-birth/early-days/",
+      "specialties": ["pediatrics", "general_medicine", "neonatology"],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "topics": ["primeras_semanas", "perdida_peso_inicial", "prueba_talon", "cribado_auditivo"],
+      "chunks": [
+        "Early days (After the birth, NHS, Reino Unido, revisado en 2026). Tema: revisiones y cribados del bebé en las primeras semanas. Hallazgo: un pediatra, una matrona o una enfermera neonatal ofrecen una exploración física del recién nacido en las primeras 72 horas, en la que buscan ictericia, infección del cordón o de los ojos y muguet en la boca, y comprueban temperatura, peso y reflejos. El día 5 tras el parto, o unos días después, se ofrece la prueba del talón, y antes de las 4 semanas el cribado de audición. Las matronas visitan en casa o en un centro infantil hasta que el bebé tiene unos 10 días, y un visitador de salud lo ve hacia los 10 a 14 días; el crecimiento se anota en el libro rojo de salud del niño.",
+        "Early days (After the birth, NHS, Reino Unido, revisado en 2026). Tema: pérdida de peso, llanto y baño en los primeros días. Hallazgo: es normal que el bebé pierda algo de peso en los primeros días tras el nacimiento, y la mayoría recupera su peso de nacimiento en las 3 primeras semanas; ganar peso de forma constante después indica que está sano y se alimenta bien. Algunos bebés maman nada más nacer y otros tardan más. Conviene aprender a acostarlo de forma segura para reducir el riesgo de muerte súbita, y el llanto es su forma de pedir consuelo y cuidados. No hace falta bañarlo a diario: basta con lavarle con cuidado la cara, el cuello, las manos y el culito."
+      ]
+    },
+    {
+      "source_type": "reference",
+      "title": "Breastfeeding: is my baby getting enough milk? (NHS)",
+      "organization": "NHS (National Health Service, Reino Unido)",
+      "publication_year": 2026,
+      "url": "https://www.nhs.uk/baby/breastfeeding-and-bottle-feeding/breastfeeding-problems/enough-milk/",
+      "specialties": ["pediatrics", "general_medicine", "neonatology"],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "topics": ["perdida_peso_inicial", "deposiciones_recien_nacido"],
+      "chunks": [
+        "Breastfeeding: is my baby getting enough milk? (NHS, Reino Unido, revisado en 2026). Tema: peso y pañales del recién nacido amamantado en los primeros días. Hallazgo: es normal que el bebé pierda algo de su peso al nacer en los primeros 3 o 4 días; después debe ganar peso de forma constante. En las primeras 48 horas lo habitual son solo 2 o 3 pañales mojados, y desde el día 5 deben ser al menos 6 pañales bien mojados cada 24 horas. Desde el día 4, y durante las primeras semanas, debería hacer al menos 2 cacas blandas y amarillas al día, del tamaño aproximado de una moneda grande. Si preocupa que tome poco, la página aconseja pedir ayuda pronto a la matrona, al visitador de salud o a una especialista en lactancia.",
+        "Breastfeeding: is my baby getting enough milk? (NHS, Reino Unido, revisado en 2026). Tema: señales de que el recién nacido mama bien. Hallazgo: la toma empieza con unas succiones rápidas que pasan a ser largas y rítmicas, con tragos y pausas; se le ve y se le oye tragar, las mejillas siguen redondeadas y no hundidas, y al final suelta el pecho solo y parece tranquilo y satisfecho, con la boca húmeda. El pecho queda más blando después de la toma y el pezón conserva su forma, sin aplanarse ni blanquearse. Cuando está despierto, el bebé se ve sano y alerta. Para aumentar la producción se aconseja amamantar tan a menudo y tanto tiempo como quiera, ofrecer los dos pechos y mantener el contacto piel con piel."
+      ]
+    },
+    {
+      "source_type": "reference",
+      "title": "How to change your baby's nappy (NHS)",
+      "organization": "NHS (National Health Service, Reino Unido)",
+      "publication_year": 2024,
+      "url": "https://www.nhs.uk/baby/caring-for-a-newborn/how-to-change-your-babys-nappy/",
+      "specialties": ["pediatrics", "general_medicine", "gastroenterology"],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "topics": ["deposiciones_recien_nacido"],
+      "chunks": [
+        "How to change your baby's nappy (NHS, Reino Unido, revisado en 2024). Tema: aspecto y número de cacas del recién nacido. Hallazgo: la primera caca es el meconio, pegajoso y de color negro verdoso, que puede salir durante o después del parto o en las primeras 48 horas; a los pocos días la caca se vuelve amarilla o mostaza. En la primera semana los bebés suelen hacer 2 o más cacas al día. Con pecho la caca es líquida y casi no huele, y el bebé puede hacer una en cada toma las primeras semanas; pasadas unas 6 semanas puede estar varios días sin hacer. Con fórmula es más firme, marrón oscura y huele más, y puede hacer hasta 5 al día al principio y una al día pasados unos meses.",
+        "How to change your baby's nappy (NHS, Reino Unido, revisado en 2024). Tema: cambios en la caca del bebé por los que pedir consejo. Hallazgo: es normal que la caca cambie de un día a otro y que el bebé empuje o llore al hacerla; la página aclara que no está estreñido mientras las cacas sean blandas. Algunas leches de fórmula dan cacas verde oscuro, y pasar del pecho a la fórmula las vuelve más oscuras y pastosas. Hay que hablar con el médico de cabecera o el visitador de salud si se nota un cambio claro, como cacas muy malolientes, muy líquidas o más duras, sobre todo si llevan sangre. Las cacas pálidas pueden ser un signo de ictericia y también hay que consultarlas con el visitador de salud o el médico. Las niñas pueden tener unos días un flujo blanco o un pequeño sangrado por las hormonas de la madre."
+      ]
+    },
+    {
+      "source_type": "reference",
+      "title": "La ictericia en bebés recién nacidos (HealthyChildren, AAP)",
+      "organization": "American Academy of Pediatrics",
+      "publication_year": 2024,
+      "url": "https://www.healthychildren.org/Spanish/ages-stages/baby/Paginas/jaundice.aspx",
+      "specialties": ["pediatrics", "general_medicine", "neonatology"],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "topics": ["ictericia_neonatal"],
+      "chunks": [
+        "La ictericia en bebés recién nacidos (HealthyChildren.org, Academia Americana de Pediatría, 2024). Tema: por qué la mayoría de los recién nacidos se ponen amarillos en sus primeros días. Hallazgo: la ictericia es el color amarillento de la piel por acumulación de bilirrubina, una sustancia de los glóbulos rojos que el hígado elimina; la mayoría de los bebés la desarrollan en los primeros días tras el nacimiento porque su hígado tarda unos días en aprender a eliminarla bien. Se ve mejor con luz blanca, como la del día; suele empezar en la cara y bajar al pecho, el abdomen, los brazos y las piernas, y puede amarillear lo blanco de los ojos. En las pieles oscuras cuesta más verla.",
+        "La ictericia en bebés recién nacidos (HealthyChildren.org, Academia Americana de Pediatría, 2024). Tema: ictericia en las primeras 24 horas, controles y cuándo llamar al médico. Hallazgo: a todo bebé con ictericia en las primeras 24 horas tras el nacimiento hay que medirle la bilirrubina inmediatamente, y todos los bebés necesitan al menos una medición antes de salir del hospital; los que reciben el alta antes de las 48 horas deben ser examinados en un plazo de 2 días. Hay que llamar al médico del bebé si la piel se pone más amarilla, si el abdomen, los brazos o las piernas están amarillos, si lo blanco de los ojos está amarillo, o si cuesta despertarlo, está inquieto o no se alimenta bien. Exponerlo al sol no es una forma segura de tratar la ictericia.",
+        "La ictericia en bebés recién nacidos (HealthyChildren.org, Academia Americana de Pediatría, 2024). Tema: cuánto dura la ictericia del recién nacido según cómo se alimente. Hallazgo: en los bebés amamantados es común que la ictericia dure un mes u ocasionalmente más; en los alimentados con fórmula la mayoría desaparece en 2 semanas. La página pide informar al médico si la ictericia dura más de 2 semanas en el bebé alimentado con fórmula o más de 4 semanas en el alimentado principalmente con leche materna. Es más frecuente en los amamantados, sobre todo si toman poca leche por poca producción o mal agarre, y en los primeros días se recomienda amamantar entre 8 y 12 veces al día. La mayoría no necesita tratamiento."
+      ]
+    },
+    {
+      "source_type": "reference",
+      "title": "Recién nacido ictérico (guía de síntomas KidsDoc, HealthyChildren, AAP)",
+      "organization": "American Academy of Pediatrics",
+      "publication_year": null,
+      "url": "https://www.healthychildren.org/Spanish/tips-tools/symptom-checker/Paginas/symptomviewer.aspx?symptom=Reci%c3%a9n+nacido+ict%c3%a9rico",
+      "specialties": ["pediatrics", "general_medicine", "neonatology"],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "topics": ["ictericia_neonatal"],
+      "chunks": [
+        "Recién nacido ictérico (guía de síntomas KidsDoc, HealthyChildren.org, Academia Americana de Pediatría). Tema: tipos de ictericia en los 3 primeros meses de vida y cuánto duran. Hallazgo: la guía trata la ictericia en los primeros 3 meses de vida (90 días). La ictericia fisiológica, en cerca del 50 % de los recién nacidos, aparece hacia el día 2 o 3, alcanza su máximo hacia el día 4 o 5 y desaparece en 1 o 2 semanas. La ictericia por leche materna, en torno al 10 %, empieza hacia los días 4 a 7 y dura de 3 a 12 semanas sin causar daño. Son graves pero poco frecuentes la debida a incompatibilidad de grupo o Rh, que aparece en las primeras 24 horas, y la de una enfermedad del hígado, con heces gris pálido o amarillo claro y una ictericia que no se va.",
+        "Recién nacido ictérico (guía de síntomas KidsDoc, HealthyChildren.org, Academia Americana de Pediatría). Tema: signos de un bebé ictérico de menos de 3 meses que requieren atención inmediata. Hallazgo: llamar a emergencias ahora mismo si no logra despertarse, no se mueve o está muy débil. Ir a urgencias ahora mismo si se alimenta mal, con agarre débil o sin terminar las tomas, o si cuesta despertarlo. Llamar al doctor o buscar atención ahora mismo si es menor de 1 mes con aspecto o comportamiento anormal, si hay signos de deshidratación (8 horas o más sin orinar, orina oscura, boca muy seca), si tiene fiebre, si la temperatura rectal está por debajo de 36,0 °C y no sube al abrigarlo, si la ictericia empezó en las primeras 24 horas, si la piel está amarillo oscuro o naranja o si la ictericia llega a las piernas o ha empeorado.",
+        "Recién nacido ictérico (guía de síntomas KidsDoc, HealthyChildren.org, Academia Americana de Pediatría). Tema: ictericia que sigue después de los 7 o los 14 días de vida y heces pálidas. Hallazgo: según la guía, hay que comunicarse con el doctor en las próximas 24 horas si lo blanco de los ojos está amarillo, si la ictericia llega al abdomen, si hay factores de riesgo (nacer a las 36 semanas o antes, incompatibilidad de grupo o Rh, un hermano que necesitó fototerapia, problemas de lactancia) o si pasado el día 5 moja menos de 6 pañales o hace menos de 3 cacas amarillas al día. Hay que comunicarse en horario de consulta si el amarillo se oscurece después de los 7 días, si la ictericia empieza o vuelve después de los 7 días, si no desaparece y el bebé tiene más de 14 días o si las cacas son blancas, amarillo pálido o grises."
+      ],
+      "undated_reason": "Guía de síntomas KidsDoc (Barton Schmitt, Schmitt Pediatric Guidelines, copyright 2000-2025) sin fecha de publicación del tema; consultada el 2026-11-02."
+    },
+    {
+      "source_type": "reference",
+      "title": "Pruebas de detección o tamizaje neonatal (HealthyChildren, AAP)",
+      "organization": "American Academy of Pediatrics",
+      "publication_year": 2023,
+      "url": "https://www.healthychildren.org/Spanish/ages-stages/baby/Paginas/newborn-screening-tests.aspx",
+      "specialties": ["pediatrics", "general_medicine", "neonatology"],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "topics": ["prueba_talon", "cribado_auditivo"],
+      "chunks": [
+        "Pruebas de detección o tamizaje neonatal (HealthyChildren.org, Academia Americana de Pediatría, 2023). Tema: cuándo se hacen las pruebas de cribado al recién nacido en Estados Unidos. Hallazgo: buscan bebés que parecen sanos pero tienen una enfermedad rara que, sin tratamiento, podría causar daños graves o la muerte. Suelen hacerse cuando el bebé tiene uno o dos días, antes del alta; si nace en casa o se va del hospital antes de 24 horas, el pediatra ayuda a programarlas, y algunos estados piden una segunda ronda una o dos semanas después. Para la prueba de sangre se toma una muestra del talón que se envía al laboratorio; el pinchazo causa una molestia breve y cicatriza sin marca, y cogerlo en brazos o amamantarlo ayuda a calmarlo.",
+        "Pruebas de detección o tamizaje neonatal (HealthyChildren.org, Academia Americana de Pediatría, 2023). Tema: cribado auditivo, pulsioximetría y resultados fuera de rango. Hallazgo: la prueba de audición usa pequeños auriculares y un programa especial para ver cómo responde el bebé al sonido, y una prueba sencilla del oxígeno en sangre busca cardiopatías congénitas críticas. Los resultados de la prueba de sangre suelen estar cuando el bebé tiene de cinco a siete días. La mayoría de los bebés tienen resultados normales, y un resultado fuera de rango no significa automáticamente que tenga la enfermedad: el siguiente paso es una prueba diagnóstica más específica, que a menudo no encuentra ningún problema. Si se sospecha una enfermedad, el equipo explica los resultados y los pasos a seguir."
+      ]
+    },
+    {
+      "source_type": "reference",
+      "title": "Evaluaciones auditivas para los recién nacidos: qué recomienda la AAP (HealthyChildren, AAP)",
+      "organization": "American Academy of Pediatrics",
+      "publication_year": 2023,
+      "url": "https://www.healthychildren.org/Spanish/ages-stages/baby/Paginas/purpose-of-newborn-hearing-screening.aspx",
+      "specialties": ["pediatrics", "general_medicine", "neonatology"],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "topics": ["cribado_auditivo"],
+      "chunks": [
+        "Evaluaciones auditivas para los recién nacidos: qué recomienda la AAP (HealthyChildren.org, Academia Americana de Pediatría, 2023). Tema: por qué se recomienda el cribado auditivo del recién nacido y cuándo se hace. Hallazgo: la página estima que unos 6.000 bebés nacen cada año en Estados Unidos con una audición fuera del rango típico; sin detectar, la pérdida auditiva puede retrasar el habla y el lenguaje y afectar al aprendizaje y a las relaciones. La primera prueba se hace el día 1 o 2 tras el nacimiento, antes de ir a casa si nace en el hospital; si nace en casa o sale antes de 24 horas, el pediatra ayuda a coordinarla. Es indolora y dura unos 5 a 10 minutos.",
+        "Evaluaciones auditivas para los recién nacidos: qué recomienda la AAP (HealthyChildren.org, Academia Americana de Pediatría, 2023). Tema: pruebas que se usan y qué hacer si el resultado queda fuera del rango típico. Hallazgo: los potenciales auditivos automatizados del tronco cerebral miden la respuesta del nervio auditivo con auriculares y sensores mientras el bebé duerme, y las otoemisiones acústicas miden el eco del oído interno con una pequeña sonda. Si el resultado queda fuera del rango típico puede repetirse la prueba, y si la repetición sigue mostrando anomalías, el seguimiento con un profesional de la audición debe hacerse lo antes posible y no después de los 3 meses de edad. Los bebés sordos o con hipoacusia desarrollan mejor el lenguaje si la intervención empieza antes de los 6 meses. Un bebé que se sobresalta con los ruidos puede aun así no oír bien."
+      ]
+    },
+    {
+      "source_type": "reference",
+      "title": "Cuidado del cordón umbilical en recién nacidos (HealthyChildren, AAP)",
+      "organization": "American Academy of Pediatrics",
+      "publication_year": 2025,
+      "url": "https://www.healthychildren.org/Spanish/ages-stages/baby/bathing-skin-care/Paginas/Umbilical-Cord-Care.aspx",
+      "specialties": ["pediatrics", "general_medicine", "neonatology"],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "topics": ["cordon_umbilical"],
+      "chunks": [
+        "Cuidado del cordón umbilical en recién nacidos (HealthyChildren.org, Academia Americana de Pediatría, 2025). Tema: cuidado del muñón y cuándo se cae. Hallazgo: durante las primeras semanas, hasta que se seque y se caiga, basta con mantener el muñón limpio y seco, sin necesidad de ponerle alcohol. El pañal se dobla por debajo del cordón para que la orina no lo moje. El muñón debería secarse y desprenderse hacia las 3 semanas de edad, y si sigue ahí más tiempo hay que consultar al médico. Es normal ver unas pequeñas manchas de sangre en el pañal cuando se cae, pero un sangrado activo requiere llamar al médico del bebé de inmediato.",
+        "Cuidado del cordón umbilical en recién nacidos (HealthyChildren.org, Academia Americana de Pediatría, 2025). Tema: signos de infección del cordón, granuloma y hernia umbilical. Hallazgo: las infecciones son poco frecuentes, pero hay que contactar con el pediatra si hay secreción amarillenta y maloliente del cordón, piel roja alrededor de su base o llanto al tocar el cordón o la piel cercana; un muñón infectado necesita tratamiento médico. Tras la caída puede quedar un granuloma, una pequeña masa rojiza o parda de tejido cicatricial que drena un líquido amarillo claro; suele desaparecer en una semana y, si no, el pediatra puede secarlo o cauterizarlo. La hernia umbilical abomba el ombligo al llorar, no es grave y suele cerrarse sola en los primeros 12 a 18 meses; pegarle una moneda encima no ayuda y puede irritar la piel."
+      ]
+    },
+    {
+      "source_type": "reference",
+      "title": "Síntomas del cordón umbilical (guía de síntomas KidsDoc, HealthyChildren, AAP)",
+      "organization": "American Academy of Pediatrics",
+      "publication_year": null,
+      "url": "https://www.healthychildren.org/Spanish/tips-tools/symptom-checker/Paginas/symptomviewer.aspx?symptom=S%c3%adntomas+del+Cord%c3%b3n+Umbilical",
+      "specialties": ["pediatrics", "general_medicine", "neonatology"],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "topics": ["cordon_umbilical"],
+      "chunks": [
+        "Síntomas del cordón umbilical (guía de síntomas KidsDoc, HealthyChildren.org, Academia Americana de Pediatría). Tema: qué es normal en el cordón y el ombligo del recién nacido. Hallazgo: el cordón se seca, pasa de amarillo brillante a pardo o gris y suele caerse en 1 a 3 semanas, de media entre los 10 y los 14 días, con límites normales de 7 a 21 días. Tras la caída el centro del ombligo puede verse rojo, con algo de secreción clara o teñida de sangre o una costra, y debería estar curado y seco hacia los 7 días. Es normal un poco de sangre al caerse o si el pañal lo roza, que cura en unos 2 días. La onfalitis afecta a cerca de 1 de cada 200 recién nacidos y es una emergencia médica; el granuloma, a 1 de cada 500.",
+        "Síntomas del cordón umbilical (guía de síntomas KidsDoc, HealthyChildren.org, Academia Americana de Pediatría). Tema: signos del cordón que requieren llamar al médico ahora o en 24 horas. Hallazgo: llamar al doctor o buscar atención ahora mismo si es menor de 1 mes con aspecto o comportamiento anormal, si el sangrado no para tras presionar 10 minutos dos veces, si la mancha de sangre mide más de 5 cm, si sale una raya roja desde el ombligo, si la piel alrededor está enrojecida o si tiene fiebre siendo menor de 12 semanas. Comunicarse en las próximas 24 horas si hay sangrado leve durante más de 3 días, granos, ampollas o heridas cerca del ombligo o mucha secreción. En horario de consulta, si el ombligo no está seco y limpio tras 3 días de cuidados, si hay una pequeña masa roja dentro o si el cordón sigue unido a las 6 semanas.",
+        "Síntomas del cordón umbilical (guía de síntomas KidsDoc, HealthyChildren.org, Academia Americana de Pediatría). Tema: cuidado seco del cordón en casa y baño. Hallazgo: se revisa a diario la piel de la base del cordón y, si hay secreción, se limpia con un bastoncillo de algodón húmedo y se seca con cuidado. No se aconseja poner alcohol ni productos antibacterianos, porque retrasan la caída, salvo que lo indique el médico. Hasta que se caiga se lava al bebé con esponja, sin bañera, y se dobla el pañal hacia abajo para que el cordón reciba aire; si se mancha de caca, se limpia con agua y jabón. La secreción turbia suele desaparecer en 2 o 3 días con buen cuidado, y si el cordón tarda más de 3 semanas hay que tener paciencia porque siempre acaba cayéndose solo."
+      ],
+      "undated_reason": "Guía de síntomas KidsDoc (Barton Schmitt, Schmitt Pediatric Guidelines, copyright 2000-2025) sin fecha de publicación del tema; consultada el 2026-11-02."
+    },
+    {
+      "source_type": "reference",
+      "title": "La primera semana de su recién nacido: cómo prepararse y qué esperar (HealthyChildren, AAP)",
+      "organization": "American Academy of Pediatrics",
+      "publication_year": 2025,
+      "url": "https://www.healthychildren.org/Spanish/ages-stages/prenatal/delivery-beyond/Paginas/bringing-baby-home.aspx",
+      "specialties": ["pediatrics", "general_medicine", "neonatology"],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "topics": ["primeras_semanas", "deposiciones_recien_nacido", "cordon_umbilical"],
+      "chunks": [
+        "La primera semana de su recién nacido: cómo prepararse y qué esperar (HealthyChildren.org, Academia Americana de Pediatría, 2025). Tema: sueño, tomas y primera revisión en la primera semana en casa. Hallazgo: los recién nacidos duermen entre 14 y 17 horas al día, siempre boca arriba sobre una superficie firme y plana sin mantas, almohadas ni juguetes. La mayoría come cada 2 a 3 horas, a demanda; las señales de hambre son relamerse o sacar la lengua, buscar con la boca, llevarse las manos a la boca, la inquietud y chupar cosas, y el llanto es una señal tardía. La primera visita al pediatra debe programarse dentro de la primera semana tras el nacimiento. El cordón suele secarse y caerse en un plazo de 1 a 3 semanas y se mantiene limpio y seco.",
+        "La primera semana de su recién nacido: cómo prepararse y qué esperar (HealthyChildren.org, Academia Americana de Pediatría, 2025). Tema: pañales y cacas del recién nacido en los primeros 5 días. Hallazgo: los bebés con biberón que comen bien mojan 5 o más pañales en el primer o segundo día, y los amamantados pueden mojar menos hasta que sube la leche de la madre. Entre los días 3 y 5 ambos deberían mojar unos 8 pañales cada 24 horas. La primera caca es negra, espesa y pegajosa; después, con pecho las cacas pasan a ser amarillo mostaza y con grumos, y con biberón de distintos tonos de marrón y pastosas. Que las cacas se vayan aclarando indica que el bebé está tomando suficiente leche.",
+        "La primera semana de su recién nacido: cómo prepararse y qué esperar (HealthyChildren.org, Academia Americana de Pediatría, 2025). Tema: signos por los que llamar siempre al pediatra en la primera semana. Hallazgo: la página indica llamar siempre al pediatra si hay signos de ictericia, abdomen duro sobre todo si no ha hecho caca en las últimas 24 horas, piel persistentemente azulada, tos o arcadas frecuentes durante las tomas, llanto excesivo sobre todo si parece de dolor, si no se despierta para comer o no muestra interés por las tomas, o si respira de forma inusualmente rápida, abre las aletas de la nariz, resopla o se le marcan las costillas al respirar. Ante una piel amarillenta pide consultar al pediatra de inmediato, porque a veces la ictericia es grave."
+      ]
+    },
+    {
+      "source_type": "reference",
+      "title": "Cómo saber si su bebé amamantado está recibiendo suficiente leche (HealthyChildren, AAP)",
+      "organization": "American Academy of Pediatrics",
+      "publication_year": 2025,
+      "url": "https://www.healthychildren.org/Spanish/ages-stages/baby/breastfeeding/Paginas/how-to-tell-if-baby-is-getting-enough-milk.aspx",
+      "specialties": ["pediatrics", "general_medicine", "neonatology"],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "topics": ["perdida_peso_inicial", "deposiciones_recien_nacido"],
+      "chunks": [
+        "Cómo saber si su bebé amamantado está recibiendo suficiente leche (HealthyChildren.org, Academia Americana de Pediatría, 2025). Tema: pérdida de peso y primera visita del recién nacido amamantado. Hallazgo: la pérdida de peso de los primeros días no debería superar el 8 a 10 % del peso al nacer. La primera visita al pediatra debe programarse no más de 48 horas después del alta del hospital, y el peso que se toma en esa visita ayuda a saber si el bebé recibe suficiente leche. En las primeras semanas el bebé debería mamar al menos de 8 a 12 veces en 24 horas y quedarse satisfecho y contento durante 1 a 3 horas entre tomas, aproximadamente.",
+        "Cómo saber si su bebé amamantado está recibiendo suficiente leche (HealthyChildren.org, Academia Americana de Pediatría, 2025). Tema: cacas y pañales mojados por días en el recién nacido amamantado. Hallazgo: los días 1 y 2 suele hacer 1 o 2 cacas al día, oscuras y alquitranadas; los días 3 y 4, al menos 2 al día, que empiezan a volverse amarillo verdosas; y de los días 5 a 7, al menos 3 o 4 al día, amarillas y blandas con pequeños grumos. Durante el primer mes, cuando aumenta la producción de leche, suele hacer una caca con cada toma. Desde los días 5 a 7 debería mojar al menos 6 pañales al día, con una orina casi incolora o amarillo pálido."
+      ]
+    },
+    {
+      "source_type": "reference",
+      "title": "Atresia biliar: cuando la enfermedad hepática se desarrolla en bebés (HealthyChildren, AAP)",
+      "organization": "American Academy of Pediatrics",
+      "publication_year": 2025,
+      "url": "https://www.healthychildren.org/Spanish/health-issues/conditions/abdominal/Paginas/biliary-atresia.aspx",
+      "specialties": ["pediatrics", "general_medicine", "gastroenterology"],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "topics": ["ictericia_neonatal", "deposiciones_recien_nacido"],
+      "chunks": [
+        "Atresia biliar: cuando la enfermedad hepática se desarrolla en bebés (HealthyChildren.org, Academia Americana de Pediatría, 2025). Tema: ictericia, heces pálidas y orina oscura entre las 4 y las 6 semanas de vida. Hallazgo: la atresia biliar es una enfermedad hepática grave de los bebés en la que los conductos biliares están bloqueados y la bilis no llega al intestino, se acumula y daña el hígado; afecta a cerca de 1 de cada 15.000 bebés y su causa se desconoce. La mayoría nacen a término y al principio parecen sanos; la ictericia, con ojos y piel amarillos, las heces pálidas y la orina oscura suelen aparecer entre las 4 y las 6 semanas de edad. Si preocupa, la página indica ver al pediatra lo antes posible.",
+        "Atresia biliar: cuando la enfermedad hepática se desarrolla en bebés (HealthyChildren.org, Academia Americana de Pediatría, 2025). Tema: por qué las heces pálidas del bebé de pocas semanas son un signo de alarma. Hallazgo: normalmente un pigmento amarillo, la bilirrubina conjugada, llega al intestino y da color a las heces; si los conductos están bloqueados no llega y las heces se ven pálidas. La primera prueba es un análisis de sangre de bilirrubina conjugada: si es normal, el bebé no tiene atresia biliar, y si está alta hacen falta más pruebas como una ecografía abdominal, otros análisis o pruebas de imagen, y a veces una biopsia hepática o cirugía para ver los conductos. El tratamiento principal es la operación de Kasai, que une el hígado al intestino para que drene la bilis, y la página insiste en diagnosticar y tratar pronto."
+      ]
+    },
+    {
+      "source_type": "reference",
+      "title": "Enfermedades del recién nacido: cómo reconocerlas (guía de síntomas KidsDoc, HealthyChildren, AAP)",
+      "organization": "American Academy of Pediatrics",
+      "publication_year": null,
+      "url": "https://www.healthychildren.org/Spanish/tips-tools/symptom-checker/Paginas/symptomviewer.aspx?symptom=Enfermedades+del+Reci%c3%a9n+Nacido%3a+C%c3%b3mo+Reconocerlas",
+      "specialties": ["pediatrics", "general_medicine", "neonatology"],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "topics": ["primeras_semanas"],
+      "chunks": [
+        "Enfermedades del recién nacido: cómo reconocerlas (guía de síntomas KidsDoc, HealthyChildren.org, Academia Americana de Pediatría). Tema: por qué vigilar de cerca al recién nacido durante el primer mes. Hallazgo: los recién nacidos tienen más riesgo de infección, que puede aparecer en cualquier momento del primer mes, y los primeros 7 días son especialmente importantes; una infección de la sangre puede enfermarlos gravemente muy deprisa y los síntomas pueden ser sutiles. La alimentación es la medida más fiable de su bienestar: hay que llamar al médico si no se alimenta bien o si su forma de comer cambia de repente. Si su aspecto o su comportamiento cambian y no son normales, hay que llamar de inmediato.",
+        "Enfermedades del recién nacido: cómo reconocerlas (guía de síntomas KidsDoc, HealthyChildren.org, Academia Americana de Pediatría). Tema: signos del recién nacido que requieren emergencias o urgencias de inmediato. Hallazgo: llamar a emergencias ahora mismo si no logra despertarse, no se mueve o está muy débil, si gime o gruñe con cada respiración de forma nueva o si tiene los labios, la lengua o la cara azulados o grises. Ir a una sala de urgencias ahora mismo si vomita bilis, de color verde, si su tono muscular cambia o está flácido, si se mueve menos, si chupa muy débilmente o durante poco tiempo o si su llanto cambia y se vuelve débil o extraño.",
+        "Enfermedades del recién nacido: cómo reconocerlas (guía de síntomas KidsDoc, HealthyChildren.org, Academia Americana de Pediatría). Tema: signos del recién nacido por los que llamar al médico ahora o en 24 horas. Hallazgo: llamar al doctor o buscar atención ahora mismo ante cualquier síntoma de enfermedad como tos, diarrea o vómitos, cambios en la alimentación (hay que despertarlo para comer o no termina las tomas), sudor durante las tomas, si duerme más de lo normal, si está pálido o con brazos y piernas azulados o grises, si la fontanela está abultada, si tiene fiebre siendo menor de 12 semanas, sin medicamentos para la fiebre antes de que lo vea un profesional, o si la temperatura rectal está por debajo de 36,0 °C y no sube al abrigarlo. Comunicarse en las próximas 24 horas si la orina es rosa, naranja o color melocotón."
+      ],
+      "undated_reason": "Guía de síntomas KidsDoc (Barton Schmitt, Schmitt Pediatric Guidelines, copyright 2000-2025) sin fecha de publicación del tema; consultada el 2026-11-02."
+    },
+    {
+      "source_type": "reference",
+      "title": "Primer mes: crecimiento y apariencia física (HealthyChildren, AAP)",
+      "organization": "American Academy of Pediatrics",
+      "publication_year": 2018,
+      "url": "https://www.healthychildren.org/Spanish/ages-stages/baby/Paginas/First-Month-Physical-Appearance-and-Growth.aspx",
+      "specialties": ["pediatrics", "general_medicine", "neonatology"],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "topics": ["perdida_peso_inicial", "primeras_semanas"],
+      "chunks": [
+        "Primer mes: crecimiento y apariencia física (HealthyChildren.org, Academia Americana de Pediatría, 2018). Tema: cuánto peso pierde y recupera el recién nacido en el primer mes. Hallazgo: la mayoría de los bebés pierden alrededor de una décima parte de su peso al nacer en los primeros 5 días, lo recuperan en los 5 siguientes y suelen volver a su peso de nacimiento hacia el día 10. Hay estirones de crecimiento hacia los días 7 a 10 y de nuevo entre las 3 y las 6 semanas. Un recién nacido gana de media entre 20 y 30 g al día y suele pesar unos 4,5 kg al mes; durante el primer mes crece entre 4,5 y 5 cm de longitud. Los niños suelen pesar y medir algo más que las niñas.",
+        "Primer mes: crecimiento y apariencia física (HealthyChildren.org, Academia Americana de Pediatría, 2018). Tema: aspecto normal del bebé durante el primer mes. Hallazgo: la piel puede verse moteada, de rosada a azulada, con manos y pies más fríos, y recupera el color rosado al moverse. El pelo fino del nacimiento suele caerse y puede quedar una calva donde apoya la cabeza, sin importancia médica. El acné del bebé suele aparecer hacia las 4 a 5 semanas. Los moratones del cuero cabelludo y la hinchazón de los párpados por el parto desaparecen en 1 o 2 semanas, y las manchas rojas en los ojos en unas 3 semanas. Como aún no regula bien su temperatura, se le viste con una capa más de la que llevaría un adulto en las mismas condiciones, sin abrigarlo en exceso."
+      ]
+    },
+    {
+      "source_type": "reference",
+      "title": "Suivi de l'enfant à la maternité (ameli.fr)",
+      "organization": "Assurance Maladie (ameli.fr)",
+      "publication_year": 2026,
+      "url": "https://www.ameli.fr/assure/sante/devenir-parent/accouchement-et-nouveau-ne/depistage-neonatal-suivi-bebe",
+      "specialties": ["pediatrics", "general_medicine", "neonatology"],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "topics": ["primeras_semanas", "prueba_talon", "cribado_auditivo"],
+      "chunks": [
+        "Suivi de l'enfant à la maternité (ameli.fr, Assurance Maladie, Francia, 2026). Tema: exploraciones del recién nacido en la maternidad y revisiones del primer mes. Hallazgo: el test de Apgar se calcula a 1, 5 y 10 minutos de vida, con una puntuación de 0 a 10. El primer examen suele hacerse 1 o 2 horas tras el nacimiento: un bebé a término pesa entre 2,6 y 4 kg, mide de 46 a 54 cm y tiene un perímetro craneal de 34 a 36 cm. En las 2 horas siguientes al nacimiento recibe vitamina K1 por boca para prevenir hemorragias. Antes del día 8 un médico hace un examen completo, cubierto al 100 %, y hay otra revisión en la segunda semana de vida y otra antes del mes.",
+        "Suivi de l'enfant à la maternité (ameli.fr, Assurance Maladie, Francia, 2026). Tema: la prueba del talón en Francia, cuándo y qué enfermedades. Hallazgo: en los 2 o 3 días siguientes al nacimiento (72 horas) se toma sangre del talón, normalmente en la maternidad y a veces en casa por una matrona, con el acuerdo de los padres y cubierta al 100 %. Detectaba 13 enfermedades (fenilcetonuria, hipotiroidismo congénito, hiperplasia suprarrenal congénita, fibrosis quística, déficit de MCAD, homocistinuria, leucinosis, tirosinemia tipo 1, acidemia isovalérica, aciduria glutárica tipo 1, déficit de LCAD, déficit primario de carnitina y drepanocitosis) y desde el 1 de septiembre de 2025 se añaden 3 más: inmunodeficiencia combinada grave, atrofia muscular espinal y déficit de VLCAD, en total 16.",
+        "Suivi de l'enfant à la maternité (ameli.fr, Assurance Maladie, Francia, 2026). Tema: el cribado auditivo del recién nacido en Francia. Hallazgo: se propone después de las 24 horas de vida en la maternidad, o a veces en casa en los primeros días, con el acuerdo de los padres. La sordera congénita afecta a entre 0,5 y 1,3 de cada 1.000 recién nacidos. Si la primera prueba no es concluyente, se ofrece una segunda con el mismo protocolo antes de salir de la maternidad. Si la segunda tampoco lo es, se deriva a un centro especializado y, si los padres están de acuerdo, la maternidad organiza la cita en el plazo de un mes; si no, reciben los datos de contacto de los servicios especializados."
+      ]
+    },
+    {
+      "source_type": "reference",
+      "title": "Examen du nourrisson dans les 8 jours qui suivent sa naissance (ameli.fr)",
+      "organization": "Assurance Maladie (ameli.fr)",
+      "publication_year": 2025,
+      "url": "https://www.ameli.fr/assure/sante/themes/suivi-medical-de-l-enfant-et-de-l-adolescent/examen-du-nourrisson-dans-les-8-jours-qui-suivent-sa-naissance",
+      "specialties": ["pediatrics", "general_medicine", "neonatology"],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "topics": ["primeras_semanas", "ictericia_neonatal"],
+      "chunks": [
+        "Examen du nourrisson dans les 8 jours qui suivent sa naissance (ameli.fr, Assurance Maladie, Francia, 2025). Tema: el examen obligatorio del bebé antes del día 8 de vida. Hallazgo: un médico hace un examen detallado en los 8 días siguientes al nacimiento, cubierto al 100 % sin adelantar dinero. Mide peso, talla, perímetro craneal y frecuencias cardiaca y respiratoria, explora todo el cuerpo, manipula las caderas para descartar una luxación (con ecografía si hay dudas) y revisa los ojos: tamaño, pupilas y transparencia de la córnea. La prueba del talón se toma en las primeras 72 horas, y si la prueba de audición de la maternidad no se hizo o no permitió valorar la audición, se hacen otras antes del final del tercer mes. El médico rellena el primer certificado de salud.",
+        "Examen du nourrisson dans les 8 jours qui suivent sa naissance (ameli.fr, Assurance Maladie, Francia, 2025). Tema: cuándo consultar rápidamente en las primeras semanas, incluida la ictericia que sigue después de 2 semanas de vida. Hallazgo: fuera de las revisiones, la página pide consultar rápidamente a un médico si el bebé tiene heces descoloridas o sigue con la piel amarilla (ictericia) después de 2 semanas de vida; si tiene diarrea, con cacas de repente más líquidas y frecuentes, porque puede deshidratarse deprisa, sobre todo si vomita; si tiene fiebre; si le cuesta respirar; o si tiene un comportamiento inusual. Añade que no se le debe dar ningún medicamento sin consejo médico."
+      ]
+    },
+    {
+      "source_type": "reference",
+      "title": "Sortie de maternité : préparez votre retour à la maison (HAS)",
+      "organization": "Haute Autorité de Santé (HAS)",
+      "publication_year": 2014,
+      "url": "https://www.has-sante.fr/upload/docs/application/pdf/2014-02/document_dinformation.pdf",
+      "specialties": ["pediatrics", "general_medicine", "neonatology"],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "topics": ["primeras_semanas", "ictericia_neonatal", "deposiciones_recien_nacido"],
+      "chunks": [
+        "Sortie de maternité : préparez votre retour à la maison (Haute Autorité de Santé, Francia, 2014). Tema: estancia en la maternidad y visitas al recién nacido tras el alta. Hallazgo: si el parto vaginal y el bebé van bien, la estancia es de 72 a 96 horas (3 a 4 días), y de 96 a 120 horas tras una cesárea. Tras una estancia estándar, la primera visita de la matrona o el médico se hace si es posible en la semana siguiente al alta, mejor en las 48 horas; tras un alta precoz, en las 24 horas siguientes, con una segunda en la misma semana. En las visitas se explora al bebé (peso, hidratación), y además hay que planificar una consulta entre el día 6 y el día 10 de vida, preferentemente con un pediatra.",
+        "Sortie de maternité : préparez votre retour à la maison (Haute Autorité de Santé, Francia, 2014). Tema: signos por los que consultar rápidamente por el recién nacido en su primera semana. Hallazgo: el documento pide consultar rápidamente si el bebé tiene fiebre (más de 38 °C) o una temperatura demasiado baja (menos de 36,5 °C), si le cuesta respirar, si tiene diarrea (cacas de repente más líquidas y frecuentes), sobre todo con vómitos, si no ha hecho caca en 48 horas durante la primera semana de vida, si tiene ictericia junto con dificultades para alimentarse (bebé adormilado) o con cacas muy pálidas o blancas, o si se comporta de forma inusual: muy agitado, con gritos agudos o, al contrario, poco reactivo y con un llanto débil.",
+        "Sortie de maternité : préparez votre retour à la maison (Haute Autorité de Santé, Francia, 2014). Tema: seguridad del recién nacido en casa y temperatura de la habitación. Hallazgo: hay que acostarlo solo boca arriba, en su propia cuna rígida y profunda, con colchón firme y un saco adaptado a su talla, sin manta, almohada ni edredón, y no abrigarlo demasiado: la habitación debe estar a 19 °C. Nunca se le deja solo, ni un instante, en el baño, el cambiador, una cama de adulto o el coche. No se le da ningún medicamento sin consejo médico, no se fuma en su presencia y en el coche va en un dispositivo homologado. Si el llanto se hace insoportable, se pide relevo o se le deja en la cuna, y nunca se le zarandea."
+      ]
+    },
+    {
+      "source_type": "reference",
+      "title": "Mejorar la supervivencia y el bienestar de los recién nacidos (OMS)",
+      "organization": "World Health Organization (WHO)",
+      "publication_year": 2020,
+      "url": "https://www.who.int/es/news-room/fact-sheets/detail/newborns-reducing-mortality",
+      "specialties": ["pediatrics", "general_medicine", "neonatology"],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "topics": ["primeras_semanas", "cordon_umbilical"],
+      "chunks": [
+        "Mejorar la supervivencia y el bienestar de los recién nacidos (Organización Mundial de la Salud, nota descriptiva, 2020). Tema: la atención esencial que debe recibir todo recién nacido. Hallazgo: la OMS indica que todos los recién nacidos deben recibir protección térmica, por ejemplo con el contacto piel con piel con la madre; higiene del cordón umbilical y de la piel; lactancia materna precoz y exclusiva; valoración de signos de problemas graves o de necesidad de cuidados adicionales, como el bajo peso o la enfermedad; y tratamiento preventivo como las vacunas al nacer, la vitamina K y la profilaxis ocular. Recomienda cuatro contactos de atención posnatal, en centros de salud o con visitas a domicilio, además del registro del nacimiento y las vacunas del calendario.",
+        "Mejorar la supervivencia y el bienestar de los recién nacidos (Organización Mundial de la Salud, nota descriptiva, 2020). Tema: signos de peligro del recién nacido por los que buscar atención sin demora. Hallazgo: la OMS aconseja que las familias busquen atención médica sin demora ante los signos de peligro del recién nacido: problemas para alimentarse, actividad reducida, dificultad para respirar, fiebre, convulsiones o sensación de frío. Recuerda que cerca de 1 millón de recién nacidos mueren en las primeras 24 horas de vida y que en torno al 75 % de las muertes neonatales ocurren en la primera semana de vida."
+      ]
+    }
+  ]
+}
