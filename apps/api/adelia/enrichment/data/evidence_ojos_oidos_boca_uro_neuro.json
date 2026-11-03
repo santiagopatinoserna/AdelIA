@@ -1,0 +1,818 @@
+{
+  "_meta": {
+    "topic": "Ojos, oídos, boca, genitales y forma de la cabeza de 0 a 24 meses: estrabismo, obstrucción del conducto lagrimal, audición después del cribado neonatal, caries y pasta con flúor, fimosis, testículo no descendido, hernias umbilical e inguinal, plagiocefalia postural y tortícolis muscular congénita",
+    "compiled": "2026-11-02",
+    "method": "Lectura directa el 2026-11-02 de cada página pública de Familia y Salud (AEPap), HealthyChildren en español (AAP), NHS, ameli.fr (Assurance Maladie) y la Haute Autorité de Santé; cada cifra, edad, signo de alarma y nivel de urgencia procede de la página citada en el propio fragmento. Las páginas de EnFamilia (AEP) y de mpedia.fr devolvieron error 403 al abrirlas y no se usaron.",
+    "caveat": "Resúmenes en español de fuentes en español, inglés o francés; los chunks son paráfrasis con las cifras y los niveles de urgencia del original, no texto literal. Orientación para familias que no sustituye la valoración de un profesional y no contiene pautas de medicación: el flúor aparece solo como pasta dental y como barniz que aplica el profesional, nunca como cantidad de un suplemento.",
+    "purpose": "Cubrir las dudas de las revisiones de los dos primeros años sobre ojos, oídos, dientes, genitales del niño, hernias y forma de la cabeza, que no encontraban evidencia, con los signos que obligan a consultar y la urgencia que da cada fuente."
+  },
+  "sources": [
+    {
+      "source_type": "reference",
+      "title": "La visión de mi bebé (Familia y Salud, AEPap)",
+      "organization": "Asociación Española de Pediatría de Atención Primaria (AEPap)",
+      "publication_year": 2019,
+      "url": "https://www.familiaysalud.es/podemos-prevenir/eventos-del-desarrollo/deteccion-precoz/la-vision-de-mi-bebe",
+      "specialties": [
+        "pediatrics",
+        "general_medicine"
+      ],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "topics": [
+        "estrabismo",
+        "lagrimal_obstruido"
+      ],
+      "chunks": [
+        "La visión de mi bebé (Familia y Salud, AEPap, 2019, actualizado 2025). Tema: cuándo un ojo desviado en el lactante es normal y cuándo consultar. Hallazgo: la visión del niño se desarrolla de forma progresiva y no madura del todo hasta los 7-8 años; hacia los 3-4 meses desaparecen los movimientos involuntarios de los ojos y aparece la visión en relieve. Que el bebé meta un ojo hacia dentro antes de los 6 meses puede ser normal. La página indica consultar al pediatra si el bebé tiene los ojos cruzados a partir de los 6 meses o si la pupila no se ve negra. El estrabismo se trata, según el caso, con gafas, parches o cirugía.",
+        "La visión de mi bebé (Familia y Salud, AEPap, 2019, actualizado 2025). Tema: señales de que un bebé puede no ver bien. Hallazgo: la página enumera como signos de alarma una sensibilidad marcada a la luz, una pupila blanca, opaca o de forma irregular, movimientos de los ojos involuntarios o en vaivén, que no responda a las caras ni a los objetos conocidos, que no pueda fijar la mirada en luces brillantes y que se frote los ojos con insistencia o muestre molestias al mirar. Ante una pupila que no se ve negra hay que consultar al pediatra. La página no fija un nivel de urgencia más allá de esa consulta.",
+        "La visión de mi bebé (Familia y Salud, AEPap, 2019, actualizado 2025). Tema: lagrimeo excesivo en los primeros meses. Hallazgo: el lagrimeo excesivo (epífora) del lactante suele deberse a una obstrucción del conducto lagrimal y en general se resuelve en los primeros meses. Al principio se recomienda el masaje del saco lagrimal y, si el lagrimeo persiste, debe valorarlo un especialista. La página recuerda también que el ojo rojo es un motivo de consulta muy frecuente, casi siempre por conjuntivitis, y que en el recién nacido pueden verse pequeñas manchas de sangre en el blanco del ojo tras un esfuerzo como la tos."
+      ]
+    },
+    {
+      "source_type": "reference",
+      "title": "Si una persona se coloca detrás del recién nacido este puede quedar bizco (Familia y Salud, AEPap)",
+      "organization": "Asociación Española de Pediatría de Atención Primaria (AEPap)",
+      "publication_year": 2018,
+      "url": "https://www.familiaysalud.es/mito-o-realidad/mito-o-realidad/si-una-persona-se-coloca-detras-del-recien-nacido-este-puede-quedar",
+      "specialties": [
+        "pediatrics",
+        "general_medicine"
+      ],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "topics": [
+        "estrabismo"
+      ],
+      "chunks": [
+        "Si una persona se coloca detrás del recién nacido este puede quedar bizco (Familia y Salud, Grupo de Educación para la Salud de la AEPap, 2018). Tema: el mito de que ponerse detrás del bebé lo vuelve bizco. Hallazgo: la página lo califica de falso. El estrabismo es la desalineación de un ojo respecto al otro y puede estar presente al nacer o aparecer durante la infancia, pero no lo provoca que alguien se sitúe detrás del recién nacido. Como el sistema visual del bebé todavía está madurando y necesita estímulos para desarrollarse bien, lo recomendable es dejar que mueva la cabeza y mire hacia donde quiera.",
+        "Si una persona se coloca detrás del recién nacido este puede quedar bizco (Familia y Salud, AEPap, 2018). Tema: qué es normal en los primeros meses y cuándo consultar al pediatra. Hallazgo: en los primeros meses es frecuente que el bebé se ponga bizco de vez en cuando, porque los músculos de los ojos todavía son inmaduros y le cuesta enfocar. Entre los 4 y los 6 meses los ojos suelen enderezarse. Si la desviación de los ojos continúa después de esa edad, hay que consultar al pediatra. La página no da otros signos de alarma ni niveles de urgencia."
+      ]
+    },
+    {
+      "source_type": "reference",
+      "title": "Squint (NHS)",
+      "organization": "NHS (National Health Service, Reino Unido)",
+      "publication_year": 2023,
+      "url": "https://www.nhs.uk/conditions/squint/",
+      "specialties": [
+        "pediatrics",
+        "general_medicine"
+      ],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "topics": [
+        "estrabismo"
+      ],
+      "chunks": [
+        "Squint (NHS, Reino Unido, revisada en 2023). Tema: cuándo un estrabismo del bebé necesita consulta. Hallazgo: el estrabismo es que los ojos miran en direcciones distintas; puede ser constante o ir y venir, y es más frecuente en niños pequeños. En bebés menores de 3 meses un estrabismo intermitente es frecuente y no suele preocupar. El NHS indica pedir consejo médico en cualquier momento si el niño tiene un estrabismo constante, si un estrabismo que va y viene sigue después de los 3 meses, o si preocupa su visión, por ejemplo si inclina a menudo la cabeza hacia un lado o cierra un ojo para mirar. El médico de familia, el health visitor o el óptico pueden derivar al especialista de los ojos.",
+        "Squint (NHS, Reino Unido, revisada en 2023). Tema: por qué se trata pronto y con qué. Hallazgo: el NHS recomienda tratar el estrabismo porque es poco probable que se corrija solo y puede causar problemas si no se trata a tiempo: visión borrosa o doble persistente y ojo vago (ambliopía), en el que el cerebro deja de usar las señales del ojo desviado. Los tratamientos son gafas, ejercicios de los ojos, cirugía de los músculos del ojo o inyecciones en esos músculos, y el ojo vago suele tratarse primero con un parche sobre el ojo bueno. La cirugía puede alinear los ojos aunque se haga tarde, pero los problemas de visión no tratados en la primera infancia pueden quedar para siempre.",
+        "Squint (NHS, Reino Unido, revisada en 2023). Tema: causas y por qué un niño con estrabismo debe ver al médico. Hallazgo: a menudo no se conoce la causa; el estrabismo puede estar presente desde el nacimiento, aparecer más tarde o darse en varias personas de la familia, y con frecuencia el ojo compensa un defecto de visión como la miopía, la hipermetropía o el astigmatismo. Con menos frecuencia se asocia a infecciones como el sarampión, a síndromes como el de Down, a retrasos del desarrollo, a parálisis cerebral o a otros problemas del cerebro o los nervios. En ocasiones es un signo de retinoblastoma, un cáncer de ojo infantil poco frecuente, por lo que el NHS indica que un niño con estrabismo vea a su médico para descartarlo."
+      ]
+    },
+    {
+      "source_type": "reference",
+      "title": "Señales de advertencia de problemas de la vista en bebés y niños (HealthyChildren, AAP)",
+      "organization": "American Academy of Pediatrics",
+      "publication_year": 2024,
+      "url": "https://www.healthychildren.org/Spanish/health-issues/conditions/eyes/Paginas/warning-signs-of-vison-problems-in-children.aspx",
+      "specialties": [
+        "pediatrics",
+        "general_medicine"
+      ],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "topics": [
+        "estrabismo"
+      ],
+      "chunks": [
+        "Señales de advertencia de problemas de la vista en bebés y niños (HealthyChildren, American Academy of Pediatrics, 2024). Tema: alineación de los ojos en el primer año. Hallazgo: los ojos de muchos recién nacidos parecen a veces desalineados, y eso es habitual. A partir de los 4 meses aproximadamente, que los ojos se crucen hacia dentro o se desvíen hacia fuera con frecuencia ya no se considera normal, y la página pide comentarlo con el pediatra si ocurre a menudo. Hacia los 3 meses también conviene avisar al pediatra si el bebé no sigue con los ojos un objeto en movimiento, no mantiene el contacto visual o parece no ver.",
+        "Señales de advertencia de problemas de la vista en bebés y niños (HealthyChildren, American Academy of Pediatrics, 2024). Tema: signos en los ojos que hay que comunicar al pediatra a cualquier edad. Hallazgo: la AAP enumera ojos desalineados (cruzados, desviados hacia fuera o que no enfocan juntos), color blanco o gris en la pupila, ojos que se mueven deprisa de un lado a otro o de arriba abajo, dolor, picor o molestias en los ojos, un enrojecimiento que no se va en unos días, pus o costras, ojos que lloran constantemente, párpados caídos y una sensibilidad extrema a la luz. La página no define niveles de urgencia para estos signos, salvo pedir consulta de inmediato si un niño en edad preescolar tiene los ojos desalineados."
+      ]
+    },
+    {
+      "source_type": "reference",
+      "title": "Obstrucción del conducto lagrimal en lactantes (Familia y Salud, AEPap)",
+      "organization": "Asociación Española de Pediatría de Atención Primaria (AEPap)",
+      "publication_year": 2023,
+      "url": "https://www.familiaysalud.es/sintomas-y-enfermedades/organos-de-los-sentidos/ojos/obstruccion-del-conducto-lagrimal-en-lactantes",
+      "specialties": [
+        "pediatrics",
+        "general_medicine"
+      ],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "topics": [
+        "lagrimal_obstruido"
+      ],
+      "chunks": [
+        "Obstrucción del conducto lagrimal en lactantes (Familia y Salud, AEPap, 2023). Tema: cómo se reconoce el ojo que lagrimea por un conducto obstruido. Hallazgo: es la causa más frecuente de lagrimeo excesivo en el lactante; la tienen entre el 6 y el 15 % de los recién nacidos, más los prematuros, y en hasta un tercio de los casos afecta a los dos ojos. El ojo está encharcado o las lágrimas caen por la mejilla, puede haber legañas amarillentas con las pestañas pegadas e irritación de la piel de los párpados, pero el blanco del ojo se ve normal salvo que haya conjuntivitis. Aunque el defecto existe desde el nacimiento, suele notarse entre las 2 y las 6 semanas, porque al principio el bebé produce pocas lágrimas. Se nota más con catarros, viento, frío o llanto.",
+        "Obstrucción del conducto lagrimal en lactantes (Familia y Salud, AEPap, 2023). Tema: evolución y masaje. Hallazgo: la mayoría se cura sola, casi todas en los primeros seis meses y hasta un 90 % a los 12 meses. El tratamiento inicial es conservador: limpieza del ojo con suero fisiológico o agua templada, siempre desde el ángulo interno hacia fuera, y masaje hidrostático. Para el masaje se presiona con firmeza con el dedo justo por encima del ángulo interno del ojo y se desliza la presión hacia abajo, sobre el hueso de la nariz; se repite de 5 a 10 veces en cada sesión, 3 o 4 veces al día. No hacen falta colirios antibióticos salvo que haya una conjuntivitis asociada.",
+        "Obstrucción del conducto lagrimal en lactantes (Familia y Salud, AEPap, 2023). Tema: cuándo derivar al oftalmólogo y qué complicación vigilar. Hallazgo: se sugiere derivar al oftalmólogo entre los 6 y los 12 meses, según la intensidad de los síntomas y las complicaciones; en los pocos casos que no se resuelven, el tratamiento de elección es el sondaje del conducto, que hace el oftalmólogo con sedación. Las complicaciones más comunes son las conjuntivitis de repetición y la dermatitis de los párpados. Menos frecuente pero importante es la dacriocistitis aguda, con enrojecimiento intenso, calor e hinchazón en el ángulo interno del ojo, que necesita tratamiento médico y vigilancia estrecha para descartar complicaciones graves como la celulitis preseptal. El pediatra debe descartar además otras enfermedades raras que se parecen y requieren derivación precoz."
+      ]
+    },
+    {
+      "source_type": "reference",
+      "title": "Lagrimeo en el lactante (Familia y Salud, AEPap)",
+      "organization": "Asociación Española de Pediatría de Atención Primaria (AEPap)",
+      "publication_year": 2013,
+      "url": "https://www.familiaysalud.es/sintomas-y-enfermedades/organos-de-los-sentidos/ojos/lagrimeo-en-el-lactante",
+      "specialties": [
+        "pediatrics",
+        "general_medicine"
+      ],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "topics": [
+        "lagrimal_obstruido"
+      ],
+      "chunks": [
+        "Lagrimeo en el lactante (Familia y Salud, AEPap, 2013, actualizado 2024). Tema: la causa principal del ojo que llora en el bebé. Hallazgo: la obstrucción congénita del conducto lagrimal es la principal causa de lagrimeo en el bebé; la tienen hasta el 10 % de los recién nacidos durante el primer año y alrededor del 20 % de los prematuros. Suele empezar en la segunda o tercera semana de vida, cuando aumenta la producción de lágrimas, con lagrimeo constante, legañas en el borde de los párpados sin que el ojo esté rojo e irritación de la piel alrededor. Casi todos los casos se resuelven solos en los primeros 6 meses y más del 90 % se curan en el primer año con medidas conservadoras.",
+        "Lagrimeo en el lactante (Familia y Salud, AEPap, 2013, actualizado 2024). Tema: otras causas de lagrimeo que se acompañan de más síntomas. Hallazgo: la página distingue la obstrucción de cuadros con síntomas añadidos: la conjuntivitis (ojo rojo con lagrimeo y secreción), la dacriocistitis (dolor, hinchazón y enrojecimiento en el ángulo interno del ojo, a veces con pus), un cuerpo extraño (lagrimeo, ojo rojo, molestia con la luz, dolor y llanto, a veces tras un golpe) y el glaucoma congénito, raro pero grave, con un ojo más grande, intolerancia a la luz y córnea turbia. Si el bebé llora o lagrimea muy a menudo por uno o ambos ojos, hay que llevarlo al pediatra para un diagnóstico correcto.",
+        "Lagrimeo en el lactante (Familia y Salud, AEPap, 2013, actualizado 2024). Tema: masaje hidrostático y cuándo ir al oftalmólogo. Hallazgo: el masaje se hace colocando el dedo índice sobre el saco lagrimal, entre el ángulo interno del ojo y la nariz, presionando con firmeza y deslizando el dedo hacia abajo por el lateral de la nariz; se repite de 5 a 10 veces, 3 o 4 veces al día, junto con la limpieza de los párpados. Si el problema persiste o las conjuntivitis o dacriocistitis se repiten a menudo, se deriva al oftalmólogo, que puede valorar el sondaje del conducto. El diagnóstico suele hacerse con la historia y la exploración, y rara vez hacen falta pruebas."
+      ]
+    },
+    {
+      "source_type": "reference",
+      "title": "Conducto lagrimal bloqueado (HealthyChildren, AAP)",
+      "organization": "American Academy of Pediatrics",
+      "publication_year": null,
+      "undated_reason": "Ficha del verificador de síntomas de HealthyChildren sin fecha de revisión visible (solo derechos de autor 2000-2025); consultada el 2026-11-02.",
+      "url": "https://www.healthychildren.org/Spanish/tips-tools/symptom-checker/Paginas/symptomviewer.aspx?symptom=Conducto+Lagrimal+Bloqueado",
+      "specialties": [
+        "pediatrics",
+        "general_medicine"
+      ],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "topics": [
+        "lagrimal_obstruido"
+      ],
+      "chunks": [
+        "Conducto lagrimal bloqueado (HealthyChildren, American Academy of Pediatrics, verificador de síntomas). Tema: qué es y cómo evoluciona. Hallazgo: el conducto que lleva las lágrimas del ojo a la nariz está bloqueado en alrededor del 10 % de los recién nacidos, y en un 30 % de ellos en los dos lados. Un ojo lagrimea constantemente y las lágrimas caen por la mejilla aunque el niño no llore, sin ojo rojo ni párpado hinchado. Puede pasar desapercibido hasta el mes o los 2 meses de edad, cuando el ojo produce más lágrimas. Más del 90 % de los conductos se abren solos, normalmente hacia los 12 meses; si el niño tiene más de 12 meses, hay que hablarlo con el médico, que puede derivarlo al oftalmólogo.",
+        "Conducto lagrimal bloqueado (HealthyChildren, American Academy of Pediatrics, verificador de síntomas). Tema: cuándo llamar al médico y con qué urgencia. Hallazgo: hay que buscar atención médica ahora mismo si el párpado está muy rojo o muy hinchado, si la parte transparente del ojo (córnea) se ve turbia, si hay fiebre en un bebé menor de 12 semanas o si el niño parece muy enfermo. Hay que contactar con el médico en las 24 horas siguientes si aparece un bulto rojo en el ángulo interno del párpado, si el párpado está rojo o hinchado o si hay pus en el ojo. Se consulta en horario normal si el diagnóstico no lo hizo un médico, si el niño tiene más de 12 meses o si hay dudas.",
+        "Conducto lagrimal bloqueado (HealthyChildren, American Academy of Pediatrics, verificador de síntomas). Tema: cuidados en casa y masaje. Hallazgo: un conducto bloqueado no suele necesitar tratamiento salvo que el ojo se infecte. Si hay pus o los párpados quedan pegados, probablemente hay infección y hay que llamar al pediatra; mientras, se retira el pus con bolas de algodón mojadas en agua tibia, una nueva cada vez. Sobre el masaje del saco lagrimal los médicos no se ponen de acuerdo: algunos lo aconsejan y otros no, y no es imprescindible porque el conducto se abre sin él. Si el médico lo indica, se hace con un bastoncillo de algodón en lugar del dedo, desde el ángulo interno del ojo y presionando hacia arriba con mucha suavidad, no más de una vez al día."
+      ]
+    },
+    {
+      "source_type": "reference",
+      "title": "No oye bien, ¿qué puede ser? (Familia y Salud, AEPap)",
+      "organization": "Asociación Española de Pediatría de Atención Primaria (AEPap)",
+      "publication_year": 2022,
+      "url": "https://www.familiaysalud.es/sintomas-y-enfermedades/organos-de-los-sentidos/oidos/no-oye-bien-que-puede-ser",
+      "specialties": [
+        "pediatrics",
+        "general_medicine"
+      ],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "topics": [
+        "audicion"
+      ],
+      "chunks": [
+        "No oye bien, ¿qué puede ser? (Familia y Salud, AEPap, 2022). Tema: la prueba del recién nacido no descarta una sordera posterior. Hallazgo: unos 2 o 3 de cada 1.000 recién nacidos no oyen bien desde el nacimiento y otros niños pierden audición más tarde. La pérdida puede ser leve, moderada o profunda y afectar a un oído o a los dos; algunas son permanentes, otras empeoran con el tiempo y otras se resuelven, como las debidas a cera u otitis. Una prueba de audición normal al nacer no descarta una pérdida posterior por otitis repetidas, golpes o causas hereditarias, así que la familia debe seguir atenta a cómo reacciona el niño a los sonidos.",
+        "No oye bien, ¿qué puede ser? (Familia y Salud, AEPap, 2022). Tema: signos de alarma de sordera por edades hasta los 3 años. Hallazgo: la página propone sospechar un problema de audición si en los primeros 6 meses el bebé no se sobresalta con ruidos fuertes o bruscos; si a los 6 meses no busca con la mirada ni gira la cabeza hacia un sonido nuevo o cuando se le llama, salvo que vea a quien le habla; si a los 12 meses no usa la voz para llamar la atención; si a los 15 meses no responde a su nombre cuando no ve a quien le llama; si a los 18 meses no dice palabras de sílabas repetidas como mamá o papá ni nombra cosas conocidas; si a los 2 años no imita palabras sencillas ni sigue órdenes simples sin gestos, y si a los 3 años no usa frases de dos palabras.",
+        "No oye bien, ¿qué puede ser? (Familia y Salud, AEPap, 2022). Tema: factores de riesgo y cuándo consultar. Hallazgo: aumentan el riesgo las infecciones en el embarazo (rubeola, sífilis, herpes, citomegalovirus, toxoplasmosis), el alcohol, el tabaco o las drogas en la gestación, un parto difícil, pesar menos de 1.500 g al nacer, estar más de 2 días en cuidados intensivos, una ictericia grave, las malformaciones de cabeza o cara, las otitis crónicas o repetidas, paperas, sarampión, meningitis, los golpes en la cabeza y tener familiares con sordera. Si se duda de que el niño oiga bien, hay que consultar al pediatra; que no responda alguna vez no suele preocupar, pero si ocurre a menudo conviene consultar. Cuanto antes se trate, mejor, sobre todo mientras aprende a hablar."
+      ]
+    },
+    {
+      "source_type": "reference",
+      "title": "Pérdida auditiva: cuándo llamar al pediatra (HealthyChildren, AAP)",
+      "organization": "American Academy of Pediatrics",
+      "publication_year": 2015,
+      "url": "https://www.healthychildren.org/Spanish/health-issues/conditions/ear-nose-throat/Paginas/Hearing-Loss-When-to-Call-the-Pediatrician.aspx",
+      "specialties": [
+        "pediatrics",
+        "general_medicine"
+      ],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "topics": [
+        "audicion"
+      ],
+      "chunks": [
+        "Pérdida auditiva: cuándo llamar al pediatra (HealthyChildren, American Academy of Pediatrics, 2015). Tema: señales de que un bebé puede no oír bien en el primer año. Hallazgo: la AAP aconseja llamar al pediatra si al mes de vida el bebé no se sobresalta con los ruidos fuertes, si a los 3 o 4 meses no se gira hacia el lugar de donde viene un sonido, si no se da cuenta de que usted está hasta que le ve, o si al balbucear se centra en sonidos que puede sentir, como gorgoteos, en lugar de probar una variedad de vocales y consonantes. La página presenta estas señales como motivo para sospechar una pérdida de audición y consultar, sin asignarles un nivel de urgencia.",
+        "Pérdida auditiva: cuándo llamar al pediatra (HealthyChildren, American Academy of Pediatrics, 2015). Tema: señales entre el año y los dos años. Hallazgo: también es motivo de consulta que a los 12-15 meses el habla esté retrasada, cueste entenderle o no diga palabras sueltas como mamá o papá; que no siempre responda cuando se le llama, algo que a menudo se confunde con falta de atención o terquedad y puede deberse a una pérdida parcial; que parezca oír unos sonidos y otros no, porque algunas pérdidas solo afectan a los agudos o a un oído, y que junto a la mala audición le cueste sostener la cabeza o tarde en sentarse o andar sin ayuda, porque en algunas sorderas del oído interno también se afecta el equilibrio."
+      ]
+    },
+    {
+      "source_type": "reference",
+      "title": "Pérdida de la audición en los niños (HealthyChildren, AAP)",
+      "organization": "American Academy of Pediatrics",
+      "publication_year": 2021,
+      "url": "https://www.healthychildren.org/Spanish/health-issues/conditions/ear-nose-throat/Paginas/hearing-loss.aspx",
+      "specialties": [
+        "pediatrics",
+        "general_medicine"
+      ],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "topics": [
+        "audicion"
+      ],
+      "chunks": [
+        "Pérdida de la audición en los niños (HealthyChildren, American Academy of Pediatrics, 2021). Tema: por qué una sordera en el bebé necesita atención inmediata. Hallazgo: el aprendizaje del lenguaje empieza al nacer y depende de oír bien, así que una pérdida de audición que no se reconoce y trata pronto puede causar problemas del desarrollo; incluso una pérdida temporal pero importante en la primera infancia puede dificultar aprender a hablar. Además de las señales del primer año, la página cita tener menos de 5 a 10 palabras a los 18 meses o no combinar 2 o 3 palabras a los 2 años. La pérdida de audición en la infancia requiere atención inmediata, y los audífonos o implantes puestos pronto mejoran mucho el habla y el lenguaje.",
+        "Pérdida de la audición en los niños (HealthyChildren, American Academy of Pediatrics, 2021). Tema: pruebas de audición después del cribado del recién nacido. Hallazgo: si en cualquier momento la familia o el pediatra sospechan una pérdida de audición, hay que pedir enseguida una evaluación formal, aunque el bebé pasara el cribado al nacer. El pediatra puede hacer pruebas iniciales y derivar al audiólogo o al otorrino. En menores de 6 meses o en niños que no colaboran se usan dos pruebas indoloras: los potenciales evocados auditivos de tronco cerebral, que hasta los 3-4 meses pueden hacerse durante el sueño natural, y las otoemisiones acústicas, que se hacen a cualquier edad. Desde los 6 meses puede hacerse una audiometría de comportamiento con estímulos visuales y sonoros.",
+        "Pérdida de la audición en los niños (HealthyChildren, American Academy of Pediatrics, 2021). Tema: pérdidas temporales y permanentes. Hallazgo: la mayoría de los niños tiene alguna vez una pérdida leve cuando se acumula líquido en el oído medio tras congestión, catarros u otitis, y la audición suele volver cuando el líquido drena; en alrededor de 1 de cada 10 niños el líquido persiste por problemas de la trompa de Eustaquio y pueden tardar más en hablar. Las pérdidas permanentes son menos frecuentes: de transmisión, por malformaciones del conducto o del oído medio, cera abundante o líquido persistente, o neurosensoriales, del oído interno o del nervio, a menudo genéticas o por infecciones antes de nacer como la rubeola, el citomegalovirus o la toxoplasmosis."
+      ]
+    },
+    {
+      "source_type": "reference",
+      "title": "Mon enfant entend mal : dépistage, symptômes et diagnostic de la surdité (ameli.fr)",
+      "organization": "Assurance Maladie (ameli.fr)",
+      "publication_year": 2026,
+      "url": "https://www.ameli.fr/assure/sante/themes/surdite-enfant/mon-enfant-entend-mal-depistage-symptomes-et-diagnostic-de-la-surdite",
+      "specialties": [
+        "pediatrics",
+        "general_medicine"
+      ],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "topics": [
+        "audicion"
+      ],
+      "chunks": [
+        "Mon enfant entend mal (Assurance Maladie, ameli.fr, 2026). Tema: controles de audición después del cribado neonatal en Francia. Hallazgo: además del cribado en la maternidad, la audición se vuelve a comprobar en las consultas pediátricas de los 4, 9 y 24 meses, sea cual sea el resultado al nacer. A los 4 meses el control busca sobre todo las sorderas de los dos oídos severas y profundas, y a partir de los 9 meses también las moderadas. Si la prueba del recién nacido no fue concluyente, las exploraciones deben completarse antes de que el bebé cumpla 3 meses. Los resultados se explican a los padres y se anotan en el carnet de salud del niño.",
+        "Mon enfant entend mal (Assurance Maladie, ameli.fr, 2026). Tema: signos de alerta de sordera de 3 a 24 meses. Hallazgo: entre los 3 y los 12 meses alertan unos sonidos poco melodiosos, que no balbucee y que no reaccione a su nombre ni a los ruidos fuertes; entre los 12 y los 24 meses, que no diga palabras, que se comunique sobre todo con gestos, que no preste atención a lo que queda fuera de su campo visual o que emita sonidos extraños sin control. También pueden orientar una respuesta irregular a los sonidos o a la voz. Estos signos no significan necesariamente sordera, pero ante cualquier cambio en el habla o en el comportamiento hay que consultar al pediatra.",
+        "Mon enfant entend mal (Assurance Maladie, ameli.fr, 2026). Tema: a quién consultar y cómo es el estudio de la audición. Hallazgo: ante la duda, ameli aconseja no esperar y hablar primero con el médico de familia o el pediatra, que puede derivar al otorrinolaringólogo. El estudio incluye preguntas sobre factores de riesgo de sordera, una exploración general, el examen de los tímpanos al microscopio para descartar líquido o infección en el oído medio y pruebas de audición adaptadas a la edad: de comportamiento a cualquier edad, timpanometría, otoemisiones y potenciales evocados. Si se busca la causa, pueden pedirse estudios genéticos, de citomegalovirus u otras infecciones y pruebas de imagen."
+      ]
+    },
+    {
+      "source_type": "reference",
+      "title": "Caries en los dientes de leche (Familia y Salud, AEPap)",
+      "organization": "Asociación Española de Pediatría de Atención Primaria (AEPap)",
+      "publication_year": 2013,
+      "url": "https://www.familiaysalud.es/vivimos-sanos/higiene/salud-bucodental/caries-en-los-dientes-de-leche",
+      "specialties": [
+        "pediatrics",
+        "general_medicine"
+      ],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "topics": [
+        "caries_fluor"
+      ],
+      "chunks": [
+        "Caries en los dientes de leche (Familia y Salud, AEPap, 2013, actualizado 2021). Tema: por qué importan las caries de los dientes de leche y cómo empiezan. Hallazgo: la página desmonta la idea de que una caries en un diente de leche no importa porque se va a caer: la caries es un foco de infección que puede destruir el diente, el dolor dificulta comer y la infección puede dañar los dientes vecinos y los definitivos; perder pronto los dientes de leche, que guardan el sitio a los permanentes, favorece la maloclusión. Al principio la caries es una mancha blanca mate que no duele y que puede revertir con una buena limpieza y un tratamiento con flúor del dentista; después se oscurece, se forma un agujero y aparece el dolor.",
+        "Caries en los dientes de leche (Familia y Salud, AEPap, 2013, actualizado 2021). Tema: la caries del biberón. Hallazgo: afecta sobre todo a los incisivos superiores y a los primeros molares y puede ser muy agresiva. Se relaciona con que el niño se duerma con un biberón de zumo u otro líquido azucarado, pero la leche, también la materna, puede producirla si el niño se duerme mamando o con el biberón durante mucho tiempo. Para prevenirla, la página aconseja no poner azúcar en chupetes ni biberones, evitar que el bebé se duerma succionando el pecho o el biberón y que el agua sea la bebida principal cuando empiece a comer otros alimentos; los zumos y refrescos no se recomiendan, sobre todo entre horas.",
+        "Caries en los dientes de leche (Familia y Salud, AEPap, 2013, actualizado 2021). Tema: limpieza de la boca desde los primeros meses y pasta con flúor. Hallazgo: desde los primeros meses se limpian las encías con una gasa húmeda. Cuando sale el primer diente se cepilla con pasta infantil con flúor de 1000 ppm, en una capa fina o barrillo, y a partir de los 3 años con una cantidad del tamaño de un guisante. Se cepilla al menos dos veces al día, después del desayuno y antes de acostarse, y lo ideal es tras cada toma; hay que ayudar al niño a cepillarse hasta los 8 años. Los cuidadores pueden pasar al niño las bacterias de la caries, así que conviene cuidar la propia boca desde el embarazo y no compartir chupetes ni cucharas ni soplar su comida."
+      ]
+    },
+    {
+      "source_type": "reference",
+      "title": "El flúor y la salud dental (Familia y Salud, AEPap)",
+      "organization": "Asociación Española de Pediatría de Atención Primaria (AEPap)",
+      "publication_year": 2016,
+      "url": "https://www.familiaysalud.es/vivimos-sanos/higiene/salud-bucodental/el-fluor-y-la-salud-dental",
+      "specialties": [
+        "pediatrics",
+        "general_medicine"
+      ],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "topics": [
+        "caries_fluor"
+      ],
+      "chunks": [
+        "El flúor y la salud dental (Familia y Salud, Grupo PrevInfad de la AEPap, 2016, actualizado 2020). Tema: pasta con flúor desde el primer diente y cantidad según la edad. Hallazgo: todos los niños con dientes deben cepillárselos dos veces al día con pasta con flúor, desde que sale el primer diente. En menores de 3 años la cantidad es una capa muy fina, comparable a un grano de arroz o a la mitad del cepillo infantil, y a partir de los 3 años se aumenta hasta el tamaño aproximado de un guisante. Hasta los 6 años se recomienda una pasta infantil. Después del cepillado no hay que ofrecer agua a los niños pequeños, para que no traguen la pasta. Según estudios de 2019 que cita la página, los niños que usan pasta fluorada tienen alrededor de un 75 % menos de caries.",
+        "El flúor y la salud dental (Familia y Salud, Grupo PrevInfad de la AEPap, 2016, actualizado 2020). Tema: el flúor que protege es el que toca el diente, y por qué no se dan suplementos a todos. Hallazgo: la página explica que el flúor tópico, el que actúa sobre el diente como el de la pasta, es el que previene la caries. El flúor tragado tiene interés sobre todo antes de que salgan los dientes, y su exceso en esa fase puede causar fluorosis, desde manchas leves hasta la destrucción del esmalte. Por eso los suplementos de flúor por boca ya no se dan a todos los niños: se reservan para niños con alto riesgo de caries, valorados por el dentista, cuando otras vías no son adecuadas y la familia bebe agua sin flúor. La página no indica cantidades de suplemento.",
+        "El flúor y la salud dental (Familia y Salud, Grupo PrevInfad de la AEPap, 2016, actualizado 2020). Tema: qué niños tienen más riesgo de caries y qué hace el profesional. Hallazgo: tienen más riesgo los niños con enfermedades genéticas de los dientes, con discapacidad intelectual, con familiares que tienen caries o con caries activa. En la consulta, el odontopediatra puede poner geles o barnices con flúor concentrado y recomendar enjuagues en casa a los niños de riesgo. La página aconseja acudir al programa de salud bucodental escolar si existe en el municipio, o preguntar al pediatra o a la enfermera por el programa de la comunidad autónoma. También señala que la ósmosis inversa y el carbón activado reducen el flúor del agua, y los descalcificadores no."
+      ]
+    },
+    {
+      "source_type": "reference",
+      "title": "Recomendaciones de los expertos sobre el cuidado de los dientes (Familia y Salud, AEPap)",
+      "organization": "Asociación Española de Pediatría de Atención Primaria (AEPap)",
+      "publication_year": 2024,
+      "url": "https://www.familiaysalud.es/vivimos-sanos/higiene/salud-bucodental/recomendaciones-de-los-expertos-sobre-el-cuidado-de-los",
+      "specialties": [
+        "pediatrics",
+        "general_medicine"
+      ],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "topics": [
+        "caries_fluor"
+      ],
+      "chunks": [
+        "Recomendaciones de los expertos sobre el cuidado de los dientes (Familia y Salud, AEPap, 2024, a partir de la Sociedad Española de Odontopediatría y la AEP). Tema: cepillado de 0 a 3 años. Hallazgo: la limpieza de la boca empieza con la salida del primer diente, hacia los 6 meses, dos veces al día y con especial atención a la noche, limpiando con suavidad la cara delantera y la trasera de los dientes. De 0 a 3 años se usa un cepillo para lactantes y pasta de 1000 ppm de flúor en una cantidad como un grano de arroz o una pequeña mancha. A partir de los 3 años la pasta sigue siendo de 1000 ppm, en una cantidad como un guisante o el ancho del cabezal, y el odontopediatra puede ajustar la concentración según el riesgo de caries de cada niño.",
+        "Recomendaciones de los expertos sobre el cuidado de los dientes (Familia y Salud, AEPap, 2024, a partir de la Sociedad Española de Odontopediatría y la AEP). Tema: quién cepilla, biberón nocturno y primera revisión. Hallazgo: el cepillado debe hacerlo un adulto, porque el niño no suele tener destreza para cepillarse solo antes de los 7 años. No hay que acostar al niño con un biberón que contenga algo distinto del agua, ni mojar el chupete en sustancias dulces, ni soplar sobre su comida para no pasarle la saliva del adulto; durante la dentición se puede ofrecer un mordedor. Se recomienda la revisión por un odontopediatra desde el primer año de vida, dentro del programa de cada comunidad autónoma, y los niños con enfermedades que dificultan la higiene deben derivarse al odontopediatra desde el diagnóstico."
+      ]
+    },
+    {
+      "source_type": "reference",
+      "title": "Baby and toddler tooth care (Best Start in Life, NHS)",
+      "organization": "NHS (National Health Service, Reino Unido)",
+      "publication_year": null,
+      "undated_reason": "Página de Best Start in Life (NHS) sin fecha de revisión visible; consultada el 2026-11-02.",
+      "url": "https://www.nhs.uk/best-start-in-life/how-to-take-care-of-your-baby-or-toddlers-teeth/",
+      "specialties": [
+        "pediatrics",
+        "general_medicine"
+      ],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "topics": [
+        "caries_fluor"
+      ],
+      "chunks": [
+        "Baby and toddler tooth care (Best Start in Life, NHS, Reino Unido). Tema: cuándo empezar a cepillar y cuánta pasta usar. Hallazgo: el NHS indica empezar a cepillar en cuanto asoma el primer diente de leche. En menores de 3 años se cepilla lo último antes de dormir y otra vez durante el día, con una pasta que tenga al menos 1.000 ppm de flúor (la cifra figura en el envase) y en una cantidad como una mancha del tamaño de un grano de arroz; a partir de los 3 años, hasta los 6, se usa una cantidad del tamaño de un guisante. Conviene que escupa la pasta en lugar de tragarla, no enjuagar con agua después porque arrastra el flúor, usar un cepillo de cabeza pequeña y cerdas suaves y guardar la pasta fuera de su alcance.",
+        "Baby and toddler tooth care (Best Start in Life, NHS, Reino Unido). Tema: biberones, azúcar y vasos. Hallazgo: en el biberón solo deben ir leche materna, leche de fórmula o agua enfriada, y el agua puede empezar hacia los 6 meses; no se aconseja seguir con el biberón después del año y nunca hay que poner en él zumos ni bebidas azucaradas. Para los dientes importan tanto la frecuencia y el momento del azúcar como la cantidad: los alimentos y bebidas dulces se dejan para las comidas, no se añade azúcar a la comida ni a la bebida del bebé y se evitan los tentempiés dulces antes de dormir. Se recomienda un vaso abierto o sin válvula para que aprenda a beber a sorbos, y acudir al dentista cuanto antes si se sospecha una caries."
+      ]
+    },
+    {
+      "source_type": "reference",
+      "title": "¿Por qué el fluoruro es bueno para la salud dental de los niños? (HealthyChildren, AAP)",
+      "organization": "American Academy of Pediatrics",
+      "publication_year": 2025,
+      "url": "https://www.healthychildren.org/Spanish/healthy-living/oral-health/Paginas/faq-fluoride-and-children.aspx",
+      "specialties": [
+        "pediatrics",
+        "general_medicine"
+      ],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "topics": [
+        "caries_fluor"
+      ],
+      "chunks": [
+        "¿Por qué el fluoruro es bueno para la salud dental de los niños? (HealthyChildren, American Academy of Pediatrics, 2025). Tema: pasta con fluoruro desde el primer diente. Hallazgo: la AAP aconseja empezar a cepillar con pasta con fluoruro cuando sale el primer diente, con una cantidad del tamaño de una mancha o de un grano de arroz dos veces al día hasta los 3 años, y con una cantidad del tamaño de un guisante a partir de los 3 años. Cuando el niño sea capaz, hay que enseñarle a escupir; no hace falta enjuagar con agua después del cepillado. La primera visita al dentista se programa después de que salga el primer diente.",
+        "¿Por qué el fluoruro es bueno para la salud dental de los niños? (HealthyChildren, American Academy of Pediatrics, 2025). Tema: barniz de fluoruro en la consulta y agua sin flúor. Hallazgo: el pediatra o el dentista pueden pintar los dientes con barniz de fluoruro después de que salga el primer diente; se extiende por arriba y por los lados, se endurece enseguida y en casa se puede quitar con el cepillo pasadas de 4 a 12 horas. Se recomienda de 2 a 4 veces al año hasta los 5 años. Si el agua de casa no tiene fluoruro, por ejemplo agua de pozo, la página remite al pediatra para que valore las opciones; los bebés menores de 6 meses, tomen pecho o fórmula, no necesitan suplementos. La página no indica cantidades de suplemento.",
+        "¿Por qué el fluoruro es bueno para la salud dental de los niños? (HealthyChildren, American Academy of Pediatrics, 2025). Tema: fluorosis. Hallazgo: la fluorosis suele verse como rayas blancas muy tenues en los dientes que a menudo solo nota un profesional; la fluorosis leve no duele ni afecta a la función ni a la salud del diente. Preparar el biberón de fórmula con agua fluorada puede aumentar un poco el riesgo, aunque la mayoría de los casos son leves, y el riesgo desaparece cuando han salido los dientes definitivos, hacia los 8 años."
+      ]
+    },
+    {
+      "source_type": "reference",
+      "title": "¿Cómo se trata la fimosis? (Familia y Salud, AEPap)",
+      "organization": "Asociación Española de Pediatría de Atención Primaria (AEPap)",
+      "publication_year": 2016,
+      "url": "https://www.familiaysalud.es/sintomas-y-enfermedades/genitales/de-ninos/como-se-trata-la-fimosis",
+      "specialties": [
+        "pediatrics",
+        "general_medicine"
+      ],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "topics": [
+        "fimosis"
+      ],
+      "chunks": [
+        "¿Cómo se trata la fimosis? (Familia y Salud, AEPap, 2016, actualizado 2023). Tema: la fimosis del bebé es fisiológica y se resuelve con la edad. Hallazgo: la fimosis es un prepucio demasiado estrecho para bajarlo del todo sobre el glande. La mayoría de los bebés nacen con ella y a menudo se resuelve sola antes de los 3 o 4 años: el prepucio se puede retraer en menos del 5 % de los recién nacidos, en alrededor del 50 % a los 2 años y en cerca del 90 % a los 3 años. Una estrechez leve, un prepucio largo o las adherencias entre glande y prepucio no son fimosis; las adherencias son normales hasta que llega la pubertad, suelen mejorar hacia los 3-4 años y no necesitan tratamiento.",
+        "¿Cómo se trata la fimosis? (Familia y Salud, AEPap, 2016, actualizado 2023). Tema: no forzar el prepucio e higiene. Hallazgo: no se recomienda la retracción forzada del prepucio; la página pide abandonar definitivamente el tirón tradicional, que es muy doloroso y deja cicatrices. Basta con mantener limpia la zona. A partir de los 3-4 años, si la fimosis persiste, el pediatra puede valorar un tratamiento local, acompañado de retracciones suaves y sin dolor, devolviendo después el prepucio a su posición natural. A partir de los 4 años aproximadamente los niños suelen poder retraerlo por sí mismos, y hay que enseñarles a dejarlo en su posición natural.",
+        "¿Cómo se trata la fimosis? (Familia y Salud, AEPap, 2016, actualizado 2023). Tema: cuándo se plantea la cirugía. Hallazgo: la página reserva la cirugía para las balanitis (inflamación del glande) de repetición, las infecciones de orina, la parafimosis, en la que el prepucio retraído atrapa el glande detrás del anillo de piel, y la imposibilidad persistente de retraer el prepucio pese al tratamiento. Las técnicas son la circuncisión o la prepucioplastia, un corte en el anillo del prepucio para los casos leves, y suelen requerir ingreso y anestesia general o local según la edad y la colaboración del niño. La página no fija un nivel de urgencia ni un plazo para la parafimosis."
+      ]
+    },
+    {
+      "source_type": "reference",
+      "title": "Para que no tengan que operarlo de fimosis hay que bajarle la piel (Familia y Salud, AEPap)",
+      "organization": "Asociación Española de Pediatría de Atención Primaria (AEPap)",
+      "publication_year": 2022,
+      "url": "https://www.familiaysalud.es/mito-o-realidad/mito-o-realidad/para-que-no-tengan-que-operarlo-de-fimosis-hay-que-bajarle-la-piel",
+      "specialties": [
+        "pediatrics",
+        "general_medicine"
+      ],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "topics": [
+        "fimosis"
+      ],
+      "chunks": [
+        "Para que no tengan que operarlo de fimosis hay que bajarle la piel (Familia y Salud, Grupo de Educación para la Salud de la AEPap, 2022). Tema: el mito de bajar la piel del pene al bebé. Hallazgo: la página lo califica de falso. Durante años se creyó que había que retraer a la fuerza el prepucio de los bebés para curar la fimosis, pero los estudios muestran que no es así. Casi todos los bebés tienen fimosis al nacer y lo normal es que se resuelva antes de los 3 o 4 años. Forzar la retracción puede producir heridas que dejan cicatriz y, además, puede impedir que la fimosis se resuelva sola.",
+        "Para que no tengan que operarlo de fimosis hay que bajarle la piel (Familia y Salud, AEPap, 2022). Tema: higiene del prepucio y cuándo se plantea operar. Hallazgo: hasta que la fimosis se resuelve, basta con retraer el prepucio con suavidad, solo lo necesario para la higiene durante el baño y sin forzar. La cirugía solo se valora a partir de los 3 o 4 años, o antes, si la fimosis da problemas como infecciones de orina o balanitis (inflamación del glande). Antes de operar, unas retracciones suaves junto con el tratamiento que indique el médico a menudo resuelven el problema. La página no da otros signos de alarma ni niveles de urgencia."
+      ]
+    },
+    {
+      "source_type": "reference",
+      "title": "Tight foreskin (phimosis) (NHS)",
+      "organization": "NHS (National Health Service, Reino Unido)",
+      "publication_year": 2026,
+      "url": "https://www.nhs.uk/conditions/phimosis/",
+      "specialties": [
+        "pediatrics",
+        "general_medicine"
+      ],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "topics": [
+        "fimosis"
+      ],
+      "chunks": [
+        "Tight foreskin (NHS, Reino Unido, revisada en 2026). Tema: el prepucio estrecho es normal en bebés y niños pequeños. Hallazgo: el NHS explica que un prepucio estrecho es normal en bebés y niños pequeños. La mayoría de los niños no pueden retraer el prepucio antes de los 5 años y en algunos no es posible hasta los 10 años o más; al orinar la punta del pene puede hincharse como un globo, sobre todo si el prepucio es estrecho. Como el prepucio se afloja con la edad, a menudo no necesita tratamiento. Nunca hay que retraer el prepucio de un bebé o de un niño pequeño si todavía está adherido, porque puede doler y causar daño. Para la higiene basta con lavar el pene con agua tibia, si acaso con jabón sin perfume, evitando los polvos de talco y los desodorantes.",
+        "Tight foreskin (NHS, Reino Unido, revisada en 2026). Tema: cuándo ver al médico y la parafimosis como emergencia. Hallazgo: suele ser inofensivo salvo que cause hinchazón y dolor, dolor al orinar o un chorro débil, sangre en la orina, infecciones de orina frecuentes, sangrado, una secreción espesa o mal olor. Se pide cita con el médico de familia, sin urgencia, si el prepucio está estrecho e hinchado o duele, si hay sangrado, secreción espesa o mal olor, o si orinar es doloroso o difícil. La parafimosis, cuando el prepucio estrecho queda retraído y no vuelve a cubrir la punta del pene, que se hincha y duele, es una emergencia porque puede cortar el riego: el NHS indica llamar a emergencias o ir de inmediato a urgencias, sin conducir uno mismo."
+      ]
+    },
+    {
+      "source_type": "reference",
+      "title": "Cuidados para un pene no circuncidado: qué deben saber los padres (HealthyChildren, AAP)",
+      "organization": "American Academy of Pediatrics",
+      "publication_year": 2024,
+      "url": "https://www.healthychildren.org/Spanish/ages-stages/baby/bathing-skin-care/Paginas/care-for-an-uncircumcised-penis.aspx",
+      "specialties": [
+        "pediatrics",
+        "general_medicine"
+      ],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "topics": [
+        "fimosis"
+      ],
+      "chunks": [
+        "Cuidados para un pene no circuncidado: qué deben saber los padres (HealthyChildren, American Academy of Pediatrics, 2024). Tema: el prepucio del bebé y por qué no se fuerza. Hallazgo: al nacer, el prepucio está unido al glande y no se puede retraer. La edad a la que se separa varía mucho: rara vez son unas semanas y lo habitual es que tarde meses o años. Una vez separado se puede retraer con suavidad, pero la AAP insiste en que nunca se debe forzar, porque hacerlo antes de tiempo causa mucho dolor, sangrado y desgarros en la piel. Antes de que se separe basta con lavar el pene con agua tibia, sin retraer el prepucio y sin bastoncillos ni antisépticos.",
+        "Cuidados para un pene no circuncidado: qué deben saber los padres (HealthyChildren, American Academy of Pediatrics, 2024). Tema: esmegma y cuándo llamar al pediatra. Hallazgo: los bultitos blancos como perlas bajo el prepucio y una sustancia espesa blanca o amarillenta son esmegma, una mezcla normal de células muertas, grasa y líquidos; si se acumula puede oler o irritar y se aclara con agua tibia. Hay que llamar al pediatra si la abertura del prepucio es tan pequeña que el chorro de orina nunca pasa de un hilo, si el bebé parece molesto o con dolor al orinar, o si el prepucio está rojo o hinchado. La página no precisa con qué urgencia."
+      ]
+    },
+    {
+      "source_type": "reference",
+      "title": "Prépuce non rétractable et phimosis : que faire et quand consulter ? (ameli.fr)",
+      "organization": "Assurance Maladie (ameli.fr)",
+      "publication_year": 2024,
+      "url": "https://www.ameli.fr/assure/sante/themes/phimosis/que-faire-quand-consulter",
+      "specialties": [
+        "pediatrics",
+        "general_medicine"
+      ],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "topics": [
+        "fimosis"
+      ],
+      "chunks": [
+        "Prépuce non rétractable et phimosis (Assurance Maladie, ameli.fr, 2024). Tema: el bebé con un prepucio que no baja. Hallazgo: ameli describe como normal que el prepucio de un lactante no se pueda retraer. Los genitales se lavan con agua y jabón sin retraer el prepucio ni descubrir el glande, y forzar la retracción está totalmente desaconsejado. A medida que crece, el niño puede retraerlo él mismo con suavidad en la ducha; si no, el prepucio puede aflojarse de forma natural, algo que puede tardar hasta la pubertad. Si a partir de los 5 años sigue sin poder retraerse, se comenta con el médico de familia en una revisión, sin urgencia.",
+        "Prépuce non rétractable et phimosis (Assurance Maladie, ameli.fr, 2024). Tema: cuándo consultar con urgencia. Hallazgo: ameli pide una consulta urgente si el glande o el prepucio están inflamados y escuece al orinar, lo que puede indicar una infección de orina, y si tras retraer el prepucio no se consigue volver a cubrir el glande (parafimosis). Sin urgencia se consulta si a partir de los 5 años el niño sigue sin poder retraer el prepucio, si tiene una anomalía de las vías urinarias, si hay una enfermedad de la piel del prepucio o si le cuesta orinar. Forzar la retracción duele y puede causar heridas, infección y cicatrices gruesas que empeoran la fimosis."
+      ]
+    },
+    {
+      "source_type": "reference",
+      "title": "Criptorquidia (Familia y Salud, AEPap)",
+      "organization": "Asociación Española de Pediatría de Atención Primaria (AEPap)",
+      "publication_year": 2011,
+      "url": "https://www.familiaysalud.es/sintomas-y-enfermedades/genitales/de-ninos/criptorquidia",
+      "specialties": [
+        "pediatrics",
+        "general_medicine"
+      ],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "topics": [
+        "testiculo_no_descendido"
+      ],
+      "chunks": [
+        "Criptorquidia (Familia y Salud, AEPap, 2011, actualizado 2017). Tema: qué es un testículo no descendido y con qué frecuencia ocurre. Hallazgo: en la criptorquidia el testículo no está en la bolsa del escroto por una anomalía en su migración: no se palpa en el escroto ni se puede bajar a él, a diferencia del testículo retráctil, que está descendido pero sube y se baja con facilidad. Afecta al 2-8 % de los recién nacidos a término y a alrededor del 30 % de los prematuros, en muchos de los cuales el testículo baja en los primeros meses. Suele ser de un solo lado (85 % de los casos), más a menudo el derecho. La favorecen la prematuridad, el bajo peso al nacer, la diabetes de la madre y la exposición de la madre a sustancias químicas.",
+        "Criptorquidia (Familia y Salud, AEPap, 2011, actualizado 2017). Tema: cuándo se revisa y cuándo se opera. Hallazgo: el diagnóstico se hace palpando los testículos en las revisiones del niño sano, y solo unos pocos necesitan más pruebas: los que tienen los dos testículos sin descender o uno solo junto con otra anomalía genital. Si el testículo no ha descendido de forma espontánea a los 6 meses de vida, hay que derivar al niño a cirugía. El tratamiento de elección es la orquidopexia, y operar antes de los 18-24 meses se asocia a menos riesgo de infertilidad y de cáncer de testículo. Sin tratamiento, la criptorquidia se asocia a peor función del testículo, infertilidad y un riesgo de cáncer testicular un 4-10 % mayor."
+      ]
+    },
+    {
+      "source_type": "reference",
+      "title": "Testículo retráctil: el testículo que sube y baja (Familia y Salud, AEPap)",
+      "organization": "Asociación Española de Pediatría de Atención Primaria (AEPap)",
+      "publication_year": 2013,
+      "url": "https://www.familiaysalud.es/sintomas-y-enfermedades/genitales/de-ninos/testiculo-retractil-el-testiculo-que-sube-y-baja",
+      "specialties": [
+        "pediatrics",
+        "general_medicine"
+      ],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "topics": [
+        "testiculo_no_descendido"
+      ],
+      "chunks": [
+        "Testículo retráctil: el testículo que sube y baja (Familia y Salud, AEPap, 2013, actualizado 2017). Tema: el testículo en ascensor es una variante normal. Hallazgo: el testículo retráctil sube por sí solo fuera del escroto y vuelve a la bolsa espontáneamente o al manipularlo; la página lo considera una variante normal y no una criptorquidia. El diagnóstico se hace con la exploración: el médico palpa los testículos y comprueba si se pueden bajar a la bolsa. La mayoría de estos testículos quedan descendidos de forma definitiva al llegar la pubertad. No hay pruebas de que tengan más riesgo de torsión ni de cáncer de testículo.",
+        "Testículo retráctil: el testículo que sube y baja (Familia y Salud, AEPap, 2013, actualizado 2017). Tema: seguimiento del testículo retráctil. Hallazgo: el testículo retráctil en sí no necesita tratamiento, pero se recomienda una revisión anual para confirmar que no evoluciona a una criptorquidia verdadera, es decir, a que los testículos dejen de estar en la bolsa, algo que ocurre en unos pocos niños. Si eso sucede, hace falta cirugía. Fuera de esa revisión anual, la página no fija edades de control, signos de alarma ni niveles de urgencia."
+      ]
+    },
+    {
+      "source_type": "reference",
+      "title": "Undescended testicles (NHS)",
+      "organization": "NHS (National Health Service, Reino Unido)",
+      "publication_year": 2025,
+      "url": "https://www.nhs.uk/conditions/undescended-testicles/",
+      "specialties": [
+        "pediatrics",
+        "general_medicine"
+      ],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "topics": [
+        "testiculo_no_descendido"
+      ],
+      "chunks": [
+        "Undescended testicles (NHS, Reino Unido, revisada en 2025). Tema: cómo se detecta y cuándo baja solo. Hallazgo: el signo principal es no poder palpar los dos testículos en el escroto, solo uno o ninguno. Suele detectarse en la exploración física del recién nacido, en los primeros días tras el parto. Es frecuente en niños pequeños y a menudo el testículo baja solo, muchas veces en las primeras 12 semanas, y el health visitor lo revisa en los controles habituales. Tienen más riesgo los nacidos antes de las 37 semanas de embarazo, los de bajo peso al nacer y los que tienen familiares con el problema. Si se sospecha o se notan cambios en los testículos, se pide cita con el médico de familia, sin urgencia.",
+        "Undescended testicles (NHS, Reino Unido, revisada en 2025). Tema: cuándo se deriva al especialista y cuándo se opera. Hallazgo: si solo está afectado un testículo y no ha bajado a los 4-5 meses, se suele derivar al especialista; si están afectados los dos, la derivación puede ser antes, normalmente pasadas las 8 semanas. La cirugía para bajar el testículo y fijarlo en el escroto (orquidopexia) se hace normalmente hacia el año de edad, y el NHS la describe como segura y eficaz. Sin tratamiento, un testículo no descendido puede causar problemas de salud, y la página recuerda que en los hombres adultos es raro tenerlo."
+      ]
+    },
+    {
+      "source_type": "reference",
+      "title": "Testículos no descendidos: qué deben saber los padres (HealthyChildren, AAP)",
+      "organization": "American Academy of Pediatrics",
+      "publication_year": 2025,
+      "url": "https://www.healthychildren.org/Spanish/health-issues/conditions/genitourinary-tract/Paginas/undescended-testicles.aspx",
+      "specialties": [
+        "pediatrics",
+        "general_medicine"
+      ],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "topics": [
+        "testiculo_no_descendido"
+      ],
+      "chunks": [
+        "Testículos no descendidos: qué deben saber los padres (HealthyChildren, American Academy of Pediatrics, 2025). Tema: frecuencia y tipos. Hallazgo: es la anomalía genital más frecuente al nacer: afecta a alrededor del 1-3 % de los nacidos a término, a un 30 % de los bebés de menos de 2,4 kg y a casi todos los de menos de 1,4 kg. Muchos testículos bajan solos, a menudo hacia los 6 meses de edad. No suele doler, y el escroto puede verse pequeño o desigual. La página distingue el testículo no descendido desde el nacimiento, el adquirido (estaba en la bolsa y luego subió), el testículo ausente y el retráctil, que entra y sale del escroto, a menudo con el frío, y normalmente no necesita cirugía. El diagnóstico es por exploración en las revisiones y la ecografía no suele hacer falta.",
+        "Testículos no descendidos: qué deben saber los padres (HealthyChildren, American Academy of Pediatrics, 2025). Tema: cuándo se trata y urgencia por torsión. Hallazgo: si el testículo no ha bajado solo a los 6 meses, probablemente necesitará tratamiento, porque después de esa edad esperar rara vez sirve, y se recomienda derivar al urólogo pediátrico. Las inyecciones de hormonas ya no se recomiendan. El tratamiento es la cirugía (orquiopexia), idealmente dentro de los primeros 18 meses, ya que esperar más allá de los 2-3 años puede afectar al crecimiento y la función del testículo. Si un niño con un testículo no descendido se queja de dolor en la ingle o el escroto, hay que llamar al pediatra o ir a urgencias de inmediato, porque una torsión sin tratar puede causar un daño grave y permanente."
+      ]
+    },
+    {
+      "source_type": "reference",
+      "title": "La hernia del ombligo (Familia y Salud, AEPap)",
+      "organization": "Asociación Española de Pediatría de Atención Primaria (AEPap)",
+      "publication_year": 2022,
+      "url": "https://www.familiaysalud.es/sintomas-y-enfermedades/recien-nacido/la-hernia-del-ombligo",
+      "specialties": [
+        "pediatrics",
+        "general_medicine"
+      ],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "topics": [
+        "hernias"
+      ],
+      "chunks": [
+        "La hernia del ombligo (Familia y Salud, AEPap, 2022). Tema: qué es y por qué es tan frecuente en el recién nacido. Hallazgo: la hernia umbilical es un pequeño orificio en la pared del abdomen a la altura del ombligo por el que puede salir una pequeña parte del intestino. Es muy frecuente en el recién nacido sano, en alrededor de 1 de cada 5, y más en los prematuros y en algunos síndromes. Se ve en la exploración y a menudo la notan antes los padres: el bulto aumenta al llorar, toser o hacer caca, es blando y se puede meter hacia dentro. Normalmente no da síntomas ni molesta al bebé, y las complicaciones son muy raras.",
+        "La hernia del ombligo (Familia y Salud, AEPap, 2022). Tema: evolución y cuándo derivar al cirujano. Hallazgo: tras el nacimiento el orificio tiende a cerrarse solo, porque los músculos rectos del abdomen crecen el uno hacia el otro, y en casi todos los casos se cierra antes de los 5 años. Es menos probable que se cierre sola si el orificio es muy grande o si el niño tiene otras enfermedades asociadas. Si el anillo sigue abierto a partir de los 4 años, se deriva al cirujano para valorar el cierre quirúrgico. La página no describe signos de urgencia."
+      ]
+    },
+    {
+      "source_type": "reference",
+      "title": "Hernia e hidrocele (Familia y Salud, AEPap)",
+      "organization": "Asociación Española de Pediatría de Atención Primaria (AEPap)",
+      "publication_year": 2011,
+      "url": "https://www.familiaysalud.es/sintomas-y-enfermedades/genitales/de-ninos/hernia-e-hidrocele",
+      "specialties": [
+        "pediatrics",
+        "general_medicine"
+      ],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "topics": [
+        "hernias"
+      ],
+      "chunks": [
+        "Hernia e hidrocele (Familia y Salud, AEPap, 2011, actualizado 2017). Tema: qué son la hernia inguinal y el hidrocele. Hallazgo: una hernia es la salida de intestino u otro tejido por un orificio anormal; las más frecuentes en los niños son la inguinal y la umbilical. La hernia inguinal y el hidrocele, que es líquido acumulado en el escroto, aparecen cuando persiste un paso entre el abdomen y la ingle. La umbilical se debe a una debilidad de la pared del abdomen y se nota más cuando el bebé llora, tose o hace fuerza. El diagnóstico es por exploración: un bulto en el ombligo o en la ingle, o un escroto hinchado en el caso del hidrocele.",
+        "Hernia e hidrocele (Familia y Salud, AEPap, 2011, actualizado 2017). Tema: estrangulación de la hernia inguinal y cuándo se opera cada una. Hallazgo: la hernia inguinal siempre necesita cirugía programada. La complicación que describe la página es la estrangulación, en la que el intestino queda atrapado en la hernia y pierde riego; sus signos son dolor continuo, enrojecimiento, vómitos y afectación del estado general, y en ese caso la operación se hace de urgencia. Las hernias umbilicales vistas antes de los 6 meses y no muy grandes suelen desaparecer con el tiempo sin tratamiento, y no deben usarse bragueros, vendajes, monedas ni esparadrapo; se operan si hasta los 4-5 años no se han resuelto o si son muy grandes. El hidrocele que no se ha resuelto a los 2 años se opera."
+      ]
+    },
+    {
+      "source_type": "reference",
+      "title": "Umbilical hernia (NHS)",
+      "organization": "NHS (National Health Service, Reino Unido)",
+      "publication_year": 2025,
+      "url": "https://www.nhs.uk/conditions/umbilical-hernia/",
+      "specialties": [
+        "pediatrics",
+        "general_medicine"
+      ],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "topics": [
+        "hernias"
+      ],
+      "chunks": [
+        "Umbilical hernia (NHS, Reino Unido, revisada en 2025). Tema: la hernia del ombligo en bebés y niños. Hallazgo: es un bulto en la tripa donde el intestino o la grasa empujan a través de un punto débil del músculo cerca del ombligo, y suele ser indoloro. Muchos bebés nacen con ella y en bebés y niños va desde el tamaño de un guisante hasta unos 2 cm. Los niños normalmente no necesitan tratamiento, porque suele desaparecer antes de los 5 años; en los adultos, en cambio, se suele recomendar cirugía porque es poco probable que mejore sola. Si se cree que el niño tiene una hernia umbilical, se pide cita con el médico de familia sin urgencia, y también si el bulto duele, está duro, no se mueve, crece o no desaparece.",
+        "Umbilical hernia (NHS, Reino Unido, revisada en 2025). Tema: cuándo es una emergencia. Hallazgo: el NHS indica llamar a emergencias si hay un dolor de tripa muy fuerte que no se va, náuseas, vómitos o no se puede retener la comida, si la hernia está más hinchada de lo habitual y la piel de alrededor ha cambiado de color, o si no se pueden expulsar gases ni hacer caca, y pide no ir conduciendo uno mismo a urgencias. La complicación que describe es la hernia estrangulada, en la que se bloquea el riego del intestino: es una emergencia que puede llevar a sepsis o gangrena y necesita cirugía lo antes posible."
+      ]
+    },
+    {
+      "source_type": "reference",
+      "title": "Hernia umbilical en bebés y niños (HealthyChildren, AAP)",
+      "organization": "American Academy of Pediatrics",
+      "publication_year": 2021,
+      "url": "https://www.healthychildren.org/Spanish/health-issues/conditions/abdominal/Paginas/umbilical-hernia-in-children.aspx",
+      "specialties": [
+        "pediatrics",
+        "general_medicine"
+      ],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "topics": [
+        "hernias"
+      ],
+      "chunks": [
+        "Hernia umbilical en bebés y niños (HealthyChildren, American Academy of Pediatrics, 2021). Tema: qué es y cómo evoluciona. Hallazgo: alrededor de 1 de cada 5 recién nacidos tiene una pequeña abertura en el músculo bajo el ombligo por la que puede salir parte del intestino, cubierta solo por piel. El signo habitual es un bulto en el ombligo que aparece y desaparece: crece al llorar o hacer fuerza y se reduce cuando el niño está tranquilo. Alrededor del 90 % se cierran solas hacia los 4 años sin tratamiento, y el tamaño de la abertura del músculo predice mejor el cierre que lo que sobresale el bulto. Es seguro esperar hasta los 4 años aproximadamente antes de plantear la cirugía, que es el único tratamiento si no se cierra.",
+        "Hernia umbilical en bebés y niños (HealthyChildren, American Academy of Pediatrics, 2021). Tema: signos de alarma y fajas. Hallazgo: la mayoría de las hernias umbilicales no causan ningún problema; muy rara vez el intestino queda atrapado y el bulto se ve incluso con el niño tranquilo, y todavía más rara vez se estrangula. Si el niño tiene un dolor fuerte, el ombligo muy sensible, el bulto rojo, fiebre o vómitos, o rechaza la comida, debe ser atendido de inmediato: hay que llamar al pediatra o ir a urgencias. Las fajas y otros dispositivos para sujetar la hernia no funcionan y pueden empeorarla o dañar la piel."
+      ]
+    },
+    {
+      "source_type": "reference",
+      "title": "Hernia inguinal en bebés y niños (HealthyChildren, AAP)",
+      "organization": "American Academy of Pediatrics",
+      "publication_year": 2023,
+      "url": "https://www.healthychildren.org/Spanish/health-issues/conditions/abdominal/Paginas/Inguinal-Hernia.aspx",
+      "specialties": [
+        "pediatrics",
+        "general_medicine",
+        "emergency_medicine"
+      ],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "topics": [
+        "hernias"
+      ],
+      "chunks": [
+        "Hernia inguinal en bebés y niños (HealthyChildren, American Academy of Pediatrics, 2023). Tema: qué es y cómo se nota. Hallazgo: aparece en la ingle, entre la tripa y el muslo, y en los niños suele hinchar el escroto, aunque también la tienen las niñas. Se forma antes de nacer, cuando no se cierra un conducto que comunica el abdomen con la ingle. Nacen con ella un 3-5 % de los bebés sanos a término y alrededor del 30 % de los prematuros. Se ve como un bulto en la ingle o el escroto que suele aparecer al llorar o hacer fuerza y se reduce o desaparece en reposo o dormido; es más frecuente en recién nacidos y puede no notarse hasta semanas o meses después. Llorar o hacer fuerza no causa hernias.",
+        "Hernia inguinal en bebés y niños (HealthyChildren, American Academy of Pediatrics, 2023). Tema: por qué necesita al médico y signos de hernia atrapada. Hallazgo: la hernia inguinal necesita reparación quirúrgica, porque sin tratar puede dar problemas graves, y se deriva al cirujano o al urólogo pediátrico. Está atrapada (incarcerada) cuando el bulto sigue firme aunque el niño esté relajado, con dolor constante o al tocarla, a veces vómitos y un bulto más duro o rojo: requiere atención médica inmediata. Si se estrangula y se corta el riego aparecen dolor fuerte, vómitos, poco apetito, enrojecimiento o moratón alrededor del bulto y a veces fiebre o heces con sangre. La AAP pide no ignorar nunca el dolor ni un bulto en un bebé y llamar al médico cuanto antes o ir a urgencias.",
+        "Hernia inguinal en bebés y niños (HealthyChildren, American Academy of Pediatrics, 2023). Tema: diferencia con el hidrocele y la operación. Hallazgo: el hidrocele es un saco con líquido, no con intestino, que puede parecerse; no suele necesitar cirugía inmediata salvo que duela y a menudo se vigila hasta los 12-18 meses. La hernia se repara por una pequeña incisión cerca del bulto o por laparoscopia, en 30 minutos a 1 hora, casi siempre con anestesia general y de forma ambulatoria, aunque los prematuros pueden quedarse una noche. Después hay que llamar al cirujano si hay sangrado o pus en la herida, enrojecimiento alrededor, fiebre de más de 38,3 °C, vómitos o menos pañales mojados de lo normal. Tener hernia en un lado aumenta la probabilidad de tenerla en el otro."
+      ]
+    },
+    {
+      "source_type": "reference",
+      "title": "Reconnaître une hernie inguinale de l'enfant (ameli.fr)",
+      "organization": "Assurance Maladie (ameli.fr)",
+      "publication_year": 2024,
+      "url": "https://www.ameli.fr/assure/sante/themes/hernie-inguinale-enfant/reconnaitre-une-hernie-inguinale-de-l-enfant",
+      "specialties": [
+        "pediatrics",
+        "general_medicine",
+        "emergency_medicine"
+      ],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "topics": [
+        "hernias"
+      ],
+      "chunks": [
+        "Reconnaître une hernie inguinale de l'enfant (Assurance Maladie, ameli.fr, 2024). Tema: cómo se descubre en el lactante y qué hacer si va y viene. Hallazgo: los padres suelen descubrirla en el baño o al cambiar el pañal: un bulto en la ingle que aparece con los esfuerzos (gritos, llanto, hacer caca) y desaparece cuando el niño está tranquilo; en el niño puede bajar a la bolsa del escroto y en la niña al labio mayor. El médico puede verla en la revisión de los 8 días o en las de los 2 primeros meses. Si la hernia solo se ve a ratos y el niño está bien, se comenta con el médico en la siguiente consulta. Una hernia inguinal del niño no se cura sola y necesita cirugía para evitar que se estrangule.",
+        "Reconnaître une hernie inguinale de l'enfant (Assurance Maladie, ameli.fr, 2024). Tema: signos de hernia estrangulada y urgencia. Hallazgo: si la hernia ha salido y no vuelve a entrar, está hinchada y sensible al tocarla y el niño llora, puede estar estrangulada y hay que consultar inmediatamente. En la estrangulación la hernia aumenta de tamaño, se pone roja y duele, y el niño llora y rechaza comer; sin intervención puede vomitar, el intestino puede obstruirse y el ovario o el testículo dejan de recibir bien la sangre y se dañan, así que la cirugía es urgente. El riesgo es mayor en los menores de 6 meses y en los prematuros. En las niñas el médico no intenta meter la hernia porque puede contener el ovario."
+      ]
+    },
+    {
+      "source_type": "reference",
+      "title": "Prevención y manejo de la plagiocefalia postural: a buen tiempo, buenas formas (Familia y Salud, AEPap)",
+      "organization": "Asociación Española de Pediatría de Atención Primaria (AEPap)",
+      "publication_year": 2011,
+      "url": "https://www.familiaysalud.es/podemos-prevenir/eventos-del-desarrollo/deteccion-precoz/prevencion-y-manejo-de-la-plagiocefalia",
+      "specialties": [
+        "pediatrics",
+        "general_medicine"
+      ],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "topics": [
+        "plagiocefalia"
+      ],
+      "chunks": [
+        "Prevención y manejo de la plagiocefalia postural (Familia y Salud, AEPap, 2011, actualizado 2019). Tema: qué es la cabeza plana postural y por qué aparece. Hallazgo: es una asimetría de la cabeza del lactante con aplanamiento de un lado de la parte de atrás del cráneo, a veces con la oreja desplazada hacia delante, un ojo más abierto o la frente más prominente, sin cierre precoz de las suturas. Se debe a apoyar la cabeza siempre sobre el mismo lado en las primeras semanas, dormido y despierto, porque el cráneo es moldeable; la favorecen la tortícolis muscular congénita y algunas enfermedades neuromusculares. Su frecuencia aumentó con la recomendación de dormir boca arriba para prevenir la muerte súbita, que la página mantiene. Suele ser un problema estético y no se ha demostrado que afecte al desarrollo del cerebro.",
+        "Prevención y manejo de la plagiocefalia postural (Familia y Salud, AEPap, 2011, actualizado 2019). Tema: prevención desde los primeros días. Hallazgo: la medida que la página considera sencilla, segura y muy eficaz es acostar al bebé boca arriba desde los primeros días alternando la orientación de la cabeza en cada acostada, un día hacia un lado y al siguiente hacia el otro. Cambiar la orientación de la cuna respecto a la cama de los padres tiene poca o ninguna eficacia. El tiempo boca abajo, siempre vigilado, es útil para el vínculo y el desarrollo muscular, pero según esta página no previene la plagiocefalia, y tampoco la previenen los brazos, las mochilas ni las sillas. Los posicionadores y cojines vendidos como preventivos de la cabeza plana no han demostrado ser seguros ni eficaces, y el riesgo de asfixia y muerte súbita supera cualquier beneficio.",
+        "Prevención y manejo de la plagiocefalia postural (Familia y Salud, AEPap, 2011, actualizado 2019). Tema: tratamiento y cuándo consultar. Hallazgo: hay que consultar pronto si aparece un aplanamiento de la nuca, con o sin inclinación de la cabeza y el cuello. El tratamiento es el reposicionamiento postural: que el bebé se apoye solo sobre el lado contrario al aplanado. Lo ideal es empezar antes de los 4-6-8 meses, porque las posibilidades de éxito disminuyen hacia los 12 meses. La fisioterapia de estiramientos solo se recomienda si hay tortícolis muscular asociada, y la osteopatía y la cirugía no son útiles. La página califica los cascos de controvertidos: son caros, no son más eficaces que el reposicionamiento, tienen efectos adversos y requieren consentimiento informado. Si no mejora con un tratamiento correcto, se valoran otros diagnósticos como la craneosinostosis."
+      ]
+    },
+    {
+      "source_type": "reference",
+      "title": "Flat head syndrome (plagiocephaly and brachycephaly) (NHS)",
+      "organization": "NHS (National Health Service, Reino Unido)",
+      "publication_year": 2026,
+      "url": "https://www.nhs.uk/conditions/plagiocephaly-brachycephaly/",
+      "specialties": [
+        "pediatrics",
+        "general_medicine"
+      ],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "topics": [
+        "plagiocefalia",
+        "torticolis"
+      ],
+      "chunks": [
+        "Flat head syndrome (NHS, Reino Unido, revisada en 2026). Tema: qué es la cabeza plana y cómo evoluciona. Hallazgo: algunos bebés tienen la cabeza plana a los pocos meses porque pasan mucho tiempo tumbados; suele no ser motivo de preocupación y mejora con el crecimiento. Puede estar aplanada por un lado (plagiocefalia), con las orejas desalineadas, o por detrás (braquicefalia), con la cabeza ancha y a veces la frente abombada. No da otros síntomas ni afecta al cerebro ni al desarrollo. Se debe a la presión sobre el cráneo blando al apoyar la cabeza en el colchón o a músculos del cuello tensos (tortícolis) que hacen que el bebé prefiera un lado; algunos nacen así, sobre todo los prematuros, y rara vez indica algo más serio como la craneosinostosis.",
+        "Flat head syndrome (NHS, Reino Unido, revisada en 2026). Tema: cómo evitar que empeore. Hallazgo: el NHS aconseja vigilar la forma de la cabeza, porque detectarlo pronto facilita que no empeore; ofrecer mucho tiempo boca abajo mientras el bebé está despierto y vigilado, sin dejarlo nunca solo así; mover juguetes y móviles cuando está boca arriba para animarle a girar la cabeza; alternar el lado por el que se le alimenta y se le lleva en brazos, y no dejarlo demasiado tiempo en el cochecito o la silla del coche, sacándolo al llegar. Para dormir debe seguir boca arriba, porque así se reduce el riesgo de muerte súbita del lactante.",
+        "Flat head syndrome (NHS, Reino Unido, revisada en 2026). Tema: tratamiento, cascos y cuándo consultar. Hallazgo: normalmente no necesita tratamiento y a menudo mejora en 1 o 2 años, a medida que la cabeza crece y el bebé pasa menos tiempo boca arriba; variar la postura al cogerlo y al alimentarlo ayuda. Si tiene los músculos del cuello tensos (tortícolis) se le puede derivar al fisioterapeuta, que enseña ejercicios suaves. Los cascos y bandas no se ofrecen en el NHS para la cabeza plana porque no hay pruebas suficientes de que funcionen. Se pide cita con el médico de familia, sin urgencia, si preocupa la forma o el tamaño de la cabeza, o si el bebé tiene siempre la cabeza inclinada hacia un lado o le cuesta girarla."
+      ]
+    },
+    {
+      "source_type": "reference",
+      "title": "Cuando la cabeza de un bebé se deforma: deformidad craneal postural (HealthyChildren, AAP)",
+      "organization": "American Academy of Pediatrics",
+      "publication_year": 2020,
+      "url": "https://www.healthychildren.org/Spanish/health-issues/conditions/Cleft-Craniofacial/Paginas/positional-skull-deformities-and-torticollis.aspx",
+      "specialties": [
+        "pediatrics",
+        "general_medicine"
+      ],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "topics": [
+        "plagiocefalia",
+        "torticolis"
+      ],
+      "chunks": [
+        "Cuando la cabeza de un bebé se deforma (HealthyChildren, American Academy of Pediatrics, 2020). Tema: frecuencia y causas de la deformidad craneal postural. Hallazgo: aparece cuando el bebé pasa mucho tiempo en la misma posición; afecta a alrededor del 20 % de los bebés, a menudo entre las 4 y las 12 semanas, antes de que puedan levantar o mover la cabeza por sí mismos, y hacia los 6 meses la mayoría ya se mueve más. No afecta al crecimiento del cerebro ni al desarrollo intelectual, es sobre todo estética y casi nunca necesita cirugía. La favorecen una posición preferida de la cabeza, poco tiempo boca abajo despierto, ser gemelo o trillizo, la prematuridad, un parto difícil y la tortícolis: alrededor del 85 % de los bebés con tortícolis tienen esta deformidad.",
+        "Cuando la cabeza de un bebé se deforma (HealthyChildren, American Academy of Pediatrics, 2020). Tema: prevención en casa sin dejar de dormir boca arriba. Hallazgo: el bebé debe seguir durmiendo boca arriba. Mientras está despierto y vigilado conviene ponerlo boca abajo, empezando con ratos cortos y aumentando poco a poco hasta alrededor de una hora al día repartida en varios ratos, lo que también fortalece cuello, espalda, hombros, brazos y caderas. Ayuda limitar el tiempo en sillas de coche, hamacas, columpios y portabebés, alternar el brazo con que se le sostiene y alimenta y alternar el extremo de la cuna en que duerme. Un buen momento para revisar la cabeza es después del baño, con el pelo mojado: la parte de atrás debe verse redondeada y las orejas y la frente simétricas.",
+        "Cuando la cabeza de un bebé se deforma (HealthyChildren, American Academy of Pediatrics, 2020). Tema: fisioterapia, casco y cuándo consultar. Hallazgo: los bebés con tortícolis, con los músculos del cuello tensos o desequilibrados, necesitan además fisioterapia: el pediatra puede derivar a atención temprana y a un fisioterapeuta pediátrico, que enseña a los padres ejercicios de estiramiento y de posición para casa, a veces con sesiones semanales. Si un aplanamiento moderado o grave no mejora hacia los 5 o 6 meses, el bebé puede necesitar un casco corrector, que ajusta un especialista. La cirugía solo se plantea cuando se han agotado las demás opciones. Hay que hablar con el pediatra ante cualquier cambio en la forma de la cabeza o dudas sobre su desarrollo."
+      ]
+    },
+    {
+      "source_type": "reference",
+      "title": "Prévenir la tête plate : conseils aux parents (HAS)",
+      "organization": "Haute Autorité de Santé (HAS)",
+      "publication_year": 2021,
+      "url": "https://www.has-sante.fr/jcms/p_3220369/fr/prevenir-la-tete-plate-conseils-aux-parents",
+      "specialties": [
+        "pediatrics",
+        "general_medicine"
+      ],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "topics": [
+        "plagiocefalia"
+      ],
+      "chunks": [
+        "Prévenir la tête plate (Haute Autorité de Santé, HAS, consejos a los padres, 2021). Tema: dormir boca arriba y libre para moverse. Hallazgo: la HAS explica que la cabeza plana no es grave y que se puede prevenir y corregir. Para reducir el riesgo de muerte inesperada del lactante se sigue acostando al bebé boca arriba, sobre un colchón firme y en saco de dormir, con la cuna libre de juguetes y otros objetos para evitar la asfixia. Pide no usar protectores de cuna, sujetacabezas ni posicionadores, para que el bebé pueda mover libremente la cabeza y el cuerpo de día y de noche y mirar en todas las direcciones.",
+        "Prévenir la tête plate (Haute Autorité de Santé, HAS, consejos a los padres, 2021). Tema: qué hacer cuando el bebé está despierto y cuándo ir al médico. Hallazgo: con el bebé despierto, la HAS aconseja variar sus posiciones jugando en el suelo, con juguetes a su alrededor para que mire a los dos lados; acostumbrarlo poco a poco a estar boca abajo durante los cambios de pañal, para fortalecer cuello y espalda; cogerlo a menudo en brazos; cambiar de brazo en cada toma para que gire la cabeza buscando la mirada del adulto, y limitar el tiempo en hamacas, balancines y capazos, reservando la silla del coche para los viajes. Si los padres creen que la cabeza del bebé está plana, deben pedir cita con su médico, que lo examinará y les aconsejará."
+      ]
+    },
+    {
+      "source_type": "guideline",
+      "title": "Prévention des déformations crâniennes positionnelles (DCP) et mort inattendue du nourrisson (HAS)",
+      "organization": "Haute Autorité de Santé (HAS)",
+      "publication_year": 2020,
+      "url": "https://www.has-sante.fr/jcms/p_3151574/fr/prevention-des-deformations-craniennes-positionnelles-dcp-et-mort-inattendue-du-nourrisson",
+      "specialties": [
+        "pediatrics",
+        "general_medicine"
+      ],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "topics": [
+        "plagiocefalia",
+        "torticolis"
+      ],
+      "chunks": [
+        "Prévention des déformations crâniennes positionnelles (DCP) et mort inattendue du nourrisson (Haute Autorité de Santé, HAS, recomendación de buena práctica, 2020). Tema: prevenir la deformación sin aumentar el riesgo de muerte súbita. Hallazgo: el bebé se acuesta boca arriba en cada sueño, en una cuna con colchón firme; dormir boca abajo es el principal factor de riesgo y de lado también es arriesgado. Los cojines, cuñas y sujetacabezas son inútiles o peligrosos. Despierto, hay que variar su posición y animarle a girar la cabeza con estímulos, dejarle jugar boca abajo con vigilancia constante, usar una alfombra firme con juguetes alrededor y llevarlo en brazos o en fular con la vía respiratoria libre. El principal factor de riesgo de deformación es la falta de movimiento espontáneo.",
+        "Prévention des déformations crâniennes positionnelles (DCP) et mort inattendue du nourrisson (HAS, 2020). Tema: tortícolis y fisioterapia. Hallazgo: la HAS distingue la tortícolis postural, intermitente y sin limitación del giro pasivo del cuello, de la tortícolis muscular congénita, permanente y con el giro pasivo limitado, y recomienda derivar en ambos casos a un fisioterapeuta con orientación pediátrica. Cuando la movilidad del cuello está limitada, los consejos de posición y la fisioterapia son el tratamiento de primera línea y la fisioterapia debe prescribirse siempre; cuanto antes empiecen mejor, y empezar en el primer mes da la mejor probabilidad de normalización. La movilidad del cuello suele mejorar más deprisa que la forma del cráneo.",
+        "Prévention des déformations crâniennes positionnelles (DCP) et mort inattendue du nourrisson (HAS, 2020). Tema: seguimiento, osteopatía y casco. Hallazgo: la deformación y la craneosinostosis se buscan al nacer y en cada revisión hasta el año, porque la deformación suele aparecer después; en general basta la exploración y no se recomiendan pruebas de imagen de entrada. No hay datos que muestren que la deformación cause problemas del neurodesarrollo, de la vista o del equilibrio. Los datos actuales no permiten recomendar la osteopatía. Si no mejora con el tratamiento adecuado, se deriva pronto, hacia el final del primer semestre, a un centro de referencia de malformaciones craneofaciales; el casco u ortesis craneal es excepcional y solo pueden indicarlo esos equipos."
+      ]
+    },
+    {
+      "source_type": "reference",
+      "title": "Tortícolis congénita. Qué es y qué podemos hacer para tratarla (Familia y Salud, AEPap)",
+      "organization": "Asociación Española de Pediatría de Atención Primaria (AEPap)",
+      "publication_year": 2013,
+      "url": "https://www.familiaysalud.es/sintomas-y-enfermedades/recien-nacido/torticolis-congenita-que-es-y-que-podemos-hacer-para-tratarla",
+      "specialties": [
+        "pediatrics",
+        "general_medicine"
+      ],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "topics": [
+        "torticolis"
+      ],
+      "chunks": [
+        "Tortícolis congénita. Qué es y qué podemos hacer para tratarla (Familia y Salud, AEPap, 2013, actualizado 2023). Tema: qué es y cómo se detecta. Hallazgo: en la tortícolis congénita o cuello torcido el bebé inclina la cabeza hacia un lado mientras la barbilla mira al otro. Casi siempre es muscular o postural y afecta al músculo esternocleidomastoideo, que puede acortarse por la postura al final del embarazo o volverse rígido o formar un bulto tras el parto; una fractura de clavícula en el parto también puede hacer que gire la cabeza hacia un lado. Suele notarse entre las 2 y las 4 semanas de vida, a veces desde el nacimiento. El pediatra revisa la postura de la cabeza en las revisiones y descarta causas menos frecuentes; normalmente no hacen falta pruebas. La consecuencia más común es la plagiocefalia postural.",
+        "Tortícolis congénita. Qué es y qué podemos hacer para tratarla (Familia y Salud, AEPap, 2013, actualizado 2023). Tema: medidas posturales en casa. Hallazgo: el tratamiento lo hace sobre todo la familia: acostar siempre al bebé boca arriba alternando la cabeza y girándola más hacia el lado que menos le gusta; ofrecer el pecho o el biberón por el lado que más le cuesta; llevarlo en brazos o en portabebés de forma que tenga que mirar hacia ese lado, y colocarlo en la cuna o el cambiador para que deba girar la barbilla hacia el lado afectado para ver la habitación o a sus padres. A partir de las 4-6 semanas de vida se le pone boca abajo unos minutos, 3 o 4 veces al día y vigilado, para fortalecer cuello y espalda. La página describe además ejercicios pasivos suaves para mejorar el giro y la inclinación del cuello.",
+        "Tortícolis congénita. Qué es y qué podemos hacer para tratarla (Familia y Salud, AEPap, 2013, actualizado 2023). Tema: cuándo ir al fisioterapeuta y cuánto tarda en mejorar. Hallazgo: casi todos los casos son leves y se resuelven con el manejo en casa, y cuanto antes se empiece, mejor. Se recomienda acudir al fisioterapeuta en las formas graves, con gran acortamiento del músculo con o sin bulto, cuando el tratamiento empieza después de los 3 meses, si no hay mejoría tras 4 a 6 semanas de manejo básico, cuando hay otros problemas o cuando lo indica el pediatra. En casi todos los bebés se nota una mejoría clara en unos 2-3 meses, aunque pueden hacer falta hasta 12 meses para que se corrija del todo; si no mejora, el pediatra decide si derivar."
+      ]
+    },
+    {
+      "source_type": "reference",
+      "title": "Fisioterapia para la tortícolis muscular congénita (Familia y Salud, AEPap)",
+      "organization": "Asociación Española de Pediatría de Atención Primaria (AEPap)",
+      "publication_year": 2022,
+      "url": "https://www.familiaysalud.es/sintomas-y-enfermedades/recien-nacido/fisioterapia-para-la-torticolis-muscular-congenita",
+      "specialties": [
+        "pediatrics",
+        "general_medicine"
+      ],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "topics": [
+        "torticolis"
+      ],
+      "chunks": [
+        "Fisioterapia para la tortícolis muscular congénita (Familia y Salud, AEPap, 2022). Tema: en qué consiste la fisioterapia. Hallazgo: la tortícolis muscular congénita es una banda fibrosa o un bulto en el músculo esternocleidomastoideo del cuello presente ya al nacer; es frecuente y tiene varias causas. La fisioterapeuta autora describe un tratamiento en tres fases: una preparatoria, con balanceos suaves y masaje para relajar el tono del músculo; otra de movilizaciones pasivas, con estiramientos y estímulos de sonido y tacto a los dos lados para ganar simetría, y otra de estimulación, en la que se anima al bebé a moverse en la dirección que corrige la postura con volteos, el paso de tumbado a sentado y juguetes que le hagan mirar y girar hacia el lado deseado.",
+        "Fisioterapia para la tortícolis muscular congénita (Familia y Salud, AEPap, 2022). Tema: ejercicios en casa y posturas al cogerlo y alimentarlo. Hallazgo: el fisioterapeuta enseña a los padres los ejercicios para que los repitan en casa, de 4 a 5 veces al día durante unos 15 minutos. Al llevarlo en brazos, la cabeza del bebé debe quedar girada hacia el lado contrario al afectado, sujetándola con la barbilla del adulto. Para alimentarlo se le coloca de modo que el cuello gire hacia el lado contrario al afectado; si el pecho queda en el lado opuesto, la madre adelanta el pezón para que el bebé lo busque en la dirección que corrige. La página no da edades, pronóstico ni signos de alarma, que deja para su artículo sobre la tortícolis congénita."
+      ]
+    },
+    {
+      "source_type": "reference",
+      "title": "Inclinación de la cabeza (Tortícolis) (HealthyChildren, AAP)",
+      "organization": "American Academy of Pediatrics",
+      "publication_year": 2020,
+      "url": "https://www.healthychildren.org/Spanish/health-issues/conditions/Cleft-Craniofacial/Paginas/Head-Tilt.aspx",
+      "specialties": [
+        "pediatrics",
+        "general_medicine"
+      ],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "topics": [
+        "torticolis"
+      ],
+      "chunks": [
+        "Inclinación de la cabeza (HealthyChildren, American Academy of Pediatrics, 2020). Tema: la tortícolis muscular congénita. Hallazgo: el niño mantiene la cabeza o el cuello torcidos, a menudo inclinados hacia un hombro con la cara girada hacia el otro lado, y puede tener la cabeza aplanada por un lado. En menores de cinco años la causa más frecuente es la tortícolis muscular congénita, ligada a la postura en el útero, que suele detectarse en las primeras 6 a 8 semanas de vida: el músculo esternocleidomastoideo está tenso y en la mitad de los casos se palpa un bultito en él. Sin tratamiento puede dejar una asimetría permanente de la cara o limitar el movimiento de la cabeza, por lo que la AAP insiste en buscar tratamiento pronto.",
+        "Inclinación de la cabeza (HealthyChildren, American Academy of Pediatrics, 2020). Tema: estiramientos y posturas en casa. Hallazgo: el médico enseña a los padres a mover suavemente la cabeza del bebé en dirección contraria a la inclinación varias veces al día, aumentando poco a poco el recorrido a medida que el músculo se suelta. Para dormir se le acuesta boca arriba con la cabeza girada hacia el lado contrario a la inclinación, y despierto se colocan las cosas que le interesa mirar, como ventanas, imágenes o actividad, en el lado opuesto a la lesión, para que estire el músculo tenso; también puede aconsejarse tiempo boca abajo con la cara girada lejos del lado afectado. El pediatra puede derivar a un fisioterapeuta, y estas medidas curan la gran mayoría de los casos y suelen evitar la cirugía.",
+        "Inclinación de la cabeza (HealthyChildren, American Academy of Pediatrics, 2020). Tema: si no mejora y otras causas de cabeza inclinada. Hallazgo: si la inclinación no mejora con los ejercicios y los cambios de postura, se deriva al neurólogo o al ortopeda pediátrico, y a veces hace falta cirugía para alargar el tendón afectado. Algunos niños con tortícolis congénita tienen también displasia de cadera, por lo que puede pedirse una radiografía o una ecografía de la cadera. La página recuerda que una cabeza inclinada puede deberse también a una pérdida de audición, a ojos desalineados, al reflujo, a una infección de garganta o de ganglios y, mucho menos a menudo, a un tumor cerebral, y que la tortícolis adquirida por inflamación o lesión suele empezar de forma brusca y muy dolorosa, sobre todo en niños mayores."
+      ]
+    }
+  ]
+}
