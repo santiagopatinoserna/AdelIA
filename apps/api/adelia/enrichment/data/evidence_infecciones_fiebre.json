@@ -1,0 +1,582 @@
+{
+  "_meta": {
+    "topic": "Infecciones frecuentes y fiebre de 0 a 24 meses: qué es la fiebre y cómo medirla, cuidados en casa y signos de alarma por edad (también en menores de 3 meses), gastroenteritis y rehidratación oral, varicela, roséola o exantema súbito, enfermedad boca-mano-pie, conjuntivitis infecciosa, infección de orina del lactante y convulsión febril",
+    "compiled": "2026-11-02",
+    "method": "Lectura directa el 2026-11-02 de cada página pública citada (Familia y Salud de la AEPap, HealthyChildren.org de la AAP, NHS, ameli.fr y Ministerio de Sanidad); cada cifra, edad, signo de alarma y nivel de urgencia procede de la página citada en su propio fragmento. Las páginas de EnFamilia (AEP), SEUP, NICE, HAS y mpedia.fr no se pudieron leer ese día y no se usaron.",
+    "caveat": "Resúmenes en español de fuentes en español, inglés y francés; los fragmentos son paráfrasis con las cifras, edades y niveles de urgencia del original, no texto literal. Orientación para familias que no sustituye la valoración de un profesional y no contiene pautas de medicación: no nombra fármacos ni dosis, y donde la fuente habla de medicamentos solo recoge la idea general o la advertencia. Los números de urgencia son los del país de cada fuente (111 y 999 en el Reino Unido, 15 y 112 en Francia, 112 en España, el número de emergencias local en Estados Unidos).",
+    "purpose": "Dar a las preguntas más frecuentes sobre la fiebre y las infecciones comunes del bebé fuentes divulgativas con los signos de alarma y la urgencia que cada organismo indica, para que la respuesta diga cuándo y adónde acudir sin dar dosis"
+  },
+  "sources": [
+    {
+      "source_type": "reference",
+      "title": "¿Qué debo saber sobre la fiebre? (Familia y Salud, AEPap)",
+      "organization": "Asociación Española de Pediatría de Atención Primaria (AEPap)",
+      "publication_year": 2019,
+      "url": "https://www.familiaysalud.es/sintomas-y-enfermedades/infecciones/fiebre-e-infecciones/que-debo-saber-sobre-la-fiebre",
+      "specialties": ["pediatrics", "general_medicine"],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "topics": ["fiebre"],
+      "chunks": [
+        "¿Qué debo saber sobre la fiebre? (Familia y Salud, Asociación Española de Pediatría de Atención Primaria, 2019). Tema: qué es la fiebre y por qué aparece. Hallazgo: se habla de fiebre cuando la temperatura supera 37,5 °C en la axila o 38 °C en el recto. No es una enfermedad sino parte de la respuesta del cuerpo a una infección, casi siempre vírica, y sirve para activar las defensas. El niño puede notarse caliente, con las mejillas rojas, el corazón más rápido, tiritona o escalofríos, y conviene confirmarlo con un termómetro. La fiebre por sí misma no daña el cerebro ni otros órganos: las complicaciones vienen de la enfermedad que la causa. Si se prolonga, sobre todo en lactantes, puede deshidratar, por eso importa ofrecer líquidos de forma continuada.",
+        "¿Qué debo saber sobre la fiebre? (Familia y Salud, Asociación Española de Pediatría de Atención Primaria, 2019). Tema: cuidados en casa y uso general de los antitérmicos. Hallazgo: ofrecer líquidos a menudo, no abrigar en exceso ni desnudar del todo y evitar las friegas con alcohol y los baños fríos; un baño templado alivia poco tiempo y no siempre mejora el bienestar. Si el niño juega y está contento puede no necesitar medicación. El antitérmico se reserva para la fiebre alta o el malestar, siguiendo el prospecto y calculado por el peso, no por la edad. Alternar dos antitérmicos no aporta ventajas salvo indicación del pediatra, y no hace falta despertar al niño que duerme para dárselo. Basta con que se encuentre mejor aunque la fiebre baje poco.",
+        "¿Qué debo saber sobre la fiebre? (Familia y Salud, Asociación Española de Pediatría de Atención Primaria, 2019). Tema: cuándo consultar al pediatra. Hallazgo: la página pide consultar si el niño tiene menos de 3 meses, si la fiebre dura más de 48 horas, si sube por encima de 40 °C, si rechaza el alimento y sobre todo los líquidos, si está adormilado o muy irritable, si tiene mal aspecto o le cuesta respirar, si le salen manchas en la piel, en especial de color rojo vino que no se borran al estirar la piel, si tiene convulsiones o por cualquier otro motivo que preocupe a la familia. El texto no separa estos signos por grado de urgencia."
+      ]
+    },
+    {
+      "source_type": "reference",
+      "title": "Cómo actuar si un bebé tiene fiebre (Familia y Salud, AEPap)",
+      "organization": "Asociación Española de Pediatría de Atención Primaria (AEPap)",
+      "publication_year": 2023,
+      "url": "https://www.familiaysalud.es/salud-y-escuela/educacion-infantil-0/los-problemas-de-salud/que-hago-si-hay-una-urgencia/como-actu-0",
+      "specialties": ["pediatrics", "general_medicine"],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "topics": ["fiebre"],
+      "chunks": [
+        "Cómo actuar si un bebé tiene fiebre (Familia y Salud, Asociación Española de Pediatría de Atención Primaria, 2023). Tema: cómo reconocer la fiebre en un bebé y qué significa. Hallazgo: la temperatura normal cambia de una persona a otra y a lo largo del día, y suele ser más alta al final de la tarde. Se considera fiebre más de 37,5 °C en la axila o más de 38 °C en el recto, y siempre hay que confirmarla con termómetro, axilar o rectal. Además del calor al tacto pueden verse mejillas rojas, ojos brillantes, menos actividad, escalofríos y respiración o pulso más rápidos. La fiebre es una respuesta del organismo que ayuda a combatir la infección, casi siempre vírica, y ni la cifra ni cómo responde al antitérmico indican si es grave o si la causa es un virus o una bacteria.",
+        "Cómo actuar si un bebé tiene fiebre (Familia y Salud, Asociación Española de Pediatría de Atención Primaria, 2023). Tema: medidas de confort y lo que no se debe hacer. Hallazgo: quitar ropa para que el cuerpo pierda calor sin que el bebé esté incómodo, no usar compresas con alcohol ni agua fría y ofrecer líquidos a menudo para evitar la deshidratación. Se trata el malestar y no el número del termómetro: si el bebé está bien y juega, no necesita medicamentos aunque tenga fiebre. No conviene usar dos antitérmicos a la vez ni alternarlos por rutina, ni despertarle para dárselo, ni usarlo para prevenir convulsiones febriles. Los antibióticos no sirven para la fiebre ni para las infecciones por virus, tras las vacunas no se aconseja el antitérmico preventivo y la dentición no debe considerarse causa de fiebre.",
+        "Cómo actuar si un bebé tiene fiebre (Familia y Salud, Asociación Española de Pediatría de Atención Primaria, 2023). Tema: cuándo consultar según la edad. Hallazgo: un bebé menor de 3 meses con fiebre debe ser valorado siempre por un profesional sanitario. También hay que consultar al pediatra si la fiebre dura más de 48-72 horas, si un bebé de 3 a 6 meses supera los 39 °C o si a cualquier edad llega a 40 °C, si está muy irritable o adormilado, si tiene mal aspecto general o dificultad para respirar, o si le sale una erupción en la piel. La página no asigna a cada signo un nivel de urgencia distinto."
+      ]
+    },
+    {
+      "source_type": "reference",
+      "title": "Medidas físicas para bajar la fiebre: entre el mito y la evidencia (Familia y Salud, AEPap)",
+      "organization": "Asociación Española de Pediatría de Atención Primaria (AEPap)",
+      "publication_year": 2025,
+      "url": "https://www.familiaysalud.es/sintomas-y-enfermedades/infecciones/fiebre-e-infecciones/medidas-fisicas-para-bajar-la-fiebre-entre",
+      "specialties": ["pediatrics", "general_medicine"],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "topics": ["fiebre"],
+      "chunks": [
+        "Medidas físicas para bajar la fiebre: entre el mito y la evidencia (Familia y Salud, Asociación Española de Pediatría de Atención Primaria, 2025). Tema: qué medidas físicas no se recomiendan. Hallazgo: nunca deben hacerse friegas con alcohol, porque pueden intoxicar al niño. Los baños o duchas de agua fría tampoco se aconsejan: resultan desagradables y provocan tiritona, que puede subir la temperatura interna. Abrigar mucho a un niño con fiebre puede deshidratarlo y hacer que suba más la temperatura, y desnudarlo del todo o exponerlo al frío le causa malestar. El baño o las compresas de agua templada bajan algo la temperatura, pero el efecto dura poco y no siempre mejora el bienestar, que es lo que se busca.",
+        "Medidas físicas para bajar la fiebre: entre el mito y la evidencia (Familia y Salud, Asociación Española de Pediatría de Atención Primaria, 2025). Tema: qué sí ayuda y por qué tratar la fiebre solo cuando molesta. Hallazgo: lo recomendable es quitar la ropa que sobre, mantener al niño en una habitación templada y bien ventilada y ofrecerle agua a menudo para que esté bien hidratado. La fiebre en sí no es perjudicial y bajarla no cambia la evolución de la infección, así que solo se trata cuando es muy alta o causa malestar, y lo importante es tratar la causa. Los autores recuerdan que un pequeño grupo de niños tiene predisposición a las convulsiones febriles y que tratar pronto la fiebre no las evita."
+      ]
+    },
+    {
+      "source_type": "reference",
+      "title": "Decálogo de la fiebre (Familia y Salud, AEPap)",
+      "organization": "Asociación Española de Pediatría de Atención Primaria (AEPap)",
+      "publication_year": 2012,
+      "url": "https://www.familiaysalud.es/sintomas-y-enfermedades/infecciones/fiebre-e-infecciones/decalogo-de-la-fiebre",
+      "specialties": ["pediatrics", "general_medicine"],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "topics": ["fiebre"],
+      "chunks": [
+        "Decálogo de la fiebre (Familia y Salud, Asociación Española de Pediatría de Atención Primaria, 2012). Tema: la fiebre como defensa y lo que no hace. Hallazgo: la fiebre es un mecanismo de defensa del organismo frente a infecciones víricas o bacterianas, no una enfermedad. Por sí misma no produce daño cerebral, ceguera, sordera ni muerte. Las convulsiones febriles afectan a un 4 % de los niños predispuestos y tratar la fiebre no las evita, por lo que no deben usarse medicamentos para bajarla con ese fin. Ni la cifra de fiebre ni cuánto baja después del antitérmico indican la gravedad de la infección.",
+        "Decálogo de la fiebre (Familia y Salud, Asociación Española de Pediatría de Atención Primaria, 2012). Tema: cuidados en casa del niño con fiebre. Hallazgo: solo hay que tratar al niño con fiebre si tiene malestar general o dolor, y no se aconseja combinar ni alternar antitérmicos. No se recomiendan paños húmedos, friegas de alcohol, desnudarle, duchas ni baños para bajar la fiebre, y tampoco abrigarle ni desnudarle en exceso. Conviene ofrecerle líquidos con frecuencia, mejor con hidratos de carbono, como zumos, batidos o papillas según lo que ya tome. Tras las vacunas no se aconseja usar antitérmicos para prevenir la fiebre o las reacciones locales.",
+        "Decálogo de la fiebre (Familia y Salud, Asociación Española de Pediatría de Atención Primaria, 2012). Tema: signos de alarma que piden consulta urgente. Hallazgo: el decálogo indica consultar con carácter urgente si aparecen manchas rojo oscuro o moradas en la piel que no desaparecen al estirarla, decaimiento, irritabilidad o llanto excesivo difícil de calmar, rigidez de cuello, convulsión o pérdida de conocimiento, dificultad para respirar, vómitos o diarrea persistentes o muy abundantes con signos de deshidratación, u orina escasa o ausente. La fiebre en un menor de 3 meses requiere siempre consulta urgente."
+      ]
+    },
+    {
+      "source_type": "reference",
+      "title": "Fiebre en el niño, ¿cuándo hay que llevarlo al hospital? (Familia y Salud, AEPap)",
+      "organization": "Asociación Española de Pediatría de Atención Primaria (AEPap)",
+      "publication_year": 2019,
+      "url": "https://www.familiaysalud.es/sintomas-y-enfermedades/infecciones/fiebre-e-infecciones/fiebre-en-el-nino-cuando-hay-que-llevarlo",
+      "specialties": ["pediatrics", "general_medicine", "emergency_medicine"],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "topics": ["fiebre", "infeccion_orina"],
+      "chunks": [
+        "Fiebre en el niño, ¿cuándo hay que llevarlo al hospital? (Familia y Salud, Asociación Española de Pediatría de Atención Primaria, 2019). Tema: adónde acudir con fiebre según la edad. Hallazgo: en los menores de 3 meses con fiebre se aconseja ir directamente al hospital, y el riesgo de infección grave es todavía mayor por debajo de las 3 semanas de vida. A partir de los 3 meses lo indicado es acudir primero al centro de salud, donde el pediatra, que conoce al niño y a la familia, decide si hacen falta pruebas o si lo envía al hospital. La mayoría de las fiebres altas están entre 38,5 y 39,5 °C; por encima de 40 °C aumenta la probabilidad de causa bacteriana y es motivo para llevarlo al hospital.",
+        "Fiebre en el niño, ¿cuándo hay que llevarlo al hospital? (Familia y Salud, Asociación Española de Pediatría de Atención Primaria, 2019). Tema: cómo valorar en casa a un niño con fiebre. Hallazgo: los padres pueden fijarse en tres aspectos sin ningún aparato. Respiración: es señal de alerta que respire más deprisa de lo normal, que se le hundan los espacios entre las costillas, que abra las aletas de la nariz o que le cueste tomar el pecho o el biberón. Color de la piel: pálida, azulada, con aspecto de mármol o con manchitas es motivo para llevarlo al hospital. Estado general, lo más importante: si se mueve menos de lo normal, si no se consuela, si tiene la mirada perdida o vidriosa, o si está quejoso e irritable. Un niño que mira, juega y se relaciona con normalidad está bien, y eso pesa más que la cifra del termómetro.",
+        "Fiebre en el niño, ¿cuándo hay que llevarlo al hospital? (Familia y Salud, Asociación Española de Pediatría de Atención Primaria, 2019). Tema: fiebre sin un origen claro e infección de orina. Hallazgo: cuando la fiebre no tiene una causa evidente, una de las más frecuentes es la infección de orina, que el pediatra puede sospechar con una tira de orina en el propio centro de salud. La otra causa habitual que se busca es la neumonía, que en general también se estudia en el centro de salud con una radiografía. En los mayores de 3 meses es el pediatra del centro de salud quien valora al niño, decide qué pruebas necesita y si hace falta enviarlo al hospital."
+      ]
+    },
+    {
+      "source_type": "reference",
+      "title": "¿Cuándo debe llamar al pediatra debido a una fiebre? (HealthyChildren, AAP)",
+      "organization": "American Academy of Pediatrics",
+      "publication_year": 2016,
+      "url": "https://www.healthychildren.org/Spanish/health-issues/conditions/fever/Paginas/When-to-Call-the-Pediatrician.aspx",
+      "specialties": ["pediatrics", "general_medicine"],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "topics": ["fiebre"],
+      "chunks": [
+        "¿Cuándo debe llamar al pediatra debido a una fiebre? (HealthyChildren.org, Academia Americana de Pediatría, 2016). Tema: signos con los que hay que llamar al médico de inmediato. Hallazgo: con fiebre, llamar enseguida al médico si el niño parece muy enfermo, está más adormilado de lo habitual o muy irritable; si tiene el cuello rígido, dolor fuerte de cabeza, de garganta o de oído, una erupción sin causa conocida o vómitos o diarrea repetidos; si ha tenido una convulsión; si tiene problemas de inmunidad o toma medicación que la afecta; si ha estado en un lugar muy caluroso, como un coche recalentado; si es menor de 3 meses (12 semanas) y tiene 38,0 °C o más; o si a cualquier edad la fiebre sube una y otra vez por encima de 40 °C.",
+        "¿Cuándo debe llamar al pediatra debido a una fiebre? (HealthyChildren.org, Academia Americana de Pediatría, 2016). Tema: cuándo llamar aunque no sea de inmediato y qué vigilar en casa. Hallazgo: también hay que llamar al médico si el niño sigue comportándose como enfermo cuando la fiebre ya ha bajado, si parece ir a peor, si la fiebre dura más de 24 horas en un menor de 2 años o más de 3 días (72 horas) en un niño a partir de los 2 años. Mientras tanto se recomienda mantenerlo cómodo, asegurarse de que toma líquidos suficientes y observar si aparecen signos de enfermedad grave. Que vuelva a jugar y a relacionarse cuando se le alivia el malestar es una buena señal."
+      ]
+    },
+    {
+      "source_type": "reference",
+      "title": "Su bebé tiene fiebre: ¿cuándo es una señal de preocupación? (HealthyChildren, AAP)",
+      "organization": "American Academy of Pediatrics",
+      "publication_year": 2025,
+      "url": "https://www.healthychildren.org/Spanish/health-issues/conditions/fever/Paginas/fever-and-your-baby.aspx",
+      "specialties": ["pediatrics", "general_medicine"],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "topics": ["fiebre"],
+      "chunks": [
+        "Su bebé tiene fiebre: ¿cuándo es una señal de preocupación? (HealthyChildren.org, Academia Americana de Pediatría, 2025). Tema: qué se considera fiebre y cómo medirla en un bebé. Hallazgo: en los bebés la medición rectal es la más fiable, sobre todo por debajo de los 3 meses, y 38 °C o más en el recto se considera fiebre; con termómetro oral, de oído o de sien el umbral suele ser también 38 °C, y en la axila puede usarse uno algo más bajo. Tocar la frente o la piel no es preciso y las tiras sensibles a la temperatura no son fiables. No se debe usar el termómetro de oído antes de los 6 meses, porque el conducto es demasiado pequeño. La temperatura cambia con la edad, la actividad y la hora: es más alta al final de la tarde y más baja de madrugada.",
+        "Su bebé tiene fiebre: ¿cuándo es una señal de preocupación? (HealthyChildren.org, Academia Americana de Pediatría, 2025). Tema: la fiebre como defensa y cuándo llamar según la edad. Hallazgo: la fiebre suele indicar que el cuerpo está combatiendo una infección y estimula defensas como los glóbulos blancos, pero hay que averiguar su causa y mantener al bebé hidratado y cómodo. De 0 a 3 meses, con 38 °C o más en el recto hay que llamar de inmediato al pediatra aunque no haya otros síntomas, porque el médico tiene que examinarlo. De 3 a 6 meses se llama si llega a 38,3 °C o más, y a partir de los 6 meses si llega a 39,4 °C o más, porque podría indicar deshidratación o una infección seria. Abrigar demasiado a un bebé cuando hace calor y humedad puede causarle un golpe de calor."
+      ]
+    },
+    {
+      "source_type": "reference",
+      "title": "Cómo tomarle la temperatura a un niño (HealthyChildren, AAP)",
+      "organization": "American Academy of Pediatrics",
+      "publication_year": 2024,
+      "url": "https://www.healthychildren.org/Spanish/health-issues/conditions/fever/Paginas/How-to-Take-a-Childs-Temperature.aspx",
+      "specialties": ["pediatrics", "general_medicine"],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "topics": ["fiebre"],
+      "chunks": [
+        "Cómo tomarle la temperatura a un niño (HealthyChildren.org, Academia Americana de Pediatría, 2024). Tema: qué método usar según la edad. Hallazgo: la medición rectal es la más exacta a cualquier edad, sobre todo en bebés menores de 3 meses. El termómetro de frente, de arteria temporal, sirve a todas las edades y es más exacto que el de axila; el de oído solo a partir de los 6 meses, porque en bebés muy pequeños el conducto es estrecho; el oral, a partir de los 4 años. La axila vale a cualquier edad pero es el método menos exacto, útil para una comprobación rápida. Los termómetros chupete y las cintas de frente son menos exactos. Los termómetros de mercurio no deben usarse: se rompen con facilidad y liberan vapores tóxicos, y si hay uno en casa conviene desecharlo.",
+        "Cómo tomarle la temperatura a un niño (HealthyChildren.org, Academia Americana de Pediatría, 2024). Tema: cómo tomar la temperatura rectal a un bebé y cuándo llamar. Hallazgo: se pone un poco de lubricante en la punta del termómetro, se coloca al bebé boca abajo sobre el regazo o boca arriba con las piernas flexionadas hacia el pecho, se introduce con suavidad media pulgada en menores de 6 meses y hasta una pulgada en los mayores, parando si se nota resistencia, y se espera a que suene. El termómetro rectal se limpia antes y después y se marca para no usarlo en la boca. La fiebre suele definirse como 38 °C o más; hay que llamar de inmediato al pediatra si un bebé de 2 meses o menos tiene 38 °C o más en el recto, o si a cualquier edad la fiebre sube a menudo por encima de 40 °C."
+      ]
+    },
+    {
+      "source_type": "reference",
+      "title": "High temperature (fever) in children (NHS)",
+      "organization": "NHS (National Health Service, Reino Unido)",
+      "publication_year": 2024,
+      "url": "https://www.nhs.uk/conditions/fever-in-children/",
+      "specialties": ["pediatrics", "general_medicine", "emergency_medicine"],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "topics": ["fiebre"],
+      "chunks": [
+        "High temperature (fever) in children (NHS, Servicio Nacional de Salud del Reino Unido, 2024). Tema: qué es fiebre y cómo medirla en la axila. Hallazgo: se considera temperatura alta 38 °C o más. El niño puede notarse más caliente de lo habitual, sudar, tener mal aspecto o sufrir una convulsión febril. Se usa un termómetro digital colocado en la parte alta de la axila, cerrando con suavidad el brazo contra el costado durante el tiempo que indique el folleto. Después de un baño o de estar envuelto en mantas la lectura puede salir alta, así que conviene esperar unos minutos y repetirla. La página recuerda que la temperatura alta es la respuesta natural del cuerpo para combatir infecciones como las toses y los resfriados.",
+        "High temperature (fever) in children (NHS, Servicio Nacional de Salud del Reino Unido, 2024). Tema: cómo cuidar en casa a un niño con fiebre. Hallazgo: ofrecer muchos líquidos y seguir con el pecho si es amamantado, vigilar los signos de deshidratación, ofrecerle comida si la quiere, revisarlo con regularidad también por la noche y mantenerlo en casa. No hay que desnudarlo ni pasarle una esponja para enfriarlo, porque la fiebre es una respuesta sana a la infección, ni taparlo con demasiada ropa. Si parece angustiado o incómodo puede usarse un antitérmico adecuado a su edad, comprobando el envase o preguntando al farmacéutico, y no se deben alternar antitérmicos salvo indicación de un profesional. Hay que pedir consejo médico si preocupa o si el medicamento no le alivia.",
+        "High temperature (fever) in children (NHS, Servicio Nacional de Salud del Reino Unido, 2024). Tema: cuándo pedir consejo médico urgente. Hallazgo: el NHS indica pedir consejo médico urgente si el niño es menor de 3 meses y tiene 38 °C o más o se le nota fiebre; si tiene de 3 a 6 meses y 39 °C o más o se le nota fiebre; si la fiebre se acompaña de otros signos, como una erupción; si dura 5 días o más; si no quiere comer o no parece el de siempre y eso preocupa; o si hay signos de deshidratación, como pañales poco mojados, ojos hundidos o llanto sin lágrimas.",
+        "High temperature (fever) in children (NHS, Servicio Nacional de Salud del Reino Unido, 2024). Tema: cuándo llamar a emergencias. Hallazgo: hay que actuar de inmediato y llamar a emergencias si el niño tiene el cuello rígido, una erupción que no se borra al presionar un vaso contra ella, molestia con la luz, una primera convulsión febril en la que no deja de temblar, manos y pies muy fríos, piel, labios o lengua azulados, grises, más pálidos o con manchas, si está adormilado y cuesta despertarlo, muy agitado sin dejar de llorar o confuso, si respira con dificultad, con quejido, hundiendo la barriga bajo las costillas o muy deprisa, o si no responde como siempre ni le interesan las tomas o sus actividades."
+      ]
+    },
+    {
+      "source_type": "reference",
+      "title": "Votre enfant a de la fièvre : que faire et quand consulter ? (ameli.fr)",
+      "organization": "Assurance Maladie (ameli.fr)",
+      "publication_year": 2024,
+      "url": "https://www.ameli.fr/assure/sante/themes/fievre-enfant/bons-reflexes-cas-faut-consulter",
+      "specialties": ["pediatrics", "general_medicine"],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "topics": ["fiebre"],
+      "chunks": [
+        "Votre enfant a de la fièvre : que faire et quand consulter ? (ameli.fr, Assurance Maladie, 2024). Tema: medidas de confort y cuándo pensar en un antitérmico. Hallazgo: una fiebre alta no es necesariamente grave y el comportamiento del niño es un indicador importante. Conviene tenerlo en una habitación fresca y aireada, entre 18 y 20 °C, quitarle capas de ropa sin desnudarlo del todo, para que no tirite, y ofrecerle a menudo agua o una bebida que le guste aunque no la pida. No hay que limitarle la bebida ni bañarlo en agua mucho más fría que su temperatura. Por debajo de 38,5 °C no siempre hace falta un antitérmico; la página lo contempla si pasa de 38,5 °C, si dura más de dos días, si el niño la tolera mal, si tiene menos de 3 meses o un problema de salud particular.",
+        "Votre enfant a de la fièvre : que faire et quand consulter ? (ameli.fr, Assurance Maladie, 2024). Tema: cuándo consultar en urgencia y cuándo en el mismo día. Hallazgo: consultar en urgencia si tiene fiebre un lactante menor de 3 meses y, a cualquier edad, si supera 40 °C, si empeora el estado general (no come ni bebe, somnolencia, poca reacción, llanto débil, piel marmórea), si hay dolor de cabeza intenso, rigidez de nuca o vómitos, deshidratación (mucosas secas, menos orina), dolor abdominal con diarrea abundante o dificultad para respirar. Consultar en el día si tiene una enfermedad crónica, fiebres frecuentes, fiebre de más de dos días en menores de 2 años o de más de tres días por encima de esa edad, si la fiebre vuelve tras más de 24 horas sin ella, si ha tenido una convulsión febril o ante otro síntoma preocupante."
+      ]
+    },
+    {
+      "source_type": "reference",
+      "title": "Diarrhée et gastro-entérite de l'enfant : que faire et quand consulter ? (ameli.fr)",
+      "organization": "Assurance Maladie (ameli.fr)",
+      "publication_year": 2025,
+      "url": "https://www.ameli.fr/assure/sante/themes/gastro-enterite-enfant/que-faire-quand-consulter",
+      "specialties": ["pediatrics", "general_medicine", "gastroenterology"],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "topics": ["gastroenteritis"],
+      "chunks": [
+        "Diarrhée et gastro-entérite de l'enfant : que faire et quand consulter ? (ameli.fr, Assurance Maladie, 2025). Tema: rehidratación con solución de rehidratación oral. Hallazgo: la solución de rehidratación oral de farmacia se empieza incluso antes de la consulta y se mantiene mientras dure la diarrea. Al principio se ofrece a menudo y en pequeñas cantidades, aumentando poco a poco; si hay vómitos, se ofrece fresca, a pequeños sorbos o con cuchara, y después el niño bebe a voluntad, según su sed. No se debe rehidratar con agua sola, refrescos ni bebidas solo azucaradas, ni cambiar la proporción de agua al preparar la solución.",
+        "Diarrhée et gastro-entérite de l'enfant : que faire et quand consulter ? (ameli.fr, Assurance Maladie, 2025). Tema: alimentación y lactancia en menores de 2 años y lo que no se debe dar. Hallazgo: si el bebé toma pecho, se siguen las tomas habituales y se ofrece la solución de rehidratación entre ellas. Si toma leche de fórmula, la página indica sustituirla por la solución durante 4 a 6 horas como máximo y después volver a la leche habitual, ofreciendo la solución entre biberones mientras siga el riesgo de deshidratación. Desaconseja los medicamentos para los vómitos, los preparados de arcilla antes de los 2 años y los antisépticos intestinales sin receta, y advierte de que los antiinflamatorios no esteroideos están contraindicados si hay deshidratación.",
+        "Diarrhée et gastro-entérite de l'enfant : que faire et quand consulter ? (ameli.fr, Assurance Maladie, 2025). Tema: signos de deshidratación en el bebé. Hallazgo: los signos que enumera son agitación anormal o, al contrario, apatía y sueño excesivo, dificultad para despertarlo, quejidos, comportamiento inusual, palidez, ojos hundidos y con ojeras, lengua seca y pegajosa, respiración rápida, vómitos que persisten pese a la solución de rehidratación y pérdida de más del 5 % del peso. Ante estos signos hay que consultar al médico de inmediato. El riesgo de deshidratación es mayor en los lactantes, sobre todo en los menores de 6 meses, especialmente frágiles, y en niños con enfermedades crónicas.",
+        "Diarrhée et gastro-entérite de l'enfant : que faire et quand consulter ? (ameli.fr, Assurance Maladie, 2025). Tema: cuándo consultar y con qué rapidez. Hallazgo: en menores de 2 años con diarrea aguda, al menos 3 deposiciones líquidas en pocas horas con o sin vómitos, hay que consultar rápido al médico o al pediatra. Se acude sin demora a un médico o a las urgencias del hospital si un lactante vomita de forma repetida y rechaza beber, si el niño no come ni bebe, si la diarrea dura más de 2 días o empeora, si hay fiebre de más de 38,5 °C con la diarrea, flemas o sangre en las heces, o signos de deshidratación."
+      ]
+    },
+    {
+      "source_type": "reference",
+      "title": "Rotavirus en niños: síntomas, tratamiento y la importancia de la vacuna (HealthyChildren, AAP)",
+      "organization": "American Academy of Pediatrics",
+      "publication_year": 2026,
+      "url": "https://www.healthychildren.org/Spanish/health-issues/vaccine-preventable-diseases/Paginas/rotavirus.aspx",
+      "specialties": ["pediatrics", "general_medicine", "gastroenterology"],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "topics": ["gastroenteritis"],
+      "chunks": [
+        "Rotavirus en niños: síntomas, tratamiento y la importancia de la vacuna (HealthyChildren.org, Academia Americana de Pediatría, 2026). Tema: cómo es la gastroenteritis por rotavirus y cómo se contagia. Hallazgo: el rotavirus produce una infección intestinal con vómitos, diarrea líquida, fiebre y dolor abdominal, que aparecen uno o dos días después del contagio y en niños sanos duran de tres a siete días. Los niños no vacunados de 3 a 35 meses tienen más probabilidad de un cuadro moderado o grave. Se transmite cuando restos mínimos de heces de una persona infectada llegan a la boca de otra, a través de alimentos, agua, manos, juguetes o superficies, donde el virus sobrevive semanas o meses.",
+        "Rotavirus en niños: síntomas, tratamiento y la importancia de la vacuna (HealthyChildren.org, Academia Americana de Pediatría, 2026). Tema: cuidados en casa, signos de deshidratación y vacuna. Hallazgo: que descanse, siga comiendo con normalidad y tome más líquidos de lo habitual, mejor bebidas con sales como las soluciones de electrolitos; si vomita, ofrecer líquidos y comida en porciones pequeñas y más frecuentes, con cuidado con el zumo de manzana. Los antibióticos no sirven contra los virus y pueden empeorar la diarrea. Son signos de deshidratación la sed, la boca seca, menos lágrimas, la pérdida de peso y orinar menos o mojar menos pañales; más adelante, irritabilidad, ojos hundidos y respiración y pulso rápidos. En casos graves puede hacer falta el hospital para recibir líquidos por vena. La vacuna se toma por la boca, sin pinchazo, en varias tomas que empiezan a los 2 meses."
+      ]
+    },
+    {
+      "source_type": "reference",
+      "title": "Alimentación en la Diarrea Aguda (Familia y Salud, AEPap)",
+      "organization": "Asociación Española de Pediatría de Atención Primaria (AEPap)",
+      "publication_year": 2016,
+      "url": "https://www.familiaysalud.es/vivimos-sanos/alimentacion/situaciones-especiales/alimentacion-en-la-diarrea-aguda",
+      "specialties": ["pediatrics", "general_medicine", "gastroenterology"],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "topics": ["gastroenteritis"],
+      "chunks": [
+        "Alimentación en la Diarrea Aguda (Familia y Salud, Asociación Española de Pediatría de Atención Primaria, 2016). Tema: reponer líquidos con solución de rehidratación oral. Hallazgo: la diarrea aguda suele ser leve y pasar sola, y el objetivo es mantener la hidratación y la nutrición. Lo principal son las soluciones de rehidratación oral, que reponen agua y sales y son preferibles al agua; las bebidas para deportistas no son adecuadas porque están pensadas para el sudor del ejercicio. Se toman poco a poco, en pequeñas cantidades, durante unas 3-4 horas. Si vienen en polvo, se preparan con la cantidad exacta de agua que indica el fabricante, porque una mezcla mal concentrada puede ser ineficaz o perjudicial.",
+        "Alimentación en la Diarrea Aguda (Familia y Salud, Asociación Española de Pediatría de Atención Primaria, 2016). Tema: volver a comer pronto y mantener la lactancia. Hallazgo: conviene volver a comer cuanto antes. Con lactancia materna se mantiene el pecho a demanda, tantas veces como el niño quiera, complementando con solución de rehidratación si hace falta. Con leche de fórmula se sigue con la misma, sin diluirla ni cambiarla por fórmulas sin lactosa, hidrolizadas o de soja salvo que lo indique el pediatra. En los que ya comen de todo no hay una dieta especial: es normal que pierdan apetito y no hay que forzarles; se evitan zumos, bebidas azucaradas, grasas, fritos y bollería, y van bien arroz, pan, patata, zanahoria, pescado o carne magra, caldos, plátano, manzana y yogur."
+      ]
+    },
+    {
+      "source_type": "reference",
+      "title": "Cómo actuar cuando un bebé tiene diarrea (Familia y Salud, AEPap)",
+      "organization": "Asociación Española de Pediatría de Atención Primaria (AEPap)",
+      "publication_year": 2023,
+      "url": "https://www.familiaysalud.es/salud-y-escuela/educacion-infantil-0/los-problemas-de-salud/sobre-enfermedades-de-los-ninos/como-1",
+      "specialties": ["pediatrics", "general_medicine", "gastroenterology"],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "topics": ["gastroenteritis"],
+      "chunks": [
+        "Cómo actuar cuando un bebé tiene diarrea (Familia y Salud, Asociación Española de Pediatría de Atención Primaria, 2023). Tema: causa infecciosa, rehidratación y comida. Hallazgo: la diarrea infecciosa puede deberse a virus como el rotavirus, a bacterias o a parásitos, suele acompañarse de vómitos, fiebre y dolor abdominal y se transmite por vía fecal-oral o por agua y alimentos contaminados. Lo fundamental es evitar la deshidratación con soluciones de rehidratación oral de farmacia: cuantas más deposiciones y más abundantes, más solución necesita. No hace falta ayunar; se le ofrece comida desde el principio sin forzarle, los biberones se preparan con los cacitos de siempre, sin diluir más, y basta una dieta suave. No se deben usar medicamentos sin receta médica.",
+        "Cómo actuar cuando un bebé tiene diarrea (Familia y Salud, Asociación Española de Pediatría de Atención Primaria, 2023). Tema: signos de alarma, escuela infantil e higiene. Hallazgo: los signos de deshidratación son boca seca, ausencia de lágrimas, fontanela hundida y menos orina. Hay que avisar pronto a la familia para que acuda a su pediatra si el bebé está adormilado, no tolera sólidos ni líquidos y vomita aunque no tome nada, si las deposiciones son tan líquidas, abundantes y frecuentes que no puede beber al ritmo que pierde, si hay sangre en la diarrea, dolor abdominal fuerte o signos de deshidratación. No debe ir a la escuela si está decaído, vomita, tiene fiebre, dolor abdominal o deposiciones muy frecuentes; con pañal puede volver cuando las heces quedan contenidas en él. Lavarse las manos es la medida más eficaz y existe una vacuna oral frente al rotavirus."
+      ]
+    },
+    {
+      "source_type": "reference",
+      "title": "Varicela en niños: síntomas, tratamiento y prevención (HealthyChildren, AAP)",
+      "organization": "American Academy of Pediatrics",
+      "publication_year": 2025,
+      "url": "https://www.healthychildren.org/Spanish/health-issues/vaccine-preventable-diseases/Paginas/varicella-chickenpox.aspx",
+      "specialties": ["pediatrics", "general_medicine"],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "topics": ["varicela"],
+      "chunks": [
+        "Varicela en niños: síntomas, tratamiento y prevención (HealthyChildren.org, Academia Americana de Pediatría, 2025). Tema: cómo evoluciona la varicela y cuándo contagia. Hallazgo: el sarpullido aparece entre 10 y 21 días después de la exposición, a menudo con fiebre leve, dolor de cabeza y cansancio. Empieza en el tronco y el cuero cabelludo y puede extenderse a cara, brazos y piernas, con 250 a 500 ampollas y brotes nuevos mientras otras curan; las ampollas forman costra antes de sanar y los síntomas suelen mejorar en una semana. Contagia desde 1 o 2 días antes del sarpullido y durante 5 a 7 días más, hasta que todas las ampollas tienen costra; mientras tanto el niño no va a la guardería y se mantiene lejos de embarazadas, de niños inmunodeprimidos y de quien no la haya pasado ni esté vacunado.",
+        "Varicela en niños: síntomas, tratamiento y prevención (HealthyChildren.org, Academia Americana de Pediatría, 2025). Tema: cuidado del picor y cuándo llamar al pediatra. Hallazgo: para que no se rasque, mantener las uñas limpias y cortas y ponerle guantes o calcetines en las manos si ayuda; se le puede bañar con agua y jabón. Hay que comunicarse con el pediatra si la fiebre pasa de 38,9 °C o dura más de 4 días; si un menor de 1 año o un niño inmunodeprimido ha estado expuesto o tiene signos de varicela; si zonas del sarpullido se ponen muy rojas, sensibles y calientes o los síntomas empeoran, lo que puede indicar una infección bacteriana; o si tiene dificultad para respirar, para despertarse o para caminar. Las complicaciones posibles son la infección bacteriana de las ampollas que pasa a la sangre, la neumonía y la encefalitis.",
+        "Varicela en niños: síntomas, tratamiento y prevención (HealthyChildren.org, Academia Americana de Pediatría, 2025). Tema: la vacuna en los dos primeros años. Hallazgo: según el calendario de Estados Unidos, la primera vacuna de la varicela se pone entre los 12 y los 15 meses de edad y la segunda más adelante, al menos tres meses después de la primera. Los menores de 12 meses son demasiado pequeños para vacunarse. Mientras un niño con varicela contagia, la página pide mantenerlo lejos de quien no la haya pasado ni esté vacunado, en especial de embarazadas y niños inmunodeprimidos. Quien planee un embarazo y no haya pasado la varicela ni se haya vacunado debe vacunarse antes."
+      ]
+    },
+    {
+      "source_type": "reference",
+      "title": "Chickenpox (NHS)",
+      "organization": "NHS (National Health Service, Reino Unido)",
+      "publication_year": 2025,
+      "url": "https://www.nhs.uk/conditions/chickenpox/",
+      "specialties": ["pediatrics", "general_medicine"],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "topics": ["varicela"],
+      "chunks": [
+        "Chickenpox (NHS, Servicio Nacional de Salud del Reino Unido, 2025). Tema: fases del sarpullido y contagio. Hallazgo: el síntoma principal es un sarpullido de granos que pica y puede salir en cualquier parte del cuerpo, a veces con fiebre, dolores, falta de apetito y malestar. Primero aparecen granitos rojos, rosados o del color de la piel, que en la piel oscura se ven peor; luego se llenan de líquido y forman ampollas que pican mucho y pueden romperse; al final hacen costra. Pueden salir granos nuevos mientras otros están en ampolla o en costra, y suele curarse sola en 1 a 2 semanas. Contagia desde 2 días antes de los granos hasta que todos tienen costra, normalmente unos 5 días después de aparecer, y hasta entonces el niño no va a la guardería.",
+        "Chickenpox (NHS, Servicio Nacional de Salud del Reino Unido, 2025). Tema: cuidados en casa. Hallazgo: animar al niño a beber mucho líquido, cortarle las uñas y ponerle calcetines en las manos por la noche para que no se rasque, bañarle en agua fresca y secar a toques sin frotar, y vestirle con ropa holgada; rascarse puede dejar cicatriz. El NHS advierte de que no se le dé ningún antiinflamatorio salvo indicación médica, porque puede causar infecciones graves de la piel. Hay que mantener al niño lejos de los recién nacidos, de las embarazadas y de las personas con las defensas bajas, porque para ellos la varicela puede ser peligrosa.",
+        "Chickenpox (NHS, Servicio Nacional de Salud del Reino Unido, 2025). Tema: cuándo pedir ayuda y vacuna. Hallazgo: pedir consejo médico urgente si los síntomas empeoran, por ejemplo con piel roja, caliente o dolorosa alrededor de las ampollas, si el niño tiene signos de deshidratación como menos pañales mojados, si un recién nacido tiene varicela o ha estado cerca de alguien que la tiene, o ante cualquier otro síntoma que preocupe. Se pide cita con el médico de cabecera, sin urgencia, si no se está seguro de que sea varicela, avisando antes por teléfono. En el Reino Unido los niños reciben una vacuna combinada frente a sarampión, paperas, rubéola y varicela en dos momentos, a los 12 y a los 18 meses."
+      ]
+    },
+    {
+      "source_type": "reference",
+      "title": "Varicelle : que faire et quand consulter ? (ameli.fr)",
+      "organization": "Assurance Maladie (ameli.fr)",
+      "publication_year": 2026,
+      "url": "https://www.ameli.fr/assure/sante/themes/varicelle/que-faire-cas-faut-consulter",
+      "specialties": ["pediatrics", "general_medicine"],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "topics": ["varicela"],
+      "chunks": [
+        "Varicelle : que faire et quand consulter ? (ameli.fr, Assurance Maladie, 2026). Tema: higiene de la piel, picor y fiebre. Hallazgo: se recomienda ducharle con un producto suave, preferir agua y jabón a los antisépticos, secar a toques sin frotar y evitar los baños. Para limitar el rascado, lavarle las manos a menudo, mantener las uñas cortas y, si se puede, ponerle guantes. No se deben usar talco, polvos ni cremas con antibiótico, antiviral, anestésico o contra el picor, porque favorecen la sobreinfección. Para la fiebre, no abrigarle demasiado, ofrecerle de beber con regularidad y mantener la habitación fresca y aireada. Los antiinflamatorios no esteroideos están contraindicados en la varicela, y no se debe dar ningún medicamento sin consejo del farmacéutico o del médico.",
+        "Varicelle : que faire et quand consulter ? (ameli.fr, Assurance Maladie, 2026). Tema: guardería y cuándo consultar. Hallazgo: hay que avisar a la guardería o a quien cuide al niño para proteger a embarazadas y personas inmunodeprimidas, y tenerlo en casa hasta que los granos estén en fase de costra. La varicela habitual del niño suele ser benigna y se consulta al médico sin urgencia. Se pide consejo médico en el mismo día si un niño menor de seis meses tiene granos de varicela, si tiene una enfermedad crónica de la piel como el eccema, si los granos se llenan de sangre o se hunden con fiebre alta, si se llenan de pus o si aparece tos. Hay que llamar al 112 si cambia el comportamiento del niño, con fiebre alta, problemas de equilibrio o confusión."
+      ]
+    },
+    {
+      "source_type": "reference",
+      "title": "Varicela, vacunas para ciudadanos (Ministerio de Sanidad)",
+      "organization": "Ministerio de Sanidad (España)",
+      "publication_year": 2025,
+      "url": "https://www.sanidad.gob.es/areas/promocionPrevencion/vacunaciones/vacunas/ciudadanos/varicela.htm",
+      "specialties": ["pediatrics", "general_medicine"],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "topics": ["varicela"],
+      "chunks": [
+        "Varicela, vacunas para ciudadanos (Ministerio de Sanidad de España, 2025). Tema: la vacunación infantil frente a la varicela en España. Hallazgo: el calendario español vacuna de la varicela dos veces en la infancia: la primera a los 15 meses y la segunda se pospone hasta los 3-4 años. Alrededor del 90 % de la población infantil está vacunada. Las vacunas contienen virus atenuados, debilitados en el laboratorio, que en personas sanas no producen la enfermedad pero sí estimulan la producción de anticuerpos. A los adolescentes que no la han pasado ni se han vacunado se les completa la vacunación.",
+        "Varicela, vacunas para ciudadanos (Ministerio de Sanidad de España, 2025). Tema: reacciones y seguridad de la vacuna. Hallazgo: las reacciones más frecuentes son dolor, enrojecimiento e hinchazón donde se pone la inyección, fiebre, una erupción parecida a la varicela, de 2 a 5 lesiones de media, e irritabilidad, y el Ministerio subraya que estas vacunas son muy seguras. Están contraindicadas en el embarazo, en las personas inmunodeprimidas y en quien tiene hipersensibilidad al principio activo o a alguno de sus componentes. Al llevar virus atenuados, en una persona sana la vacuna no produce la enfermedad."
+      ]
+    },
+    {
+      "source_type": "reference",
+      "title": "Exantema súbito (Familia y Salud, AEPap)",
+      "organization": "Asociación Española de Pediatría de Atención Primaria (AEPap)",
+      "publication_year": 2016,
+      "url": "https://www.familiaysalud.es/sintomas-y-enfermedades/infecciones/enfermedades-exantematicas/exantema-subito",
+      "specialties": ["pediatrics", "general_medicine"],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "topics": ["roseola"],
+      "chunks": [
+        "Exantema súbito (Familia y Salud, Asociación Española de Pediatría de Atención Primaria, 2016). Tema: qué es y a qué edades aparece. Hallazgo: también llamado roséola infantil o sexta enfermedad, es una infección vírica frecuente causada por el herpesvirus humano tipo 6. Afecta sobre todo a niños de 3 meses a 3 años, especialmente antes de los 2 años, es rara en niños mayores y se ve más en primavera y otoño. La incubación dura de 5 a 15 días, en general sin síntomas. El contagio no se conoce con certeza; se cree que es respiratorio, como el de otros virus. El diagnóstico es clínico: fiebre alta de 3-4 días con buen estado general seguida de la erupción, y antes de que esta salga puede confundirse con una faringitis o una otitis.",
+        "Exantema súbito (Familia y Salud, Asociación Española de Pediatría de Atención Primaria, 2016). Tema: evolución de la fiebre y de la erupción, cuidados y guardería. Hallazgo: la fiebre empieza de golpe, entre 38 y 39 °C y a veces hasta 40 °C, dura unos 3 días y el niño mantiene buen estado general; puede haber catarro, lesiones en boca u ojos y ganglios, sobre todo en la nuca. Cuando baja la fiebre salen pequeñas manchas rosadas de 3 a 5 mm en tronco, cuello y espalda, que apenas afectan a cara, brazos y piernas y duran entre 2 horas y 2 días. No hay tratamiento específico: poca ropa, baño templado, antitérmico si hace falta y líquidos abundantes. Es una infección benigna con pocas complicaciones y rara vez la fiebre causa una convulsión febril. Puede volver a la guardería cuando desaparece la erupción."
+      ]
+    },
+    {
+      "source_type": "reference",
+      "title": "Roséola en bebés y niños pequeños: síntomas, causas y cuándo llamar al médico (HealthyChildren, AAP)",
+      "organization": "American Academy of Pediatrics",
+      "publication_year": 2025,
+      "url": "https://www.healthychildren.org/Spanish/health-issues/conditions/skin/Paginas/roseola-infantum.aspx",
+      "specialties": ["pediatrics", "general_medicine"],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "topics": ["roseola"],
+      "chunks": [
+        "Roséola en bebés y niños pequeños: síntomas, causas y cuándo llamar al médico (HealthyChildren.org, Academia Americana de Pediatría, 2025). Tema: evolución típica de la roséola. Hallazgo: es una enfermedad vírica muy común, causada en general por el herpesvirus humano 6, que afecta sobre todo de los 6 meses a los 2 años; casi todos los niños la pasan en sus dos primeros años. La fiebre es alta, en general de 38,9 a 40,5 °C, y dura de 3 a 5 días. Cuando la fiebre desaparece sale un sarpullido en pecho, abdomen y espalda que luego se extiende a cuello, brazos y piernas; en piel clara es rosado o rojo y en piel oscura puede verse rojo tenue o morado. No suele picar y dura de 1 a 4 días. Muchos niños siguen activos y juegan.",
+        "Roséola en bebés y niños pequeños: síntomas, causas y cuándo llamar al médico (HealthyChildren.org, Academia Americana de Pediatría, 2025). Tema: contagio, cuidados y cuándo llamar. Hallazgo: se contagia con la tos y los estornudos, y el niño puede volver a la guardería cuando lleva 24 horas sin fiebre aunque siga con sarpullido. No hay tratamiento específico y mejora sola; un medicamento para la fiebre puede aliviar las molestias, consultando al pediatra cuál usar. Hay que ofrecerle muchos líquidos aunque coma poco. Llamar de inmediato si está muy somnoliento y no se despierta con facilidad; contactar pronto con el pediatra si no toma líquidos y orina poco; y consultar si el sarpullido forma ampollas o llagas o afecta a los labios o al interior de la boca."
+      ]
+    },
+    {
+      "source_type": "reference",
+      "title": "Roseola (NHS)",
+      "organization": "NHS (National Health Service, Reino Unido)",
+      "publication_year": 2026,
+      "url": "https://www.nhs.uk/conditions/roseola/",
+      "specialties": ["pediatrics", "general_medicine"],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "topics": ["roseola", "convulsion_febril"],
+      "chunks": [
+        "Roseola (NHS, Servicio Nacional de Salud del Reino Unido, 2026). Tema: curso de la fiebre y del sarpullido. Hallazgo: es una infección muy común en bebés y niños pequeños que suele dar fiebre alta y un sarpullido, y se cura en casa en una semana. Antes del sarpullido, durante unos 3 a 7 días, aparecen fiebre alta repentina, síntomas de catarro, falta de apetito y párpados y ganglios del cuello hinchados. Después sale un sarpullido de manchas rosadas o rojas que empieza en pecho, barriga y espalda y se extiende a cuello y brazos; no suele picar y se va en unos 2 días. Contagia sobre todo mientras hay fiebre, por lo que el niño se queda en casa; pasada la fiebre y si se encuentra bien puede volver a la guardería sin esperar a que se vaya el sarpullido.",
+        "Roseola (NHS, Servicio Nacional de Salud del Reino Unido, 2026). Tema: convulsión febril durante la roséola y cuidados en casa. Hallazgo: algunos niños pequeños tienen una convulsión febril con la subida brusca de la fiebre; suele durar 2 a 3 minutos y es poco probable que cause daño o efectos a largo plazo, pero si el niño no ha tenido convulsiones antes necesita atención médica inmediata: llamar a emergencias o ir a urgencias, sin conducir uno mismo. En casa, que descanse y beba mucho líquido, no abrigarle con demasiada ropa y, si está incómodo, usar un antitérmico adecuado para niños, consultando al médico o al farmacéutico antes de cualquier medicamento nuevo, porque algunos no son adecuados para niños pequeños.",
+        "Roseola (NHS, Servicio Nacional de Salud del Reino Unido, 2026). Tema: cuándo pedir ayuda urgente o llamar a emergencias. Hallazgo: pedir cita urgente con el médico el mismo día si es menor de 3 meses con 38 °C o más, o de 3 a 6 meses con 39 °C o más, si la fiebre dura 5 días o más, si rechaza líquidos o tomas, no es el de siempre, la fiebre no baja con el medicamento o hay signos de deshidratación como menos pañales mojados, ojos hundidos o llanto sin lágrimas. Llamar a emergencias o ir a urgencias si la piel, los labios o la lengua están azulados, grises, pálidos o con manchas, si hay una erupción que no se borra al rodar un vaso sobre ella, dificultad para respirar, un llanto débil y agudo distinto del habitual, si no responde con normalidad, está mucho más dormido o cuesta despertarle, o tiene una convulsión inesperada."
+      ]
+    },
+    {
+      "source_type": "reference",
+      "title": "Roséole : que faire et quand consulter ? (ameli.fr)",
+      "organization": "Assurance Maladie (ameli.fr)",
+      "publication_year": 2025,
+      "url": "https://www.ameli.fr/assure/sante/themes/roseole/bons-reflexes-cas-faut-consulter",
+      "specialties": ["pediatrics", "general_medicine"],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "topics": ["roseola", "convulsion_febril"],
+      "chunks": [
+        "Roséole : que faire et quand consulter ? (ameli.fr, Assurance Maladie, 2025). Tema: la fiebre de la roséola y cómo aliviarla. Hallazgo: la roséola es benigna pero da una fiebre muy alta que inquieta a los padres y que en general no cede hasta el final del tercer día, a veces del quinto. Se recomienda tener al niño en una habitación fresca y aireada, entre 18 y 20 °C, quitarle capas de ropa sin desnudarle del todo y ofrecerle de beber a menudo; no se aconseja un baño demasiado frío. El antitérmico no siempre es necesario por debajo de 38,5 °C y se plantea si la fiebre pasa de esa cifra, si dura más de dos días, si se tolera mal o si el niño tiene un problema de salud, siempre en presentaciones pediátricas.",
+        "Roséole : que faire et quand consulter ? (ameli.fr, Assurance Maladie, 2025). Tema: cuándo consultar y qué hacer si hay convulsión. Hallazgo: consultar al médico si la temperatura es alta, hasta 40 °C, si empeora el estado general (deja de comer, bebe menos, está somnoliento) o si preocupa aunque se comporte con normalidad. Consultar rápidamente si hay fiebre con convulsiones, signos de deshidratación (mucosas secas, orina menos frecuente, ojeras) o un cambio de comportamiento como confusión, vómitos o rechazo a beber; el riesgo de deshidratación se vigila sobre todo antes de los 3 meses. Las convulsiones febriles aparecen desde los 6 meses hasta los 5 años y suelen durar de 1 a 3 minutos, 15 como máximo, sin dejar secuelas: se tumba al niño de lado, se trata la fiebre después de la crisis y se consulta rápidamente."
+      ]
+    },
+    {
+      "source_type": "reference",
+      "title": "Síndrome boca mano pie (Familia y Salud, AEPap)",
+      "organization": "Asociación Española de Pediatría de Atención Primaria (AEPap)",
+      "publication_year": 2018,
+      "url": "https://www.familiaysalud.es/sintomas-y-enfermedades/infecciones/enfermedades-exantematicas/sindrome-boca-mano-pie",
+      "specialties": ["pediatrics", "general_medicine"],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "topics": ["mano_pie_boca"],
+      "chunks": [
+        "Síndrome boca mano pie (Familia y Salud, Asociación Española de Pediatría de Atención Primaria, 2018). Tema: causa, síntomas y evolución. Hallazgo: es una enfermedad vírica y contagiosa, causada casi siempre por el virus Coxsackie y más frecuente al final del verano y al principio del otoño. Entre 3 y 7 días después del contacto aparecen fiebre de 37,5 a 39 °C, menos apetito y malestar; luego salen en la boca entre 2 y 10 ampollas ovaladas pequeñas que se ulceran y duelen al comer, y 2 o 3 días después lesiones en la piel de los dedos de manos y pies. Las lesiones desaparecen en 5 a 10 días sin dejar cicatriz y la mayoría se recupera en 7 a 10 días sin tratamiento específico. Se contagia por contacto con mocos, saliva, líquido de las ampollas o heces, sobre todo al principio.",
+        "Síndrome boca mano pie (Familia y Salud, Asociación Española de Pediatría de Atención Primaria, 2018). Tema: cuidados en casa, prevención y guardería. Hallazgo: ofrecer muchos líquidos para evitar la deshidratación y alimentos blandos como papillas, cremas, purés o gelatinas; evitar lo salado, picante, muy condimentado o ácido, y los zumos y bebidas con gas. Las bebidas frías y los lácteos alivian el dolor. La fiebre y el dolor se tratan con antitérmicos y no hay tratamiento específico porque se cura sola. Para prevenir el contagio, lavarse las manos a menudo, sobre todo tras cambiar pañales y antes de comer o cocinar, desinfectar juguetes y no compartir comida ni bebida con el niño enfermo. Puede ir a la guardería si no tiene fiebre y las llagas le dejan comer.",
+        "Síndrome boca mano pie (Familia y Salud, Asociación Española de Pediatría de Atención Primaria, 2018). Tema: cuándo consultar al pediatra. Hallazgo: hay que consultar si el niño no quiere comer ni beber por el dolor de las llagas de la boca, si el cuadro dura más de 10 días, si orina oscuro o en menos cantidad, o si está muy irritable, decaído o con dolor de cuello. Entre las complicaciones poco frecuentes la página cita la deshidratación y las convulsiones febriles, además de la pérdida de apetito y de peso. El texto no da a estos signos un grado de urgencia concreto."
+      ]
+    },
+    {
+      "source_type": "reference",
+      "title": "Enfermedad de manos, pies y boca: síntomas, tratamiento y prevención (HealthyChildren, AAP)",
+      "organization": "American Academy of Pediatrics",
+      "publication_year": 2026,
+      "url": "https://www.healthychildren.org/Spanish/health-issues/conditions/infections/Paginas/hand-foot-and-mouth-disease.aspx",
+      "specialties": ["pediatrics", "general_medicine"],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "topics": ["mano_pie_boca"],
+      "chunks": [
+        "Enfermedad de manos, pies y boca: síntomas, tratamiento y prevención (HealthyChildren.org, Academia Americana de Pediatría, 2026). Tema: síntomas, evolución y contagio. Hallazgo: es una infección vírica común y en general leve, sobre todo en lactantes y menores de 5 años, más frecuente en verano y otoño. Empieza de 3 a 6 días después del contagio con fiebre, dolor de garganta y mocos, como un resfriado; después salen ampollas o llagas en encías, mejillas, lengua y paladar, y una erupción en manos, pies y nalgas. Es más intensa al principio y suele pasar en una semana; una o dos semanas después algunos niños pelan la piel de los dedos, sin importancia. Contagia sobre todo la primera semana, aunque el virus se elimina por vía respiratoria de 1 a 3 semanas y por las heces durante semanas o meses.",
+        "Enfermedad de manos, pies y boca: síntomas, tratamiento y prevención (HealthyChildren.org, Academia Americana de Pediatría, 2026). Tema: cuidados, cuándo llamar y guardería. Hallazgo: no hay medicamento que la cure; la fiebre y el dolor pueden aliviarse consultando con el pediatra, y lo importante es que tome líquidos suficientes. No deben usarse enjuagues bucales convencionales porque escuecen. Llamar al pediatra si la fiebre dura más de 3 días o si no bebe, y llamar al pediatra o ir a urgencias si se cree que está deshidratado. Puede ir a la guardería salvo que tenga fiebre, no se encuentre bien para participar o babee tanto que no se le pueda atender; con muchas ampollas abiertas puede necesitar hasta siete días. Se previene lavándose las manos, limpiando juguetes y superficies y sin compartir cubiertos, vasos ni toallas."
+      ]
+    },
+    {
+      "source_type": "reference",
+      "title": "Hand, foot and mouth disease (NHS)",
+      "organization": "NHS (National Health Service, Reino Unido)",
+      "publication_year": 2024,
+      "url": "https://www.nhs.uk/conditions/hand-foot-mouth-disease/",
+      "specialties": ["pediatrics", "general_medicine"],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "topics": ["mano_pie_boca"],
+      "chunks": [
+        "Hand, foot and mouth disease (NHS, Servicio Nacional de Salud del Reino Unido, 2024). Tema: síntomas, duración y contagio. Hallazgo: empieza con dolor de garganta, fiebre y pocas ganas de comer; unos días después pueden salir llagas en la boca y una erupción en relieve en manos y pies, a veces también en ingles y nalgas, con granos que pueden convertirse en ampollas. Suele ser leve y curarse sola en 7 a 10 días. Se contagia con la tos, los estornudos, las heces y el líquido de las ampollas, y se puede pasar más de una vez; contagia desde unos días antes de los síntomas y sobre todo en los primeros 5 días. El niño no va a la guardería mientras esté demasiado mal para ir y puede volver cuando se encuentre mejor, aunque las ampollas no hayan curado.",
+        "Hand, foot and mouth disease (NHS, Servicio Nacional de Salud del Reino Unido, 2024). Tema: cuidados en casa y cuándo pedir ayuda. Hallazgo: ofrecer bebidas frescas para calmar la boca y prevenir la deshidratación, evitando las ácidas como el zumo de fruta, y comida blanda como el yogur, evitando lo caliente, salado o picante. Los antibióticos y otros medicamentos no curan esta enfermedad. Lavarse las manos a menudo, no compartir toallas ni vasos y lavar ropa y sábanas en caliente. Pedir cita urgente con el médico el mismo día si el niño tiene fiebre muy alta o se nota caliente, frío o con escalofríos, si hace menos pis de lo normal, que puede indicar deshidratación, o si preocupan los síntomas. Ver al médico de cabecera si no mejora en 7 a 10 días."
+      ]
+    },
+    {
+      "source_type": "reference",
+      "title": "Syndrome pieds-mains-bouche : que faire et quand consulter ? (ameli.fr)",
+      "organization": "Assurance Maladie (ameli.fr)",
+      "publication_year": 2025,
+      "url": "https://www.ameli.fr/assure/sante/themes/syndrome-pieds-mains-bouche/que-faire-quand-consulter",
+      "specialties": ["pediatrics", "general_medicine"],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "topics": ["mano_pie_boca"],
+      "chunks": [
+        "Syndrome pieds-mains-bouche : que faire et quand consulter ? (ameli.fr, Assurance Maladie, 2025). Tema: alimentación, hidratación e higiene en casa. Hallazgo: si la boca está muy afectada conviene ofrecer alimentos fríos, como lácteos frescos, y purés o sopas templadas, evitando lo caliente y lo duro. Si rechaza comer, vomita o tiene diarrea, hay que ofrecerle de beber a menudo y compensar las pérdidas con solución de rehidratación oral, que los lactantes aceptan mejor que los mayores. Para la fiebre, no abrigarle en exceso, ofrecerle agua y mantener la habitación aireada a unos 19 °C, y preguntar al farmacéutico o al médico antes de cualquier medicamento. Se le lava con jabón suave secando a toques, se le cortan las uñas, nunca se aplican talco, polvos ni cremas, y hay que lavarse las manos con frecuencia.",
+        "Syndrome pieds-mains-bouche : que faire et quand consulter ? (ameli.fr, Assurance Maladie, 2025). Tema: uñas, guardería y cuándo consultar. Hallazgo: la caída de uñas que puede aparecer después es benigna y no necesita tratamiento, y vuelven a crecer en 6 a 12 semanas. Si las lesiones son numerosas, el niño se queda en casa hasta mejorar, se consulta al médico y se avisa a la guardería; si son pocas y el estado general lo permite puede ir, porque la exclusión no es obligatoria. Se pide cita sin urgencia si no mejora en una semana. Se consulta en el mismo día si es un lactante menor de 6 meses, si tiene una enfermedad de piel como el eccema con muchas vesículas, o a cualquier edad ante signos de complicación: deshidratación, vesículas con pus o que se hunden, tos con dificultad para respirar, o cambio de comportamiento con fiebre, dolor de cabeza fuerte y vómitos."
+      ]
+    },
+    {
+      "source_type": "reference",
+      "title": "Conjuntivitis (Familia y Salud, AEPap)",
+      "organization": "Asociación Española de Pediatría de Atención Primaria (AEPap)",
+      "publication_year": 2016,
+      "url": "https://www.familiaysalud.es/sintomas-y-enfermedades/organos-de-los-sentidos/ojos/conjuntivitis",
+      "specialties": ["pediatrics", "general_medicine"],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "topics": ["conjuntivitis"],
+      "chunks": [
+        "Conjuntivitis (Familia y Salud, Asociación Española de Pediatría de Atención Primaria, 2016). Tema: tipos de conjuntivitis y cuánto duran. Hallazgo: es la inflamación de la membrana que cubre la parte delantera del ojo y el interior de los párpados; la mayoría son contagiosas, pero casi nunca dañan el ojo ni la vista. La vírica suele ir con catarro; la bacteriana da secreción amarilla y espesa, y los párpados se hinchan o se pegan; la alérgica pica más y es rara en niños pequeños; la irritativa aparece tras el contacto con cloro, humo o polvo. Todas dan ojo rojo, lagrimeo, molestias, sensibilidad a la luz y legañas. Sin tratamiento, las bacterianas duran de 7 a 10 días y las víricas hasta 2 semanas, y casi siempre se curan solas. La vírica contagia mientras hay enrojecimiento y secreción.",
+        "Conjuntivitis (Familia y Salud, Asociación Española de Pediatría de Atención Primaria, 2016). Tema: limpieza de los ojos, higiene y guardería. Hallazgo: limpiar con una gasa empapada en agua hervida o suero fisiológico estéril templado, una gasa distinta para cada ojo, de dentro hacia fuera, de la nariz a la sien; las compresas de agua fría alivian. No se recomienda lavar los ojos con infusión de manzanilla. Lavarse las manos a menudo, el niño y quienes le cuidan, evitar que se toque los ojos y que comparta toallas o juguetes, y lavar aparte la ropa de cama y las toallas. No compartir medicamentos ni usar colirios o pomadas caducados. Sobre la guardería no hay consenso; el artículo considera prudente que los niños pequeños no acudan hasta que dejen de contagiar.",
+        "Conjuntivitis (Familia y Salud, Asociación Española de Pediatría de Atención Primaria, 2016). Tema: cuándo consultar al pediatra. Hallazgo: hay que consultar ante cualquier conjuntivitis en un recién nacido, si la secreción es espesa o con costras y no mejora tras 2-3 días de lavados, si los ojos están muy rojos, si el niño refiere dolor intenso, si se sospecha un cuerpo extraño o si el enrojecimiento se concentra en la zona central, alrededor del iris. No conviene empezar ningún tratamiento sin indicación del pediatra o del oftalmólogo, porque el uso innecesario de antibióticos favorece las resistencias, y casi siempre no hace falta."
+      ]
+    },
+    {
+      "source_type": "reference",
+      "title": "Conjunctivitis (NHS)",
+      "organization": "NHS (National Health Service, Reino Unido)",
+      "publication_year": 2024,
+      "url": "https://www.nhs.uk/conditions/conjunctivitis/",
+      "specialties": ["pediatrics", "general_medicine"],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "topics": ["conjuntivitis"],
+      "chunks": [
+        "Conjunctivitis (NHS, Servicio Nacional de Salud del Reino Unido, 2024). Tema: síntomas, limpieza en casa y contagio. Hallazgo: la conjuntivitis u ojo rojo suele afectar a los dos ojos, que se ponen rojos, escuecen o pican, lagrimean o producen pus que se pega a las pestañas. Para limpiarlos se hierve agua, se deja enfriar y se pasa con suavidad un algodón limpio por las pestañas, uno para cada ojo, para quitar las costras; también puede ponerse un paño frío unos minutos sobre los ojos. Suele mejorar en un par de semanas sin tratamiento. Para no contagiar: lavarse las manos con agua tibia y jabón, lavar fundas de almohada y toallitas en caliente, no compartir toallas ni almohadas y no frotarse los ojos. No hace falta faltar al colegio salvo que el niño se encuentre muy mal.",
+        "Conjunctivitis (NHS, Servicio Nacional de Salud del Reino Unido, 2024). Tema: el recién nacido con ojos rojos y pegados y otros signos urgentes. Hallazgo: un bebé de menos de 30 días con los ojos rojos y pegados necesita una cita urgente con el médico el mismo día. Lo mismo si hay dolor en los ojos, molestia con la luz, cambios en la visión como líneas onduladas o destellos, o uno o ambos ojos muy rojos, porque pueden indicar un problema más serio. Se pide una cita normal con el médico de cabecera si los síntomas no se han resuelto en 7 días. La conjuntivitis alérgica, por ejemplo por el polen, da ojos rojos y llorosos pero no contagia."
+      ]
+    },
+    {
+      "source_type": "reference",
+      "title": "Conjonctivite : que faire et quand consulter ? (ameli.fr)",
+      "organization": "Assurance Maladie (ameli.fr)",
+      "publication_year": 2025,
+      "url": "https://www.ameli.fr/assure/sante/themes/conjonctivite/que-faire-quand-consulter",
+      "specialties": ["pediatrics", "general_medicine"],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "topics": ["conjuntivitis"],
+      "chunks": [
+        "Conjonctivite : que faire et quand consulter ? (ameli.fr, Assurance Maladie, 2025). Tema: lavados de los ojos e higiene. Hallazgo: se lava a menudo el ojo afectado, o los dos, con suero fisiológico y se seca con un pañuelo desechable o una compresa estéril; si los ojos amanecen pegados, se usa una compresa empapada en agua templada. Hay que lavarse las manos antes y después de tocar los ojos y no frotárselos, porque empeora la inflamación y puede contagiar a otros. También conviene alejar al niño del humo del tabaco y del polvo, que irritan. La página aclara que una conjuntivitis no es motivo de llamada de urgencia, pero que en algunos casos sí hay que ver al médico pronto.",
+        "Conjonctivite : que faire et quand consulter ? (ameli.fr, Assurance Maladie, 2025). Tema: cuándo consultar y con qué rapidez. Hallazgo: se consulta al médico de cabecera o al oftalmólogo en los días siguientes si el ojo está rojo pero poco doloroso, con una secreción que no cede con los lavados. Se consulta a un oftalmólogo en el mismo día si el niño tiene menos de dos años, si hay un cuerpo extraño en el ojo, si el ojo está hinchado con más de 38 °C de fiebre, si la visión está borrosa y no mejora al parpadear, si el ojo está rojo y doloroso con visión borrosa o si molesta la luz. También en el mismo día si hay diabetes, defensas bajas, una operación reciente del ojo u otra enfermedad ocular."
+      ]
+    },
+    {
+      "source_type": "reference",
+      "title": "Infección urinaria (Familia y Salud, AEPap)",
+      "organization": "Asociación Española de Pediatría de Atención Primaria (AEPap)",
+      "publication_year": 2026,
+      "url": "https://www.familiaysalud.es/sintomas-y-enfermedades/rinon-y-vias-urinarias/infeccion-urinaria",
+      "specialties": ["pediatrics", "general_medicine"],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "topics": ["infeccion_orina"],
+      "chunks": [
+        "Infección urinaria (Familia y Salud, Asociación Española de Pediatría de Atención Primaria, 2026). Tema: frecuencia, tipos y síntomas en bebés. Hallazgo: el 1-2 % de los niños y el 3-5 % de las niñas tendrán al menos una infección de orina, más frecuente en niñas y en niños no circuncidados. Suele deberse a bacterias que llegan a la uretra desde el ano. La cistitis afecta a vejiga y uretra y normalmente no da fiebre ni daña los riñones; la pielonefritis llega a los riñones, suele dar fiebre y es más grave. En bebés y niños pequeños lo más habitual es la fiebre alta sin causa aparente, a veces con irritabilidad, vómitos o falta de apetito; los niños mayores notan dolor o escozor al orinar, ganas frecuentes o escapes de orina.",
+        "Infección urinaria (Familia y Salud, Asociación Española de Pediatría de Atención Primaria, 2026). Tema: cómo se recoge la orina y por qué hace falta el pediatra. Hallazgo: la tira reactiva da un resultado inmediato pero orientativo: si es normal casi descarta la infección y si sale alterada hay que confirmarla con un urocultivo recogido en condiciones estériles, que tarda unos días. En lactantes puede usarse una bolsa adhesiva, que se cambia cada 20 minutos tras lavar la zona; se contamina con facilidad, de modo que un resultado negativo sirve pero uno positivo no basta, y a veces hace falta un sondaje, más fiable. La muestra debe recogerse antes de empezar el tratamiento. El pediatra interpreta las pruebas y decide el tratamiento; en lactantes pequeños o con infección alta puede hacer falta tratarla por vena e ingresar.",
+        "Infección urinaria (Familia y Salud, Asociación Española de Pediatría de Atención Primaria, 2026). Tema: evolución y prevención. Hallazgo: la gran mayoría se cura por completo sin secuelas, sobre todo las de vías bajas; las de vías altas pueden ser más graves y dejar cicatrices en el riñón, y tratarlas pronto reduce ese riesgo. Es importante completar el tratamiento pautado aunque los síntomas mejoren antes. No se pueden evitar del todo, pero ayuda beber agua suficiente, no aguantar las ganas de orinar, evitar el estreñimiento y, en las niñas, limpiar de delante hacia atrás después de hacer caca."
+      ]
+    },
+    {
+      "source_type": "reference",
+      "title": "Infecciones urinarias (UTI) en niños: diagnóstico, síntomas y tratamiento (HealthyChildren, AAP)",
+      "organization": "American Academy of Pediatrics",
+      "publication_year": 2026,
+      "url": "https://www.healthychildren.org/Spanish/health-issues/conditions/genitourinary-tract/Paginas/detecting-urinary-tract-infections.aspx",
+      "specialties": ["pediatrics", "general_medicine"],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "topics": ["infeccion_orina"],
+      "chunks": [
+        "Infecciones urinarias (UTI) en niños: diagnóstico, síntomas y tratamiento (HealthyChildren.org, Academia Americana de Pediatría, 2026). Tema: la fiebre como único signo en bebés. Hallazgo: en bebés y niños pequeños, hasta los 2 años, la infección urinaria puede dar pocos signos aparte de la fiebre, y en los bebés una fiebre alta sin causa aparente puede ser la única pista. A esta edad tiene más probabilidad de dañar el riñón que en niños mayores, por eso el diagnóstico y el tratamiento deben empezar cuanto antes. Si se sospecha una infección hay que avisar al pediatra de inmediato, y si un bebé tiene fiebre sin ningún otro síntoma durante más de 3 días hay que comunicarse con el pediatra.",
+        "Infecciones urinarias (UTI) en niños: diagnóstico, síntomas y tratamiento (HealthyChildren.org, Academia Americana de Pediatría, 2026). Tema: cómo se confirma y se trata. Hallazgo: en los niños que aún usan pañal el pediatra suele empezar con una bolsa especial sobre los genitales; si la muestra parece infectada se confirma con un catéter, y rara vez se extrae la orina de la vejiga con una aguja fina. Solo el análisis y el cultivo de orina confirman el diagnóstico. El pediatra también toma la tensión, explora el abdomen y los genitales y pregunta por el estreñimiento, que puede imitar una infección. El tratamiento se inicia enseguida y puede cambiarse según el cultivo, y hay que completarlo aunque mejore antes, porque dejarlo pronto puede provocar otra infección; a veces se piden ecografías o se deriva al especialista."
+      ]
+    },
+    {
+      "source_type": "reference",
+      "title": "Urinary tract infections (UTIs) (NHS)",
+      "organization": "NHS (National Health Service, Reino Unido)",
+      "publication_year": 2025,
+      "url": "https://www.nhs.uk/conditions/urinary-tract-infections-utis/",
+      "specialties": ["pediatrics", "general_medicine"],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "topics": ["infeccion_orina"],
+      "chunks": [
+        "Urinary tract infections (UTIs) (NHS, Servicio Nacional de Salud del Reino Unido, 2025). Tema: síntomas en niños pequeños y cuándo pedir ayuda. Hallazgo: un niño con infección de orina puede tener fiebre, que se nota tocándole el cuello, la espalda o la barriga, parecer enfermo en general (bebés y niños pequeños pueden estar irritables y no comer ni beber bien), mojarse o vomitar. Si se sospecha una infección de orina hay que pedir cita urgente con el médico el mismo día si tiene temperatura muy alta o muy baja, se nota caliente o frío o tirita, si los síntomas empeoran deprisa o no mejoran en 48 horas de tratamiento, si las infecciones se repiten, si hay sangre en la orina o dolor en el bajo vientre o la espalda, o si tiene las defensas bajas. Si está confuso o adormilado, llamar a emergencias.",
+        "Urinary tract infections (UTIs) (NHS, Servicio Nacional de Salud del Reino Unido, 2025). Tema: prevención en niños y tratamiento. Hallazgo: limpiar de delante hacia atrás, mantener la zona genital limpia y seca, cambiar enseguida los pañales sucios, ofrecer líquidos, sobre todo agua, para que haga pis claro con regularidad, evitar jabones perfumados en la zona, usar ropa interior de algodón no ajustada, no aguantarse el pis y vaciar bien la vejiga, y tratar el estreñimiento, que dificulta vaciarla. El tratamiento lo decide el médico, a veces tras un análisis de orina, y si se receta un medicamento hay que terminarlo aunque el niño se encuentre mejor."
+      ]
+    },
+    {
+      "source_type": "reference",
+      "title": "Cómo obtener una muestra de orina de un bebé o niño que no sabe ir al baño (HealthyChildren, AAP)",
+      "organization": "American Academy of Pediatrics",
+      "publication_year": 2025,
+      "url": "https://www.healthychildren.org/Spanish/health-issues/conditions/genitourinary-tract/Paginas/how-to-collect-a-urine-sample-from-a-baby.aspx",
+      "specialties": ["pediatrics", "general_medicine"],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "topics": ["infeccion_orina"],
+      "chunks": [
+        "Cómo obtener una muestra de orina de un bebé o niño que no sabe ir al baño (HealthyChildren.org, Academia Americana de Pediatría, 2025). Tema: por qué se analiza la orina de un bebé con fiebre. Hallazgo: cuando un bebé tiene fiebre, está inusualmente irritable o cambia su forma de comer o los pañales, el médico puede pedir un análisis de orina, que detecta con rapidez infecciones urinarias y deshidratación y sirve también para estudiar el riñón, la diabetes o la sangre en la orina. El método de recogida se elige equilibrando el riesgo de que la muestra se contamine con bacterias de la piel y lo molesto o invasivo que resulta para el bebé.",
+        "Cómo obtener una muestra de orina de un bebé o niño que no sabe ir al baño (HealthyChildren.org, Academia Americana de Pediatría, 2025). Tema: métodos para recoger la orina con pañal. Hallazgo: la recogida directa mientras orina da una muestra poco contaminada pero es difícil de coordinar; una toalla fría y húmeda en el bajo vientre puede estimular la micción. Las bolitas de algodón en el pañal no sirven para buscar una infección. La bolsa adhesiva es sencilla, pero la muestra puede contaminarse con bacterias de la piel. El sondaje, que hace un profesional con un tubo fino hasta la vejiga, tiene poco riesgo de contaminación y es el método más usado cuando se sospecha infección urinaria; la punción suprapúbica casi no se contamina pero es invasiva y se usa poco. Si una muestra de bolsa, de algodón o de recogida directa sale positiva, el médico puede confirmarla con sondaje o punción."
+      ]
+    },
+    {
+      "source_type": "reference",
+      "title": "Convulsión febril (Familia y Salud, AEPap)",
+      "organization": "Asociación Española de Pediatría de Atención Primaria (AEPap)",
+      "publication_year": 2019,
+      "url": "https://www.familiaysalud.es/sintomas-y-enfermedades/cerebro-y-sistema-nervioso/convulsiones-y-epilepsia/convulsion-febril",
+      "specialties": ["pediatrics", "general_medicine", "neurology"],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "topics": ["convulsion_febril"],
+      "chunks": [
+        "Convulsión febril (Familia y Salud, Asociación Española de Pediatría de Atención Primaria, 2019). Tema: qué es y a quién afecta. Hallazgo: es una respuesta del cerebro a la fiebre: el niño pierde de golpe la conciencia, el cuerpo se pone rígido y pueden aparecer sacudidas de brazos y piernas; a veces queda flácido, con los ojos hacia arriba, los labios morados, y parece que no respira. Suele darse el primer día de fiebre y dura unos minutos. Afecta a niños desde los 6 meses hasta los 5 años, a 3 a 5 de cada 100, y es más probable si ya tuvo una antes o si es menor de 15 meses. El diagnóstico se basa en lo que cuentan los padres, y la causa de la fiebre suele ser una infección vírica leve.",
+        "Convulsión febril (Familia y Salud, Asociación Española de Pediatría de Atención Primaria, 2019). Tema: qué hacer durante la convulsión y cuándo llamar al 112. Hallazgo: mantener la calma, evitar que se golpee, tumbarlo de lado para que respire mejor, dejarlo en un lugar seguro y, si se puede, esperar a que pase midiendo cuánto dura; no meterle nada en la boca. Si dura más de 5 minutos hay que llamar al 112 y buscar ayuda médica. Tras una primera convulsión conviene acudir a un centro sanitario para confirmar el diagnóstico y buscar la causa de la fiebre. También hay que buscar atención médica si se repite en el mismo proceso febril, si sigue muy adormilado, decaído o irritable, o si tiene dolor de cabeza intenso con vómitos. Conducir con prisas para llegar al centro sí puede causar daño, así que hay que evitarlo.",
+        "Convulsión febril (Familia y Salud, Asociación Española de Pediatría de Atención Primaria, 2019). Tema: si se repite, si se puede prevenir y si es epilepsia. Hallazgo: casi todas se detienen solas en pocos minutos y pocos niños necesitan medicación. La mayoría no vuelve a tenerlas, pero 1 de cada 3 las repite; el riesgo es mayor cuanto más pequeño es el niño o si hay casos en la familia, y baja cuando pasan 6 meses del primer episodio. No se pueden prevenir: los antitérmicos alivian el malestar de la fiebre pero no las evitan, ni deben usarse antes o después de las vacunas para prevenirlas, y las vacunas se ponen según el calendario. Solo 1 de cada 100 niños con convulsiones febriles y sin otra enfermedad del sistema nervioso desarrollará epilepsia, y la convulsión no perjudica al niño."
+      ]
+    },
+    {
+      "source_type": "reference",
+      "title": "Convulsiones febriles en niños (HealthyChildren, AAP)",
+      "organization": "American Academy of Pediatrics",
+      "publication_year": 2025,
+      "url": "https://www.healthychildren.org/Spanish/health-issues/conditions/fever/Paginas/febrile-seizures.aspx",
+      "specialties": ["pediatrics", "general_medicine", "neurology"],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "topics": ["convulsion_febril"],
+      "chunks": [
+        "Convulsiones febriles en niños (HealthyChildren.org, Academia Americana de Pediatría, 2025). Tema: frecuencia y cómo se ven. Hallazgo: afectan a unos 3 o 4 de cada 100 niños, en general desde los 6 meses hasta los 5 años y con más frecuencia entre los 12 y los 18 meses. Suelen aparecer en las primeras horas de fiebre, sobre todo con 38,9 °C o más, aunque también con fiebre baja. El niño puede ponerse rígido, tener sacudidas y la mirada perdida, no reaccionar durante un rato y cambiar de respiración o de color; la mayoría dura menos de uno o dos minutos y se recupera pronto. Las convulsiones breves no causan daño cerebral, parálisis, discapacidad ni muerte. Pueden darse con cualquier enfermedad con fiebre, como un resfriado, una otitis o la roséola.",
+        "Convulsiones febriles en niños (HealthyChildren.org, Academia Americana de Pediatría, 2025). Tema: qué hacer y cuándo llamar a emergencias. Hallazgo: colocar al niño en el suelo o en una cama, lejos de objetos duros o afilados, girarle la cabeza a un lado para que salgan la saliva o el vómito y llamar al pediatra; no meterle nada en la boca, porque no puede tragarse la lengua. Si dura más de 5 minutos hay que llamar al número de emergencias, porque una convulsión de más de 5 minutos es casi siempre una urgencia médica. Después de una convulsión febril se llama al médico de inmediato; lo importante es tratar la causa de la fiebre, y en menores de 1 año puede hacerse una punción lumbar para descartar una meningitis.",
+        "Convulsiones febriles en niños (HealthyChildren.org, Academia Americana de Pediatría, 2025). Tema: probabilidad de que se repita, medicamentos y vacunas. Hallazgo: suelen ser hereditarias. Si la primera ocurre antes del año, la probabilidad de tener otra es del 50 %; si ocurre después del año, del 30 %, y muchas dejan de aparecer al llegar a la edad escolar. Solo un pequeño número de niños con convulsiones febriles desarrolla epilepsia. Los medicamentos para la fiebre la bajan pero no previenen las convulsiones, y en general no se recomiendan tratamientos preventivos, aunque puede hablarse con el pediatra si se repiten o son largas. Las vacunas pueden dar fiebre, pero las convulsiones febriles tras vacunarse son raras, y las del calendario ayudan a prevenir las que causan el sarampión, la varicela, la gripe o el neumococo."
+      ]
+    },
+    {
+      "source_type": "reference",
+      "title": "Febrile seizures (NHS)",
+      "organization": "NHS (National Health Service, Reino Unido)",
+      "publication_year": 2023,
+      "url": "https://www.nhs.uk/conditions/febrile-seizures/",
+      "specialties": ["pediatrics", "general_medicine", "neurology"],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "topics": ["convulsion_febril"],
+      "chunks": [
+        "Febrile seizures (NHS, Servicio Nacional de Salud del Reino Unido, 2023). Tema: cómo es una convulsión febril. Hallazgo: suelen afectar a niños desde los 6 meses hasta los 6 años. El niño puede ponerse rígido y tener temblores, sacudidas o movimientos bruscos, perder la conciencia o no responder ni mirar cuando se le habla, vomitar u orinarse encima, y quedar dormido, irritable o confuso hasta 1 hora después. Suele durar 2 a 3 minutos y es raro que pase de 10. Aunque asusta, es poco probable que le haga daño o deje efectos a largo plazo, y la página dice que no se pueden prevenir. Muy rara vez un niño sigue teniéndolas y el médico puede recetar un medicamento para usar durante la crisis. Haberla tenido aumenta algo, aunque es raro, la probabilidad de epilepsia más adelante.",
+        "Febrile seizures (NHS, Servicio Nacional de Salud del Reino Unido, 2023). Tema: qué hacer, qué no hacer y cuándo llamar a emergencias. Hallazgo: mirar la hora de inicio y de fin, protegerle la cabeza con las manos o con algo blando y retirar los objetos peligrosos; cuando acabe, ponerle en posición de recuperación y comprobar que nada le tapa la boca ni la garganta. No moverle ni sujetarle, no meterle nada en la boca y no intentar bajarle la fiebre desnudándole o con agua fría. Llamar a emergencias o ir a urgencias si es la primera vez, si dura más de 5 minutos, si respira con dificultad, si la rigidez y las sacudidas afectan solo a un lado del cuerpo, si sigue más dormido de lo normal más de 1 hora después o si tiene más de una en 24 horas. Si sigue convulsionando o inconsciente, llamar a emergencias en lugar de llevarlo en coche."
+      ]
+    },
+    {
+      "source_type": "reference",
+      "title": "Convulsions fébriles de l'enfant (ameli.fr)",
+      "organization": "Assurance Maladie (ameli.fr)",
+      "publication_year": 2025,
+      "url": "https://www.ameli.fr/assure/sante/urgence/bebe-enfant/convulsions-febriles-enfant",
+      "specialties": ["pediatrics", "general_medicine", "neurology"],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "topics": ["convulsion_febril"],
+      "chunks": [
+        "Convulsions fébriles de l'enfant (ameli.fr, Assurance Maladie, 2025). Tema: cómo es la crisis y con qué frecuencia ocurre. Hallazgo: son contracciones musculares involuntarias y a sacudidas durante un episodio de fiebre, casi siempre benignas, en niños sanos desde los 6 meses hasta los 5 años. El cuerpo se sacude de forma simétrica, el niño pierde la conciencia o tiene una breve ausencia y a veces los ojos se desvían o la mirada queda fija. Suele durar de 1 a 5 minutos; después queda somnoliento y luego vuelve a la normalidad, sin secuelas. Les ocurre al 2 a 5 % de los menores de 5 años, sobre todo entre 1 y 3 años, con un máximo hacia los 18 meses. Suele ser única, pero se repite en torno al 30 % de los casos con otra fiebre, más si la primera fue antes de los 15 meses, con fiebre inferior a 38,5 °C o hay antecedentes familiares.",
+        "Convulsions fébriles de l'enfant (ameli.fr, Assurance Maladie, 2025). Tema: qué hacer, qué no hacer y cuándo llamar al 112. Hallazgo: anotar la hora de inicio, retirar objetos peligrosos, ponerle en posición lateral de seguridad, quedarse a su lado, protegerle la cabeza y aflojarle la ropa; no ofrecerle bebida ni comida mientras esté somnoliento, no sujetar sus movimientos, no meterle nada en la boca y no dejarse llevar por el pánico. Llamar al 112 si tiene menos de 1 año o más de 5, si la crisis dura 15 minutos o más, si hay varias en 24 horas, si solo afecta a un lado del cuerpo, si tiene una enfermedad neurológica conocida, si no tiene fiebre (menos de 38 °C), si tiene labios o manos azulados con dificultad para respirar o si queda una parálisis. En una crisis típica de menos de 15 minutos no hace falta llamar a emergencias; después se consulta al médico."
+      ]
+    }
+  ]
+}
