@@ -378,14 +378,19 @@ for (const locale of LOCALES) {
       }
       await page.unrouteAll({ behavior: "ignoreErrors" });
 
-      for (const [name, path] of [
-        ["13-documentos", "/dashboard/overview"], ["14-subir", "/dashboard/upload"],
-        ["15-consulta", "/dashboard/consulta"], ["16-grabar", "/dashboard/consulta/grabar"],
-        ["17-ajustes", "/dashboard/settings"],
+      // Each screen's main action, for the taps-and-seconds table: where it
+      // sits and how many words come before it (taps counted from the tab bar).
+      for (const [name, path, target, taps] of [
+        ["13-documentos", "/dashboard/overview", 'main a[href*="/dashboard/documents/"]', 2],
+        ["14-subir", "/dashboard/upload", 'main label:has(input[type="file"])', 2],
+        ["15-consulta", "/dashboard/consulta", "main textarea", 2],
+        ["16-grabar", "/dashboard/consulta/grabar", 'main input[type="checkbox"]', 3],
+        ["17-ajustes", "/dashboard/settings", 'main [role="group"]', 2],
       ] as const) {
         await page.goto(`/${locale}${path}`);
         await shoot(page, `${p}-${name}`, true);
-        metrics[name] = await firstScreen(page);
+        const at = (await positions(page, { target }, target)) as Record<string, number | null>;
+        metrics[name] = { ...(await firstScreen(page)), task: { target: at.target, wordsBefore: at.wordsBefore, taps } };
       }
 
       // Sign-up and onboarding: signed out, then a fresh account.
