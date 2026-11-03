@@ -71,6 +71,14 @@ services:
       AUTH_SECRET: ${AUTH_SECRET:?set in .env.prod}
       MISTRAL_API_KEY: ${MISTRAL_API_KEY:?set in .env.prod}
       OPENAI_API_KEY: ${OPENAI_API_KEY:-}
+      # Generation provider (chat, OCR, extraction, summaries). Only the vars
+      # listed here reach the container, so without these lines a .env.prod
+      # with LLM_PROVIDER=anthropic was silently ignored. Mistral stays
+      # required above: embeddings and Voxtral transcription have no Claude
+      # equivalent. A personal (sk-ant-usr) key needs the workspace id.
+      LLM_PROVIDER: ${LLM_PROVIDER:-mistral}
+      ANTHROPIC_API_KEY: ${ANTHROPIC_API_KEY:-}
+      ANTHROPIC_WORKSPACE_ID: ${ANTHROPIC_WORKSPACE_ID:-}
       RESEND_API_KEY: ${RESEND_API_KEY:-}
       ADELIA_APP_URL: ${ADELIA_APP_URL:-http://localhost:3000}
       CORS_ORIGINS: ${ADELIA_APP_URL:-http://localhost:3000}
