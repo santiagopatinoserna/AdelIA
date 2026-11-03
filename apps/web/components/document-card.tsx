@@ -30,12 +30,16 @@ export function DocumentCard({ doc, locale }: { doc: DocumentDTO; locale: string
           <span className="inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-primary-tint text-primary-text ring-1 ring-primary-tint-line">
             <Icon className="h-4 w-4" strokeWidth={2} />
           </span>
-          <span className="truncate text-sm font-medium text-ink">{title}</span>
+          <span className="truncate text-base font-medium text-ink">{title}</span>
         </div>
         <StatusBadge status={doc.status} />
       </div>
-      <p className="mt-3 pl-12 font-mono text-xs text-ink-soft">
-        {new Date(doc.created_at).toLocaleString(locale)}
+      {/* A date she reads ("3 nov 2026, 1:23"), not a log stamp with seconds
+          in monospace. */}
+      <p className="mt-2 pl-12 text-sm text-ink-soft">
+        {new Intl.DateTimeFormat(locale, { dateStyle: "medium", timeStyle: "short" }).format(
+          new Date(doc.created_at),
+        )}
       </p>
     </Link>
   );
