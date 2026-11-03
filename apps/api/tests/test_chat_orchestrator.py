@@ -460,3 +460,75 @@ async def test_the_chat_passes_the_relative_margin_from_the_setting(
         mock_retrieve_evidence.call_args.kwargs["relative_margin"]
         == settings.evidence_relative_margin
     )
+
+
+# --- the corpus is searched in Spanish, her documents in her language ------
+#
+# agent/corpus_query.py: measured 2026-11-03, a French question sat 0.06 farther
+# from the Spanish corpus than its Spanish twin and was refused. Her own
+# documents are in her language, so only the evidence half changes.
+
+
+@patch("adelia.services.chat_orchestrator._retrieve_evidence_for_query", return_value=[])
+@patch("adelia.services.chat_orchestrator.retrieve_relevant_chunks", return_value=[])
+@patch("adelia.services.chat_orchestrator.embed_texts")
+@patch("adelia.services.chat_orchestrator.detect_temporal_intent", return_value=None)
+@patch("adelia.services.chat_orchestrator.corpus_query")
+async def test_a_french_question_searches_her_documents_as_written_and_the_corpus_in_spanish(
+    mock_corpus, mock_temporal, mock_embed, mock_chunks, mock_evidence,
+):
+    from adelia.services.chat_orchestrator import retrieve_for_account
+    from adelia.services.scope import Scope
+
+    question = "Mon bébé régurgite après chaque tétée"
+    mock_corpus.return_value = "Mi bebé regurgita después de cada toma"
+    mock_embed.return_value = [[0.1] * 1024, [0.2] * 1024]
+
+    await retrieve_for_account(Scope(user_id=uuid4()), question=question, locale="fr")
+
+    mock_corpus.assert_awaited_once_with(question, "fr")
+    mock_embed.assert_awaited_once_with([question, "Mi bebé regurgita después de cada toma"])
+    assert mock_chunks.call_args.kwargs["query_embedding"] == [0.1] * 1024
+    assert mock_evidence.call_args.args[0] == [0.2] * 1024
+
+
+@patch("adelia.services.chat_orchestrator._retrieve_evidence_for_query", return_value=[])
+@patch("adelia.services.chat_orchestrator.retrieve_relevant_chunks", return_value=[])
+@patch("adelia.services.chat_orchestrator.embed_texts")
+@patch("adelia.services.chat_orchestrator.detect_temporal_intent", return_value=None)
+async def test_a_spanish_question_embeds_once_for_both_halves(
+    mock_temporal, mock_embed, mock_chunks, mock_evidence,
+):
+    from adelia.services.chat_orchestrator import retrieve_for_account
+    from adelia.services.scope import Scope
+
+    mock_embed.return_value = [[0.1] * 1024]
+    await retrieve_for_account(Scope(user_id=uuid4()), question="¿Regurgita?", locale="es")
+
+    mock_embed.assert_awaited_once_with(["¿Regurgita?"])
+    assert mock_evidence.call_args.args[0] == [0.1] * 1024
+
+
+@patch("adelia.services.chat_orchestrator._retrieve_evidence_for_query", return_value=[])
+@patch("adelia.services.chat_orchestrator.embed_texts")
+@patch("adelia.services.chat_orchestrator.query_observations_by_name_and_date_range",
+       return_value=[])
+@patch("adelia.services.chat_orchestrator.detect_temporal_intent")
+@patch("adelia.services.chat_orchestrator.corpus_query")
+async def test_the_temporal_path_embeds_only_the_corpus_text(
+    mock_corpus, mock_temporal, mock_rows, mock_embed, mock_evidence,
+):
+    """Her values come from the structured query there; the embedding is for
+    the guidelines alone."""
+    from adelia.services.chat_orchestrator import retrieve_for_account
+    from adelia.services.scope import Scope
+
+    mock_temporal.return_value = MagicMock(entity_name="ferritine", from_date=None, to_date=None)
+    mock_corpus.return_value = "curva de ferritina"
+    mock_embed.return_value = [[0.3] * 1024]
+
+    await retrieve_for_account(Scope(user_id=uuid4()), question="courbe de ferritine",
+                               locale="fr")
+
+    mock_embed.assert_awaited_once_with(["curva de ferritina"])
+    assert mock_evidence.call_args.args[0] == [0.3] * 1024

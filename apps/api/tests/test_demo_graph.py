@@ -179,3 +179,43 @@ async def test_a_clarification_for_a_field_we_never_asked_is_refused(client):
         "clarification": {"field": "weight", "value": "7"},
     })
     assert resp.status_code == 422
+
+
+@pg_only
+async def test_a_french_visitor_is_searched_in_spanish_by_the_demos_provider(client, monkeypatch):
+    """agent/corpus_query.py: the home QA's plan-fr question was refused at
+    0.219 while its Spanish twin answered at 0.162 (2026-11-03). The demo
+    translates with its own provider and answers the French it was asked."""
+    monkeypatch.setattr(settings, "demo_llm_provider", "anthropic")
+    seen: dict = {}
+
+    async def _corpus_query(text, locale, *, provider=None):
+        seen["corpus"] = (text, locale, provider)
+        return "Mi bebé de 4 meses regurgita después de cada toma"
+
+    async def _embed(texts):
+        seen["embedded"] = list(texts)
+        return [[0.0] * 1024]
+
+    async def _retrieve(session, **kwargs):
+        return [_match()]
+
+    async def _no_experience(session, **kwargs):
+        return []
+
+    async def _generate(system_prompt, user_message, **kwargs):
+        seen["user"] = user_message
+        return "Réponse [ev_1]."
+
+    question = "Mon bébé de 4 mois régurgite après chaque tétée, ça m'inquiète"
+    with patch("adelia.routers.demo.corpus_query", _corpus_query), patch(
+        "adelia.routers.demo.embed_texts", _embed
+    ), patch("adelia.routers.demo.retrieve_evidence", _retrieve), patch(
+        "adelia.routers.demo.retrieve_experience", _no_experience
+    ), patch("adelia.routers.demo.generate_answer", _generate):
+        resp = await client.post("/demo/ask", json={"question": question, "locale": "fr"})
+
+    assert resp.status_code == 200, resp.text
+    assert seen["corpus"] == (question, "fr", "anthropic")
+    assert seen["embedded"] == ["Mi bebé de 4 meses regurgita después de cada toma"]
+    assert question in seen["user"]

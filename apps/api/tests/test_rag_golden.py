@@ -20,7 +20,10 @@ What runs where
        holds one recorded 1024-dim query vector per question. Record it once
        with `uv run python -m tests.record_golden_embeddings` on a machine
        that has a key; after that the set runs with no key at all, as long as
-       the corpus is in the database.
+       the corpus is in the database. A French or English question also
+       records the Spanish text production searches the corpus with and its
+       vector (agent/corpus_query.py), so the offline run searches the way
+       production does; a recording without them names the ids and skips.
   With neither, both groups skip and say so. A skip is reported, never
   counted as a pass: `GoldenReport.failures()` treats "did not run" as
   "unknown", so a human decides instead of a green tick lying.
@@ -37,12 +40,15 @@ from __future__ import annotations
 
 import json
 import os
+from contextlib import ExitStack
 from pathlib import Path
 from unittest.mock import patch
 from uuid import uuid4
 
 import pytest
 
+from adelia.agent import route as _route
+from adelia.agent.corpus_query import needs_translation
 from adelia.clinical.golden import (
     GOLDEN_SET,
     LOCALES,
@@ -65,6 +71,9 @@ from adelia.services.chat_orchestrator import answer_question_streaming
 
 REPORT_PATH = Path(__file__).resolve().parents[1] / "golden_report.json"
 EMBEDDINGS_FIXTURE = Path(__file__).parent / "fixtures" / "golden_query_embeddings.json"
+#: Taken at import, before conftest disables the model layer for each test: a
+#: live run (a key, no recording) translates for real, as production does.
+_LIVE_COMPLETE_JSON = _route._complete_json
 
 
 # ---------------------------------------------------------------------------
@@ -260,6 +269,16 @@ def _recorded_embeddings() -> dict[str, list[float]] | None:
     return data.get("embeddings") or None
 
 
+def _recorded_corpus() -> dict[str, tuple[str, list[float]]]:
+    """Per French or English id: the Spanish text the corpus is searched
+    with and its vector, as recorded next to the question's own vector."""
+    if not EMBEDDINGS_FIXTURE.exists():
+        return {}
+    data = json.loads(EMBEDDINGS_FIXTURE.read_text(encoding="utf-8"))
+    texts, vectors = data.get("corpus_queries") or {}, data.get("corpus_embeddings") or {}
+    return {qid: (texts[qid], vectors[qid]) for qid in texts if qid in vectors}
+
+
 async def _corpus_size() -> int:
     from sqlalchemy import func, select
 
@@ -279,7 +298,12 @@ def _missing_recordings(embeddings: dict[str, list[float]] | None) -> list[str]:
     the ids named, or (when there is a key) a live embedding of everything.
     """
     have = embeddings or {}
-    return [q.id for q in GOLDEN_SET if q.group in ("A", "B") and q.id not in have]
+    corpus = _recorded_corpus()
+    return [
+        q.id for q in GOLDEN_SET
+        if q.group in ("A", "B")
+        and (q.id not in have or (needs_translation(q.locale) and q.id not in corpus))
+    ]
 
 
 def _usable_recording() -> dict[str, list[float]] | None:
@@ -324,14 +348,22 @@ async def _answer(q, embeddings: dict[str, list[float]] | None) -> tuple[str, li
     text: list[str] = []
     evidence: list[dict] = []
 
-    async def _fake_embed(texts):
-        return [embeddings[q.id]]
+    corpus = _recorded_corpus().get(q.id)
 
-    ctx = (
-        patch("adelia.services.chat_orchestrator.embed_texts", _fake_embed)
-        if embeddings is not None
-        else _null_context()
-    )
+    async def _fake_embed(texts):
+        return [corpus[1] if corpus and t == corpus[0] else embeddings[q.id] for t in texts]
+
+    async def _recorded_corpus_query(text, locale, **kwargs):
+        return corpus[0] if corpus else text
+
+    if embeddings is not None:
+        ctx = ExitStack()
+        ctx.enter_context(patch("adelia.services.chat_orchestrator.embed_texts", _fake_embed))
+        ctx.enter_context(
+            patch("adelia.services.chat_orchestrator.corpus_query", _recorded_corpus_query)
+        )
+    else:
+        ctx = patch.object(_route, "_complete_json", _LIVE_COMPLETE_JSON)
     with ctx:
         async for ev in answer_question_streaming(
             user_id=uuid4(), question=q.question, locale=q.locale, age_months=q.age_months
@@ -343,12 +375,6 @@ async def _answer(q, embeddings: dict[str, list[float]] | None) -> tuple[str, li
             elif ev.type == "error":
                 raise AssertionError(f"{q.id}: {ev.content}")
     return "".join(text), evidence
-
-
-def _null_context():
-    from contextlib import nullcontext
-
-    return nullcontext()
 
 
 @pytest.mark.asyncio
@@ -509,6 +535,34 @@ async def test_a_recording_that_misses_new_questions_skips_naming_them(monkeypat
     assert module._usable_recording() is None
     reason = await module._skip_reason()
     assert reason is not None and "A12" in reason and "B15" in reason
+
+
+@pytest.mark.asyncio
+async def test_a_recording_without_the_corpus_translations_skips_naming_them(monkeypatch):
+    """agent/corpus_query.py searches the corpus with a Spanish rendering of a
+    French or English question. A recording made before that measures those
+    questions the way production no longer searches them, so it must not pass
+    for a full one."""
+    import sys
+
+    module = sys.modules[__name__]
+    full = {q.id: [0.0] for q in GOLDEN_SET if q.group in ("A", "B")}
+    monkeypatch.delenv("MISTRAL_API_KEY", raising=False)
+    monkeypatch.setattr(module, "_recorded_embeddings", lambda: full)
+    monkeypatch.setattr(module, "_recorded_corpus", lambda: {})
+    translated = [q.id for q in GOLDEN_SET if q.group in ("A", "B") and q.locale != "es"]
+    assert translated, "the set has French and English questions"
+    assert module._missing_recordings(full) == translated
+    reason = await module._skip_reason()
+    assert reason is not None and all(qid in reason for qid in translated)
+
+
+def test_the_recording_holds_a_spanish_corpus_text_for_every_translated_question():
+    corpus = _recorded_corpus()
+    for q in GOLDEN_SET:
+        if q.group in ("A", "B") and q.locale != "es":
+            text, vector = corpus[q.id]
+            assert text != q.question and len(vector) == 1024, q.id
 
 
 @pytest.mark.asyncio
