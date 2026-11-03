@@ -300,7 +300,6 @@
   },
   "upload": {
     "title": "Subir documento",
-    "drop": "Toca para elegir un archivo",
     "or": "o",
     "browse": "Elige un archivo",
     "uploading": "Subiendo…",
@@ -313,8 +312,6 @@
     "retry": "Reintentar",
     "intro": "Sube la cartilla de tu bebé, un análisis o el informe del pediatra.",
     "dropDesktop": "o arrástralo aquí",
-    "examplesToggle": "¿Qué puedo subir?",
-    "examples": "Ej: una foto de la cartilla, el PDF de un análisis o una nota de voz del pediatra.",
     "successToast": "Documento subido. Lo estamos leyendo: puedes esperar o seguir explorando.",
     "goDashboard": "Ver mi panel"
   },

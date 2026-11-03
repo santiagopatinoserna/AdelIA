@@ -300,7 +300,6 @@
   },
   "upload": {
     "title": "Upload document",
-    "drop": "Tap to choose a file",
     "or": "or",
     "browse": "Choose a file",
     "uploading": "Uploading…",
@@ -313,8 +312,6 @@
     "retry": "Try again",
     "intro": "Upload your baby's health record, a lab result or the pediatrician's report.",
     "dropDesktop": "or drag it here",
-    "examplesToggle": "What can I upload?",
-    "examples": "E.g. a photo of the health record, a lab PDF, or a voice note from the doctor.",
     "successToast": "Document uploaded. We're reading it: you can wait or keep exploring.",
     "goDashboard": "Go to my dashboard"
   },

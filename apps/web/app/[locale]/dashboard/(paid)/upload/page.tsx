@@ -27,14 +27,14 @@ export default async function UploadPage({
   const t = await getTranslations("upload");
   const tr = await getTranslations({ locale, namespace: "consulta.record" });
   return (
-    <main className="mx-auto max-w-2xl px-6 py-12">
-      <h1 className="text-2xl font-semibold">{t("title")}</h1>
-      <div className="mt-8">
+    <main className="mx-auto max-w-2xl px-5 py-8 sm:px-6 sm:py-12">
+      <h1 className="text-title text-ink">{t("title")}</h1>
+      <div className="mt-2">
         <UploadZone locale={locale} />
       </div>
       <Link
         href="/dashboard/consulta/grabar"
-        className="mt-6 flex items-center justify-center gap-2 text-sm text-primary-text underline decoration-primary-tint-line underline-offset-2 hover:text-primary-text-hover"
+        className="mt-6 flex min-h-11 items-center justify-center gap-2 text-primary-text underline decoration-primary-tint-line underline-offset-2 hover:text-primary-text-hover"
       >
         <Mic className="h-4 w-4" strokeWidth={2} />
         {tr("entryTitle")}

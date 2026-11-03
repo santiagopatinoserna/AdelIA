@@ -300,7 +300,6 @@
   },
   "upload": {
     "title": "Importer un document",
-    "drop": "Touche pour choisir un fichier",
     "or": "ou",
     "browse": "Choisir un fichier",
     "uploading": "Import en cours…",
@@ -313,8 +312,6 @@
     "retry": "Réessayer",
     "intro": "Ajoute le carnet de santé de ton bébé, une analyse ou le compte-rendu du pédiatre.",
     "dropDesktop": "ou glisse-le ici",
-    "examplesToggle": "Qu'est-ce que je peux ajouter ?",
-    "examples": "Ex : une photo du carnet, le PDF d'une analyse ou une note vocale du pédiatre.",
     "successToast": "Document ajouté. On le lit: tu peux attendre ou continuer à explorer.",
     "goDashboard": "Voir mon espace"
   },
