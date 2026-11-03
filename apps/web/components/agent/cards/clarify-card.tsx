@@ -12,7 +12,7 @@ export function ClarifyCard({ card, onAction }: { card: AgentCard; onAction: Car
   const titleId = `clarify-${card.id}`;
   return (
     <section data-testid="clarify-card" aria-labelledby={titleId} className="ad-card ad-rise p-4">
-      <h3 id={titleId} className="mb-3 font-sans text-lg font-semibold text-ink">{p.question}</h3>
+      <h2 id={titleId} className="mb-3 font-sans text-lg font-semibold text-ink">{p.question}</h2>
       <div className="flex flex-col gap-2" role="group" aria-labelledby={titleId}>
         {p.options.map((option) => (
           <button key={option.value} type="button" data-testid="clarify-option"

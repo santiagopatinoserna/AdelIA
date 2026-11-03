@@ -103,9 +103,24 @@ const markdownComponents: Components = {
   pre: ({ node, ...props }) => <pre className="overflow-x-auto whitespace-pre-wrap text-base" {...props} />,
 };
 
-function Md({ children }: { children: string }) {
+// The same map one level up, for a page whose only heading above the answer
+// is its h1 (the chat, the agent once the thread has started): there the
+// answer's own headings start at h2, or axe reports a skipped level.
+const markdownComponentsH2: Components = {
+  ...markdownComponents,
+  h1: ({ node, ...props }) => <h2 className="mt-6 text-lg font-semibold leading-snug" {...props} />,
+  h2: ({ node, ...props }) => <h2 className="mt-6 text-lg font-semibold leading-snug" {...props} />,
+  h3: ({ node, ...props }) => <h3 className="mt-5 text-base font-semibold leading-snug" {...props} />,
+  h4: ({ node, ...props }) => <h4 className="mt-5 text-base font-semibold leading-snug" {...props} />,
+  h5: ({ node, ...props }) => <h5 className="mt-5 text-base font-semibold leading-snug" {...props} />,
+};
+
+function Md({ children, level = 3 }: { children: string; level?: 2 | 3 }) {
   return (
-    <ReactMarkdown remarkPlugins={[remarkGfm, remarkCiteMarkers]} components={markdownComponents}>
+    <ReactMarkdown
+      remarkPlugins={[remarkGfm, remarkCiteMarkers]}
+      components={level === 2 ? markdownComponentsH2 : markdownComponents}
+    >
       {children}
     </ReactMarkdown>
   );
@@ -170,7 +185,10 @@ const SECTION_CLASS: Record<PlanKey, string> = {
 // Presentation only: never infer clinical sections or rewrite the model's text.
 // Like Markdown in chat, use the parser's safe URL transform and no raw-HTML plugin.
 // The surrounding answer owns h2, so supplied headings begin at h3.
-export function AnswerContent({ children }: { children: string }) {
+// `level` is where the answer's headings start: 3 under a page that titles
+// the answer with an h2 (the demo), 2 where the page has only its h1.
+export function AnswerContent({ children, level = 3 }: { children: string; level?: 2 | 3 }) {
+  const Heading = level === 2 ? "h2" : "h3";
   const t = useTranslations("demo");
   const uid = useId();
   const titles = Object.fromEntries(PLAN_KEYS.map((key) => [key, t(`plan.${key}`)])) as Record<PlanKey, string>;
@@ -182,7 +200,7 @@ export function AnswerContent({ children }: { children: string }) {
         data-testid="answer-content"
         className={`${CONTENT_CLASS} space-y-4 [&>p:first-child]:text-lead [&>p:first-child]:font-medium`}
       >
-        <Md>{children}</Md>
+        <Md level={level}>{children}</Md>
       </div>
     );
   }
@@ -198,14 +216,14 @@ export function AnswerContent({ children }: { children: string }) {
     if (!target) return;
     const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     target.scrollIntoView({ block: "start", behavior: reduce ? "auto" : "smooth" });
-    target.querySelector<HTMLElement>("h3")?.focus({ preventScroll: true });
+    target.querySelector<HTMLElement>(Heading)?.focus({ preventScroll: true });
   }
 
   return (
     <div data-testid="answer-content" className={`${CONTENT_CLASS} space-y-6`}>
       {plan.intro && (
         <div data-testid="plan-intro" className="text-lead font-medium [&>p]:whitespace-pre-wrap">
-          <Md>{plan.intro}</Md>
+          <Md level={level}>{plan.intro}</Md>
         </div>
       )}
       {mapped.length > 1 && (
@@ -233,18 +251,18 @@ export function AnswerContent({ children }: { children: string }) {
             data-testid={`plan-section-${section.key}`}
             className={`scroll-mt-4 text-ink ${SECTION_CLASS[section.key]}`}
           >
-            <h3
+            <Heading
               tabIndex={-1}
               className={`flex items-center gap-2 text-lg font-semibold leading-snug ${doctor ? "text-error-text" : "text-ink"}`}
             >
               <Icon className="h-5 w-5 shrink-0" strokeWidth={2} aria-hidden />
               {section.title}
-            </h3>
+            </Heading>
             {mothers && (
               <p className="mt-1 text-sm leading-relaxed text-ink-soft">{t("mothersLabel")}</p>
             )}
             <div className="mt-2 space-y-2 [&>:first-child]:mt-0">
-              <Md>{section.body.trim()}</Md>
+              <Md level={level}>{section.body.trim()}</Md>
             </div>
           </section>
         );

@@ -220,11 +220,12 @@ export function AgentCanvas({
           {/* The one headline of this screen. Everything below it (the
               showcase section title included) is mono, small caps and amber:
               two serif headlines competing was the reason nothing led. */}
-          {messages.length === 0 && (
-            <h1 className="ad-rise font-display text-title text-ink">
-              {activeName ? t("greetingWithName", { name: activeName }) : t("greeting")}
-            </h1>
-          )}
+          {/* Always the page's h1; once the thread has started it stays for
+              screen readers only (axe page-has-heading-one), and the answers
+              below start their headings at h2. */}
+          <h1 className={messages.length === 0 ? "ad-rise font-display text-title text-ink" : "sr-only"}>
+            {activeName ? t("greetingWithName", { name: activeName }) : t("greeting")}
+          </h1>
           {/* The height mark: the only warm signal of the panel, a real name
               and a real age, so it cannot read as stock. It is a mark beside
               the label, NOT a section rule (the full-width hairline it used to
@@ -261,7 +262,7 @@ export function AgentCanvas({
             return (
               <div key={i} data-testid="agent-message" data-role="assistant" className="my-4 [&_[data-testid=answer-content]]:mt-0">
                 {m.content ? (
-                  <AnswerContent>{m.content}</AnswerContent>
+                  <AnswerContent level={2}>{m.content}</AnswerContent>
                 ) : (
                   <p role="status" className="flex items-center gap-2.5 text-base text-ink-soft">
                     <span className="ad-pulse-dot shrink-0" aria-hidden />
