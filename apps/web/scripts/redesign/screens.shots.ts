@@ -1,3 +1,4 @@
+import AxeBuilder from "@axe-core/playwright";
 import { test, type Browser, type Page } from "@playwright/test";
 import { mkdirSync, writeFileSync } from "node:fs";
 import { homedir } from "node:os";
@@ -72,10 +73,15 @@ async function settle(page: Page) {
   await page.waitForTimeout(250);
 }
 
+// Every captured screen is also an axe run, in the scheme of its variant;
+// the violations land in metrics/axe-<prefix>.json next to the numbers.
+const axeFindings: Record<string, string[]> = {};
 async function shoot(page: Page, name: string, full = false) {
   await settle(page);
   await page.screenshot({ path: join(OUT, `${name}.png`) });
   if (full) await page.screenshot({ path: join(OUT, `${name}-full.png`), fullPage: true });
+  const audit = await new AxeBuilder({ page }).analyze();
+  axeFindings[name] = audit.violations.map((v) => `${v.id} (${v.impact}, ${v.nodes.length})`);
 }
 
 // Words a reader meets in the first screen, and the controls she can reach.
@@ -258,6 +264,8 @@ for (const locale of LOCALES) {
       }
       metrics.tasks = tasks;
       writeFileSync(join(OUT, "metrics", `${p}-public.json`), JSON.stringify(metrics, null, 1));
+      writeFileSync(join(OUT, "metrics", `axe-${p}-public.json`),
+        JSON.stringify(Object.fromEntries(Object.entries(axeFindings).filter(([k]) => k.startsWith(p))), null, 1));
       await context.close();
     });
 
@@ -396,6 +404,8 @@ for (const locale of LOCALES) {
       metrics.onboarding = await firstScreen(page);
 
       writeFileSync(join(OUT, "metrics", `${p}-account.json`), JSON.stringify(metrics, null, 1));
+      writeFileSync(join(OUT, "metrics", `axe-${p}-account.json`),
+        JSON.stringify(Object.fromEntries(Object.entries(axeFindings).filter(([k]) => k.startsWith(p))), null, 1));
       await context.close();
     });
   }
