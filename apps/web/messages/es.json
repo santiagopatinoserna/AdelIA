@@ -872,8 +872,10 @@
     "subscribeNowCta": "Suscribirme ahora"
   },
   "agent": {
-    "greeting": "Hola 👋 ¿En qué te ayudo con la salud de tu bebé?",
-    "placeholder": "Escribe o pulsa el micro…",
+    "greeting": "¿En qué te ayudo con la salud de tu bebé?",
+    "greetingWithName": "¿Cómo está {name}?",
+    "inputLabel": "Escribe o pulsa el micro…",
+    "placeholder": "Escribe, ej.: ha tenido 37,8",
     "send": "Enviar",
     "stop": "Parar",
     "listen": "Dictar por voz",

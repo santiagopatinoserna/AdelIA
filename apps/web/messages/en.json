@@ -872,8 +872,10 @@
     "subscribeNowCta": "Subscribe now"
   },
   "agent": {
-    "greeting": "Hi 👋 How can I help with your baby's health?",
-    "placeholder": "Type or tap the mic…",
+    "greeting": "How can I help with your baby's health?",
+    "greetingWithName": "How is {name} today?",
+    "inputLabel": "Type or tap the mic…",
+    "placeholder": "Type, e.g. she had 37.8",
     "send": "Send",
     "stop": "Stop",
     "listen": "Voice input",

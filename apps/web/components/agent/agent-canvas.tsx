@@ -4,6 +4,7 @@ import { useTranslations } from "next-intl";
 import { streamAgent, getSuggestions } from "@/lib/agent-client-browser";
 import type { AgentCard } from "@/lib/agent-types";
 import type { Citation, EvidenceCitation } from "@/lib/chat-types";
+import { AnswerContent } from "@/components/answer-content";
 import { CitationCard } from "@/components/citation-card";
 import { EvidenceCard } from "@/components/evidence-card";
 import { Database, BookMarked } from "lucide-react";
@@ -50,7 +51,13 @@ export function AgentCanvas({
 }) {
   const t = useTranslations("agent");
   const router = useRouter();
-  const { activeId } = useActiveProfile();
+  const { activeId, profiles } = useActiveProfile();
+  // Her baby's name in the greeting when we have it: the same server-fed
+  // profile list the ProfileProvider starts with, so the first render already
+  // has it and nothing is set after mount (7adb21c). Only a child's name: the
+  // parent's own row ("Mi perfil", relationship self) is not a baby.
+  const active = profiles.find((p) => p.id === activeId);
+  const activeName = active?.relationship === "child" ? active.display_name?.trim() : undefined;
   const growthMark = useGrowthMarkLabel();
   const [messages, setMessages] = useState<Msg[]>([]);
   const [cards, setCards] = useState<AgentCard[]>([]);
@@ -214,7 +221,9 @@ export function AgentCanvas({
               showcase section title included) is mono, small caps and amber:
               two serif headlines competing was the reason nothing led. */}
           {messages.length === 0 && (
-            <h1 className="ad-rise font-display text-[1.375rem] leading-[1.25] text-ink">{t("greeting")}</h1>
+            <h1 className="ad-rise font-display text-title text-ink">
+              {activeName ? t("greetingWithName", { name: activeName }) : t("greeting")}
+            </h1>
           )}
           {/* The height mark: the only warm signal of the panel, a real name
               and a real age, so it cannot read as stock. It is a mark beside
@@ -232,42 +241,65 @@ export function AgentCanvas({
               this tab. The "ask" row opens /dashboard/chat (the path that
               answers with citations), not this canvas. */}
           {messages.length === 0 && <CapabilityShowcase locale={locale} userId={userId} />}
-          {messages.map((m, i) => (
-            <div key={i} data-testid="agent-message" data-role={m.role} className={`my-2 ${m.role === "user" ? "text-right" : ""}`}>
-              <span className={`inline-block max-w-full rounded-lg px-3 py-2 ${m.role === "user" ? "bg-primary-tint" : "bg-surface-2"}`}>
-                {m.content || (busy && m.role === "assistant" ? t("thinking") : "")}
+          {messages.map((m, i) => {
+            // A turn that answered with a card only (a record to confirm, a
+            // question with buttons) leaves no text: no empty bubble for it.
+            const last = i === messages.length - 1;
+            if (m.role === "assistant" && !m.content && !(busy && last)) return null;
+            if (m.role === "user") {
+              return (
+                <div key={i} data-testid="agent-message" data-role="user" className="my-3 flex justify-end">
+                  <p className="max-w-[85%] whitespace-pre-wrap break-words rounded-2xl rounded-br-md bg-primary-tint px-4 py-2.5 text-base text-ink">
+                    {m.content}
+                  </p>
+                </div>
+              );
+            }
+            // The answer is read like the demo's: Markdown, the plan's
+            // sections and map, quiet citation markers, at full width. It used
+            // to be printed raw, "## Hoy - **...**" (AUDITORIA_UX.md, 11c).
+            return (
+              <div key={i} data-testid="agent-message" data-role="assistant" className="my-4 [&_[data-testid=answer-content]]:mt-0">
+                {m.content ? (
+                  <AnswerContent>{m.content}</AnswerContent>
+                ) : (
+                  <p role="status" className="flex items-center gap-2.5 text-base text-ink-soft">
+                    <span className="ad-pulse-dot shrink-0" aria-hidden />
+                    {t("thinking")}
+                  </p>
+                )}
                 {/* The source behind the [ev_N] markers in the text above.
                     Same cards the chat renders, from the same payload: one
                     citation renderer, two surfaces (audit 3.7). */}
-                {m.role === "assistant" && m.citations.length > 0 && (
-                  <span className="mt-3 block border-t border-line pt-3">
-                    <span className="ad-eyebrow flex items-center gap-1.5">
-                      <Database className="h-3 w-3" strokeWidth={2.4} />
+                {m.citations.length > 0 && (
+                  <div className="mt-4 border-t border-line pt-3">
+                    <p className="ad-eyebrow flex items-center gap-1.5">
+                      <Database className="h-3 w-3" strokeWidth={2.4} aria-hidden />
                       {t("citationSourceUserData")}
-                    </span>
-                    <span className="mt-1.5 flex flex-wrap gap-1">
+                    </p>
+                    <div className="mt-1.5 flex flex-wrap gap-1">
                       {m.citations.map((c, n) => (
                         <CitationCard key={c.chunk_id} citation={c} index={n + 1} locale={locale} />
                       ))}
-                    </span>
-                  </span>
+                    </div>
+                  </div>
                 )}
-                {m.role === "assistant" && m.evidence_citations.length > 0 && (
-                  <span className="mt-3 block border-t border-line pt-3">
-                    <span className="ad-eyebrow flex items-center gap-1.5 !text-accent-text">
-                      <BookMarked className="h-3 w-3" strokeWidth={2.4} />
+                {m.evidence_citations.length > 0 && (
+                  <div className="mt-4 border-t border-line pt-3">
+                    <p className="ad-eyebrow flex items-center gap-1.5 !text-accent-text">
+                      <BookMarked className="h-3 w-3" strokeWidth={2.4} aria-hidden />
                       {t("citationSourceEvidence")}
-                    </span>
-                    <span className="mt-1.5 flex flex-col gap-1.5">
+                    </p>
+                    <div className="mt-1.5 flex flex-col">
                       {m.evidence_citations.map((ev) => (
                         <EvidenceCard key={ev.tag} citation={ev} />
                       ))}
-                    </span>
-                  </span>
+                    </div>
+                  </div>
                 )}
-              </span>
-            </div>
-          ))}
+              </div>
+            );
+          })}
           {/* Mobile: cards render inline in the thread */}
           <div className="mt-3 flex flex-col gap-3 md:hidden">
             {cards.map((c) => <CardRenderer key={c.id} card={c} onAction={onCardAction} />)}

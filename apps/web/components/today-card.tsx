@@ -1,4 +1,5 @@
 import { getTranslations } from "next-intl/server";
+import { Bookmark, Syringe, Thermometer } from "lucide-react";
 
 import type { TodayItem } from "@/lib/api-endpoints";
 
@@ -22,24 +23,33 @@ export async function TodayCard({
   if (items.length === 0) return null;
   const t = await getTranslations("today");
   const title = name ? t("titleWithName", { name }) : t("title");
+  // The most useful block of the home, so it gets a real heading, not the
+  // 11 px eyebrow it had; a due vaccine is a reminder, in the warning colour,
+  // not the error red of an emergency (AUDITORIA_UX.md, problems 6 and 7).
   return (
-    <section aria-labelledby="today-card-title" className="ad-card ad-rise mb-4 p-4" data-testid="today-card">
-      <h2 id="today-card-title" className="ad-eyebrow">
+    <section aria-labelledby="today-card-title" className="ad-card ad-rise mb-5 p-4" data-testid="today-card">
+      <h2 id="today-card-title" className="font-sans text-lg font-semibold leading-snug text-ink">
         {title}
       </h2>
-      <ul className="mt-2 flex flex-col gap-1.5">
-        {items.map((item) => (
-          <li
-            key={item.kind}
-            data-kind={item.kind}
-            className={`text-[0.9375rem] leading-snug ${
-              item.tone === "warn" ? "text-error-text" : "text-ink"
-            }`}
-          >
-            {item.text}
-          </li>
-        ))}
+      <ul className="mt-1 flex flex-col divide-y divide-line">
+        {items.map((item) => {
+          const Icon = ICONS[item.kind] ?? Bookmark;
+          return (
+            <li
+              key={item.kind}
+              data-kind={item.kind}
+              className={`flex items-start gap-3 py-2.5 text-base leading-snug last:pb-0 ${
+                item.tone === "warn" ? "text-warning-text" : "text-ink"
+              }`}
+            >
+              <Icon className="mt-0.5 h-5 w-5 shrink-0" strokeWidth={1.9} aria-hidden />
+              {item.text}
+            </li>
+          );
+        })}
       </ul>
     </section>
   );
 }
+
+const ICONS = { vaccine: Syringe, observation: Thermometer, remember: Bookmark } as const;
