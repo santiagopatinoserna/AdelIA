@@ -45,6 +45,36 @@ async def test_with_retry_covers_anthropic_errors(monkeypatch):
     assert call.await_count == 2
 
 
+def _anthropic_status_error(cls, status: int):
+    request = httpx.Request("POST", "https://api.anthropic.com/v1/messages")
+    return cls("error", response=httpx.Response(status, request=request), body=None)
+
+
+async def test_with_retry_does_not_retry_a_permanent_anthropic_error(monkeypatch):
+    """A PDF Claude cannot read is a 400 on every attempt."""
+    import anthropic
+
+    monkeypatch.setattr(docs_mod, "RETRY_DELAYS", (0.0, 0.0))
+    call = AsyncMock(side_effect=_anthropic_status_error(anthropic.BadRequestError, 400))
+    with pytest.raises(anthropic.BadRequestError):
+        await _with_retry("ocr", call)
+    assert call.await_count == 1
+
+
+@pytest.mark.parametrize(
+    ("cls_name", "status"),
+    [("RateLimitError", 429), ("InternalServerError", 500), ("InternalServerError", 529)],
+)
+async def test_with_retry_still_retries_transient_anthropic_errors(monkeypatch, cls_name, status):
+    import anthropic
+
+    monkeypatch.setattr(docs_mod, "RETRY_DELAYS", (0.0, 0.0))
+    error = _anthropic_status_error(getattr(anthropic, cls_name), status)
+    call = AsyncMock(side_effect=[error, "texto"])
+    assert await _with_retry("ocr", call) == "texto"
+    assert call.await_count == 2
+
+
 async def test_with_retry_does_not_retry_a_refusal(monkeypatch):
     from adelia.llm import AnthropicRefusal
 
