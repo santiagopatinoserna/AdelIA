@@ -65,19 +65,23 @@ export function AccountSettingsView({
         : t("subscriptionNoneBody");
 
   return (
-    <main className="mx-auto max-w-2xl px-6 py-12">
-      <h1 className="text-2xl text-ink">{t("title")}</h1>
-      <section className="ad-card mt-6 p-4">
-        <div className="ad-eyebrow">{t("emailLabel")}</div>
-        <div className="mt-1.5 font-mono text-sm text-ink">{email}</div>
-      </section>
+    // One list instead of five cards: the email is the page's subtitle and
+    // each setting a section under a rule, so the screen reads top to bottom
+    // without a box per line (redesign direction A, "espacio antes que
+    // cajas"). The danger zone keeps its tinted box: that one is a warning.
+    <main className="mx-auto max-w-2xl px-5 py-8 sm:px-6 sm:py-12">
+      <h1 className="text-title text-ink">{t("title")}</h1>
+      <p className="mt-1 mb-6 break-all text-ink-soft">
+        <span className="sr-only">{t("emailLabel")}: </span>
+        {email}
+      </p>
 
       {/* GDPR art. 20 portability: a plain <a download> — the browser
           handles the stream, no JS blob juggling, and the endpoint sets
           Content-Disposition so it saves as adelia-export.json. */}
-      <section className="ad-card mt-6 p-4">
-        <div className="ad-eyebrow">{t("exportTitle")}</div>
-        <p className="mt-1.5 text-sm text-ink-soft">{t("exportBody")}</p>
+      <section className="border-t border-line py-6">
+        <h2 className="font-sans text-lg font-semibold text-ink">{t("exportTitle")}</h2>
+        <p className="mt-1.5 text-ink-soft">{t("exportBody")}</p>
         <a
           href="/api/backend/users/me/export"
           download="adelia-export.json"
@@ -98,9 +102,9 @@ export function AccountSettingsView({
           account the button opens the Stripe portal (card, invoices, cancel);
           without one there is nothing for the portal to show, so the link
           goes to /billing instead of a button that would answer 400. */}
-      <section className="ad-card mt-6 p-4">
-        <div className="ad-eyebrow">{t("subscriptionTitle")}</div>
-        <p className="mt-1.5 text-sm text-ink-soft">{subscriptionBody}</p>
+      <section className="border-t border-line py-6">
+        <h2 className="font-sans text-lg font-semibold text-ink">{t("subscriptionTitle")}</h2>
+        <p className="mt-1.5 text-ink-soft">{subscriptionBody}</p>
         <div className="mt-3">
           {billing?.can_manage ? (
             <ManageButton />
@@ -118,9 +122,9 @@ export function AccountSettingsView({
 
       {/* On phones the header has no language pill (it ate 174px of a
           390px bar): this is where the language lives on mobile. */}
-      <section className="ad-card mt-6 p-4">
-        <div className="ad-eyebrow">{t("languageTitle")}</div>
-        <p className="mt-1.5 text-sm text-ink-soft">{t("languageBody")}</p>
+      <section className="border-t border-line py-6">
+        <h2 className="font-sans text-lg font-semibold text-ink">{t("languageTitle")}</h2>
+        <p className="mt-1.5 text-ink-soft">{t("languageBody")}</p>
         <div className="mt-3">
           <LocaleSwitcher current={locale} variant="group" />
         </div>
@@ -130,7 +134,7 @@ export function AccountSettingsView({
           once and iOS never shows one, so Settings always offers the path. */}
       <InstallSettingsEntry />
 
-      <section className="mt-8 rounded-2xl border border-error-tint-line bg-error-tint p-5">
+      <section className="mt-6 rounded-2xl border border-error-tint-line bg-error-tint p-5">
         <h2 className="flex items-center gap-2 font-display text-lg font-semibold text-error-text">
           <AlertTriangle className="h-4 w-4" strokeWidth={2.2} />
           {t("dangerTitle")}
@@ -141,11 +145,11 @@ export function AccountSettingsView({
             type="checkbox"
             checked={acknowledged}
             onChange={(e) => setAcknowledged(e.target.checked)}
-            className="mt-0.5 h-4 w-4 shrink-0 rounded"
+            className="mt-0.5 h-5 w-5 shrink-0 rounded accent-error"
           />
           <span>{t("ackIrreversible")}</span>
         </label>
-        <label htmlFor="confirm-delete" className="mt-3 block text-xs font-medium text-error-text">
+        <label htmlFor="confirm-delete" className="mt-3 block text-sm font-medium text-error-text">
           {t("confirmLabel", { email })}
           <input
             id="confirm-delete"

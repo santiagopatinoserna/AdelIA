@@ -191,9 +191,9 @@ export function InstallSettingsEntry() {
   const installed = state.installed || justInstalled;
 
   return (
-    <section className="ad-card mt-6 p-4">
-      <div className="ad-eyebrow">{t("installTitle")}</div>
-      <p className="mt-1.5 text-sm text-ink-soft">{t("installBody")}</p>
+    <section className="border-t border-line py-6">
+      <h2 className="font-sans text-lg font-semibold text-ink">{t("installTitle")}</h2>
+      <p className="mt-1.5 text-ink-soft">{t("installBody")}</p>
       {installed ? (
         <p className="mt-3 inline-flex items-center gap-2 text-sm font-medium text-primary-text">
           <CheckCircle2 className="h-4 w-4" strokeWidth={2.2} />
