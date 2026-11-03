@@ -300,9 +300,15 @@ export function AgentCanvas({
               </div>
             );
           })}
-          {/* Mobile: cards render inline in the thread */}
+          {/* Mobile: cards render inline in the thread. While a card of this
+              turn waits for her (a record to confirm, a question with
+              buttons) it is the only one: a Telegram suggestion under "¿Lo
+              anoto así?" competed with a one-tap decision. */}
           <div className="mt-3 flex flex-col gap-3 md:hidden">
-            {cards.map((c) => <CardRenderer key={c.id} card={c} onAction={onCardAction} />)}
+            {(cards.some((c) => turnCardIds.current.has(c.id))
+              ? cards.filter((c) => turnCardIds.current.has(c.id))
+              : cards
+            ).map((c) => <CardRenderer key={c.id} card={c} onAction={onCardAction} />)}
           </div>
         </div>
         <AgentInput locale={locale} disabled={busy} onStop={() => abortRef.current?.abort()}

@@ -17,7 +17,7 @@ export function ClarifyCard({ card, onAction }: { card: AgentCard; onAction: Car
         {p.options.map((option) => (
           <button key={option.value} type="button" data-testid="clarify-option"
                   onClick={() => onAction("clarify", card, option.value)}
-                  className="ad-btn ad-btn-ghost min-h-11 w-full justify-start text-base">
+                  className="ad-btn ad-btn-ghost ad-btn-lg w-full justify-start">
             {option.label}
           </button>
         ))}
