@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import { useLocale, useTranslations } from "next-intl";
-import { ArrowUpRight, Loader2, Mic, MicOff, ShieldAlert } from "lucide-react";
+import { ArrowUpRight, Loader2, Mic, MicOff, Phone, ShieldAlert } from "lucide-react";
 import { AnswerSources } from "@/components/answer-sources";
 import { AnswerContent, type AnswerCorpusStats } from "@/components/answer-content";
 import { useDictation } from "@/hooks/use-dictation";
@@ -145,7 +145,7 @@ export function DemoAsk({ suggested, corpusStats }: {
             placeholder={dictation.interim ? "" : t("askPlaceholder")}
             aria-label={t("askLabel")}
             aria-describedby="demo-question-help"
-            className={`ad-field block w-full resize-y text-base leading-relaxed placeholder:text-ink-faint${
+            className={`ad-field block w-full resize-none text-base leading-relaxed placeholder:text-ink-faint${
               dictation.supported ? " ad-field-mic" : ""}`}
           />
           {/* Words still being recognised, greyed after what she has typed. A
@@ -167,10 +167,13 @@ export function DemoAsk({ suggested, corpusStats }: {
               aria-label={t("dictate")}
               aria-pressed={dictation.listening}
               disabled={busy}
-              className={`absolute right-1 top-1 inline-flex h-11 w-11 items-center justify-center rounded-full transition-colors ${
+              // Bottom right of the field: next to "Preguntar" and inside the
+              // thumb's reach, where the top corner was not. Tinted so it
+              // reads as a way in for someone who cannot type right now.
+              className={`absolute bottom-1.5 right-1.5 inline-flex h-11 w-11 items-center justify-center rounded-full transition-colors ${
                 dictation.listening
                   ? "bg-primary text-on-primary motion-safe:animate-pulse"
-                  : "text-ink-soft hover:bg-surface-2 hover:text-ink"}`}
+                  : "bg-primary-tint text-on-primary-tint hover:bg-surface-2"}`}
             >
               {dictation.listening ? <MicOff className="h-5 w-5" aria-hidden /> : <Mic className="h-5 w-5" aria-hidden />}
             </button>
@@ -189,7 +192,7 @@ export function DemoAsk({ suggested, corpusStats }: {
             type="submit"
             disabled={busy || question.trim().length < 3}
             aria-busy={busy}
-            className="ad-btn ad-btn-primary w-full text-base sm:w-auto sm:min-w-36"
+            className="ad-btn ad-btn-primary ad-btn-lg w-full sm:w-auto sm:min-w-36"
           >
             {busy && <Loader2 className="h-4 w-4 motion-safe:animate-spin" aria-hidden />}
             {busy ? t("askBusy") : t("askCta")}
@@ -200,7 +203,8 @@ export function DemoAsk({ suggested, corpusStats }: {
       {/* Short, persistent live region, rather than announcing every citation. */}
       <div role="status" aria-atomic="true" className="text-sm leading-relaxed text-ink-soft">
         {busy && (
-          <p data-testid="demo-loading" className="mt-4">
+          <p data-testid="demo-loading" className="mt-4 flex items-center gap-2.5 text-base text-ink">
+            <span className="ad-pulse-dot shrink-0" aria-hidden />
             {slow ? t("uxWaitingLong") : t("uxWaiting")}
           </p>
         )}
@@ -228,7 +232,7 @@ export function DemoAsk({ suggested, corpusStats }: {
         >
           {/* One question, the values as buttons, and a way out that still
               answers: never a second question, never a dead end. */}
-          <h2 id="demo-clarify-title" className="text-xl font-semibold text-ink">
+          <h2 id="demo-clarify-title" className="text-title text-ink">
             {result.clarify.question}
           </h2>
           <div className="mt-4 flex flex-col gap-2" role="group" aria-labelledby="demo-clarify-title">
@@ -241,7 +245,7 @@ export function DemoAsk({ suggested, corpusStats }: {
                   const field = result.clarify!.field;
                   void ask(asked, { field, value: option.value });
                 }}
-                className="ad-btn ad-btn-ghost min-h-11 w-full justify-start text-base"
+                className="ad-btn ad-btn-ghost ad-btn-lg w-full justify-start"
               >
                 {option.label}
               </button>
@@ -267,22 +271,40 @@ export function DemoAsk({ suggested, corpusStats }: {
           aria-labelledby="demo-answer-title"
           className="mt-6 border-t border-line pt-5"
         >
-          <h2 id="demo-answer-title" className={`text-xl font-semibold ${result.kind === "red_flag" ? "text-error-text" : "text-ink"}`}>
-            {t(result.kind === "red_flag" ? "urgentAnswerTitle"
-              : result.kind === "experience_only" ? "experienceOnlyTitle"
-              : isShortAnswer(result) ? "shortAnswerTitle" : "answerTitle")}
-          </h2>
-          {result.kind === "red_flag" && (
-            <p className="mt-4 flex items-start gap-2 rounded-lg bg-error-tint p-4 text-sm leading-relaxed text-error-text">
-              <ShieldAlert className="mt-0.5 h-4 w-4 shrink-0" aria-hidden />
-              <span>{t("redFlagNote")}</span>
-            </p>
+          {result.kind === "red_flag" ? (
+            // The emergency leads, and its action is one tap: the number is
+            // read from the code's own fixed reply, never from a model, and
+            // the button only exists when that reply names one. The reply
+            // itself follows in full, untouched.
+            <div data-testid="urgent-block" className="rounded-2xl border border-error-tint-line bg-error-tint p-4">
+              <h2 id="demo-answer-title" className="text-title text-error-text">
+                {t("urgentAnswerTitle")}
+              </h2>
+              <p className="mt-2 flex items-start gap-2 text-base leading-relaxed text-error-text">
+                <ShieldAlert className="mt-1 h-4 w-4 shrink-0" aria-hidden />
+                <span>{t("redFlagNote")}</span>
+              </p>
+              {emergencyNumber(result.answer) && (
+                <a
+                  data-testid="call-emergency"
+                  href={`tel:${emergencyNumber(result.answer)}`}
+                  className="ad-btn ad-btn-danger ad-btn-lg mt-4 w-full"
+                >
+                  <Phone className="h-5 w-5" aria-hidden />
+                  {t("callEmergency", { number: emergencyNumber(result.answer)! })}
+                </a>
+              )}
+            </div>
+          ) : (
+            <h2 id="demo-answer-title" className="text-title text-ink">
+              {t(titleKey(result))}
+            </h2>
           )}
           <AnswerContent>
             {result.kind === "evidence_only" ? t("evidenceOnlyNote") : result.answer}
           </AnswerContent>
           {/* Fixed clinical line comes from the API, unchanged (audit 3.8). */}
-          <p className="mt-5 border-t border-line pt-4 text-sm leading-relaxed text-ink-soft">
+          <p data-testid="answer-disclaimer" className="mt-6 border-t border-line pt-4 text-sm leading-relaxed text-ink-soft">
             {result.disclaimer}
           </p>
           <AnswerSources
@@ -292,22 +314,29 @@ export function DemoAsk({ suggested, corpusStats }: {
             answer={result.answer}
             corpusStats={corpusStats}
           />
-          <button
-            data-testid="ask-another"
-            type="button"
-            onClick={() => {
-              setResult(null);
-              setQuestion("");
-              requestAnimationFrame(() => form.current?.querySelector("textarea")?.focus());
-            }}
-            className="ad-btn ad-btn-ghost mt-4 w-full text-base"
-          >
-            {t("askAnother")}
-          </button>
+          {/* Under her thumb for the whole length of a long plan, settling at
+              the end of the answer (sticky, not fixed). Not on an emergency:
+              there the only action that matters is the call. */}
+          <div className={result.kind === "red_flag" ? "mt-5" : "ad-sticky-action mt-5"}>
+            <button
+              data-testid="ask-another"
+              type="button"
+              onClick={() => {
+                setResult(null);
+                setQuestion("");
+                requestAnimationFrame(() => form.current?.querySelector("textarea")?.focus());
+              }}
+              className="ad-btn ad-btn-ghost ad-btn-lg w-full"
+            >
+              {t("askAnother")}
+            </button>
+          </div>
         </section>
       )}
 
-      <div className="mt-5" hidden={Boolean(result)}>
+      {/* Gone while she waits, not just disabled: three greyed questions under
+          "Pensando…" were the only thing on the screen to read. */}
+      <div className="mt-5" hidden={Boolean(result) || busy}>
         <ul className="mt-1 flex flex-col">
           {suggested.map((suggestion, index) => (
             <li key={suggestion} className="border-t border-line first:border-t-0">
@@ -330,6 +359,24 @@ export function DemoAsk({ suggested, corpusStats }: {
       </div>
     </div>
   );
+}
+
+// The title says what kind of answer this is, never more: a refusal is not
+// "Tu plan" (handoff 5.1, "Ton plan" over no_evidence in production), and
+// sources found without a composed answer are titled as sources.
+function titleKey(result: DemoAnswer) {
+  if (result.kind === "experience_only") return "experienceOnlyTitle";
+  if (result.kind === "no_evidence") return "noEvidenceTitle";
+  if (result.kind === "evidence_only") return "evidenceOnlyTitle";
+  return isShortAnswer(result) ? "shortAnswerTitle" : "answerTitle";
+}
+
+// The number in the fixed red-flag frame of the API (answer_contract,
+// "Llama al {number}" / "Call {number}" / "Appelez le {number}"), or null.
+// Only that frame counts: a number elsewhere in the text is not a phone.
+const EMERGENCY_FRAME = /(?:Llama al|Call|Appelez le) (\d{2,3})\b/;
+function emergencyNumber(answer: string): string | null {
+  return EMERGENCY_FRAME.exec(answer)?.[1] ?? null;
 }
 
 // A fact question answered in one sentence is not a plan, and the page must

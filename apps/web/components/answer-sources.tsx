@@ -50,7 +50,8 @@ export function AnswerSources({ citations, kind, answer, corpusStats, shortAnswe
 
   // Emergency references remain immediately available; there is no secondary
   // reading layer between the urgent message and its supporting guideline.
-  if (kind === "red_flag") return (
+  // Sources found without a composed answer ARE the answer: open too.
+  if (kind === "red_flag" || kind === "evidence_only") return (
     <div className="mt-5">
       <h3 className="text-sm font-medium">{t("sourcesTitle")}</h3>
       {contents}

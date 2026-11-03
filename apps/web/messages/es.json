@@ -1,7 +1,7 @@
 {
   "common": {
     "appName": "AdelIA",
-    "tagline": "El vault de salud de tu bebé, con IA basada en la ciencia",
+    "tagline": "La salud de tu bebé, con pediatría y con fuentes",
     "loading": "Cargando…",
     "errorTitle": "Algo salió mal",
     "errorBody": "Hubo un error inesperado. Puedes reintentar o volver al inicio.",
@@ -21,7 +21,7 @@
   },
   "home": {
     "calmTitle": "La IA que sigue el desarrollo de tu bebé",
-    "calmIntro": "Responde con lo que dicen las guías y estudios de pediatría, siempre con la fuente. No sustituye a tu pediatra: busca donde él ha estudiado.",
+    "calmIntro": "Qué hacer ahora y cuándo ir al médico, según las guías de pediatría y con la fuente. No sustituye a tu pediatra.",
     "aboutLabel": "Sobre AdelIA y precios",
     "moreExamples": "Más ejemplos",
     "hero": "La salud de tu bebé, con menos dudas.",
@@ -282,7 +282,7 @@
   },
   "onboarding": {
     "title": "¿De quién vamos a cuidar?",
-    "subtitle": "Con el nombre y la fecha de nacimiento, AdelIA aplica las guías que corresponden a su edad. Puedes saltar este paso y completarlo cuando quieras.",
+    "subtitle": "Con su nombre y su fecha de nacimiento, las respuestas se ajustan a su edad. Puedes hacerlo luego.",
     "nameLabel": "Nombre del bebé",
     "namePlaceholder": "Adel",
     "dobLabel": "Fecha de nacimiento",
@@ -322,7 +322,7 @@
   },
   "signin": {
     "emailPlaceholder": "tu@email.com",
-    "sendMagicLink": "Enviar magic link",
+    "sendMagicLink": "Enviarme el enlace",
     "emailLabel": "Correo electrónico",
     "heading": "Entra con tu email",
     "instr": "Escribe tu correo y te enviamos un enlace privado para entrar, sin contraseña.",
@@ -337,7 +337,7 @@
     "title": "Preguntar a AdelIA",
     "newSession": "Nueva conversación",
     "emptyHistory": "Sin conversaciones todavía",
-    "placeholder": "Ej: Mi bebé no duerme bien y regurgita después de comer.",
+    "placeholder": "Ej.: Mi bebé no duerme bien",
     "send": "Enviar",
     "thinking": "Pensando…",
     "noContext": "No tengo información suficiente.",
@@ -872,8 +872,10 @@
     "subscribeNowCta": "Suscribirme ahora"
   },
   "agent": {
-    "greeting": "Hola 👋 ¿En qué te ayudo con la salud de tu bebé?",
-    "placeholder": "Escribe o pulsa el micro…",
+    "greeting": "¿En qué te ayudo con la salud de tu bebé?",
+    "greetingWithName": "¿Cómo está {name}?",
+    "inputLabel": "Escribe o pulsa el micro…",
+    "placeholder": "Escribe, ej.: ha tenido 37,8",
     "send": "Enviar",
     "stop": "Parar",
     "listen": "Dictar por voz",
@@ -1057,6 +1059,10 @@
     "shortAnswerTitle": "Tu respuesta",
     "experienceOnlyTitle": "Lo que cuentan otras madres",
     "urgentAnswerTitle": "Esto no puede esperar",
+    "noEvidenceTitle": "Sobre esto no tengo fuentes",
+    "evidenceOnlyTitle": "Las fuentes que encontré",
+    "callEmergency": "Llamar al {number}",
+    "planMap": "Partes del plan",
     "readMoreTitle": "En qué se basa este plan",
     "readMoreTitleAnswer": "En qué se basa esta respuesta",
     "readMoreTitleExperience": "De dónde salen estas experiencias",

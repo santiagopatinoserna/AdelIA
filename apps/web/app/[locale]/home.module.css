@@ -18,13 +18,13 @@
 .command:has(:global([data-testid="demo-answer"])) .headline { position:absolute; width:1px; height:1px; overflow:hidden; clip-path:inset(50%); white-space:nowrap; }
 .command:has(:global([data-testid="demo-answer"])) .ask { margin-top:0; }
 .command:has(:global([data-testid="demo-answer"])) :global([data-testid="demo-answer"]) { margin-top:0; border-top:0; padding-top:0; }
-.intro { margin-top:8px; max-width:46ch; font-size:15px; line-height:1.55; color:var(--color-ink-soft); }
+.intro { margin-top:8px; max-width:46ch; font-size:16px; line-height:1.5; color:var(--color-ink-soft); }
 .command:has(:global([data-testid="demo-answer"])) .intro { display:none; }
 .ask { margin-top:16px; }
 .ask :global(textarea) { min-height:96px; border-radius:18px; padding:16px; box-shadow:none; }
 .ask :global(.ad-field-mirror) { padding:16px; }
 .ask :global(.ad-field-mic) { padding-right:60px; }
-.ask :global(button[type="submit"]) { min-height:48px; border-radius:14px; }
+.ask :global(button[type="submit"]) { min-height:var(--tap-lg, 52px); border-radius:14px; margin-top:4px; }
 .record { margin-top:20px; }
 .record > details { padding-top:14px; }
 .record h2 { font-family:var(--font-sans); font-size:15px; font-weight:600; }

@@ -1,0 +1,665 @@
+{
+ "es": {
+  "plan": {
+   "question": "Está comiendo menos. Comparando sus revisiones, ¿qué debería vigilar y qué le pregunto al pediatra?",
+   "payload": {
+    "kind": "answer",
+    "intent": "plan",
+    "answer": "Pueden ser variaciones normales de apetito, pero con el antecedente de “come peor” tu pediatra ya pidió estar atenta [4]; ahora lo clave es observar bien y llevarle datos concretos a la próxima visita.\n\n## Hoy\n- **Anota cuánta leche toma en 24 h** (número de tomas, ml aproximados si es biberón, cuánto deja) para poder comparar con días previos y enseñarlo en consulta [ev_2].  \n- **Respeta sus señales de hambre y saciedad** (si gira la cabeza, cierra la boca, deja de succionar, se relaja, no la fuerces a terminar el biberón) [ev_3][ev_4].  \n- **Haz las tomas tranquilas y sin distracciones** (sin pantallas, ambiente calmado, actitud neutra) para que ella pueda notar bien cuándo tiene hambre o está llena [ev_1][ev_3][ev_4].  \n\n## Vigila\n- **Crecimiento y energía**: si sigue activa, se mueve, juega y el sueño es parecido a otros días (por ejemplo, ayer durmió 5 horas seguidas un tramo [5]) frente a si la notas más apagada o muy cansada [ev_2].  \n- **Patrón de alimentación**: si come menos en volumen pero mantiene un número de tomas razonable y sin conflicto, suele encajar con apetito propio del bebé, que es muy variable y se autorregula por energía más que por cantidad de ml [ev_1][ev_3].  \n- **Tu propia ansiedad en las tomas**: la preocupación excesiva con un crecimiento que ha sido adecuado puede hacer que se perciba como “mal comedora” a una niña con apetito simplemente pequeño [ev_1]; forzar o insistir demasiado puede empeorar la resistencia a comer [ev_2][ev_4].  \n\n## Cuándo ir al médico\n- **Con urgencia (hoy / en 24 h)** si notas cualquiera de estos signos junto a que come menos: menos pañales mojados de lo habitual, llanto débil o quejumbroso, está muy somnolienta o difícil de despertar, o parece claramente más decaída que otros días [ev_2].  \n- **En consulta en los próximos días** si ves que durante varios días seguidos come claramente menos, o tú percibes que “come peor” y además la notas más cansada, tal como os indicaron al proponer repetir la analítica si seguía así [4][ev_2].  \n- **En consulta programada** si el apetito es variable pero ella se mantiene activa y el crecimiento en la gráfica sigue su trayectoria; en esa visita se revisan peso y talla con la frecuencia recomendada (en torno a semanal entre 1–6 meses si hay dudas) [ev_2].  \n\n## No olvides\n- **Llevar a la consulta**: tu registro de 3–7 días con horas de las tomas, cantidad aproximada, cuánto deja, regurgitaciones (ayer tuvo dos por la tarde [5]) y cómo estaba de activa cada día [ev_2].  \n- **Preguntar al pediatra**:  \n  - Si su curva de peso y talla sigue una trayectoria adecuada con lo que está comiendo ahora [ev_1][ev_2].  \n  - Cómo interpretar sus análisis previos (hemoglobina y ferritina) en relación con el cansancio o el apetito, y cuándo repetirlos si sigue comiendo menos, como ya os sugirió [3][4][ev_2].  \n  - Qué señales concretas de hambre y saciedad ve más importantes en su caso para que podáis respetar su apetito sin forzar [ev_3][ev_4].",
+    "evidence_citations": [
+     {
+      "tag": "ev_1",
+      "source_id": "fixture-1",
+      "chunk_id": "fixture-chunk-1",
+      "title": "Recomendaciones de la Asociación Española de Pediatría sobre la Alimentación Complementaria",
+      "organization": "Asociación Española de Pediatría",
+      "year": 2024,
+      "url": "https://www.aeped.es/publicaciones/protocolos/recomendaciones-aep-sobre-alimentacion",
+      "snippet": "Recomendaciones de la Asociación Española de Pediatría sobre la Alimentación Complementaria (Gómez Fernández-Vegue M, Comités de Lactancia Materna y de Nutrición de la AEP, 2018). Tema: inicio de la alimentación complementaria (AC) y papel de la leche materna después de los 6 meses. Hallazgo: lactancia materna (LM) exclusiva 6 meses y después añadir alimentos de forma paulatina manteniendo la LM a"
+     },
+     {
+      "tag": "ev_2",
+      "source_id": "fixture-2",
+      "chunk_id": "fixture-chunk-2",
+      "title": "Lactancia materna en niños mayores o \"prolongada\"",
+      "organization": "Asociación Española de Pediatría",
+      "year": 2024,
+      "url": "https://www.aeped.es/publicaciones/protocolos/lactancia-materna-en-ninos-mayores-o",
+      "snippet": "Lactancia materna en niños mayores o \"prolongada\" (Comité de Lactancia Materna de la AEP, 2015). Tema: recomendaciones sobre la lactancia materna después del primer año. Hallazgo: OMS, UNICEF, AEP, AAP y otras sociedades recomiendan la leche materna como único alimento hasta los 6 meses y después complementarla con otros alimentos al menos hasta los 12-24 meses, manteniéndola todo el tiempo que ma"
+     },
+     {
+      "tag": "ev_3",
+      "source_id": "fixture-3",
+      "chunk_id": "fixture-chunk-3",
+      "title": "Métodos de alimentación complementaria en el lactante: Mapa de la evidencia y consideraciones del Comité de Nutrición y Lactancia Materna de la AEP",
+      "organization": "Anales de Pediatría",
+      "year": 2024,
+      "url": "https://doi.org/10.1016/j.anpedi.2026.504291",
+      "snippet": "Métodos de alimentación complementaria en el lactante: Mapa de la evidencia y consideraciones del Comité de Nutrición y Lactancia Materna de la AEP (Jiménez-Tapia A, González Jiménez D, Gil-Campos M, Suanes Cabello A, Rodríguez Delgado J, Campoy C, et al.; Anales de Pediatría, 2026;105:504291). Tema: baby-led weaning (BLW, BLISS) frente a alimentación complementaria tradicional con cuchara y purés"
+     },
+     {
+      "tag": "ev_4",
+      "source_id": "fixture-4",
+      "chunk_id": "fixture-chunk-4",
+      "title": "Análisis crítico de las nuevas directrices de la OMS sobre alimentación complementaria en el lactante de 6 a 23 meses de edad",
+      "organization": "Revista de Pediatría de Atención Primaria (Grupo de Gastroenterología y Nutrición de la AEPap)",
+      "year": 2024,
+      "url": "https://doi.org/10.60147/17e0ce48",
+      "snippet": "Análisis crítico de las nuevas directrices de la OMS sobre alimentación complementaria en el lactante de 6 a 23 meses de edad (Almazán Fernández de Bobadilla MV, García Mérida MJ, Ruiz Chércoles E, Castell Miñana M, Rodríguez Delgado J, Carbajo Ferreira ÁJ, Grupo de Gastroenterología y Nutrición de la AEPap; Rev Pediatr Aten Primaria 2024;26(103):e51-e65). Tema: valoración por el grupo de la AEPap"
+     }
+    ],
+    "disclaimer": "AdelIA no sustituye a tu pediatra. Verifica con tu médico antes de tomar decisiones clínicas."
+   }
+  },
+  "short": {
+   "question": "¿A qué edad gatean?",
+   "payload": {
+    "kind": "answer",
+    "intent": "question",
+    "answer": "La mayoría de los bebés empieza a gatear entre los 7 y los 10 meses, y algunos se saltan el gateo y pasan directamente a ponerse de pie [ev_1].\n\n- Antes suelen arrastrarse o girar sobre la tripa [ev_1].\n- Jugar boca abajo cuando está despierto le ayuda a ganar fuerza [ev_1].\n- Coméntalo en la revisión si a los 12 meses no se desplaza de ninguna forma [ev_1].",
+    "evidence_citations": [
+     {
+      "tag": "ev_1",
+      "source_id": "fixture-1",
+      "chunk_id": "fixture-chunk-1",
+      "title": "Reflujo (GER) vs enfermedad por reflujo (GERD) e historia natural en el lactante — NASPGHAN-ESPGHAN 2018 / NICE NG1",
+      "organization": "NASPGHAN-ESPGHAN",
+      "year": 2024,
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC6416385/",
+      "snippet": "El reflujo gastroesofágico (GER) es el paso del contenido del estómago al esófago, con o sin regurgitación o vómito. Es un proceso FISIOLÓGICO normal en el bebé: la regurgitación afecta al menos al 40% de los lactantes sanos. Solo se llama enfermedad por reflujo (GERD) cuando el reflujo causa síntomas molestos o complicaciones (escaso aumento de peso, esofagitis, problemas respiratorios). Distingu"
+     }
+    ],
+    "disclaimer": "AdelIA no sustituye a tu pediatra. Verifica con tu médico antes de tomar decisiones clínicas."
+   }
+  },
+  "experience": {
+   "question": "¿Algún truco para que empiece a gatear?",
+   "payload": {
+    "kind": "experience_only",
+    "intent": "plan",
+    "answer": "No he encontrado guías ni estudios sobre esto. Otras madres cuentan:\n\n## Lo que cuentan otras madres\n- Una madre cuenta que su hija empezó a desplazarse sentada, arrastrando el culete, y que gateó más tarde [ex_1].\n- Otra explica que poner juguetes un poco fuera de su alcance animó a su bebé a moverse [ex_2].",
+    "evidence_citations": [
+     {
+      "tag": "ex_1",
+      "source_id": "fixture-ex-1",
+      "chunk_id": "fixture-ex-chunk-1",
+      "title": "Foro de crianza: «mi bebé no quiere gatear»",
+      "organization": "Foro público de familias",
+      "year": 2024,
+      "url": "https://example.org/foro",
+      "snippet": "Fragmento de prueba de una experiencia contada por una familia.",
+      "tier": "experience"
+     },
+     {
+      "tag": "ex_2",
+      "source_id": "fixture-ex-2",
+      "chunk_id": "fixture-ex-chunk-2",
+      "title": "Blog de una madre: los primeros desplazamientos",
+      "organization": "Blog público",
+      "year": 2023,
+      "url": "https://example.org/blog",
+      "snippet": "Fragmento de prueba de una experiencia contada por una madre.",
+      "tier": "experience"
+     }
+    ],
+    "disclaimer": "AdelIA no sustituye a tu pediatra. Verifica con tu médico antes de tomar decisiones clínicas."
+   }
+  },
+  "no_evidence": {
+   "question": "¿Puedo darle infusión de manzanilla para los gases?",
+   "payload": {
+    "kind": "no_evidence",
+    "intent": "plan",
+    "answer": "No tengo evidencia clínica sobre esto en mi biblioteca, así que prefiero no responder antes que inventar. Coméntalo con tu pediatra, que conoce a tu bebé y puede valorarlo.",
+    "evidence_citations": [],
+    "disclaimer": "AdelIA no sustituye a tu pediatra. Verifica con tu médico antes de tomar decisiones clínicas."
+   }
+  },
+  "red_flag": {
+   "question": "Mi bebé de 2 meses tiene 38,2 de fiebre",
+   "payload": {
+    "kind": "red_flag",
+    "intent": null,
+    "answer": "Esto no puede esperar a una respuesta mía.\n\nHas descrito fiebre en un bebé de menos de 3 meses. A esa edad, 38 °C o más se considera de alto riesgo y se valora el mismo día, aunque el bebé parezca tranquilo.\n\nLlama al 112 o acude ahora a urgencias pediátricas, y cuéntales exactamente lo que acabas de escribirme. No le des ningún medicamento por tu cuenta mientras tanto, y no esperes a ver si mejora.\n\nNo voy a valorar esto a distancia: no puedo verle, ni tomarle las constantes, ni explorarle. Esa parte le toca a una persona, hoy.",
+    "evidence_citations": [
+     {
+      "tag": "ev_1",
+      "source_id": "red_flag:fever_under_3_months",
+      "chunk_id": "red_flag:fever_under_3_months",
+      "title": "Fiebre en menores de 5 años: valoración y manejo inicial (NICE NG143)",
+      "organization": "National Institute for Health and Care Excellence (NICE)",
+      "year": 2021,
+      "url": "https://www.nice.org.uk/guidance/ng143",
+      "snippet": ""
+     }
+    ],
+    "disclaimer": "AdelIA no sustituye a tu pediatra. Verifica con tu médico antes de tomar decisiones clínicas."
+   }
+  },
+  "clarify": {
+   "question": "Tiene fiebre, ¿qué hago?",
+   "payload": {
+    "kind": "clarify",
+    "intent": "clarify",
+    "answer": "¿Cuánto ha marcado el termómetro?",
+    "evidence_citations": [],
+    "disclaimer": "AdelIA no sustituye a tu pediatra. Verifica con tu médico antes de tomar decisiones clínicas.",
+    "clarify": {
+     "field": "temperature",
+     "question": "¿Cuánto ha marcado el termómetro?",
+     "options": [
+      {
+       "value": "37.5-37.9",
+       "label": "37,5 a 37,9 °C"
+      },
+      {
+       "value": "38-38.9",
+       "label": "38 a 38,9 °C"
+      },
+      {
+       "value": "39+",
+       "label": "39 °C o más"
+      }
+     ],
+     "skip": {
+      "value": "unknown",
+      "label": "No la he medido"
+     }
+    }
+   }
+  },
+  "plan_reflux": {
+   "question": "Mi bebé de 5 meses regurgita y llora",
+   "payload": {
+    "kind": "answer",
+    "intent": "plan",
+    "answer": "Sí: a la edad de Lucía es muy frecuente que regurgite tras muchas tomas si está ganando peso y está contenta entre medias [1][ev_1].\n\n## Hoy\n- **Sigue con tomas algo más pequeñas y más frecuentes**, como os pautaron, manteniendo el volumen total del día [2][ev_2].  \n- **Observa si la regurgitación es “sin esfuerzo”** (sale al eructar o al moverla, sin arcadas fuertes ni malestar intenso) [ev_1].  \n- **Procura mantenerla algo incorporada tras la toma** (en brazos o semisentada un rato), ya que el reflujo es más fácil cuando están tumbados todo el tiempo [ev_4].\n\n## Vigila\n- Si las regurgitaciones aumentan claramente en cantidad o fuerza, o empiezan a molestarle mucho (llanto intenso, se niega a comer, arquea la espalda) [ev_4].  \n- Si notas que deja de ganar peso o come cada vez peor, como ya os advirtió la pediatra [2][4][ev_4].  \n- Si el contenido cambia de aspecto: muy amarillo‑verdoso (biliar), con sangre roja o muy oscuro tipo “posos de café” [ev_3].\n\n## Cuándo ir al médico\n- **Urgencias de inmediato** si aparece vómito verde/amarillo‑verdoso (biliar), sangre en el vómito (no por grietas del pezón), o vómitos en proyectil repetidos, especialmente si fueran muy bruscos y abundantes [ev_3].  \n- **Valoración médica urgente (en el día)** si los vómitos empiezan a ser muy forzados, dolorosos, o si empiezan de forma nueva después de los 6 meses o persisten más allá de los 12 meses [ev_1][ev_3].  \n- **Consulta programada** si en las próximas semanas sigue regurgitando igual y notas peor apetito, menos energía o dudas sobre su ganancia de peso [2][4][ev_4].\n\n## No olvides\n- Apunta durante unos días: cuántas tomas hace, cuánto toma (aprox.), cuántas veces regurgita y si parece molestarle; esta información ayuda a ajustar el manejo conservador paso a paso [2][ev_2].  \n- Ten presente que, en la mayoría de bebés, la regurgitación mejora de forma espontánea entre los 6 y los 18 meses y suele desaparecer antes del año en alrededor del 90 % [ev_1].",
+    "evidence_citations": [
+     {
+      "tag": "ev_1",
+      "source_id": "fixture-1",
+      "chunk_id": "fixture-chunk-1",
+      "title": "Recomendaciones de la Asociación Española de Pediatría sobre la Alimentación Complementaria",
+      "organization": "Asociación Española de Pediatría",
+      "year": 2024,
+      "url": "https://www.aeped.es/publicaciones/protocolos/recomendaciones-aep-sobre-alimentacion",
+      "snippet": "Recomendaciones de la Asociación Española de Pediatría sobre la Alimentación Complementaria (Gómez Fernández-Vegue M, Comités de Lactancia Materna y de Nutrición de la AEP, 2018). Tema: inicio de la alimentación complementaria (AC) y papel de la leche materna después de los 6 meses. Hallazgo: lactancia materna (LM) exclusiva 6 meses y después añadir alimentos de forma paulatina manteniendo la LM a"
+     },
+     {
+      "tag": "ev_2",
+      "source_id": "fixture-2",
+      "chunk_id": "fixture-chunk-2",
+      "title": "Lactancia materna en niños mayores o \"prolongada\"",
+      "organization": "Asociación Española de Pediatría",
+      "year": 2024,
+      "url": "https://www.aeped.es/publicaciones/protocolos/lactancia-materna-en-ninos-mayores-o",
+      "snippet": "Lactancia materna en niños mayores o \"prolongada\" (Comité de Lactancia Materna de la AEP, 2015). Tema: recomendaciones sobre la lactancia materna después del primer año. Hallazgo: OMS, UNICEF, AEP, AAP y otras sociedades recomiendan la leche materna como único alimento hasta los 6 meses y después complementarla con otros alimentos al menos hasta los 12-24 meses, manteniéndola todo el tiempo que ma"
+     },
+     {
+      "tag": "ev_3",
+      "source_id": "fixture-3",
+      "chunk_id": "fixture-chunk-3",
+      "title": "Métodos de alimentación complementaria en el lactante: Mapa de la evidencia y consideraciones del Comité de Nutrición y Lactancia Materna de la AEP",
+      "organization": "Anales de Pediatría",
+      "year": 2024,
+      "url": "https://doi.org/10.1016/j.anpedi.2026.504291",
+      "snippet": "Métodos de alimentación complementaria en el lactante: Mapa de la evidencia y consideraciones del Comité de Nutrición y Lactancia Materna de la AEP (Jiménez-Tapia A, González Jiménez D, Gil-Campos M, Suanes Cabello A, Rodríguez Delgado J, Campoy C, et al.; Anales de Pediatría, 2026;105:504291). Tema: baby-led weaning (BLW, BLISS) frente a alimentación complementaria tradicional con cuchara y purés"
+     },
+     {
+      "tag": "ev_4",
+      "source_id": "fixture-4",
+      "chunk_id": "fixture-chunk-4",
+      "title": "Análisis crítico de las nuevas directrices de la OMS sobre alimentación complementaria en el lactante de 6 a 23 meses de edad",
+      "organization": "Revista de Pediatría de Atención Primaria (Grupo de Gastroenterología y Nutrición de la AEPap)",
+      "year": 2024,
+      "url": "https://doi.org/10.60147/17e0ce48",
+      "snippet": "Análisis crítico de las nuevas directrices de la OMS sobre alimentación complementaria en el lactante de 6 a 23 meses de edad (Almazán Fernández de Bobadilla MV, García Mérida MJ, Ruiz Chércoles E, Castell Miñana M, Rodríguez Delgado J, Carbajo Ferreira ÁJ, Grupo de Gastroenterología y Nutrición de la AEPap; Rev Pediatr Aten Primaria 2024;26(103):e51-e65). Tema: valoración por el grupo de la AEPap"
+     }
+    ],
+    "disclaimer": "AdelIA no sustituye a tu pediatra. Verifica con tu médico antes de tomar decisiones clínicas."
+   }
+  }
+ },
+ "en": {
+  "plan": {
+   "question": "She is feeding less. Comparing her check-ups, what should I watch for and ask her pediatrician?",
+   "payload": {
+    "kind": "answer",
+    "intent": "plan",
+    "answer": "She is feeding less; with her history, the key is to watch her overall intake, energy, and growth trend, and bring those points to her pediatrician.\n\n## Today\n- **Note her actual intake**: write down for 2–3 days how many feeds she takes in 24 hours, roughly how long each feed lasts, and any spit‑ups, so you can compare with her previous pattern and show it at the visit [1], [2], [ev_1].  \n- **Track nappies and energy**: count wet nappies in 24 hours and note if she seems as alert and active as usual or more tired, because reduced feeding plus low energy can be more concerning than feeding changes alone [3], [4], [ev_2].  \n- **Weighing plan**: if you have access to a reliable baby scale, follow the kind of frequency suggested in guidelines (about weekly between 1–6 months) rather than weighing daily, to see her growth trend without adding stress [ev_1].\n\n## Watch for\n- **Signs of poor intake**: clearly fewer wet nappies than usual, much shorter or fewer feeds, or long gaps with little interest in feeding can suggest she is not getting enough, especially if this persists over several days [ev_2].  \n- **Changes in behavior**: watch for unusual sleepiness, difficulty waking for feeds, or being too tired to feed effectively, as these are warning signs in sick infants [ev_2].  \n- **Growth trend**: at her next check‑up, ask to see her weight and length plotted on growth charts and whether her curve is steady or flattening, since guidelines focus on the *trend* (faltering growth) rather than one single weight [2], [ev_1].\n\n## When to see a doctor\n- **Emergency / same‑day**: seek urgent care if she refuses all breast/bottle, has very few clearly wet nappies, is very hard to wake, or is breathing fast or with chest indrawing, as these are danger signs in infants with feeding problems or illness [ev_2].  \n- **Today / soon**: contact her pediatrician the same day if she is feeding clearly less *and* seems more tired than usual or her feeding has worsened since the last visit, as your pediatrician already asked to repeat blood tests if she “stays tired or feeds worse” [4], [3].  \n- **Booked visit**: arrange a routine appointment if over a week or more she continues to feed less than before, even if she seems otherwise well, so her growth and need for any feeding adjustments can be reviewed in line with faltering‑growth guidance [ev_1].\n\n## Don’t forget\n- **Bring specific questions**: ask, “Is her weight gain on track compared with last visit?” and “Do you think her current intake is enough, given her blood tests and spit‑ups?” so they can link her feeding, labs, and growth [2], [3], [ev_1].  \n- **Mention the pediatrician’s prior plan**: remind them she spits up after many feeds but had no weight loss and was advised smaller, more frequent feeds, and that they wanted repeat blood tests if she stayed tired or fed worse [2], [4].  \n- **Ask about next steps if intake stays low**: you can ask whether any change in feeding pattern, monitoring schedule, or further tests are needed if she continues to feed less, based on her growth curve and current symptoms [ev_1], [ev_2].",
+    "evidence_citations": [
+     {
+      "tag": "ev_1",
+      "source_id": "fixture-1",
+      "chunk_id": "fixture-chunk-1",
+      "title": "Recomendaciones de la Asociación Española de Pediatría sobre la Alimentación Complementaria",
+      "organization": "Asociación Española de Pediatría",
+      "year": 2024,
+      "url": "https://www.aeped.es/publicaciones/protocolos/recomendaciones-aep-sobre-alimentacion",
+      "snippet": "Recomendaciones de la Asociación Española de Pediatría sobre la Alimentación Complementaria (Gómez Fernández-Vegue M, Comités de Lactancia Materna y de Nutrición de la AEP, 2018). Tema: inicio de la alimentación complementaria (AC) y papel de la leche materna después de los 6 meses. Hallazgo: lactancia materna (LM) exclusiva 6 meses y después añadir alimentos de forma paulatina manteniendo la LM a"
+     },
+     {
+      "tag": "ev_2",
+      "source_id": "fixture-2",
+      "chunk_id": "fixture-chunk-2",
+      "title": "Lactancia materna en niños mayores o \"prolongada\"",
+      "organization": "Asociación Española de Pediatría",
+      "year": 2024,
+      "url": "https://www.aeped.es/publicaciones/protocolos/lactancia-materna-en-ninos-mayores-o",
+      "snippet": "Lactancia materna en niños mayores o \"prolongada\" (Comité de Lactancia Materna de la AEP, 2015). Tema: recomendaciones sobre la lactancia materna después del primer año. Hallazgo: OMS, UNICEF, AEP, AAP y otras sociedades recomiendan la leche materna como único alimento hasta los 6 meses y después complementarla con otros alimentos al menos hasta los 12-24 meses, manteniéndola todo el tiempo que ma"
+     },
+     {
+      "tag": "ev_3",
+      "source_id": "fixture-3",
+      "chunk_id": "fixture-chunk-3",
+      "title": "Métodos de alimentación complementaria en el lactante: Mapa de la evidencia y consideraciones del Comité de Nutrición y Lactancia Materna de la AEP",
+      "organization": "Anales de Pediatría",
+      "year": 2024,
+      "url": "https://doi.org/10.1016/j.anpedi.2026.504291",
+      "snippet": "Métodos de alimentación complementaria en el lactante: Mapa de la evidencia y consideraciones del Comité de Nutrición y Lactancia Materna de la AEP (Jiménez-Tapia A, González Jiménez D, Gil-Campos M, Suanes Cabello A, Rodríguez Delgado J, Campoy C, et al.; Anales de Pediatría, 2026;105:504291). Tema: baby-led weaning (BLW, BLISS) frente a alimentación complementaria tradicional con cuchara y purés"
+     },
+     {
+      "tag": "ev_4",
+      "source_id": "fixture-4",
+      "chunk_id": "fixture-chunk-4",
+      "title": "Análisis crítico de las nuevas directrices de la OMS sobre alimentación complementaria en el lactante de 6 a 23 meses de edad",
+      "organization": "Revista de Pediatría de Atención Primaria (Grupo de Gastroenterología y Nutrición de la AEPap)",
+      "year": 2024,
+      "url": "https://doi.org/10.60147/17e0ce48",
+      "snippet": "Análisis crítico de las nuevas directrices de la OMS sobre alimentación complementaria en el lactante de 6 a 23 meses de edad (Almazán Fernández de Bobadilla MV, García Mérida MJ, Ruiz Chércoles E, Castell Miñana M, Rodríguez Delgado J, Carbajo Ferreira ÁJ, Grupo de Gastroenterología y Nutrición de la AEPap; Rev Pediatr Aten Primaria 2024;26(103):e51-e65). Tema: valoración por el grupo de la AEPap"
+     }
+    ],
+    "disclaimer": "AdelIA does not replace your pediatrician. Verify with your doctor before making clinical decisions."
+   }
+  },
+  "short": {
+   "question": "At what age do babies crawl?",
+   "payload": {
+    "kind": "answer",
+    "intent": "question",
+    "answer": "Most babies start crawling between 7 and 10 months, and some skip crawling and go straight to pulling up to stand [ev_1].\n\n- Before that they often shuffle or pivot on their tummy [ev_1].\n- Awake tummy time helps build strength [ev_1].\n- Mention it at the check-up if by 12 months they do not move around in any way [ev_1].",
+    "evidence_citations": [
+     {
+      "tag": "ev_1",
+      "source_id": "fixture-1",
+      "chunk_id": "fixture-chunk-1",
+      "title": "Reflujo (GER) vs enfermedad por reflujo (GERD) e historia natural en el lactante — NASPGHAN-ESPGHAN 2018 / NICE NG1",
+      "organization": "NASPGHAN-ESPGHAN",
+      "year": 2024,
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC6416385/",
+      "snippet": "El reflujo gastroesofágico (GER) es el paso del contenido del estómago al esófago, con o sin regurgitación o vómito. Es un proceso FISIOLÓGICO normal en el bebé: la regurgitación afecta al menos al 40% de los lactantes sanos. Solo se llama enfermedad por reflujo (GERD) cuando el reflujo causa síntomas molestos o complicaciones (escaso aumento de peso, esofagitis, problemas respiratorios). Distingu"
+     }
+    ],
+    "disclaimer": "AdelIA does not replace your pediatrician. Verify with your doctor before making clinical decisions."
+   }
+  },
+  "experience": {
+   "question": "Any tricks to get her crawling?",
+   "payload": {
+    "kind": "experience_only",
+    "intent": "plan",
+    "answer": "I found no guidelines or studies on this. Other mothers say:\n\n## What other mothers say\n- One mother says her daughter first moved around sitting, shuffling on her bottom, and crawled later [ex_1].\n- Another explains that placing toys just out of reach encouraged her baby to move [ex_2].",
+    "evidence_citations": [
+     {
+      "tag": "ex_1",
+      "source_id": "fixture-ex-1",
+      "chunk_id": "fixture-ex-chunk-1",
+      "title": "Foro de crianza: «mi bebé no quiere gatear»",
+      "organization": "Foro público de familias",
+      "year": 2024,
+      "url": "https://example.org/foro",
+      "snippet": "Fragmento de prueba de una experiencia contada por una familia.",
+      "tier": "experience"
+     },
+     {
+      "tag": "ex_2",
+      "source_id": "fixture-ex-2",
+      "chunk_id": "fixture-ex-chunk-2",
+      "title": "Blog de una madre: los primeros desplazamientos",
+      "organization": "Blog público",
+      "year": 2023,
+      "url": "https://example.org/blog",
+      "snippet": "Fragmento de prueba de una experiencia contada por una madre.",
+      "tier": "experience"
+     }
+    ],
+    "disclaimer": "AdelIA does not replace your pediatrician. Verify with your doctor before making clinical decisions."
+   }
+  },
+  "no_evidence": {
+   "question": "Can I give chamomile tea for wind?",
+   "payload": {
+    "kind": "no_evidence",
+    "intent": "plan",
+    "answer": "I have no clinical evidence about this in my library, so I would rather say nothing than make something up. Please raise it with your pediatrician, who knows your baby and can assess it.",
+    "evidence_citations": [],
+    "disclaimer": "AdelIA does not replace your pediatrician. Verify with your doctor before making clinical decisions."
+   }
+  },
+  "red_flag": {
+   "question": "My 2-month-old has a temperature of 38.2",
+   "payload": {
+    "kind": "red_flag",
+    "intent": null,
+    "answer": "This cannot wait for an answer from me.\n\nYou have described a fever in a baby under 3 months old. At that age, 38 °C or more counts as high risk and is assessed the same day, even if the baby seems settled.\n\nCall 112 or go to a paediatric emergency department now, and tell them exactly what you just wrote to me. Do not give any medicine on your own in the meantime, and do not wait to see whether it improves.\n\nI am not going to assess this remotely: I cannot see your baby, take their vital signs or examine them. That part belongs to a person, today.",
+    "evidence_citations": [
+     {
+      "tag": "ev_1",
+      "source_id": "red_flag:fever_under_3_months",
+      "chunk_id": "red_flag:fever_under_3_months",
+      "title": "Fiebre en menores de 5 años: valoración y manejo inicial (NICE NG143)",
+      "organization": "National Institute for Health and Care Excellence (NICE)",
+      "year": 2021,
+      "url": "https://www.nice.org.uk/guidance/ng143",
+      "snippet": ""
+     }
+    ],
+    "disclaimer": "AdelIA does not replace your pediatrician. Verify with your doctor before making clinical decisions."
+   }
+  },
+  "clarify": {
+   "question": "She has a fever, what should I do?",
+   "payload": {
+    "kind": "clarify",
+    "intent": "clarify",
+    "answer": "What did the thermometer say?",
+    "evidence_citations": [],
+    "disclaimer": "AdelIA does not replace your pediatrician. Verify with your doctor before making clinical decisions.",
+    "clarify": {
+     "field": "temperature",
+     "question": "What did the thermometer say?",
+     "options": [
+      {
+       "value": "37.5-37.9",
+       "label": "37.5 to 37.9 °C"
+      },
+      {
+       "value": "38-38.9",
+       "label": "38 to 38.9 °C"
+      },
+      {
+       "value": "39+",
+       "label": "39 °C or more"
+      }
+     ],
+     "skip": {
+      "value": "unknown",
+      "label": "I haven’t measured it"
+     }
+    }
+   }
+  },
+  "plan_reflux": {
+   "question": "My 5-month-old spits up and cries",
+   "payload": {
+    "kind": "answer",
+    "intent": "plan",
+    "answer": "Yes, frequent spit‑up (reflux) at your baby’s age is usually normal and often peaks around now, then improves on its own.  \n\nLucía is 5 months and spits up after almost every feed but is not losing weight [1],[2]; this pattern fits typical infant reflux rather than disease in most babies [ev_1],[ev_2].\n\n---\n\n## Today\n\n- **Keep feeds smaller and more frequent**, as your pediatrician already suggested [2]; this is a standard first step to reduce regurgitation in formula‑fed babies [ev_3].  \n- **Do not worry about investigations or medicines just for effortless spit‑up**, because simple regurgitation alone usually does not need tests or treatment [ev_1].  \n- **Expect gradual improvement from about 6 months onward**, as she starts solids and spends more time upright, which usually reduces reflux episodes [ev_1],[ev_2].\n\n---\n\n## Watch for\n\n- **Changes in the spit‑up pattern**, such as vomiting that starts for the first time after 6 months or regurgitation that continues beyond 12 months, because this should trigger a fresh medical review [ev_1].  \n- **Signs that spit‑up is becoming forceful or clearly painful** (e.g., strong distress with feeds, arching, refusing feeds), which are more typical of reflux disease than of simple reflux [ev_2].  \n- **Any new problems with growth or feeding**, such as taking much less milk or seeming unusually tired with feeds, as your pediatrician linked this to the need to repeat blood tests [4].\n\n---\n\n## When to see a doctor\n\n- **Book a visit (non‑urgent) if spit‑up is still frequent and troublesome after 12 months**, or if vomiting first appears after 6 months, because guidelines advise reassessing for other causes in these situations [ev_1].  \n- **Seek a same‑day assessment if she develops clear feeding difficulties or distress with feeds** (e.g., persistent refusal, marked crying with every feed), as these can suggest reflux disease rather than simple reflux [ev_2].  \n\n---\n\n## Don’t forget\n\n- **Your pediatrician has already ruled out cow’s milk protein allergy and planned to review at 6 months** [4]; keep that appointment and mention how often she spits up and whether it’s getting better or worse.  \n- **Note a simple 1–2 day diary** of how many feeds she takes, how often she spits up, and any discomfort, so you can describe the pattern clearly at the next visit [1],[2],[5].",
+    "evidence_citations": [
+     {
+      "tag": "ev_1",
+      "source_id": "fixture-1",
+      "chunk_id": "fixture-chunk-1",
+      "title": "Recomendaciones de la Asociación Española de Pediatría sobre la Alimentación Complementaria",
+      "organization": "Asociación Española de Pediatría",
+      "year": 2024,
+      "url": "https://www.aeped.es/publicaciones/protocolos/recomendaciones-aep-sobre-alimentacion",
+      "snippet": "Recomendaciones de la Asociación Española de Pediatría sobre la Alimentación Complementaria (Gómez Fernández-Vegue M, Comités de Lactancia Materna y de Nutrición de la AEP, 2018). Tema: inicio de la alimentación complementaria (AC) y papel de la leche materna después de los 6 meses. Hallazgo: lactancia materna (LM) exclusiva 6 meses y después añadir alimentos de forma paulatina manteniendo la LM a"
+     },
+     {
+      "tag": "ev_2",
+      "source_id": "fixture-2",
+      "chunk_id": "fixture-chunk-2",
+      "title": "Lactancia materna en niños mayores o \"prolongada\"",
+      "organization": "Asociación Española de Pediatría",
+      "year": 2024,
+      "url": "https://www.aeped.es/publicaciones/protocolos/lactancia-materna-en-ninos-mayores-o",
+      "snippet": "Lactancia materna en niños mayores o \"prolongada\" (Comité de Lactancia Materna de la AEP, 2015). Tema: recomendaciones sobre la lactancia materna después del primer año. Hallazgo: OMS, UNICEF, AEP, AAP y otras sociedades recomiendan la leche materna como único alimento hasta los 6 meses y después complementarla con otros alimentos al menos hasta los 12-24 meses, manteniéndola todo el tiempo que ma"
+     },
+     {
+      "tag": "ev_3",
+      "source_id": "fixture-3",
+      "chunk_id": "fixture-chunk-3",
+      "title": "Métodos de alimentación complementaria en el lactante: Mapa de la evidencia y consideraciones del Comité de Nutrición y Lactancia Materna de la AEP",
+      "organization": "Anales de Pediatría",
+      "year": 2024,
+      "url": "https://doi.org/10.1016/j.anpedi.2026.504291",
+      "snippet": "Métodos de alimentación complementaria en el lactante: Mapa de la evidencia y consideraciones del Comité de Nutrición y Lactancia Materna de la AEP (Jiménez-Tapia A, González Jiménez D, Gil-Campos M, Suanes Cabello A, Rodríguez Delgado J, Campoy C, et al.; Anales de Pediatría, 2026;105:504291). Tema: baby-led weaning (BLW, BLISS) frente a alimentación complementaria tradicional con cuchara y purés"
+     },
+     {
+      "tag": "ev_4",
+      "source_id": "fixture-4",
+      "chunk_id": "fixture-chunk-4",
+      "title": "Análisis crítico de las nuevas directrices de la OMS sobre alimentación complementaria en el lactante de 6 a 23 meses de edad",
+      "organization": "Revista de Pediatría de Atención Primaria (Grupo de Gastroenterología y Nutrición de la AEPap)",
+      "year": 2024,
+      "url": "https://doi.org/10.60147/17e0ce48",
+      "snippet": "Análisis crítico de las nuevas directrices de la OMS sobre alimentación complementaria en el lactante de 6 a 23 meses de edad (Almazán Fernández de Bobadilla MV, García Mérida MJ, Ruiz Chércoles E, Castell Miñana M, Rodríguez Delgado J, Carbajo Ferreira ÁJ, Grupo de Gastroenterología y Nutrición de la AEPap; Rev Pediatr Aten Primaria 2024;26(103):e51-e65). Tema: valoración por el grupo de la AEPap"
+     }
+    ],
+    "disclaimer": "AdelIA does not replace your pediatrician. Verify with your doctor before making clinical decisions."
+   }
+  }
+ },
+ "fr": {
+  "plan": {
+   "question": "Elle mange moins. En comparant ses consultations, que dois-je surveiller et demander au pédiatre ?",
+   "payload": {
+    "kind": "answer",
+    "intent": "plan",
+    "answer": "Elle mange un peu moins, mais ce qui compte surtout est sa courbe de croissance et son état général, pas un jour isolé d’appétit. Voici quoi suivre et quoi demander au pédiatre.\n\n## Aujourd’hui\n\n- **Noter précisément ce qu’elle mange et boit sur quelques jours** (heures, quantités approximatives, durée des tétées, régurgitations, réactions) pour pouvoir le montrer au pédiatre, car l’évaluation des difficultés alimentaires repose d’abord sur l’histoire détaillée et la croissance, pas sur une impression ponctuelle [ev_1].  \n- **Respecter ses signes de faim et de satiété** (bouche qui s’ouvre quand on approche le biberon/sein, agitation quand elle a faim ; bouche fermée, tête tournée, endormissement quand elle est rassasiée) et ne pas la forcer à finir un biberon si elle n’en veut plus [ev_3][ev_4].  \n- **Garder des repas calmes, sans écrans ni distractions** et sans insister de façon coercitive, car le forçage et les distracteurs aggravent les difficultés alimentaires et ne les résolvent pas [ev_1][ev_2][ev_3][ev_4].  \n\n## À surveiller\n\n- **Sa croissance entre les consultations** : noter son poids et sa taille quand ils sont mesurés, car la surveillance auxologique (poids/taille) est la base pour repérer une vraie difficulté alimentaire ou une dénutrition, et un IMC bas ne suffit pas à lui seul à conclure à une dénutrition [ev_1][ev_2].  \n- **Son comportement pendant les tétées** : surveiller s’il y a des signes de gêne comme des fausses routes répétées, des étouffements ou des fuites de lait par les commissures, qui orientent vers une difficulté de déglutition (disphagie) plutôt qu’un simple « petit appétit » [ev_1].  \n- **Son appétit sur la durée, pas au jour le jour** : l’appétit des bébés varie naturellement d’un jour à l’autre, et il est surtout régulé par les besoins énergétiques ; une baisse ponctuelle sans autre signe n’est pas en soi anormale [ev_3][ev_4].  \n\n## Quand consulter\n\n- **En consultation programmée (prochain rendez-vous)** :  \n  - Demander au pédiatre de **vérifier la courbe de poids/taille/IMC** pour dépister une éventuelle cassure de courbe ou un ralentissement de croissance, ce qui est indispensable avant de parler de « bébé qui mange mal » [ev_1][ev_2].  \n  - Lui demander **quels signes précis doivent faire recontrôler la prise de sang** (fatigue, appétit bas qui persiste…), puisque la pédiatre a déjà prévu de répéter l’analyse si ces symptômes durent [4], ce qui s’inscrit dans la démarche de recherche de cause organique en cas de difficultés alimentaires [ev_1].  \n  - Discuter avec lui/elle de **l’organisation des repas** (fréquence, durée, ambiance, absence de forçage, pas de repas trop longs ni trop courts) car les recommandations insistent sur des repas structurés, réguliers, agréables, sans pression [ev_2][ev_3][ev_4].  \n\n- **En consultation plus rapide** (dans les jours qui viennent) si vous observez :  \n  - Une **baisse nette et persistante des quantités sur plusieurs jours** associée à une impression de fatigue ou de maladie générale, car une maladie sous-jacente peut se manifester par des difficultés alimentaires [ev_1].  \n  - Des **régurgitations qui s’aggravent avec perte de poids ou sang visible**, car le reflux simple est rarement la cause principale des difficultés alimentaires, mais une œsophagite n’est envisagée qu’en cas de perte de poids et/ou de saignement [ev_1].  \n\n- **En urgence** :  \n  - Si elle présente des **fausses routes répétées, étouffements, difficultés respiratoires pendant ou après les tétées**, ce qui évoque une possible disphagie ou un problème respiratoire associé aux repas [ev_1].  \n\n## À ne pas oublier\n\n- **Ne pas attribuer d’emblée la baisse d’appétit au reflux** : les recommandations rappellent que le reflux est rarement la cause principale des difficultés alimentaires, et qu’il faut d’abord vérifier la croissance et rechercher d’autres causes éventuelles [ev_1].  \n- **Ne pas la forcer à manger ni multiplier les « petits compléments » entre les repas** : les guides insistent sur le fait de proposer sans obliger, de ne pas compenser entre les repas, et de respecter son appétit, qui varie et est très bien régulé à cet âge [ev_2][ev_3][ev_4].  \n- **Préparer vos questions pour la prochaine visite** : évolution de son poids/taille, conduite à tenir si l’appétit reste moindre, moment opportun pour débuter la diversification (la pédiatre a parlé de 6 mois [4]), et si un suivi diététique ou des adaptations alimentaires sont nécessaires en fonction de sa courbe de croissance [ev_2][ev_3].",
+    "evidence_citations": [
+     {
+      "tag": "ev_1",
+      "source_id": "fixture-1",
+      "chunk_id": "fixture-chunk-1",
+      "title": "Recomendaciones de la Asociación Española de Pediatría sobre la Alimentación Complementaria",
+      "organization": "Asociación Española de Pediatría",
+      "year": 2024,
+      "url": "https://www.aeped.es/publicaciones/protocolos/recomendaciones-aep-sobre-alimentacion",
+      "snippet": "Recomendaciones de la Asociación Española de Pediatría sobre la Alimentación Complementaria (Gómez Fernández-Vegue M, Comités de Lactancia Materna y de Nutrición de la AEP, 2018). Tema: inicio de la alimentación complementaria (AC) y papel de la leche materna después de los 6 meses. Hallazgo: lactancia materna (LM) exclusiva 6 meses y después añadir alimentos de forma paulatina manteniendo la LM a"
+     },
+     {
+      "tag": "ev_2",
+      "source_id": "fixture-2",
+      "chunk_id": "fixture-chunk-2",
+      "title": "Lactancia materna en niños mayores o \"prolongada\"",
+      "organization": "Asociación Española de Pediatría",
+      "year": 2024,
+      "url": "https://www.aeped.es/publicaciones/protocolos/lactancia-materna-en-ninos-mayores-o",
+      "snippet": "Lactancia materna en niños mayores o \"prolongada\" (Comité de Lactancia Materna de la AEP, 2015). Tema: recomendaciones sobre la lactancia materna después del primer año. Hallazgo: OMS, UNICEF, AEP, AAP y otras sociedades recomiendan la leche materna como único alimento hasta los 6 meses y después complementarla con otros alimentos al menos hasta los 12-24 meses, manteniéndola todo el tiempo que ma"
+     },
+     {
+      "tag": "ev_3",
+      "source_id": "fixture-3",
+      "chunk_id": "fixture-chunk-3",
+      "title": "Métodos de alimentación complementaria en el lactante: Mapa de la evidencia y consideraciones del Comité de Nutrición y Lactancia Materna de la AEP",
+      "organization": "Anales de Pediatría",
+      "year": 2024,
+      "url": "https://doi.org/10.1016/j.anpedi.2026.504291",
+      "snippet": "Métodos de alimentación complementaria en el lactante: Mapa de la evidencia y consideraciones del Comité de Nutrición y Lactancia Materna de la AEP (Jiménez-Tapia A, González Jiménez D, Gil-Campos M, Suanes Cabello A, Rodríguez Delgado J, Campoy C, et al.; Anales de Pediatría, 2026;105:504291). Tema: baby-led weaning (BLW, BLISS) frente a alimentación complementaria tradicional con cuchara y purés"
+     },
+     {
+      "tag": "ev_4",
+      "source_id": "fixture-4",
+      "chunk_id": "fixture-chunk-4",
+      "title": "Análisis crítico de las nuevas directrices de la OMS sobre alimentación complementaria en el lactante de 6 a 23 meses de edad",
+      "organization": "Revista de Pediatría de Atención Primaria (Grupo de Gastroenterología y Nutrición de la AEPap)",
+      "year": 2024,
+      "url": "https://doi.org/10.60147/17e0ce48",
+      "snippet": "Análisis crítico de las nuevas directrices de la OMS sobre alimentación complementaria en el lactante de 6 a 23 meses de edad (Almazán Fernández de Bobadilla MV, García Mérida MJ, Ruiz Chércoles E, Castell Miñana M, Rodríguez Delgado J, Carbajo Ferreira ÁJ, Grupo de Gastroenterología y Nutrición de la AEPap; Rev Pediatr Aten Primaria 2024;26(103):e51-e65). Tema: valoración por el grupo de la AEPap"
+     }
+    ],
+    "disclaimer": "AdelIA ne remplace pas votre pédiatre. Vérifiez avec votre médecin avant toute décision clinique."
+   }
+  },
+  "short": {
+   "question": "À quel âge les bébés rampent-ils ?",
+   "payload": {
+    "kind": "answer",
+    "intent": "question",
+    "answer": "La plupart des bébés commencent à ramper à quatre pattes entre 7 et 10 mois, et certains sautent cette étape pour se mettre directement debout [ev_1].\n\n- Avant, ils se traînent souvent ou pivotent sur le ventre [ev_1].\n- Le jeu sur le ventre quand il est éveillé l’aide à prendre de la force [ev_1].\n- Parlez-en à la visite si à 12 mois il ne se déplace d’aucune façon [ev_1].",
+    "evidence_citations": [
+     {
+      "tag": "ev_1",
+      "source_id": "fixture-1",
+      "chunk_id": "fixture-chunk-1",
+      "title": "Reflujo (GER) vs enfermedad por reflujo (GERD) e historia natural en el lactante — NASPGHAN-ESPGHAN 2018 / NICE NG1",
+      "organization": "NASPGHAN-ESPGHAN",
+      "year": 2024,
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC6416385/",
+      "snippet": "El reflujo gastroesofágico (GER) es el paso del contenido del estómago al esófago, con o sin regurgitación o vómito. Es un proceso FISIOLÓGICO normal en el bebé: la regurgitación afecta al menos al 40% de los lactantes sanos. Solo se llama enfermedad por reflujo (GERD) cuando el reflujo causa síntomas molestos o complicaciones (escaso aumento de peso, esofagitis, problemas respiratorios). Distingu"
+     }
+    ],
+    "disclaimer": "AdelIA ne remplace pas votre pédiatre. Vérifiez avec votre médecin avant toute décision clinique."
+   }
+  },
+  "experience": {
+   "question": "Une astuce pour qu’il commence à ramper ?",
+   "payload": {
+    "kind": "experience_only",
+    "intent": "plan",
+    "answer": "Je n’ai trouvé ni recommandation ni étude sur ce sujet. D’autres mères racontent :\n\n## Ce que racontent d’autres mères\n- Une mère raconte que sa fille s’est d’abord déplacée assise, en glissant sur les fesses, et a rampé plus tard [ex_1].\n- Une autre explique que poser des jouets juste hors de portée a encouragé son bébé à bouger [ex_2].",
+    "evidence_citations": [
+     {
+      "tag": "ex_1",
+      "source_id": "fixture-ex-1",
+      "chunk_id": "fixture-ex-chunk-1",
+      "title": "Foro de crianza: «mi bebé no quiere gatear»",
+      "organization": "Foro público de familias",
+      "year": 2024,
+      "url": "https://example.org/foro",
+      "snippet": "Fragmento de prueba de una experiencia contada por una familia.",
+      "tier": "experience"
+     },
+     {
+      "tag": "ex_2",
+      "source_id": "fixture-ex-2",
+      "chunk_id": "fixture-ex-chunk-2",
+      "title": "Blog de una madre: los primeros desplazamientos",
+      "organization": "Blog público",
+      "year": 2023,
+      "url": "https://example.org/blog",
+      "snippet": "Fragmento de prueba de una experiencia contada por una madre.",
+      "tier": "experience"
+     }
+    ],
+    "disclaimer": "AdelIA ne remplace pas votre pédiatre. Vérifiez avec votre médecin avant toute décision clinique."
+   }
+  },
+  "no_evidence": {
+   "question": "Puis-je lui donner de la camomille pour les gaz ?",
+   "payload": {
+    "kind": "no_evidence",
+    "intent": "plan",
+    "answer": "Je n’ai aucune preuve clinique à ce sujet dans ma bibliothèque, je préfère donc ne rien dire plutôt que d’inventer. Parlez-en à votre pédiatre, qui connaît votre bébé et peut l’évaluer.",
+    "evidence_citations": [],
+    "disclaimer": "AdelIA ne remplace pas votre pédiatre. Vérifiez avec votre médecin avant toute décision clinique."
+   }
+  },
+  "red_flag": {
+   "question": "Mon bébé de 2 mois a 38,2 de fièvre",
+   "payload": {
+    "kind": "red_flag",
+    "intent": null,
+    "answer": "Cela ne peut pas attendre une réponse de ma part.\n\nVous décrivez une fièvre chez un bébé de moins de 3 mois. À cet âge, 38 °C ou plus est considéré comme à haut risque et s’évalue le jour même, même si le bébé paraît calme.\n\nAppelez le 112 ou rendez-vous maintenant aux urgences pédiatriques, et dites-leur exactement ce que vous venez de m’écrire. Ne donnez aucun médicament de votre propre initiative en attendant, et n’attendez pas de voir si cela s’améliore.\n\nJe ne vais pas évaluer cela à distance : je ne peux ni le voir, ni prendre ses constantes, ni l’examiner. Cette partie revient à une personne, aujourd’hui.",
+    "evidence_citations": [
+     {
+      "tag": "ev_1",
+      "source_id": "red_flag:fever_under_3_months",
+      "chunk_id": "red_flag:fever_under_3_months",
+      "title": "Fiebre en menores de 5 años: valoración y manejo inicial (NICE NG143)",
+      "organization": "National Institute for Health and Care Excellence (NICE)",
+      "year": 2021,
+      "url": "https://www.nice.org.uk/guidance/ng143",
+      "snippet": ""
+     }
+    ],
+    "disclaimer": "AdelIA ne remplace pas votre pédiatre. Vérifiez avec votre médecin avant toute décision clinique."
+   }
+  },
+  "clarify": {
+   "question": "Il a de la fièvre, que faire ?",
+   "payload": {
+    "kind": "clarify",
+    "intent": "clarify",
+    "answer": "Combien affichait le thermomètre ?",
+    "evidence_citations": [],
+    "disclaimer": "AdelIA ne remplace pas votre pédiatre. Vérifiez avec votre médecin avant toute décision clinique.",
+    "clarify": {
+     "field": "temperature",
+     "question": "Combien affichait le thermomètre ?",
+     "options": [
+      {
+       "value": "37.5-37.9",
+       "label": "37,5 à 37,9 °C"
+      },
+      {
+       "value": "38-38.9",
+       "label": "38 à 38,9 °C"
+      },
+      {
+       "value": "39+",
+       "label": "39 °C ou plus"
+      }
+     ],
+     "skip": {
+      "value": "unknown",
+      "label": "Je ne l’ai pas mesurée"
+     }
+    }
+   }
+  },
+  "plan_reflux": {
+   "question": "Mon bébé de 5 mois régurgite et pleure",
+   "payload": {
+    "kind": "answer",
+    "intent": "plan",
+    "answer": "La plupart des bébés comme Lucía régurgitent beaucoup vers 4–5 mois, puis ça diminue surtout après 6 mois et disparaît le plus souvent avant 1 an. [ev_1]\n\n## Aujourd’hui\n- Continuer les tétées plus fréquentes et moins volumineuses comme proposé à 4 mois, puisque Lucía régurgite souvent mais sans perte de poids ni autre signe inquiétant rapporté. [2][ev_1]  \n- Garder en tête que la régurgitation isolée, sans effort ni autres symptômes, ne nécessite en général ni examens ni traitement spécifique. [ev_1]  \n- Se préparer à la diversification autour de 6 mois comme conseillé par votre pédiatre, ce qui coïncide souvent avec une amélioration progressive du reflux chez beaucoup de bébés. [4][ev_1][ev_2]\n\n## À surveiller\n- Noter si les régurgitations deviennent moins fréquentes ou moins abondantes après 6 mois, ce qui correspond à l’évolution habituelle (amélioration entre 6 et 18 mois, 90 % des bébés soulagés avant 1 an). [ev_1]  \n- Observer si les régurgitations restent faciles, sans effort de vomissement, sans gêne marquée ni changement de comportement (refus de téter, pleurs importants pendant/après la tétée). [ev_1]  \n- Suivre le poids et l’appétit lors des visites, car la régurgitation simple ne s’accompagne en général pas de cassure de courbe pondérale. [2][ev_1]\n\n## Quand consulter\n- **En consultation programmée** : si les régurgitations restent très fréquentes et gênantes après 6 mois révolus, pour réévaluer la situation et vérifier qu’il s’agit toujours d’un reflux simple. [ev_1]  \n- **En consultation dans les prochains jours** : si les vomissements commencent pour la première fois après 6 mois, ou si les régurgitations persistent au‑delà de 12 mois, car cela doit faire rechercher un autre diagnostic. [ev_1]  \n- **En urgence** (selon les recommandations générales sur le reflux) : si apparaissent des vomissements très abondants ou en jet, des difficultés respiratoires, une grande somnolence ou une mauvaise prise de poids associées au reflux, qui ne sont pas attendus dans la régurgitation simple. [ev_1]\n\n## À ne pas oublier\n- Votre pédiatre a déjà écarté une allergie aux protéines de lait de vache et prévu un contrôle à distance, ce qui est cohérent avec un reflux simple qui atteint son maximum vers 4 mois puis s’améliore progressivement. [2][4][ev_1]  \n- Noter sur quelques jours la fréquence des régurgitations, la quantité approximative et le confort de Lucía (pleurs, refus de téter), pour pouvoir en parler précisément à la prochaine visite. [2][ev_1]",
+    "evidence_citations": [
+     {
+      "tag": "ev_1",
+      "source_id": "fixture-1",
+      "chunk_id": "fixture-chunk-1",
+      "title": "Recomendaciones de la Asociación Española de Pediatría sobre la Alimentación Complementaria",
+      "organization": "Asociación Española de Pediatría",
+      "year": 2024,
+      "url": "https://www.aeped.es/publicaciones/protocolos/recomendaciones-aep-sobre-alimentacion",
+      "snippet": "Recomendaciones de la Asociación Española de Pediatría sobre la Alimentación Complementaria (Gómez Fernández-Vegue M, Comités de Lactancia Materna y de Nutrición de la AEP, 2018). Tema: inicio de la alimentación complementaria (AC) y papel de la leche materna después de los 6 meses. Hallazgo: lactancia materna (LM) exclusiva 6 meses y después añadir alimentos de forma paulatina manteniendo la LM a"
+     },
+     {
+      "tag": "ev_2",
+      "source_id": "fixture-2",
+      "chunk_id": "fixture-chunk-2",
+      "title": "Lactancia materna en niños mayores o \"prolongada\"",
+      "organization": "Asociación Española de Pediatría",
+      "year": 2024,
+      "url": "https://www.aeped.es/publicaciones/protocolos/lactancia-materna-en-ninos-mayores-o",
+      "snippet": "Lactancia materna en niños mayores o \"prolongada\" (Comité de Lactancia Materna de la AEP, 2015). Tema: recomendaciones sobre la lactancia materna después del primer año. Hallazgo: OMS, UNICEF, AEP, AAP y otras sociedades recomiendan la leche materna como único alimento hasta los 6 meses y después complementarla con otros alimentos al menos hasta los 12-24 meses, manteniéndola todo el tiempo que ma"
+     },
+     {
+      "tag": "ev_3",
+      "source_id": "fixture-3",
+      "chunk_id": "fixture-chunk-3",
+      "title": "Métodos de alimentación complementaria en el lactante: Mapa de la evidencia y consideraciones del Comité de Nutrición y Lactancia Materna de la AEP",
+      "organization": "Anales de Pediatría",
+      "year": 2024,
+      "url": "https://doi.org/10.1016/j.anpedi.2026.504291",
+      "snippet": "Métodos de alimentación complementaria en el lactante: Mapa de la evidencia y consideraciones del Comité de Nutrición y Lactancia Materna de la AEP (Jiménez-Tapia A, González Jiménez D, Gil-Campos M, Suanes Cabello A, Rodríguez Delgado J, Campoy C, et al.; Anales de Pediatría, 2026;105:504291). Tema: baby-led weaning (BLW, BLISS) frente a alimentación complementaria tradicional con cuchara y purés"
+     },
+     {
+      "tag": "ev_4",
+      "source_id": "fixture-4",
+      "chunk_id": "fixture-chunk-4",
+      "title": "Análisis crítico de las nuevas directrices de la OMS sobre alimentación complementaria en el lactante de 6 a 23 meses de edad",
+      "organization": "Revista de Pediatría de Atención Primaria (Grupo de Gastroenterología y Nutrición de la AEPap)",
+      "year": 2024,
+      "url": "https://doi.org/10.60147/17e0ce48",
+      "snippet": "Análisis crítico de las nuevas directrices de la OMS sobre alimentación complementaria en el lactante de 6 a 23 meses de edad (Almazán Fernández de Bobadilla MV, García Mérida MJ, Ruiz Chércoles E, Castell Miñana M, Rodríguez Delgado J, Carbajo Ferreira ÁJ, Grupo de Gastroenterología y Nutrición de la AEPap; Rev Pediatr Aten Primaria 2024;26(103):e51-e65). Tema: valoración por el grupo de la AEPap"
+     }
+    ],
+    "disclaimer": "AdelIA ne remplace pas votre pédiatre. Vérifiez avec votre médecin avant toute décision clinique."
+   }
+  }
+ }
+}

@@ -1,7 +1,7 @@
 {
   "common": {
     "appName": "AdelIA",
-    "tagline": "Your baby's health vault, with science-backed AI",
+    "tagline": "Your baby's health, with paediatric guidance and sources",
     "loading": "Loading…",
     "errorTitle": "Something went wrong",
     "errorBody": "An unexpected error occurred. You can retry or go back home.",
@@ -21,7 +21,7 @@
   },
   "home": {
     "calmTitle": "The AI that follows your baby’s development",
-    "calmIntro": "It answers with what pediatric guidelines and studies say, always with the source. It doesn’t replace your pediatrician: it looks where they studied.",
+    "calmIntro": "What to do now and when to see a doctor, from pediatric guidelines, always with the source. It doesn’t replace your pediatrician.",
     "aboutLabel": "About AdelIA and pricing",
     "moreExamples": "More examples",
     "hero": "Your baby's health. A little more clarity.",
@@ -282,7 +282,7 @@
   },
   "onboarding": {
     "title": "Who are we looking after?",
-    "subtitle": "With a name and a date of birth, AdelIA applies the guidance for that age. You can skip this step and fill it in whenever you like.",
+    "subtitle": "With a name and a date of birth, the answers fit your baby's age. You can do this later.",
     "nameLabel": "Baby's name",
     "namePlaceholder": "Adel",
     "dobLabel": "Date of birth",
@@ -322,7 +322,7 @@
   },
   "signin": {
     "emailPlaceholder": "you@email.com",
-    "sendMagicLink": "Send magic link",
+    "sendMagicLink": "Email me the link",
     "emailLabel": "Email",
     "heading": "Sign in with your email",
     "instr": "Enter your email and we'll send a private link to log in: no password.",
@@ -337,7 +337,7 @@
     "title": "Ask AdelIA",
     "newSession": "New conversation",
     "emptyHistory": "No conversations yet",
-    "placeholder": "E.g. My baby isn't sleeping well and spits up after feeding.",
+    "placeholder": "E.g. My baby isn't sleeping well",
     "send": "Send",
     "thinking": "Thinking…",
     "noContext": "I don't have enough information.",
@@ -872,8 +872,10 @@
     "subscribeNowCta": "Subscribe now"
   },
   "agent": {
-    "greeting": "Hi 👋 How can I help with your baby's health?",
-    "placeholder": "Type or tap the mic…",
+    "greeting": "How can I help with your baby's health?",
+    "greetingWithName": "How is {name} today?",
+    "inputLabel": "Type or tap the mic…",
+    "placeholder": "Type, e.g. she had 37.8",
     "send": "Send",
     "stop": "Stop",
     "listen": "Voice input",
@@ -1057,6 +1059,10 @@
     "shortAnswerTitle": "Your answer",
     "experienceOnlyTitle": "What other mothers say",
     "urgentAnswerTitle": "This cannot wait",
+    "noEvidenceTitle": "I have no sources on this",
+    "evidenceOnlyTitle": "The sources I found",
+    "callEmergency": "Call {number}",
+    "planMap": "Parts of the plan",
     "readMoreTitle": "What this plan is based on",
     "readMoreTitleAnswer": "What this answer is based on",
     "readMoreTitleExperience": "Where these experiences come from",

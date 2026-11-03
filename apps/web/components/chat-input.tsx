@@ -93,10 +93,6 @@ export function ChatInput({
           in the page footer, because the composer is the part of the column
           that never scrolls away. */}
       <ClinicalDisclaimer className="mt-2" />
-      {/* Make the Enter / Shift+Enter convention discoverable. */}
-      <p className="mt-1.5 hidden px-1 text-xs text-ink-faint sm:block">
-        {t("keyboardHint")}
-      </p>
     </form>
   );
 }

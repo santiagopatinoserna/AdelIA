@@ -1,0 +1,189 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>AdelIA · Dirección A: calma cálida</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:wght@400..700&family=Hanken+Grotesk:wght@400..700&display=swap" rel="stylesheet">
+<style>
+/* Dirección A: evolución de la marca (crema, pino, miel, arcilla). Prototipo
+   estático para comparar jerarquías; los tokens son los de REDISENO.md. */
+:root {
+  --canvas:#f4f1e9; --surface:#fffefb; --surface-2:#faf7f0; --line:#e2dacb; --line-control:#6b8478;
+  --ink:#18201b; --ink-soft:#586059; --ink-faint:#646b64;
+  --primary:#115443; --on-primary:#eef3ef; --primary-text:#115443; --primary-tint:#e9f1ec;
+  --accent:#d99f43; --accent-line:#a36e1f; --accent-text:#7e5214; --accent-tint:#f6e9cf;
+  --doctor-text:#7a2616; --doctor-line:#b25a41; --doctor-tint:#fbf1ed;
+  --urgent:#973020; --on-urgent:#fdf1ee; --urgent-tint:#f8e9e4; --urgent-text:#7a2616;
+  --today-line:#a36e1f; --cite:#646b64;
+  --shadow:0 1px 1px rgb(24 32 27/.03),0 2px 6px -4px rgb(24 32 27/.08);
+  --lift:0 1px 2px rgb(24 32 27/.05),0 8px 20px -12px rgb(11 52 41/.18);
+}
+:root[data-theme="dark"] {
+  --canvas:#071813; --surface:#102821; --surface-2:#17332b; --line:#2b5145; --line-control:#5f8f80;
+  --ink:#edf3ee; --ink-soft:#b6c7bd; --ink-faint:#9dafa4;
+  --primary:#1a6c55; --on-primary:#edf3ee; --primary-text:#7ecfae; --primary-tint:#1b4a3b;
+  --accent:#d99f43; --accent-line:#a98334; --accent-text:#e2b25f; --accent-tint:#4d3813;
+  --doctor-text:#f0a48d; --doctor-line:#b25a41; --doctor-tint:#2a1a14;
+  --urgent:#b8402a; --on-urgent:#fdf1ee; --urgent-tint:#43201a; --urgent-text:#f0a48d;
+  --today-line:#a98334; --cite:#9dafa4; --shadow:none; --lift:0 8px 20px -12px rgb(0 0 0/.55);
+}
+* { box-sizing:border-box; margin:0; }
+body { font-family:"Hanken Grotesk",system-ui,sans-serif; background:#d9d4c7; color:var(--ink); padding:24px; }
+:root[data-theme="dark"] body { background:#02090a; }
+.bar { display:flex; gap:12px; align-items:center; margin-bottom:20px; font-size:14px; color:#333; }
+:root[data-theme="dark"] .bar { color:#ccc; }
+.bar button { min-height:44px; padding:0 16px; border-radius:12px; border:1px solid #888; background:#fff; font:inherit; cursor:pointer; }
+.row { display:flex; gap:24px; flex-wrap:wrap; }
+.frame { width:390px; height:844px; overflow:hidden; background:var(--canvas); border-radius:28px; box-shadow:0 20px 40px -20px rgb(0 0 0/.4); position:relative; display:flex; flex-direction:column; }
+.cap { width:390px; font-size:13px; margin-top:8px; color:#333; }
+:root[data-theme="dark"] .cap { color:#bbb; }
+.scroll { flex:1; overflow:auto; padding:0 20px 24px; }
+header { display:flex; align-items:center; justify-content:space-between; min-height:60px; padding:0 20px; }
+.logo { font-family:Fraunces,serif; font-weight:600; font-size:23px; letter-spacing:-.02em; }
+.logo b { color:var(--accent-text); font-weight:600; }
+.badge { font-size:12.5px; font-weight:600; background:var(--accent-tint); color:var(--accent-text); padding:2px 8px; border-radius:99px; margin-left:8px; }
+.hlink { color:var(--primary-text); font-weight:560; font-size:15px; }
+h1 { font-family:Fraunces,serif; font-weight:520; font-size:30px; line-height:1.12; letter-spacing:-.025em; margin-top:12px; }
+.intro { font-size:16px; line-height:1.5; color:var(--ink-soft); margin-top:8px; }
+.field { position:relative; margin-top:18px; }
+textarea { width:100%; min-height:100px; border:1.5px solid var(--line-control); border-radius:18px; background:var(--surface); color:var(--ink); font:inherit; font-size:17px; padding:14px 60px 14px 16px; resize:none; }
+textarea::placeholder { color:var(--ink-faint); }
+.mic { position:absolute; right:6px; bottom:10px; width:44px; height:44px; border-radius:99px; border:0; background:var(--primary-tint); color:var(--primary-text); display:grid; place-items:center; }
+.btn { display:flex; align-items:center; justify-content:center; gap:8px; width:100%; min-height:52px; border-radius:14px; font:inherit; font-weight:600; font-size:17px; border:1px solid transparent; }
+.btn-primary { background:var(--primary); color:var(--on-primary); box-shadow:var(--shadow); }
+.btn-ghost { background:var(--surface); color:var(--ink); border-color:var(--line-control); }
+.btn-urgent { background:var(--urgent); color:var(--on-urgent); min-height:56px; font-size:18px; }
+.sugg { list-style:none; padding:0; margin-top:14px; }
+.sugg li { border-top:1px solid var(--line); }
+.sugg li:first-child { border-top:0; }
+.sugg a { display:flex; gap:12px; align-items:center; min-height:48px; padding:10px 0; font-size:15px; line-height:1.4; color:var(--ink); text-decoration:none; }
+.sugg a span { flex:1; }
+.fold { display:flex; align-items:center; justify-content:space-between; min-height:52px; border-top:1px solid var(--line); margin-top:12px; font-size:15px; }
+.small { font-size:14px; line-height:1.5; color:var(--ink-soft); }
+.title { font-family:Fraunces,serif; font-size:23px; line-height:1.25; font-weight:540; margin-top:8px; }
+.lead { font-size:19px; line-height:1.5; font-weight:500; margin-top:12px; }
+.cite { font-size:.72em; color:var(--cite); font-weight:500; letter-spacing:.01em; vertical-align:.12em; }
+.map { display:flex; flex-wrap:wrap; gap:8px; margin-top:16px; }
+.map a { min-height:44px; display:inline-flex; align-items:center; padding:0 14px; border-radius:99px; border:1px solid var(--line); background:var(--surface); color:var(--ink); font-size:15px; font-weight:560; text-decoration:none; }
+.map a.doc { border-color:var(--doctor-line); color:var(--doctor-text); }
+.sec { margin-top:22px; }
+.sec h3 { display:flex; align-items:center; gap:8px; font-size:18px; font-weight:650; line-height:1.3; }
+.sec ul { padding-left:20px; margin-top:8px; }
+.sec li { font-size:17px; line-height:1.6; margin-top:8px; }
+.sec.today { border-left:3px solid var(--today-line); padding-left:14px; margin-left:-17px; }
+.sec.doctor { background:var(--doctor-tint); border-left:3px solid var(--doctor-line); padding:14px 16px 16px 14px; border-radius:0 16px 16px 0; margin-left:-17px; }
+.sec.doctor h3 { color:var(--doctor-text); }
+.dot { width:20px; height:20px; display:inline-grid; place-items:center; }
+.sticky { position:sticky; bottom:12px; margin-top:20px; }
+.sticky .btn { box-shadow:var(--lift); }
+.urgent { background:var(--urgent-tint); border-radius:20px; padding:16px; margin-top:12px; }
+.urgent h2 { font-family:Fraunces,serif; color:var(--urgent-text); font-size:24px; line-height:1.2; font-weight:560; }
+.urgent p { color:var(--urgent-text); font-size:15px; margin:6px 0 14px; }
+.p { font-size:17px; line-height:1.6; margin-top:14px; }
+.disc { font-size:14px; color:var(--ink-soft); border-top:1px solid var(--line); padding-top:14px; margin-top:20px; }
+.today-card { background:var(--surface); border:1px solid var(--line); border-radius:20px; padding:16px; margin-top:16px; box-shadow:var(--shadow); }
+.today-card h2 { font-size:18px; font-weight:650; }
+.today-card li { list-style:none; display:flex; gap:10px; font-size:16px; line-height:1.45; padding:10px 0; border-top:1px solid var(--line); }
+.today-card li:first-of-type { border-top:0; }
+.today-card .warn { color:var(--accent-text); }
+.mark { font-size:13px; letter-spacing:.06em; color:var(--accent-text); font-weight:600; margin-top:6px; }
+.composer { border-top:1px solid var(--line); background:var(--surface); padding:10px 16px 8px; }
+.composer .in { display:flex; gap:8px; }
+.composer input { flex:1; min-height:48px; border-radius:14px; border:1.5px solid var(--line-control); background:var(--surface); color:var(--ink); font:inherit; font-size:17px; padding:0 14px; }
+.ib { width:48px; min-height:48px; border-radius:14px; border:1px solid var(--line-control); background:var(--surface); color:var(--ink); display:grid; place-items:center; }
+.ib.send { background:var(--primary); color:var(--on-primary); border-color:var(--primary); }
+.tabs { display:flex; justify-content:space-around; height:58px; border-top:1px solid var(--line); background:var(--surface); font-size:11px; color:var(--ink-faint); }
+.tabs div { display:flex; flex-direction:column; align-items:center; justify-content:center; gap:3px; flex:1; }
+.tabs .on { color:var(--primary-text); font-weight:600; }
+.confirm { background:var(--surface); border:1px solid var(--line); border-radius:20px; padding:16px; margin-top:12px; box-shadow:var(--shadow); }
+.confirm .entry { font-size:19px; font-weight:560; margin:6px 0 14px; }
+.confirm .two { display:grid; grid-template-columns:2fr 1fr; gap:8px; }
+.bubble { align-self:flex-end; background:var(--primary-tint); border-radius:18px 18px 4px 18px; padding:10px 14px; font-size:16px; margin:16px 0 0 auto; width:fit-content; }
+svg { width:20px; height:20px; stroke:currentColor; fill:none; stroke-width:2; stroke-linecap:round; stroke-linejoin:round; }
+@media (prefers-reduced-motion: no-preference) { .btn { transition:transform .12s; } .btn:active { transform:translateY(1px); } }
+</style>
+</head>
+<body>
+<div class="bar">
+  <strong>Dirección A · calma cálida</strong>
+  <button type="button" onclick="document.documentElement.dataset.theme = document.documentElement.dataset.theme === 'dark' ? 'light' : 'dark'">Claro / oscuro</button>
+  <span>390x844. Mismos textos reales que la auditoría.</span>
+</div>
+<div class="row">
+
+<div><div class="frame">
+  <header><div><span class="logo">Adel<b>IA</b></span><span class="badge">Demo</span></div><span class="hlink">Empezar · ES</span></header>
+  <div class="scroll">
+    <h1>La IA que sigue el desarrollo de tu bebé</h1>
+    <p class="intro">Te dice qué hacer ahora y cuándo ir al médico, con guías de pediatría. No sustituye a tu pediatra.</p>
+    <div class="field"><textarea placeholder="Por ejemplo: desde ayer tiene mocos y le cuesta dormirse"></textarea>
+      <button class="mic" aria-label="Dictar la pregunta"><svg viewBox="0 0 24 24"><rect x="9" y="2" width="6" height="12" rx="3"/><path d="M5 10a7 7 0 0 0 14 0M12 17v5"/></svg></button></div>
+    <button class="btn btn-primary" style="margin-top:10px">Preguntar</button>
+    <ul class="sugg">
+      <li><a href="#"><span><strong>¿Es normal que mi bebé regurgite después de casi todas las tomas?</strong></span>↗</a></li>
+      <li><a href="#"><span>¿Está preparada para empezar con otros alimentos?</span>↗</a></li>
+      <li><a href="#"><span>Está comiendo menos. ¿Qué vigilo y qué le pregunto al pediatra?</span>↗</a></li>
+    </ul>
+    <div class="fold"><span><strong>Lucía, 5 meses</strong> <span class="small">· su historia</span></span><span class="badge">Demo</span></div>
+  </div>
+</div><p class="cap">1. Portada: una frase de entradilla, el micrófono abajo a la derecha del campo (zona del pulgar), botón de 52 px.</p></div>
+
+<div><div class="frame">
+  <header><div><span class="logo">Adel<b>IA</b></span><span class="badge">Demo</span></div><span class="hlink">Empezar · ES</span></header>
+  <div class="scroll">
+    <h2 class="title">Tu plan</h2>
+    <p class="lead">Pueden ser variaciones normales de apetito, pero tu pediatra ya pidió estar atenta <span class="cite">[4]</span>; ahora lo clave es observar bien y llevarle datos concretos.</p>
+    <nav class="map" aria-label="Partes del plan"><a href="#">Hoy</a><a href="#">Vigila</a><a href="#" class="doc">Cuándo ir al médico</a><a href="#">No olvides</a></nav>
+    <section class="sec today"><h3><span class="dot"><svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="17" rx="2"/><path d="M8 2v4M16 2v4M3 10h18M9 15l2 2 4-4"/></svg></span>Hoy</h3>
+      <ul><li><strong>Anota cuánta leche toma en 24 h</strong> (número de tomas, ml aproximados, cuánto deja) para compararlo y enseñarlo en consulta <span class="cite">[ev_2]</span>.</li>
+      <li><strong>Respeta sus señales de hambre y saciedad</strong>: no la fuerces a terminar el biberón <span class="cite">[ev_3][ev_4]</span>.</li></ul></section>
+    <section class="sec doctor"><h3><span class="dot"><svg viewBox="0 0 24 24"><path d="M6 3v6a6 6 0 0 0 12 0V3M12 15v3a3 3 0 0 0 6 0v-1"/><circle cx="18" cy="15" r="2"/></svg></span>Cuándo ir al médico</h3>
+      <ul><li><strong>Con urgencia (hoy / en 24 h)</strong> si moja menos pañales, llora débil o está muy somnolienta <span class="cite">[ev_2]</span>.</li></ul></section>
+    <div class="sticky"><button class="btn btn-ghost">Hacer otra pregunta</button></div>
+  </div>
+</div><p class="cap">2. Plan: título por tipo, apertura grande, mapa del plan (un toque a «Cuándo ir al médico»), citas atenuadas, «Hoy» con filete miel, médico en arcilla suave, «Hacer otra pregunta» siempre al alcance.</p></div>
+
+<div><div class="frame">
+  <header><div><span class="logo">Adel<b>IA</b></span><span class="badge">Demo</span></div><span class="hlink">Empezar · ES</span></header>
+  <div class="scroll">
+    <div class="urgent"><h2>Esto no puede esperar</h2><p>No puedo valorar a tu bebé a distancia. Necesita atención médica.</p>
+      <a class="btn btn-urgent" href="tel:112"><svg viewBox="0 0 24 24"><path d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3.1 19.5 19.5 0 0 1-6-6A19.8 19.8 0 0 1 2.1 4.2 2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.7c.1.9.4 1.8.7 2.7a2 2 0 0 1-.5 2.1L8 9.8a16 16 0 0 0 6 6l1.3-1.3a2 2 0 0 1 2.1-.4c.9.3 1.8.6 2.7.7a2 2 0 0 1 1.7 2z"/></svg>Llamar al 112</a></div>
+    <p class="p">Esto no puede esperar a una respuesta mía.</p>
+    <p class="p">Has descrito fiebre en un bebé de menos de 3 meses. A esa edad, 38 °C o más se considera de alto riesgo y se valora el mismo día, aunque el bebé parezca tranquilo.</p>
+    <p class="p">Llama al 112 o acude ahora a urgencias pediátricas, y cuéntales exactamente lo que acabas de escribirme.</p>
+    <p class="disc">AdelIA no sustituye a tu pediatra. Verifica con tu médico antes de tomar decisiones clínicas.</p>
+  </div>
+</div><p class="cap">3. Urgencia: la llamada en un toque arriba (el número sale del propio texto fijo), arcilla en vez de rojo de error, el texto entero debajo sin tocar.</p></div>
+
+<div><div class="frame">
+  <header><span class="logo">Adel<b>IA</b></span></header>
+  <div class="scroll">
+    <h1 style="font-size:28px">¿Cómo está Nora?</h1>
+    <p class="mark">NORA · 3 MESES</p>
+    <section class="today-card"><h2>Hoy con Nora</h2><ul style="padding:0;margin-top:6px">
+      <li class="warn"><svg viewBox="0 0 24 24"><path d="m18 2 4 4M17 7l3-3M19 9 8.7 19.3a2.4 2.4 0 0 1-3.4 0l-.6-.6a2.4 2.4 0 0 1 0-3.4L15 5M9 11l4 4M5 19l-3 3M14 4l6 6"/></svg><span>Sin anotar y ya tocaba: Hexavalente DTPa-VPI-Hib-HB, 1.ª dosis · Neumococo conjugada, 1.ª dosis · Meningococo B, 1.ª dosis (a los 2 meses). Si está puesta, dímelo y lo apunto.</span></li>
+      <li><svg viewBox="0 0 24 24"><path d="M14 4v10.5a4 4 0 1 1-4 0V4a2 2 0 0 1 4 0z"/></svg><span>Temperatura: ayer 37,2 °C.</span></li>
+      <li><svg viewBox="0 0 24 24"><path d="M19 21l-7-4-7 4V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg><span>Apunta cada toma hasta mañana.</span></li></ul></section>
+    <p class="small" style="margin-top:20px">PRIMEROS PASOS · se queda, más discreto</p>
+  </div>
+  <div class="composer"><div class="in"><input placeholder="Ej.: hoy ha tenido 37,8"><button class="ib" aria-label="Dictar"><svg viewBox="0 0 24 24"><rect x="9" y="2" width="6" height="12" rx="3"/><path d="M5 10a7 7 0 0 0 14 0M12 17v5"/></svg></button><button class="ib send" aria-label="Enviar"><svg viewBox="0 0 24 24"><path d="m22 2-7 20-4-9-9-4z"/></svg></button></div>
+  <p class="small" style="font-size:12.5px;margin-top:6px">AdelIA no sustituye a tu pediatra. Verifica con tu médico antes de tomar decisiones clínicas.</p></div>
+  <nav class="tabs"><div class="on">Inicio</div><div>Consulta</div><div>Subir</div><div>Historial</div><div>Ajustes</div></nav>
+</div><p class="cap">4. Inicio con cuenta: saludo con su nombre, «Hoy con Nora» como bloque principal con iconos, la vacuna en miel (recordatorio, no alarma), el marcador del campo es un ejemplo y la subida vive solo en la barra.</p></div>
+
+<div><div class="frame">
+  <header><span class="logo">Adel<b>IA</b></span></header>
+  <div class="scroll">
+    <p class="bubble">hoy ha tenido 37,8</p>
+    <section class="confirm"><p class="small">¿Lo anoto así?</p><p class="entry">Temperatura: 37,8 °C, hoy a las 17:00</p>
+      <div class="two"><button class="btn btn-primary">Sí</button><button class="btn btn-ghost">No</button></div></section>
+  </div>
+  <div class="composer"><div class="in"><input placeholder="Ej.: hoy ha tenido 37,8"><button class="ib send" aria-label="Enviar"><svg viewBox="0 0 24 24"><path d="m22 2-7 20-4-9-9-4z"/></svg></button></div></div>
+  <nav class="tabs"><div class="on">Inicio</div><div>Consulta</div><div>Subir</div><div>Historial</div><div>Ajustes</div></nav>
+</div><p class="cap">5. Anotar: sin burbuja vacía ni sugerencias debajo mientras espera su sí; la entrada en grande; «Sí» ancho y al alcance del pulgar.</p></div>
+
+</div>
+</body>
+</html>

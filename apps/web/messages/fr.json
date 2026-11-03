@@ -1,7 +1,7 @@
 {
   "common": {
     "appName": "AdelIA",
-    "tagline": "Le coffre-fort santé de ton bébé, avec une IA fondée sur la science",
+    "tagline": "La santé de ton bébé, avec la pédiatrie et ses sources",
     "loading": "Chargement…",
     "errorTitle": "Une erreur s'est produite",
     "errorBody": "Une erreur inattendue s'est produite. Réessaie ou reviens à l'accueil.",
@@ -21,7 +21,7 @@
   },
   "home": {
     "calmTitle": "L’IA qui suit le développement de ton bébé",
-    "calmIntro": "Elle répond avec les études et recommandations de pédiatrie, sources à l’appui. Elle ne remplace pas ton pédiatre : elle cherche là où il a étudié.",
+    "calmIntro": "Que faire maintenant et quand voir un médecin, d’après la pédiatrie et sources à l’appui. Ne remplace pas ton pédiatre.",
     "aboutLabel": "À propos et tarifs",
     "moreExamples": "Autres exemples",
     "hero": "La santé de ton bébé. Des repères pour toi.",
@@ -282,7 +282,7 @@
   },
   "onboarding": {
     "title": "De qui allons-nous prendre soin ?",
-    "subtitle": "Avec un prénom et une date de naissance, AdelIA applique les repères de son âge. Tu peux passer cette étape et la compléter quand tu veux.",
+    "subtitle": "Avec son prénom et sa date de naissance, les réponses s’adaptent à son âge. Tu peux le faire plus tard.",
     "nameLabel": "Prénom du bébé",
     "namePlaceholder": "Adel",
     "dobLabel": "Date de naissance",
@@ -322,7 +322,7 @@
   },
   "signin": {
     "emailPlaceholder": "toi@exemple.com",
-    "sendMagicLink": "Recevoir mon magic link",
+    "sendMagicLink": "Recevoir le lien",
     "emailLabel": "Adresse e-mail",
     "heading": "Connecte-toi avec ton email",
     "instr": "Entre ton email : on t'envoie un lien privé pour te connecter, sans mot de passe.",
@@ -337,7 +337,7 @@
     "title": "Demander à AdelIA",
     "newSession": "Nouvelle conversation",
     "emptyHistory": "Pas encore de conversations",
-    "placeholder": "Ex : Mon bébé dort mal et régurgite après les repas.",
+    "placeholder": "Ex. : Mon bébé dort mal",
     "send": "Envoyer",
     "thinking": "Réflexion…",
     "noContext": "Je n’ai pas assez d’informations.",
@@ -872,8 +872,10 @@
     "subscribeNowCta": "M’abonner maintenant"
   },
   "agent": {
-    "greeting": "Coucou 👋 Comment je peux t’aider pour la santé de ton bébé ?",
-    "placeholder": "Écris ou touche le micro…",
+    "greeting": "Comment je peux t’aider pour la santé de ton bébé ?",
+    "greetingWithName": "Comment va {name} ?",
+    "inputLabel": "Écris ou touche le micro…",
+    "placeholder": "Écris, ex. : il a eu 37,8",
     "send": "Envoyer",
     "stop": "Stop",
     "listen": "Dictée vocale",
@@ -1057,6 +1059,10 @@
     "shortAnswerTitle": "Ta réponse",
     "experienceOnlyTitle": "Ce que racontent d’autres mères",
     "urgentAnswerTitle": "Cela ne peut pas attendre",
+    "noEvidenceTitle": "Je n’ai pas de sources là-dessus",
+    "evidenceOnlyTitle": "Les sources que j’ai trouvées",
+    "callEmergency": "Appeler le {number}",
+    "planMap": "Parties du plan",
     "readMoreTitle": "Sur quoi repose ce plan",
     "readMoreTitleAnswer": "Sur quoi repose cette réponse",
     "readMoreTitleExperience": "D’où viennent ces expériences",

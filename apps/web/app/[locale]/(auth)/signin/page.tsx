@@ -11,7 +11,6 @@ const initial: SignInState = { status: "idle" };
 
 export default function SignInPage() {
   const t = useTranslations("signin");
-  const tc = useTranslations("common");
   const locale = useLocale();
   const [state, action, pending] = useActionState(sendMagicLink, initial);
 
@@ -85,13 +84,13 @@ export default function SignInPage() {
                       autoCapitalize="off"
                       spellCheck={false}
                       placeholder={t("emailPlaceholder")}
-                      className="w-full rounded-xl border border-line-control bg-surface py-2.5 pl-9 pr-3 text-base text-ink placeholder:text-ink-faint focus:border-primary-text"
+                      className="min-h-12 w-full rounded-xl border border-line-control bg-surface py-2.5 pl-9 pr-3 text-base text-ink placeholder:text-ink-faint focus:border-primary-text"
                     />
                   </div>
                   <button
                     type="submit"
                     disabled={pending}
-                    className="ad-btn ad-btn-primary w-full py-3 text-sm disabled:cursor-not-allowed disabled:opacity-60"
+                    className="ad-btn ad-btn-primary ad-btn-lg w-full disabled:cursor-not-allowed disabled:opacity-60"
                   >
                     {pending ? (
                       <>
@@ -114,7 +113,6 @@ export default function SignInPage() {
                   </p>
                 )}
 
-                <p className="mt-5 text-xs text-ink-faint">{tc("tagline")}</p>
               </>
             )}
           </div>
