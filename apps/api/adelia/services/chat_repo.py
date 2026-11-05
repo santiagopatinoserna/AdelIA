@@ -9,9 +9,13 @@ from adelia.models import ChatMessage, ChatSession
 from adelia.schemas import ChatCitation, ChatMessageOut, ChatSessionDetailOut, ChatSessionOut
 
 
-async def create_session(*, user_id: UUID, title: str | None = None) -> ChatSessionOut:
+async def create_session(
+    *, user_id: UUID, title: str | None = None, profile_id: UUID | None = None
+) -> ChatSessionOut:
     async with AsyncSessionLocal() as session:
-        chat = ChatSession(user_id=user_id, title=title or "Nueva conversación")
+        chat = ChatSession(
+            user_id=user_id, title=title or "Nueva conversación", profile_id=profile_id
+        )
         session.add(chat)
         await session.commit()
         await session.refresh(chat)
@@ -74,7 +78,14 @@ async def persist_message(
     role: Literal["user", "assistant"],
     content: str,
     citations: list[ChatCitation] | None,
+    profile_id: UUID | None = None,
 ) -> ChatMessageOut:
+    """Store one message; `profile_id`, when given, is the child this turn is about.
+
+    The session then belongs to that child: a mother who switches to Adel and
+    keeps writing in the same conversation is now talking about Adel, and the
+    newest plan in it, which GET /today reads, is his (services/today).
+    """
     async with AsyncSessionLocal() as session:
         msg = ChatMessage(
             session_id=session_id,
@@ -88,6 +99,8 @@ async def persist_message(
         chat = await session.get(ChatSession, session_id)
         if chat is not None:
             chat.updated_at = datetime.now(timezone.utc)
+            if profile_id is not None:
+                chat.profile_id = profile_id
         await session.commit()
         await session.refresh(msg)
         return ChatMessageOut(

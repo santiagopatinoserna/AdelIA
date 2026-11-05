@@ -85,10 +85,18 @@ async def post_chat(
     user_id: Annotated[uuid.UUID, Depends(get_current_user_id)],
 ):
     """SSE endpoint: streams ChatEvent JSON payloads back to the client."""
+    # How old the baby is, resolved once per turn. The answering path must not
+    # open a session mid-stream, and without this the red-flag rule that
+    # depends on age (under 3 months with a fever) can only fire when the
+    # parent happens to write the age in the question itself. Resolved before
+    # the session too: the session records this child (0024), so GET /today
+    # can put the plan's "No olvides" line under the right sibling.
+    facts = await load_profile_facts(user_id=user_id, profile_id=payload.profile_id)
+
     # Create or load session
     history: list[dict] = []
     if payload.session_id is None:
-        new_session = await create_session(user_id=user_id)
+        new_session = await create_session(user_id=user_id, profile_id=facts.profile_id)
         session_id = new_session.id
     else:
         existing = await get_session_with_messages(
@@ -108,19 +116,15 @@ async def post_chat(
             if m.content
         ]
 
-    # How old the baby is, resolved once per turn. The answering path must not
-    # open a session mid-stream, and without this the red-flag rule that
-    # depends on age (under 3 months with a fever) can only fire when the
-    # parent happens to write the age in the question itself.
-    facts = await load_profile_facts(user_id=user_id, profile_id=payload.profile_id)
-
-    # Persist user message before streaming begins
+    # Persist user message before streaming begins. The turn's child becomes
+    # the session's: a continued conversation about her sibling is his now.
     await persist_message(
         session_id=session_id,
         user_id=user_id,
         role="user",
         content=payload.question,
         citations=None,
+        profile_id=facts.profile_id,
     )
 
     async def event_publisher():

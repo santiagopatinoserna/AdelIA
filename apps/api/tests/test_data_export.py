@@ -2,7 +2,7 @@
 from __future__ import annotations
 
 import uuid
-from datetime import date
+from datetime import date, datetime, timedelta, timezone
 
 import pytest
 from httpx import ASGITransport, AsyncClient
@@ -131,3 +131,54 @@ async def test_export_is_scoped_to_the_requesting_user():
     assert all(
         e["resource"]["resourceType"] != "Immunization" for e in body["fhir_bundle"]["entry"]
     )
+
+
+@pytest.mark.asyncio
+async def test_export_carries_her_conversations_and_the_child_each_was_about():
+    """Art. 20 covers what she wrote: the chat transcripts were missing from the export.
+
+    Each session says which child it was about (chat_sessions.profile_id), so a
+    family of two can tell Nora's conversations from Adel's in the file.
+    """
+    from adelia.db import AsyncSessionLocal
+    from adelia.models import ChatMessage, ChatSession
+
+    user_id = await make_user()
+    other = await make_user()
+    async with AsyncSessionLocal() as session:
+        nora = Profile(user_id=user_id, display_name="Nora", relationship="child",
+                       is_default=True)
+        session.add(nora)
+        await session.flush()
+        chat = ChatSession(user_id=user_id, title="Tomas", profile_id=nora.id)
+        legacy = ChatSession(user_id=user_id, title="Antes")
+        hers = ChatSession(user_id=other, title="Ajena")
+        session.add_all([chat, legacy, hers])
+        await session.flush()
+        # One transaction shares one now(): the order is pinned by hand.
+        asked = datetime(2026, 11, 2, 9, 0, tzinfo=timezone.utc)
+        session.add_all([
+            ChatMessage(session_id=chat.id, user_id=user_id, role="assistant",
+                        content="## Hoy\n- Ofrécele más a menudo [ev_1].",
+                        created_at=asked + timedelta(seconds=5)),
+            ChatMessage(session_id=chat.id, user_id=user_id, role="user", content="come poco",
+                        created_at=asked),
+            ChatMessage(session_id=hers.id, user_id=other, role="user", content="ajeno"),
+        ])
+        await session.commit()
+        nora_id = nora.id
+
+    try:
+        async with _client_as(user_id) as client:
+            resp = await client.get("/users/me/export")
+    finally:
+        app.dependency_overrides.clear()
+
+    sessions = {s["title"]: s for s in resp.json()["adelia"]["chat_sessions"]}
+    assert set(sessions) == {"Tomas", "Antes"}
+    assert sessions["Tomas"]["profile_id"] == str(nora_id)
+    assert sessions["Antes"]["profile_id"] is None
+    assert [(m["role"], m["content"]) for m in sessions["Tomas"]["messages"]] == [
+        ("user", "come poco"),
+        ("assistant", "## Hoy\n- Ofrécele más a menudo [ev_1]."),
+    ]

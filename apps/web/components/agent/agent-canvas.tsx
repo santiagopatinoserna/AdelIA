@@ -60,9 +60,10 @@ const HISTORY_MAX_CHARS_PER_MESSAGE = 2000;
 // Telegram-first daily diary: the bot lives outside the app on purpose.
 const TELEGRAM_BOT_URL = `https://t.me/${process.env.NEXT_PUBLIC_TELEGRAM_BOT ?? "Adelia_godiai_bot"}`;
 
-// `today` is the server-rendered "Hoy con <nombre>" card (components/today-card):
-// the page fetches it, the canvas only decides where it sits, under the
-// greeting and before the showcase, and only while the thread is empty.
+// `today` is the "Hoy con <nombre>" card (components/today-follows-child): the
+// page fetches it and swaps it when she picks another child; the canvas only
+// decides where it sits, under the greeting and before the showcase, and only
+// while the thread is empty.
 export function AgentCanvas({
   locale,
   userId,

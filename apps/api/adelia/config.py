@@ -213,6 +213,19 @@ class Settings(BaseSettings):
     # remain the only admission control (see evidence_retrieval for why).
     retrieval_hybrid_enabled: bool = False
 
+    # A mother's words rendered in the corpus's clinical Spanish (agent/lay_terms.py).
+    # Measured in production on 2026-11-05: "Tiene el culito muy rojo del pañal",
+    # "legañas amarillas", "granitos en las manos y en la boca" and "4 días sin
+    # hacer caca" were refused while the corpus covers each topic; the fragments
+    # name the condition and her sentence names what she sees
+    # (docs/specs/RECUPERACION_LENGUAJE_MADRE.md). On, the retrieve step also
+    # embeds her sentence plus the clinical terms the lexicon reads in it, both
+    # are searched under the same cut-offs, and each fragment keeps its better
+    # distance. Neither cut-off moves. OFF until scripts/eval_lay_language.py,
+    # run in production, shows group A gaining and group B not moving; off,
+    # retrieval makes exactly the calls it made before this setting existed.
+    lay_query_expansion: bool = False
+
     # STT (speech-to-text). "mistral" = Voxtral (UE por defecto, diarización);
     # "openai" = whisper-1 (sin diarización). Voxtral reusa mistral_api_key.
     stt_provider: str = "mistral"  # "mistral" | "openai"

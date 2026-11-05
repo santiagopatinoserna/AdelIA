@@ -137,7 +137,10 @@ jobs:
         run: pnpm build
 
   e2e:
-    runs-on: ubuntu-latest
+    # Pinned: ubuntu-latest moved to 26.04, for which Playwright 1.60 ships no Chromium
+    # ("Playwright does not support chromium on ubuntu26.04-x64"), so every e2e job failed
+    # at install. Move back to ubuntu-latest once Playwright supports it.
+    runs-on: ubuntu-24.04
     services:
       postgres:
         image: pgvector/pgvector:pg16

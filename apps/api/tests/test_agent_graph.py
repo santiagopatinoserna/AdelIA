@@ -352,3 +352,137 @@ async def test_the_suite_never_reaches_the_routing_provider():
 
     with pytest.raises(RuntimeError, match="disabled in tests"):
         await r._complete_json("system", "user")
+
+
+# --- her words, rendered for the corpus (agent/lay_terms.py) ----------------------
+#
+# Measured in production on 2026-11-05: "Tiene el culito muy rojo del pañal" was
+# refused while the corpus holds diaper dermatitis. Behind
+# settings.lay_query_expansion the retrieve step also searches her sentence
+# plus the corpus's clinical terms, and keeps the better distance of each
+# fragment. Off by default; off means the exact calls of before.
+
+LAY = "Tiene el culito muy rojo del pañal"
+
+
+class VectorFakes(Fakes):
+    """One vector per text (vector i is all i), and evidence by vector, so a
+    test can tell which of the two searches found what."""
+
+    def __init__(self, *, by_vector=None, **kwargs):
+        super().__init__(**kwargs)
+        self.by_vector = by_vector or {}
+
+    async def embed(self, texts):
+        self.calls.append(("embed", list(texts)))
+        return [[float(i)] * 1024 for i in range(len(texts))]
+
+    async def retrieve_evidence(self, session, **kwargs):
+        self.calls.append(("evidence", kwargs))
+        return list(self.by_vector.get(kwargs["query_embedding"][0], self.evidence))
+
+
+def _retrieval_calls(fakes) -> list[tuple]:
+    return [c for c in fakes.calls if c[0] in ("embed", "evidence", "experience")]
+
+
+def test_the_expansion_is_off_by_default():
+    from adelia.config import Settings
+
+    assert Settings.model_fields["lay_query_expansion"].default is False
+
+
+async def test_with_the_expansion_off_retrieval_is_exactly_what_it_was(monkeypatch):
+    """The lexicon is not even read, and the calls are the calls of before."""
+    from adelia.agent import lay_terms
+    from adelia.config import settings
+
+    monkeypatch.setattr(settings, "lay_query_expansion", False)
+
+    def _never(*args, **kwargs):
+        raise AssertionError("the lexicon is read with the expansion off")
+
+    monkeypatch.setattr(lay_terms, "expanded_query", _never)
+    monkeypatch.setattr(lay_terms, "clinical_terms", _never)
+    fakes = Fakes(intent="plan", experience=[EXPERIENCE])
+    out = await _run(fakes, LAY)
+    cuts = {
+        "max_distance": settings.evidence_max_distance,
+        "relative_margin": settings.evidence_relative_margin,
+    }
+    assert _retrieval_calls(fakes) == [
+        ("embed", [LAY]),
+        ("evidence", {"query_embedding": [0.0] * 1024, "specialties": ["pediatrics"],
+                      "top_k": 4, **cuts}),
+        ("experience", {"query_embedding": [0.0] * 1024, "top_k": 3, **cuts}),
+    ]
+    assert out["kind"] == "answer"
+
+
+async def test_with_the_expansion_on_her_sentence_and_the_terms_are_both_searched(monkeypatch):
+    from adelia.agent.lay_terms import expanded_query
+    from adelia.config import settings
+
+    monkeypatch.setattr(settings, "lay_query_expansion", True)
+    fakes = VectorFakes(intent="plan", experience=[EXPERIENCE])
+    await _run(fakes, LAY)
+    calls = _retrieval_calls(fakes)
+    assert calls[0] == ("embed", [LAY, expanded_query(LAY)])
+    assert "dermatitis del pañal" in calls[0][1][1]
+    searches = [kwargs for name, kwargs in calls if name == "evidence"]
+    assert [s["query_embedding"][0] for s in searches] == [0.0, 1.0]
+    for s in searches:
+        assert s["specialties"] == ["pediatrics"] and s["top_k"] == 4
+        assert s["max_distance"] == settings.evidence_max_distance
+        assert s["relative_margin"] == settings.evidence_relative_margin
+    (_, experience), = [c for c in calls if c[0] == "experience"]
+    assert experience["query_embedding"][0] == 0.0, "other mothers: her sentence only"
+
+
+async def test_what_only_the_clinical_terms_found_is_an_answer_not_a_refusal(monkeypatch):
+    from adelia.config import settings
+
+    monkeypatch.setattr(settings, "lay_query_expansion", True)
+    fakes = VectorFakes(intent="plan", by_vector={0.0: [], 1.0: [EVIDENCE]})
+    out = await _run(fakes, LAY)
+    assert out["kind"] == "answer"
+    assert [c["title"] for c in out["evidence_citations"]] == [EVIDENCE.source_title]
+
+
+async def test_with_the_expansion_on_a_sentence_without_lay_words_is_searched_once(monkeypatch):
+    from adelia.config import settings
+
+    monkeypatch.setattr(settings, "lay_query_expansion", True)
+    fakes = VectorFakes(intent="question")
+    await _run(fakes, "¿Cuánto tiempo de pantalla puede ver?")
+    calls = _retrieval_calls(fakes)
+    assert calls[0] == ("embed", ["¿Cuánto tiempo de pantalla puede ver?"])
+    assert [c[0] for c in calls].count("evidence") == 1
+
+
+async def test_a_red_flag_never_reaches_the_lexicon(monkeypatch):
+    """The guard reads her original words first; a referral costs no search."""
+    from adelia.agent import lay_terms
+    from adelia.config import settings
+
+    monkeypatch.setattr(settings, "lay_query_expansion", True)
+    read: list[str] = []
+    monkeypatch.setattr(lay_terms, "expanded_query", lambda text: read.append(text))
+    fakes = VectorFakes()
+    out = await _run(fakes, "Tiene 2 meses, 38,5 de fiebre y granitos en el culito")
+    assert out["kind"] == "red_flag"
+    assert fakes.calls == [] and read == []
+
+
+async def test_the_lexicon_reads_the_spanish_corpus_text_of_a_french_question(monkeypatch):
+    from adelia.agent.lay_terms import expanded_query
+    from adelia.config import settings
+
+    monkeypatch.setattr(settings, "lay_query_expansion", True)
+
+    async def _corpus_text(text, locale):
+        return LAY
+
+    fakes = VectorFakes(intent="plan")
+    await _run(fakes, "Elle a les fesses toutes rouges", locale="fr", corpus_text=_corpus_text)
+    assert _retrieval_calls(fakes)[0] == ("embed", [LAY, expanded_query(LAY)])

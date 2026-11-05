@@ -60,3 +60,32 @@ async def test_delete_me_erases_documents_briefings_shares(client, monkeypatch):
 async def test_delete_me_requires_auth(client):
     response = await client.delete("/users/me")
     assert response.status_code in (401, 403)
+
+
+@pytest.mark.skipif(not PG_AVAILABLE, reason="needs Postgres running")
+async def test_delete_me_erases_conversations_tagged_with_a_child(client, monkeypatch):
+    """chat_sessions.profile_id must not keep a session alive once the account goes."""
+    from adelia.models import ChatMessage, ChatSession, Profile
+
+    monkeypatch.setattr(settings, "auth_secret", "test-secret")
+    user_id = await make_user()
+    async with AsyncSessionLocal() as session:
+        nora = Profile(user_id=user_id, display_name="Nora", relationship="child",
+                       is_default=True)
+        session.add(nora)
+        await session.flush()
+        chat = ChatSession(user_id=user_id, title="t", profile_id=nora.id)
+        session.add(chat)
+        await session.flush()
+        session.add(ChatMessage(session_id=chat.id, user_id=user_id, role="user", content="x"))
+        await session.commit()
+
+    token = make_token(str(user_id))
+    response = await client.delete("/users/me", headers={"Authorization": f"Bearer {token}"})
+    assert response.status_code == 204
+    async with AsyncSessionLocal() as session:
+        for model in (ChatSession, ChatMessage, Profile):
+            count = await session.scalar(
+                sa.select(sa.func.count()).select_from(model).where(model.user_id == user_id)
+            )
+            assert count == 0, f"{model.__tablename__} not erased"
