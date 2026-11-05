@@ -1,5 +1,7 @@
 import { defineConfig } from "@playwright/test";
 
+import { realChromeUse } from "./e2e-chrome.config";
+
 // Before/after captures of the mother-first redesign (docs/design/AUDITORIA_UX.md).
 // Not part of `pnpm e2e`: it writes ~250 PNGs and a metrics file, and it runs
 // in the real Chrome install on purpose (the product is judged on what a phone
@@ -17,7 +19,9 @@ export default defineConfig({
   fullyParallel: true,
   retries: 0,
   use: {
-    channel: process.env.SHOTS_CHANNEL ?? "chrome",
+    // The installed Chrome, launched so its helpers cannot keep a worker alive
+    // (chrome-quiet-stdio.sh), unless SHOTS_CHANNEL names another browser.
+    ...(process.env.SHOTS_CHANNEL ? { channel: process.env.SHOTS_CHANNEL } : realChromeUse),
     baseURL: process.env.E2E_BASE_URL ?? "http://localhost:3001",
   },
   reporter: [["list"]],

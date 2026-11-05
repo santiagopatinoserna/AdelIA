@@ -73,3 +73,42 @@ async def test_delete_session_404_for_other_users():
     s = await create_session(user_id=user_a)
     result = await delete_session(session_id=s.id, user_id=user_b)
     assert result is False  # not found / not owned
+
+
+async def _child(user_id, name: str, *, default: bool):
+    from adelia.db import AsyncSessionLocal
+    from adelia.models import Profile
+
+    async with AsyncSessionLocal() as session:
+        profile = Profile(user_id=user_id, display_name=name, relationship="child",
+                          is_default=default)
+        session.add(profile)
+        await session.commit()
+        return profile.id
+
+
+async def _session_profile(session_id):
+    from adelia.db import AsyncSessionLocal
+    from adelia.models import ChatSession
+
+    async with AsyncSessionLocal() as session:
+        return (await session.get(ChatSession, session_id)).profile_id
+
+
+@pytest.mark.skipif(not PG_AVAILABLE, reason="needs Postgres running")
+async def test_a_session_carries_the_child_it_is_about():
+    """GET /today reads the "No olvides" line per child, so the session says which one."""
+    user_id = await make_user()
+    nora = await _child(user_id, "Nora", default=True)
+    adel = await _child(user_id, "Adel", default=False)
+    session = await create_session(user_id=user_id, profile_id=nora)
+    assert await _session_profile(session.id) == nora
+    # A turn about another child moves the conversation to that child: the
+    # newest plan in it is the one the home card shows, and it is about Adel.
+    await persist_message(session_id=session.id, user_id=user_id, role="user",
+                          content="¿Y Adel?", citations=None, profile_id=adel)
+    assert await _session_profile(session.id) == adel
+    # The assistant half of the turn does not pass a profile and leaves it be.
+    await persist_message(session_id=session.id, user_id=user_id, role="assistant",
+                          content="respuesta", citations=[])
+    assert await _session_profile(session.id) == adel

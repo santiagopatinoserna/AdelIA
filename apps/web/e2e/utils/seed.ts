@@ -24,16 +24,22 @@ function pool() {
   });
 }
 
+// `isDefault` is true unless a sibling already holds it: profiles allow one
+// default per account (idx_profiles_one_default_per_user).
 export async function seedProfile(
   userId: string,
-  { displayName, dateOfBirth }: { displayName: string; dateOfBirth: string | null },
+  {
+    displayName,
+    dateOfBirth,
+    isDefault = true,
+  }: { displayName: string; dateOfBirth: string | null; isDefault?: boolean },
 ): Promise<string> {
   const db = pool();
   const { rows } = await db.query(
     `INSERT INTO profiles (user_id, display_name, relationship, date_of_birth, is_default)
-     VALUES ($1, $2, 'child', $3::date, true)
+     VALUES ($1, $2, 'child', $3::date, $4)
      RETURNING id`,
-    [userId, displayName, dateOfBirth],
+    [userId, displayName, dateOfBirth, isDefault],
   );
   await db.end();
   return rows[0].id as string;

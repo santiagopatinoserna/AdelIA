@@ -14,9 +14,10 @@ advice:
 3. The "No olvides" line of the last plan the chat stored in the last 7 days.
 
 Every read is scoped (`services/scope`): a mother of two never sees Adel's
-temperature under "Hoy con Nora". `chat_messages` carry no profile, so the
-plan line is only shown when the account has a single child; with two it
-cannot be attributed and is skipped rather than guessed.
+temperature under "Hoy con Nora". The plan line comes from the sessions of
+this child (`chat_sessions.profile_id`, 0024). A session from before that
+column has no child: it counts only when the account has a single child, and
+with two it cannot be attributed and is skipped rather than guessed.
 
 Nothing applies: `items` is empty and the web renders no card. No empty
 state and no filler, by design.
@@ -36,7 +37,7 @@ from adelia.agent import record
 from adelia.agent.pediatrics import VaccineStatus, resolve_country, vaccine_status
 from adelia.db import AsyncSessionLocal
 from adelia.enrichment.profile_service import age_in_months, get_profile_facts
-from adelia.models import ChatMessage, Entity, Observation, Profile
+from adelia.models import ChatMessage, ChatSession, Entity, Observation, Profile
 from adelia.services.answer_contract import PLAN_HEADINGS
 from adelia.services.observations import previous_comparable
 from adelia.services.scope import Scope
@@ -174,20 +175,26 @@ def remember_line(plan: str, lang: str) -> str | None:
     return None
 
 
-async def _last_plan_line(session: AsyncSession, user_id: UUID, lang: str,
-                          now: datetime) -> str | None:
-    """`chat_messages` carry no profile, so with two children the line is not attributable."""
+async def _last_plan_line(session: AsyncSession, user_id: UUID, profile_id: UUID | None,
+                          lang: str, now: datetime) -> str | None:
+    """The newest plan in this child's sessions, or in untagged ones when she has one child."""
     children = await session.scalar(
         sa.select(sa.func.count()).select_from(Profile)
         .where(Profile.user_id == user_id, Profile.relationship == "child",
                Profile.deleted_at.is_(None))
     )
-    if (children or 0) > 1:
+    whose = [ChatSession.profile_id == profile_id] if profile_id is not None else []
+    if (children or 0) <= 1:
+        whose.append(ChatSession.profile_id.is_(None))
+    if not whose:
         return None
     heading = PLAN_HEADINGS[lang]["remember"]
     content = await session.scalar(
         sa.select(ChatMessage.content)
-        .where(ChatMessage.user_id == user_id, ChatMessage.role == "assistant",
+        .join(ChatSession, ChatSession.id == ChatMessage.session_id)
+        .where(ChatMessage.user_id == user_id, ChatSession.user_id == user_id,
+               sa.or_(*whose), ChatSession.deleted_at.is_(None),
+               ChatMessage.role == "assistant",
                ChatMessage.created_at >= now - PLAN_MAX_AGE,
                ChatMessage.content.contains(f"## {heading}"))
         .order_by(ChatMessage.created_at.desc())
@@ -222,6 +229,7 @@ async def build_today(
                 session, scope=scope, kind=latest.kind, before=latest.observed_at
             )
             items.append(_observation_item(latest, previous, lang, now))
-        if (line := await _last_plan_line(session, user_id, lang, now)) is not None:
+        line = await _last_plan_line(session, user_id, facts.profile_id, lang, now)
+        if line is not None:
             items.append({"kind": "remember", "text": line, "tone": "neutral"})
     return {"name": facts.display_name, "items": items}
