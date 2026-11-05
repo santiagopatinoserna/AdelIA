@@ -18,12 +18,14 @@ from adelia.llm import (
     reasoning_effort_kwargs,
     uses_anthropic,
 )
+from adelia.agent import lay_terms
 from adelia.agent.corpus_query import corpus_query
 from adelia.agent.graph import GraphDeps, Retrieved, stream_graph
 from adelia.agent.route import log_route
 from adelia.db import AsyncSessionLocal
 from adelia.enrichment.evidence_retrieval import (
     EvidenceMatch,
+    merge_by_best_distance,
     retrieve_evidence,
 )
 from adelia.enrichment.profile_service import ProfileFacts
@@ -369,6 +371,12 @@ async def retrieve_for_account(
         tail = " ".join(m["content"] for m in history[-2:] if isinstance(m.get("content"), str))
         retrieval_query = f"{tail[-1000:]}\n{question}"
     corpus_text = await corpus_query(retrieval_query, locale)
+    # Her words rendered in the corpus's terms, a second evidence search in the
+    # same embedding call (agent/lay_terms.py). Off by default, and then the
+    # lexicon is not read. The temporal path asks for her own lab curve, which
+    # no lay word names, so it searches as before.
+    widened = lay_terms.expanded_query(corpus_text) if settings.lay_query_expansion else None
+    widened_embedding: list[float] | None = None
 
     temporal = detect_temporal_intent(question)
     if temporal is not None:
@@ -401,11 +409,16 @@ async def retrieve_for_account(
         texts = [retrieval_query]
         if corpus_text != retrieval_query:
             texts.append(corpus_text)
+        corpus_index = len(texts) - 1
+        if widened is not None:
+            texts.append(widened)
         query_embeds = await embed_texts(texts)
         if not query_embeds:
             raise RuntimeError("embed_texts returned empty — cannot retrieve chunks")
         query_embedding = query_embeds[0]
-        evidence_embedding = query_embeds[1] if len(texts) == 2 else query_embedding
+        evidence_embedding = query_embeds[corpus_index]
+        if widened is not None and len(query_embeds) > corpus_index + 1:
+            widened_embedding = query_embeds[corpus_index + 1]
         chunks = await retrieve_relevant_chunks(
             scope=scope,
             query_embedding=query_embedding,
@@ -433,6 +446,13 @@ async def retrieve_for_account(
     evidence_matches = await _retrieve_evidence_for_query(
         evidence_embedding, query_text=question, locale=locale
     )
+    if widened_embedding is not None:
+        also = await _retrieve_evidence_for_query(
+            widened_embedding, query_text=question, locale=locale
+        )
+        evidence_matches = merge_by_best_distance(
+            [evidence_matches, also], top_k=4, relative_margin=settings.evidence_relative_margin
+        )
     return Retrieved(
         evidence=evidence_matches, patient_context=patient_context or None, citations=citations
     )

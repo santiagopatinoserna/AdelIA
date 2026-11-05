@@ -63,6 +63,7 @@ from langgraph.config import get_stream_writer  # noqa: E402
 from langgraph.graph import END, START, StateGraph  # noqa: E402
 from langgraph.runtime import Runtime  # noqa: E402
 
+from adelia.agent import lay_terms  # noqa: E402
 from adelia.agent import record as rec  # noqa: E402
 from adelia.agent.route import RouteDecision  # noqa: E402
 from adelia.clinical import red_flags  # noqa: E402
@@ -73,6 +74,7 @@ from adelia.enrichment.evidence_retrieval import (  # noqa: E402
     evidence_citations_for_response,
     format_evidence_for_prompt,
     format_experience_for_prompt,
+    merge_by_best_distance,
 )
 from adelia.enrichment.profile_service import ProfileFacts  # noqa: E402
 from adelia.services.answer_contract import (  # noqa: E402
@@ -461,22 +463,33 @@ async def retrieve(state: AgentState, runtime: Runtime[GraphDeps]) -> dict:
     text = deps.retrieval_text(state["message"])
     if deps.corpus_text is not None:
         text = await deps.corpus_text(text, _locale(state))
+    # Her words, rendered in the corpus's terms, as a second search
+    # (agent/lay_terms.py). Off by default: then the lexicon is not read and
+    # the calls below are the ones this node always made.
+    widened = lay_terms.expanded_query(text) if settings.lay_query_expansion else None
+    texts = [text] if widened is None else [text, widened]
     try:
-        embeds = await deps.embed([text])
+        embeds = await deps.embed(texts)
     except Exception as exc:  # noqa: BLE001 - no key, no network, provider down
         logger.warning("graph: embedding failed (%s)", type(exc).__name__)
         raise GraphUnavailable("embedding failed") from exc
     if not embeds:
         raise GraphUnavailable("embedding returned nothing")
+    cuts = {
+        "specialties": ["pediatrics"],
+        "top_k": 4,
+        "max_distance": settings.evidence_max_distance,
+        "relative_margin": settings.evidence_relative_margin,
+    }
     async with AsyncSessionLocal() as session:
-        evidence = await deps.retrieve_evidence(
-            session,
-            query_embedding=embeds[0],
-            specialties=["pediatrics"],
-            top_k=4,
-            max_distance=settings.evidence_max_distance,
-            relative_margin=settings.evidence_relative_margin,
-        )
+        evidence = await deps.retrieve_evidence(session, query_embedding=embeds[0], **cuts)
+        if widened is not None and len(embeds) > 1:
+            also = await deps.retrieve_evidence(session, query_embedding=embeds[1], **cuts)
+            evidence = merge_by_best_distance(
+                [evidence, also], top_k=cuts["top_k"], relative_margin=cuts["relative_margin"]
+            )
+    # Other mothers are searched with her sentence alone: the experience tier
+    # is not what the lexicon was measured for.
     return {"evidence": list(evidence), "query_embedding": embeds[0]}
 
 

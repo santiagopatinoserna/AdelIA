@@ -532,3 +532,93 @@ async def test_the_temporal_path_embeds_only_the_corpus_text(
 
     mock_embed.assert_awaited_once_with(["curva de ferritina"])
     assert mock_evidence.call_args.args[0] == [0.3] * 1024
+
+
+# --- her words, rendered for the corpus (agent/lay_terms.py) ----------------------
+#
+# The chat and the /dashboard agent search the corpus through this function, so
+# settings.lay_query_expansion reaches them here: off, the calls of before; on,
+# a third text in the same embedding call and a second evidence search, merged
+# by best distance. Her own documents are searched with what she wrote.
+
+_LAY = "Tiene el culito muy rojo del pañal"
+
+
+@patch("adelia.services.chat_orchestrator._retrieve_evidence_for_query", return_value=[])
+@patch("adelia.services.chat_orchestrator.retrieve_relevant_chunks", return_value=[])
+@patch("adelia.services.chat_orchestrator.embed_texts")
+@patch("adelia.services.chat_orchestrator.detect_temporal_intent", return_value=None)
+async def test_with_the_expansion_off_the_chat_searches_exactly_as_before(
+    mock_temporal, mock_embed, mock_chunks, mock_evidence, monkeypatch,
+):
+    from adelia.agent import lay_terms
+    from adelia.config import settings
+    from adelia.services.chat_orchestrator import retrieve_for_account
+    from adelia.services.scope import Scope
+
+    monkeypatch.setattr(settings, "lay_query_expansion", False)
+
+    def _never(*args, **kwargs):
+        raise AssertionError("the lexicon is read with the expansion off")
+
+    monkeypatch.setattr(lay_terms, "expanded_query", _never)
+    mock_embed.return_value = [[0.1] * 1024]
+    await retrieve_for_account(Scope(user_id=uuid4()), question=_LAY, locale="es")
+
+    mock_embed.assert_awaited_once_with([_LAY])
+    mock_evidence.assert_awaited_once_with([0.1] * 1024, query_text=_LAY, locale="es")
+
+
+@patch("adelia.services.chat_orchestrator._retrieve_evidence_for_query")
+@patch("adelia.services.chat_orchestrator.retrieve_relevant_chunks", return_value=[])
+@patch("adelia.services.chat_orchestrator.embed_texts")
+@patch("adelia.services.chat_orchestrator.detect_temporal_intent", return_value=None)
+async def test_with_the_expansion_on_the_chat_also_searches_the_clinical_terms(
+    mock_temporal, mock_embed, mock_chunks, mock_evidence, monkeypatch,
+):
+    from adelia.agent.lay_terms import expanded_query
+    from adelia.config import settings
+    from adelia.enrichment.evidence_retrieval import EvidenceMatch
+    from adelia.services.chat_orchestrator import retrieve_for_account
+    from adelia.services.scope import Scope
+
+    monkeypatch.setattr(settings, "lay_query_expansion", True)
+    found = EvidenceMatch(
+        chunk_id=uuid4(), source_id=uuid4(), source_title="Nappy rash (NHS)",
+        organization="NHS", publication_year=2026, url=None, content="dermatitis del pañal",
+        chunk_index=0, distance=0.12,
+    )
+    mock_evidence.side_effect = [[], [found]]
+    mock_embed.return_value = [[0.1] * 1024, [0.2] * 1024]
+
+    out = await retrieve_for_account(Scope(user_id=uuid4()), question=_LAY, locale="es")
+
+    mock_embed.assert_awaited_once_with([_LAY, expanded_query(_LAY)])
+    assert mock_chunks.call_args.kwargs["query_embedding"] == [0.1] * 1024
+    assert [c.args[0] for c in mock_evidence.await_args_list] == [[0.1] * 1024, [0.2] * 1024]
+    assert out.evidence == [found]
+
+
+@patch("adelia.services.chat_orchestrator._retrieve_evidence_for_query", return_value=[])
+@patch("adelia.services.chat_orchestrator.retrieve_relevant_chunks", return_value=[])
+@patch("adelia.services.chat_orchestrator.embed_texts")
+@patch("adelia.services.chat_orchestrator.detect_temporal_intent", return_value=None)
+@patch("adelia.services.chat_orchestrator.corpus_query")
+async def test_with_the_expansion_on_a_french_question_expands_its_spanish_rendering(
+    mock_corpus, mock_temporal, mock_embed, mock_chunks, mock_evidence, monkeypatch,
+):
+    from adelia.agent.lay_terms import expanded_query
+    from adelia.config import settings
+    from adelia.services.chat_orchestrator import retrieve_for_account
+    from adelia.services.scope import Scope
+
+    monkeypatch.setattr(settings, "lay_query_expansion", True)
+    question = "Elle a les fesses toutes rouges"
+    mock_corpus.return_value = _LAY
+    mock_embed.return_value = [[0.1] * 1024, [0.2] * 1024, [0.3] * 1024]
+
+    await retrieve_for_account(Scope(user_id=uuid4()), question=question, locale="fr")
+
+    mock_embed.assert_awaited_once_with([question, _LAY, expanded_query(_LAY)])
+    assert mock_chunks.call_args.kwargs["query_embedding"] == [0.1] * 1024
+    assert [c.args[0] for c in mock_evidence.await_args_list] == [[0.2] * 1024, [0.3] * 1024]

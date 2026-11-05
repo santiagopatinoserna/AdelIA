@@ -125,6 +125,37 @@ def dedupe_by_source(matches: Sequence[EvidenceMatch], top_k: int) -> list[Evide
     return kept
 
 
+def merge_by_best_distance(
+    result_lists: Sequence[Sequence[EvidenceMatch]],
+    *,
+    top_k: int,
+    relative_margin: float | None,
+) -> list[EvidenceMatch]:
+    """Several searches for one question, merged: each fragment at its better distance.
+
+    For settings.lay_query_expansion (agent/lay_terms.py): her sentence and her
+    sentence plus the corpus's clinical terms are searched separately, each
+    under the same cut-offs, and merged here. A fragment found by both keeps
+    the closer of its two matches; the union is ranked by distance; the
+    relative margin is anchored to the best of all of them; one fragment per
+    source, up to `top_k`. Nothing past `max_distance` can come out, because
+    nothing past it went in, and with an empty second list this returns what
+    the first one held (in distance order).
+
+    The ranking is by distance, so a fused hybrid order
+    (settings.retrieval_hybrid_enabled) does not survive the merge; the merge
+    only runs when the expansion found terms, so with it off nothing changes.
+    """
+    best: dict[UUID, EvidenceMatch] = {}
+    for matches in result_lists:
+        for match in matches:
+            kept = best.get(match.chunk_id)
+            if kept is None or match.distance < kept.distance:
+                best[match.chunk_id] = match
+    ranked = sorted(best.values(), key=lambda m: m.distance)
+    return dedupe_by_source(within_relative_margin(ranked, relative_margin), top_k)
+
+
 async def retrieve_evidence(
     session: AsyncSession,
     *,

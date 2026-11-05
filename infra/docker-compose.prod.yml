@@ -106,6 +106,10 @@ services:
       # product's llm_provider. See config.py demo_llm_provider.
       DEMO_LLM_PROVIDER: ${DEMO_LLM_PROVIDER:-}
       DEMO_DAILY_BUDGET: ${DEMO_DAILY_BUDGET:-300}
+      # Mother's words to clinical terms in retrieval (adelia/agent/lay_terms.py).
+      # Off by default; switched on only after scripts/eval_lay_language.py shows
+      # more coverage and no group B question under the cut in production.
+      LAY_QUERY_EXPANSION: ${LAY_QUERY_EXPANSION:-false}
     ports:
       - "${API_PORT:-8000}:8000"
     healthcheck:
