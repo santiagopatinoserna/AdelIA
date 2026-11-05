@@ -2,7 +2,7 @@ import { getLocale, getTranslations } from "next-intl/server";
 import { auth } from "@/lib/auth";
 import { Link } from "@/lib/navigation";
 import { AgentCanvas } from "@/components/agent/agent-canvas";
-import { TodayCard } from "@/components/today-card";
+import { TodayFollowsChild, TodaySlot } from "@/components/today-follows-child";
 import { today } from "@/lib/api-client";
 
 export default async function DashboardHome() {
@@ -15,7 +15,8 @@ export default async function DashboardHome() {
   // "Hoy con <nombre>" (vision note 2026-10-22): fetched here, next to the
   // other server-side reads, for the DEFAULT child, which is the same child
   // the ProfileProvider starts on. Fail-open to nothing: a transient API
-  // error must not stand between a mother and the greeting.
+  // error must not stand between a mother and the greeting. When she picks
+  // another child, TodayFollowsChild asks for that child's day in the browser.
   const due = await today(locale).catch(() => null);
   // No ProfileProvider here any more: it moved up to (paid)/layout.tsx so the
   // recorder, the upload zone, the chat and the briefing form share this
@@ -24,11 +25,9 @@ export default async function DashboardHome() {
   // switcher again, unheard by every other surface.
   return (
       <div className="relative">
-        <AgentCanvas
-          locale={locale}
-          userId={userId}
-          today={due ? <TodayCard name={due.name} items={due.items} /> : null}
-        />
+        <TodayFollowsChild initial={due} locale={locale}>
+          <AgentCanvas locale={locale} userId={userId} today={<TodaySlot />} />
+        </TodayFollowsChild>
         {/* Desktop only: on mobile it overlapped the greeting, and the
             bottom nav's "Historial" tab covers the same destination. */}
         <nav

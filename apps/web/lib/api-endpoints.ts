@@ -94,8 +94,11 @@ export type BillingStatus = {
 
 export function makeApi(fetcher: Fetcher) {
   return {
-    async today(locale: string): Promise<TodayDTO> {
-      const res = await fetcher(`/today?locale=${encodeURIComponent(locale)}`);
+    /** `profileId` omitted is the default child, which is what the server render asks for. */
+    async today(locale: string, profileId?: string | null): Promise<TodayDTO> {
+      const q = new URLSearchParams({ locale });
+      if (profileId) q.set("profile_id", profileId);
+      const res = await fetcher(`/today?${q}`);
       if (!res.ok) throw new Error(`today: ${res.status}`);
       return res.json();
     },

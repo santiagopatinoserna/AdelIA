@@ -1,5 +1,5 @@
 "use client";
-import { createContext, useContext, useState } from "react";
+import { createContext, useContext, useMemo, useState } from "react";
 import type { Profile } from "@/lib/enrichment-types";
 
 type Ctx = { profiles: Profile[]; activeId: string | null; setActiveId: (id: string) => void };
@@ -38,4 +38,34 @@ export function ProfileProvider({
 
 export function useActiveProfile() {
   return useContext(ProfileCtx);
+}
+
+// For a page that has to act when she picks another child, at the moment she
+// picks it: "Hoy con <nombre>" is drawn on the server for the default child and
+// must ask the API for the new one. The page wraps its subtree, every
+// setActiveId below goes through here, and `onSwitch` runs inside her tap's
+// own handler. No effect watches activeId, so nothing runs on mount and the
+// first render stays the server's (7adb21c). The active child is still the
+// ProfileProvider's: this wrapper holds no state, so the recorder, the chat
+// and the upload zone keep hearing the same switch.
+export function OnProfileSwitch({
+  onSwitch,
+  children,
+}: {
+  onSwitch: (id: string) => void;
+  children: React.ReactNode;
+}) {
+  const parent = useContext(ProfileCtx);
+  const value = useMemo(
+    () => ({
+      ...parent,
+      setActiveId: (id: string) => {
+        const changed = id !== parent.activeId;
+        parent.setActiveId(id);
+        if (changed) onSwitch(id);
+      },
+    }),
+    [parent, onSwitch],
+  );
+  return <ProfileCtx.Provider value={value}>{children}</ProfileCtx.Provider>;
 }

@@ -1,4 +1,4 @@
-import { getTranslations } from "next-intl/server";
+import { useTranslations } from "next-intl";
 import { Bookmark, Syringe, Thermometer } from "lucide-react";
 
 import type { TodayItem } from "@/lib/api-endpoints";
@@ -9,19 +9,21 @@ import type { TodayItem } from "@/lib/api-endpoints";
 // web draws the lines it gets and adds nothing. No items, no card: an empty
 // card would be the filler the home is designed not to have.
 //
-// Server component: the page fetches GET /today next to the rest of the
-// server-side reads, so the card arrives in the first HTML and never pops in
-// after the greeting. The region is named after the heading so a screen
-// reader lands on "Hoy con Nora", not on "region".
-export async function TodayCard({
+// The page fetches GET /today next to the rest of the server-side reads, so
+// the card arrives in the first HTML and never pops in after the greeting.
+// Not async and no server-only import: when she picks another child,
+// components/today-follows-child draws the same card in the browser from the
+// new child's /today, with the same markup. The region is named after the
+// heading so a screen reader lands on "Hoy con Nora", not on "region".
+export function TodayCard({
   name,
   items,
 }: {
   name: string | null;
   items: TodayItem[];
 }) {
+  const t = useTranslations("today");
   if (items.length === 0) return null;
-  const t = await getTranslations("today");
   const title = name ? t("titleWithName", { name }) : t("title");
   // The most useful block of the home, so it gets a real heading, not the
   // 11 px eyebrow it had; a due vaccine is a reminder, in the warning colour,

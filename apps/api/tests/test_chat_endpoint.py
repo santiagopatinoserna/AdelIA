@@ -59,3 +59,49 @@ async def test_get_chat_sessions_lists_user_sessions(client):
 @pytest.mark.skipif(not PG_AVAILABLE, reason="needs Postgres")
 async def test_delete_chat_session_returns_404_for_other_user(client):
     pass
+
+
+@pytest.mark.skipif(not PG_AVAILABLE, reason="needs Postgres")
+async def test_post_chat_tags_the_session_with_the_resolved_child(client, monkeypatch):
+    """No profile_id from the client resolves to the default child, and the session
+    records that child; a later turn about her sibling moves it to the sibling."""
+    from adelia.config import settings
+    from adelia.db import AsyncSessionLocal
+    from adelia.models import ChatSession, Profile
+    from adelia.routers import chat as chat_router
+    from tests.db_helpers import make_user
+    from tests.test_auth import make_token
+
+    async def fake_stream(**kwargs):
+        yield ChatEvent(type="token", content="## No olvides\n- Apunta las tomas.\n")
+        yield ChatEvent(type="final")
+
+    monkeypatch.setattr(settings, "auth_secret", "test-secret")
+    monkeypatch.setattr(chat_router, "answer_question_streaming", fake_stream)
+    user_id = await make_user()
+    async with AsyncSessionLocal() as session:
+        nora = Profile(user_id=user_id, display_name="Nora", relationship="child",
+                       is_default=True)
+        adel = Profile(user_id=user_id, display_name="Adel", relationship="child",
+                       is_default=False)
+        session.add_all([nora, adel])
+        await session.commit()
+        nora_id, adel_id = nora.id, adel.id
+    headers = {"Authorization": f"Bearer {make_token(str(user_id))}"}
+
+    resp = await client.post("/chat", json={"question": "come poco"}, headers=headers)
+    assert resp.status_code == 200
+    start = next(json.loads(line[len("data:"):]) for line in resp.text.splitlines()
+                 if line.startswith("data:") and "session_id" in line)
+    session_id = start["session_id"]
+    async with AsyncSessionLocal() as session:
+        assert (await session.get(ChatSession, session_id)).profile_id == nora_id
+
+    resp = await client.post(
+        "/chat",
+        json={"question": "¿y Adel?", "session_id": session_id, "profile_id": str(adel_id)},
+        headers=headers,
+    )
+    assert resp.status_code == 200
+    async with AsyncSessionLocal() as session:
+        assert (await session.get(ChatSession, session_id)).profile_id == adel_id
