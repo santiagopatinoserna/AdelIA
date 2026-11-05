@@ -12,6 +12,7 @@ from __future__ import annotations
 from datetime import date, datetime, timedelta, timezone
 
 import pytest
+import sqlalchemy as sa
 
 from adelia.db import AsyncSessionLocal
 from adelia.models import ChatMessage, ChatSession, Profile
@@ -54,9 +55,9 @@ async def _observe(user_id, profile_id, value, at, kind="temperature", unit="°C
         await session.commit()
 
 
-async def _store_plan(user_id, content, *, days_ago=0):
+async def _store_plan(user_id, content, *, days_ago=0, profile_id=None):
     async with AsyncSessionLocal() as session:
-        chat = ChatSession(user_id=user_id, title="t")
+        chat = ChatSession(user_id=user_id, title="t", profile_id=profile_id)
         session.add(chat)
         await session.flush()
         msg = ChatMessage(session_id=chat.id, user_id=user_id, role="assistant", content=content,
@@ -232,6 +233,64 @@ async def test_with_two_children_the_plan_line_cannot_be_attributed_and_is_skipp
     nora = await _well_vaccinated_child(user_id, "Nora")
     await _well_vaccinated_child(user_id, "Adel", default=False)
     await _store_plan(user_id, PLAN, days_ago=1)
+    payload = await build_today(user_id=user_id, profile_id=nora.id, locale="es", now=NOW)
+    assert _kinds(payload) == []
+
+
+ADEL_PLAN = (
+    "## Hoy\n- Dale agua a sorbos [ev_1].\n\n"
+    "## No olvides\n- Lleva el termómetro a la guardería [ev_3].\n"
+)
+
+
+async def test_two_siblings_each_see_only_their_own_plan_line():
+    """The session carries the child it was about: Adel's newer plan stays under Adel."""
+    user_id = await make_user()
+    nora = await _well_vaccinated_child(user_id, "Nora")
+    adel = await _well_vaccinated_child(user_id, "Adel", default=False)
+    await _store_plan(user_id, PLAN, days_ago=2, profile_id=nora.id)
+    await _store_plan(user_id, ADEL_PLAN, days_ago=1, profile_id=adel.id)
+    for_nora = await build_today(user_id=user_id, profile_id=nora.id, locale="es", now=NOW)
+    for_adel = await build_today(user_id=user_id, profile_id=adel.id, locale="es", now=NOW)
+    assert [i["text"] for i in for_nora["items"]] == [
+        "Apunta cada toma y cada pañal mojado hasta mañana."
+    ]
+    assert [i["text"] for i in for_adel["items"]] == ["Lleva el termómetro a la guardería."]
+
+
+async def test_with_two_children_an_untagged_plan_never_wins_over_her_own():
+    """A session from before profile_id existed cannot be attributed with two children."""
+    user_id = await make_user()
+    nora = await _well_vaccinated_child(user_id, "Nora")
+    await _well_vaccinated_child(user_id, "Adel", default=False)
+    await _store_plan(user_id, PLAN, days_ago=3, profile_id=nora.id)
+    await _store_plan(user_id, ADEL_PLAN, days_ago=1)
+    payload = await build_today(user_id=user_id, profile_id=nora.id, locale="es", now=NOW)
+    assert [i["text"] for i in payload["items"]] == [
+        "Apunta cada toma y cada pañal mojado hasta mañana."
+    ]
+
+
+async def test_with_one_child_the_default_profile_reads_her_tagged_and_untagged_plans():
+    """No profile_id in the request resolves to the default child, as the home page asks."""
+    user_id = await make_user()
+    nora = await _well_vaccinated_child(user_id, "Nora")
+    await _store_plan(user_id, PLAN, days_ago=3)
+    payload = await build_today(user_id=user_id, profile_id=None, locale="es", now=NOW)
+    assert _kinds(payload) == ["remember"]
+    await _store_plan(user_id, ADEL_PLAN, days_ago=1, profile_id=nora.id)
+    payload = await build_today(user_id=user_id, profile_id=None, locale="es", now=NOW)
+    assert [i["text"] for i in payload["items"]] == ["Lleva el termómetro a la guardería."]
+
+
+async def test_a_conversation_she_deleted_leaves_the_card():
+    user_id = await make_user()
+    nora = await _well_vaccinated_child(user_id, "Nora")
+    await _store_plan(user_id, PLAN, days_ago=1, profile_id=nora.id)
+    async with AsyncSessionLocal() as session:
+        chat = await session.scalar(sa.select(ChatSession).where(ChatSession.user_id == user_id))
+        chat.deleted_at = NOW
+        await session.commit()
     payload = await build_today(user_id=user_id, profile_id=nora.id, locale="es", now=NOW)
     assert _kinds(payload) == []
 

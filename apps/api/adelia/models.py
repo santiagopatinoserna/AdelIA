@@ -261,6 +261,12 @@ class ChatSession(Base):
     __tablename__ = "chat_sessions"
     id = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
     user_id = Column(UUID(as_uuid=True), ForeignKey("users.id", ondelete="CASCADE"), nullable=False, index=True)
+    # Which child the conversation is about: the child of its latest turn
+    # (routers/chat). NULL on sessions from before 0024, which GET /today only
+    # reads when the account has a single child. CASCADE, not SET NULL: see 0024.
+    profile_id = Column(
+        UUID(as_uuid=True), ForeignKey("profiles.id", ondelete="CASCADE"), nullable=True
+    )
     title = Column(String, nullable=False, default="Nueva conversación")
     created_at = Column(DateTime(timezone=True), server_default=func.now())
     updated_at = Column(DateTime(timezone=True), server_default=func.now(), onupdate=func.now())

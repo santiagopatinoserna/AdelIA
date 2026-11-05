@@ -27,6 +27,8 @@ const ALLOWED_PREFIXES = [
   "clinical",
   "billing",
   "agent",
+  // "Hoy con <nombre>" for the child she switches to (components/today-follows-child).
+  "today",
 ];
 
 function isAllowed(path: string[]): boolean {
