@@ -357,6 +357,8 @@
     "noDocBody": "Pour répondre sur ton bébé, AdelIA a besoin d’au moins un document : le carnet, une analyse ou le compte-rendu du pédiatre.",
     "noDocCta": "Ajouter un document",
     "errorAnswer": "Je n’ai pas pu traiter ta question. Vérifie ta connexion et réessaie.",
+    "unavailableAnswer": "Je ne peux pas te répondre pour l’instant. Ce n’est pas ta connexion : réessaie dans quelques minutes. Si quelque chose t’inquiète, appelle ton pédiatre.",
+    "retry": "Redemander",
     "keyboardHint": "Entrée pour envoyer · Maj+Entrée pour un saut de ligne"
   },
   "ingestion": {
@@ -678,7 +680,10 @@
     "subscriptionActiveBody": "Ton abonnement est actif.",
     "subscriptionNoneBody": "Ton essai gratuit est terminé. Abonne-toi pour continuer à ajouter des documents et à poser des questions.",
     "subscriptionUnknownBody": "On n’a pas pu lire l’état de ton abonnement pour le moment.",
-    "subscriptionSubscribeCta": "Voir les offres et m’abonner"
+    "subscriptionSubscribeCta": "Voir les offres et m’abonner",
+    "signOutTitle": "Session",
+    "signOutBody": "Tu quittes AdelIA sur cet appareil. Tout ce qui est enregistré reste dans ton compte.",
+    "signOutCta": "Se déconnecter"
   },
   "questionnaire": {
     "title": "Suivi du reflux",
@@ -873,6 +878,8 @@
     "placeholder": "Écris, ex. : il a eu 37,8",
     "send": "Envoyer",
     "stop": "Stop",
+    "unavailableAnswer": "Je ne peux pas te répondre pour l’instant. Ce n’est pas ta connexion : réessaie dans quelques minutes. Si quelque chose t’inquiète, appelle ton pédiatre.",
+    "retry": "Redemander",
     "listen": "Dictée vocale",
     "thinking": "Je réfléchis…",
     "errorAnswer": "Oups, ça a planté. Réessaie.",

@@ -53,30 +53,86 @@ async def _gather_state(*, user_id: UUID, profile_id: UUID | None) -> ProfileSta
             diary_today=bool(diary_today),
             telegram_enabled=bool(settings.telegram_bot_token))
 
+# Every word a suggestion card shows, per locale. The router has always passed
+# `locale`, but the cards were written in Spanish only, so a French or English
+# mother read "Diario por Telegram ... Enlazar" under every answer
+# (docs/design/RECORRIDO_POC.md). Unknown locales fall back to Spanish.
+_NB = "\u00a0"  # French puts a no-break space before "?" (same as messages/fr.json)
+_TEXT: dict[str, dict[str, str]] = {
+    "es": {
+        "dob": "¿Cuál es la fecha de nacimiento del bebé?", "save": "Guardar",
+        "diary_title": "¿Cómo ha ido hoy?",
+        "diary_body": "Cuéntamelo por Telegram, en texto o con un audio, y lo guardo en su diario.",
+        "diary_cta": "Abrir Telegram",
+        "link_title": "Diario por Telegram",
+        "link_body": "Enlaza Telegram y cada tarde te preguntaré cómo ha ido el día. "
+                     "Respondes con un audio y listo.",
+        "link_cta": "Enlazar",
+        "docs_title": "Documentos sin procesar",
+        "docs_body": "Tienes {n} documento(s) por procesar.", "docs_cta": "Procesar",
+        "stale_title": "Briefing desactualizado",
+        "stale_body": "Tu briefing tiene datos nuevos sin incluir.", "stale_cta": "Regenerar",
+        "ok_title": "Todo al día",
+        "ok_body": "Pregúntame lo que quieras sobre la salud de tu bebé.",
+    },
+    "en": {
+        "dob": "What is the baby's date of birth?", "save": "Save",
+        "diary_title": "How did today go?",
+        "diary_body": "Tell me on Telegram, in text or a voice note, and I'll add it to the diary.",
+        "diary_cta": "Open Telegram",
+        "link_title": "Diary on Telegram",
+        "link_body": "Link Telegram and every evening I'll ask how the day went. "
+                     "Reply with a voice note and that's it.",
+        "link_cta": "Link",
+        "docs_title": "Documents waiting",
+        "docs_body": "You have {n} document(s) to process.", "docs_cta": "Process",
+        "stale_title": "Report out of date",
+        "stale_body": "Your report has new data it does not include yet.", "stale_cta": "Update",
+        "ok_title": "All up to date",
+        "ok_body": "Ask me anything about your baby's health.",
+    },
+    "fr": {
+        "dob": f"Quelle est la date de naissance du bébé{_NB}?", "save": "Enregistrer",
+        "diary_title": f"Comment s’est passée la journée{_NB}?",
+        "diary_body": "Raconte-le-moi sur Telegram, par écrit ou en audio, "
+                      "et je l’ajoute à son journal.",
+        "diary_cta": "Ouvrir Telegram",
+        "link_title": "Journal sur Telegram",
+        "link_body": "Lie Telegram et chaque soir je te demanderai comment s’est passée "
+                     "la journée. Tu réponds par un audio, c’est tout.",
+        "link_cta": "Lier",
+        "docs_title": "Documents à traiter",
+        "docs_body": "Tu as {n} document(s) à traiter.", "docs_cta": "Traiter",
+        "stale_title": "Résumé à mettre à jour",
+        "stale_body": "Ton résumé a de nouvelles données qu’il n’inclut pas encore.",
+        "stale_cta": "Mettre à jour",
+        "ok_title": "Tout est à jour",
+        "ok_body": "Demande-moi ce que tu veux sur la santé de ton bébé.",
+    },
+}
+
+
 async def build_suggestions(*, user_id: UUID, profile_id: UUID | None, locale: str = "es") -> list[dict]:
     state = await _gather_state(user_id=user_id, profile_id=profile_id)
+    tx = _TEXT.get(locale, _TEXT["es"])
     out: list[dict] = []
     if state.is_child and not state.has_dob:
-        out.append(cards.card_question(_cid(), "date_of_birth",
-                                       "¿Cuál es la fecha de nacimiento del bebé?", input_type="date"))
+        out.append(cards.card_question(_cid(), "date_of_birth", tx["dob"], input_type="date",
+                                       action_label=tx["save"]))
     if state.telegram_enabled and not state.diary_today:
         if state.telegram_linked:
-            out.append(cards.card_action(_cid(), "¿Cómo ha ido hoy?",
-                                         "Cuéntamelo por Telegram, en texto o con un audio, y lo guardo en su diario.",
-                                         "Abrir Telegram", "daily_diary"))
+            out.append(cards.card_action(_cid(), tx["diary_title"], tx["diary_body"],
+                                         tx["diary_cta"], "daily_diary"))
         else:
-            out.append(cards.card_action(_cid(), "Diario por Telegram",
-                                         "Enlaza Telegram y cada tarde te preguntaré cómo ha ido el día. "
-                                         "Respondes con un audio y listo.",
-                                         "Enlazar", "link_telegram"))
+            out.append(cards.card_action(_cid(), tx["link_title"], tx["link_body"],
+                                         tx["link_cta"], "link_telegram"))
     if state.unprocessed_docs:
-        out.append(cards.card_action(_cid(), "Documentos sin procesar",
-                                     f"Tienes {state.unprocessed_docs} documento(s) por procesar.",
-                                     "Procesar", "process_docs"))
+        out.append(cards.card_action(_cid(), tx["docs_title"],
+                                     tx["docs_body"].format(n=state.unprocessed_docs),
+                                     tx["docs_cta"], "process_docs"))
     if state.stale_briefing:
-        out.append(cards.card_action(_cid(), "Briefing desactualizado",
-                                     "Tu briefing tiene datos nuevos sin incluir.", "Regenerar", "regen_briefing"))
+        out.append(cards.card_action(_cid(), tx["stale_title"], tx["stale_body"],
+                                     tx["stale_cta"], "regen_briefing"))
     if not out:
-        out.append(cards.card_insight(_cid(), "Todo al día",
-                                      "Pregúntame lo que quieras sobre la salud de tu bebé.", tone="positive"))
+        out.append(cards.card_insight(_cid(), tx["ok_title"], tx["ok_body"], tone="positive"))
     return out

@@ -14,6 +14,31 @@ function env(name: string, fallback?: string): string {
   return v;
 }
 
+// The link the magic-link email would carry, for an inbox the test cannot
+// read. Auth.js stores sha256(token + AUTH_SECRET) and the callback hashes the
+// token it receives the same way, so this walks the real sign-in: the adapter
+// creates the user on first use, exactly as for a mother clicking the email.
+export async function magicLinkPath(email: string, callbackPath: string): Promise<string> {
+  const { createHash, randomBytes } = await import("node:crypto");
+  const token = randomBytes(16).toString("hex");
+  const hashed = createHash("sha256").update(`${token}${env("AUTH_SECRET")}`).digest("hex");
+  const pool = new Pool({
+    host: env("POSTGRES_HOST", "localhost"),
+    port: Number(env("POSTGRES_PORT", "5434")),
+    user: env("POSTGRES_USER", "adelia"),
+    password: env("POSTGRES_PASSWORD", "adelia_dev"),
+    database: env("POSTGRES_DB", "adelia"),
+  });
+  await pool.query(
+    `INSERT INTO verification_tokens (identifier, token, expires)
+     VALUES ($1, $2, now() + interval '15 minutes')`,
+    [email, hashed],
+  );
+  await pool.end();
+  const q = new URLSearchParams({ callbackUrl: callbackPath, token, email });
+  return `/api/auth/callback/resend?${q}`;
+}
+
 export async function seedUserAndSessionCookie(email: string) {
   const pool = new Pool({
     host: env("POSTGRES_HOST", "localhost"),

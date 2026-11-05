@@ -357,6 +357,8 @@
     "noDocBody": "To answer about your baby, AdelIA needs at least one document: the health record, a lab or the pediatrician's report.",
     "noDocCta": "Upload a document",
     "errorAnswer": "I couldn't process your question. Check your connection and try again.",
+    "unavailableAnswer": "I can't answer right now. It isn't your connection: try again in a few minutes. If something worries you, call your pediatrician.",
+    "retry": "Ask again",
     "keyboardHint": "Enter to send · Shift+Enter for a new line"
   },
   "ingestion": {
@@ -678,7 +680,10 @@
     "subscriptionActiveBody": "Your subscription is active.",
     "subscriptionNoneBody": "Your free trial has ended. Subscribe to keep uploading documents and asking questions.",
     "subscriptionUnknownBody": "We could not read your subscription status right now.",
-    "subscriptionSubscribeCta": "See plans and subscribe"
+    "subscriptionSubscribeCta": "See plans and subscribe",
+    "signOutTitle": "Session",
+    "signOutBody": "You leave AdelIA on this device. Everything saved stays in your account.",
+    "signOutCta": "Sign out"
   },
   "questionnaire": {
     "title": "Reflux control",
@@ -873,6 +878,8 @@
     "placeholder": "Type, e.g. she had 37.8",
     "send": "Send",
     "stop": "Stop",
+    "unavailableAnswer": "I can't answer right now. It isn't your connection: try again in a few minutes. If something worries you, call your pediatrician.",
+    "retry": "Ask again",
     "listen": "Voice input",
     "thinking": "Thinking…",
     "errorAnswer": "Oops, something went wrong. Try again.",

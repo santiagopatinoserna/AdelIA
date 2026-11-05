@@ -15,11 +15,16 @@ export async function sendMagicLink(
   const locale = String(formData.get("locale") ?? "es").trim() || "es";
   if (!email) return { status: "error" };
   try {
-    await signIn("resend", {
+    const landing = await signIn("resend", {
       email,
       redirectTo: `/${locale}/dashboard`,
       redirect: false,
     });
+    // signIn only throws AuthErrors. A failed send (Resend rejecting the
+    // key, the network down) comes back as the URL of the error page,
+    // "/api/auth/error?error=Configuration", and was announced as "check your
+    // inbox": she waited for an email that had never left (RECORRIDO_POC.md).
+    if (linkWasNotSent(landing)) return { status: "error", email };
     return { status: "sent", email };
   } catch (err) {
     // Never swallow a Next redirect (it surfaces as a thrown error with a
@@ -34,5 +39,16 @@ export async function sendMagicLink(
       throw err;
     }
     return { status: "error", email };
+  }
+}
+
+// The email provider's success lands on /api/auth/verify-request; any landing
+// that carries an `error` parameter is a failure, whatever page it names.
+function linkWasNotSent(landing: unknown): boolean {
+  if (typeof landing !== "string") return false;
+  try {
+    return new URL(landing, "http://localhost").searchParams.has("error");
+  } catch {
+    return false;
   }
 }

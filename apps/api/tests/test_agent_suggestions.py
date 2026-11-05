@@ -31,3 +31,43 @@ async def test_diary_cards_need_a_configured_bot():
         cards_out = await build_suggestions(user_id=uuid4(), profile_id=None)
     card = next(c for c in cards_out if any(a["intent"] == "link_telegram" for a in c["actions"]))
     assert card["payload"]["title"] == "Diario por Telegram"
+
+
+async def _all_cards(locale: str) -> list[dict]:
+    """Every suggestion a state can produce, in one locale."""
+    states = [
+        ProfileState(has_dob=False, unprocessed_docs=2, stale_briefing=True, is_child=True,
+                     telegram_linked=False, diary_today=False, telegram_enabled=True),
+        ProfileState(has_dob=True, unprocessed_docs=0, stale_briefing=False, is_child=True,
+                     telegram_linked=True, diary_today=False, telegram_enabled=True),
+        ProfileState(has_dob=True, unprocessed_docs=0, stale_briefing=False, is_child=True),
+    ]
+    out: list[dict] = []
+    for state in states:
+        with patch("adelia.agent.suggestions._gather_state", return_value=state):
+            out += await build_suggestions(user_id=uuid4(), profile_id=None, locale=locale)
+    return out
+
+
+def _words(cards_out: list[dict]) -> list[str]:
+    texts = []
+    for c in cards_out:
+        p = c["payload"]
+        texts += [p.get("title"), p.get("body"), p.get("prompt")]
+        texts += [a["label"] for a in c["actions"]]
+    return [t for t in texts if t]
+
+
+async def test_suggestions_speak_her_language():
+    """The router passed `locale` and the cards ignored it: a French mother read
+    "Diario por Telegram ... Enlazar" under every answer (RECORRIDO_POC.md)."""
+    es = _words(await _all_cards("es"))
+    assert "Diario por Telegram" in es
+    for locale in ("en", "fr"):
+        other = _words(await _all_cards(locale))
+        assert len(other) == len(es)
+        assert not set(other) & set(es), (locale, set(other) & set(es))
+    fr = _words(await _all_cards("fr"))
+    assert "Journal sur Telegram" in fr
+    # An unknown locale falls back to Spanish, the app's default.
+    assert _words(await _all_cards("de")) == es
