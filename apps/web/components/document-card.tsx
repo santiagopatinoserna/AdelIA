@@ -2,7 +2,7 @@ import { useTranslations } from "next-intl";
 
 import { Link } from "@/lib/navigation";
 import type { DocumentDTO } from "@/lib/api-client";
-import { StatusBadge } from "./status-badge";
+import { FailedHint, StatusBadge } from "./status-badge";
 import { FileText, Mic } from "lucide-react";
 
 export function DocumentCard({ doc, locale }: { doc: DocumentDTO; locale: string }) {
@@ -32,7 +32,7 @@ export function DocumentCard({ doc, locale }: { doc: DocumentDTO; locale: string
           </span>
           <span className="truncate text-base font-medium text-ink">{title}</span>
         </div>
-        <StatusBadge status={doc.status} />
+        <StatusBadge status={doc.status} hint={false} />
       </div>
       {/* A date she reads ("3 nov 2026, 1:23"), not a log stamp with seconds
           in monospace. */}
@@ -41,6 +41,7 @@ export function DocumentCard({ doc, locale }: { doc: DocumentDTO; locale: string
           new Date(doc.created_at),
         )}
       </p>
+      {doc.status === "failed" && <FailedHint className="mt-1 pl-12" />}
     </Link>
   );
 }

@@ -12,9 +12,10 @@ def card_confirm(card_id: str, title: str, tool_name: str, tool_args: dict[str, 
     return _card("confirm", card_id, {"title": title, "tool_name": tool_name, "tool_args": tool_args},
                  [{"label": "Sí", "intent": "confirm"}, {"label": "No", "intent": "cancel"}])
 
-def card_question(card_id: str, field: str, prompt: str, input_type: str = "text") -> dict:
+def card_question(card_id: str, field: str, prompt: str, input_type: str = "text",
+                  action_label: str = "Guardar") -> dict:
     return _card("question", card_id, {"field": field, "prompt": prompt, "input_type": input_type},
-                 [{"label": "Guardar", "intent": "answer"}])
+                 [{"label": action_label, "intent": "answer"}])
 
 def card_lab(card_id: str, name: str, value: Any, unit: str, flag: str, range_str: str, interpretation: str) -> dict:
     return _card("lab", card_id, {"name": name, "value": value, "unit": unit, "flag": flag,

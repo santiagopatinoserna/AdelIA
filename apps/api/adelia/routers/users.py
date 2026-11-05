@@ -182,6 +182,37 @@ async def _has_child_profile(db: AsyncSession, user_id: uuid.UUID) -> bool:
     return bool(n)
 
 
+async def _retire_untouched_own_row(db: AsyncSession, user_id: uuid.UUID) -> None:
+    """Soft-delete the "Mi perfil" row GET /enrichment/profiles auto-creates,
+    when nothing hangs from it.
+
+    The dashboard layout lists profiles before it sends a new account to
+    onboarding, so every new mother got that row and then saw two chips, her
+    baby and "Mi perfil" (in Spanish whatever her language), the second empty
+    and never asked for (RECORRIDO_POC.md). A row that holds documents,
+    entities, briefings or observations is a v0.1 account's real data and stays.
+    """
+    from adelia.models import Briefing, Entity, Observation
+
+    used = sa.or_(*(
+        sa.exists().where(model.profile_id == Profile.id)
+        for model in (Document, Entity, Briefing, Observation)
+    ))
+    await db.execute(
+        sa.update(Profile)
+        .where(
+            Profile.user_id == user_id,
+            Profile.relationship == "self",
+            Profile.display_name == "Mi perfil",
+            Profile.date_of_birth.is_(None),
+            Profile.deleted_at.is_(None),
+            ~used,
+        )
+        .values(deleted_at=datetime.now(timezone.utc), is_default=False)
+        .execution_options(synchronize_session=False)
+    )
+
+
 async def _stamp_onboarded(db: AsyncSession, user_id: uuid.UUID) -> None:
     await db.execute(
         sa.update(User)
@@ -240,6 +271,7 @@ async def complete_onboarding(
             is_default=True,
         ),
     )
+    await _retire_untouched_own_row(db, user_id)
     await _stamp_onboarded(db, user_id)
     await db.commit()
     return {

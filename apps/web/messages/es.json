@@ -357,6 +357,8 @@
     "noDocBody": "Para responder sobre tu bebé, AdelIA necesita al menos un documento: la cartilla, un análisis o el informe del pediatra.",
     "noDocCta": "Subir un documento",
     "errorAnswer": "No pude procesar tu pregunta. Revisa tu conexión e inténtalo de nuevo.",
+    "unavailableAnswer": "Ahora no puedo responderte. No es tu conexión: vuelve a intentarlo en unos minutos. Si algo te preocupa, llama a tu pediatra.",
+    "retry": "Volver a preguntar",
     "keyboardHint": "Enter para enviar · Shift+Enter para salto de línea"
   },
   "ingestion": {
@@ -678,7 +680,10 @@
     "subscriptionActiveBody": "Tu suscripción está activa.",
     "subscriptionNoneBody": "Tu prueba gratuita ha terminado. Suscríbete para seguir subiendo documentos y preguntando.",
     "subscriptionUnknownBody": "No hemos podido leer el estado de tu suscripción ahora mismo.",
-    "subscriptionSubscribeCta": "Ver planes y suscribirme"
+    "subscriptionSubscribeCta": "Ver planes y suscribirme",
+    "signOutTitle": "Sesión",
+    "signOutBody": "Sales de AdelIA en este dispositivo. Todo lo guardado sigue en tu cuenta.",
+    "signOutCta": "Cerrar sesión"
   },
   "questionnaire": {
     "title": "Control del reflujo",
@@ -873,6 +878,8 @@
     "placeholder": "Escribe, ej.: ha tenido 37,8",
     "send": "Enviar",
     "stop": "Parar",
+    "unavailableAnswer": "Ahora no puedo responderte. No es tu conexión: vuelve a intentarlo en unos minutos. Si algo te preocupa, llama a tu pediatra.",
+    "retry": "Volver a preguntar",
     "listen": "Dictar por voz",
     "thinking": "Pensando…",
     "errorAnswer": "Ups, algo falló. Inténtalo otra vez.",

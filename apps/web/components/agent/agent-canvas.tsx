@@ -7,7 +7,7 @@ import type { Citation, EvidenceCitation } from "@/lib/chat-types";
 import { AnswerContent } from "@/components/answer-content";
 import { CitationCard } from "@/components/citation-card";
 import { EvidenceCard } from "@/components/evidence-card";
-import { Database, BookMarked } from "lucide-react";
+import { Database, BookMarked, RotateCcw } from "lucide-react";
 import { CardRenderer, type CardActionHandler } from "./cards/card-renderer";
 import { AgentInput } from "./agent-input";
 import { ProfileSwitcher } from "./profile-switcher";
@@ -23,7 +23,30 @@ type Msg = {
   content: string;
   citations: Citation[];
   evidence_citations: EvidenceCitation[];
+  // A turn that failed carries what to send again: "Volver a preguntar"
+  // replaces the failed exchange with the same question, sent once.
+  retry?: DriveInput;
 };
+
+type DriveInput = {
+  message?: string; card_action?: object; display?: string;
+  clarification?: { field: string; value: string };
+};
+
+// The failed turn's placeholder becomes the sentence; only a turn she typed
+// (or a clarify press, which re-sends her question) can be asked again. A
+// confirmation is not replayed: if the write landed before the stream broke,
+// a second one would note the same entry twice.
+function failTurn(p: Msg[], content: string, input: DriveInput): Msg[] {
+  const n = [...p];
+  const last = n[n.length - 1];
+  if (input.message && last?.role === "assistant") {
+    n[n.length - 1] = { ...last, content, retry: input };
+  } else {
+    n.push({ role: "assistant", content, citations: [], evidence_citations: [] });
+  }
+  return n;
+}
 
 // Must track routers/agent.py (HISTORY_MAX_MESSAGES / HISTORY_MAX_CHARS_PER_MESSAGE).
 // The transcript was sent whole, growing by two entries per turn, so it used
@@ -83,10 +106,7 @@ export function AgentCanvas({
   // `display` is what her bubble shows when it differs from what the API
   // gets: a clarify press sends her question again with the value, and the
   // transcript shows the button she pressed.
-  async function drive(input: {
-    message?: string; card_action?: object; display?: string;
-    clarification?: { field: string; value: string };
-  }) {
+  async function drive(input: DriveInput) {
     const { display, ...body } = input;
     const epoch = ++epochRef.current;
     const stale = () => epochRef.current !== epoch;
@@ -94,9 +114,13 @@ export function AgentCanvas({
     const controller = new AbortController();
     abortRef.current = controller;
     setBusy(true);
+    // A failed exchange is not history: neither the error sentence nor the
+    // question it failed on (that one is being sent again, or was abandoned).
     const history = body.message
       ? messages
-          .filter((m) => !(m.role === "assistant" && m.content === ""))
+          .filter((m, k) =>
+            !(m.role === "assistant" && (m.content === "" || m.retry)) &&
+            !(m.role === "user" && messages[k + 1]?.retry))
           .slice(-HISTORY_MAX_MESSAGES)
           .map((m) => ({
             role: m.role,
@@ -127,8 +151,10 @@ export function AgentCanvas({
               n[n.length - 1] = { ...last, citations: ev.citations, evidence_citations: ev.evidence_citations };
             return n; });
         } else if (ev.type === "error") {
-          setMessages((p) => { const n = [...p]; const last = n[n.length - 1];
-            if (last?.role === "assistant") n[n.length - 1] = { ...last, content: t("errorAnswer") }; return n; });
+          // The API answered and said it could not: not her connection. Mostly
+          // the model being unreachable (no key, an outage, a rate limit); the
+          // red flags already ran before it, without any model.
+          setMessages((p) => failTurn(p, t("unavailableAnswer"), input));
         }
       }
     } catch (err) {
@@ -140,10 +166,19 @@ export function AgentCanvas({
         controller.signal.aborted ||
         (err instanceof DOMException && err.name === "AbortError");
       if (!stale() && !aborted) {
-        setMessages((p) => { const n = [...p]; const last = n[n.length - 1];
-          if (last?.role === "assistant" && !last.content) n[n.length - 1] = { ...last, content: t("errorAnswer") }; return n; });
+        setMessages((p) => {
+          const last = p[p.length - 1];
+          return last?.role === "assistant" && !last.content ? failTurn(p, t("errorAnswer"), input) : p;
+        });
       }
     } finally { if (!stale()) setBusy(false); }
+  }
+
+  function retry(i: number) {
+    const failed = messages[i];
+    if (busy || !failed?.retry) return;
+    setMessages((p) => p.slice(0, i - 1));
+    void drive(failed.retry);
   }
 
   const onCardAction: CardActionHandler = (intent, card, value) => {
@@ -261,7 +296,22 @@ export function AgentCanvas({
             // to be printed raw, "## Hoy - **...**" (AUDITORIA_UX.md, 11c).
             return (
               <div key={i} data-testid="agent-message" data-role="assistant" className="my-4 [&_[data-testid=answer-content]]:mt-0">
-                {m.content ? (
+                {m.retry ? (
+                  <>
+                    <p role="alert" className="text-base text-ink">{m.content}</p>
+                    {last && (
+                      <button
+                        type="button"
+                        onClick={() => retry(i)}
+                        disabled={busy}
+                        className="ad-btn ad-btn-ghost mt-3 min-h-[44px] px-4 text-sm disabled:opacity-60"
+                      >
+                        <RotateCcw className="h-4 w-4" strokeWidth={2} aria-hidden />
+                        {t("retry")}
+                      </button>
+                    )}
+                  </>
+                ) : m.content ? (
                   <AnswerContent level={2}>{m.content}</AnswerContent>
                 ) : (
                   <p role="status" className="flex items-center gap-2.5 text-base text-ink-soft">

@@ -12,7 +12,10 @@ const styles: Record<DocumentStatus, { badge: string; dot: string }> = {
   failed: { badge: "bg-error-tint text-error-text ring-error-line", dot: "bg-error-text" },
 };
 
-export function StatusBadge({ status }: { status: DocumentStatus }) {
+// `hint={false}` when the caller prints the failed hint itself: in a card the
+// hint under the badge took the row's width and left the file name as "sa…"
+// at 390 px (RECORRIDO_POC.md).
+export function StatusBadge({ status, hint = true }: { status: DocumentStatus; hint?: boolean }) {
   const t = useTranslations("dashboard.status");
   const s = styles[status];
   // Friendly, de-jargoned label: a soft ETA while we read the document.
@@ -27,12 +30,17 @@ export function StatusBadge({ status }: { status: DocumentStatus }) {
         <span className={`h-1.5 w-1.5 rounded-full ${s.dot} ${status === "processing" ? "animate-pulse" : ""}`} />
         {label}
       </span>
-      {status === "failed" && (
-        <span className="flex items-center gap-1 text-[11px] font-medium text-error-text" role="alert">
-          <RefreshCw className="h-3 w-3" strokeWidth={2.2} />
-          {t("failedHint")}
-        </span>
-      )}
+      {status === "failed" && hint && <FailedHint />}
+    </span>
+  );
+}
+
+export function FailedHint({ className = "" }: { className?: string }) {
+  const t = useTranslations("dashboard.status");
+  return (
+    <span className={`flex items-center gap-1 text-[11px] font-medium text-error-text ${className}`} role="alert">
+      <RefreshCw className="h-3 w-3" strokeWidth={2.2} />
+      {t("failedHint")}
     </span>
   );
 }

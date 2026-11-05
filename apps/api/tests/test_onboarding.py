@@ -183,3 +183,65 @@ async def test_unknown_user_id_does_not_500():
 
     assert res.status_code == 200
     assert res.json()["needed"] is True
+
+
+async def _profiles_after_onboarding(user_id, *, with_document: bool):
+    """GET /enrichment/profiles first, as the dashboard layout does before it
+    sends a new account to onboarding: that read auto-creates the parent's own
+    "Mi perfil" row (ensure_default_profile, kept for v0.1 accounts)."""
+    import sqlalchemy as sa
+
+    from adelia.auth import require_active_subscription
+    from adelia.db import AsyncSessionLocal
+    from adelia.main import app
+    from adelia.models import Document, Profile
+
+    # /enrichment sits behind the paywall; onboarding does not.
+    app.dependency_overrides[require_active_subscription] = lambda: user_id
+    try:
+        async with await _as(user_id) as ac:
+            listed = await ac.get("/enrichment/profiles")
+            assert listed.status_code == 200, listed.text
+            (own,) = listed.json()
+            if with_document:
+                async with AsyncSessionLocal() as session:
+                    session.add(Document(
+                        id=uuid4(), user_id=user_id, profile_id=own["id"], source="manual",
+                        mime_type="application/pdf", s3_key=f"t/{uuid4()}.pdf",
+                        processed_at=sa.func.now()))
+                    await session.commit()
+            done = await ac.post(
+                "/users/me/onboarding",
+                json={"display_name": "Nora", "date_of_birth": None, "sex": "F"},
+            )
+            assert done.status_code == 201, done.text
+            after = await ac.get("/enrichment/profiles")
+    finally:
+        _clear_overrides()
+    async with AsyncSessionLocal() as session:
+        left = (await session.execute(sa.select(Profile.display_name).where(
+            Profile.user_id == user_id, Profile.deleted_at.is_(None)))).scalars().all()
+    return [p["display_name"] for p in after.json()], sorted(left)
+
+
+async def test_onboarding_retires_the_empty_mi_perfil_row():
+    """A mother who just named her baby saw two chips, "Nora" and "Mi perfil"
+    (in Spanish even in French), the second an empty row nobody asked for
+    (RECORRIDO_POC.md). Untouched, it goes; the baby is her only profile."""
+    from tests.db_helpers import make_user
+
+    user_id = await make_user()
+    listed, left = await _profiles_after_onboarding(user_id, with_document=False)
+    assert listed == ["Nora"]
+    assert left == ["Nora"]
+
+
+async def test_onboarding_keeps_an_own_profile_that_holds_documents():
+    """The parent's own row is retired only when nothing hangs from it: a v0.1
+    account answering the questions late keeps its documents where they are."""
+    from tests.db_helpers import make_user
+
+    user_id = await make_user()
+    listed, left = await _profiles_after_onboarding(user_id, with_document=True)
+    assert sorted(listed) == ["Mi perfil", "Nora"]
+    assert left == ["Mi perfil", "Nora"]
