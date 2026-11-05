@@ -17,6 +17,7 @@ from adelia.enrichment.evidence_retrieval import (
     dedupe_by_source,
     evidence_citations_for_response,
     format_evidence_for_prompt,
+    merge_by_best_distance,
     retrieve_evidence,
     within_relative_margin,
 )
@@ -343,3 +344,44 @@ async def test_the_model_and_the_parent_read_the_same_fragment_after_dedup():
         block = prompt.split(f"[{tag}] ", 1)[1].split("\n")[1]
         assert block == match.content and card["snippet"] == match.content[:280]
     assert "fragment a1" in prompt and "fragment a2" not in prompt
+
+
+# --- two queries, the better distance wins (agent/lay_terms.py) -----------------
+#
+# With settings.lay_query_expansion on, the retrieve step searches her sentence
+# and her sentence plus the corpus's clinical terms. The merge is what makes
+# the expansion unable to lose a fragment the original found, and unable to
+# admit anything past the cut-offs both searches already applied.
+
+
+def test_the_merge_keeps_each_fragment_at_its_better_distance():
+    plain = _m(A, 0.17, "a")
+    widened = EvidenceMatch(**{**plain.__dict__, "distance": 0.09})
+    merged = merge_by_best_distance([[plain], [widened]], top_k=4, relative_margin=0.08)
+    assert merged == [widened]
+
+
+def test_the_merge_never_loses_what_the_original_found():
+    a, b = _m(A, 0.10, "a"), _m(B, 0.12, "b")
+    assert merge_by_best_distance([[a, b], []], top_k=4, relative_margin=0.08) == [a, b]
+
+
+def test_the_merge_ranks_by_distance_and_keeps_one_fragment_per_source():
+    a_far, b = _m(A, 0.16, "a-far"), _m(B, 0.12, "b")
+    a_near, c = _m(A, 0.08, "a-near"), _m(C, 0.15, "c")
+    merged = merge_by_best_distance([[b, a_far], [a_near, c]], top_k=4, relative_margin=0.08)
+    assert merged == [a_near, b, c]
+
+
+def test_the_merge_anchors_the_margin_to_the_best_of_both():
+    """What the expansion found well can push a lateral original match out."""
+    lateral, good = _m(A, 0.185, "lateral"), _m(B, 0.07, "good")
+    merged = merge_by_best_distance([[lateral], [good]], top_k=4, relative_margin=0.08)
+    assert merged == [good]
+
+
+def test_the_merge_honours_top_k_and_no_margin():
+    ranked = [_m(s, 0.05 + i / 100, str(i)) for i, s in enumerate((A, B, C, D, E))]
+    merged = merge_by_best_distance([ranked[:3], ranked[3:]], top_k=4, relative_margin=None)
+    assert [m.source_id for m in merged] == [A, B, C, D]
+    assert merge_by_best_distance([[], []], top_k=4, relative_margin=0.08) == []

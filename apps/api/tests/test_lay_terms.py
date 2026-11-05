@@ -1,0 +1,202 @@
+"""A mother's words, rendered in the corpus's clinical Spanish for the search.
+
+Measured in production on 2026-11-05 (30 real questions, cut-off 0.19): the
+library has diaper dermatitis, hand-foot-mouth, conjunctivitis and croup, and
+"Tiene el culito muy rojo del pañal", "Le han salido granitos en las manos y en
+la boca", "Tiene un ojo con legañas amarillas" and "Lleva 4 días sin hacer caca"
+were refused as if it had none. The fragments name the condition ("Tema:
+síntomas y causas de la dermatitis del pañal"); her sentence names what she
+sees. docs/specs/RECUPERACION_LENGUAJE_MADRE.md has the diagnosis.
+
+What these tests pin about the lexicon (agent/lay_terms.py):
+
+  * each entry turns her words into the terms the fragments use;
+  * no false friend: "cacahuete" is not "caca", a dog in the house is not a
+    barking cough, a red stool in the nappy is not diaper dermatitis;
+  * every term it adds is written somewhere in the pediatric corpus, so the
+    lexicon can only point at what the library holds;
+  * none of the group B questions of the golden set gets a single term: a
+    near miss must stay as far from the corpus as it is today.
+"""
+from __future__ import annotations
+
+import json
+import unicodedata
+
+import pytest
+
+from adelia.agent.lay_terms import LEXICON, clinical_terms, expanded_query
+from adelia.clinical.golden import CORPUS_DATA_DIR, questions
+
+
+def _plain(text: str) -> str:
+    folded = unicodedata.normalize("NFKD", text.lower())
+    return "".join(ch for ch in folded if not unicodedata.combining(ch))
+
+
+# --- each entry, in her words -------------------------------------------------
+
+@pytest.mark.parametrize(("message", "expected"), [
+    # The seven production misses (2026-11-05) that the lexicon can reach.
+    ("Lleva 4 días sin hacer caca y toma pecho, ¿es normal?", {"estreñimiento", "deposiciones"}),
+    ("Tiene el culito muy rojo del pañal", {"dermatitis del pañal"}),
+    ("Le han salido granitos en las manos y en la boca", {"síndrome boca mano pie", "exantema"}),
+    ("Tiene un ojo con legañas amarillas", {"conjuntivitis", "secreción"}),
+    ("¿Cuándo se le cae el cordón umbilical y cómo lo cuido?", {"muñón"}),
+    ("Tiene tos de perro por la noche", {"laringitis", "crup"}),
+    # The rest of the corpus's topics, said the way a mother says them.
+    ("No ha hecho caca desde el sábado", {"estreñimiento"}),
+    ("Le cuesta mucho hacer caca y llora", {"estreñimiento"}),
+    ("Hace las cacas muy duras", {"estreñimiento"}),
+    ("¿Cuántas cacas al día son normales?", {"deposiciones", "heces"}),
+    ("Tiene el culete irritado", {"dermatitis del pañal"}),
+    ("Tiene rozaduras del pañal", {"dermatitis del pañal"}),
+    ("Le han salido ampollas en los pies y llagas en la boca", {"síndrome boca mano pie"}),
+    ("Le ha salido un sarpullido en la tripa", {"exantema"}),
+    ("Se levanta con los ojos pegados", {"conjuntivitis"}),
+    ("Le llora un ojo todo el rato", {"lagrimeo", "obstrucción del conducto lagrimal"}),
+    ("Tiene muchos mocos y la nariz tapada", {"congestión nasal", "catarro"}),
+    ("Tose como un perro", {"laringitis", "crup"}),
+    ("Tiene una tos perruna muy fea", {"laringitis", "crup"}),
+    ("Le huele mal el ombligo", {"cordón umbilical"}),
+    ("Tiene el ombligo salido", {"hernia umbilical"}),
+    ("Echa la leche después de cada toma", {"regurgitación", "reflujo"}),
+    ("Le están saliendo los dientes y babea muchísimo", {"dentición"}),
+    ("Se toca mucho la oreja y llora", {"otitis"}),
+    ("Creo que está un poco bizca", {"estrabismo"}),
+    ("Tiene la cabeza plana por detrás", {"plagiocefalia"}),
+    ("Tiene costras en la cabeza", {"costra láctea"}),
+    ("Llora al hacer pis y le huele fuerte", {"infección de orina"}),
+    ("Tiene un bulto en la ingle", {"hernia inguinal"}),
+    ("Tiene la piel muy seca y áspera", {"dermatitis atópica"}),
+    # When the translation fails, her French or English reaches the lexicon as written.
+    ("My 8-month-old hasn't had a poo in four days", {"estreñimiento"}),
+    ("Il a les fesses rouges", {"dermatitis del pañal"}),
+    ("Mon bébé a les fesses toutes rouges", {"dermatitis del pañal"}),
+    ("She has a red sore bottom from the nappy", {"dermatitis del pañal"}),
+    ("Il a des boutons sur les mains et dans la bouche", {"síndrome boca mano pie"}),
+    ("He has spots on his hands and feet", {"síndrome boca mano pie"}),
+    ("Elle a les yeux collés le matin", {"conjuntivitis"}),
+    ("He has a sticky eye", {"conjuntivitis"}),
+    ("Il a le nez bouché", {"congestión nasal"}),
+    ("She has a runny nose", {"congestión nasal"}),
+    ("Il a une toux de phoque", {"laringitis", "crup"}),
+    ("He has a barking cough at night", {"laringitis", "crup"}),
+    ("Quand tombe le cordon du nombril ?", {"cordón umbilical"}),
+    ("When does the belly button stump fall off?", {"cordón umbilical"}),
+])
+def test_her_words_get_the_corpus_terms(message, expected):
+    terms = set(clinical_terms(message))
+    assert expected <= terms, f"{message!r} -> {sorted(terms)}"
+
+
+# --- false friends ----------------------------------------------------------------
+
+@pytest.mark.parametrize("message", [
+    "¿Puedo darle cacahuete a mi bebé de 8 meses?",          # caca-
+    "Le da miedo el perro del vecino",                        # perro, no cough
+    "Mi hija de 10 meses tiene los labios de la vulva pegados",  # pegados, no eye
+    "Me saco leche con el sacaleches, ¿cuánto dura?",         # her milk, not reflux
+    "¿Cómo le cepillo los dientes?",                          # teeth, not teething
+    "Llora mucho por las tardes",                             # crying, not a weeping eye
+    "¿A qué edad suelen empezar a gatear?",                   # no gap: the corpus says gatear
+    "Le compré un cordón para el chupete",                    # a cord, not the navel
+])
+def test_a_false_friend_gets_no_term(message):
+    assert clinical_terms(message) == ()
+
+
+def test_red_stool_in_the_nappy_is_stool_not_diaper_dermatitis():
+    terms = clinical_terms("Tiene caca roja en el pañal")
+    assert "deposiciones" in terms
+    assert "dermatitis del pañal" not in terms
+
+
+def test_spots_in_the_nappy_area_are_the_nappy_not_a_rash():
+    terms = clinical_terms("Le han salido granitos en el culito")
+    assert "dermatitis del pañal" in terms
+    assert "exantema" not in terms
+
+
+def test_a_navel_that_sticks_out_is_the_hernia_not_the_cord():
+    terms = clinical_terms("Tiene el ombligo salido")
+    assert "hernia umbilical" in terms
+    assert "cordón umbilical" not in terms
+
+
+# --- what the lexicon may add -------------------------------------------------
+
+def _corpus_text() -> str:
+    parts: list[str] = []
+    for path in sorted(CORPUS_DATA_DIR.glob("evidence_*.json")):
+        payload = json.loads(path.read_text(encoding="utf-8"))
+        for source in payload["sources"]:
+            if "pediatrics" in (source.get("specialties") or []):
+                parts.append(source["title"])
+                parts.extend(source["chunks"])
+    return _plain(" ".join(parts))
+
+
+def test_every_term_is_written_in_the_pediatric_corpus():
+    """The lexicon points at what the library holds, never at a word of its own."""
+    corpus = _corpus_text()
+    missing = sorted({t for e in LEXICON for t in e.terms if _plain(t) not in corpus})
+    assert missing == []
+
+
+def test_every_entry_has_a_name_patterns_and_terms():
+    names = [e.name for e in LEXICON]
+    assert len(names) == len(set(names))
+    for entry in LEXICON:
+        assert entry.patterns and entry.terms, entry.name
+
+
+def test_a_term_she_already_wrote_is_not_repeated():
+    terms = clinical_terms("¿Cuándo se le cae el cordón umbilical y cómo lo cuido?")
+    assert "cordón umbilical" not in terms
+
+
+def test_terms_come_once_in_lexicon_order():
+    terms = clinical_terms("Lleva 4 días sin hacer caca, y las cacas son duras")
+    assert len(terms) == len(set(terms))
+
+
+def test_the_expanded_query_is_her_text_then_the_terms():
+    message = "Tiene el culito muy rojo del pañal"
+    out = expanded_query(message)
+    assert out is not None
+    assert out.startswith(message + "\n")
+    assert "dermatitis del pañal" in out.split("\n", 1)[1]
+
+
+@pytest.mark.parametrize("message", ["", "   ", "¿Cuánto tiempo de pantalla puede ver?"])
+def test_nothing_to_add_is_none(message):
+    assert expanded_query(message) is None
+
+
+def test_the_lexicon_is_accent_and_case_blind():
+    assert clinical_terms("TIENE LEGANAS") == clinical_terms("tiene legañas")
+
+
+# --- group B of the golden set ------------------------------------------------
+
+@pytest.mark.parametrize("question", questions("B"), ids=lambda q: q.id)
+def test_no_group_b_question_gets_a_term(question):
+    """Each of the 15 near misses read against the lexicon, one by one.
+
+    B2 ("¿Es normal que no gatee a los 9 meses?") is the reason there is no
+    crawling entry: the corpus already writes gatear, gatean and gateo, so
+    there is no gap to close, and any entry for it would pull B2 towards the
+    motor-milestone fragments. B8 (yellow skin at 4 months) is why yellow is
+    not mapped to jaundice, B11 (trapped wind) why gas is not mapped to colic,
+    and B13 and B14 why French diarrhoea and first teeth have no entry.
+    """
+    assert clinical_terms(question.question) == ()
+    assert expanded_query(question.question) is None
+
+
+def test_the_b_group_is_the_fifteen_this_review_covered():
+    assert [q.id for q in questions("B")] == [
+        "B1", "B2", "B3", "B4", "B6", "B7", "B8", "B9",
+        "B11", "B12", "B13", "B14", "B15", "B16", "B17",
+    ]
