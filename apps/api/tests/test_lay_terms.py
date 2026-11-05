@@ -90,6 +90,57 @@ def test_her_words_get_the_corpus_terms(message, expected):
     assert expected <= terms, f"{message!r} -> {sorted(terms)}"
 
 
+@pytest.mark.parametrize(("message", "expected"), [
+    # Prod 2026-11-06 (lay-language-eval.json): L22 stayed at 0.217 with 19 sleep
+    # sources in the corpus, and L21 reached the lexicon translated as "manchas".
+    ("No duerme nada por la noche, se despierta cada hora",
+     {"despertares nocturnos", "sueño del bebé"}),
+    ("Tiene manchas en las manos y en la boca", {"síndrome boca mano pie"}),
+    ("Se despierta cinco veces cada noche", {"despertares nocturnos"}),
+    ("Duerme fatal desde hace una semana", {"despertares nocturnos"}),
+    ("Il se réveille toutes les heures la nuit", {"despertares nocturnos"}),
+    ("She wakes up every hour at night", {"despertares nocturnos"}),
+    # Other complaints mothers of 0-24 months bring every day.
+    ("No come nada desde hace dos días", {"falta de apetito", "inapetencia"}),
+    ("No quiere comer y come muy poco", {"falta de apetito"}),
+    ("No quiere el biberón", {"rechazo del alimento"}),
+    ("Il ne mange plus rien", {"falta de apetito"}),
+    ("He won't eat anything", {"falta de apetito"}),
+    ("Ha vomitado dos veces esta mañana", {"vómitos"}),
+    ("Vomita después de comer", {"vómitos"}),
+    ("He has been throwing up since lunch", {"vómitos"}),
+    ("Suda mucho cuando duerme", {"sudoración"}),
+    ("Se queda empapado de sudor por la noche", {"sudoración"}),
+    ("Ronca mucho por la noche", {"ronquido"}),
+    ("Respira con mucho ruido pero no tiene fiebre", {"respiración ruidosa", "ronquido"}),
+    ("He snores every night", {"ronquido"}),
+])
+def test_her_everyday_complaints_get_the_corpus_terms(message, expected):
+    terms = set(clinical_terms(message))
+    assert expected <= terms, f"{message!r} -> {sorted(terms)}"
+
+
+def test_milk_that_comes_back_up_stays_reflux_not_vomiting():
+    """"Vomita la leche" after a feed is what the reflux entry was written for;
+    the vomiting entry yields to it rather than pulling gastroenteritis in."""
+    terms = clinical_terms("Vomita la leche después de cada toma")
+    assert "regurgitación" in terms
+    assert "vómitos" not in terms
+
+
+@pytest.mark.parametrize(("message", "absent"), [
+    ("No se despierta para comer", "despertares nocturnos"),   # hard to wake, not wakings
+    ("Me cuesta despertarlo por la mañana", "despertares nocturnos"),
+    ("Le he puesto una sudadera", "sudoración"),               # sudadera is a jumper
+    ("¿Qué come un bebé de 8 meses?", "falta de apetito"),      # what to eat, not refusing
+    ("Il a vomi une fois", "vómitos"),                          # French: B13 is why
+    ("Tose como un perro y está ronca", "ronquido"),            # hoarse, not snoring
+    ("Tiene la voz ronca", "ronquido"),
+])
+def test_an_everyday_false_friend_gets_no_term(message, absent):
+    assert absent not in clinical_terms(message)
+
+
 # --- false friends ----------------------------------------------------------------
 
 @pytest.mark.parametrize("message", [
