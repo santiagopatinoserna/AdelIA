@@ -190,13 +190,15 @@ async def _retire_untouched_own_row(db: AsyncSession, user_id: uuid.UUID) -> Non
     onboarding, so every new mother got that row and then saw two chips, her
     baby and "Mi perfil" (in Spanish whatever her language), the second empty
     and never asked for (RECORRIDO_POC.md). A row that holds documents,
-    entities, briefings or observations is a v0.1 account's real data and stays.
+    entities, briefings, observations or chats is a v0.1 account's real data
+    and stays. (Chunks hang from documents; consent events are an audit trail,
+    not her data, and a soft delete leaves their link intact.)
     """
-    from adelia.models import Briefing, Entity, Observation
+    from adelia.models import Briefing, ChatSession, Entity, Observation
 
     used = sa.or_(*(
         sa.exists().where(model.profile_id == Profile.id)
-        for model in (Document, Entity, Briefing, Observation)
+        for model in (Document, Entity, Briefing, Observation, ChatSession)
     ))
     await db.execute(
         sa.update(Profile)

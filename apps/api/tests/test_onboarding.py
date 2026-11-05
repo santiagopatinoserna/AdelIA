@@ -185,7 +185,7 @@ async def test_unknown_user_id_does_not_500():
     assert res.json()["needed"] is True
 
 
-async def _profiles_after_onboarding(user_id, *, with_document: bool):
+async def _profiles_after_onboarding(user_id, *, with_document: bool, with_chat: bool = False):
     """GET /enrichment/profiles first, as the dashboard layout does before it
     sends a new account to onboarding: that read auto-creates the parent's own
     "Mi perfil" row (ensure_default_profile, kept for v0.1 accounts)."""
@@ -194,7 +194,7 @@ async def _profiles_after_onboarding(user_id, *, with_document: bool):
     from adelia.auth import require_active_subscription
     from adelia.db import AsyncSessionLocal
     from adelia.main import app
-    from adelia.models import Document, Profile
+    from adelia.models import ChatSession, Document, Profile
 
     # /enrichment sits behind the paywall; onboarding does not.
     app.dependency_overrides[require_active_subscription] = lambda: user_id
@@ -209,6 +209,10 @@ async def _profiles_after_onboarding(user_id, *, with_document: bool):
                         id=uuid4(), user_id=user_id, profile_id=own["id"], source="manual",
                         mime_type="application/pdf", s3_key=f"t/{uuid4()}.pdf",
                         processed_at=sa.func.now()))
+                    await session.commit()
+            if with_chat:
+                async with AsyncSessionLocal() as session:
+                    session.add(ChatSession(user_id=user_id, profile_id=own["id"], title="t"))
                     await session.commit()
             done = await ac.post(
                 "/users/me/onboarding",
@@ -243,5 +247,16 @@ async def test_onboarding_keeps_an_own_profile_that_holds_documents():
 
     user_id = await make_user()
     listed, left = await _profiles_after_onboarding(user_id, with_document=True)
+    assert sorted(listed) == ["Mi perfil", "Nora"]
+    assert left == ["Mi perfil", "Nora"]
+
+
+async def test_onboarding_keeps_an_own_profile_that_holds_a_chat():
+    """Chats carry their child since chat_sessions.profile_id (0024): a
+    conversation about the parent's own row is real data, so the row stays."""
+    from tests.db_helpers import make_user
+
+    user_id = await make_user()
+    listed, left = await _profiles_after_onboarding(user_id, with_document=False, with_chat=True)
     assert sorted(listed) == ["Mi perfil", "Nora"]
     assert left == ["Mi perfil", "Nora"]
