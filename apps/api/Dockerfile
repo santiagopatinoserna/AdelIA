@@ -1,5 +1,13 @@
 # AdelIA API — production image (also the Fly.io build).
-FROM python:3.12-slim-bookworm
+#
+# Three stages. `base` is the whole production image. `golden` adds the dev
+# tools and tests/ on top of the same layers, for the deploy's clinical gate
+# (scripts/prod-golden-gate.sh, docs/GOLDEN_GATE_DESPLIEGUE.md): the gate runs
+# the code that is about to serve, not a rebuild of it. `runtime` is `base`
+# again and comes LAST, so it stays the default target: `docker compose build
+# api` and the Fly build produce exactly the production image, with no tests
+# and no pytest in it.
+FROM python:3.12-slim-bookworm AS base
 
 # WeasyPrint needs pango/cairo at runtime; curl for healthchecks.
 RUN apt-get update && apt-get install -y --no-install-recommends \
@@ -34,3 +42,11 @@ EXPOSE 8000
 # --proxy-headers: behind the Fly/compose edge every client shares the
 # proxy IP otherwise — the limiter anonymous buckets would collapse.
 CMD ["sh", "-c", "uv run alembic upgrade head && uv run uvicorn adelia.main:app --host 0.0.0.0 --port 8000 --proxy-headers --forwarded-allow-ips=*"]
+
+# The deploy gate's image: built only with `--target golden` (the compose
+# overlay infra/docker-compose.golden.yml), run once and thrown away.
+FROM base AS golden
+RUN uv sync --frozen
+COPY tests ./tests
+
+FROM base AS runtime
