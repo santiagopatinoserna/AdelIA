@@ -184,3 +184,56 @@ def test_profile_create_dataclass():
 def test_profile_create_default_flag():
     p = ProfileCreate(display_name="Me", relationship="self", is_default=True)
     assert p.is_default is True
+
+
+@pytest.mark.skipif(not PG_AVAILABLE, reason="PG required")
+@pytest.mark.asyncio
+async def test_ensure_default_profile_survives_two_concurrent_first_loads(monkeypatch):
+    """Two first requests at once must share one default profile, not 500.
+
+    The dashboard fires several requests on a new account's first load. Each
+    GET /enrichment/profiles ran select-then-insert: both saw no default, both
+    inserted, and the second hit idx_profiles_one_default_per_user as an
+    IntegrityError (a 500, seen once in the 2026-11-06 night e2e). The barrier
+    holds both calls after their select so the race happens every run instead
+    of once in a while.
+    """
+    import asyncio
+
+    import sqlalchemy as sa
+
+    from adelia.db import AsyncSessionLocal
+    from adelia.enrichment import profile_service
+    from adelia.models import Profile
+
+    both_looked = asyncio.Barrier(2)
+    real_create = profile_service.create_profile
+
+    async def create_after_both_looked(*args, **kwargs):
+        try:
+            await asyncio.wait_for(both_looked.wait(), timeout=5)
+        except (TimeoutError, asyncio.BrokenBarrierError):
+            pass  # only one call got here: nothing to line up
+        return await real_create(*args, **kwargs)
+
+    monkeypatch.setattr(profile_service, "create_profile", create_after_both_looked)
+    user_id = await make_user()
+
+    async def first_load():
+        async with AsyncSessionLocal() as session:
+            profile = await profile_service.ensure_default_profile(session, user_id=user_id)
+            await session.commit()
+            return profile.id
+
+    a, b = await asyncio.wait_for(asyncio.gather(first_load(), first_load()), timeout=30)
+
+    assert a == b
+    async with AsyncSessionLocal() as session:
+        defaults = await session.scalar(
+            sa.select(sa.func.count()).select_from(Profile).where(
+                Profile.user_id == user_id,
+                Profile.is_default.is_(True),
+                Profile.deleted_at.is_(None),
+            )
+        )
+    assert defaults == 1

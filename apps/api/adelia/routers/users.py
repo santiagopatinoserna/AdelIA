@@ -2,6 +2,7 @@
 question the app has to ask before it can be clinically safe: who the baby is
 (audit 4.3)."""
 
+import asyncio
 import logging
 import uuid
 from datetime import date, datetime, timezone
@@ -63,29 +64,75 @@ async def delete_my_account(
     return None
 
 
-async def sweep_blob_tombstones() -> None:
-    """Delete every tombstoned blob; drop the tombstone only on success.
-    Called post-erasure and at startup (retries previous failures)."""
+# Strong references to post-erasure sweeps: the loop keeps only a weak one, so
+# a bare create_task() can be collected mid-sweep (same trap as
+# documents._BACKGROUND_TASKS).
+_ERASURE_SWEEPS: set[asyncio.Task] = set()
+
+
+def _spawn_erasure_sweep(keys: list[str]) -> asyncio.Task:
+    task = asyncio.create_task(_sweep_after_erasure(keys))
+    _ERASURE_SWEEPS.add(task)
+    task.add_done_callback(_ERASURE_SWEEPS.discard)
+    return task
+
+
+async def _sweep_after_erasure(keys: list[str]) -> None:
+    try:
+        await sweep_blob_tombstones(keys=keys)
+    except Exception:  # noqa: BLE001 — tombstones kept, next sweep retries
+        logger.exception("sweep after erasure failed (tombstones kept)")
+
+
+async def drain_erasure_sweeps(grace_s: float = 10.0) -> None:
+    """Wait for in-flight post-erasure sweeps, cancelling what outlives
+    `grace_s`. The lifespan calls it before disposing the engine, like
+    documents.cancel_background_pipelines. Cancelling loses nothing: a
+    tombstone is only dropped after its blob is gone, so the next sweep
+    retries whatever was cut short."""
+    tasks = [task for task in _ERASURE_SWEEPS if not task.done()]
+    if not tasks:
+        return
+    _done, pending = await asyncio.wait(tasks, timeout=grace_s)
+    for task in pending:
+        task.cancel()
+    if pending:
+        await asyncio.wait(pending, timeout=grace_s)
+
+
+async def sweep_blob_tombstones(keys: list[str] | None = None) -> None:
+    """Delete every due tombstoned blob, or only `keys`; drop a tombstone only
+    once its blob is gone. Called post-erasure (her keys) and at startup and
+    hourly (all of them, which retries previous failures).
+
+    No session is held while storage works: a slow or unreachable endpoint
+    used to pin a pooled connection for as long as botocore kept retrying."""
     from adelia.db import AsyncSessionLocal
 
+    now = datetime.now(timezone.utc)
+    due = sa.select(BlobTombstone.s3_key).where(
+        sa.or_(BlobTombstone.not_before.is_(None), BlobTombstone.not_before <= now)
+    )
+    if keys is not None:
+        due = due.where(BlobTombstone.s3_key.in_(keys))
     async with AsyncSessionLocal() as session:
-        now = datetime.now(timezone.utc)
-        result = await session.execute(
-            sa.select(BlobTombstone.s3_key).where(
-                sa.or_(BlobTombstone.not_before.is_(None), BlobTombstone.not_before <= now)
-            )
-        )
-        keys = [row[0] for row in result.all()]
-        for key in keys:
-            try:
-                await storage.delete_object(key)
-            except Exception:  # noqa: BLE001 — keep tombstone, retry next sweep
-                logger.exception("blob tombstone delete failed for %s (kept)", key)
-                continue
+        pending = [row[0] for row in (await session.execute(due)).all()]
+
+    gone: list[str] = []
+    for key in pending:
+        try:
+            await storage.delete_object(key)
+        except Exception:  # noqa: BLE001 — keep tombstone, retry next sweep
+            logger.exception("blob tombstone delete failed for %s (kept)", key)
+            continue
+        gone.append(key)
+
+    if gone:
+        async with AsyncSessionLocal() as session:
             await session.execute(
-                sa.delete(BlobTombstone).where(BlobTombstone.s3_key == key)
+                sa.delete(BlobTombstone).where(BlobTombstone.s3_key.in_(gone))
             )
-        await session.commit()
+            await session.commit()
 
 
 class SessionRevocation(BaseModel):

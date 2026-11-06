@@ -16,6 +16,7 @@ from typing import Literal
 from uuid import UUID
 
 from sqlalchemy import select, update
+from sqlalchemy.exc import IntegrityError
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from adelia.models import Profile
@@ -108,10 +109,39 @@ async def ensure_default_profile(
     user_id: UUID,
     display_name: str = "Mi perfil",
 ) -> Profile:
-    """Idempotent — returns existing default profile or creates one.
+    """Idempotent, also under concurrency: returns the existing default
+    profile or creates one.
 
     Called on user first-login to ensure backward compatibility for v0.1 data.
+    A new account's dashboard fires several requests at once, and two of them
+    can both see no default and both insert: the second one hit
+    idx_profiles_one_default_per_user and answered 500 (2026-11-06 night e2e).
+    The insert runs in a savepoint, so losing that race rolls back only the
+    insert and returns the row the other request created.
     """
+    existing = await _default_profile(session, user_id=user_id)
+    if existing is not None:
+        return existing
+
+    try:
+        async with session.begin_nested():
+            return await create_profile(
+                session,
+                user_id=user_id,
+                data=ProfileCreate(
+                    display_name=display_name,
+                    relationship="self",
+                    is_default=True,
+                ),
+            )
+    except IntegrityError:
+        winner = await _default_profile(session, user_id=user_id)
+        if winner is None:
+            raise  # not the one-default race: a real error, keep it loud
+        return winner
+
+
+async def _default_profile(session: AsyncSession, *, user_id: UUID) -> Profile | None:
     stmt = (
         select(Profile)
         .where(Profile.user_id == user_id)
@@ -119,19 +149,7 @@ async def ensure_default_profile(
         .where(Profile.deleted_at.is_(None))
     )
     result = await session.execute(stmt)
-    existing = result.scalar_one_or_none()
-    if existing is not None:
-        return existing
-
-    return await create_profile(
-        session,
-        user_id=user_id,
-        data=ProfileCreate(
-            display_name=display_name,
-            relationship="self",
-            is_default=True,
-        ),
-    )
+    return result.scalar_one_or_none()
 
 
 async def list_profiles(session: AsyncSession, *, user_id: UUID) -> list[Profile]:
