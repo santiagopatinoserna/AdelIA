@@ -1,7 +1,9 @@
 "use client";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { useTranslations } from "next-intl";
-import { Menu, Stethoscope, Sparkles, ArrowUpRight, ArrowDown, UploadCloud, FileText } from "lucide-react";
+import {
+  Menu, Stethoscope, Sparkles, ArrowUpRight, ArrowDown, UploadCloud, FileText, RotateCcw,
+} from "lucide-react";
 import { Link } from "@/lib/navigation";
 import {
   type ChatSession,
@@ -22,6 +24,8 @@ type LocalMsg = {
   content: string;
   citations: Citation[];
   evidence_citations: EvidenceCitation[];
+  // Set on an answer that failed: the question to send again.
+  retry?: string;
 };
 
 export function ChatPageClient({
@@ -168,11 +172,14 @@ export function ChatPageClient({
             return updated;
           });
         } else if (event.type === "error") {
+          // The API answered and said it could not, so it is not her
+          // connection: "revisa tu conexión" sent her to check a Wi-Fi that
+          // worked. Mostly the model being unreachable (RECORRIDO_POC.md).
           setMessages((prev) => {
             const updated = [...prev];
             const last = updated[updated.length - 1];
             if (last?.role === "assistant") {
-              updated[updated.length - 1] = { ...last, content: t("errorAnswer") };
+              updated[updated.length - 1] = { ...last, content: t("unavailableAnswer"), retry: text };
             }
             return updated;
           });
@@ -190,7 +197,7 @@ export function ChatPageClient({
         const updated = [...prev];
         const last = updated[updated.length - 1];
         if (last?.role === "assistant" && !last.content) {
-          updated[updated.length - 1] = { ...last, content: t("errorAnswer") };
+          updated[updated.length - 1] = { ...last, content: t("errorAnswer"), retry: text };
         }
         return updated;
       });
@@ -200,6 +207,15 @@ export function ChatPageClient({
   }, [activeId, activeProfileId, locale, sessions]);
 
   const stop = useCallback(() => abortRef.current?.abort(), []);
+
+  // "Volver a preguntar": the failed exchange goes and the same words are sent
+  // once more, into the same conversation.
+  const retry = useCallback((i: number) => {
+    const question = messages[i]?.retry;
+    if (busy || !question) return;
+    setMessages((prev) => prev.slice(0, i - 1));
+    void handleSubmit(question);
+  }, [busy, handleSubmit, messages]);
 
   // Question handed over in the URL: strip it first (a reload or a shared
   // link must not re-send it and open yet another session), then send it.
@@ -285,6 +301,17 @@ export function ChatPageClient({
                 {messages.map((m, i) => (
                   <div key={i} data-chat-role={m.role}>
                     <ChatMessageBubble message={m} locale={locale} />
+                    {m.retry && i === messages.length - 1 && (
+                      <button
+                        type="button"
+                        onClick={() => retry(i)}
+                        disabled={busy}
+                        className="ad-btn ad-btn-ghost mt-2 min-h-[44px] px-4 text-sm disabled:opacity-60"
+                      >
+                        <RotateCcw className="h-4 w-4" strokeWidth={2} aria-hidden />
+                        {t("retry")}
+                      </button>
+                    )}
                   </div>
                 ))}
               </div>

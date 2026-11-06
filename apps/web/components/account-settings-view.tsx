@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { signOut } from "next-auth/react";
 import { useLocale, useTranslations } from "next-intl";
-import { AlertTriangle, CreditCard, Download } from "lucide-react";
+import { AlertTriangle, CreditCard, Download, LogOut } from "lucide-react";
 
 import { ManageButton } from "@/components/billing-actions";
 import { InstallSettingsEntry } from "@/components/install-prompt";
@@ -40,7 +40,8 @@ export function AccountSettingsView({
       if (res.status !== 204) throw new Error(`HTTP ${res.status}`);
       // Leave nothing of this account behind in the tab, not even a UI flag.
       clearShowcaseHidden();
-      await signOut({ callbackUrl: "/" });
+      // Her language, not the bare root: "/" lands on the browser's locale.
+      await signOut({ callbackUrl: `/${locale}` });
     } catch (e) {
       setError(t("actionError"));
       setBusy(false);
@@ -133,6 +134,26 @@ export function AccountSettingsView({
       {/* Permanent way to install the PWA: the browser's own prompt shows
           once and iOS never shows one, so Settings always offers the path. */}
       <InstallSettingsEntry />
+
+      {/* The only way out used to be deleting the account: nothing in the app
+          called signOut otherwise, so on a shared or lost phone her baby's
+          records stayed open (RECORRIDO_POC.md). A full navigation, so no
+          in-memory state of this account survives in the tab. */}
+      <section className="border-t border-line py-6">
+        <h2 className="font-sans text-lg font-semibold text-ink">{t("signOutTitle")}</h2>
+        <p className="mt-1.5 text-ink-soft">{t("signOutBody")}</p>
+        <button
+          type="button"
+          onClick={() => {
+            clearShowcaseHidden();
+            void signOut({ callbackUrl: `/${locale}` });
+          }}
+          className="ad-btn ad-btn-ghost mt-3 min-h-[44px] px-3.5 py-2 text-sm"
+        >
+          <LogOut className="h-4 w-4" strokeWidth={2} />
+          {t("signOutCta")}
+        </button>
+      </section>
 
       <section className="mt-6 rounded-2xl border border-error-tint-line bg-error-tint p-5">
         <h2 className="flex items-center gap-2 font-display text-lg font-semibold text-error-text">
