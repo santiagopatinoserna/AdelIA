@@ -826,6 +826,26 @@
       0 0 0 2px var(--color-focus-contrast),
       0 0 0 6px var(--color-focus-halo);
   }
+
+  /* A link inside a sentence that a thumb can still hit: 44 px tall through
+     padding that an equal negative margin takes back, so the line box only
+     sees the words and the paragraph keeps its height. inline-block keeps the
+     label in one piece. The tall box is for the thumb, not the eye: drawn
+     around it, the focus ring covered the line above, so the ring goes on the
+     words (the inner span) instead. Used by the landing's consent note. */
+  .ad-tap-inline {
+    display: inline-block;
+    padding-block: 11px;
+    margin-block: -11px;
+  }
+  .ad-tap-inline:focus-visible { outline: none; box-shadow: none; }
+  .ad-tap-inline:focus-visible > span {
+    outline: 2px solid var(--color-focus);
+    outline-offset: 2px;
+    box-shadow:
+      0 0 0 2px var(--color-focus-contrast),
+      0 0 0 6px var(--color-focus-halo);
+  }
 }
 
 /* Type and rhythm for the public pages. One fluid scale (clamp, 390 -> 1280)

@@ -166,8 +166,9 @@ export default async function HomePage() {
               consentNote={
                 <>
                   {t("guestSpace.landingNote")}{" "}
-                  <Link href="/privacidad#sin-cuenta" className="underline underline-offset-4">
-                    {t("guestSpace.landingPrivacyLink")}
+                  {/* 44px for the thumb without growing the line (globals.css). */}
+                  <Link href="/privacidad#sin-cuenta" className="ad-tap-inline underline underline-offset-4">
+                    <span>{t("guestSpace.landingPrivacyLink")}</span>
                   </Link>
                 </>
               }
