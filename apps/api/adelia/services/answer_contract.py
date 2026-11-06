@@ -348,6 +348,79 @@ NO_UNASKED_DOCTOR_RULE: dict[str, str] = {
     ),
 }
 
+#: A plan she can read with a crying baby in her arms, behind settings.plan_brevity,
+#: for a plan only. Measured on 29 prod plans of 2026-11-06 (median 365 words, up
+#: from 292 at the start of the night): the opening ran two sentences and 42 words,
+#: Hoy carried 16 loose "Evita / No le des" paragraphs (466 words) and up to 7
+#: bullets, and 33 of 62 No olvides bullets were two sentences. Those are what it
+#: counts. "Cuándo ir al médico" (26 % of the words, the growth we wanted) is never
+#: counted: night/brevity cut answers by 45 % and lost a warning sign, so a sign or
+#: a precaution that does not fit moves to the doctor section or to one Hoy bullet,
+#: never out. The coded refusal paragraph of a half-covered question (B9, B11) is
+#: the one paragraph it keeps. It only shapes what the model writes; the code never
+#: truncates the answer.
+PLAN_BREVITY_RULE: dict[str, str] = {
+    "es": (
+        "Plan breve, para leerlo con el bebé en brazos. Este límite nunca quita una señal "
+        "de alarma, una precaución ni una condición que traigan las fuentes. La frase "
+        "inicial responde en menos de 25 palabras; lo demás va en los apartados. "
+        f"«{_H['es']['today']}»: como máximo 3 viñetas de acción y, si las fuentes dicen qué "
+        "no darle o qué no hacer, una viñeta más que lo junte todo y empiece por «No le des» "
+        f"o «Evita». «{_H['es']['watch']}»: como máximo 3 viñetas, solo lo que se observa en "
+        "casa; no repitas ahí una señal que ya va en el apartado del médico. "
+        f"«{_H['es']['remember']}»: como máximo 2 viñetas. En esos tres apartados cada viñeta "
+        "es una sola frase corta, sin explicación detrás, y no hay párrafos sueltos dentro de "
+        "los apartados ni entre ellos; el único párrafo aparte permitido es el de la frase de "
+        "rechazo exacta para la parte que las fuentes no cubren. "
+        f"«{_H['es']['doctor']}» no tiene límite de viñetas ni de palabras: escribe todas las "
+        "señales que traen las fuentes, sin quitar ninguna, agrupadas por la urgencia que da "
+        "cada fuente, con una línea como «Ve a urgencias si:» y debajo las señales en viñetas "
+        "cortas, sin explicación. Una señal o una condición que no quepa en otro apartado va "
+        f"a ese apartado; una precaución, a la viñeta de lo que no hacer de "
+        f"«{_H['es']['today']}»; "
+        "nunca se omite."
+    ),
+    "en": (
+        "A short plan, to read with the baby in her arms. This limit never removes a warning "
+        "sign, a precaution or a condition the sources carry. The opening sentence answers in "
+        "fewer than 25 words; everything else goes into the sections. "
+        f"“{_H['en']['today']}”: at most 3 action bullets and, if the sources say what not to "
+        "give or do, one more bullet that gathers it all and starts with “Do not give” or "
+        f"“Avoid”. “{_H['en']['watch']}”: at most 3 bullets, only what she can observe at "
+        "home; do not repeat there a sign that already goes in the doctor section. "
+        f"“{_H['en']['remember']}”: at most 2 bullets. In those three sections each bullet is "
+        "one short sentence with no explanation after it, and there are no loose paragraphs "
+        "inside or between sections; the only separate paragraph allowed is the one with the "
+        "exact refusal sentence for the part the sources do not cover. "
+        f"“{_H['en']['doctor']}” has no limit on bullets or words: write every sign the "
+        "sources carry, leaving none out, grouped by the urgency each source gives, with a "
+        "line such as “Go to the emergency department if:” and the signs below it in short "
+        "bullets with no explanation. A sign or a condition that does not fit another section "
+        f"goes there; a precaution goes to the what-not-to-do bullet of “{_H['en']['today']}”; "
+        "nothing is left out."
+    ),
+    "fr": (
+        "Un plan court, à lire avec le bébé dans les bras. Cette limite n’enlève jamais un "
+        "signe d’alerte, une précaution ou une condition que donnent les sources. La phrase "
+        "d’ouverture répond en moins de 25 mots ; tout le reste va dans les rubriques. "
+        f"« {_H['fr']['today']} » : au maximum 3 puces d’action et, si les sources disent quoi "
+        "ne pas lui donner ou ne pas faire, une puce de plus qui regroupe tout et commence par "
+        f"« Ne lui donnez pas » ou « Évitez ». « {_H['fr']['watch']} » : au maximum 3 puces, "
+        "seulement ce qui s’observe à la maison ; n’y répète pas un signe qui va déjà dans la "
+        f"rubrique du médecin. « {_H['fr']['remember']} » : au maximum 2 puces. Dans ces trois "
+        "rubriques, chaque puce est une seule phrase courte, sans explication derrière, et il "
+        "n’y a pas de paragraphe isolé dans les rubriques ni entre elles ; le seul paragraphe "
+        "à part permis est celui de la phrase de refus exacte pour la partie que les sources "
+        f"ne couvrent pas. « {_H['fr']['doctor']} » n’a pas de limite de puces ni de mots : "
+        "écris tous les signes que donnent les sources, sans en enlever aucun, regroupés selon "
+        "l’urgence que donne chaque source, avec une ligne comme « Allez aux urgences si : » "
+        "et en dessous les signes en puces courtes, sans explication. Un signe ou une "
+        "condition qui ne trouve pas sa place ailleurs va dans cette rubrique ; une "
+        f"précaution, dans la puce de ce qu’il ne faut pas faire d’« {_H['fr']['today']} » ; "
+        "rien n’est omis."
+    ),
+}
+
 #: The answer shapes a surface may ask for. `plan` is the default and the
 #: path with the most safeguards; the graph picks `question` only when the
 #: route node said so (agent/graph.py).
@@ -427,6 +500,11 @@ def answer_contract(locale: str, *, shape: str = "plan") -> str:
         if shape == "plan":
             doctor = NO_UNASKED_DOCTOR_RULE.get(locale, NO_UNASKED_DOCTOR_RULE[DEFAULT_LOCALE])
             unasked += f"- {doctor}\n"
+    # Plans only, right after the format clause it narrows; off, not a byte changes.
+    brevity = ""
+    if settings.plan_brevity and shape == "plan":
+        rule = PLAN_BREVITY_RULE.get(locale, PLAN_BREVITY_RULE[DEFAULT_LOCALE])
+        brevity = f"- {rule}\n"
     return f"""Reglas de respuesta (obligatorias, idénticas en el chat y en el agente):
 - Toda interpretación, valoración o recomendación clínica DEBE apoyarse en al menos una
   cita de evidencia [ev_1], [ev_2], ... Si NO hay un estudio o guía en el contexto que
@@ -447,7 +525,7 @@ def answer_contract(locale: str, *, shape: str = "plan") -> str:
 {unasked}- Si no tienes ninguna base documental para lo que se te pregunta, dilo con estas
   palabras exactas y no añadas nada más: "{c.refusal}"
 - {language_rule}
-- NUNCA inventes datos médicos ni estudios. NUNCA des consejos médicos definitivos.
+{brevity}- NUNCA inventes datos médicos ni estudios. NUNCA des consejos médicos definitivos.
 - NO escribas ningún descargo de responsabilidad ni "consulta con tu médico" al final:
   la interfaz ya lo muestra de forma fija bajo cada respuesta (auditoría 3.8). Repetirlo
   gasta la línea que el padre sí lee."""

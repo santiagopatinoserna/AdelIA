@@ -267,6 +267,15 @@ class Settings(BaseSettings):
     # section. Off, the contract is byte for byte what it was.
     no_unasked_refusals: bool = False
 
+    # A plan she can read with the baby in her arms (services/answer_contract.py,
+    # PLAN_BREVITY_RULE). Measured on 29 prod plans of 2026-11-06: median 365 words,
+    # up from 292 at the start of the night, with loose "Evita" paragraphs under Hoy
+    # and two-sentence bullets. On, a plan's contract carries one more line that counts
+    # the opening, Hoy, Vigila and No olvides and leaves "Cuándo ir al médico" uncounted;
+    # short answers never get it. Off, the contract is byte for byte what it was. OFF
+    # until scripts/probe_plan_brevity.py, run in production, and the golden gate show it.
+    plan_brevity: bool = False
+
     # STT (speech-to-text). "mistral" = Voxtral (UE por defecto, diarización);
     # "openai" = whisper-1 (sin diarización). Voxtral reusa mistral_api_key.
     stt_provider: str = "mistral"  # "mistral" | "openai"
