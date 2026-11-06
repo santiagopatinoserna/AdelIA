@@ -512,8 +512,12 @@ async def retrieve(state: AgentState, runtime: Runtime[GraphDeps]) -> dict:
         if widened is not None and len(embeds) > 1:
             also.append(await deps.retrieve_evidence(session, query_embedding=embeds[1], **cuts))
         if subject_index is not None and len(embeds) > subject_index:
+            # Our rewrite of her words admits only under its own, stricter cut
+            # (config.implicit_subject_max_distance has the measurement).
+            subject_cut = min(cuts["max_distance"], settings.implicit_subject_max_distance)
             also.append(await deps.retrieve_evidence(
-                session, query_embedding=embeds[subject_index], **cuts
+                session, query_embedding=embeds[subject_index],
+                **{**cuts, "max_distance": subject_cut},
             ))
         if also:
             evidence = merge_by_best_distance(
