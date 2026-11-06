@@ -28,6 +28,16 @@ What runs where
   counted as a pass: `GoldenReport.failures()` treats "did not run" as
   "unknown", so a human decides instead of a green tick lying.
 
+In a deploy
+-----------
+`scripts/deploy-prod.sh` runs this file on the server before it replaces the
+API container (scripts/prod-golden-gate.sh, docs/GOLDEN_GATE_DESPLIEGUE.md),
+with `ADELIA_GOLDEN_DEPLOY=1`. There, and only there, a skip of A and B is a
+failure that says "no ejecutado", the answers come from the provider
+production is configured with (not the Mistral the suite pins), and the
+questions run four at a time under a 300 s ceiling. The report counts the
+model calls and the wall time.
+
 Publishing
 ----------
 The report (recall@4, refusal rate, orphan citations, red-flag rate, red-flag
@@ -38,9 +48,14 @@ docs/APROBAR_CAMBIO_DE_MODELO.md for the procedure that uses it.
 """
 from __future__ import annotations
 
+import asyncio
+import contextvars
 import json
 import os
-from contextlib import ExitStack
+import time
+from collections.abc import Iterator
+from contextlib import ExitStack, contextmanager
+from dataclasses import dataclass
 from pathlib import Path
 from unittest.mock import patch
 from uuid import uuid4
@@ -66,6 +81,8 @@ from adelia.clinical.golden import (
     run_red_flag_group,
     source_matches,
 )
+from adelia.config import settings
+from adelia.services import chat_orchestrator as _chat
 from adelia.services.answer_contract import no_evidence_reply, red_flag_reply
 from adelia.services.chat_orchestrator import answer_question_streaming
 
@@ -74,6 +91,26 @@ EMBEDDINGS_FIXTURE = Path(__file__).parent / "fixtures" / "golden_query_embeddin
 #: Taken at import, before conftest disables the model layer for each test: a
 #: live run (a key, no recording) translates for real, as production does.
 _LIVE_COMPLETE_JSON = _route._complete_json
+#: Also taken before conftest pins the suite to Mistral: in a deploy the gate
+#: answers with whatever production is configured to answer with.
+_CONFIGURED_PROVIDER = settings.llm_provider
+#: Set by apps/api/scripts/golden_gate.sh, the deploy's golden container.
+DEPLOY_ENV = "ADELIA_GOLDEN_DEPLOY"
+#: Answers in flight at once. Measured on 2026-11-06 against the dev corpus,
+#: 23 of the 33 A and B questions reach the generative model (17 of A, the 6
+#: near misses of B that retrieve something); one at a time that is several
+#: minutes of a deploy, four at a time it stays near the three the deploy can
+#: afford, and four stays well inside the database pool and the rate limits.
+GOLDEN_CONCURRENCY = 4
+#: The question a running answer belongs to. The embedder and the corpus
+#: translation are patched ONCE for all the answers in flight, so they find
+#: their question here instead of in a per-question patch that would leak
+#: across interleaved runs.
+_CURRENT_QUESTION: contextvars.ContextVar = contextvars.ContextVar("golden_question")
+
+
+def _in_deploy() -> bool:
+    return os.environ.get(DEPLOY_ENV) == "1"
 
 
 # ---------------------------------------------------------------------------
@@ -343,54 +380,148 @@ async def _skip_reason() -> str | None:
     return None
 
 
-async def _answer(q, embeddings: dict[str, list[float]] | None) -> tuple[str, list[dict]]:
-    """Run one golden question through the real answering path."""
-    text: list[str] = []
-    evidence: list[dict] = []
+@dataclass
+class _ModelCalls:
+    """What one A/B run paid for, counted where the calls leave the process."""
 
-    corpus = _recorded_corpus().get(q.id)
+    generation: int = 0
+    routing: int = 0
 
-    async def _fake_embed(texts):
-        return [corpus[1] if corpus and t == corpus[0] else embeddings[q.id] for t in texts]
+
+@contextmanager
+def _answering_path(
+    embeddings: dict[str, list[float]] | None, calls: _ModelCalls
+) -> Iterator[None]:
+    """The patches every A and B answer shares, entered ONCE around all of them.
+
+    With a recording, the embedder and the corpus translation answer from it,
+    for the question `_CURRENT_QUESTION` names. Without one (a key and no
+    recording) the routing model is the live one, as it always was here. In a
+    deploy it is live in both cases and generation follows the configured
+    provider: the gate measures what production answers. The generative
+    stream and the routing model are wrapped to count calls either way.
+
+    One context for every answer in flight because a patch per answer cannot
+    nest under concurrency: the first answer to finish would restore the
+    original under the three still running.
+    """
+    corpus = _recorded_corpus()
+    live = embeddings is None or _in_deploy()
+    router = _LIVE_COMPLETE_JSON if live else _route._complete_json
+    stream = _chat._stream_llm_tokens
+
+    def _counted_stream(*args, **kwargs):
+        calls.generation += 1
+        return stream(*args, **kwargs)
+
+    async def _counted_router(*args, **kwargs):
+        calls.routing += 1
+        return await router(*args, **kwargs)
+
+    async def _recorded_embed(texts):
+        q = _CURRENT_QUESTION.get()
+        rec = corpus.get(q.id)
+        return [rec[1] if rec and t == rec[0] else embeddings[q.id] for t in texts]
 
     async def _recorded_corpus_query(text, locale, **kwargs):
-        return corpus[0] if corpus else text
+        rec = corpus.get(_CURRENT_QUESTION.get().id)
+        return rec[0] if rec else text
 
-    if embeddings is not None:
-        ctx = ExitStack()
-        ctx.enter_context(patch("adelia.services.chat_orchestrator.embed_texts", _fake_embed))
-        ctx.enter_context(
-            patch("adelia.services.chat_orchestrator.corpus_query", _recorded_corpus_query)
-        )
-    else:
-        ctx = patch.object(_route, "_complete_json", _LIVE_COMPLETE_JSON)
-    with ctx:
-        async for ev in answer_question_streaming(
-            user_id=uuid4(), question=q.question, locale=q.locale, age_months=q.age_months
-        ):
-            if ev.type == "token":
-                text.append(ev.content)
-            elif ev.type == "final":
-                evidence = list(ev.evidence_citations)
-            elif ev.type == "error":
-                raise AssertionError(f"{q.id}: {ev.content}")
+    provider = settings.llm_provider
+    with ExitStack() as stack:
+        if embeddings is not None:
+            stack.enter_context(patch.object(_chat, "embed_texts", _recorded_embed))
+            stack.enter_context(patch.object(_chat, "corpus_query", _recorded_corpus_query))
+        stack.enter_context(patch.object(_chat, "_stream_llm_tokens", _counted_stream))
+        stack.enter_context(patch.object(_route, "_complete_json", _counted_router))
+        if _in_deploy():
+            settings.llm_provider = _CONFIGURED_PROVIDER
+        try:
+            yield
+        finally:
+            settings.llm_provider = provider
+
+
+async def _answer(q, embeddings: dict[str, list[float]] | None) -> tuple[str, list[dict]]:
+    """Run one golden question through the real answering path.
+
+    Runs inside `_answering_path`, which holds the patches; `embeddings` stays
+    in the signature for the canned answers that replace this function."""
+    _CURRENT_QUESTION.set(q)
+    text: list[str] = []
+    evidence: list[dict] = []
+    async for ev in answer_question_streaming(
+        user_id=uuid4(), question=q.question, locale=q.locale, age_months=q.age_months
+    ):
+        if ev.type == "token":
+            text.append(ev.content)
+        elif ev.type == "final":
+            evidence = list(ev.evidence_citations)
+        elif ev.type == "error":
+            raise AssertionError(f"{q.id}: {ev.content}")
     return "".join(text), evidence
 
 
+async def _answer_all(
+    qs: list, embeddings: dict[str, list[float]] | None, calls: _ModelCalls
+) -> list[tuple[str, list[dict]]]:
+    """Every answer, at most GOLDEN_CONCURRENCY at once, in the order asked.
+
+    Each answer is its own task, so `_CURRENT_QUESTION` is set in its own
+    context. When one fails the others are cancelled and awaited BEFORE the
+    patches come off: an orphaned answer must not go on to call the real
+    embedder, or a real model, with nothing counting it.
+    """
+    limit = asyncio.Semaphore(GOLDEN_CONCURRENCY)
+
+    async def _bounded(q):
+        async with limit:
+            return await _answer(q, embeddings)
+
+    with _answering_path(embeddings, calls):
+        tasks = [asyncio.create_task(_bounded(q)) for q in qs]
+        try:
+            return list(await asyncio.gather(*tasks))
+        finally:
+            for task in tasks:
+                task.cancel()
+            await asyncio.gather(*tasks, return_exceptions=True)
+
+
 @pytest.mark.asyncio
+@pytest.mark.timeout(300)
 async def test_groups_a_and_b_meet_the_deploy_gate():
     reason = await _skip_reason()
     report = run_red_flag_group()
     if reason:
         report.skipped_reason = reason
         _publish(report)
+        if _in_deploy():
+            # The deploy cannot tell a skip from a pass by the exit status
+            # alone, and a gate that did not run must not let a release
+            # through (2026-11-05: three deploys with A and B skipped).
+            pytest.fail(f"grupos A y B NO EJECUTADOS en el despliegue: {reason}", pytrace=False)
         pytest.skip(reason)
 
     embeddings = _usable_recording()
+    calls = _ModelCalls()
+    a_questions, b_questions = questions("A"), questions("B")
+    started = time.monotonic()
+    try:
+        answers = await _answer_all([*a_questions, *b_questions], embeddings, calls)
+    except Exception as exc:
+        # No number to read: published as "not measured", so the deploy says
+        # "did not run" and names the question, instead of leaving no report.
+        report.skipped_reason = f"A y B no se pudieron medir: {exc}"
+        _publish(report)
+        raise
+    report.elapsed_seconds = time.monotonic() - started
+    report.generation_calls, report.routing_calls = calls.generation, calls.routing
+    a_answers, b_answers = answers[: len(a_questions)], answers[len(a_questions) :]
+
     hits = 0
     orphans = 0
-    for q in questions("A"):
-        answer, evidence = await _answer(q, embeddings)
+    for q, (answer, evidence) in zip(a_questions, a_answers, strict=True):
         titles = " | ".join((c.get("title") or "").lower() for c in evidence[:TOP_K])
         hit = source_matches(q.expect_source, titles)
         if hit:
@@ -408,8 +539,7 @@ async def test_groups_a_and_b_meet_the_deploy_gate():
     report.recall_at_4 = hits / report.a_ran
 
     refusals = 0
-    for q in questions("B"):
-        answer, evidence = await _answer(q, embeddings)
+    for q, (answer, evidence) in zip(b_questions, b_answers, strict=True):
         refused = is_refusal(answer, q.locale)
         if refused:
             refusals += 1
@@ -638,6 +768,10 @@ def _drive_the_gate(
             return "Dale 5 ml de cetirizina cada 8 horas.", []
         return no_evidence_reply(q.locale), []
 
+    # Canned answers measure the wiring, never a provider: inside the deploy's
+    # golden container (ADELIA_GOLDEN_DEPLOY=1) the gate would otherwise switch
+    # routing to the live model for these runs too.
+    monkeypatch.delenv(DEPLOY_ENV, raising=False)
     monkeypatch.setattr(module, "_skip_reason", _no_skip)
     monkeypatch.setattr(module, "_answer", _canned)
     monkeypatch.setattr(module, "_usable_recording", lambda: _full_recording())
@@ -762,3 +896,233 @@ async def test_two_gate_runs_compare_end_to_end(monkeypatch, tmp_path):
         await module.test_groups_a_and_b_meet_the_deploy_gate()
     assert compare.main([str(base), str(path)]) == 1
     assert compare.main([str(base), str(base)]) == 0
+
+
+# ---------------------------------------------------------------------------
+# The gate inside a deploy (scripts/prod-golden-gate.sh, ADELIA_GOLDEN_DEPLOY)
+#
+# On 2026-11-05 production was deployed three times with groups A and B
+# skipped: the Mac that runs deploy-prod.sh has no evidence database and no
+# key, so the skip was the only possible outcome and the deploy went on with a
+# warning. The deploy now runs this file on the server, in a container of the
+# new image against a scratch copy of the production corpus, with
+# ADELIA_GOLDEN_DEPLOY=1. There a skip is a failure that says "not run",
+# answers come from the production provider, and the model calls are bounded,
+# counted and timed. Outside a deploy nothing of this changes.
+# ---------------------------------------------------------------------------
+
+
+def _ab_ids() -> list[str]:
+    return [q.id for q in questions("A")] + [q.id for q in questions("B")]
+
+
+@pytest.mark.asyncio
+async def test_in_a_deploy_a_skip_is_a_failure_that_says_it_did_not_run(monkeypatch, tmp_path):
+    import sys
+
+    module = sys.modules[__name__]
+
+    async def _down() -> str:
+        return "la base de datos de evidencia no responde: no route"
+
+    monkeypatch.setattr(module, "_skip_reason", _down)
+    monkeypatch.setattr(module, "REPORT_PATH", tmp_path / "golden_report.json")
+    monkeypatch.setenv(DEPLOY_ENV, "1")
+    with pytest.raises(pytest.fail.Exception) as failed:
+        await module.test_groups_a_and_b_meet_the_deploy_gate()
+    assert "NO EJECUTADOS" in str(failed.value) and "no route" in str(failed.value)
+    data = json.loads((tmp_path / "golden_report.json").read_text(encoding="utf-8"))
+    assert "no route" in data["skipped_reason"]
+    assert data["recall_at_4"] is None and data["refusal_rate"] is None
+
+
+@pytest.mark.asyncio
+async def test_outside_a_deploy_a_skip_is_still_a_skip(monkeypatch, tmp_path):
+    import sys
+
+    module = sys.modules[__name__]
+
+    async def _down() -> str:
+        return "la base de datos de evidencia no responde: no route"
+
+    monkeypatch.setattr(module, "_skip_reason", _down)
+    monkeypatch.setattr(module, "REPORT_PATH", tmp_path / "golden_report.json")
+    monkeypatch.delenv(DEPLOY_ENV, raising=False)
+    with pytest.raises(pytest.skip.Exception):
+        await module.test_groups_a_and_b_meet_the_deploy_gate()
+
+
+@pytest.mark.asyncio
+async def test_the_gate_answers_four_at_a_time_and_reports_in_question_order(
+    monkeypatch, tmp_path
+):
+    import asyncio
+
+    path, module = _drive_the_gate(monkeypatch, tmp_path)
+    canned = module._answer
+    in_flight = peak = 0
+
+    async def _slow(q, embeddings):
+        nonlocal in_flight, peak
+        in_flight += 1
+        peak = max(peak, in_flight)
+        try:
+            await asyncio.sleep(0.01)
+            return await canned(q, embeddings)
+        finally:
+            in_flight -= 1
+
+    monkeypatch.setattr(module, "_answer", _slow)
+    await module.test_groups_a_and_b_meet_the_deploy_gate()
+    assert module.GOLDEN_CONCURRENCY == 4
+    assert peak == module.GOLDEN_CONCURRENCY, f"peak {peak}: not parallel, or not bounded"
+    data = json.loads(path.read_text(encoding="utf-8"))
+    assert [qid for qid in data["results"] if qid[0] in "AB"] == _ab_ids()
+    assert isinstance(data["elapsed_seconds"], float)
+
+
+@pytest.mark.asyncio
+async def test_concurrent_answers_each_embed_with_their_own_recorded_vector(monkeypatch):
+    """Four answers in flight share one patched embedder. Patching it per
+    question, as the sequential loop did, would hand one question another
+    question's vector as soon as two runs interleave."""
+    import asyncio
+    import sys
+    from types import SimpleNamespace
+
+    from adelia.services import chat_orchestrator as co
+
+    module = sys.modules[__name__]
+    qs = [q for q in GOLDEN_SET if q.group in ("A", "B")]
+    recording = {q.id: [float(i)] for i, q in enumerate(qs)}
+
+    async def _fake_streaming(*, user_id, question, locale, age_months):
+        await asyncio.sleep(0.001 * (len(question) % 7))
+        vector = (await co.embed_texts([question]))[0]
+        await asyncio.sleep(0.001 * (len(question) % 3))
+        yield SimpleNamespace(type="token", content=str(vector[0]))
+        yield SimpleNamespace(type="final", evidence_citations=[])
+
+    monkeypatch.setattr(module, "answer_question_streaming", _fake_streaming)
+    answers = await module._answer_all(qs, recording, module._ModelCalls())
+    assert [text for text, _ in answers] == [str(recording[q.id][0]) for q in qs]
+
+
+@pytest.mark.asyncio
+async def test_the_gate_counts_the_model_calls_it_paid_for(monkeypatch, tmp_path):
+    from adelia.services import chat_orchestrator as co
+
+    path, module = _drive_the_gate(monkeypatch, tmp_path)
+    canned = module._answer
+
+    async def _fake_stream(system_prompt, user_message, history=None, *, provider=None):
+        yield "x"
+
+    monkeypatch.setattr(co, "_stream_llm_tokens", _fake_stream)
+    near_misses = [q.id for q in questions("B") if q.kind]
+
+    async def _paying(q, embeddings):
+        if q.group == "A":
+            async for _ in co._stream_llm_tokens("system", "user"):
+                pass
+        if q.id in near_misses:
+            try:
+                await _route._complete_json("system", "user")
+            except RuntimeError:
+                pass  # conftest disables the routing model; the call still counts
+        return await canned(q, embeddings)
+
+    monkeypatch.setattr(module, "_answer", _paying)
+    await module.test_groups_a_and_b_meet_the_deploy_gate()
+    data = json.loads(path.read_text(encoding="utf-8"))
+    assert data["generation_calls"] == len(questions("A"))
+    assert data["routing_calls"] == len(near_misses)
+    # The counters are taken off again: the next test sees the plain functions.
+    assert co._stream_llm_tokens is _fake_stream
+
+
+@pytest.mark.asyncio
+async def test_in_a_deploy_the_answers_come_from_the_production_provider(monkeypatch, tmp_path):
+    """conftest pins generation to Mistral and switches the routing model off,
+    which is right for the suite and wrong for the gate: production may answer
+    with Claude, and its router asks a model when the rules abstain. In a
+    deploy the gate measures what the mothers get, then puts both back."""
+    from adelia.config import settings
+
+    path, module = _drive_the_gate(monkeypatch, tmp_path)
+    monkeypatch.setenv(DEPLOY_ENV, "1")
+    monkeypatch.setattr(module, "_CONFIGURED_PROVIDER", "anthropic")
+
+    async def _live_router(system, user, *, provider=None):
+        return {"live": True}
+
+    monkeypatch.setattr(module, "_LIVE_COMPLETE_JSON", _live_router)
+    seen: set[tuple[str, bool]] = set()
+    canned = module._answer
+
+    async def _spy(q, embeddings):
+        seen.add((settings.llm_provider, bool(await _route._complete_json("s", "u"))))
+        return await canned(q, embeddings)
+
+    monkeypatch.setattr(module, "_answer", _spy)
+    await module.test_groups_a_and_b_meet_the_deploy_gate()
+    assert seen == {("anthropic", True)}
+    assert settings.llm_provider == "mistral"
+    with pytest.raises(RuntimeError):
+        await _route._complete_json("s", "u")
+
+
+@pytest.mark.asyncio
+async def test_outside_a_deploy_the_gate_keeps_the_suite_provider(monkeypatch, tmp_path):
+    from adelia.config import settings
+
+    path, module = _drive_the_gate(monkeypatch, tmp_path)
+    monkeypatch.setattr(module, "_CONFIGURED_PROVIDER", "anthropic")
+    seen: set[str] = set()
+    canned = module._answer
+
+    async def _spy(q, embeddings):
+        seen.add(settings.llm_provider)
+        return await canned(q, embeddings)
+
+    monkeypatch.setattr(module, "_answer", _spy)
+    await module.test_groups_a_and_b_meet_the_deploy_gate()
+    assert seen == {"mistral"}
+
+
+def test_the_gate_may_take_minutes_but_not_for_ever():
+    """About 23 answers from the production model, four at a time, overrun the
+    suite's 120 s ceiling; a hang must still end the deploy, not stall it."""
+    marks = {m.name: m for m in test_groups_a_and_b_meet_the_deploy_gate.pytestmark}
+    assert 240 <= marks["timeout"].args[0] <= 600
+
+
+def test_the_report_says_skipped_reason_null_on_its_own_line_when_a_and_b_ran():
+    """apps/api/scripts/golden_gate.sh tells "failed" from "did not run" by
+    this exact line of golden_report.json."""
+    report = run_red_flag_group()
+    assert '\n  "skipped_reason": null,\n' in _report_json(report.as_dict())
+    report.skipped_reason = "sin corpus"
+    assert '"skipped_reason": null' not in _report_json(report.as_dict())
+
+
+@pytest.mark.asyncio
+async def test_an_answer_that_errors_is_published_as_not_measured(monkeypatch, tmp_path):
+    """A provider down or a bad key ends the run with no number to read. The
+    report still lands, says which question broke and why, and reads as "did
+    not run" (golden_gate.sh exit 2), never as a pass or a measured miss."""
+    path, module = _drive_the_gate(monkeypatch, tmp_path)
+    canned = module._answer
+
+    async def _broken(q, embeddings):
+        if q.id == "A3":
+            raise AssertionError("A3: MISTRAL_API_KEY not set")
+        return await canned(q, embeddings)
+
+    monkeypatch.setattr(module, "_answer", _broken)
+    with pytest.raises(AssertionError, match="MISTRAL_API_KEY"):
+        await module.test_groups_a_and_b_meet_the_deploy_gate()
+    data = json.loads(path.read_text(encoding="utf-8"))
+    assert "A3: MISTRAL_API_KEY not set" in data["skipped_reason"]
+    assert data["recall_at_4"] is None and data["refusal_rate"] is None
+    assert '"skipped_reason": null' not in path.read_text(encoding="utf-8")

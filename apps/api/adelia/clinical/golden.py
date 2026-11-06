@@ -642,6 +642,14 @@ class GoldenReport:
     #: Corpus sources no group A question names, per theme, or None when the
     #: corpus files could not be read (see `corpus_blind_spots`).
     blind_spots: list[dict] | None = None
+    #: What the A/B run cost, added 2026-11-06 when the deploy started running
+    #: it against the production model on every API release: answers streamed
+    #: by the generative model, calls to the routing model, and wall time of
+    #: both groups. Informational, no threshold reads them; None means A and B
+    #: did not run, so a skip never reads as "free".
+    generation_calls: int | None = None
+    routing_calls: int | None = None
+    elapsed_seconds: float | None = None
 
     def mark(self, q: GoldenQuestion, passed: bool, **extra: object) -> None:
         """Record one question's verdict. Call it once per question that ran."""
@@ -692,6 +700,12 @@ class GoldenReport:
             "rates_by_locale": self.rates_by_locale(),
             "results": self.results,
             "blind_spots": self.blind_spots,
+            # Added 2026-11-06 (the deploy gate on the server).
+            "generation_calls": self.generation_calls,
+            "routing_calls": self.routing_calls,
+            "elapsed_seconds": (
+                None if self.elapsed_seconds is None else round(self.elapsed_seconds, 1)
+            ),
         }
 
     def failures(self) -> list[str]:
@@ -729,6 +743,11 @@ class GoldenReport:
             f"  banderas rojas con dosis:  {self.red_flag_dosage}",
             f"  citas repetidas o ajenas:  {self.citation_defects}",
         ]
+        if self.generation_calls is not None:
+            lines.append(
+                f"  llamadas al modelo:        {self.generation_calls} de generación, "
+                f"{self.routing_calls or 0} de enrutado, en {self.elapsed_seconds or 0:.1f} s"
+            )
         for group, by_locale in self.rates_by_locale().items():
             cells = "  ".join(f"{loc} {rate:.2f}" for loc, rate in by_locale.items())
             lines.append(f"  grupo {group} por idioma:      {cells}")

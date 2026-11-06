@@ -463,3 +463,20 @@ def test_the_report_carries_and_gates_on_citation_defects():
     assert report.as_dict()["citation_defects"] == 2
     assert any("repetida(s) o de otro tema" in f for f in report.failures())
     assert "citas repetidas o ajenas:  2" in report.render()
+
+
+def test_the_report_carries_the_cost_of_the_run_without_gating_on_it():
+    """The deploy runs A and B against the production model, so the log says
+    how many answers it paid for and how long they took. Informational: no
+    threshold reads either number, and a run that never reached the model
+    (group C alone, or a skip) leaves both at None rather than at a fake 0."""
+    report = GoldenReport()
+    data = report.as_dict()
+    assert data["generation_calls"] is None and data["routing_calls"] is None
+    assert data["elapsed_seconds"] is None
+    assert "llamadas al modelo" not in report.render()
+    report.generation_calls, report.routing_calls, report.elapsed_seconds = 23, 2, 81.44
+    data = report.as_dict()
+    assert (data["generation_calls"], data["routing_calls"], data["elapsed_seconds"]) == (23, 2, 81.4)
+    assert report.failures() == []
+    assert "llamadas al modelo:        23 de generación, 2 de enrutado, en 81.4 s" in report.render()

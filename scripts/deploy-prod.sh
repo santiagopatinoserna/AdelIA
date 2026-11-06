@@ -18,12 +18,15 @@
 #   ./scripts/deploy-prod.sh --allow-dirty      # EMERGENCY ONLY: skip the
 #                                               # clean-tree/pushed-HEAD gate
 #   ./scripts/deploy-prod.sh --skip-golden      # EMERGENCY ONLY: skip the
-#                                               # clinical golden-set gate
+#                                               # clinical golden-set gate,
+#                                               # on the Mac AND on the server
 #
-# Steps: check working tree -> golden set (clinical gate) -> discover host ->
-# rsync code (no --delete) ->
+# Steps: check working tree -> golden set on the Mac (group C) -> discover
+# host -> rsync code -> golden set on the server (groups A and B, new image,
+# scratch copy of the corpus; only when the api is deployed) ->
 # docker compose up -d --build -> verify (HTTP 200s + alembic version) ->
-# summary.
+# summary. A failed or unrun server gate stops before `up -d`, so the
+# previous version keeps serving (docs/GOLDEN_GATE_DESPLIEGUE.md).
 #
 # What rsync sends is the WORKING TREE, not a commit. So the gate below
 # refuses to deploy unless `git status --porcelain` is empty and HEAD is the
@@ -202,10 +205,12 @@ check_tree_is_deployable() {
 #
 # Group C needs neither a key nor a database, so this gate always has teeth:
 # it is the part that protects against the audit's risk 1 (a baby harmed by
-# an answer that looks sourced and is not). Groups A and B need embeddings
-# and a loaded corpus; when they cannot run, the test says so, the report
-# records "no ejecutado", and the deploy continues with a warning rather than
-# a green tick that means nothing. Bypass with --skip-golden, out loud.
+# an answer that looks sourced and is not). It runs here, before anything is
+# synced, because it is cheap and fails fast. Groups A and B need the corpus
+# and a key, which this Mac does not have: here they skip with "no
+# ejecutado" and the deploy goes on to the server, where
+# run_prod_golden_gate (section 3) runs them for real and a skip there stops
+# the deploy. Bypass both halves with --skip-golden, out loud.
 run_golden_gate() {
   local skip="$1"
   if [[ "${skip}" -eq 1 ]]; then
@@ -280,9 +285,66 @@ sync_code() {
 }
 
 # --- 3. Rebuild containers ----------------------------------------------
+#
+# The clinical gate for groups A and B runs HERE, on the server, before
+# `up -d` replaces the container that serves the mothers (docs/
+# GOLDEN_GATE_DESPLIEGUE.md). The Mac half of the gate (1c) cannot run them:
+# no evidence database, no key, so they always skipped, and on 2026-11-05
+# production was deployed three times like that. scripts/prod-golden-gate.sh
+# builds the new image, copies the production corpus into a scratch
+# database, migrates the copy, loads the new release's corpus into it and
+# runs the golden set with the production keys in a throwaway container of
+# the new image. It never touches the live containers or the live database.
+#
+# Only a pass reaches `up -d`. A failure (exit 1) and a gate that could not
+# run (exit 2, or ssh dropping) both stop the deploy with the previous
+# version still serving. A deploy without the api (web only) does not run it:
+# nothing it measures changed. --skip-golden skips it, out loud.
+
+services_include_api() {
+  [[ " $1 " == *" api "* ]]
+}
+
+run_prod_golden_gate() {
+  local host="$1" rc
+  log "Golden set A/B on the server, against the new image, before up -d..."
+  set +e
+  ssh "${SSH_OPTS[@]}" "${REMOTE_USER}@${host}" \
+    "cd ${REMOTE_DIR} && bash scripts/prod-golden-gate.sh" 2>&1 | sed 's/^/[deploy]   /' >&2
+  rc="${PIPESTATUS[0]}"
+  set -e
+  if [[ "${rc}" -eq 0 ]]; then
+    log "Golden set passed on the server."
+    return 0
+  fi
+  {
+    if [[ "${rc}" -eq 1 ]]; then
+      printf '[deploy] ERROR: the golden set FAILED on the server. Not deploying.\n\n'
+      printf '  The report above has recall@4, the refusal rate, the orphan\n'
+      printf '  citations and the questions that missed.\n'
+    else
+      printf '[deploy] ERROR: the golden set DID NOT RUN on the server (exit %s). Not deploying.\n\n' "${rc}"
+      printf '  A gate that could not measure is not a pass. The output above says\n'
+      printf '  why (build, corpus copy, migration, key, corpus size or ssh).\n'
+    fi
+    printf '\n  Nothing was replaced: the previous version is still serving.\n'
+    printf '  The new code is synced to %s but not running.\n\n' "${REMOTE_DIR}"
+    printf '  Bypass (deliberately, and write down why): ./scripts/deploy-prod.sh --skip-golden\n'
+  } >&2
+  exit 1
+}
 
 rebuild() {
-  local host="$1" services="$2"
+  local host="$1" services="$2" skip_golden="${3:-0}"
+  if services_include_api "${services}"; then
+    if [[ "${skip_golden}" -eq 1 ]]; then
+      log "WARNING: --skip-golden: groups A and B did not run on the server either."
+    else
+      run_prod_golden_gate "${host}"
+    fi
+  else
+    log "Deploying web only (${services}): no api change, groups A and B not run."
+  fi
   log "Rebuilding containers on ${host}: ${services}"
   ssh "${SSH_OPTS[@]}" "${REMOTE_USER}@${host}" \
     "cd ${REMOTE_DIR} && docker compose -f infra/docker-compose.prod.yml --env-file .env.prod up -d --build ${services}"
@@ -509,7 +571,7 @@ main() {
   fi
 
   sync_code "${host}"
-  rebuild "${host}" "${requested_services}"
+  rebuild "${host}" "${requested_services}" "${skip_golden}"
   verify "${host}" "${requested_services}"
 }
 
