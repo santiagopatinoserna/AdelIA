@@ -122,6 +122,10 @@ _HERS_BUT_ABOUT_THE_BABY = {
 #: An age she wrote. The prefix then carries none, so it never says two ages.
 _AGE_IN_TEXT = re.compile(r"\b\d+\s*(mes|meses|semanas?|months?|weeks?|mois|semaines?)\b")
 
+#: Past this the active profile is no baby (her own "Mi perfil" with her date of
+#: birth): the prefix then carries no age. AdelIA covers 0-24 months.
+MAX_PREFIX_AGE_MONTHS = 36
+
 
 def _lang(locale: str | None) -> str:
     key = (locale or DEFAULT_LANG).split("-")[0].lower()
@@ -147,7 +151,11 @@ def names_someone(text: str, locale: str | None, *, name: str | None = None) -> 
 def subject_prefix(locale: str | None, age_months: int | None = None) -> str:
     """"Mi bebé: " or "Mi bebé de N meses: ", in the language of the text it goes on."""
     lang = _lang(locale)
-    age = age_months if age_months is not None and age_months >= 1 else None
+    age = (
+        age_months
+        if age_months is not None and 1 <= age_months <= MAX_PREFIX_AGE_MONTHS
+        else None
+    )
     if lang == "en":
         return "My baby: " if age is None else f"My {age}-month-old baby: "
     if lang == "fr":

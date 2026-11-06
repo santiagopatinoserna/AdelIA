@@ -131,6 +131,18 @@ def test_the_prefix(locale, age, expected):
     assert subject_prefix(locale, age) == expected
 
 
+@pytest.mark.parametrize("age", [37, 120, 420])
+def test_an_age_past_early_childhood_never_goes_into_the_prefix(age):
+    """The active profile can be her own ("Mi perfil", relationship self) with
+    her date of birth: "Mi bebé de 420 meses" is no baby. AdelIA covers 0-24
+    months; up to 36 keeps a toddler's age, past that the prefix has none."""
+    assert subject_prefix("es", age) == "Mi bebé: "
+    assert subject_prefix("en", age) == "My baby: "
+    assert subject_prefix("fr", age) == "Mon bébé : "
+    assert subject_query(DIARRHOEA, locale="es", age_months=age) == f"Mi bebé: {DIARRHOEA}"
+    assert subject_prefix("es", 36) == "Mi bebé de 36 meses: "
+
+
 def test_a_sentence_without_subject_gets_the_baby_with_the_profile_age():
     assert subject_query(FEVER, locale="es", age_months=5) == f"Mi bebé de 5 meses: {FEVER}"
     assert subject_query(DIARRHOEA, locale="es") == f"Mi bebé: {DIARRHOEA}"
