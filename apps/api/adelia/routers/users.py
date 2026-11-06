@@ -91,7 +91,7 @@ async def _sweep_after_erasure(keys: list[str]) -> None:
     try:
         await sweep_blob_tombstones(keys=keys)
     except Exception:  # noqa: BLE001 — tombstones kept, next sweep retries
-        logger.exception("sweep after account erasure failed (tombstones kept)")
+        logger.exception("sweep after an erasure failed (tombstones kept)")
 
 
 async def drain_erasure_sweeps(grace_s: float = 10.0) -> None:

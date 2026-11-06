@@ -759,7 +759,8 @@ async def delete_document(
     consent_events.document_id and briefing_citations references go NULL
     (SET NULL) so the consent trail and generated briefings survive. The S3
     blob is tombstoned in the SAME transaction with no grace window (the
-    user asked for erasure, not a retry buffer) and swept right after.
+    user asked for erasure, not a retry buffer) and swept right after the
+    response, in the background.
     Cross-user and nonexistent ids are an opaque 404.
     """
     doc = await db.get(Document, doc_id)
@@ -770,7 +771,8 @@ async def delete_document(
     # a 48h-grace tombstone, and merge() only overwrites attributes populated
     # on the source instance. Explicit None collapses any pending grace into
     # immediate erasure — the user asked to delete, not to wait.
-    await db.merge(BlobTombstone(s3_key=doc.s3_key, not_before=None))
+    s3_key = doc.s3_key
+    await db.merge(BlobTombstone(s3_key=s3_key, not_before=None))
     await db.execute(sa.delete(Document).where(Document.id == doc.id))
     # Briefings may cite the erased entities: flag them for regeneration.
     await briefing_repo.mark_stale_for_user(
@@ -778,12 +780,15 @@ async def delete_document(
     )
     await db.commit()
 
-    from adelia.routers.users import sweep_blob_tombstones
+    # Her blob goes AFTER the 204, and only hers. This request used to await a
+    # sweep of every due tombstone in the system, other users' too; with
+    # storage slow or unreachable each key costs 4 to 9 s of botocore retries
+    # (2026-11-06 night run), so deleting one PDF waited for everybody's
+    # backlog. The row is gone at the commit above and the tombstone is
+    # durable: the boot and hourly sweeps retry whatever this one misses.
+    from adelia.routers.users import _spawn_erasure_sweep
 
-    try:
-        await sweep_blob_tombstones()
-    except Exception:  # noqa: BLE001 — sweep retries at next boot/upload
-        logger.exception("sweep after document delete failed (tombstone kept)")
+    _spawn_erasure_sweep([s3_key])
 
     logger.info("document erased user_id=%s doc_id=%s", user_id, doc_id)
     return None
