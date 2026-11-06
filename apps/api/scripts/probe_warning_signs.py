@@ -11,16 +11,26 @@ settings.no_unasked_refusals (services/answer_contract.py). Measured in prod on
 carried a section the model made up that ended in the coded refusal, the croup
 plan's warning signs among them. This script asks those four and eight more
 with clear warning signs (fever, bronchiolitis, otitis, vomiting, diarrhoea, a
-bump on the head, a rash, constipation) through the agent graph with the demo's
+bump on the head, a rash, constipation), then the croup question with a dose in
+it (FOLLOW_UPS), through the agent graph with the demo's
 own wiring: the demo baby, its router, its translation, its retrieval and the
 production model (`demo_llm_provider`), twice per question, with both settings
 OFF and then both ON, set in memory for this process only. Per question and
-mode it prints the words, the sources cited, the bullets of "Cuándo ir al
+mode it prints the words, the sources cited, the title and "Tema:" of every
+fragment handed to the model (cited or not), the bullets of "Cuándo ir al
 médico" and whether the coded refusal appears, and where (the bold label or
 the section that carries it).
 
-Cheap on purpose: one call at a time, PAUSE_SECONDS between calls, 12 questions
-x 2 modes, so 24 generations at most.
+The fragments matter because of what was measured next, the same day: the croup
+question with a dose in it held the SEUP "cuándo ir a urgencias" paragraph in
+its main search and wrote "Ve a urgencias si hace ruido al coger aire"; without
+the dose its warning search brought only "síntomas y evolución de la
+laringitis". The warning search now also reads the other paragraphs of the
+guidelines the plan cites (evidence_retrieval.retrieve_evidence, `cited_sources`);
+the "given" lines tell whether the paragraph on when to go arrives.
+
+Cheap on purpose: one call at a time, PAUSE_SECONDS between calls, 13 questions
+x 2 modes, so 26 generations at most.
 
 Read only. Every database session it opens is `SET TRANSACTION READ ONLY` before
 the first query, so a write would fail rather than happen. No spending gate is
@@ -45,7 +55,11 @@ from adelia.agent.route import log_route
 from adelia.config import settings
 from adelia.demo.fixture import demo_patient_context, demo_profile, retrieval_query
 from adelia.enrichment.evidence_loader import embed_with_retry
-from adelia.enrichment.evidence_retrieval import retrieve_evidence, retrieve_experience
+from adelia.enrichment.evidence_retrieval import (
+    retrieve_evidence,
+    retrieve_experience,
+    topic_of,
+)
 from adelia.enrichment.profile_service import ProfileFacts
 from adelia.services.answer_contract import CONTRACTS, PLAN_HEADINGS
 from adelia.services.chat_orchestrator import generate_answer
@@ -69,6 +83,16 @@ QUESTIONS: tuple[tuple[str, str, str], ...] = (
     ("estrenimiento", "es", "Hace caca muy dura y le cuesta, ¿qué puedo hacer?"),
 )
 
+#: The croup question with a dose in it: measured in prod with a main search that
+#: already held the SEUP paragraph on when to go, so it is the one to compare the
+#: first question with. Paracetamol, not ibuprofen: the demo baby is 5 months old.
+FOLLOW_UPS: tuple[tuple[str, str, str], ...] = (
+    ("crup_dosis", "es",
+     "Tiene tos de perro por la noche, ¿le puedo dar 2,5 ml de paracetamol?"),
+)
+
+ALL_QUESTIONS = (*QUESTIONS, *FOLLOW_UPS)
+
 #: Seconds between calls, so the run stays under the providers' rate.
 PAUSE_SECONDS = 2.0
 
@@ -85,6 +109,8 @@ class Row:
     answer: str
     #: (tag, title) of the cards that went out with the answer.
     sources: list[tuple[str, str]] = field(default_factory=list)
+    #: (tag, title, "Tema:") of every fragment handed to the model, cited or not.
+    given: list[tuple[str, str, str]] = field(default_factory=list)
 
     @property
     def words(self) -> int:
@@ -110,6 +136,14 @@ def read_only(search):
         await session.execute(sql("SET TRANSACTION READ ONLY"))
         return await search(session, **kwargs)
     return _wrapped
+
+
+def fragment_topics(evidence) -> list[tuple[str, str, str]]:
+    """(ev_N, title, topic) of each fragment in the order the model read them."""
+    return [
+        (f"ev_{i}", m.source_title, topic_of(m.content) or "")
+        for i, m in enumerate(evidence, start=1)
+    ]
 
 
 def doctor_bullets(answer: str, locale: str) -> list[str]:
@@ -183,6 +217,7 @@ async def answer_once(qid: str, locale: str, question: str) -> Row:
         intent=out.get("intent"),
         answer=out.get("answer", ""),
         sources=[(c.get("tag", ""), c.get("title", "")) for c in out.get("evidence_citations", [])],
+        given=fragment_topics(out.get("evidence") or []),
     )
 
 
@@ -215,12 +250,14 @@ def print_row(q: tuple[str, str, str], off: Row, on: Row) -> None:
               f"refusal {'yes: ' + ' | '.join(places) if places else 'no'}")
         for tag, title in row.sources:
             print(f"       source  [{tag}] {title:.80}")
+        for tag, title, topic in row.given:
+            print(f"       given   [{tag}] {title}: {topic}")
         for bullet in doctor_bullets(row.answer, locale):
             print(f"       doctor  - {bullet:.110}")
 
 
 async def main_async(args) -> int:
-    rows = await run_all(QUESTIONS)
+    rows = await run_all(ALL_QUESTIONS)
     for q, off, on in rows:
         print_row(q, off, on)
     print("\n== summary (cut-off %.2f, margin %.2f)" % (

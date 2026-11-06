@@ -14,7 +14,20 @@ then these words on a second line. That vector is searched under the same two
 cut-offs (evidence_max_distance and the relative margin, untouched) and up to
 two fragments the main search did not hold are appended after it
 (evidence_retrieval.add_warning_fragments), those of the sources already
-retrieved first. What it can and cannot do:
+retrieved first.
+
+With the setting on in production (2026-11-06) the croup plan still had no
+"Cuándo ir al médico": the search returned one fragment per source, so for the
+guidelines the plan cited it brought each one's closest fragment to the warning
+words, "síntomas y evolución de la laringitis", while SEUP's "cuidados en casa
+y cuándo ir a urgencias" (about 0.135) and AEPap's "cuándo acudir a urgencias",
+both inside the cut-off, never reached the model. So the warning search is told
+which sources and fragments the plan holds (retrieve_evidence's
+`cited_sources`): it first returns the other fragments of those sources under
+the same two cut-offs, with no dedup, then the global search as before, and
+among the cited sources a fragment whose "Tema:" says when to go comes first
+(evidence_retrieval.says_when_to_go). Still at most two new fragments, nothing
+past either cut-off. What it can and cannot do:
 
 * it runs only when the main search found evidence: a question with nothing
   under the cut-off is refused by the code as before, never answered from a

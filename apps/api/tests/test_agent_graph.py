@@ -751,6 +751,56 @@ async def test_with_both_searches_on_the_warning_query_widens_the_lay_one(monkey
     assert out["evidence"] == [MAIN, ALARM]
 
 
+# The warning search returned one fragment per source, so a guideline the plan
+# already cited only showed its best fragment for the warning words, a general
+# one: the croup plan of 2026-11-06 never saw "cuándo acudir a urgencias".
+
+SECOND = _match("evidence", "Laringitis, información para padres (SEUP)")
+
+
+async def test_the_warning_search_is_told_which_sources_and_fragments_the_plan_holds(
+    monkeypatch,
+):
+    from adelia.config import settings
+
+    monkeypatch.setattr(settings, "warning_signs_retrieval", True)
+    monkeypatch.setattr(settings, "lay_query_expansion", False)
+    fakes = VectorFakes(intent="plan", by_vector={0.0: [MAIN, SECOND], 1.0: []})
+    await _run(fakes, CROUP)
+    main, warning = [kw for name, kw in _retrieval_calls(fakes) if name == "evidence"]
+    assert "cited_sources" not in main and "cited_chunks" not in main
+    assert list(warning["cited_sources"]) == [MAIN.source_id, SECOND.source_id]
+    assert list(warning["cited_chunks"]) == [MAIN.chunk_id, SECOND.chunk_id]
+
+
+async def test_the_urgency_paragraph_of_a_cited_guideline_reaches_the_plan(monkeypatch):
+    from adelia.config import settings
+
+    monkeypatch.setattr(settings, "warning_signs_retrieval", True)
+    monkeypatch.setattr(settings, "lay_query_expansion", False)
+    general = _with(MAIN, 0.10, "Laringitis (AEPap). Tema: síntomas y evolución. Hallazgo: x.")
+    urgent = _with(MAIN, 0.15, "Laringitis (AEPap). Tema: cuándo acudir a urgencias. "
+                               "Hallazgo: si respira con ruido en reposo.")
+    stranger = _with(_match("evidence", "Cómo manejar la tos"), 0.09, "Tema: qué es la tos.")
+    fakes = VectorFakes(intent="plan", by_vector={0.0: [MAIN], 1.0: [stranger, general, urgent]})
+    out = await _run(fakes, CROUP)
+    assert out["evidence"] == [MAIN, urgent, general]
+    (_, _, prompt), = [c for c in fakes.calls if c[0] == "generate"]
+    assert "[ev_2] " in prompt and urgent.content in prompt
+
+
+async def test_with_the_warning_search_off_nothing_is_told_about_cited_sources(monkeypatch):
+    from adelia.config import settings
+
+    monkeypatch.setattr(settings, "warning_signs_retrieval", False)
+    monkeypatch.setattr(settings, "lay_query_expansion", False)
+    fakes = VectorFakes(intent="plan", by_vector={0.0: [MAIN, SECOND]})
+    out = await _run(fakes, CROUP)
+    (search,) = [kw for name, kw in _retrieval_calls(fakes) if name == "evidence"]
+    assert "cited_sources" not in search and "cited_chunks" not in search
+    assert out["evidence"] == [MAIN, SECOND]
+
+
 # --- the baby she does not name (agent/implicit_subject.py) ----------------------
 #
 # Measured in production on 2026-11-06: "Tiene 38,3 de fiebre desde esta mañana,

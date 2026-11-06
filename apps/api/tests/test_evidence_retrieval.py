@@ -22,6 +22,8 @@ from adelia.enrichment.evidence_retrieval import (
     within_relative_margin,
 )
 
+from tests.pg_gate import PG_AVAILABLE
+
 
 def _fake_match(i: int) -> EvidenceMatch:
     return EvidenceMatch(
@@ -431,3 +433,288 @@ def test_warning_fragments_add_nothing_to_an_empty_main_search():
     assert add_warning_fragments([], [_m(A, 0.05, "a")]) == []
     a = _m(A, 0.08, "a")
     assert add_warning_fragments([a], []) == [a]
+
+
+# --- the paragraph on when to go, of a guideline already cited -------------------
+#
+# Measured in prod on 2026-11-06 (demo retrieve node, warning search on): "Tiene
+# tos de perro por la noche, ¿qué puedo hacer en casa?" cited AEPap, AEP and SEUP,
+# and the warning search added only "síntomas y evolución de la laringitis". The
+# SEUP "cuidados en casa y cuándo ir a urgencias" and the AEPap "cuándo acudir a
+# urgencias" paragraphs were inside the cut-off, but retrieve_evidence returns one
+# fragment per source, so a cited guideline only ever showed its best fragment for
+# the warning words, a general one. The croup plan then had no «Cuándo ir al médico».
+
+
+def _topic(source: UUID, distance: float, topic: str) -> EvidenceMatch:
+    """A fragment shaped like the corpus: title, "Tema:", then "Hallazgo:"."""
+    return EvidenceMatch(
+        chunk_id=uuid4(), source_id=source, source_title="Laringitis", organization="ORG",
+        publication_year=2017, url=None, chunk_index=0, distance=distance,
+        content=f"Laringitis (Familia y Salud, AEPap, 2017). Tema: {topic}. Hallazgo: texto.",
+    )
+
+
+@pytest.mark.parametrize("topic", [
+    "cuándo acudir a urgencias con un niño con laringitis",
+    "cuidados en casa y cuándo ir a urgencias",
+    "signos de empeoramiento por los que consultar",
+    "qué hacer, qué no hacer y cuándo llamar al 112",
+    "evolución y signos de alarma",
+    "when to call for emergency help",
+    "when to see a doctor urgently",
+    "quand consulter en urgence",
+    "signes d’alerte et quand appeler le 15",
+])
+def test_a_topic_on_when_to_go_is_recognised_in_three_languages(topic):
+    from adelia.enrichment.evidence_retrieval import says_when_to_go
+
+    assert says_when_to_go(_topic(A, 0.1, topic).content)
+
+
+@pytest.mark.parametrize("content", [
+    _topic(A, 0.1, "síntomas y evolución de la laringitis").content,
+    _topic(A, 0.1, "qué hacer en casa y qué remedios no sirven").content,
+    # The finding mentions a doctor, as most do; only the topic line counts.
+    "Laringitis (AEPap). Tema: qué es. Hallazgo: si empeora, consulte a urgencias.",
+    # No topic line at all (a paper abstract): no preference, plain distance.
+    "Emergency department visits for croup fell after 2020.",
+    "",
+])
+def test_a_general_fragment_is_not_taken_for_one_on_when_to_go(content):
+    from adelia.enrichment.evidence_retrieval import says_when_to_go
+
+    assert not says_when_to_go(content)
+
+
+def test_the_urgency_paragraph_of_a_cited_source_wins_over_its_closer_general_one():
+    """The croup case: AEPap's best fragment for the warning words is "síntomas y
+    evolución"; its paragraph on when to go is farther and is the one she needs."""
+    from adelia.enrichment.evidence_retrieval import add_warning_fragments
+
+    home = _topic(A, 0.08, "qué hacer en casa y qué remedios no sirven")
+    seup = _topic(B, 0.09, "qué es la laringitis y cómo se manifiesta")
+    general = _topic(A, 0.11, "síntomas y evolución de la laringitis")
+    a_urgent = _topic(A, 0.15, "cuándo acudir a urgencias con un niño con laringitis")
+    b_urgent = _topic(B, 0.135, "cuidados en casa y cuándo ir a urgencias")
+    got = add_warning_fragments([home, seup], [general, a_urgent, b_urgent])
+    assert got == [home, seup, b_urgent, a_urgent]
+    assert add_warning_fragments([home, seup], [general, a_urgent], limit=1) == [
+        home, seup, a_urgent]
+
+
+def test_the_urgency_paragraph_of_a_cited_source_wins_over_a_new_source():
+    from adelia.enrichment.evidence_retrieval import add_warning_fragments
+
+    home = _topic(A, 0.08, "qué hacer en casa y qué remedios no sirven")
+    stranger = _topic(C, 0.05, "qué es la tos y por qué aparece")
+    a_urgent = _topic(A, 0.15, "cuándo acudir a urgencias con un niño con laringitis")
+    assert add_warning_fragments([home], [stranger, a_urgent], limit=1) == [home, a_urgent]
+
+
+def test_a_new_source_is_ranked_by_distance_alone():
+    """Outside the cited guidelines the preference does not apply: another
+    illness's "cuándo llamar" (the fever guide for a croup question) must not
+    jump over a closer fragment."""
+    from adelia.enrichment.evidence_retrieval import add_warning_fragments
+
+    home = _topic(A, 0.08, "qué hacer en casa")
+    near = _topic(C, 0.07, "qué es la laringitis")
+    fever = _topic(D, 0.12, "la fiebre y cuándo llamar al pediatra")
+    assert add_warning_fragments([home], [fever, near], limit=1) == [home, near]
+
+
+def test_one_fragment_found_by_both_warning_searches_is_added_once():
+    """The restricted search and the global one can both return a fragment of a
+    cited source; it is one paragraph and takes one slot."""
+    from adelia.enrichment.evidence_retrieval import add_warning_fragments
+
+    home = _topic(A, 0.08, "qué hacer en casa")
+    urgent = _topic(A, 0.12, "cuándo acudir a urgencias")
+    other = _topic(C, 0.10, "qué es")
+    assert add_warning_fragments([home], [urgent, urgent, other]) == [home, urgent, other]
+
+
+# --- the same, against Postgres: the restricted search's SQL ----------------------
+
+needs_pg = pytest.mark.skipif(not PG_AVAILABLE, reason="needs Postgres")
+
+DIM = 1024
+QUERY = [1.0] + [0.0] * (DIM - 1)
+#: A specialty no real source carries, so the shared dev corpus never answers.
+SPECIALTY = "warning-paragraph-test"
+PREFIX = "WARNING-PARAGRAPH-TEST-"
+
+
+def _vec_at(distance: float) -> list[float]:
+    import math
+
+    cos = 1.0 - distance
+    return [cos, math.sqrt(1.0 - cos * cos)] + [0.0] * (DIM - 2)
+
+
+@pytest.fixture
+async def croup_corpus():
+    """Two cited guidelines with several paragraphs each, and one new source.
+
+    Distances from the warning query, chosen like the croup measurement: each
+    cited guideline's best fragment for the warning words is a general one.
+    """
+    from sqlalchemy import text
+
+    from adelia.db import AsyncSessionLocal
+    from adelia.models import EvidenceChunk, EvidenceSource
+
+    async def _sweep():
+        async with AsyncSessionLocal() as session:
+            await session.execute(text("DELETE FROM evidence_sources WHERE title LIKE :p"),
+                                  {"p": f"{PREFIX}%"})
+            await session.commit()
+
+    await _sweep()
+    spec = {
+        "aepap": [("qué hacer en casa y qué remedios no sirven", 0.13),
+                  ("síntomas y evolución de la laringitis", 0.10),
+                  ("cuándo acudir a urgencias con un niño con laringitis", 0.15),
+                  ("la tos que dura semanas", 0.25)],
+        "seup": [("qué es la laringitis y cómo se manifiesta", 0.11),
+                 ("cuidados en casa y cuándo ir a urgencias", 0.135)],
+        "new": [("qué es la tos y por qué aparece", 0.09)],
+        "adult": [("cuándo ir a urgencias con disnea", 0.05)],
+    }
+    ids: dict[str, object] = {}
+    async with AsyncSessionLocal() as session:
+        for key, chunks in spec.items():
+            source = EvidenceSource(
+                source_type="guideline", title=f"{PREFIX}{key}-{uuid4().hex[:6]}",
+                organization="TEST", publication_year=2026, language="es", tier="evidence",
+                specialties=["adult"] if key == "adult" else [SPECIALTY],
+            )
+            session.add(source)
+            await session.flush()
+            ids[key] = source.id
+            for i, (topic, distance) in enumerate(chunks):
+                chunk = EvidenceChunk(
+                    source_id=source.id, chunk_index=i, language="es", embedding=_vec_at(distance),
+                    content=f"{key} (TEST). Tema: {topic}. Hallazgo: texto.",
+                )
+                session.add(chunk)
+                await session.flush()
+                ids[(key, topic)] = chunk.id
+        await session.commit()
+    try:
+        yield ids
+    finally:
+        await _sweep()
+
+
+async def _warning_search(**kwargs):
+    from adelia.db import AsyncSessionLocal
+
+    kwargs.setdefault("specialties", [SPECIALTY])
+    kwargs.setdefault("max_distance", 0.19)
+    kwargs.setdefault("relative_margin", 0.08)
+    async with AsyncSessionLocal() as session:
+        return await retrieve_evidence(session, query_embedding=QUERY, top_k=4, **kwargs)
+
+
+def _main(ids):
+    """What the croup question's main search held: AEPap's home care, SEUP's "qué es"."""
+    return {
+        "cited_sources": [ids["aepap"], ids["seup"]],
+        "cited_chunks": [ids[("aepap", "qué hacer en casa y qué remedios no sirven")],
+                         ids[("seup", "qué es la laringitis y cómo se manifiesta")]],
+    }
+
+
+@needs_pg
+async def test_without_cited_sources_the_search_is_one_fragment_per_source(croup_corpus):
+    got = await _warning_search()
+    assert [m.distance for m in got] == pytest.approx([0.09, 0.10, 0.11], abs=1e-4)
+    assert len({m.source_id for m in got}) == len(got)
+
+
+@needs_pg
+async def test_the_restricted_search_returns_several_fragments_of_one_source(croup_corpus):
+    ids = croup_corpus
+    got = await _warning_search(**_main(ids))
+    of_aepap = [m.chunk_id for m in got if m.source_id == ids["aepap"]]
+    assert ids[("aepap", "síntomas y evolución de la laringitis")] in of_aepap
+    assert ids[("aepap", "cuándo acudir a urgencias con un niño con laringitis")] in of_aepap
+    assert ids[("seup", "cuidados en casa y cuándo ir a urgencias")] in {m.chunk_id for m in got}
+
+
+@needs_pg
+async def test_the_restricted_search_never_returns_a_fragment_the_plan_holds(croup_corpus):
+    """The restricted half excludes them in SQL; the global half may still return
+    one (as it always did) and add_warning_fragments drops it."""
+    from adelia.db import AsyncSessionLocal
+    from adelia.enrichment.evidence_retrieval import fragments_of_sources
+
+    ids = croup_corpus
+    main = _main(ids)
+    async with AsyncSessionLocal() as session:
+        restricted = await fragments_of_sources(
+            session, query_embedding=QUERY, source_ids=main["cited_sources"],
+            exclude_chunk_ids=main["cited_chunks"], specialties=[SPECIALTY], max_distance=0.19,
+        )
+    assert [m.distance for m in restricted] == pytest.approx([0.10, 0.135, 0.15], abs=1e-4)
+    assert not {m.chunk_id for m in restricted} & set(main["cited_chunks"])
+    assert {m.source_id for m in restricted} == {ids["aepap"], ids["seup"]}
+
+
+@needs_pg
+async def test_the_restricted_search_admits_nothing_past_the_cut_off(croup_corpus):
+    ids = croup_corpus
+    got = await _warning_search(**_main(ids))
+    assert ids[("aepap", "la tos que dura semanas")] not in {m.chunk_id for m in got}
+    assert all(m.distance < 0.19 for m in got)
+    tight = await _warning_search(**_main(ids), max_distance=0.12)
+    assert all(m.distance < 0.12 for m in tight)
+    assert ids[("aepap", "cuándo acudir a urgencias con un niño con laringitis")] not in {
+        m.chunk_id for m in tight}
+
+
+@needs_pg
+async def test_the_restricted_search_keeps_the_relative_margin_of_the_warning_query(croup_corpus):
+    """Anchored to the warning query's best fragment (0.09, the new source), as the
+    global search is: at a 0.03 margin the 0.135 and 0.15 paragraphs are out."""
+    ids = croup_corpus
+    got = await _warning_search(**_main(ids), relative_margin=0.03)
+    assert all(m.distance <= 0.09 + 0.03 + 1e-6 for m in got)
+
+
+@needs_pg
+async def test_the_restricted_search_keeps_the_specialty_filter(croup_corpus):
+    """An adult source passed as cited still never answers a question about a baby."""
+    ids = croup_corpus
+    main = _main(ids)
+    main["cited_sources"].append(ids["adult"])
+    got = await _warning_search(**main)
+    assert ids["adult"] not in {m.source_id for m in got}
+
+
+@needs_pg
+async def test_the_urgency_paragraphs_of_the_cited_guidelines_reach_the_plan(croup_corpus):
+    """End to end in the retrieval module: the croup shape of 2026-11-06."""
+    from adelia.enrichment.evidence_retrieval import add_warning_fragments
+
+    ids = croup_corpus
+    main_ids = _main(ids)
+    main = [
+        EvidenceMatch(chunk_id=chunk, source_id=source, source_title="t", organization=None,
+                      publication_year=None, url=None, content="c", chunk_index=0, distance=0.1)
+        for source, chunk in zip(main_ids["cited_sources"], main_ids["cited_chunks"])
+    ]
+    got = add_warning_fragments(main, await _warning_search(**main_ids))
+    assert got[: len(main)] == main
+    added = {m.chunk_id for m in got[len(main):]}
+    assert added == {ids[("aepap", "cuándo acudir a urgencias con un niño con laringitis")],
+                     ids[("seup", "cuidados en casa y cuándo ir a urgencias")]}
+
+
+@needs_pg
+async def test_an_empty_main_list_stays_empty_with_the_restricted_search(croup_corpus):
+    from adelia.enrichment.evidence_retrieval import add_warning_fragments
+
+    assert add_warning_fragments([], await _warning_search(**_main(croup_corpus))) == []

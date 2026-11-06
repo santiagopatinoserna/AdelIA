@@ -520,8 +520,12 @@ async def retrieve(state: AgentState, runtime: Runtime[GraphDeps]) -> dict:
                 [evidence, *also], top_k=cuts["top_k"], relative_margin=cuts["relative_margin"]
             )
         if evidence and warning_index is not None and len(embeds) > warning_index:
+            # The sources the plan cites, so their other paragraphs under the
+            # cut-offs come back too (the croup guide's "cuándo acudir a urgencias").
             alarm = await deps.retrieve_evidence(
-                session, query_embedding=embeds[warning_index], **cuts
+                session, query_embedding=embeds[warning_index], **cuts,
+                cited_sources=list(dict.fromkeys(m.source_id for m in evidence)),
+                cited_chunks=[m.chunk_id for m in evidence],
             )
             evidence = add_warning_fragments(evidence, alarm)
     # Other mothers are searched with her sentence alone: the experience tier
