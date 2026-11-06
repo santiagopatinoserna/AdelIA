@@ -17,6 +17,11 @@ async def _dispose_engine():
     after every test so the next loop starts clean."""
     yield
     from adelia.db import engine
+    from adelia.routers.users import drain_erasure_sweeps
+
+    # An erasure answers before its blob sweep ends; let it finish on this
+    # loop instead of dying half-way through a pooled connection.
+    await drain_erasure_sweeps()
     await engine.dispose()
 
 
