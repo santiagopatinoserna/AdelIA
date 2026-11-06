@@ -4,6 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import { useTranslations } from "next-intl";
 import { ArrowLeft, RotateCcw, Trash2 } from "lucide-react";
 
+import { formatDay, formatInstant } from "@/lib/dates";
 import { Link, useRouter } from "@/lib/navigation";
 import {
   deleteDocument,
@@ -139,14 +140,12 @@ export function DocumentDetailView({
 
   const isConsulta = doc.source === "consulta";
   // "consulta-2026-08-20.webm" is a filename, not a title a mom should read.
-  const longDate = (iso: string) =>
-    new Intl.DateTimeFormat(locale, { dateStyle: "long" }).format(new Date(iso));
   // Telegram diary entries are titled by the day they describe, not by
   // the "diario-2026-08-27.ogg" filename the bot generated.
   const title = isConsulta
-    ? t("consultaDocTitle", { date: longDate(doc.created_at) })
+    ? t("consultaDocTitle", { date: formatInstant(doc.created_at, locale, "long") })
     : doc.diary_date
-      ? t("diaryDocTitle", { date: longDate(`${doc.diary_date}T12:00:00`) })
+      ? t("diaryDocTitle", { date: formatDay(doc.diary_date, locale) })
       : doc.file_name;
   const turns = isConsulta && doc.raw_text ? parseDiarized(doc.raw_text) : null;
   return (
@@ -166,10 +165,7 @@ export function DocumentDetailView({
         <p className="mt-2 text-xs text-ink-faint">{tRecord("audioDeleted")}</p>
       )}
       <p className="mt-2 font-mono text-xs text-ink-faint">
-        {new Intl.DateTimeFormat(locale, {
-          dateStyle: "medium",
-          timeStyle: "short",
-        }).format(new Date(doc.created_at))}
+        {formatInstant(doc.created_at, locale)}
         {doc.raw_text ? `  ·  ${t("docReady")}` : ""}
       </p>
       {/* Post-recording essence: the takeaway before the full conversation.

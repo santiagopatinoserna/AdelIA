@@ -1,9 +1,10 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { useTranslations } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
 import { Share2, X, Copy, Check, FileDown, Ban } from "lucide-react";
 
+import { formatInstant } from "@/lib/dates";
 import { sharing, type ShareLink } from "@/lib/sharing-client";
 import { useFocusTrap } from "@/lib/use-focus-trap";
 
@@ -21,6 +22,7 @@ const TTL_PRESETS = [
 
 export function ShareDialog({ briefingId, onClose }: Props) {
   const t = useTranslations("briefing");
+  const locale = useLocale();
   const [ttl, setTtl] = useState(24);
   const [ack, setAck] = useState(false);
   const [link, setLink] = useState<ShareLink | null>(null);
@@ -146,7 +148,7 @@ export function ShareDialog({ briefingId, onClose }: Props) {
             <div className="mb-4 rounded-xl border border-primary-tint-line bg-primary-tint p-3">
               <div className="ad-eyebrow">
                 {t("share.activeUntil", {
-                  date: new Date(link.expires_at).toLocaleString(),
+                  date: formatInstant(link.expires_at, locale),
                 })}
               </div>
               <div className="mt-2 flex items-center gap-2">

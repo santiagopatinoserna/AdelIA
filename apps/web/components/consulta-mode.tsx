@@ -262,7 +262,7 @@ export function ConsultaMode() {
               </div>
             </div>
           )}
-          {answer && <AnswerContent level={2}>{answer}</AnswerContent>}
+          {answer && <AnswerContent level={2} recordLinks={citations.length > 0}>{answer}</AnswerContent>}
           {citations.length > 0 && (
             <div className="mt-4 border-t border-line pt-3">
               <div className="ad-eyebrow">{t("sourcesLabel")}</div>

@@ -6,6 +6,7 @@ import { useTranslations } from "next-intl";
 import { Baby, Loader2 } from "lucide-react";
 
 import { onboarding } from "@/lib/api-client-browser";
+import { todayInAppZone } from "@/lib/dates";
 
 // Three questions, asked once, before the panel (audit 4.3). Between the magic
 // link and the first useful pixel there used to be a credit card and nothing
@@ -28,7 +29,9 @@ export function BabyOnboardingForm({ locale }: { locale: string }) {
   // `max` on the date input blocks the picker; this blocks a typed value.
   // A date of birth in the future makes the age unknown, which silently
   // switches off every age-gated rule instead of failing loudly.
-  const today = new Date().toISOString().slice(0, 10);
+  // Her today, not UTC's: in the hour after midnight in Madrid a baby born
+  // that day was "in the future".
+  const today = todayInAppZone();
 
   function leave() {
     router.replace(`/${locale}/dashboard`);

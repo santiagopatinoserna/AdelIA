@@ -211,7 +211,8 @@ async def rate_limiting(request: Request, call_next):
 @app.middleware("http")
 async def security_headers(request: Request, call_next):
     """Baseline security headers on every API response. The public share
-    HTML (/s/{token}) renders styles from /static — same-origin CSP."""
+    HTML (/s/{token}) loads its stylesheet from /s/_assets/, same origin,
+    because the production proxy only forwards /s/ to the API."""
     response = await call_next(request)
     response.headers.setdefault("X-Content-Type-Options", "nosniff")
     response.headers.setdefault("Referrer-Policy", "strict-origin-when-cross-origin")

@@ -42,6 +42,10 @@ ROUTE_BUDGETS: list[tuple[str, str, int]] = [
     ("POST", "/briefings", 6),       # 5-stage LLM pipeline
     ("POST", "/enrichment/genomics", 5),
     ("POST", "/shares", 20),
+    # The shared page's stylesheet: static, reveals nothing, fetched on every
+    # view. Before "/s/" (first match wins) so it does not spend the token
+    # brake, nor go bare once a busy clinic has spent it.
+    ("GET", "/s/_assets/", 600),
     ("GET", "/s/", 60),              # public links — token enumeration brake
     # One upsert per call and no identity attached, so the only thing to
     # protect is the write rate itself (audit 4.8). Same caveat as /demo: the

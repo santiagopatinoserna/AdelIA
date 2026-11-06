@@ -313,7 +313,7 @@ export function AgentCanvas({
                     )}
                   </>
                 ) : m.content ? (
-                  <AnswerContent level={2}>{m.content}</AnswerContent>
+                  <AnswerContent level={2} recordLinks={m.citations.length > 0}>{m.content}</AnswerContent>
                 ) : (
                   <p role="status" className="flex items-center gap-2.5 text-base text-ink-soft">
                     <span className="ad-pulse-dot shrink-0" aria-hidden />

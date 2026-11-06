@@ -170,9 +170,39 @@ def render_pdf(payload: BriefingPayload) -> bytes:
     from weasyprint import HTML
 
     html_str = render_briefing_html(payload)
-    # WeasyPrint reads URLs as file paths by default; base_url makes /static/* resolvable
-    pdf_bytes = HTML(string=html_str).write_pdf()
+    # The template links its stylesheet by a site path. With no base_url that
+    # relative link never resolved and every PDF came out unstyled. The fake
+    # origin only gives it something to resolve against: the fetcher below
+    # serves our own file and refuses every other URL, so a link that slipped
+    # into the HTML cannot make the server fetch it.
+    pdf_bytes = HTML(
+        string=html_str,
+        base_url=_PDF_BASE_URL,
+        # Looked up per call, so tests can watch what the render asks for.
+        url_fetcher=lambda url, *a, **kw: _pdf_url_fetcher(url, *a, **kw),
+    ).write_pdf()
     return pdf_bytes
+
+
+_PDF_BASE_URL = "https://briefing.adelia.invalid/"
+
+
+def _pdf_url_fetcher(url: str, *args, **kwargs):
+    """Resolve only the briefing stylesheet, from disk; refuse the rest."""
+    from urllib.parse import urlsplit
+
+    from weasyprint.urls import URLFetcherResponse
+
+    from adelia.services.briefing_html_renderer import BRIEFING_CSS_PATH, BRIEFING_CSS_URL
+
+    parts = urlsplit(url)
+    if f"{parts.scheme}://{parts.netloc}/" == _PDF_BASE_URL and parts.path == BRIEFING_CSS_URL:
+        return URLFetcherResponse(
+            url,
+            body=BRIEFING_CSS_PATH.read_bytes(),
+            headers={"Content-Type": "text/css; charset=utf-8"},
+        )
+    raise ValueError(f"briefing PDF does not fetch {url!r}")
 
 
 SharingMode = Literal["link", "pdf", "html"]
