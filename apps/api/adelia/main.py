@@ -170,6 +170,10 @@ async def lifespan(app: FastAPI):
     # it is disposed, or they check out connections from the rebuilt pool that
     # the loop teardown then abandons (see cancel_background_pipelines).
     await documents.cancel_background_pipelines()
+    # Same for the sweep an account erasure starts after its 204.
+    from adelia.routers.users import drain_erasure_sweeps
+
+    await drain_erasure_sweeps()
     for task in (sweep_task, reminder_task):
         if task is None:
             continue

@@ -261,8 +261,26 @@ for (const L of LOCALES) {
     // Armed only once both safeguards reached React state; a press before that
     // does nothing and the test would wait 20 s for a navigation that never comes.
     await expect(page.getByRole("button", { name: m.settings.deleteButton })).toBeEnabled();
+    // A bare "Timeout" here said nothing for three CI failures. The cause was
+    // a DELETE that answered 204 after 21.6 s (routers/users.py swept every
+    // blob in the system before answering). Say which step stalled and why.
+    const sent = Date.now();
+    const erased = page.waitForResponse(
+      (r) => r.url().endsWith("/api/backend/users/me") && r.request().method() === "DELETE",
+      { timeout: 20_000 },
+    ).catch(() => null);
     await page.getByRole("button", { name: m.settings.deleteButton }).click();
-    await page.waitForURL((u) => !u.pathname.includes("/dashboard"), { timeout: 20_000 });
+    const res = await erased;
+    expect(res, "DELETE /users/me gave no answer within 20 s").not.toBeNull();
+    const ms = Date.now() - sent;
+    expect(res!.status(), `DELETE /users/me answered ${res!.status()} after ${ms} ms: `
+      + `${await res!.text().catch(() => "")}`).toBe(204);
+    const left = await page
+      .waitForURL((u) => !u.pathname.includes("/dashboard"), { timeout: 20_000 })
+      .then(() => true, () => false);
+    const shown = await page.getByText(m.settings.actionError).isVisible();
+    expect(left, `204 after ${ms} ms but still on ${page.url()}; error shown: ${shown}`)
+      .toBe(true);
     expect(await query("SELECT 1 FROM users WHERE email = $1", [email])).toHaveLength(0);
 
     expect(crashes).toEqual([]);
