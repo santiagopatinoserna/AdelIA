@@ -136,3 +136,77 @@ async def test_one_call_at_a_time_with_a_pause_and_two_modes(monkeypatch):
     assert len(calls) == 24 and len(rows) == 12
     assert [on for _, on in calls] == [False, True] * 12
     assert len(pauses) == 23 and set(pauses) == {pw.PAUSE_SECONDS} and pw.PAUSE_SECONDS == 2.0
+
+
+# --- the croup question with a dose, and every fragment handed to the model -------
+#
+# Measured in prod on 2026-11-06: the croup question with a dose in it found the
+# SEUP "cuándo ir a urgencias" paragraph in its main search and wrote "Ve a
+# urgencias si hace ruido al coger aire"; the same question without the dose did
+# not. The probe asks both and prints the topic of every fragment the model read,
+# so the supervisor sees whether the paragraph on when to go arrives.
+
+
+def test_the_croup_question_with_a_dose_follows_the_measured_twelve():
+    assert [i for i, _, _ in pw.FOLLOW_UPS] == ["crup_dosis"]
+    (_, locale, question), = pw.FOLLOW_UPS
+    assert locale == "es" and question.startswith("Tiene tos de perro por la noche")
+    assert "ml" in question
+    assert pw.ALL_QUESTIONS == (*pw.QUESTIONS, *pw.FOLLOW_UPS)
+    assert len({i for i, _, _ in pw.ALL_QUESTIONS}) == 13
+
+
+@pytest.mark.parametrize("qid, locale, question", pw.FOLLOW_UPS)
+def test_the_follow_up_does_not_stop_at_the_guard_for_the_demo_baby(qid, locale, question):
+    assert red_flags.detect(question, locale=locale, age_months=AGE_MONTHS) is None
+    assert not child_outside_scope(question)
+
+
+async def test_the_whole_run_is_thirteen_questions_twice(monkeypatch):
+    calls = []
+
+    async def _answer(qid, locale, question):
+        calls.append(qid)
+        return pw.Row(kind="answer", intent="plan", answer="", sources=[])
+
+    async def _pause(seconds):
+        return None
+
+    monkeypatch.setattr(pw, "answer_once", _answer)
+    monkeypatch.setattr(pw, "_pause", _pause)
+    await pw.run_all(pw.ALL_QUESTIONS)
+    assert len(calls) == 26 and calls[-2:] == ["crup_dosis", "crup_dosis"]
+
+
+def _fragment(content: str, title: str = "Laringitis (Familia y Salud, AEPap)"):
+    from uuid import uuid4
+
+    from adelia.enrichment.evidence_retrieval import EvidenceMatch
+
+    return EvidenceMatch(chunk_id=uuid4(), source_id=uuid4(), source_title=title,
+                         organization="AEPap", publication_year=2017, url=None,
+                         content=content, chunk_index=0, distance=0.1)
+
+
+def test_every_fragment_handed_to_the_model_is_listed_by_its_topic():
+    given = pw.fragment_topics([
+        _fragment("Laringitis (AEPap). Tema: qué hacer en casa. Hallazgo: líquidos."),
+        _fragment("Laringitis (AEPap). Tema: cuándo acudir a urgencias. Hallazgo: ruido."),
+        _fragment("An abstract without a topic line.", title="A paper"),
+    ])
+    assert given == [
+        ("ev_1", "Laringitis (Familia y Salud, AEPap)", "qué hacer en casa"),
+        ("ev_2", "Laringitis (Familia y Salud, AEPap)", "cuándo acudir a urgencias"),
+        ("ev_3", "A paper", ""),
+    ]
+
+
+def test_the_row_prints_every_fragment_given_not_only_the_cited(capsys):
+    row = pw.Row(kind="answer", intent="plan", answer="Respuesta [ev_1].",
+                 sources=[("ev_1", "Laringitis (AEPap)")],
+                 given=[("ev_1", "Laringitis (AEPap)", "qué hacer en casa"),
+                        ("ev_2", "Laringitis (SEUP)", "cuidados en casa y cuándo ir a urgencias")])
+    pw.print_row(("crup", "es", "Tiene tos de perro"), row, row)
+    out = capsys.readouterr().out
+    assert "given   [ev_2] Laringitis (SEUP): cuidados en casa y cuándo ir a urgencias" in out
+    assert out.count("given ") == 4, "both modes, every fragment"

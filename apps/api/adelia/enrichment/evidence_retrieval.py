@@ -12,12 +12,14 @@ LLM synthesizes both with separate citation namespaces:
 from __future__ import annotations
 
 import logging
+import re
 from dataclasses import dataclass
-from typing import Iterable, Sequence
+from typing import Collection, Iterable, Sequence
 from uuid import UUID
 
 from sqlalchemy import String, bindparam, text
 from sqlalchemy.dialects.postgresql import ARRAY
+from sqlalchemy.dialects.postgresql import UUID as PG_UUID
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from adelia.config import settings
@@ -156,6 +158,40 @@ def merge_by_best_distance(
     return dedupe_by_source(within_relative_margin(ranked, relative_margin), top_k)
 
 
+#: The corpus says what each fragment is about on one line, "Tema: <topic>.",
+#: before "Hallazgo:" (975 of its 1047 fragments on 2026-11-06). Only that line
+#: is read: 297 findings mention a doctor or an emergency in passing, 123 topics
+#: are about when to go.
+_TOPIC_LINE = re.compile(r"\b(?:Tema|Topic|Sujet)\s*:\s*([^\n]*?)(?:\.(?:\s|$)|\n|$)")
+
+#: Words of a topic about when to go, in es/en/fr: urgencias, urgente, urgent,
+#: urgences; emergencias, emergency; acudir; consultar, consulter; llamar,
+#: appeler, call; the 112 (and 999, 911); signos de alarma, alerta, alerte,
+#: warning signs; see a doctor, seek help.
+_WHEN_TO_GO = re.compile(
+    r"urgen[ct]|emergenc|acudir|consultar|consulter|llamar|appeler|\bcall\b|\bseek\b"
+    r"|\b(?:112|999|911)\b|alarm|alert|warning|see a doctor",
+    re.IGNORECASE,
+)
+
+
+def topic_of(content: str) -> str | None:
+    """The fragment's "Tema:" line without the label, or None when it has none."""
+    found = _TOPIC_LINE.search(content or "")
+    return found.group(1).strip() if found else None
+
+
+def says_when_to_go(content: str) -> bool:
+    """Whether a fragment's "Tema:" line is about when to see a doctor or go to the ER.
+
+    A cheap, deterministic signal for add_warning_fragments, read from the topic
+    line only. A fragment without one (a paper's abstract) says no, and is
+    ranked by distance like before.
+    """
+    topic = topic_of(content)
+    return bool(topic and _WHEN_TO_GO.search(topic))
+
+
 def add_warning_fragments(
     main: Sequence[EvidenceMatch], extra: Sequence[EvidenceMatch], *, limit: int = 2
 ) -> list[EvidenceMatch]:
@@ -165,21 +201,121 @@ def add_warning_fragments(
     `merge_by_best_distance` this does not re-rank: the main list keeps its
     order, so the [ev_N] the model reads for it are the numbers of before, and
     the new fragments come after it. A fragment already in the main list is not
-    added again. The paragraph on when to go is usually a later fragment of a
-    guideline the plan already cites (the croup guide of AEPap), so fragments of
-    the sources already retrieved come first, then the others, each group by
+    added again, nor twice when both warning searches found it (the one
+    restricted to the cited sources and the global one, see retrieve_evidence's
+    `cited_sources`). The paragraph on when to go is usually a later fragment of
+    a guideline the plan already cites (the croup guide of AEPap), so fragments
+    of the sources already retrieved come first, then the others, each group by
     distance. That can put two fragments of one source in the list; they are
     two different paragraphs and the answer cites the one it uses (compose
     keeps only cited cards). An empty main list stays empty: this never turns
     a question without evidence into one with evidence.
+
+    Among the cited sources, a fragment whose topic says when to go
+    (says_when_to_go) comes before a closer one that does not. Measured in prod
+    on 2026-11-06, the croup question: AEPap's closest fragment to the warning
+    words was "síntomas y evolución de la laringitis", and its "cuándo acudir a
+    urgencias" paragraph, inside the cut-off but farther, never reached the
+    plan. This only reorders what both cut-offs already admitted. It is not
+    applied to the other sources: there another illness's "cuándo llamar" (the
+    fever guide for a croup question) would jump over a closer fragment.
     """
     if not main:
         return []
-    have = {m.chunk_id for m in main}
+    seen = {m.chunk_id for m in main}
     sources = {m.source_id for m in main}
-    new = [m for m in extra if m.chunk_id not in have]
-    ranked = sorted(new, key=lambda m: (m.source_id not in sources, m.distance))
+    new: list[EvidenceMatch] = []
+    for match in extra:
+        if match.chunk_id not in seen:
+            seen.add(match.chunk_id)
+            new.append(match)
+
+    def _rank(m: EvidenceMatch) -> tuple[bool, bool, float]:
+        cited = m.source_id in sources
+        return (not cited, cited and not says_when_to_go(m.content), m.distance)
+
+    ranked = sorted(new, key=_rank)
     return [*main, *ranked[: max(limit, 0)]]
+
+
+_SELECT_MATCHES = """
+        SELECT
+            ec.id AS chunk_id,
+            ec.source_id,
+            es.title AS source_title,
+            es.organization,
+            es.publication_year,
+            es.url,
+            ec.content,
+            ec.chunk_index,
+            ec.embedding <=> :emb AS distance,
+            es.tier
+        FROM evidence_chunks ec
+        JOIN evidence_sources es ON es.id = ec.source_id
+        WHERE ec.embedding <=> :emb < :max_distance
+          AND es.tier = :tier
+    """
+
+
+def _match_of(row, tier: str) -> EvidenceMatch:
+    return EvidenceMatch(
+        chunk_id=row["chunk_id"],
+        source_id=row["source_id"],
+        source_title=row["source_title"],
+        organization=row["organization"],
+        publication_year=row["publication_year"],
+        url=row["url"],
+        content=row["content"],
+        chunk_index=row["chunk_index"],
+        distance=float(row["distance"]),
+        tier=row.get("tier", tier),
+    )
+
+
+async def fragments_of_sources(
+    session: AsyncSession,
+    *,
+    query_embedding: list[float],
+    source_ids: Collection[UUID],
+    exclude_chunk_ids: Collection[UUID] = (),
+    specialties: Iterable[str] | None = None,
+    max_distance: float | None = None,
+    tier: str = EVIDENCE_TIER,
+    limit: int = EVIDENCE_CANDIDATE_CAP,
+) -> list[EvidenceMatch]:
+    """Every fragment of `source_ids` under `max_distance`, by distance, no dedup.
+
+    The fragment-level half of the warning-signs search (see retrieve_evidence's
+    `cited_sources`). The same vector statement as retrieve_evidence, under the
+    same absolute cut-off, tier and specialty filters, narrowed to the sources
+    the plan already cites and without the chunks it already holds. The
+    relative margin is applied by the caller, which knows the warning query's
+    best distance over the whole corpus.
+    """
+    if not source_ids:
+        return []
+    if max_distance is None:
+        max_distance = settings.evidence_max_distance
+    stmt_text = _SELECT_MATCHES + """
+          AND ec.source_id = ANY(:source_ids)
+          AND NOT (ec.id = ANY(:exclude_ids))
+    """
+    params: dict = {
+        "emb": str(query_embedding), "max_distance": max_distance, "tier": tier,
+        "source_ids": list(source_ids), "exclude_ids": list(exclude_chunk_ids), "k": limit,
+    }
+    binds = [
+        bindparam("source_ids", type_=ARRAY(PG_UUID(as_uuid=True))),
+        bindparam("exclude_ids", type_=ARRAY(PG_UUID(as_uuid=True))),
+    ]
+    spec_list = list(specialties) if specialties else None
+    if spec_list:
+        stmt_text += " AND es.specialties ?| :spec_list"
+        params["spec_list"] = spec_list
+        binds.append(bindparam("spec_list", type_=ARRAY(String)))
+    stmt_text += " ORDER BY distance ASC LIMIT :k"
+    result = await session.execute(text(stmt_text).bindparams(*binds), params)
+    return [_match_of(r, tier) for r in result.mappings().all()]
 
 
 async def retrieve_evidence(
@@ -194,6 +330,8 @@ async def retrieve_evidence(
     locale: str | None = None,
     reranker: Reranker | None = None,
     tier: str = EVIDENCE_TIER,
+    cited_sources: Collection[UUID] = (),
+    cited_chunks: Collection[UUID] = (),
 ) -> list[EvidenceMatch]:
     """Retrieve up to top-K evidence chunks, one per source, ranked by cosine distance.
 
@@ -237,6 +375,20 @@ async def retrieve_evidence(
             mistake still never reaches a clinical answer, and a guideline
             never shows up as "what other mothers say". Both the vector and
             the lexical statements carry it. See retrieve_experience.
+        cited_sources, cited_chunks: for the warning-signs search only
+            (agent/warning_signs.py), the sources and fragments the plan's
+            main search holds. Empty, the default, changes nothing. Given,
+            the result is first every other fragment of those sources under
+            both cut-offs, by distance and with no dedup (fragments_of_sources;
+            the relative margin anchored to the best of this query over the
+            whole corpus, as the search below anchors it), then what the
+            search below returns. Measured in prod on 2026-11-06: one fragment
+            per source meant a guideline the croup plan cited only showed its
+            best fragment for the warning words, "síntomas y evolución", never
+            its "cuándo acudir a urgencias". add_warning_fragments picks from
+            this list. They travel as arguments of this function so every
+            surface that lends it to the graph (the demo's wrapper) carries
+            them without being edited.
 
     One citation per source, and no filler (measured on the public demo on
     2026-10-14). The corpus holds several fragments per source, so the top
@@ -288,31 +440,31 @@ async def retrieve_evidence(
     outside the cut-off stays an open item for after the eval harness exists.
 
     Returns: sorted list, most relevant first, never two fragments of one
-    source, possibly shorter than `top_k` and possibly empty.
+    source, possibly shorter than `top_k` and possibly empty. With
+    `cited_sources`, see above: the cited sources' fragments come first.
     """
+    if cited_sources:
+        found = await retrieve_evidence(
+            session, query_embedding=query_embedding, specialties=specialties, top_k=top_k,
+            max_distance=max_distance, relative_margin=relative_margin, query_text=query_text,
+            locale=locale, reranker=reranker, tier=tier,
+        )
+        more = await fragments_of_sources(
+            session, query_embedding=query_embedding, source_ids=cited_sources,
+            exclude_chunk_ids=cited_chunks, specialties=specialties,
+            max_distance=max_distance, tier=tier,
+        )
+        if relative_margin is not None and more:
+            ceiling = min(m.distance for m in [*more, *found]) + relative_margin
+            more = [m for m in more if m.distance <= ceiling]
+        return [*more, *found]
     if max_distance is None:
         max_distance = settings.evidence_max_distance
     plan = plan_lexical(query_text, locale)
     pool = max(top_k, HYBRID_CANDIDATE_POOL) if plan is not None else top_k
     # pgvector cosine distance via `<=>` operator
     # We do a join to evidence_sources to filter by specialty + return metadata
-    stmt_text = """
-        SELECT
-            ec.id AS chunk_id,
-            ec.source_id,
-            es.title AS source_title,
-            es.organization,
-            es.publication_year,
-            es.url,
-            ec.content,
-            ec.chunk_index,
-            ec.embedding <=> :emb AS distance,
-            es.tier
-        FROM evidence_chunks ec
-        JOIN evidence_sources es ON es.id = ec.source_id
-        WHERE ec.embedding <=> :emb < :max_distance
-          AND es.tier = :tier
-    """
+    stmt_text = _SELECT_MATCHES
     params: dict = {"emb": str(query_embedding), "max_distance": max_distance, "tier": tier}
 
     # JSONB array contains-any check via the ?| operator, whose right-hand
@@ -339,21 +491,7 @@ async def retrieve_evidence(
         params["k"] = limit
         result = await session.execute(stmt, params)
         rows = result.mappings().all()
-        matches = [
-            EvidenceMatch(
-                chunk_id=r["chunk_id"],
-                source_id=r["source_id"],
-                source_title=r["source_title"],
-                organization=r["organization"],
-                publication_year=r["publication_year"],
-                url=r["url"],
-                content=r["content"],
-                chunk_index=r["chunk_index"],
-                distance=float(r["distance"]),
-                tier=r.get("tier", tier),
-            )
-            for r in rows
-        ]
+        matches = [_match_of(r, tier) for r in rows]
         admitted = within_relative_margin(matches, relative_margin)
         # Look past repeated sources only when that can still pay off: the
         # rows so far do not hold `top_k` distinct sources, the margin has not
