@@ -749,3 +749,190 @@ async def test_with_both_searches_on_the_warning_query_widens_the_lay_one(monkey
     searches = [kw["query_embedding"][0] for n, kw in _retrieval_calls(fakes) if n == "evidence"]
     assert searches == [0.0, 1.0, 2.0]
     assert out["evidence"] == [MAIN, ALARM]
+
+
+# --- the baby she does not name (agent/implicit_subject.py) ----------------------
+#
+# Measured in production on 2026-11-06: "Tiene 38,3 de fiebre desde esta mañana,
+# ¿qué hago?" was refused with three fever sources at 0.197-0.205, just past the
+# 0.19 cut-off, while the same worry with "Mi bebé de 10 meses" found five at
+# 0.12-0.14. Behind settings.implicit_subject_expansion the retrieve step also
+# searches her sentence with the baby put back ("Mi bebé de 5 meses: ..."), under
+# the same cut-offs, and keeps the better distance of each fragment.
+
+NO_SUBJECT = "Tiene 38,3 de fiebre desde esta mañana, ¿qué hago?"
+
+
+def _subject_off(monkeypatch):
+    from adelia.config import settings
+
+    monkeypatch.setattr(settings, "implicit_subject_expansion", False)
+    monkeypatch.setattr(settings, "lay_query_expansion", False)
+    monkeypatch.setattr(settings, "warning_signs_retrieval", False)
+
+
+def _subject_on(monkeypatch):
+    from adelia.config import settings
+
+    _subject_off(monkeypatch)
+    monkeypatch.setattr(settings, "implicit_subject_expansion", True)
+
+
+async def test_with_the_subject_off_retrieval_is_exactly_what_it_was(monkeypatch):
+    """The rules are not even read, and the calls are the calls of before."""
+    from adelia.agent import implicit_subject
+    from adelia.config import settings
+
+    _subject_off(monkeypatch)
+
+    def _never(*args, **kwargs):
+        raise AssertionError("the subject rules are read with the setting off")
+
+    monkeypatch.setattr(implicit_subject, "subject_query", _never)
+    monkeypatch.setattr(implicit_subject, "names_someone", _never)
+    fakes = Fakes(intent="plan", experience=[EXPERIENCE])
+    out = await _run(fakes, NO_SUBJECT)
+    cuts = {
+        "max_distance": settings.evidence_max_distance,
+        "relative_margin": settings.evidence_relative_margin,
+    }
+    assert _retrieval_calls(fakes) == [
+        ("embed", [NO_SUBJECT]),
+        ("evidence", {"query_embedding": [0.0] * 1024, "specialties": ["pediatrics"],
+                      "top_k": 4, **cuts}),
+        ("experience", {"query_embedding": [0.0] * 1024, "top_k": 3, **cuts}),
+    ]
+    assert out["kind"] == "answer"
+
+
+async def test_with_the_subject_on_her_sentence_and_the_baby_are_both_searched(monkeypatch):
+    """One embedding call, the same cut-offs on both searches, the demo's age."""
+    from adelia.config import settings
+
+    _subject_on(monkeypatch)
+    fakes = VectorFakes(intent="plan", experience=[EXPERIENCE])
+    await _run(fakes, NO_SUBJECT)
+    calls = _retrieval_calls(fakes)
+    assert calls[0] == ("embed", [NO_SUBJECT, f"Mi bebé de 5 meses: {NO_SUBJECT}"])
+    searches = [kwargs for name, kwargs in calls if name == "evidence"]
+    assert [s["query_embedding"][0] for s in searches] == [0.0, 1.0]
+    for s in searches:
+        assert s["specialties"] == ["pediatrics"] and s["top_k"] == 4
+        assert s["max_distance"] == settings.evidence_max_distance
+        assert s["relative_margin"] == settings.evidence_relative_margin
+    (_, experience), = [c for c in calls if c[0] == "experience"]
+    assert experience["query_embedding"][0] == 0.0, "other mothers: her sentence only"
+
+
+async def test_what_only_the_baby_found_is_an_answer_and_the_better_distance_wins(monkeypatch):
+    _subject_on(monkeypatch)
+    far = _with(EVIDENCE, 0.18, "fiebre")
+    near = EvidenceMatch(**{**far.__dict__, "distance": 0.13})
+    fakes = VectorFakes(intent="plan", by_vector={0.0: [far], 1.0: [near]})
+    out = await _run(fakes, NO_SUBJECT)
+    assert out["kind"] == "answer"
+    assert [m.distance for m in out["evidence"]] == [0.13]
+    nothing = VectorFakes(intent="plan", by_vector={0.0: [], 1.0: [EVIDENCE]})
+    assert (await _run(nothing, NO_SUBJECT))["kind"] == "answer"
+
+
+async def test_with_the_subject_on_a_sentence_that_names_the_baby_is_searched_once(monkeypatch):
+    _subject_on(monkeypatch)
+    question = "Mi bebé de 10 meses tiene 38,5 de fiebre pero juega, ¿qué hago?"
+    fakes = VectorFakes(intent="plan")
+    await _run(fakes, question)
+    calls = _retrieval_calls(fakes)
+    assert calls[0] == ("embed", [question])
+    assert [c[0] for c in calls].count("evidence") == 1
+
+
+async def test_the_demo_baby_s_name_is_already_the_baby(monkeypatch):
+    """retrieval_text put "el bebé" where "Lucía" was: no second search."""
+    _subject_on(monkeypatch)
+    fakes = VectorFakes(intent="plan")
+    await _run(fakes, "Lucía tiene diarrea desde ayer")
+    assert _retrieval_calls(fakes)[0] == ("embed", ["el bebé tiene diarrea desde ayer"])
+
+
+async def test_a_red_flag_never_reaches_the_subject_rules(monkeypatch):
+    """The guard reads her original words first; a referral costs no search."""
+    from adelia.agent import implicit_subject
+
+    _subject_on(monkeypatch)
+    read: list[str] = []
+    monkeypatch.setattr(implicit_subject, "subject_query",
+                        lambda text, **kwargs: read.append(text))
+    fakes = VectorFakes()
+    out = await _run(fakes, "Tiene 2 meses y 38,5 de fiebre, ¿qué hago?")
+    assert out["kind"] == "red_flag"
+    assert fakes.calls == [] and read == []
+
+
+async def test_a_french_question_gets_the_baby_in_the_corpus_s_spanish(monkeypatch):
+    _subject_on(monkeypatch)
+
+    async def _corpus_text(text, locale):
+        return "Tiene fiebre desde esta mañana, ¿qué hago?"
+
+    fakes = VectorFakes(intent="plan")
+    await _run(fakes, "Il a de la fièvre depuis ce matin, que faire ?", locale="fr",
+               corpus_text=_corpus_text)
+    assert _retrieval_calls(fakes)[0] == ("embed", [
+        "Tiene fiebre desde esta mañana, ¿qué hago?",
+        "Mi bebé de 5 meses: Tiene fiebre desde esta mañana, ¿qué hago?",
+    ])
+
+
+async def test_with_the_lexicon_on_too_each_variant_is_its_own_search(monkeypatch):
+    """Her words, her words plus the terms, her words with the baby: three
+    searches merged by best distance, so each flag keeps what its own
+    measurement saw. The warning query still widens the lay text only."""
+    from adelia.agent.lay_terms import expanded_query
+    from adelia.agent.warning_signs import warning_query
+    from adelia.config import settings
+
+    _subject_on(monkeypatch)
+    monkeypatch.setattr(settings, "lay_query_expansion", True)
+    monkeypatch.setattr(settings, "warning_signs_retrieval", True)
+    lay = "Tiene diarrea y vomita desde ayer"
+    widened = expanded_query(lay)
+    assert widened is not None
+    fakes = VectorFakes(intent="plan", by_vector={0.0: [], 1.0: [], 2.0: [MAIN], 3.0: [ALARM]})
+    out = await _run(fakes, lay)
+    (_, texts), = [c for c in fakes.calls if c[0] == "embed"]
+    assert texts == [lay, widened, f"Mi bebé de 5 meses: {lay}", warning_query(widened, "es")]
+    searches = [kw["query_embedding"][0] for n, kw in _retrieval_calls(fakes) if n == "evidence"]
+    assert searches == [0.0, 1.0, 2.0, 3.0]
+    assert out["evidence"] == [MAIN, ALARM]
+
+
+async def test_a_fever_answered_through_the_button_is_searched_with_the_baby(monkeypatch):
+    """The clarify flow, both turns. "Tiene fiebre, ¿qué hago?" gets the
+    thermometer question; her button comes back as a line of the message,
+    which still names nobody. Off, that message is searched alone (in
+    production its sources sit past the cut, so she is told there is no
+    evidence); on, the baby is put back for a second search."""
+    first = "Tiene fiebre, ¿qué hago?"
+    absorbed = f"{first}\nTemperatura: 38 a 38,9 °C"
+    turn_two = {"surface": "demo", "locale": "es", "message": first, "account": False,
+                "facts": ProfileFacts(None, None, None, None, 5),
+                "clarification": {"field": "temperature", "value": "38-38.9"}}
+
+    asking = Fakes()
+    asking.decision = RouteDecision(intent="clarify", confidence=0.9, via="rule",
+                                    missing=["temperature"])
+    _subject_on(monkeypatch)
+    out = await _run(asking, first)
+    assert out["kind"] == "clarify" and "embed" not in asking.names()
+
+    _subject_off(monkeypatch)
+    off = VectorFakes(intent="plan", by_vector={0.0: []})
+    out = await run_graph(dict(turn_two), off.deps())
+    assert _retrieval_calls(off)[0] == ("embed", [absorbed])
+    assert out["kind"] == "no_evidence"
+
+    _subject_on(monkeypatch)
+    on = VectorFakes(intent="plan", by_vector={0.0: [], 1.0: [EVIDENCE]})
+    out = await run_graph(dict(turn_two), on.deps())
+    assert _retrieval_calls(on)[0] == ("embed", [absorbed, f"Mi bebé de 5 meses: {absorbed}"])
+    assert out["kind"] == "answer"

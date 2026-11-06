@@ -89,8 +89,10 @@ async def run_turn(*, user_id: UUID, profile_id: UUID | None, message: str,
         return await log_route("agent", text, **kwargs)
 
     async def _retrieve(state) -> Retrieved:
+        known = state.get("facts") or facts
         return await chat_orchestrator.retrieve_for_account(
-            scope, question=state["message"], history=text_history, locale=locale
+            scope, question=state["message"], history=text_history, locale=locale,
+            age_months=known.age_months, baby_name=known.display_name,
         )
 
     def _stream(system_prompt: str, user_message: str):

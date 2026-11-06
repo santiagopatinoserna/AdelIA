@@ -110,6 +110,10 @@ services:
       # Off by default; switched on only after scripts/eval_lay_language.py shows
       # more coverage and no group B question under the cut in production.
       LAY_QUERY_EXPANSION: ${LAY_QUERY_EXPANSION:-false}
+      # The baby she does not name, put back for the search (agent/implicit_subject.py).
+      # Off by default; on only after scripts/eval_implicit_subject.py shows no group B
+      # question newly under the cut and the server golden gate passes.
+      IMPLICIT_SUBJECT_EXPANSION: ${IMPLICIT_SUBJECT_EXPANSION:-false}
       # Warning signs with a source (agent/warning_signs.py) and no refusal for a part
       # she did not ask (answer_contract.NO_UNASKED_REFUSALS_RULE). Off by default; on
       # only after scripts/probe_warning_signs.py and the server golden gate pass.

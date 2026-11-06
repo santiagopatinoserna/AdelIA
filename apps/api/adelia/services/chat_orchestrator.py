@@ -18,7 +18,7 @@ from adelia.llm import (
     reasoning_effort_kwargs,
     uses_anthropic,
 )
-from adelia.agent import lay_terms
+from adelia.agent import implicit_subject, lay_terms
 from adelia.agent.corpus_query import corpus_query
 from adelia.agent.graph import GraphDeps, Retrieved, stream_graph
 from adelia.agent.route import log_route
@@ -341,6 +341,8 @@ async def retrieve_for_account(
     question: str,
     history: list[dict] | None = None,
     locale: str = "es",
+    age_months: int | None = None,
+    baby_name: str | None = None,
 ) -> Retrieved:
     """Her own record and the clinical evidence for one question (dual RAG).
 
@@ -359,6 +361,10 @@ async def retrieve_for_account(
     her documents are searched with what she wrote, the Spanish corpus with
     its Spanish rendering (agent/corpus_query.py). Both go in one embedding
     call, so the second vector costs no extra round trip.
+
+    `age_months` and `baby_name` are the active child's, for
+    settings.implicit_subject_expansion (agent/implicit_subject.py): her name
+    counts as the subject, and her age goes into "Mi bebé de N meses: ...".
     """
     citations: list[ChatCitation] = []
     evidence_embedding: list[float] | None = None
@@ -377,6 +383,17 @@ async def retrieve_for_account(
     # no lay word names, so it searches as before.
     widened = lay_terms.expanded_query(corpus_text) if settings.lay_query_expansion else None
     widened_embedding: list[float] | None = None
+    # The baby she did not name, put back, as its own evidence search
+    # (agent/implicit_subject.py). Off by default, and then not read. Like the
+    # lexicon, only on the standard path.
+    subject = (
+        implicit_subject.subject_query(
+            corpus_text, locale=locale, spoken=retrieval_query, age_months=age_months,
+            name=baby_name,
+        )
+        if settings.implicit_subject_expansion else None
+    )
+    subject_embedding: list[float] | None = None
 
     temporal = detect_temporal_intent(question)
     if temporal is not None:
@@ -412,13 +429,18 @@ async def retrieve_for_account(
         corpus_index = len(texts) - 1
         if widened is not None:
             texts.append(widened)
+        widened_index = len(texts) - 1
+        if subject is not None:
+            texts.append(subject)
         query_embeds = await embed_texts(texts)
         if not query_embeds:
             raise RuntimeError("embed_texts returned empty — cannot retrieve chunks")
         query_embedding = query_embeds[0]
         evidence_embedding = query_embeds[corpus_index]
-        if widened is not None and len(query_embeds) > corpus_index + 1:
-            widened_embedding = query_embeds[corpus_index + 1]
+        if widened is not None and len(query_embeds) > widened_index:
+            widened_embedding = query_embeds[widened_index]
+        if subject is not None and len(query_embeds) > len(texts) - 1:
+            subject_embedding = query_embeds[len(texts) - 1]
         chunks = await retrieve_relevant_chunks(
             scope=scope,
             query_embedding=query_embedding,
@@ -446,12 +468,13 @@ async def retrieve_for_account(
     evidence_matches = await _retrieve_evidence_for_query(
         evidence_embedding, query_text=question, locale=locale
     )
-    if widened_embedding is not None:
-        also = await _retrieve_evidence_for_query(
-            widened_embedding, query_text=question, locale=locale
-        )
+    also = [
+        await _retrieve_evidence_for_query(extra, query_text=question, locale=locale)
+        for extra in (widened_embedding, subject_embedding) if extra is not None
+    ]
+    if also:
         evidence_matches = merge_by_best_distance(
-            [evidence_matches, also], top_k=4, relative_margin=settings.evidence_relative_margin
+            [evidence_matches, *also], top_k=4, relative_margin=settings.evidence_relative_margin
         )
     return Retrieved(
         evidence=evidence_matches, patient_context=patient_context or None, citations=citations
@@ -502,8 +525,11 @@ async def answer_question_streaming(
         return await log_route("chat", message, **kwargs)
 
     async def _retrieve(state) -> Retrieved:
+        facts = state.get("facts")
         return await retrieve_for_account(
-            scope, question=state["message"], history=history, locale=locale
+            scope, question=state["message"], history=history, locale=locale,
+            age_months=facts.age_months if facts is not None else None,
+            baby_name=facts.display_name if facts is not None else None,
         )
 
     def _stream(system_prompt: str, user_message: str) -> AsyncIterator[str]:
