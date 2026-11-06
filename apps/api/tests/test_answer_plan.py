@@ -376,3 +376,11 @@ def test_the_brevity_rule_has_no_long_dashes_and_no_refusal(locale):
     assert "—" not in rule and "–" not in rule
     assert CONTRACTS[locale].refusal not in rule
     assert set(PLAN_BREVITY_RULE) == {"es", "en", "fr"}
+
+
+def test_the_prod_compose_passes_plan_brevity_off_by_default():
+    """Compose hands the api only the variables it lists: without this line,
+    PLAN_BREVITY=true in .env.prod would switch nothing on, and the server
+    golden gate (which extends the same service) would measure it off."""
+    compose = Path(__file__).resolve().parents[3] / "infra" / "docker-compose.prod.yml"
+    assert "PLAN_BREVITY: ${PLAN_BREVITY:-false}" in compose.read_text(encoding="utf-8")
