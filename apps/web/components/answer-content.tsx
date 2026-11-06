@@ -1,19 +1,29 @@
 "use client";
 
-import { useId } from "react";
+import { useId, type KeyboardEvent, type MouseEvent } from "react";
 import ReactMarkdown, { type Components } from "react-markdown";
 import { Bookmark, CalendarCheck, Eye, MessageCircle, Stethoscope } from "lucide-react";
 import remarkGfm from "remark-gfm";
 import { useTranslations } from "next-intl";
 
-// A remark plugin that wraps the literal citation markers of an answer,
-// [ev_N], [ex_N] and [N], in <span class="ad-cite">. The text is untouched,
-// character for character: the marker is still there to read and to verify
-// (UX_PRINCIPLES 11), it just stops weighing what the sentence weighs.
-// mdast-util-to-hast turns a node's data.hName into the element it emits, so
-// no raw HTML is involved and the markdown stays inert. It lives in this file,
-// not in lib/, because answer-reading.spec.ts compiles this module with a
-// plain require that does not know the @/ alias.
+// A remark plugin that turns the citation markers of an answer, [ev_N],
+// [ex_N] and [N], into a small number: the number printed on its source card
+// (evidence, or what other mothers say) or on its record in her history,
+// drawn differently. A mother read "limpia y seca [ev_1][ev_2]" as programmer
+// text in production (prod journey 2026-11-06).
+// The model's text is untouched, character for character: the marker stays in
+// the DOM inside a hidden span and the number is drawn from data-n by CSS, so
+// the text still reads and verifies as the model wrote it (UX_PRINCIPLES 11)
+// and nothing clinical changes. A marker whose card is on the page acts as a
+// button that takes her there; its name is "Fuente 1" or "Historial 2". It is
+// a span with role="button", not a <button>: under the answer a visible
+// <button> in a list means a suggestion came back (mother-first-answer.spec),
+// and markers sit in list items.
+// mdast-util-to-hast turns a node's data.hName/hProperties/hChildren into the
+// element it emits, so no raw HTML is involved and the markdown stays inert.
+// It lives in this file, not in lib/, because answer-reading.spec.ts and
+// citation-plugin.spec.ts compile this module with a plain require that does
+// not know the @/ alias.
 type MdNode = {
   type: string;
   value?: string;
@@ -23,33 +33,115 @@ type MdNode = {
 
 const MARKER = /(\[(?:ev_\d+|ex_\d+|\d+)\])/;
 
-function split(value: string): MdNode[] {
+export type CiteOptions = {
+  // Spoken before the number: "Fuente" for a source, "Historial" for a record.
+  labels: { source: string; record: string };
+  // Whether the record cards ([N]) are on the page. The demo has none: its
+  // history is the sample child's and has no card per record.
+  recordLinks?: boolean;
+};
+
+// "[ev_2]" -> ev_2 / 2, "[3]" -> rec_3 / 3. `key` is the card's data-cite-target.
+export function parseMarker(marker: string) {
+  const inner = marker.slice(1, -1);
+  const kind = inner.startsWith("ev_") ? "ev" : inner.startsWith("ex_") ? "ex" : "rec";
+  const n = inner.replace(/^e[vx]_/, "");
+  return { inner, kind, n, key: kind === "rec" ? `rec_${n}` : inner } as const;
+}
+
+function citeNode(marker: string, options: CiteOptions, linked: boolean): MdNode {
+  const { inner, kind, n } = parseMarker(marker);
+  const label = `${kind === "rec" ? options.labels.record : options.labels.source} ${n}`;
+  const button = linked && (kind !== "rec" || options.recordLinks === true);
+  return {
+    type: "citeMarker",
+    data: {
+      hName: "span",
+      hProperties: {
+        className: ["ad-cite", `ad-cite-${kind}`],
+        dataCite: inner,
+        dataN: n,
+        ariaLabel: label,
+        // A span is not announced by its aria-label unless it has a role.
+        ...(button ? { role: "button", tabIndex: 0 } : { role: "img" }),
+      },
+      hChildren: [{
+        type: "element", tagName: "span",
+        properties: { className: ["ad-cite-raw"] },
+        children: [{ type: "text", value: marker }],
+      }],
+    },
+  };
+}
+
+function split(value: string, options: CiteOptions, linked: boolean): MdNode[] {
   return value
     .split(MARKER)
     .filter((part) => part !== "")
-    .map((part) =>
-      MARKER.test(part)
-        ? { type: "text", value: part, data: { hName: "span", hProperties: { className: ["ad-cite"] } } }
-        : { type: "text", value: part },
-    );
+    .map((part) => (MARKER.test(part) ? citeNode(part, options, linked) : { type: "text", value: part }));
 }
 
-function walk(node: MdNode) {
+// Inside a Markdown link a button would be a control within a control: the
+// marker is drawn the same but stays inert there.
+function walk(node: MdNode, options: CiteOptions, linked: boolean) {
   if (!node.children) return;
   const children: MdNode[] = [];
   for (const child of node.children) {
     if (child.type === "text" && child.value && MARKER.test(child.value)) {
-      children.push(...split(child.value));
+      children.push(...split(child.value, options, linked));
     } else {
-      walk(child);
+      walk(child, options, linked && child.type !== "link" && child.type !== "linkReference");
       children.push(child);
     }
   }
   node.children = children;
 }
 
-export function remarkCiteMarkers() {
-  return (tree: MdNode) => walk(tree);
+const DEFAULT_CITE_OPTIONS: CiteOptions = { labels: { source: "Source", record: "Record" } };
+
+export function remarkCiteMarkers(options: CiteOptions = DEFAULT_CITE_OPTIONS) {
+  return (tree: MdNode) => walk(tree, options, true);
+}
+
+// The card a marker points to is the first one with its key AFTER this answer
+// and before the next answer: in a thread, every answer is followed by its
+// own cards, and an earlier answer may carry the same ev_1.
+export function findCiteTarget(root: HTMLElement, key: string): HTMLElement | null {
+  const answers = Array.from(document.querySelectorAll<HTMLElement>("[data-testid='answer-content']"));
+  const next = answers[answers.indexOf(root) + 1] ?? null;
+  for (const el of document.querySelectorAll<HTMLElement>(`[data-cite-target="${CSS.escape(key)}"]`)) {
+    if (!(root.compareDocumentPosition(el) & Node.DOCUMENT_POSITION_FOLLOWING)) continue;
+    if (next && !(el.compareDocumentPosition(next) & Node.DOCUMENT_POSITION_FOLLOWING)) continue;
+    return el;
+  }
+  return null;
+}
+
+// Open the list of sources and the card itself if they are folded, bring the
+// card into view and move focus to it, so a keyboard or screen reader user
+// lands where a finger would.
+export function revealCiteTarget(target: HTMLElement) {
+  for (let el: HTMLElement | null = target; el; el = el.parentElement) {
+    if (el instanceof HTMLDetailsElement) el.open = true;
+  }
+  const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  target.scrollIntoView({ block: "center", behavior: reduce ? "auto" : "smooth" });
+  const focusable = target instanceof HTMLDetailsElement
+    ? target.querySelector<HTMLElement>(":scope > summary")
+    : target.matches("a[href], button") ? target : target.querySelector<HTMLElement>("a[href], button");
+  focusable?.focus({ preventScroll: true });
+}
+
+function onCite(event: MouseEvent<HTMLElement> | KeyboardEvent<HTMLElement>) {
+  const cite = (event.target as HTMLElement).closest<HTMLElement>('[data-cite][role="button"]');
+  if (!cite) return;
+  // Enter and Space, as on a native button; Space must not scroll the page.
+  if ("key" in event) {
+    if (event.key !== "Enter" && event.key !== " ") return;
+    event.preventDefault();
+  }
+  const target = findCiteTarget(event.currentTarget, parseMarker(`[${cite.dataset.cite}]`).key);
+  if (target) revealCiteTarget(target);
 }
 
 export type AnswerCorpusStats = { sources: number; chunks: number };
@@ -115,10 +207,10 @@ const markdownComponentsH2: Components = {
   h5: ({ node, ...props }) => <h5 className="mt-5 text-base font-semibold leading-snug" {...props} />,
 };
 
-function Md({ children, level = 3 }: { children: string; level?: 2 | 3 }) {
+function Md({ children, level = 3, cites }: { children: string; level?: 2 | 3; cites: CiteOptions }) {
   return (
     <ReactMarkdown
-      remarkPlugins={[remarkGfm, remarkCiteMarkers]}
+      remarkPlugins={[remarkGfm, [remarkCiteMarkers, cites]]}
       components={level === 2 ? markdownComponentsH2 : markdownComponents}
     >
       {children}
@@ -187,9 +279,20 @@ const SECTION_CLASS: Record<PlanKey, string> = {
 // The surrounding answer owns h2, so supplied headings begin at h3.
 // `level` is where the answer's headings start: 3 under a page that titles
 // the answer with an h2 (the demo), 2 where the page has only its h1.
-export function AnswerContent({ children, level = 3 }: { children: string; level?: 2 | 3 }) {
+// `recordLinks`: the page renders a card per record ([N]) after the answer.
+export function AnswerContent({ children, level = 3, recordLinks = false }: {
+  children: string;
+  level?: 2 | 3;
+  recordLinks?: boolean;
+}) {
   const Heading = level === 2 ? "h2" : "h3";
   const t = useTranslations("demo");
+  const tAll = useTranslations();
+  // Existing words on purpose: the three catalogs are being edited elsewhere.
+  const cites: CiteOptions = {
+    labels: { source: tAll("questionnaire.sourceLabel"), record: tAll("dashboard.navHistory") },
+    recordLinks,
+  };
   const uid = useId();
   const titles = Object.fromEntries(PLAN_KEYS.map((key) => [key, t(`plan.${key}`)])) as Record<PlanKey, string>;
   const plan = parsePlan(children, titles);
@@ -198,9 +301,11 @@ export function AnswerContent({ children, level = 3 }: { children: string; level
     return (
       <div
         data-testid="answer-content"
+        onClick={onCite}
+        onKeyDown={onCite}
         className={`${CONTENT_CLASS} space-y-4 [&>p:first-child]:text-lead [&>p:first-child]:font-medium`}
       >
-        <Md level={level}>{children}</Md>
+        <Md level={level} cites={cites}>{children}</Md>
       </div>
     );
   }
@@ -220,10 +325,10 @@ export function AnswerContent({ children, level = 3 }: { children: string; level
   }
 
   return (
-    <div data-testid="answer-content" className={`${CONTENT_CLASS} space-y-6`}>
+    <div data-testid="answer-content" onClick={onCite} onKeyDown={onCite} className={`${CONTENT_CLASS} space-y-6`}>
       {plan.intro && (
         <div data-testid="plan-intro" className="text-lead font-medium [&>p]:whitespace-pre-wrap">
-          <Md level={level}>{plan.intro}</Md>
+          <Md level={level} cites={cites}>{plan.intro}</Md>
         </div>
       )}
       {mapped.length > 1 && (
@@ -262,7 +367,7 @@ export function AnswerContent({ children, level = 3 }: { children: string; level
               <p className="mt-1 text-sm leading-relaxed text-ink-soft">{t("mothersLabel")}</p>
             )}
             <div className="mt-2 space-y-2 [&>:first-child]:mt-0">
-              <Md level={level}>{section.body.trim()}</Md>
+              <Md level={level} cites={cites}>{section.body.trim()}</Md>
             </div>
           </section>
         );

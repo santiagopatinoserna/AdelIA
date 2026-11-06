@@ -1,5 +1,6 @@
 import { useTranslations } from "next-intl";
 
+import { formatDay, formatInstant } from "@/lib/dates";
 import { Link } from "@/lib/navigation";
 import type { DocumentDTO } from "@/lib/api-client";
 import { FailedHint, StatusBadge } from "./status-badge";
@@ -10,14 +11,12 @@ export function DocumentCard({ doc, locale }: { doc: DocumentDTO; locale: string
   const isConsulta = doc.source === "consulta";
   // Recordings get a human title ("Consulta del 20 de agosto de 2026"), not
   // the raw filename the recorder generated.
-  const longDate = (iso: string) =>
-    new Intl.DateTimeFormat(locale, { dateStyle: "long" }).format(new Date(iso));
   // Telegram diary entries are titled by the day they describe, not by
   // the "diario-2026-08-27.ogg" filename the bot generated.
   const title = isConsulta
-    ? t("consultaDocTitle", { date: longDate(doc.created_at) })
+    ? t("consultaDocTitle", { date: formatInstant(doc.created_at, locale, "long") })
     : doc.diary_date
-      ? t("diaryDocTitle", { date: longDate(`${doc.diary_date}T12:00:00`) })
+      ? t("diaryDocTitle", { date: formatDay(doc.diary_date, locale) })
       : doc.file_name;
   const Icon = isConsulta || (doc.diary_date && doc.mime_type.startsWith("audio/")) ? Mic : FileText;
   return (
@@ -37,9 +36,7 @@ export function DocumentCard({ doc, locale }: { doc: DocumentDTO; locale: string
       {/* A date she reads ("3 nov 2026, 1:23"), not a log stamp with seconds
           in monospace. */}
       <p className="mt-2 pl-12 text-sm text-ink-soft">
-        {new Intl.DateTimeFormat(locale, { dateStyle: "medium", timeStyle: "short" }).format(
-          new Date(doc.created_at),
-        )}
+        {formatInstant(doc.created_at, locale)}
       </p>
       {doc.status === "failed" && <FailedHint className="mt-1 pl-12" />}
     </Link>

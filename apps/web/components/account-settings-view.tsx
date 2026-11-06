@@ -10,6 +10,7 @@ import { InstallSettingsEntry } from "@/components/install-prompt";
 import { LocaleSwitcher } from "@/components/locale-switcher";
 import { Link } from "@/lib/navigation";
 import type { BillingStatus } from "@/lib/api-endpoints";
+import { formatInstant } from "@/lib/dates";
 import { clearShowcaseHidden } from "@/lib/showcase-storage";
 
 export function AccountSettingsView({
@@ -53,9 +54,7 @@ export function AccountSettingsView({
   // "trialing" plus trial_end), so this needs no second concept.
   const trialDate =
     billing?.trial_end
-      ? new Intl.DateTimeFormat(locale, { dateStyle: "long" }).format(
-          new Date(billing.trial_end),
-        )
+      ? formatInstant(billing.trial_end, locale, "long")
       : null;
   const subscriptionBody = !billing
     ? t("subscriptionUnknownBody")

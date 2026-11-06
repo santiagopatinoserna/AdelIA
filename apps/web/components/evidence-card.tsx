@@ -17,11 +17,19 @@ export function EvidenceCard({ citation }: { citation: EvidenceCitation }) {
     citation.year ? `(${citation.year})` : null,
   ].filter(Boolean).join(" ");
   const snippet = citation.snippet?.trim();
-  const experience = citation.tier === "experience";
+  const experience = citation.tier === "experience" || citation.tag.startsWith("ex_");
+  // The number the answer's marker shows: ev_3 is "3", ex_1 is "1" in the
+  // experience colours. A tag of another shape is printed as it comes.
+  const number = /^e[vx]_(\d+)$/.exec(citation.tag)?.[1] ?? citation.tag;
 
   const row = (
     <div className="flex items-start gap-3">
-      <span className="ad-ev-tag mt-0.5 shrink-0">{citation.tag}</span>
+      <span
+        data-testid="source-number"
+        className={`ad-src-num ${experience ? "ad-src-num-ex" : "ad-src-num-ev"} shrink-0`}
+      >
+        {number}
+      </span>
       <div className="min-w-0 flex-1">
         <p className="break-words text-sm font-medium leading-snug text-ink">{citation.title}</p>
         <p className="mt-1 flex flex-wrap items-center gap-x-2 gap-y-1 text-xs leading-relaxed text-ink-soft">
@@ -40,7 +48,7 @@ export function EvidenceCard({ citation }: { citation: EvidenceCitation }) {
   // unfold, so the whole row is the link. Never show empty quotation marks.
   if (!snippet) {
     return (
-      <div data-testid="evidence-card" className="border-t border-line">
+      <div data-testid="evidence-card" data-cite-target={citation.tag} className="border-t border-line">
         {citation.url ? (
           <a href={citation.url} target="_blank" rel="noopener noreferrer" className="ad-ev-row flex min-h-11 items-start gap-2">
             <div className="min-w-0 flex-1">{row}</div>
@@ -55,7 +63,7 @@ export function EvidenceCard({ citation }: { citation: EvidenceCitation }) {
   }
 
   return (
-    <details data-testid="evidence-card" className="group border-t border-line">
+    <details data-testid="evidence-card" data-cite-target={citation.tag} className="group border-t border-line">
       <summary className="ad-ev-row flex min-h-11 cursor-pointer list-none items-start gap-2 [&::-webkit-details-marker]:hidden">
         <div className="min-w-0 flex-1">
           {row}

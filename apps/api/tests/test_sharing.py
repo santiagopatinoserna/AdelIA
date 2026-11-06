@@ -290,3 +290,144 @@ def test_render_pdf_with_minimal_payload():
     assert isinstance(pdf_bytes, bytes)
     assert pdf_bytes.startswith(b"%PDF")
     assert len(pdf_bytes) > 500  # reasonable minimum for any PDF
+
+
+# ----------------------------------------------------------------------------
+# Shared page assets live under /s/ (prod journey 2026-11-06)
+# ----------------------------------------------------------------------------
+# The production proxy forwards only /s/ to the API; /static/ lands on the
+# Next app, which answers 404 in HTML, and Chrome refuses the stylesheet. The
+# pediatrician got the report with no formatting at all.
+
+
+def _minimal_payload():
+    from adelia.schemas import (
+        AppliedFilter,
+        BriefingPayload,
+        BriefingSections,
+        LLMMeta,
+        PatientHeader,
+        Specialty,
+    )
+
+    return BriefingPayload(
+        schema_version="1.0",
+        generated_at=datetime.now(UTC),
+        target_specialty=Specialty.DEFAULT,
+        patient=PatientHeader(name="Nora", age_months=4, sex="F"),
+        sections=BriefingSections(
+            reason_for_consult="Revision",
+            active_problems=[],
+            medications=[],
+            allergies="no_known_allergies",
+            immunizations=None,
+            procedures=[],
+            family_history=None,
+            relevant_observations=[],
+            open_questions=[],
+        ),
+        applied_filter=AppliedFilter(specialty="default", rules_version="1.0"),
+        llm_meta=LLMMeta(model="test", tokens_used=0, cost_estimate_usd=0.0),
+    )
+
+
+def _local_refs(html: str) -> list[str]:
+    """Every same-origin href/src the browser would fetch or follow."""
+    import re
+
+    refs = re.findall(r"""(?:href|src)\s*=\s*["']([^"']+)["']""", html, flags=re.I)
+    return [r for r in refs if not re.match(r"^[a-z][a-z0-9+.-]*:", r, flags=re.I)]
+
+
+def _serve(monkeypatch, html: str):
+    fake_resolved = sharing_svc.ResolvedShare(
+        briefing_id=uuid4(),
+        briefing_payload=None,
+        briefing_html=html,
+        expires_at=datetime.now(UTC) + timedelta(hours=1),
+        view_count=1,
+    )
+    monkeypatch.setattr(
+        sharing_svc, "resolve_token", AsyncMock(return_value=fake_resolved)
+    )
+    with TestClient(app) as client:
+        return client.get("/s/sometoken")
+
+
+def test_public_view_references_nothing_outside_s(monkeypatch):
+    from adelia.services.briefing_html_renderer import render_briefing_html
+
+    resp = _serve(monkeypatch, render_briefing_html(_minimal_payload()))
+    assert resp.status_code == 200
+    refs = _local_refs(resp.text)
+    assert refs, "the page must still link its stylesheet"
+    assert all(r.startswith("/s/") for r in refs), refs
+
+
+def test_public_view_rehomes_the_stylesheet_of_a_stored_briefing(monkeypatch):
+    """Briefings already shared keep their rendered HTML in the database, with
+    the old /static/ link baked in. They must get the styles too."""
+    legacy = (
+        '<!DOCTYPE html><html><head>'
+        '<link rel="stylesheet" href="/static/briefing/briefing.css">'
+        '</head><body class="briefing"><h1>Nora</h1></body></html>'
+    )
+    resp = _serve(monkeypatch, legacy)
+    assert resp.status_code == 200
+    assert "/static/" not in resp.text
+    assert all(r.startswith("/s/") for r in _local_refs(resp.text))
+
+
+def test_shared_stylesheet_is_served_as_css_with_cache_and_csp():
+    from adelia.services.briefing_html_renderer import BRIEFING_CSS_URL
+
+    assert BRIEFING_CSS_URL.startswith("/s/")
+    with TestClient(app) as client:
+        resp = client.get(BRIEFING_CSS_URL)
+        assert resp.status_code == 200
+        assert resp.headers["content-type"].startswith("text/css")
+        assert "body.briefing" in resp.text
+        assert "max-age=" in resp.headers["cache-control"]
+        assert resp.headers["x-content-type-options"] == "nosniff"
+        csp = resp.headers["content-security-policy"]
+        assert "default-src 'self'" in csp
+        etag = resp.headers["etag"]
+        again = client.get(BRIEFING_CSS_URL, headers={"If-None-Match": etag})
+        assert again.status_code == 304
+
+
+def test_shared_asset_route_does_not_swallow_tokens(monkeypatch):
+    """The asset path sits under /s/ but must not be read as a share token,
+    and an unknown asset is a plain 404, never a lookup in the share table."""
+    from adelia.services.briefing_html_renderer import BRIEFING_CSS_URL
+
+    resolve = AsyncMock(return_value=None)
+    monkeypatch.setattr(sharing_svc, "resolve_token", resolve)
+    with TestClient(app) as client:
+        assert client.get(BRIEFING_CSS_URL).status_code == 200
+        assert client.get("/s/_assets/nope.css").status_code == 404
+    resolve.assert_not_awaited()
+
+
+def test_pdf_render_loads_the_briefing_stylesheet(monkeypatch):
+    """WeasyPrint had no base_url, so the relative link never resolved and the
+    PDF the pediatrician downloads came out unstyled as well. Only our own
+    stylesheet is fetched; anything else is refused."""
+    try:
+        from weasyprint import HTML  # noqa: F401
+    except (ImportError, OSError) as e:
+        pytest.skip(f"WeasyPrint not available in this env: {e}")
+
+    fetched: list[str] = []
+    real = sharing_svc._pdf_url_fetcher
+
+    def spy(url, *args, **kwargs):
+        fetched.append(url)
+        return real(url, *args, **kwargs)
+
+    monkeypatch.setattr(sharing_svc, "_pdf_url_fetcher", spy)
+    pdf_bytes = sharing_svc.render_pdf(_minimal_payload())
+    assert pdf_bytes.startswith(b"%PDF")
+    assert any(u.endswith("/s/_assets/briefing.css") for u in fetched), fetched
+    with pytest.raises(ValueError):
+        real("https://example.com/tracker.png")

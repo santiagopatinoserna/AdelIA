@@ -1,6 +1,7 @@
 "use client";
 
 import { Link } from "@/lib/navigation";
+import { formatInstant } from "@/lib/dates";
 import { useTranslations } from "next-intl";
 
 import type { BriefingOut } from "@/lib/briefing-types";
@@ -34,7 +35,7 @@ export function BriefingList({ briefings, locale }: Props) {
               </div>
               <div className="mt-1 font-mono text-xs text-ink-faint">
                 {t("briefing.createdAt")}
-                {new Date(b.created_at).toLocaleString(locale)}
+                {formatInstant(b.created_at, locale)}
               </div>
             </div>
             <span className="ad-eyebrow shrink-0">

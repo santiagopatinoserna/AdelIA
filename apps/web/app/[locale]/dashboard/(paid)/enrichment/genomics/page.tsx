@@ -1,10 +1,11 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { useTranslations } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
 import { Dna } from "lucide-react";
 
 import { enrichment } from "@/lib/api-client-browser";
+import { formatInstant } from "@/lib/dates";
 import type { VariantHit } from "@/lib/enrichment-types";
 
 const CATEGORY_STYLE: Record<string, string> = {
@@ -15,6 +16,7 @@ const CATEGORY_STYLE: Record<string, string> = {
 
 export default function GenomicsPage() {
   const t = useTranslations();
+  const locale = useLocale();
   const [file, setFile] = useState<File | null>(null);
   const [hits, setHits] = useState<VariantHit[]>([]);
   const [analyzedAt, setAnalyzedAt] = useState<string | null>(null);
@@ -60,7 +62,7 @@ export default function GenomicsPage() {
       {analyzedAt && (
         <p className="mt-1 text-xs text-ink-faint">
           {t("enrichment.genomics.savedFrom")}{" "}
-          {new Date(analyzedAt).toLocaleDateString()}
+          {formatInstant(analyzedAt, locale, "medium")}
         </p>
       )}
 

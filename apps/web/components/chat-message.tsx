@@ -48,7 +48,9 @@ export function ChatMessageBubble({
         {isUser ? (
           <p className="whitespace-pre-wrap break-words leading-relaxed">{message.content}</p>
         ) : message.content.trim() ? (
-          <AnswerContent level={2}>{message.content}</AnswerContent>
+          <AnswerContent level={2} recordLinks={message.citations.length > 0}>
+            {message.content}
+          </AnswerContent>
         ) : (
           <span className="flex items-center gap-1 py-1" role="status" aria-label="…">
             <span className="ad-typing-dot h-1.5 w-1.5 rounded-full bg-primary-text" />

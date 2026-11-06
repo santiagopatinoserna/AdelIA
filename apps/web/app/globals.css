@@ -616,17 +616,71 @@
   }
   .ad-sticky-action > .ad-btn { box-shadow: var(--shadow-lift); }
 
-  /* A literal citation marker, [ev_2] or [3]. It stays in the text, verbatim
-     and verifiable, but it no longer weighs what the sentence weighs: a plan
-     carries 25 to 30 of them (docs/design/AUDITORIA_UX.md, problem 4). */
+  /* A citation marker. The model's literal "[ev_2]" stays in the DOM in
+     .ad-cite-raw, hidden; what she sees is the number from data-n, the one
+     printed on the source card (prod journey 2026-11-06). Small enough that a
+     plan with 25 to 30 of them still reads as prose (AUDITORIA_UX.md,
+     problem 4). Evidence wears the colour of its card tag, what other mothers
+     say the neutral tint of their section, a record of her history the green
+     of its card, square-cornered so it is not told apart by colour alone. */
   .ad-cite {
-    font-size: 0.72em;
-    font-weight: 500;
-    letter-spacing: 0.01em;
-    color: var(--color-cite);
-    vertical-align: 0.12em;
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 1.5em;
+    height: 1.5em;
+    padding: 0 0.32em;
+    margin-inline: 0.1em;
+    font-family: var(--font-sans);
+    font-size: 0.68em;
+    font-weight: 600;
+    font-variant-numeric: tabular-nums;
+    letter-spacing: 0;
     line-height: 1;
+    vertical-align: 0.3em;
+    border: 1px solid transparent;
+    border-radius: 999px;
+    color: var(--color-cite);
   }
+  .ad-cite::before { content: attr(data-n); }
+  .ad-cite-raw { display: none; }
+  .ad-cite[role="button"] { cursor: pointer; -webkit-tap-highlight-color: transparent; }
+  /* A larger hit area than the drawn number, without moving the line. */
+  .ad-cite[role="button"]::after { content: ""; position: absolute; inset: -0.75rem -0.1rem; }
+  .ad-cite-ev, .ad-src-num-ev {
+    color: var(--color-on-accent-tint);
+    background: var(--color-accent-tint);
+    border-color: var(--color-accent-line);
+  }
+  .ad-cite-ex, .ad-src-num-ex {
+    color: var(--color-ink-soft);
+    background: var(--color-surface-2);
+    border-color: var(--color-line-control);
+  }
+  .ad-cite-rec, .ad-src-num-rec {
+    color: var(--color-primary-text);
+    background: var(--color-primary-tint);
+    border-color: var(--color-primary-text);
+    border-radius: 0.3em;
+  }
+
+  /* The same number on the card the marker points to. */
+  .ad-src-num {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 1.5rem;
+    height: 1.5rem;
+    padding: 0 0.3rem;
+    font-size: 0.75rem;
+    font-weight: 600;
+    font-variant-numeric: tabular-nums;
+    line-height: 1;
+    border: 1px solid transparent;
+    border-radius: 999px;
+  }
+  .ad-src-num-rec { border-radius: 0.35rem; }
 
   /* Text field. A control, so its boundary is line-control (3:1), not the
      decorative hairline of a card. */
@@ -677,20 +731,6 @@
   .ad-ev-row { -webkit-tap-highlight-color: transparent; transition: background-color 0.15s var(--ease-out-soft); }
   .ad-ev-row:active { background: var(--color-surface-2); }
   .ad-ev-row { padding-block: 0.5rem; }
-
-  /* Citation chip: the trust differentiator, now carrying the colour of
-     discovering. */
-  .ad-ev-tag {
-    font-family: var(--font-mono);
-    font-size: 0.7rem;
-    font-weight: 600;
-    letter-spacing: 0.02em;
-    color: var(--color-on-accent-tint);
-    background: var(--color-accent-tint);
-    border: 1px solid var(--color-accent-line);
-    border-radius: 0.4rem;
-    padding: 0.05rem 0.34rem;
-  }
 
   /* Section marker. Amber, and by construction it commands less than a
      Fraunces headline: mono, 11 px, small caps. */

@@ -4,6 +4,7 @@ Routes:
 - POST   /shares                       create share link for a briefing (auth'd)
 - GET    /shares                       list user's shares (auth'd)
 - DELETE /shares/{token}               revoke (auth'd)
+- GET    /s/_assets/briefing.css       PUBLIC stylesheet of the shared page
 - GET    /s/{token}                    PUBLIC view (no auth)
 - GET    /s/{token}/pdf                PUBLIC PDF download (no auth)
 - GET    /briefings/{id}/pdf           direct PDF for owner (auth'd)
@@ -11,11 +12,12 @@ Routes:
 from __future__ import annotations
 
 import asyncio
+import hashlib
 import logging
 from datetime import timedelta
 from uuid import UUID
 
-from fastapi import APIRouter, Depends, HTTPException, Response, status
+from fastapi import APIRouter, Depends, Header, HTTPException, Response, status
 from fastapi.responses import HTMLResponse
 from pydantic import BaseModel, Field
 from sqlalchemy.ext.asyncio import AsyncSession
@@ -24,6 +26,11 @@ from adelia.auth import get_current_user_id, require_active_subscription
 from adelia.db import AsyncSessionLocal, get_db
 from adelia.services import sharing as sharing_svc
 from adelia.services import briefing_repo
+from adelia.services.briefing_html_renderer import (
+    BRIEFING_CSS_PATH,
+    BRIEFING_CSS_URL,
+    LEGACY_CSS_URL,
+)
 
 logger = logging.getLogger(__name__)
 # The paywall goes per route, never on the APIRouter: /s/{token} and
@@ -124,9 +131,36 @@ async def revoke_share_endpoint(
 # ----------------------------------------------------------------------------
 
 
+# Read once: the file ships with the image and never changes at runtime.
+_BRIEFING_CSS = BRIEFING_CSS_PATH.read_bytes()
+_BRIEFING_CSS_ETAG = '"' + hashlib.sha256(_BRIEFING_CSS).hexdigest()[:16] + '"'
+
+
+@router.get(BRIEFING_CSS_URL, include_in_schema=False)
+async def shared_stylesheet(if_none_match: str | None = Header(default=None)):
+    """The shared page's stylesheet, under /s/ so the proxy sends it here.
+
+    Two path segments, so neither /s/{token} nor /s/{token}/pdf can match it
+    and no share lookup runs. A day of cache with a content ETag: a clinic
+    that opens several links pays once, and a CSS change shows up within a
+    day at worst. The /s/ CSP and nosniff come from main.security_headers.
+    """
+    headers = {"Cache-Control": "public, max-age=86400", "ETag": _BRIEFING_CSS_ETAG}
+    if if_none_match == _BRIEFING_CSS_ETAG:
+        return Response(status_code=status.HTTP_304_NOT_MODIFIED, headers=headers)
+    return Response(
+        content=_BRIEFING_CSS, media_type="text/css; charset=utf-8", headers=headers
+    )
+
+
 @router.get("/s/{token}", response_class=HTMLResponse)
 async def public_view(token: str):
-    """Public HTML view of a shared briefing. No auth — token IS the credential."""
+    """Public HTML view of a shared briefing. No auth: the token IS the credential.
+
+    The HTML was rendered when the briefing was made and is stored as is, so
+    briefings from before the stylesheet moved still link /static/. Rewrite
+    that one href here rather than migrate every stored row.
+    """
     async with AsyncSessionLocal() as session:
         resolved = await sharing_svc.resolve_token(session, token=token)
     if resolved is None or resolved.briefing_html is None:
@@ -135,7 +169,9 @@ async def public_view(token: str):
             content="<html><body><h1>404</h1><p>This link is invalid or has expired.</p></body></html>",
             status_code=404,
         )
-    return HTMLResponse(content=resolved.briefing_html)
+    return HTMLResponse(
+        content=resolved.briefing_html.replace(LEGACY_CSS_URL, BRIEFING_CSS_URL)
+    )
 
 
 @router.get("/s/{token}/pdf")
