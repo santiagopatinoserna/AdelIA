@@ -27,7 +27,7 @@ Rules the lexicon keeps, each pinned in tests/test_lay_terms.py:
   the library holds;
 * no false friends: "cacahuete" is not "caca", a red stool in the nappy is not
   diaper dermatitis, a navel that sticks out is the hernia and not the cord;
-* none of the 15 group B questions of the golden set gets a term. That is why
+* none of the 18 group B questions of the golden set gets a term. That is why
   there is no entry for crawling (B2, and the fragments already say gatear),
   yellow skin (B8), trapped wind (B11), French diarrhoea (B13) or first teeth
   in French (B14);
@@ -329,6 +329,22 @@ LEXICON: tuple[LayEntry, ...] = (
             r"\bsnor(e|es|ing)\b|\bnoisy\s+breathing\b",
         ),
         ("ronquido", "respiración ruidosa"),
+    ),
+    # The choking manoeuvre asked in calm (golden A39, measured in prod on
+    # 2026-11-06: ERC 2021 at 0.1977, past the cut). Every word of choking
+    # itself is a red flag, so this reads the manoeuvre and never "atragant".
+    # Patting the back to burp, or a knock on the back, is not it.
+    LayEntry(
+        "atragantamiento",
+        _rx(
+            r"\bmaniobras?\b.{0,40}\bgolpes\b|\bgolpes\b.{0,40}\bmaniobras?\b",
+            r"\bgolpes\s+en\s+la\s+espalda\b.*\bprimeros\s+auxilios\b",
+            r"\bprimeros\s+auxilios\b.*\bgolpes\s+en\s+la\s+espalda\b",
+            r"\bmaniobras?\s+de\s+(desobstruccion|desatragantamiento)\b",
+            r"\bback\s+blows?\b|\bclaques\s+dans\s+le\s+dos\b",
+        ),
+        ("atragantamiento", "golpes en la espalda", "compresiones torácicas"),
+        unless=_rx(r"\beruct\w*|\bgases\b|\bburp\w*|\brots?\b"),
     ),
 )
 

@@ -318,6 +318,216 @@ GOLDEN_SET: tuple[GoldenQuestion, ...] = (
             "del corpus da un laxante ni una cantidad, así que la respuesta citada es de comida."
         ),
     ),
+    # A19-A38 were written on 2026-11-06 for the blind spots of the first gate
+    # run on the server (see CANDIDATES) and measured against the production
+    # corpus that day by scripts/preview_golden_candidates.py: these passed (the
+    # source in the four cards and every card on topic) and moved here with
+    # their ids, wording and recorded vectors. The other eleven are still
+    # candidates, each with the reason in CANDIDATE_MISSES_2026_11_06.
+    GoldenQuestion(
+        "A19", "A",
+        "Tiene 38,5 desde esta mañana pero juega y come bien. ¿Hay que bajarle la fiebre sí o sí?",
+        age_months=15, distinct_sources=True,
+        expect_source=(
+            "sobre la fiebre|Decálogo de la fiebre|bajar la fiebre|un bebé tiene fiebre|"
+            "High temperature|a de la fièvre|Fiebre en menores de 5 años"
+        ),
+        every_citation_mentions="fiebre|fever|fievre|temperatura|antitermic",
+        rationale=(
+            "Familia y Salud (AEPap) 2025, «Medidas físicas para bajar la fiebre»: tratar la "
+            "fiebre solo cuando molesta, quitar ropa y ofrecer agua; NICE NG143 dice lo mismo "
+            "de los antitérmicos. Fiebre a los 15 meses con buen estado: no es bandera roja y "
+            "la respuesta tiene que salir de la evidencia."
+        ),
+    ),
+    GoldenQuestion(
+        "A21", "A",
+        "Desde que nació le llora un ojo y se le llena de legañas. ¿Se le pasará solo?",
+        age_months=2, distinct_sources=True,
+        expect_source="conducto lagrimal|Lagrimeo en el lactante",
+        rationale=(
+            "Familia y Salud (AEPap) 2023 y HealthyChildren: la obstrucción del conducto "
+            "lagrimal se cura sola en la mayoría, casi todas antes de los 12 meses, con "
+            "limpieza y masaje. Las legañas llevan al léxico hacia conjuntivitis: mide que "
+            "el lagrimeo gane."
+        ),
+    ),
+    GoldenQuestion(
+        "A22", "A",
+        "My 10-month-old's foreskin won't pull back at all. Should I be pulling it back in "
+        "the bath?",
+        locale="en", age_months=10, distinct_sources=True,
+        expect_source="phimosis|fimosis|foreskin|prépuce|pene no circuncidado",
+        every_citation_mentions="prepucio|fimosis|phimosis|foreskin|prepuce|pene",
+        rationale=(
+            "Familia y Salud (AEPap) 2016 y 2022, NHS, AAP y ameli: la fimosis del bebé es "
+            "fisiológica y el prepucio no se fuerza. Cinco fuentes en tres idiomas, ninguna "
+            "tocada por el golden."
+        ),
+    ),
+    GoldenQuestion(
+        "A23", "A",
+        "¿Hasta cuándo tiene que ir a contramarcha en el coche? Tiene 13 meses y ya toca el "
+        "asiento con los pies",
+        age_months=13, distinct_sources=True,
+        expect_source="contramarcha|orientados hacia atrás|car seat|en el coche",
+        rationale=(
+            "EnFamilia (AEP), Familia y Salud (AEPap) 2020, AAP 2021 y NHS: a contramarcha el "
+            "mayor tiempo posible, y que los pies toquen el respaldo no es motivo para girar "
+            "la silla."
+        ),
+    ),
+    GoldenQuestion(
+        "A24", "A",
+        "Is a baby walker safe? My 8-month-old loves it and my mum says it helps them walk "
+        "sooner",
+        locale="en", age_months=8, distinct_sources=True,
+        expect_source="andador|Caídas, muy frecuentes|psychomoteur entre 9 et 12",
+        rationale=(
+            "AAP 2022, «Los andadores para bebés: una elección peligrosa», EnFamilia (AEP) "
+            "sobre caídas y mpedia (AFPA) 2025: el andador causa lesiones y no adelanta la "
+            "marcha."
+        ),
+    ),
+    GoldenQuestion(
+        "A25", "A",
+        "¿Cuándo se le cae el cordón? ¿Se lo limpio con alcohol? Tiene 6 días",
+        age_months=0, distinct_sources=True,
+        expect_source="cordón umbilical",
+        every_citation_mentions="cordon|ombligo|umbilical|munon",
+        rationale=(
+            "Familia y Salud (AEPap) 2023 y AAP 2025: el cordón cae entre los 5 y los 15 días "
+            "y basta con mantenerlo limpio y seco, sin alcohol."
+        ),
+    ),
+    GoldenQuestion(
+        "A26", "A",
+        "Mon bébé a 5 jours et il est tout jaune. On m'a dit que c'est normal, ça part quand ?",
+        locale="fr", age_months=0, distinct_sources=True,
+        expect_source="ictericia|jaundice",
+        rationale=(
+            "Familia y Salud (AEPap) 2018 y 2024, NHS, AAP y NICE CG98: la ictericia "
+            "fisiológica empieza entre el 2.º y el 4.º día y se va en dos semanas. Es la edad "
+            "en la que la guía vale; B8 pregunta lo mismo a los 4 meses y debe negarse."
+        ),
+    ),
+    GoldenQuestion(
+        "A28", "A",
+        "How long can expressed breast milk stay in the fridge? I'm going back to work next "
+        "month",
+        locale="en", age_months=4, distinct_sources=True,
+        expect_source="leche materna|sacado la leche|breast milk|Allaiter et travailler",
+        rationale=(
+            "Familia y Salud (AEPap) 2018, «Ya me he sacado la leche», AAP 2024 y NHS 2026: "
+            "tiempos de conservación de la leche extraída en nevera y congelador."
+        ),
+    ),
+    GoldenQuestion(
+        "A29", "A",
+        "She's 13 months and cries every morning at nursery drop-off. It's week three. Will it "
+        "ever stop?",
+        locale="en", age_months=13, distinct_sources=True,
+        expect_source="adaptación|transition to",
+        rationale=(
+            "Familia y Salud (AEPap) 2018, «La adaptación a la escuela», el modelo de Berlín y "
+            "los estudios de transición a la guardería: el llanto de las primeras semanas es "
+            "esperable y baja con una adaptación acompañada. A3 y A15 tocan las fuentes con "
+            "«guardería» en el título; esta, las demás."
+        ),
+    ),
+    GoldenQuestion(
+        "A30", "A",
+        "Desde que va a la guarde siempre está malito, un catarro detrás de otro. ¿Es normal?",
+        age_months=12, distinct_sources=True,
+        expect_source=(
+            "on the common cold|early daycare|childcare attendance|Acute Respiratory Infections|"
+            "siempre tiene mocos|catarro"
+        ),
+        rationale=(
+            "Ball 2002 y Kamper-Jørgensen 2006: más resfriados en el primer año de guardería; "
+            "EnFamilia (AEP) y SEUP: cuántos catarros son normales. Sin duraciones en la frase: "
+            "«cada dos semanas» se leía como la edad y disparaba la fiebre del menor de 3 meses."
+        ),
+    ),
+    GoldenQuestion(
+        "A31", "A",
+        "Tiene la piel muy seca y rojeces en las mejillas que se rasca. ¿Es dermatitis atópica? "
+        "¿Cada cuánto la baño?",
+        age_months=6, distinct_sources=True,
+        expect_source="dermatitis atópica|atopic eczema",
+        every_citation_mentions="atopic|eccema|eczema|piel",
+        rationale=(
+            "Familia y Salud (AEPap) 2016 y 2017, AEDV 2020 y NHS 2024: cómo es el eccema del "
+            "lactante, baño corto e hidratación después."
+        ),
+    ),
+    GoldenQuestion(
+        "A32", "A",
+        "Il a des croûtes jaunes sur la tête. C'est des croûtes de lait ? Je peux les enlever ?",
+        locale="fr", age_months=2, distinct_sources=True,
+        expect_source="costra láctea|cradle cap",
+        rationale=(
+            "Familia y Salud (AEPap) 2024 y NHS 2025: aceite o vaselina y champú suave, sin "
+            "arrancar las escamas."
+        ),
+    ),
+    GoldenQuestion(
+        "A34", "A",
+        "Il a le nez bouché, il a du mal à téter. Comment je lui fais un lavage de nez ?",
+        locale="fr", age_months=3, distinct_sources=True,
+        expect_source="lavados nasales|catarro",
+        rationale=(
+            "EnFamilia (AEP) y Familia y Salud (AEPap) 2023: el lactante no sabe respirar por "
+            "la boca, por eso se lava la nariz antes de las tomas, paso a paso."
+        ),
+    ),
+    GoldenQuestion(
+        "A35", "A",
+        "Tiene 18 meses y solo dice mamá, papá y agua. ¿Debería decir más palabras?",
+        age_months=18, distinct_sources=True,
+        expect_source="lenguaje|primeras palabras|18 meses y a los 2 años",
+        rationale=(
+            "CDC 2026 (indicadores de los 18 meses: tres palabras o más además de mamá y papá), "
+            "EnFamilia (AEP) y Familia y Salud (AEPap) sobre el lenguaje hasta los 24 meses. "
+            "Del lenguaje y no de la marcha: B2 (gateo) sigue en el grupo B."
+        ),
+    ),
+    GoldenQuestion(
+        "A36", "A",
+        "Il a ses vaccins des 2 mois la semaine prochaine. C'est lesquels, et ils sont "
+        "obligatoires ?",
+        locale="fr", age_months=2, distinct_sources=True,
+        expect_source="vaccin|vacunaci",
+        every_citation_mentions="vacun|vaccin",
+        rationale=(
+            "ameli 2026 y Vaccination Info Service: vacunas obligatorias del lactante en "
+            "Francia a los 2, 4 y 11 meses; el calendario español (CISNS y CAV-AEP 2026) "
+            "también vale como fuente."
+        ),
+    ),
+    GoldenQuestion(
+        "A37", "A",
+        "Quiero empezar con BLW, trozos en vez de purés. ¿Es seguro o es mejor empezar con "
+        "purés?",
+        age_months=6, distinct_sources=True,
+        expect_source="Métodos de alimentación complementaria",
+        rationale=(
+            "Comité de Nutrición de la AEP 2026, mapa de la evidencia del BLW: el riesgo de "
+            "atragantamiento depende de la habilidad del bebé y no del método. Sin la palabra "
+            "atragantarse en la frase, que dispara la bandera roja."
+        ),
+    ),
+    GoldenQuestion(
+        "A38", "A",
+        "Con la gastroenteritis no quiere comer nada. ¿La obligo o le doy solo líquidos?",
+        age_months=13, distinct_sources=True,
+        expect_source="diarrea aguda|gastroenteritis aguda|Effects of common illnesses",
+        rationale=(
+            "Guía de Algoritmos AEPap 2021 (diarrea aguda): ofrecer comida sin forzar, "
+            "respetando la falta de apetito; Familia y Salud (AEPap) y SEUP: volver a comer "
+            "pronto y mantener la lactancia."
+        ),
+    ),
     # --- B: nothing in the corpus and nothing in the record ----------------
     GoldenQuestion(
         "B1", "B", "¿Cuál es el mejor colegio bilingüe de Madrid para mi hija?",
@@ -480,6 +690,37 @@ GOLDEN_SET: tuple[GoldenQuestion, ...] = (
             "el corpus no respalda."
         ),
     ),
+    # B18, B20 and B26: the 2026-11-06 near misses the production measurement
+    # passed (nothing under the cut, or the age scope refusing before search).
+    GoldenQuestion(
+        "B18", "B",
+        "Ha pillado piojos en la guarde. ¿Qué champú le pongo y cuándo puede volver?",
+        age_months=22, kind="adjacent",
+        rationale=(
+            "Ninguna fuente nombra piojos ni pediculosis. «Guarde» y «cuándo puede volver» "
+            "acercan la pregunta a los fragmentos de enfermedades contagiosas y vuelta a la "
+            "guardería: una respuesta con cita sería de otra infección."
+        ),
+    ),
+    GoldenQuestion(
+        "B20", "B",
+        "Mi hijo tiene 4 años, ¿puede ir ya sin silla, solo con el cinturón?",
+        age_months=48, kind="age_band",
+        rationale=(
+            "El corpus de sillas de coche habla del bebé y de la ley hasta 135 cm, no del niño "
+            "de 4 años. La frase lo dice, así que el filtro de edad (clinical/age_scope) se "
+            "niega antes de buscar; mide ese filtro con el vocabulario de seguridad."
+        ),
+    ),
+    GoldenQuestion(
+        "B26", "B",
+        "Mi hija de 20 meses lo coge todo con la izquierda. ¿Será zurda? ¿La corrijo?",
+        age_months=20, kind="adjacent",
+        rationale=(
+            "Vecina de los hitos motores y la motricidad fina, que el corpus cubre a fondo; "
+            "la lateralidad no aparece (zurdo, cero menciones)."
+        ),
+    ),
     # --- C: the detector must fire before anything else --------------------
     GoldenQuestion(
         "C1", "C", "Mi bebé de 2 meses tiene 38,2, ¿le doy paracetamol?",
@@ -621,108 +862,24 @@ GOLDEN_SET: tuple[GoldenQuestion, ...] = (
 #: like B16 and B17. urgencias_lactante has one A only: every wording found for
 #: its other sources (anaphylaxis, febrile seizure) is a red flag, which the
 #: tests pin.
+#:
+#: Measured in production on 2026-11-06: 20 of the 31 passed and are now in
+#: GOLDEN_SET. The eleven below failed, each for the reason in
+#: CANDIDATE_MISSES_2026_11_06, and stay here until they are measured again,
+#: including the ones whose check or lexicon has been fixed since.
 CANDIDATES: tuple[GoldenQuestion, ...] = (
     # --- infecciones_fiebre ---------------------------------------------------
-    GoldenQuestion(
-        "A19", "A",
-        "Tiene 38,5 desde esta mañana pero juega y come bien. ¿Hay que bajarle la fiebre sí o sí?",
-        age_months=15, distinct_sources=True,
-        expect_source=(
-            "sobre la fiebre|Decálogo de la fiebre|bajar la fiebre|un bebé tiene fiebre|"
-            "High temperature|a de la fièvre|Fiebre en menores de 5 años"
-        ),
-        every_citation_mentions="fiebre|fever|fievre|temperatura|antitermic",
-        rationale=(
-            "Familia y Salud (AEPap) 2025, «Medidas físicas para bajar la fiebre»: tratar la "
-            "fiebre solo cuando molesta, quitar ropa y ofrecer agua; NICE NG143 dice lo mismo "
-            "de los antitérmicos. Fiebre a los 15 meses con buen estado: no es bandera roja y "
-            "la respuesta tiene que salir de la evidencia."
-        ),
-    ),
     GoldenQuestion(
         "A20", "A",
         "Il a l'œil rouge et collé ce matin. C'est une conjonctivite ? Il peut aller à la crèche ?",
         locale="fr", age_months=14, distinct_sources=True,
         expect_source="conjuntivitis|conjunctivitis|conjonctivite",
-        every_citation_mentions="conjuntiv|conjunctiv|conjonctiv",
+        every_citation_mentions="conjuntiv|conjunctiv|conjonctiv|guarder|creche",
         rationale=(
             "Familia y Salud (AEPap) 2016, NHS 2024 y ameli 2025: tipos de conjuntivitis, "
             "limpieza de los ojos y guardería. En francés, para medir que la traducción al "
-            "español llegue a las tres."
-        ),
-    ),
-    # --- ojos_oidos_boca_uro_neuro --------------------------------------------
-    GoldenQuestion(
-        "A21", "A",
-        "Desde que nació le llora un ojo y se le llena de legañas. ¿Se le pasará solo?",
-        age_months=2, distinct_sources=True,
-        expect_source="conducto lagrimal|Lagrimeo en el lactante",
-        rationale=(
-            "Familia y Salud (AEPap) 2023 y HealthyChildren: la obstrucción del conducto "
-            "lagrimal se cura sola en la mayoría, casi todas antes de los 12 meses, con "
-            "limpieza y masaje. Las legañas llevan al léxico hacia conjuntivitis: mide que "
-            "el lagrimeo gane."
-        ),
-    ),
-    GoldenQuestion(
-        "A22", "A",
-        "My 10-month-old's foreskin won't pull back at all. Should I be pulling it back in "
-        "the bath?",
-        locale="en", age_months=10, distinct_sources=True,
-        expect_source="phimosis|fimosis|foreskin|prépuce|pene no circuncidado",
-        every_citation_mentions="prepucio|fimosis|phimosis|foreskin|prepuce|pene",
-        rationale=(
-            "Familia y Salud (AEPap) 2016 y 2022, NHS, AAP y ameli: la fimosis del bebé es "
-            "fisiológica y el prepucio no se fuerza. Cinco fuentes en tres idiomas, ninguna "
-            "tocada por el golden."
-        ),
-    ),
-    # --- seguridad ------------------------------------------------------------
-    GoldenQuestion(
-        "A23", "A",
-        "¿Hasta cuándo tiene que ir a contramarcha en el coche? Tiene 13 meses y ya toca el "
-        "asiento con los pies",
-        age_months=13, distinct_sources=True,
-        expect_source="contramarcha|orientados hacia atrás|car seat|en el coche",
-        rationale=(
-            "EnFamilia (AEP), Familia y Salud (AEPap) 2020, AAP 2021 y NHS: a contramarcha el "
-            "mayor tiempo posible, y que los pies toquen el respaldo no es motivo para girar "
-            "la silla."
-        ),
-    ),
-    GoldenQuestion(
-        "A24", "A",
-        "Is a baby walker safe? My 8-month-old loves it and my mum says it helps them walk "
-        "sooner",
-        locale="en", age_months=8, distinct_sources=True,
-        expect_source="andador|Caídas, muy frecuentes|psychomoteur entre 9 et 12",
-        rationale=(
-            "AAP 2022, «Los andadores para bebés: una elección peligrosa», EnFamilia (AEP) "
-            "sobre caídas y mpedia (AFPA) 2025: el andador causa lesiones y no adelanta la "
-            "marcha."
-        ),
-    ),
-    # --- neonatal -------------------------------------------------------------
-    GoldenQuestion(
-        "A25", "A",
-        "¿Cuándo se le cae el cordón? ¿Se lo limpio con alcohol? Tiene 6 días",
-        age_months=0, distinct_sources=True,
-        expect_source="cordón umbilical",
-        every_citation_mentions="cordon|ombligo|umbilical|munon",
-        rationale=(
-            "Familia y Salud (AEPap) 2023 y AAP 2025: el cordón cae entre los 5 y los 15 días "
-            "y basta con mantenerlo limpio y seco, sin alcohol."
-        ),
-    ),
-    GoldenQuestion(
-        "A26", "A",
-        "Mon bébé a 5 jours et il est tout jaune. On m'a dit que c'est normal, ça part quand ?",
-        locale="fr", age_months=0, distinct_sources=True,
-        expect_source="ictericia|jaundice",
-        rationale=(
-            "Familia y Salud (AEPap) 2018 y 2024, NHS, AAP y NICE CG98: la ictericia "
-            "fisiológica empieza entre el 2.º y el 4.º día y se va en dos semanas. Es la edad "
-            "en la que la guía vale; B8 pregunta lo mismo a los 4 meses y debe negarse."
+            "español llegue a las tres. Pregunta también por la guardería, así que una tarjeta "
+            "sobre cuándo no llevarle cuenta como del tema (medido el 6-nov-2026)."
         ),
     ),
     # --- salud_madre_familia --------------------------------------------------
@@ -736,74 +893,13 @@ CANDIDATES: tuple[GoldenQuestion, ...] = (
             "abrumada"
         ),
         every_citation_mentions=(
-            "depresi|tristeza|blues|posparto|postparto|postnatal|post partum|abrumada"
+            "depresi|tristeza|blues|posparto|postparto|postnatal|post partum|abrumada|agotad"
         ),
         rationale=(
             "Familia y Salud (AEPap) 2021, NHS 2026 y AAP 2022: la tristeza posparto dura unas "
             "dos semanas; pasadas cinco, con llanto diario y sin ganas, hay que consultarlo. "
-            "La pregunta es de la madre, no del bebé."
-        ),
-    ),
-    GoldenQuestion(
-        "A28", "A",
-        "How long can expressed breast milk stay in the fridge? I'm going back to work next "
-        "month",
-        locale="en", age_months=4, distinct_sources=True,
-        expect_source="leche materna|sacado la leche|breast milk|Allaiter et travailler",
-        rationale=(
-            "Familia y Salud (AEPap) 2018, «Ya me he sacado la leche», AAP 2024 y NHS 2026: "
-            "tiempos de conservación de la leche extraída en nevera y congelador."
-        ),
-    ),
-    # --- guarderia_adaptacion -------------------------------------------------
-    GoldenQuestion(
-        "A29", "A",
-        "She's 13 months and cries every morning at nursery drop-off. It's week three. Will it "
-        "ever stop?",
-        locale="en", age_months=13, distinct_sources=True,
-        expect_source="adaptación|transition to",
-        rationale=(
-            "Familia y Salud (AEPap) 2018, «La adaptación a la escuela», el modelo de Berlín y "
-            "los estudios de transición a la guardería: el llanto de las primeras semanas es "
-            "esperable y baja con una adaptación acompañada. A3 y A15 tocan las fuentes con "
-            "«guardería» en el título; esta, las demás."
-        ),
-    ),
-    GoldenQuestion(
-        "A30", "A",
-        "Desde que va a la guarde siempre está malito, un catarro detrás de otro. ¿Es normal?",
-        age_months=12, distinct_sources=True,
-        expect_source=(
-            "on the common cold|early daycare|childcare attendance|Acute Respiratory Infections|"
-            "siempre tiene mocos|catarro"
-        ),
-        rationale=(
-            "Ball 2002 y Kamper-Jørgensen 2006: más resfriados en el primer año de guardería; "
-            "EnFamilia (AEP) y SEUP: cuántos catarros son normales. Sin duraciones en la frase: "
-            "«cada dos semanas» se leía como la edad y disparaba la fiebre del menor de 3 meses."
-        ),
-    ),
-    # --- digestivo_piel -------------------------------------------------------
-    GoldenQuestion(
-        "A31", "A",
-        "Tiene la piel muy seca y rojeces en las mejillas que se rasca. ¿Es dermatitis atópica? "
-        "¿Cada cuánto la baño?",
-        age_months=6, distinct_sources=True,
-        expect_source="dermatitis atópica|atopic eczema",
-        every_citation_mentions="atopic|eccema|eczema|piel",
-        rationale=(
-            "Familia y Salud (AEPap) 2016 y 2017, AEDV 2020 y NHS 2024: cómo es el eccema del "
-            "lactante, baño corto e hidratación después."
-        ),
-    ),
-    GoldenQuestion(
-        "A32", "A",
-        "Il a des croûtes jaunes sur la tête. C'est des croûtes de lait ? Je peux les enlever ?",
-        locale="fr", age_months=2, distinct_sources=True,
-        expect_source="costra láctea|cradle cap",
-        rationale=(
-            "Familia y Salud (AEPap) 2024 y NHS 2025: aceite o vaselina y champú suave, sin "
-            "arrancar las escamas."
+            "La pregunta es de la madre, no del bebé. Pregunta también si es normal, así que "
+            "una tarjeta sobre la madre agotada cuenta como del tema (medido el 6-nov-2026)."
         ),
     ),
     # --- respiratorio_sueno ---------------------------------------------------
@@ -813,69 +909,12 @@ CANDIDATES: tuple[GoldenQuestion, ...] = (
         "¿Necesita antibiótico?",
         age_months=11, distinct_sources=True,
         expect_source="otitis|ear infections|infección de los oídos",
-        every_citation_mentions="otitis|oido|oreja|ear infection",
+        every_citation_mentions="otitis|oido|oreja|ear infection|catarr|resfriad|mocos",
         rationale=(
             "EnFamilia (AEP), Familia y Salud (AEPap) 2018, SEUP y NHS: el 80 % de las otitis "
-            "se curan sin antibiótico; se trata el dolor y se vigila."
-        ),
-    ),
-    GoldenQuestion(
-        "A34", "A",
-        "Il a le nez bouché, il a du mal à téter. Comment je lui fais un lavage de nez ?",
-        locale="fr", age_months=3, distinct_sources=True,
-        expect_source="lavados nasales|catarro",
-        rationale=(
-            "EnFamilia (AEP) y Familia y Salud (AEPap) 2023: el lactante no sabe respirar por "
-            "la boca, por eso se lava la nariz antes de las tomas, paso a paso."
-        ),
-    ),
-    # --- desarrollo_0_24m -----------------------------------------------------
-    GoldenQuestion(
-        "A35", "A",
-        "Tiene 18 meses y solo dice mamá, papá y agua. ¿Debería decir más palabras?",
-        age_months=18, distinct_sources=True,
-        expect_source="lenguaje|primeras palabras|18 meses y a los 2 años",
-        rationale=(
-            "CDC 2026 (indicadores de los 18 meses: tres palabras o más además de mamá y papá), "
-            "EnFamilia (AEP) y Familia y Salud (AEPap) sobre el lenguaje hasta los 24 meses. "
-            "Del lenguaje y no de la marcha: B2 (gateo) sigue en el grupo B."
-        ),
-    ),
-    GoldenQuestion(
-        "A36", "A",
-        "Il a ses vaccins des 2 mois la semaine prochaine. C'est lesquels, et ils sont "
-        "obligatoires ?",
-        locale="fr", age_months=2, distinct_sources=True,
-        expect_source="vaccin|vacunaci",
-        every_citation_mentions="vacun|vaccin",
-        rationale=(
-            "ameli 2026 y Vaccination Info Service: vacunas obligatorias del lactante en "
-            "Francia a los 2, 4 y 11 meses; el calendario español (CISNS y CAV-AEP 2026) "
-            "también vale como fuente."
-        ),
-    ),
-    # --- alimentacion_bebes ---------------------------------------------------
-    GoldenQuestion(
-        "A37", "A",
-        "Quiero empezar con BLW, trozos en vez de purés. ¿Es seguro o es mejor empezar con "
-        "purés?",
-        age_months=6, distinct_sources=True,
-        expect_source="Métodos de alimentación complementaria",
-        rationale=(
-            "Comité de Nutrición de la AEP 2026, mapa de la evidencia del BLW: el riesgo de "
-            "atragantamiento depende de la habilidad del bebé y no del método. Sin la palabra "
-            "atragantarse en la frase, que dispara la bandera roja."
-        ),
-    ),
-    GoldenQuestion(
-        "A38", "A",
-        "Con la gastroenteritis no quiere comer nada. ¿La obligo o le doy solo líquidos?",
-        age_months=13, distinct_sources=True,
-        expect_source="diarrea aguda|gastroenteritis aguda|Effects of common illnesses",
-        rationale=(
-            "Guía de Algoritmos AEPap 2021 (diarrea aguda): ofrecer comida sin forzar, "
-            "respetando la falta de apetito; Familia y Salud (AEPap) y SEUP: volver a comer "
-            "pronto y mantener la lactancia."
+            "se curan sin antibiótico; se trata el dolor y se vigila. Dice que tiene mocos desde "
+            "hace días, así que una tarjeta sobre el catarro y sus complicaciones cuenta como "
+            "del tema (medido el 6-nov-2026)."
         ),
     ),
     # --- urgencias_lactante ---------------------------------------------------
@@ -884,25 +923,21 @@ CANDIDATES: tuple[GoldenQuestion, ...] = (
         "¿Cómo se hace la maniobra de los golpes en la espalda? Quiero aprenderla antes de "
         "empezar con los sólidos",
         age_months=6, distinct_sources=True,
-        expect_source="Soporte vital pediátrico",
+        expect_source="Soporte vital pediátrico|Atragantamiento",
+        every_citation_mentions=(
+            "atragant|soporte vital|golpes en la espalda|cuerpo extrano|via aerea"
+        ),
         rationale=(
             "ERC 2021: golpes en la espalda y compresiones en el lactante consciente que se "
             "atraganta. Preguntado en calma, antes de que pase: no es bandera roja y la "
             "respuesta sale de la guía. Las demás fuentes del tema (anafilaxia, convulsión "
-            "febril) solo se alcanzan con frases que disparan el detector."
+            "febril) solo se alcanzan con frases que disparan el detector. Vale también "
+            "«Atragantamiento» (Comité de Soporte Vital, AEP), la prevención antes de los "
+            "sólidos; como eso la hace más fácil de pasar, cada tarjeta tiene que hablar de "
+            "atragantamiento. El léxico de madre la acerca desde el 6-nov-2026."
         ),
     ),
     # --- B: one near miss per theme ------------------------------------------
-    GoldenQuestion(
-        "B18", "B",
-        "Ha pillado piojos en la guarde. ¿Qué champú le pongo y cuándo puede volver?",
-        age_months=22, kind="adjacent",
-        rationale=(
-            "Ninguna fuente nombra piojos ni pediculosis. «Guarde» y «cuándo puede volver» "
-            "acercan la pregunta a los fragmentos de enfermedades contagiosas y vuelta a la "
-            "guardería: una respuesta con cita sería de otra infección."
-        ),
-    ),
     GoldenQuestion(
         "B19", "B",
         "¿A qué edad le puedo hacer los agujeros de las orejas para los pendientes? Tiene "
@@ -911,16 +946,6 @@ CANDIDATES: tuple[GoldenQuestion, ...] = (
         rationale=(
             "El corpus trata oídos (otitis, audición) y piel, nunca la perforación de las "
             "orejas: «agujero» solo sale en pilas de botón, caries y el chupete."
-        ),
-    ),
-    GoldenQuestion(
-        "B20", "B",
-        "Mi hijo tiene 4 años, ¿puede ir ya sin silla, solo con el cinturón?",
-        age_months=48, kind="age_band",
-        rationale=(
-            "El corpus de sillas de coche habla del bebé y de la ley hasta 135 cm, no del niño "
-            "de 4 años. La frase lo dice, así que el filtro de edad (clinical/age_scope) se "
-            "niega antes de buscar; mide ese filtro con el vocabulario de seguridad."
         ),
     ),
     GoldenQuestion(
@@ -977,15 +1002,6 @@ CANDIDATES: tuple[GoldenQuestion, ...] = (
         ),
     ),
     GoldenQuestion(
-        "B26", "B",
-        "Mi hija de 20 meses lo coge todo con la izquierda. ¿Será zurda? ¿La corrijo?",
-        age_months=20, kind="adjacent",
-        rationale=(
-            "Vecina de los hitos motores y la motricidad fina, que el corpus cubre a fondo; "
-            "la lateralidad no aparece (zurdo, cero menciones)."
-        ),
-    ),
-    GoldenQuestion(
         "B27", "B",
         "Ma fille a 14 mois, je peux remplacer le lait de vache par une boisson à l'avoine ?",
         locale="fr", age_months=14, kind="adjacent",
@@ -996,6 +1012,37 @@ CANDIDATES: tuple[GoldenQuestion, ...] = (
         ),
     ),
 )
+
+
+#: Why each candidate failed the production measurement of 2026-11-06
+#: (scripts/preview_golden_candidates.py, cut 0.19, lexicon on), one line each,
+#: so the next measurement starts from the last one. The B near misses are
+#: scored by the gate on the model's refusal, not on the cut; the preview asks
+#: for nothing under the cut, so a B with cards needs the gate itself to say.
+CANDIDATE_MISSES_2026_11_06: dict[str, str] = {
+    "A20": "Fuente en las tarjetas; la cuarta, «¿Cuándo no deben ir los niños a la guardería?», "
+           "no nombraba la conjuntivitis aunque responde a la otra mitad de la pregunta.",
+    "A27": "Fuente en las tarjetas; la tercera, «Cómo lidiar con los desafíos de ser una nueva "
+           "madre» (AAP), habla de la madre agotada y no nombraba la depresión.",
+    "A33": "Fuente en las tarjetas; la tercera, «Catarro o resfriado» (EnFamilia, AEP), responde "
+           "a los mocos de la pregunta y no nombraba la otitis.",
+    "A39": "Ninguna tarjeta bajo el corte: «Soporte vital pediátrico» quedó a 0,1977 (corte "
+           "0,19); el léxico no tenía entrada para la maniobra.",
+    "B19": "Cuatro tarjetas bajo el corte (0,18) que no responden: prevención de accidentes, "
+           "audición, atragantamiento con juguetes y dientes.",
+    "B21": "Cuatro tarjetas bajo el corte (0,14 a 0,15) sobre la leche de la madre, ninguna "
+           "sobre los pechos hinchados del recién nacido.",
+    "B22": "Cuatro tarjetas bajo el corte (0,17) de lactancia y crianza, ninguna sobre "
+           "anticonceptivos.",
+    "B23": "Mixta: las cuatro tarjetas (0,14 a 0,16) son de adaptación a la guardería, la mitad "
+           "cubierta; ninguna habla de valeriana.",
+    "B24": "Cuatro tarjetas bajo el corte (0,18) sobre cuerpos extraños y pilas de botón, "
+           "ninguna sobre el molusco contagioso.",
+    "B25": "Dosis: cuatro tarjetas bajo el corte (0,14 a 0,16) sobre sibilancias y tos, ninguna "
+           "con salbutamol ni pulsaciones.",
+    "B27": "Cuatro tarjetas bajo el corte (0,16) sobre la leche de vaca a partir del año; el "
+           "corpus no nombra las bebidas vegetales, así que sigue siendo una B.",
+}
 
 
 #: The ids written on 2026-11-06, wherever they now live. A candidate keeps

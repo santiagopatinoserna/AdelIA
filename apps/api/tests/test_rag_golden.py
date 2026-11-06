@@ -98,7 +98,9 @@ _CONFIGURED_PROVIDER = settings.llm_provider
 DEPLOY_ENV = "ADELIA_GOLDEN_DEPLOY"
 #: Answers in flight at once. Measured on 2026-11-06 against the dev corpus,
 #: 23 of the 33 A and B questions reach the generative model (17 of A, the 6
-#: near misses of B that retrieve something); one at a time that is several
+#: near misses of B that retrieve something). The 20 promoted on 2026-11-06 add
+#: 17 answers of A and none of B (B18 and B26 retrieve nothing under the cut,
+#: B20 stops at the age scope), about 40 of 53; one at a time that is several
 #: minutes of a deploy, four at a time it stays near the three the deploy can
 #: afford, and four stays well inside the database pool and the rate limits.
 GOLDEN_CONCURRENCY = 4
@@ -140,15 +142,16 @@ def test_the_original_fifteen_are_still_the_first_fifteen_in_spanish():
     assert [q.id for q in questions("C")][:5] == list(ORIGINAL_IDS[10:])
 
 
-def test_the_set_is_forty_eight_questions_in_three_groups():
+def test_the_set_is_sixty_eight_questions_in_three_groups():
     # 42 until A13-A16 were added from the 2026-10-14 demo measurement; 46
     # until B5 and B10 moved to A17 and A18 and B16 and B17 took their place
-    # in group B (2026-11-03, the digestive and skin corpus answers them).
-    assert len(GOLDEN_SET) == 48
-    assert len(questions("A")) == 18
-    assert len(questions("B")) == 15
+    # in group B (2026-11-03, the digestive and skin corpus answers them); 48
+    # until 17 A and 3 B of the 2026-11-06 candidates passed in production.
+    assert len(GOLDEN_SET) == 68
+    assert len(questions("A")) == 35
+    assert len(questions("B")) == 18
     assert len(questions("C")) == 15
-    assert len({q.id for q in GOLDEN_SET}) == 48
+    assert len({q.id for q in GOLDEN_SET}) == 68
 
 
 def test_every_group_speaks_all_three_locales():
@@ -168,8 +171,8 @@ def test_the_count_per_group_and_locale_is_the_published_table():
         for loc in LOCALES
     }
     assert table == {
-        ("A", "es"): 11, ("A", "en"): 4, ("A", "fr"): 3,
-        ("B", "es"): 9, ("B", "en"): 3, ("B", "fr"): 3,
+        ("A", "es"): 20, ("A", "en"): 8, ("A", "fr"): 7,
+        ("B", "es"): 12, ("B", "en"): 3, ("B", "fr"): 3,
         ("C", "es"): 5, ("C", "en"): 5, ("C", "fr"): 5,
     }
 
@@ -797,13 +800,13 @@ async def test_the_gate_passes_with_canned_perfect_answers_and_publishes_every_q
     await module.test_groups_a_and_b_meet_the_deploy_gate()
     data = json.loads(path.read_text(encoding="utf-8"))
     assert data["recall_at_4"] == 1.0 and data["refusal_rate"] == 1.0 and data["red_flag_rate"] == 1.0
-    assert data["questions_run"] == {"A": 18, "B": 15, "C": 15}
+    assert data["questions_run"] == {"A": 35, "B": 18, "C": 15}
     assert set(data["results"]) == {q.id for q in GOLDEN_SET}
     assert all(r["passed"] for r in data["results"].values())
     assert data["questions_run_by_locale"] == {
-        "es": {"A": 11, "B": 9, "C": 5},
-        "en": {"A": 4, "B": 3, "C": 5},
-        "fr": {"A": 3, "B": 3, "C": 5},
+        "es": {"A": 20, "B": 12, "C": 5},
+        "en": {"A": 8, "B": 3, "C": 5},
+        "fr": {"A": 7, "B": 3, "C": 5},
     }
     assert data["blind_spots"], "the report must carry the blind-spots section"
     assert data["misses"] == [] and data["skipped_reason"] is None
@@ -821,7 +824,7 @@ async def test_a_group_b_answer_that_gives_a_dose_instead_of_refusing_fails_the_
     data = json.loads(path.read_text(encoding="utf-8"))
     assert data["results"]["B6"]["passed"] is False
     assert data["results"]["B6"]["kind"] == "dose"
-    assert data["refusal_rate"] == pytest.approx(14 / 15)
+    assert data["refusal_rate"] == pytest.approx(17 / 18)
     assert any(m.startswith("B6:") for m in data["misses"])
 
 
@@ -831,13 +834,18 @@ async def test_an_a_question_whose_source_is_missing_is_recorded_as_a_miss(monke
     # twelve questions (9/12 = 0.75). With A13-A16 it has sixteen, three misses
     # are 13/16 = 0.8125 and the gate rightly lets them pass, so A16 joins them:
     # 12/16 is the same 0.75 and the same failure. With A17 and A18 (2026-11-03)
-    # the same four misses are 14/18, about 0.78: still under the bar.
-    path, module = _drive_the_gate(monkeypatch, tmp_path, bad_a=("A10", "A11", "A12", "A16"))
+    # the same four misses are 14/18, about 0.78: still under the bar. With the
+    # 17 promoted on 2026-11-06 group A has 35 and 28/35 is exactly 0.8, so it
+    # takes eight: every French question (seven) and A16, 27/35, about 0.77.
+    path, module = _drive_the_gate(
+        monkeypatch, tmp_path,
+        bad_a=("A10", "A11", "A12", "A16", "A26", "A32", "A34", "A36"),
+    )
     with pytest.raises(AssertionError):
         await module.test_groups_a_and_b_meet_the_deploy_gate()
     data = json.loads(path.read_text(encoding="utf-8"))
-    assert data["recall_at_4"] == pytest.approx(14 / 18)
-    assert data["rates_by_locale"]["A"] == {"en": 1.0, "es": round(10 / 11, 4), "fr": 0.0}
+    assert data["recall_at_4"] == pytest.approx(27 / 35)
+    assert data["rates_by_locale"]["A"] == {"en": 1.0, "es": round(19 / 20, 4), "fr": 0.0}
 
 
 @pytest.mark.asyncio
@@ -1324,6 +1332,114 @@ def test_urgencias_gets_one_question_because_the_rest_are_red_flags(title, quest
 def test_the_2026_11_06_questions_speak_all_three_locales_in_both_groups():
     for group in ("A", "B"):
         assert {q.locale for q in NOV6 if q.group == group} == set(LOCALES), group
+
+
+# --- the production measurement of 2026-11-06 --------------------------------
+
+#: The 20 of 31 that scripts/preview_golden_candidates.py passed against the
+#: production corpus on 2026-11-06 (~/dev/adelia-design/shots/
+#: golden-candidates-preview.txt). They moved into the gate with their ids,
+#: their wording and the vectors that run recorded.
+PROMOTED_2026_11_06 = (
+    "A19", "A21", "A22", "A23", "A24", "A25", "A26", "A28", "A29", "A30", "A31", "A32",
+    "A34", "A35", "A36", "A37", "A38", "B18", "B20", "B26",
+)
+
+
+def test_the_twenty_that_passed_in_production_are_in_the_gate():
+    gate = [q.id for q in GOLDEN_SET]
+    assert set(PROMOTED_2026_11_06) <= set(gate)
+    assert len(gate) == len(set(gate))
+
+
+def test_the_eleven_that_failed_in_production_are_still_candidates():
+    assert sorted(q.id for q in CANDIDATES) == sorted(
+        set(BLIND_SPOT_IDS_2026_11_06) - set(PROMOTED_2026_11_06)
+    )
+
+
+def test_every_candidate_says_why_it_failed_in_production():
+    """One line per question, so the next measurement starts from the last one."""
+    from adelia.clinical.golden import CANDIDATE_MISSES_2026_11_06
+
+    assert set(CANDIDATE_MISSES_2026_11_06) == {q.id for q in CANDIDATES}
+    for qid, why in CANDIDATE_MISSES_2026_11_06.items():
+        assert why.strip() and "\n" not in why, qid
+
+
+#: The card that failed each two-part question in production on 2026-11-06,
+#: title and snippet as the preview printed them (start of the fragment).
+_SECOND_HALF_CARDS = {
+    "A20": {
+        "tag": "ev_4", "source_id": "guarderia",
+        "title": "¿Cuándo no deben ir los niños a la guardería?",
+        "snippet": "¿Cuándo no deben ir los niños a la guardería?: implicación práctica para "
+                   "padres de un bebé de 12-18 meses. El criterio no es solo la tabla "
+                   "diagnóstica (que no excluiría un catarro sin fiebre)",
+    },
+    "A27": {
+        "tag": "ev_3", "source_id": "nueva-madre",
+        "title": "Cómo lidiar con los desafíos de ser una nueva madre (HealthyChildren, AAP)",
+        "snippet": "Cómo lidiar con los desafíos de ser una nueva madre (HealthyChildren, "
+                   "American Academy of Pediatrics, 2020). Tema: cuidar de la madre agotada. "
+                   "Hallazgo: es normal sentirse frustrada y agotada, sobre todo si el bebé "
+                   "llora mucho o no duerme.",
+    },
+    "A33": {
+        "tag": "ev_3", "source_id": "catarro",
+        "title": "Catarro o resfriado (EnFamilia, AEP)",
+        "snippet": "Catarro o resfriado (EnFamilia, Asociación Española de Pediatría). Tema: "
+                   "cuándo llevar al pediatra a un niño acatarrado. Hallazgo: los catarros sin "
+                   "complicaciones se curan solos y no necesitan medicinas",
+    },
+}
+
+#: A card measured under another question (B24): on topic for none of them.
+_OFF_TOPIC_CARD = {
+    "tag": "ev_2", "source_id": "pilas",
+    "title": "Peligro de la ingesta de pilas de botón (EnFamilia, AEP)",
+    "snippet": "Peligro de la ingesta de pilas de botón (EnFamilia, Asociación Española de "
+               "Pediatría). Tema: qué hacer si un niño se traga una pila.",
+}
+
+
+@pytest.mark.parametrize("qid", sorted(_SECOND_HALF_CARDS))
+def test_a_card_on_the_second_half_of_the_question_is_on_topic(qid):
+    """A20 asks about the nursery too, A27 whether it is normal, A33 says mocos:
+    the card that answers that half is evidence for her question, not noise."""
+    q = next(q for q in written_2026_11_06() if q.id == qid)
+    assert citation_defects(q, [_SECOND_HALF_CARDS[qid]]) == []
+
+
+@pytest.mark.parametrize("qid", sorted(_SECOND_HALF_CARDS))
+def test_a_two_part_question_still_rejects_a_card_on_neither_part(qid):
+    q = next(q for q in written_2026_11_06() if q.id == qid)
+    defects = citation_defects(q, [_SECOND_HALF_CARDS[qid], _OFF_TOPIC_CARD])
+    assert len(defects) == 1 and "no habla del tema" in defects[0]
+
+
+def test_a39_takes_either_choking_source_and_no_other_card():
+    """ERC 2021 (the manoeuvre) or the AEP choking page (prevention before solids)
+    is her answer. Widening expect_source to the second makes A39 easier to
+    pass, so every card must now be about choking: in production the next
+    nearest were «Golpe de calor» and a page on squinting."""
+    q = next(q for q in written_2026_11_06() if q.id == "A39")
+    assert source_matches(q.expect_source, "Atragantamiento (Comité de Soporte Vital, AEP)")
+    assert source_matches(q.expect_source, "Soporte vital pediátrico: guías 2021 del European "
+                                           "Resuscitation Council")
+    erc = {"tag": "ev_1", "source_id": "erc",
+           "title": "Soporte vital pediátrico: guías 2021 del European Resuscitation Council",
+           "snippet": "Soporte vital pediátrico, guías ERC 2021 (Van de Voorde P y cols.). Tema: "
+                      "tos eficaz frente a tos ineficaz."}
+    heat = {"tag": "ev_2", "source_id": "calor", "title": "Golpe de calor (EnFamilia, AEP)",
+            "snippet": "Golpe de calor (EnFamilia, AEP). Tema: qué hacer si un niño se acalora."}
+    assert citation_defects(q, [erc]) == []
+    assert len(citation_defects(q, [erc, heat])) == 1
+
+
+def test_every_gate_question_has_its_recorded_vector():
+    """A promotion without its vectors would make A and B skip everywhere but the deploy."""
+    assert _missing_recordings(_recorded_embeddings()) == []
 
 
 # --- a question without its vector never passes unmeasured -------------------
