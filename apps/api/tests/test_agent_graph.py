@@ -22,7 +22,7 @@ import pytest
 
 from adelia.agent.graph import GraphDeps, GraphUnavailable, run_graph
 from adelia.agent.route import RouteDecision
-from adelia.clinical.golden import is_refusal
+from adelia.clinical.golden import GOLDEN_SET, is_refusal
 from adelia.enrichment.evidence_retrieval import EvidenceMatch
 from adelia.enrichment.profile_service import ProfileFacts
 from adelia.services.answer_contract import (
@@ -595,3 +595,157 @@ async def test_the_lexicon_reads_the_spanish_corpus_text_of_a_french_question(mo
     fakes = VectorFakes(intent="plan")
     await _run(fakes, "Elle a les fesses toutes rouges", locale="fr", corpus_text=_corpus_text)
     assert _retrieval_calls(fakes)[0] == ("embed", [LAY, expanded_query(LAY)])
+
+
+# --- when to see a doctor, from the library (agent/warning_signs.py) --------------
+#
+# Measured in prod on 2026-11-06 (demo, Claude): the croup plan cited AEP, AEPap
+# and SEUP and then said it had no evidence on when to go to the emergency
+# room. The guides say it; the paragraph was not among the four retrieved.
+# Behind settings.warning_signs_retrieval, a plan whose main search found
+# evidence searches the same topic plus the warning-sign words, under the same
+# cut-offs, and keeps up to two new fragments. Off means the exact calls of before.
+
+CROUP = "Tiene tos de perro por la noche, ¿qué puedo hacer en casa?"
+
+
+def _with(source_of, distance, label):
+    return EvidenceMatch(**{**source_of.__dict__, "chunk_id": uuid.uuid4(),
+                            "content": label, "distance": distance})
+
+
+MAIN = _match("evidence", "Laringitis (AEPap)")
+ALARM = _with(MAIN, 0.12, "Acude a urgencias si respira con ruido en reposo")
+
+
+def test_the_warning_signs_search_is_off_by_default():
+    from adelia.config import Settings
+
+    assert Settings.model_fields["warning_signs_retrieval"].default is False
+
+
+async def test_with_the_warning_search_off_retrieval_is_exactly_what_it_was(monkeypatch):
+    from adelia.agent import warning_signs
+    from adelia.config import settings
+
+    monkeypatch.setattr(settings, "warning_signs_retrieval", False)
+    monkeypatch.setattr(settings, "lay_query_expansion", False)
+
+    def _never(*args, **kwargs):
+        raise AssertionError("the warning query is built with the setting off")
+
+    monkeypatch.setattr(warning_signs, "warning_query", _never)
+    fakes = Fakes(intent="plan", experience=[EXPERIENCE])
+    out = await _run(fakes, CROUP)
+    cuts = {
+        "max_distance": settings.evidence_max_distance,
+        "relative_margin": settings.evidence_relative_margin,
+    }
+    assert _retrieval_calls(fakes) == [
+        ("embed", [CROUP]),
+        ("evidence", {"query_embedding": [0.0] * 1024, "specialties": ["pediatrics"],
+                      "top_k": 4, **cuts}),
+        ("experience", {"query_embedding": [0.0] * 1024, "top_k": 3, **cuts}),
+    ]
+    assert out["evidence"] == [EVIDENCE]
+
+
+async def test_a_plan_with_evidence_also_searches_its_warning_signs(monkeypatch):
+    """One embedding call for both texts, the same cut-offs, the new fragment last."""
+    from adelia.agent.warning_signs import warning_query
+    from adelia.config import settings
+
+    monkeypatch.setattr(settings, "warning_signs_retrieval", True)
+    monkeypatch.setattr(settings, "lay_query_expansion", False)
+    fakes = VectorFakes(intent="plan", by_vector={0.0: [MAIN], 1.0: [MAIN, ALARM]})
+    out = await _run(fakes, CROUP)
+    calls = _retrieval_calls(fakes)
+    assert [c for c in calls if c[0] == "embed"] == [("embed", [CROUP, warning_query(CROUP, "es")])]
+    searches = [kwargs for name, kwargs in calls if name == "evidence"]
+    assert [s["query_embedding"][0] for s in searches] == [0.0, 1.0]
+    for s in searches:
+        assert s["specialties"] == ["pediatrics"] and s["top_k"] == 4
+        assert s["max_distance"] == settings.evidence_max_distance
+        assert s["relative_margin"] == settings.evidence_relative_margin
+    assert out["evidence"] == [MAIN, ALARM]
+    (_, experience), = [c for c in calls if c[0] == "experience"]
+    assert experience["query_embedding"][0] == 0.0, "other mothers: her sentence only"
+    (_, _, prompt), = [c for c in fakes.calls if c[0] == "generate"]
+    assert "[ev_2]" in prompt and ALARM.content in prompt
+
+
+async def test_the_warning_terms_follow_the_language_of_the_question(monkeypatch):
+    from adelia.agent.warning_signs import warning_query
+    from adelia.config import settings
+
+    monkeypatch.setattr(settings, "warning_signs_retrieval", True)
+    monkeypatch.setattr(settings, "lay_query_expansion", False)
+    question = "My baby has a barking cough at night, what can I do at home?"
+    fakes = VectorFakes(intent="plan", by_vector={0.0: [MAIN], 1.0: [ALARM]})
+    await _run(fakes, question, locale="en")
+    (_, texts), = [c for c in fakes.calls if c[0] == "embed"]
+    assert texts[-1] == warning_query(question, "en")
+    assert "when to see a doctor" in texts[-1]
+
+
+async def test_a_short_answer_never_runs_the_warning_search(monkeypatch):
+    from adelia.config import settings
+
+    monkeypatch.setattr(settings, "warning_signs_retrieval", True)
+    monkeypatch.setattr(settings, "lay_query_expansion", False)
+    fakes = VectorFakes(intent="question", by_vector={0.0: [MAIN], 1.0: [ALARM]})
+    out = await _run(fakes, "¿A qué edad suelen empezar a gatear?")
+    calls = _retrieval_calls(fakes)
+    assert calls[0] == ("embed", ["¿A qué edad suelen empezar a gatear?"])
+    assert [c[0] for c in calls].count("evidence") == 1
+    assert out["evidence"] == [MAIN]
+
+
+@pytest.mark.parametrize("question", [
+    # B4 of the golden set, and a question the corpus does not hold either.
+    next(q.question for q in GOLDEN_SET if q.id == "B4"),
+    "¿Qué marca de cochecito plegable es la más ligera?",
+])
+async def test_without_main_evidence_the_warning_search_never_answers(monkeypatch, question):
+    """The warning vector would find fragments; it is never searched, the code refuses."""
+    from adelia.config import settings
+
+    monkeypatch.setattr(settings, "warning_signs_retrieval", True)
+    fakes = VectorFakes(intent="plan", by_vector={0.0: [], 1.0: [ALARM]})
+    out = await _run(fakes, question)
+    assert out["kind"] == "no_evidence"
+    assert out["answer"] == no_evidence_reply("es")
+    assert [c[0] for c in _retrieval_calls(fakes)].count("evidence") == 1
+    assert "generate" not in fakes.names()
+
+
+async def test_a_red_flag_never_reaches_the_warning_search(monkeypatch):
+    from adelia.agent import warning_signs
+    from adelia.config import settings
+
+    monkeypatch.setattr(settings, "warning_signs_retrieval", True)
+    built: list[str] = []
+    monkeypatch.setattr(warning_signs, "warning_query", lambda t, loc: built.append(t) or t)
+    fakes = VectorFakes()
+    out = await _run(fakes, "Tiene 2 meses, 38,5 de fiebre y tos de perro")
+    assert out["kind"] == "red_flag"
+    assert fakes.calls == [] and built == []
+
+
+async def test_with_both_searches_on_the_warning_query_widens_the_lay_one(monkeypatch):
+    """Her words, the corpus's terms and the warning words: three texts, one call."""
+    from adelia.agent.lay_terms import expanded_query
+    from adelia.agent.warning_signs import warning_query
+    from adelia.config import settings
+
+    monkeypatch.setattr(settings, "warning_signs_retrieval", True)
+    monkeypatch.setattr(settings, "lay_query_expansion", True)
+    fakes = VectorFakes(intent="plan", by_vector={0.0: [MAIN], 1.0: [], 2.0: [ALARM]})
+    out = await _run(fakes, CROUP)
+    widened = expanded_query(CROUP)
+    assert widened is not None
+    (_, texts), = [c for c in fakes.calls if c[0] == "embed"]
+    assert texts == [CROUP, widened, warning_query(widened, "es")]
+    searches = [kw["query_embedding"][0] for n, kw in _retrieval_calls(fakes) if n == "evidence"]
+    assert searches == [0.0, 1.0, 2.0]
+    assert out["evidence"] == [MAIN, ALARM]

@@ -283,6 +283,41 @@ _QUESTION_RULE: dict[str, str] = {
     ),
 }
 
+#: The coded refusal is for what she asked, behind settings.no_unasked_refusals.
+#: Measured in prod on 2026-11-06 (demo, Claude, 30 real questions): four good
+#: plans carried a section the model made up and closed with the refusal,
+#: "Cremas o pomadas para el pañal", "Edad exacta en meses", "Cómo corregirla"
+#: under a flat head and, under the croup plan, "Señales de alarma y cuándo
+#: acudir a urgencias: No tengo evidencia...". She asked none of them, and a
+#: mother with a croupy baby at night read that the library knew nothing about
+#: when to go. The partial-coverage clause above it still holds for what she
+#: did ask: B9 and B11 refuse their dose. This only narrows where the refusal
+#: goes, the way an empty plan section is already left out; a warning sign the
+#: sources carry is never what gets left out.
+NO_UNASKED_REFUSALS_RULE: dict[str, str] = {
+    "es": (
+        "La frase de rechazo exacta es solo para lo que la madre ha preguntado y las fuentes "
+        "no cubren. Si un apartado o un tema que ella no ha pedido (por ejemplo, cremas, una "
+        "edad exacta en meses o cómo corregirlo) no tiene fuente, omítelo, como se omite un "
+        "apartado vacío del plan: ni título ni frase de rechazo. Esto nunca quita una señal "
+        "de alarma que las fuentes sí traen."
+    ),
+    "en": (
+        "The exact refusal sentence is only for what the parent asked and the sources do not "
+        "cover. If a section or a topic she did not ask for (for example creams, an exact age "
+        "in months or how to correct it) has no source, leave it out, the way an empty plan "
+        "section is left out: no heading and no refusal sentence. This never removes a "
+        "warning sign the sources do carry."
+    ),
+    "fr": (
+        "La phrase de refus exacte est réservée à ce que le parent a demandé et que les "
+        "sources ne couvrent pas. Si une rubrique ou un sujet qu’il n’a pas demandé (par "
+        "exemple des crèmes, un âge exact en mois ou comment le corriger) n’a pas de source, "
+        "omets-le, comme on omet une rubrique vide du plan : ni titre ni phrase de refus. "
+        "Cela n’enlève jamais un signe d’alerte que les sources apportent."
+    ),
+}
+
 #: The answer shapes a surface may ask for. `plan` is the default and the
 #: path with the most safeguards; the graph picks `question` only when the
 #: route node said so (agent/graph.py).
@@ -350,6 +385,15 @@ def answer_contract(locale: str, *, shape: str = "plan") -> str:
     """
     c = contract_for(locale)
     language_rule = _language_rule(locale, shape)
+    # Off (the default), the contract is byte for byte what it was before the setting.
+    # Imported here, not at the top: the golden gate's group C imports this module
+    # and must run with no settings, database or key loaded (test_golden_metrics).
+    from adelia.config import settings
+
+    unasked = ""
+    if settings.no_unasked_refusals:
+        rule = NO_UNASKED_REFUSALS_RULE.get(locale, NO_UNASKED_REFUSALS_RULE[DEFAULT_LOCALE])
+        unasked = f"- {rule}\n"
     return f"""Reglas de respuesta (obligatorias, idénticas en el chat y en el agente):
 - Toda interpretación, valoración o recomendación clínica DEBE apoyarse en al menos una
   cita de evidencia [ev_1], [ev_2], ... Si NO hay un estudio o guía en el contexto que
@@ -367,7 +411,7 @@ def answer_contract(locale: str, *, shape: str = "plan") -> str:
   estas palabras exactas, en lugar de {c.no_info_phrase} u otra frase tuya:
   "{c.refusal}" Sobre esa parte no añadas nada más: ni una cifra, ni una pauta, ni nada
   de tu conocimiento general.
-- Si no tienes ninguna base documental para lo que se te pregunta, dilo con estas
+{unasked}- Si no tienes ninguna base documental para lo que se te pregunta, dilo con estas
   palabras exactas y no añadas nada más: "{c.refusal}"
 - {language_rule}
 - NUNCA inventes datos médicos ni estudios. NUNCA des consejos médicos definitivos.

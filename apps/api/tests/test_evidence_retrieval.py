@@ -385,3 +385,49 @@ def test_the_merge_honours_top_k_and_no_margin():
     merged = merge_by_best_distance([ranked[:3], ranked[3:]], top_k=4, relative_margin=None)
     assert [m.source_id for m in merged] == [A, B, C, D]
     assert merge_by_best_distance([[], []], top_k=4, relative_margin=0.08) == []
+
+
+# --- the warning-signs search adds, it never replaces (agent/warning_signs.py) ---
+#
+# With settings.warning_signs_retrieval on, a plan whose main search found
+# evidence runs a second search for the same topic plus the warning-sign terms.
+# What it brings is appended after what the main search found: the main list,
+# its order and its [ev_N] numbering are untouched; at most two new fragments,
+# never one already there, those of the sources already retrieved first.
+
+
+def test_warning_fragments_go_after_the_main_ones_and_never_repeat_a_fragment():
+    from adelia.enrichment.evidence_retrieval import add_warning_fragments
+
+    a, b = _m(A, 0.08, "a"), _m(B, 0.10, "b")
+    a_alarm = _m(A, 0.12, "a-alarm")
+    assert add_warning_fragments([a, b], [a, a_alarm]) == [a, b, a_alarm]
+
+
+def test_warning_fragments_prefer_the_sources_already_retrieved():
+    """The croup plan cited AEPap; the AEPap paragraph on when to go wins over a
+    closer paragraph of a source the plan never used."""
+    from adelia.enrichment.evidence_retrieval import add_warning_fragments
+
+    a, b = _m(A, 0.08, "a"), _m(B, 0.10, "b")
+    stranger, a_alarm, b_alarm = _m(C, 0.05, "c"), _m(A, 0.15, "a-alarm"), _m(B, 0.11, "b-al")
+    got = add_warning_fragments([a, b], [stranger, a_alarm, b_alarm])
+    assert got == [a, b, b_alarm, a_alarm]
+
+
+def test_warning_fragments_are_at_most_two_and_fill_with_other_sources():
+    from adelia.enrichment.evidence_retrieval import add_warning_fragments
+
+    a = _m(A, 0.08, "a")
+    a_alarm, c, d = _m(A, 0.12, "a-alarm"), _m(C, 0.06, "c"), _m(D, 0.07, "d")
+    assert add_warning_fragments([a], [c, a_alarm, d]) == [a, a_alarm, c]
+    assert add_warning_fragments([a], [c, a_alarm, d], limit=1) == [a, a_alarm]
+
+
+def test_warning_fragments_add_nothing_to_an_empty_main_search():
+    """No evidence stays no evidence: the warning search cannot answer a question."""
+    from adelia.enrichment.evidence_retrieval import add_warning_fragments
+
+    assert add_warning_fragments([], [_m(A, 0.05, "a")]) == []
+    a = _m(A, 0.08, "a")
+    assert add_warning_fragments([a], []) == [a]

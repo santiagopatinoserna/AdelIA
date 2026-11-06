@@ -226,6 +226,25 @@ class Settings(BaseSettings):
     # retrieval makes exactly the calls it made before this setting existed.
     lay_query_expansion: bool = False
 
+    # "Cuándo ir al médico" from the library (agent/warning_signs.py). Measured in prod on
+    # 2026-11-06 (demo, Claude, 30 real questions): the croup plan cited AEP, AEPap and
+    # SEUP and then said it had no evidence on when to go to the emergency room. The
+    # guides say it; that paragraph was not among the four fragments retrieved. On, a
+    # plan whose main search already found evidence also searches the same topic plus
+    # the warning-sign words of her language, under the same two cut-offs, and adds up
+    # to two new fragments. It never runs without main evidence, so it cannot turn a
+    # refusal into an answer. OFF until scripts/probe_warning_signs.py, run in
+    # production, shows it; off, retrieval makes exactly the calls it made before.
+    warning_signs_retrieval: bool = False
+
+    # The coded refusal only for what she asked (services/answer_contract.py,
+    # NO_UNASKED_REFUSALS_RULE). Same measurement: four good plans closed a section she
+    # never asked for ("Cremas o pomadas", "Edad exacta en meses", "Cómo corregirla",
+    # the croup warning signs) with "No tengo evidencia...". On, the contract carries one
+    # more line: an unasked part without a source is left out like an empty plan
+    # section. Off, the contract is byte for byte what it was.
+    no_unasked_refusals: bool = False
+
     # STT (speech-to-text). "mistral" = Voxtral (UE por defecto, diarización);
     # "openai" = whisper-1 (sin diarización). Voxtral reusa mistral_api_key.
     stt_provider: str = "mistral"  # "mistral" | "openai"

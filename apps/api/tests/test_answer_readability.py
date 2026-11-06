@@ -82,3 +82,14 @@ def test_personalization_is_grounded_and_later_reading_is_optional(locale, requi
     rule = CONTRACTS[locale].language_rule
     for clause in required:
         assert clause in rule
+
+
+@pytest.mark.parametrize("locale", ["es", "en", "fr"])
+def test_the_unasked_refusal_rule_reads_like_the_rest_of_the_contract(locale):
+    """No long dashes, no cut: leaving out an unasked part never shortens safety."""
+    from adelia.services.answer_contract import NO_UNASKED_REFUSALS_RULE
+
+    rule = NO_UNASKED_REFUSALS_RULE[locale]
+    assert "—" not in rule and "–" not in rule
+    for word in ("trunc", "acorta", "shorten", "raccourc", "resum", "summar"):
+        assert word not in rule.lower()
