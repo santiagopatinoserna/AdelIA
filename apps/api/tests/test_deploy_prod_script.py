@@ -424,3 +424,65 @@ def test_the_overlay_adds_a_golden_service_that_is_the_api_with_another_target()
     assert svc["profiles"] == ["golden"]
     assert svc["restart"] == "no"
     assert svc["healthcheck"] == {"disable": True}
+
+
+# ---------------------------------------------------------------------------
+# verify() must ask the API itself, not only the pages the web serves
+# ---------------------------------------------------------------------------
+# 2026-11-06: right after a deploy printed "Deployment verified OK", nginx
+# logged five 503s on POST /api/demo/ask (the API container was still
+# starting). Every check in verify() was served by the web container or read
+# the database directly, so an API that was starting, or crash-looping, passed.
+# /healthz is the API's readiness endpoint, mapped by nginx and reaching
+# Postgres (routers/health.py): verify waits for it like the browser would.
+
+_VERIFY_HARNESS = """
+set -euo pipefail
+source "$DEPLOY"
+check_url() {
+  printf 'check %s\\n' "$1" >> "$CALLS"
+  case "$1" in */es/demo) printf '307' ;; */foo.txt) printf '404' ;; *) printf '200' ;; esac
+}
+wait_for_url() {
+  printf 'wait %s\\n' "$1" >> "$CALLS"
+  case "$1" in
+    */healthz) printf '%s\\n' "$API_CODE"; [[ "$API_CODE" == "200" ]] ;;
+    *) printf '200\\n' ;;
+  esac
+}
+curl() { printf 'https://adelia.godi.ai/es'; }
+check_pwa() { return 0; }
+expected_alembic_head() { printf 'head1\\n'; }
+verify 10.0.0.9 "$SERVICES"
+"""
+
+
+def _verify(tmp_path: Path, services: str, api_code: str) -> tuple[subprocess.CompletedProcess, list[str]]:
+    bin_dir = tmp_path / "bin"
+    bin_dir.mkdir(exist_ok=True)
+    _executable(bin_dir / "ssh", "#!/usr/bin/env bash\nprintf 'head1\\n'\n")
+    calls = tmp_path / "calls.log"
+    harness = tmp_path / "verify.sh"
+    harness.write_text(_VERIFY_HARNESS, encoding="utf-8")
+    env = {
+        **os.environ,
+        "PATH": f"{bin_dir}{os.pathsep}{os.environ['PATH']}",
+        "DEPLOY": str(DEPLOY), "CALLS": str(calls), "SERVICES": services, "API_CODE": api_code,
+    }
+    proc = subprocess.run(["bash", str(harness)], env=env, capture_output=True, text=True, timeout=60)
+    return proc, _lines(calls)
+
+
+@pytest.mark.parametrize("services", ["api", "web", "api web"])
+def test_verify_waits_for_the_api_to_answer_through_nginx(tmp_path, services):
+    proc, calls = _verify(tmp_path, services, "200")
+    assert proc.returncode == 0, proc.stderr
+    assert "wait https://adelia.godi.ai/healthz" in calls
+    assert "GET /healthz:" in proc.stderr and "Deployment verified OK." in proc.stderr
+
+
+def test_an_api_that_does_not_answer_fails_the_verification(tmp_path):
+    proc, calls = _verify(tmp_path, "api", "503")
+    assert proc.returncode != 0
+    assert "FAIL: GET /healthz -> 503" in proc.stderr
+    assert "Deployment verified OK." not in proc.stderr

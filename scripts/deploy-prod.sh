@@ -450,10 +450,16 @@ verify() {
   local host="$1" services="$2"
   log "Verifying deployment..."
 
-  local code_home code_demo code_prof code_priv code_terms code_txt db_version expected fail=0
+  local code_home code_demo code_prof code_priv code_terms code_txt code_api db_version expected fail=0
   local pwa_status="OK"
 
   code_home=$(wait_for_url "https://adelia.godi.ai/es") || true
+  # The API itself, through nginx as the browser reaches it. Every other check
+  # here is served by the web container or reads the database directly, so an
+  # API that was still starting, or crash-looping, passed: on 2026-11-06 nginx
+  # logged five 503s on POST /api/demo/ask right after "verified OK". /healthz
+  # is its readiness endpoint and goes all the way to Postgres (routers/health.py).
+  code_api=$(wait_for_url "https://adelia.godi.ai/healthz") || true
   # The landing now hosts the demo. Its old URL must redirect to /es.
   code_demo=$(check_url "https://adelia.godi.ai/es/demo")
   local demo_target
@@ -472,6 +478,7 @@ verify() {
   expected=$(expected_alembic_head)
 
   [[ "${code_home}" == "200" ]] || { log "FAIL: GET /es -> ${code_home}"; fail=1; }
+  [[ "${code_api}" == "200" ]] || { log "FAIL: GET /healthz -> ${code_api} (the API is not answering)"; fail=1; }
   # /es/demo redirects to /es since the landing IS the demo (2026-10-21):
   # 307 is the correct answer there. A 200 would mean the redirect is gone.
   [[ "${code_demo}" == "307" || "${code_demo}" == "308" ]] \
@@ -491,6 +498,7 @@ verify() {
 Server:                 ${REMOTE_USER}@${host}
 Services rebuilt:       ${services}
 GET /es:                ${code_home}
+GET /healthz:           ${code_api}
 GET /es/demo:           ${code_demo}
 GET /es/profesionales:  ${code_prof}
 GET /es/privacidad:     ${code_priv}
