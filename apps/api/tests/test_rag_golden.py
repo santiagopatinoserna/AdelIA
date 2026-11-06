@@ -534,7 +534,12 @@ async def test_groups_a_and_b_meet_the_deploy_gate():
         report.misses.extend(f"{q.id}: {defect}" for defect in defects)
         report.citation_defects += len(defects)
         report.mark(q, hit and not defects)
-        orphans += count_orphan_citations(answer, evidence)
+        n_orphans = count_orphan_citations(answer, evidence)
+        if n_orphans:
+            # Name the answer: the first real run in production failed on
+            # "citas huérfanas: 1" with no way to tell which question.
+            report.misses.append(f"{q.id}: {n_orphans} tarjeta(s) sin citar en la respuesta")
+        orphans += n_orphans
     report.a_ran = len(questions("A"))
     report.recall_at_4 = hits / report.a_ran
 
@@ -546,7 +551,12 @@ async def test_groups_a_and_b_meet_the_deploy_gate():
         else:
             report.misses.append(f"{q.id}: respondió en vez de negarse ({answer[:120]!r})")
         report.mark(q, refused)
-        orphans += count_orphan_citations(answer, evidence)
+        n_orphans = count_orphan_citations(answer, evidence)
+        if n_orphans:
+            # Name the answer: the first real run in production failed on
+            # "citas huérfanas: 1" with no way to tell which question.
+            report.misses.append(f"{q.id}: {n_orphans} tarjeta(s) sin citar en la respuesta")
+        orphans += n_orphans
     report.b_ran = len(questions("B"))
     report.refusal_rate = refusals / report.b_ran
     report.orphan_citations = orphans
