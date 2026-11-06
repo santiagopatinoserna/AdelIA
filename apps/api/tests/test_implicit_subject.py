@@ -200,12 +200,14 @@ def _variant(q) -> str | None:
 
 
 def test_the_group_b_questions_that_get_the_second_search():
-    """Only these two name nobody. B2 sits close to the crawling fragments and
-    B3 to the nursery ones, so both are what scripts/eval_implicit_subject.py
-    must show still above the cut before the setting goes on. A change to the
-    rules that moves this list needs that measurement again."""
+    """Only these three name nobody. B2 sits close to the crawling fragments,
+    B3 to the nursery ones and B18 (head lice at nursery, promoted to the gate
+    on 2026-11-06) to both nursery and skin, so all three are what
+    scripts/eval_implicit_subject.py must show still above the cut before the
+    setting goes on. A change to the rules or to the golden set that moves this
+    list needs that measurement again."""
     got = [q.id for q in questions("B") if _variant(q) is not None]
-    assert got == ["B2", "B3"]
+    assert got == ["B2", "B3", "B18"]
 
 
 def test_the_candidate_b_questions_that_get_the_second_search():
@@ -215,11 +217,15 @@ def test_the_candidate_b_questions_that_get_the_second_search():
     assert got == _CANDIDATE_B_WITH_VARIANT
 
 
-#: Lice at nursery, pierced ears, valerian drops and molluscum: none names the
-#: child. Candidates are not in the deploy gate yet, but a promotion would be.
-_CANDIDATE_B_WITH_VARIANT: list[str] = ["B18", "B19", "B23", "B24"]
+#: Pierced ears, valerian drops and molluscum: none names the child. Candidates
+#: are not in the deploy gate yet, but a promotion would be (B18, lice at
+#: nursery, was promoted and is pinned with group B above).
+_CANDIDATE_B_WITH_VARIANT: list[str] = ["B19", "B23", "B24"]
 
 
 def test_the_group_a_questions_that_get_the_second_search():
     got = [q.id for q in questions("A") if _variant(q) is not None]
-    assert got == ["A6", "A10", "A11"]
+    assert got == [
+        "A6", "A10", "A11", "A19", "A21", "A23", "A25", "A29", "A30", "A31", "A32",
+        "A34", "A35", "A36", "A37", "A38",
+    ]

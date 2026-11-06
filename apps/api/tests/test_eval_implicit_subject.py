@@ -56,7 +56,7 @@ def test_the_fever_button_flow_is_probed_with_and_without_the_baby():
 def test_the_probes_include_groups_a_and_b_of_the_golden_set():
     groups = [p.group for p in ev.probes()]
     assert groups.count("subject") == 20
-    assert groups.count("B") == 15 and groups.count("A") >= 18
+    assert groups.count("B") == 18 and groups.count("A") >= 35
 
 
 async def test_both_modes_run_in_one_process_with_backoff_and_a_pause(monkeypatch):
