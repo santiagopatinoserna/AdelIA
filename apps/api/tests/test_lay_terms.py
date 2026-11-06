@@ -157,6 +157,54 @@ def test_a_false_friend_gets_no_term(message):
     assert clinical_terms(message) == ()
 
 
+# --- the choking manoeuvre, asked in calm (A39, 2026-11-06) ----------------------
+#
+# Measured in production: "¿Cómo se hace la maniobra de los golpes en la espalda?"
+# left «Soporte vital pediátrico» (ERC 2021) at 0.1977, past the 0.19 cut, with
+# nothing under it. Her sentence names the manoeuvre; the fragments name what it
+# is for. Any word of choking itself ("atragant...", "choking", "s'étouffe") is
+# the red flag and never reaches the lexicon, so the entry reads the manoeuvre.
+
+@pytest.mark.parametrize("message", [
+    "¿Cómo se hace la maniobra de los golpes en la espalda? Quiero aprenderla antes de "
+    "empezar con los sólidos",
+    "Quiero aprender los golpes en la espalda de primeros auxilios para bebés",
+    "¿Qué es la maniobra de desobstrucción del lactante?",
+    "How do I do back blows on a baby? I want to learn before starting solids",
+    "Comment on fait les claques dans le dos à un bébé ?",
+])
+def test_the_manoeuvre_she_wants_to_learn_gets_choking(message):
+    assert "atragantamiento" in clinical_terms(message), message
+
+
+@pytest.mark.parametrize("message", [
+    "¿Le doy golpecitos en la espalda para que eche los gases?",   # burping
+    "¿Cómo le doy golpes en la espalda para que eructe?",
+    "Quiero aprender a darle golpes en la espalda para que eche el aire",
+    "Se dio un golpe en la espalda al caerse de la cama",          # a fall
+    "Le doy palmaditas en la espalda para que se duerma",
+    "Should I pat her back to burp her?",
+    "Je lui tapote le dos pour son rot",
+])
+def test_a_pat_on_the_back_is_not_the_choking_manoeuvre(message):
+    assert "atragantamiento" not in clinical_terms(message), message
+
+
+@pytest.mark.parametrize(("message", "locale"), [
+    ("Se está atragantando, ¿le hago la maniobra de los golpes en la espalda?", "es"),
+    ("Se ha puesto morado comiendo, ¿le hago la maniobra de los golpes en la espalda?", "es"),
+    ("He's choking, should I do back blows?", "en"),
+    ("Il s'étouffe, je fais les claques dans le dos ?", "fr"),
+])
+def test_choking_now_is_a_red_flag_before_the_lexicon_reads_it(message, locale):
+    """The entry matches these too; the guard answers them first, with the
+    referral, on her original text (agent/graph.py: guard before retrieve)."""
+    from adelia.clinical.red_flags import detect
+
+    assert detect(message, locale=locale, age_months=6) is not None, message
+    assert "atragantamiento" in clinical_terms(message), message
+
+
 def test_red_stool_in_the_nappy_is_stool_not_diaper_dermatitis():
     terms = clinical_terms("Tiene caca roja en el pañal")
     assert "deposiciones" in terms
@@ -233,7 +281,7 @@ def test_the_lexicon_is_accent_and_case_blind():
 
 @pytest.mark.parametrize("question", questions("B"), ids=lambda q: q.id)
 def test_no_group_b_question_gets_a_term(question):
-    """Each of the 15 near misses read against the lexicon, one by one.
+    """Each of the 18 group B questions read against the lexicon, one by one.
 
     B2 ("¿Es normal que no gatee a los 9 meses?") is the reason there is no
     crawling entry: the corpus already writes gatear, gatean and gateo, so
@@ -246,10 +294,12 @@ def test_no_group_b_question_gets_a_term(question):
     assert expanded_query(question.question) is None
 
 
-def test_the_b_group_is_the_fifteen_this_review_covered():
+def test_the_b_group_is_the_eighteen_this_review_covered():
+    """The fifteen, plus B18, B20 and B26 since they passed in production on
+    2026-11-06 (each read against the lexicon as a candidate first)."""
     assert [q.id for q in questions("B")] == [
         "B1", "B2", "B3", "B4", "B6", "B7", "B8", "B9",
-        "B11", "B12", "B13", "B14", "B15", "B16", "B17",
+        "B11", "B12", "B13", "B14", "B15", "B16", "B17", "B18", "B20", "B26",
     ]
 
 

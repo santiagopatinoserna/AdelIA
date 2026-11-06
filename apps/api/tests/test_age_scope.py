@@ -66,10 +66,12 @@ def test_a_baby_an_adult_or_a_duration_is_not(message):
 
 
 def test_the_age_band_and_wrong_age_questions_of_group_b_are_caught():
-    """B7, B12, B13 and B15 name a child of 3 or more. B8 (jaundice at 4
-    months) is a wrong_age question INSIDE 0-24 months and must not be."""
+    """B7, B12, B13 and B15 name a child of 3 or more, and so does B20 (a
+    4-year-old's car seat, in the gate since its production measurement of
+    2026-11-06). B8 (jaundice at 4 months) is a wrong_age question INSIDE
+    0-24 months and must not be."""
     caught = {q.id for q in questions("B") if child_outside_scope(q.question)}
-    assert caught == {"B7", "B12", "B13", "B15"}
+    assert caught == {"B7", "B12", "B13", "B15", "B20"}
 
 
 def test_no_group_a_question_is_affected():
