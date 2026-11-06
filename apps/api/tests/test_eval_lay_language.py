@@ -36,7 +36,7 @@ def test_seven_production_misses_and_twenty_three_colloquial_questions():
 def test_the_probes_include_groups_a_and_b_of_the_golden_set():
     groups = [p.group for p in ev.probes()]
     assert groups.count("prod") == 7 and groups.count("lay") == 23
-    assert groups.count("B") == 15 and groups.count("A") >= 18
+    assert groups.count("B") == 18 and groups.count("A") >= 35
 
 
 @pytest.mark.parametrize("probe_id, locale, question", ev.PROD_MISSES + ev.COLLOQUIAL)
