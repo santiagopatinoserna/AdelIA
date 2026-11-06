@@ -318,6 +318,36 @@ NO_UNASKED_REFUSALS_RULE: dict[str, str] = {
     ),
 }
 
+#: The other half of that rule, for a plan only (a short answer has no sections).
+#: Measured in prod on 2026-11-06 with NO_UNASKED_REFUSALS on: croup and
+#: bronchiolitis plans had the paragraph on when to go (Laringitis AEPap: "ve a
+#: urgencias si hace ruido al coger aire aunque esté tranquila") and still left
+#: the signs under the watch heading with no action and no doctor section, while
+#: the same croup question with a dose in it wrote the section. The doctor
+#: section is what she most needs from a plan; it is never "unasked".
+NO_UNASKED_DOCTOR_RULE: dict[str, str] = {
+    "es": (
+        f"«{_H['es']['doctor']}» nunca es un apartado que ella no ha pedido: si un "
+        "fragmento dice cuándo consultar o cuándo ir a urgencias, escribe ese apartado "
+        "con esas señales y la urgencia que da la fuente, con su cita. Una señal de "
+        f"alarma cuya acción traen las fuentes no se queda solo en «{_H['es']['watch']}»."
+    ),
+    "en": (
+        f"“{_H['en']['doctor']}” is never a section she did not ask for: if a fragment "
+        "says when to see a doctor or when to go to the emergency department, write that "
+        "section with those signs and the urgency the source gives, with its citation. A "
+        f"warning sign whose action the sources carry never stays only under "
+        f"“{_H['en']['watch']}”."
+    ),
+    "fr": (
+        f"« {_H['fr']['doctor']} » n’est jamais une rubrique qu’il n’a pas demandée : si un "
+        "fragment dit quand consulter ou quand aller aux urgences, écris cette rubrique "
+        "avec ces signes et l’urgence que donne la source, avec sa citation. Un signe "
+        "d’alerte dont les sources donnent l’action ne reste jamais seulement dans "
+        f"« {_H['fr']['watch']} »."
+    ),
+}
+
 #: The answer shapes a surface may ask for. `plan` is the default and the
 #: path with the most safeguards; the graph picks `question` only when the
 #: route node said so (agent/graph.py).
@@ -394,6 +424,9 @@ def answer_contract(locale: str, *, shape: str = "plan") -> str:
     if settings.no_unasked_refusals:
         rule = NO_UNASKED_REFUSALS_RULE.get(locale, NO_UNASKED_REFUSALS_RULE[DEFAULT_LOCALE])
         unasked = f"- {rule}\n"
+        if shape == "plan":
+            doctor = NO_UNASKED_DOCTOR_RULE.get(locale, NO_UNASKED_DOCTOR_RULE[DEFAULT_LOCALE])
+            unasked += f"- {doctor}\n"
     return f"""Reglas de respuesta (obligatorias, idénticas en el chat y en el agente):
 - Toda interpretación, valoración o recomendación clínica DEBE apoyarse en al menos una
   cita de evidencia [ev_1], [ev_2], ... Si NO hay un estudio o guía en el contexto que
