@@ -956,6 +956,12 @@
       "import": "Importer"
     }
   },
+  "showcaseAsk": {
+    "young": "Mon bébé régurgite après chaque tétée. Ça passe quand ?",
+    "solids": "Mon bébé refuse les légumes. Je les propose combien de fois ?",
+    "toddler": "Est-ce normal que mon bébé ne veuille que du lait maternel ?",
+    "noAge": "Mon bébé mange moins ces jours-ci. C’est normal ?"
+  },
   "professionals": {
     "title": "Informations pour les professionnels de santé",
     "intro": "Une famille utilise AdelIA pour conserver le carnet de santé de son bébé. Avec votre autorisation explicite, elle peut enregistrer la consultation pour la retranscrire dans ce carnet.",

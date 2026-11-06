@@ -25,7 +25,11 @@ import { isoMonthsAgo, seedDocument, seedProfile } from "./utils/seed";
 
 const EYEBROW = "Primeros pasos"; // showcase.primaryEyebrow (es)
 const ALSO = "Y también"; // showcase.secondaryEyebrow (es)
-const ASK_QUESTION = "¿Es normal que con 13 meses solo quiera leche materna?"; // showcase.cards.ask.example (es)
+// showcaseAsk.noAge (es): a fresh account has no child yet, so the example
+// names no age (it used to be "con 13 meses" for every baby, 2026-11-06).
+const ASK_QUESTION = "¿Es normal que coma menos estos días?";
+const ASK_YOUNG = "Regurgita después de cada toma, ¿hacia cuándo mejora?"; // showcaseAsk.young (es)
+const ASK_TODDLER = "¿Es normal que solo quiera leche materna?"; // showcaseAsk.toddler (es)
 const MOVED_QUESTION = "¿Cuánto tarda un bebé en adaptarse a la guardería?"; // chat.example4 (es), moved out of the ask card
 const HIDE = "Ocultar por ahora"; // showcase.hide
 const SHOW = "Mostrar"; // showcase.show
@@ -617,3 +621,34 @@ test("home: the height mark carries the baby's real name and age, once, and noth
   );
   await context.close();
 });
+
+// The ask example fits the child on screen (seen in production on 2026-11-06:
+// Lucía, 5 months, was offered a question about a 13-month-old). Both the
+// visible quote and the question the link sends follow her age, and neither
+// names an age that is not hers.
+for (const child of [
+  { name: "Lucía", months: 5, question: ASK_YOUNG },
+  { name: "Mateo", months: 20, question: ASK_TODDLER },
+]) {
+  test(`showcase: the ask example fits ${child.name} at ${child.months} months`, async ({ browser }) => {
+    const { cookie, userId } = await seedUserAndSessionCookie(
+      `e2e-showcase-age-${child.months}-${Date.now()}-${Math.random().toString(36).slice(2, 8)}@adelia.test`,
+    );
+    await seedProfile(userId, { displayName: child.name, dateOfBirth: isoMonthsAgo(child.months) });
+    const context = await browser.newContext({ viewport: { width: 390, height: 844 } });
+    await context.addCookies([cookie]);
+    const page = await context.newPage();
+    await page.goto("/es/dashboard");
+
+    await expect(page.getByTestId("growth-mark")).toHaveText(`${child.name} · ${child.months} meses`);
+    const ask = rows(page).and(page.locator('[data-key="ask"]'));
+    await expect(ask).toContainText(child.question);
+    const link = showcase(page).getByRole("link", { name: "Preguntar", exact: true });
+    expect((await linkTarget(link)).q).toBe(child.question);
+    // No other age anywhere in the three rows: no "13 meses" for a 5-month-old.
+    const text = (await rows(page).allTextContents()).join(" ");
+    const ages = [...text.matchAll(/(\d+)\s*(?:meses|mes|semanas|años)\b/gu)].map((m) => Number(m[1]));
+    expect(ages.filter((n) => n !== child.months), text).toEqual([]);
+    await context.close();
+  });
+}

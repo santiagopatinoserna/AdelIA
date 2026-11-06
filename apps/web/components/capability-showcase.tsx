@@ -14,7 +14,11 @@ import {
   type LucideIcon,
 } from "lucide-react";
 
+import { monthsSince } from "@/components/agent/growth-mark";
+import { askExampleKey } from "@/lib/ask-example";
+import { todayInAppZone } from "@/lib/dates";
 import { Link } from "@/lib/navigation";
+import { useActiveProfile } from "@/lib/profile-context";
 import { readShowcaseHidden, writeShowcaseHidden } from "@/lib/showcase-storage";
 
 // The capability showcase everyone sees on the agent home while the thread is
@@ -90,6 +94,18 @@ const ACTION =
 
 export function CapabilityShowcase({ locale, userId }: { locale: string; userId: string }) {
   const t = useTranslations("showcase");
+  const tAsk = useTranslations("showcaseAsk");
+  // The ask example follows the age of the child on screen (lib/ask-example),
+  // read from the server-fed profile list during render, so switching child
+  // re-renders it and nothing is set after mount (7adb21c). Noon in Madrid,
+  // as the height mark counts, so both say the same age.
+  const { profiles, activeId } = useActiveProfile();
+  const child = profiles.find((p) => p.id === activeId);
+  const months =
+    child?.relationship === "child" && child.date_of_birth
+      ? monthsSince(child.date_of_birth, new Date(`${todayInAppZone()}T12:00:00`))
+      : null;
+  const askExample = tAsk(askExampleKey(months));
   // null until mounted: the server render must not guess the storage state
   // (no flash of the full grid for someone who just hid it, no hydration
   // mismatch either way).
@@ -162,7 +178,7 @@ export function CapabilityShowcase({ locale, userId }: { locale: string; userId:
               const titleId = `capability-showcase-${card.key}`;
               const href =
                 card.key === "ask"
-                  ? { pathname: CHAT_PATH, query: { q: t("cards.ask.example") } }
+                  ? { pathname: CHAT_PATH, query: { q: askExample } }
                   : card.href!;
               return (
                 <li
@@ -196,7 +212,7 @@ export function CapabilityShowcase({ locale, userId }: { locale: string; userId:
                     </h3>
                     <p className="ad-clamp-2 mt-0.5 text-[0.8125rem] italic leading-[1.125rem] text-ink-soft min-[1264px]:mt-1.5 min-[1264px]:min-h-9 min-[1264px]:text-sm min-[1264px]:leading-[1.125rem] min-[1264px]:text-ink">
                       {qOpen}
-                      {t(`cards.${card.key}.example`)}
+                      {card.key === "ask" ? askExample : t(`cards.${card.key}.example`)}
                       {qClose}
                     </p>
                     {/* The wrapper carries the hiding, not the paragraph:

@@ -956,6 +956,12 @@
       "import": "Import"
     }
   },
+  "showcaseAsk": {
+    "young": "My baby spits up after every feed. When does it get better?",
+    "solids": "My baby refuses vegetables. How many times should I offer them?",
+    "toddler": "Is it normal that my toddler only wants breast milk?",
+    "noAge": "My baby is eating less these days. Is that normal?"
+  },
   "professionals": {
     "title": "Information for healthcare professionals",
     "intro": "A family uses AdelIA to keep their baby's health record. With your explicit permission, they may record the visit to transcribe it into that record.",
