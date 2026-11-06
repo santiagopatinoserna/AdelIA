@@ -103,7 +103,10 @@ test.describe("landing on a phone", () => {
       await expect(page.getByRole("heading", { level: 2, name: m.evTitle })).toBeVisible();
       await expect(page.locator("section#pricing").getByText(m.prT2Trial)).toBeVisible();
       await expect(page.getByRole("contentinfo")).toContainText(m.footerDisclaimer);
-      await expect(page.getByRole("link", { name: m.footerPrivacy })).toBeVisible();
+      // The footer's own link: the consent note under "Preguntar" also links to
+      // Privacy ("Más en Privacidad"), so the page has two since 2e9c452.
+      await expect(page.getByRole("contentinfo").getByRole("link", { name: m.footerPrivacy }))
+        .toBeVisible();
       await expect(page.getByRole("link", { name: m.footerTerms })).toBeVisible();
 
       // Removed on purpose; if one comes back, argue for it here.

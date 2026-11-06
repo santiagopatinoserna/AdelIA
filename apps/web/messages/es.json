@@ -1095,5 +1095,27 @@
   "today": {
     "title": "Hoy",
     "titleWithName": "Hoy con {name}"
+  },
+  "guestSpace": {
+    "landingNote": "Al preguntar aceptas que lo que hagas se guarde en tu espacio con Lucía. Puedes borrarlo en Ajustes.",
+    "landingPrivacyLink": "Más en Privacidad",
+    "landingRecord": "Grabar la consulta con el médico",
+    "recordConsult": "Grabar la consulta",
+    "followUpPlaceholder": "Pregunta más sobre esto",
+    "saveLink": "Guardar mi cuenta",
+    "saveTitle": "Guardar mi cuenta",
+    "saveBody": "Escribe tu correo y te mandamos un enlace. Lucía y todo lo que has hecho se quedan contigo.",
+    "saveEmailLabel": "Tu correo",
+    "saveCta": "Mandar el enlace",
+    "saveSent": "Te hemos mandado un enlace. Ábrelo para guardar tu cuenta.",
+    "saveError": "No hemos podido mandarlo. Revisa el correo y vuelve a probar.",
+    "saveFailed": "Ese enlace ya no sirve. Pide otro desde Guardar mi cuenta.",
+    "settingsGuestBody": "Ahora usas AdelIA sin cuenta. Si borras tu espacio, se borran Lucía y todo lo que has hecho.",
+    "privacyTitle": "Si usas AdelIA sin cuenta",
+    "privacyBody": "Al hacer tu primera pregunta en la portada te abrimos un espacio de invitado, sin pedirte correo. Empieza con Lucía y una historia que preparamos para que pruebes AdelIA. Ahí guardamos lo que hagas: tus preguntas y las respuestas, lo que anotes, los documentos, las grabaciones y los informes. Se trata igual que una cuenta: con el mismo cifrado, y lo procesan los mismos <processors>encargados del tratamiento</processors>. No se borra solo: puedes borrarlo entero en Ajustes, o guardarlo con tu correo para no perderlo. Tu navegador guarda una cookie de sesión para volver a tu espacio; si la borras, no podemos devolverte el acceso.",
+    "backToPanel": "Volver a AdelIA",
+    "deleteConfirmLabel": "Escribe Lucía para confirmar",
+    "newConversation": "Nueva conversación",
+    "continueConversation": "Seguir la conversación"
   }
 }

@@ -8,6 +8,7 @@ export async function* streamAgent(
     card_action?: object;
     clarification?: { field: string; value: string };
     history?: { role: string; content: string }[];
+    thread_id?: string | null;
   },
   signal?: AbortSignal,
 ): AsyncGenerator<AgentStreamEvent> {

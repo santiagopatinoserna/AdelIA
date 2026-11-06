@@ -6,6 +6,10 @@ import { join } from "node:path";
 
 import es from "../messages/es.json";
 import { seedUserAndSessionCookie } from "./utils/session";
+import { forceKeylessDemo } from "./utils/keyless-demo";
+
+// The landing's own answer, drawn when no guest can be created (see the helper).
+test.beforeEach(async ({ page }) => forceKeylessDemo(page));
 
 // Prod journey 2026-11-06: a mother read "... limpia y seca [ev_1][ev_2]" in
 // the answer and "[2]" in her history, programmer text in the middle of a
@@ -154,6 +158,7 @@ test("agent: a record marker matches its card in her history, drawn apart from e
   const context = await browser.newContext({ viewport: { width: 390, height: 844 }, reducedMotion: "reduce" });
   await context.addCookies([cookie]);
   const page = await context.newPage();
+  await forceKeylessDemo(page);
   const text = "La última toma que anotaste fue a las 17:00 [1]. En la revisión le vieron la piel bien [2]. "
     + "Mantenerla limpia y seca es lo que más ayuda [ev_1].";
   await page.route("**/api/backend/agent/turn", (route: Route) => route.fulfill({

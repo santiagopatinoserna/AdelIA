@@ -7,6 +7,10 @@ import es from "../messages/es.json";
 import en from "../messages/en.json";
 import fr from "../messages/fr.json";
 import { seedUserAndSessionCookie } from "./utils/session";
+import { forceKeylessDemo } from "./utils/keyless-demo";
+
+// The landing's own answer, drawn when no guest can be created (see the helper).
+test.beforeEach(async ({ page }) => forceKeylessDemo(page));
 
 // The mother-first redesign (docs/design/REDISENO.md, apps/web/UX_PRINCIPLES.md
 // rules 12 to 17): what each screen now promises a mother with one free hand.
@@ -22,6 +26,7 @@ const citation = {
 };
 
 async function ask(page: Page, locale: "es" | "en" | "fr", payload: Record<string, unknown>) {
+  await forceKeylessDemo(page);
   await page.route("**/api/demo/ask", (route) => route.fulfill({ json: {
     evidence_citations: [citation], disclaimer: "Aviso clínico.", ...payload,
   } }));

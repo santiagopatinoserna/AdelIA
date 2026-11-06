@@ -13,6 +13,9 @@ export type AgentCard = {
 
 export type AgentStreamEvent =
   | { type: "start" }
+  // The stored conversation a first turn opened (services/agent_thread on the
+  // API, 2026-11-06): the next turn sends it back so it lands in the same one.
+  | { type: "thread"; thread_id: string }
   | { type: "token"; content: string }
   | { type: "tool_call"; tool_name: string }
   | { type: "card"; card: AgentCard }
@@ -44,6 +47,7 @@ export function* parseAgentBlocks(
     catch { console.warn("agent: bad SSE data", dataStr); continue; }
     switch (eventType) {
       case "start": yield { type: "start" }; break;
+      case "thread": if (data.thread_id) yield { type: "thread", thread_id: String(data.thread_id) }; break;
       case "token": yield { type: "token", content: String(data.content ?? "") }; break;
       case "tool_call": yield { type: "tool_call", tool_name: String(data.tool_name ?? "") }; break;
       case "card": yield { type: "card", card: data.card as AgentCard }; break;
@@ -60,3 +64,15 @@ export function* parseAgentBlocks(
   }
   write(buffer);
 }
+
+/** A stored agent conversation (GET /agent/thread), to pick it up after a reload. */
+export type AgentThread = {
+  id: string;
+  profile_id: string | null;
+  messages: {
+    role: "user" | "assistant";
+    content: string;
+    citations: Citation[];
+    evidence_citations: EvidenceCitation[];
+  }[];
+};

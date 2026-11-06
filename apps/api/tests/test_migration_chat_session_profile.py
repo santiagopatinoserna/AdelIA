@@ -74,7 +74,9 @@ async def test_upgrade_downgrade_upgrade_round_trip():
     finally:
         await admin.close()
     try:
-        _alembic(database, "upgrade", "head")
+        # To this revision, not "head": 0025 (guest accounts) came after it,
+        # and the round trip under test is this one's.
+        _alembic(database, "upgrade", REVISION)
         up = await _shape(database)
         assert up["version"] == REVISION
         assert up["nullable"] == "YES"
@@ -89,7 +91,7 @@ async def test_upgrade_downgrade_upgrade_round_trip():
         assert down == {"version": "0023_observations", "nullable": None,
                         "on_delete": None, "index": None}
 
-        _alembic(database, "upgrade", "head")
+        _alembic(database, "upgrade", REVISION)
         assert await _shape(database) == up
     finally:
         admin = await _connect(settings.postgres_db)

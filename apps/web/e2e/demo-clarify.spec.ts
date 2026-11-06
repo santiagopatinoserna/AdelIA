@@ -1,6 +1,10 @@
 import { expect, test } from "@playwright/test";
 import AxeBuilder from "@axe-core/playwright";
 import es from "../messages/es.json";
+import { forceKeylessDemo } from "./utils/keyless-demo";
+
+// The landing's own answer, drawn when no guest can be created (see the helper).
+test.beforeEach(async ({ page }) => forceKeylessDemo(page));
 
 // AGENT_GRAPH build step 3: when the answer depends on a fact she did not
 // give (the thermometer reading), the demo asks ONE question with two or

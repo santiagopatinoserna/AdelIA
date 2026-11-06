@@ -81,6 +81,15 @@ def _status_payload(user: User) -> dict[str, Any]:
                     Settings shows "Manage subscription" when true and
                     "Subscribe" when false, instead of a button that 400s.
     """
+    if getattr(user, "is_guest", False):
+        # A guest uses the app with no card and no end date (auth.user_has_
+        # access). "guest" is its own status so no screen offers her a
+        # subscription she has no email to receive.
+        return {
+            "status": "guest", "active": True, "plan": None, "trial_end": None,
+            "current_period_end": None, "trial_days": settings.stripe_trial_days,
+            "trial_source": None, "can_manage": False, "is_guest": True,
+        }
     stored = user.subscription_status or "none"
     local_end = local_trial_end(stored, user.created_at)
     local_active = local_end is not None and local_end > datetime.now(timezone.utc)
@@ -108,6 +117,7 @@ def _status_payload(user: User) -> dict[str, Any]:
         "trial_days": settings.stripe_trial_days,
         "trial_source": trial_source,
         "can_manage": bool(user.stripe_customer_id),
+        "is_guest": False,
     }
 
 
@@ -128,6 +138,10 @@ async def create_checkout(
         raise HTTPException(status_code=503, detail="No price configured")
 
     user = await _load_user(user_id)
+    if getattr(user, "is_guest", False):
+        # Stripe would mail receipts to the synthetic .invalid address, and a
+        # guest has nothing to pay for (auth.user_has_access).
+        raise HTTPException(status_code=409, detail="Guest accounts have nothing to pay")
 
     # Already covered by STRIPE → nothing to buy; send them to manage instead.
     # An account inside its card-free trial is deliberately NOT blocked here:

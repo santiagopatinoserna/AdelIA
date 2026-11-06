@@ -1095,5 +1095,27 @@
   "today": {
     "title": "Aujourd’hui",
     "titleWithName": "Aujourd’hui avec {name}"
+  },
+  "guestSpace": {
+    "landingNote": "En posant une question, tu acceptes que ce que tu fais soit gardé dans ton espace avec Lucía. Tu peux l’effacer dans Réglages.",
+    "landingPrivacyLink": "Plus dans Confidentialité",
+    "landingRecord": "Enregistrer la consultation chez le médecin",
+    "recordConsult": "Enregistrer la consultation",
+    "followUpPlaceholder": "Demande-en plus à ce sujet",
+    "saveLink": "Garder mon compte",
+    "saveTitle": "Garder mon compte",
+    "saveBody": "Écris ton e-mail et on t’envoie un lien. Lucía et tout ce que tu as fait restent avec toi.",
+    "saveEmailLabel": "Ton e-mail",
+    "saveCta": "Envoyer le lien",
+    "saveSent": "On t’a envoyé un lien. Ouvre-le pour garder ton compte.",
+    "saveError": "On n’a pas pu l’envoyer. Vérifie l’e-mail et réessaie.",
+    "saveFailed": "Ce lien ne marche plus. Demandes-en un autre depuis Garder mon compte.",
+    "settingsGuestBody": "Tu utilises AdelIA sans compte. Si tu effaces ton espace, Lucía et tout ce que tu as fait sont effacés.",
+    "privacyTitle": "Si tu utilises AdelIA sans compte",
+    "privacyBody": "À ta première question sur la page d’accueil, on t’ouvre un espace invité, sans te demander d’e-mail. Il commence avec Lucía et une histoire qu’on a préparée pour que tu puisses essayer AdelIA. C’est là qu’on garde ce que tu fais : tes questions et les réponses, ce que tu notes, les documents, les enregistrements et les comptes rendus. C’est traité comme un compte : le même chiffrement, et les mêmes <processors>sous-traitants</processors> le traitent. Rien ne s’efface tout seul : tu peux tout effacer dans Réglages, ou le garder avec ton e-mail pour ne pas le perdre. Ton navigateur garde un cookie de session pour te ramener à ton espace ; si tu l’effaces, on ne peut pas te rendre l’accès.",
+    "backToPanel": "Retour à AdelIA",
+    "deleteConfirmLabel": "Écris Lucía pour confirmer",
+    "newConversation": "Nouvelle conversation",
+    "continueConversation": "Reprendre la conversation"
   }
 }

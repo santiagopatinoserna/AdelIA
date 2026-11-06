@@ -3,6 +3,10 @@ import AxeBuilder from "@axe-core/playwright";
 import es from "../messages/es.json";
 import en from "../messages/en.json";
 import fr from "../messages/fr.json";
+import { forceKeylessDemo } from "./utils/keyless-demo";
+
+// The landing's own answer, drawn when no guest can be created (see the helper).
+test.beforeEach(async ({ page }) => forceKeylessDemo(page));
 
 // AGENT_GRAPH build step 2: the route node picks the contract. A question that
 // asks for a fact ("¿es normal que...?") gets one sentence and a few cited

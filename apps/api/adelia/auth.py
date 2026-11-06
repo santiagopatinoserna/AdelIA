@@ -205,7 +205,16 @@ def in_local_trial(subscription_status: str | None, created_at: datetime | None)
 
 
 def user_has_access(user: Any) -> bool:
-    """The one rule: a live Stripe status, or a live card-free trial."""
+    """The one rule: a guest, a live Stripe status, or a live card-free trial.
+
+    A guest of the landing (services/guest.py, decision of 2026-11-06) uses
+    the real app with no card and no end date: the demo IS the product, and
+    "sin tope de gasto" was part of the decision. The per-IP and per-user
+    rate limits still apply to her as to anyone. Saving the account with an
+    email makes it an ordinary account, trial included.
+    """
+    if getattr(user, "is_guest", False):
+        return True
     return _status_is_active(user.subscription_status) or in_local_trial(
         user.subscription_status, user.created_at
     )
@@ -242,14 +251,16 @@ async def has_active_subscription(user_id: UUID) -> bool:
     async with AsyncSessionLocal() as session:
         row = (
             await session.execute(
-                sa.select(User.subscription_status, User.created_at).where(
+                sa.select(User.subscription_status, User.created_at, User.is_guest).where(
                     User.id == user_id
                 )
             )
         ).first()
     if row is None:
         return False
-    status_value, created_at = row
+    status_value, created_at, is_guest = row
+    if is_guest:
+        return True
     return _status_is_active(status_value) or in_local_trial(status_value, created_at)
 
 

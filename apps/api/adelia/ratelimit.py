@@ -11,7 +11,12 @@ exhaustion. Memory is hard-capped at MAX_KEYS with oldest-window eviction.
 from __future__ import annotations
 
 import heapq
+import ipaddress
 import time
+from typing import TYPE_CHECKING
+
+if TYPE_CHECKING:
+    from starlette.requests import Request
 
 # route-prefix → requests/minute. First match wins; order matters.
 ROUTE_BUDGETS: list[tuple[str, str, int]] = [
@@ -38,6 +43,13 @@ ROUTE_BUDGETS: list[tuple[str, str, int]] = [
     # launch day.
     ("POST", "/demo", 20),
     ("GET", "/demo", 600),           # the fixture: no spend, page-view rate
+    # Guest accounts (routers/guest.py, 2026-11-06). Saving and adopting are
+    # one click each; "/guest/" comes first so they do not spend the brake on
+    # creation below. Creation is public and anti-bot only: a guest spends
+    # nothing at birth (no model call), so this caps identities per address,
+    # not money. The hourly ceiling lives in the router (GUEST_SIGNUPS_PER_HOUR).
+    ("POST", "/guest/", 20),
+    ("POST", "/guest", 5),
     ("POST", "/documents", 10),      # upload + OCR pipeline
     ("POST", "/briefings", 6),       # 5-stage LLM pipeline
     ("POST", "/enrichment/genomics", 5),
@@ -67,6 +79,40 @@ def _budget_for(method: str, path: str) -> tuple[str, int]:
         if method == m and path.startswith(prefix):
             return f"{m} {prefix}", budget
     return "default", DEFAULT_BUDGET
+
+
+def client_ip(request: Request) -> str:
+    """The one place that decides whose address a request counts against.
+
+    Every per-address limit asks here (the middleware, the hourly brake on
+    guests, the briefing charge in routers/agent). Until the PR #57 review the
+    answer was request.client behind `uvicorn --forwarded-allow-ips=*`, i.e.
+    the first X-Forwarded-For entry, which the client writes: one forged value
+    per request was a fresh bucket each time, and the guests it minted spend
+    the app's model budget. X-Forwarded-For is never read now (the Dockerfile
+    runs uvicorn with --no-proxy-headers, so request.client is the peer).
+
+    Behind the Cloudflare tunnel the peer is the tunnel or the web container,
+    the same for everyone, while Cloudflare sets CF-Connecting-IP to the real
+    address on each request, overwriting any the client sent. That header is
+    the client only where the operator says Cloudflare is in front
+    (TRUST_CF_CONNECTING_IP); a home LAN request skips Cloudflare and is
+    trusted as it already is. A value that is not an address is ignored.
+    """
+    from adelia.config import settings
+
+    if settings.trust_cf_connecting_ip:
+        forwarded = (request.headers.get("cf-connecting-ip") or "").strip()
+        try:
+            return str(ipaddress.ip_address(forwarded))
+        except ValueError:
+            pass
+    return request.client.host if request.client else "unknown"
+
+
+def identity_for(request: Request) -> str:
+    """identity_from() for a live request: its bearer token, else client_ip()."""
+    return identity_from(request.headers.get("authorization"), client_ip(request))
 
 
 def identity_from(auth_header: str | None, client_ip: str) -> str:
@@ -119,6 +165,22 @@ def check(method: str, path: str, identity: str, now: float | None = None) -> tu
             ):
                 del _windows[k]
 
+    return True, 0.0
+
+
+def check_window(
+    group: str, identity: str, budget: int, window_seconds: float, now: float | None = None
+) -> tuple[bool, float]:
+    """One extra fixed window beside the per-minute ones, for a route that also
+    needs a longer ceiling (guest creation per hour). Same store and cap."""
+    now = now if now is not None else time.monotonic()
+    key = (group, identity)
+    window_start, count = _windows.get(key, (now, 0))
+    if now - window_start >= window_seconds:
+        window_start, count = now, 0
+    if count >= budget:
+        return False, max(0.0, window_seconds - (now - window_start))
+    _windows[key] = (window_start, count + 1)
     return True, 0.0
 
 
