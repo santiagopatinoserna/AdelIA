@@ -1211,12 +1211,22 @@ def count_orphan_citations(answer: str, evidence_citations: list[dict]) -> int:
 
     An orphan is a source card under a sentence that does not cite it, which
     is the visual shape of "looks sourced, is not".
+
+    A red flag's guideline card (red_flags.citation_for, source_id
+    "red_flag:<code>") is not one: it is the basis of a deterministic rule
+    under a fixed alarm text that carries no markers by design, not a source
+    the model claims to have used. Counting it failed the deploy gate's first
+    real run on A6, a red flag, with nothing wrong in the answer.
     """
     from adelia.services.citations import markers_in
 
     _, used = markers_in(answer)
     used_tags = {f"ev_{i}" for i in used}
-    return sum(1 for c in evidence_citations if c.get("tag") not in used_tags)
+    return sum(
+        1 for c in evidence_citations
+        if c.get("tag") not in used_tags
+        and not str(c.get("source_id") or "").startswith("red_flag:")
+    )
 
 
 def citation_defects(q: GoldenQuestion, evidence_citations: list[dict]) -> list[str]:

@@ -32,12 +32,18 @@ export function BriefingDetail({ briefing }: Props) {
     return <div className="text-ink-soft">{t("briefing.noRender")}</div>;
   }
 
+  // The stored HTML is the shared page, whose <link> now reaches the API's
+  // stylesheet through /s/. Injected here it would load that sheet into the
+  // whole app, and its generic class names (.section, .citation) would restyle
+  // the dashboard. In the app the preview keeps the prose styles it always had.
+  const html = briefing.html_render.replace(/<link\b[^>]*>/gi, "");
+
   return (
     <div className="ad-card overflow-x-auto p-4 sm:p-6">
       <div
         ref={rootRef}
         className="briefing-render prose prose-sm max-w-full prose-table:block prose-table:overflow-x-auto"
-        dangerouslySetInnerHTML={{ __html: briefing.html_render }}
+        dangerouslySetInnerHTML={{ __html: html }}
       />
     </div>
   );

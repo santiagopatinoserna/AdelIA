@@ -1,6 +1,7 @@
 "use client";
 
 import { useTranslations } from "next-intl";
+import { todayInAppZone } from "@/lib/dates";
 import type { Profile } from "@/lib/enrichment-types";
 import { useActiveProfile } from "@/lib/profile-context";
 
@@ -76,7 +77,10 @@ export function useGrowthMarkLabel(): string | null {
   const active: Profile | undefined =
     profiles.find((p) => p.id === activeId) ?? undefined;
   if (!active?.date_of_birth || !active.display_name) return null;
-  const now = new Date();
+  // Noon of today in Madrid, read with local getters like the date of birth:
+  // the server (UTC) and the phone then count the same months and days, even
+  // in the hour after midnight (lib/dates.ts).
+  const now = new Date(`${todayInAppZone()}T12:00:00`);
   const months = monthsSince(active.date_of_birth, now);
   if (months === null) return null;
   const name = active.display_name;

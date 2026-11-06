@@ -58,3 +58,20 @@ async def test_middleware_returns_429_with_retry_after(client, monkeypatch):
     response = await client.get("/s/some-token")
     assert response.status_code == 429
     assert "Retry-After" in response.headers
+
+
+def test_shared_page_assets_have_their_own_bucket():
+    """Every view of /s/{token} also fetches its stylesheet. Sharing the
+    60/min token-enumeration bucket would halve the views a pediatrician gets
+    and, once spent, serve the page bare. The asset is static and reveals
+    nothing, so it takes a separate, roomier bucket."""
+    ratelimit.reset()
+    for _ in range(60):
+        allowed, _ = ratelimit.check("GET", "/s/some-token", "ip:9.9.9.9", now=3000.0)
+        assert allowed
+    allowed, _ = ratelimit.check("GET", "/s/some-token", "ip:9.9.9.9", now=3000.0)
+    assert not allowed
+    allowed, _ = ratelimit.check(
+        "GET", "/s/_assets/briefing.css", "ip:9.9.9.9", now=3000.0
+    )
+    assert allowed

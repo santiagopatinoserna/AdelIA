@@ -19,6 +19,16 @@ logger = logging.getLogger(__name__)
 
 
 _TEMPLATE_DIR = Path(__file__).parent.parent / "templates"
+
+# The shared page's stylesheet is served under /s/ because that is the only
+# prefix the production proxy forwards to the API. It used to be
+# /static/briefing/briefing.css, which the proxy hands to the Next app: a 404
+# in HTML, refused by the browser, and the pediatrician read an unstyled
+# report (prod journey 2026-11-06). Stored briefings still carry the old href,
+# so the public viewer rewrites LEGACY_CSS_URL on the way out.
+BRIEFING_CSS_PATH = Path(__file__).parent.parent / "static" / "briefing" / "briefing.css"
+BRIEFING_CSS_URL = "/s/_assets/briefing.css"
+LEGACY_CSS_URL = "/static/briefing/briefing.css"
 _NH3_ALLOWED_TAGS: set[str] = set()
 _NH3_ALLOWED_ATTRS: dict[str, set[str]] = {}
 
@@ -68,5 +78,9 @@ def render_briefing_html(payload: BriefingPayload) -> str:
     sanitized = _sanitize_payload(payload)
     env = _make_env()
     template = env.get_template("briefing/briefing.html.j2")
-    html = template.render(payload=sanitized, labels=briefing_labels(payload.locale))
+    html = template.render(
+        payload=sanitized,
+        labels=briefing_labels(payload.locale),
+        stylesheet_href=BRIEFING_CSS_URL,
+    )
     return html

@@ -5,6 +5,7 @@ import { getTranslations } from "next-intl/server";
 import { Baby, Check, ShieldCheck, Sparkles } from "lucide-react";
 
 import { billingStatus } from "@/lib/api-client";
+import { formatInstant } from "@/lib/dates";
 import { Link } from "@/lib/navigation";
 import { StartTrialButton, ManageButton } from "@/components/billing-actions";
 
@@ -53,7 +54,7 @@ export default async function BillingPage({
 
   const fmtDate = (iso: string | null) =>
     iso
-      ? new Intl.DateTimeFormat(locale, { dateStyle: "long" }).format(new Date(iso))
+      ? formatInstant(iso, locale, "long")
       : "";
 
   return (
