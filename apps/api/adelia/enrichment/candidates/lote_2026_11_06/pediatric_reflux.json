@@ -1,0 +1,59 @@
+{
+  "_meta": {
+    "topic": "Candidatas del dominio pediatric_reflux (0-24 meses), fuentes oficiales de muchos países leídas en su idioma y resumidas en español.",
+    "compiled": "2026-11-06",
+    "method": "Seis investigadores de Claude Code leyeron cada página con WebFetch y la pasaron por un subagente verificador (~/dev/adelia-night/research/corpus-*, verify.json). Al integrarlas se quitaron las fuentes cuyos términos prohíben adaptar, traducir o el uso comercial, los calendarios de vacunas de otros países y los duplicados con data/ y entre lotes; los teléfonos y servicios de otros sistemas de salud se reescribieron en palabras con el nivel de urgencia de la fuente, y cada fragmento sobre alarmas, urgencias, fiebre, respiración, convulsiones, deshidratación, ictericia o sepsis se volvió a comprobar contra el texto de la página descargado con curl. Idiomas del original: francés 2. Detalle en docs/corpus/CANDIDATOS_2026_11_06.md.",
+    "caveat": "Los fragmentos son paráfrasis breves en español, no traducciones literales ni citas; `language` es el idioma del fragmento (es) y `original_language` el de la página. Cada fragmento conserva las cifras, edades y el nivel de urgencia de su propia fuente, que pueden diferir entre países. No es consejo médico.",
+    "purpose": "Candidato: no lo carga el arranque. Se mide con scripts/golden_gate.sh --candidates antes de pasar a data/ como evidence_pediatric_reflux_2026_11.json."
+  },
+  "sources": [
+    {
+      "source_type": "reference",
+      "title": "Régurgitations du nourrisson : que faire ? (ameli.fr)",
+      "organization": "Assurance Maladie (ameli.fr)",
+      "publication_year": 2026,
+      "url": "https://www.ameli.fr/assure/sante/themes/rgo-nourrisson/que-faire-quand-consulter",
+      "specialties": [
+        "pediatrics",
+        "general_medicine"
+      ],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "original_language": "fr",
+      "topics": [
+        "reflujo_regurgitacion",
+        "cuando_consultar",
+        "signos_alarma"
+      ],
+      "chunks": [
+        "Régurgitations du nourrisson : que faire ? (Assurance Maladie, 2026). Tema: consejos para las regurgitaciones. Hallazgo: el reflujo gastroesofágico del lactante sin complicaciones desaparece en unos meses, y las regurgitaciones se atenúan y luego desaparecen cuando el bebé aprende a sentarse y después a ponerse de pie, y con la diversificación. No forzarlo ni restringirlo: que coma hasta saciarse sin presión para acabar el biberón. Hacer pausas durante la toma para el eructo y, después, mantenerlo en vertical de 20 a 30 minutos si es posible, en brazos o en fular. Ofrecer sólidos si tiene edad. Con lactancia materna no hay que cambiar nada y se continúa; con biberón, comprobar las cantidades y la preparación y preferir tomas menos copiosas y más frecuentes.",
+        "Régurgitations du nourrisson : que faire ? (Assurance Maladie, 2026). Tema: sueño y eructo. Hallazgo: no acostarlo justo después del biberón; acostarlo a plano boca arriba, sin elevar la cabeza, para prevenir la muerte inesperada del lactante, y evitar durante el día la hamaca y la silla de coche, porque esa postura comprime el estómago y empeora el reflujo. El eructo es un mecanismo normal para evacuar el aire tragado; puede aparecer enseguida, unos minutos después o no aparecer, y no es sistemático, sobre todo con lactancia materna.",
+        "Régurgitations du nourrisson : que faire ? (Assurance Maladie, 2026). Tema: cuándo consultar y urgencias. Hallazgo: hablar de las regurgitaciones en las revisiones. Consultar sin esperar si aparecen después de los 6 meses o persisten más allá del año, si son dolorosas con llanto y a veces rastros de sangre, si son abundantes (sobre todo antes de los 2 meses), si llora mucho y se retuerce con el biberón, si rechaza comer y no gana peso o incluso lo pierde, o si hay problemas de sueño y agitación. Consulta urgente si durante una regurgitación sufre un episodio (se pone azul o muy pálido, pierde el tono y le cuesta recuperar la respiración), vómitos en chorro tras la toma en un lactante de menos de 6 semanas con apetito conservado, o vómitos biliosos (verdosos). La página no da teléfonos."
+      ]
+    },
+    {
+      "source_type": "reference",
+      "title": "Mon bébé a un reflux gastro-oesophagien (HUG, Mon enfant est malade)",
+      "organization": "Hôpitaux universitaires de Genève (HUG)",
+      "publication_year": null,
+      "undated_reason": "la página no muestra fecha de publicación ni de actualización (consultada el 2026-11-06)",
+      "url": "https://www.monenfantestmalade.ch/fiches/reflux-gastro-oesophagien",
+      "specialties": [
+        "pediatrics",
+        "general_medicine"
+      ],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "original_language": "fr",
+      "topics": [
+        "reflujo_regurgitacion",
+        "cuando_consultar"
+      ],
+      "chunks": [
+        "Mon bébé a un reflux gastro-oesophagien (HUG). Tema: regurgitaciones del lactante y reflujo. Hallazgo: en cada toma sube algo de leche y sale por la boca del bebé, y a veces hace muecas o llora al regurgitar; muchos bebés tienen regurgitaciones banales. En la mayoría de los bebés son banales: la leche sube sin esfuerzo porque el músculo entre el estómago y el esófago aún no es del todo estanco, algo normal que disminuye poco a poco hasta el año sin tratamiento. En una minoría las regurgitaciones son abundantes y frecuentes y la acidez irrita el esófago: el bebé puede echar la cabeza atrás, llorar al regurgitar y costarle ganar peso (reflujo patológico). Regurgitar no es lo mismo que vomitar: la regurgitación es sin esfuerzo y el vómito es una expulsión forzada, proyectada a cierta distancia de la boca.",
+        "Mon bébé a un reflux gastro-oesophagien (HUG). Tema: cómo reducir las regurgitaciones y dormir. Hallazgo: comprobar que el flujo de la tetina no sea demasiado rápido, porque el aire tragado favorece las regurgitaciones; hacer eructar al bebé al final de la toma; controlar que la cantidad total de leche no sea excesiva y proponer tomas menos copiosas pero más frecuentes. Un bebé instalado en una tumbona o en una silla de coche favorece el reflujo, y se aconseja no fumar a su alrededor. Para dormir se acuesta boca arriba, como todos los bebés, la mejor prevención de la muerte súbita; ya no se recomienda inclinar la cama porque no disminuye las regurgitaciones.",
+        "Mon bébé a un reflux gastro-oesophagien (HUG). Tema: cuándo consultar al pediatra. Hallazgo: consulta inmediata si el bebé preocupa, vomita sangre o los vómitos son verdosos, se pone azul o muy pálido durante una regurgitación y le cuesta recuperar el aliento, o vomita en chorro. Consulta en 24 horas si llora y parece tener dolor después de las comidas o no gana suficiente peso. Si tiene menos de 6 semanas y vomita en chorro, a cierta distancia de la boca, justo después de las comidas, hay que consultar al pediatra: puede tratarse de una estenosis hipertrófica del píloro, que requiere una pequeña intervención quirúrgica."
+      ]
+    }
+  ]
+}

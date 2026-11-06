@@ -1,0 +1,299 @@
+Propuesta, cambio aparte (no aplicado): B19, B21, B24 y B27 pasan a A con su fuente.
+
+Aplicar en el MISMO cambio que mueva a data/ los ficheros candidatos que las responden
+(ojos_oidos_boca_uro_neuro, neonatal, digestivo_piel y alimentacion_bebes de
+adelia/enrichment/candidates/lote_2026_11_06/), nunca antes: expect_source nombra sus títulos
+y tests/test_rag_golden.py::test_every_candidate_source_alternative_names_a_real_corpus_title
+solo mira data/. Probado así (los 12 ficheros movidos a data/ y este parche aplicado): 851
+tests de golden, candidatos, léxico y sujeto implícito en verde; el único fallo,
+test_groups_a_and_b_meet_the_deploy_gate, es el conocido del entorno local (sin clave de
+Mistral).
+
+    git apply docs/corpus/golden-B19-B21-B24-B27-a-A.patch
+
+Mensaje de commit propuesto:
+
+    test(golden): move four candidate near misses to group A
+
+    B19 (ear piercing), B21 (swollen newborn breasts), B24 (molluscum) and
+    B27 (oat drink) were near misses because the corpus had no word for
+    them. The candidates of 2026-11-06 answer each one for 0-24 months
+    (KidsDoc, Seattle Children's, NHS/AEP/AAP/CDC, CDC), so refusing them
+    would now be the failure. As B5 and B10 became A17 and A18, they move to
+    A40-A43 with their wording, and four near misses of the same themes that
+    nothing in data/ or the candidates covers take their place: bruxism
+    (B28), sacral dimple (B29), ringworm (B30) and kombucha in French (B31).
+    GOLDEN_SET is untouched: all eight stay in CANDIDATES until measured.
+
+diff --git a/apps/api/adelia/clinical/golden.py b/apps/api/adelia/clinical/golden.py
+index ce17806..1dc4399 100644
+--- a/apps/api/adelia/clinical/golden.py
++++ b/apps/api/adelia/clinical/golden.py
+@@ -946,25 +946,37 @@ CANDIDATES: tuple[GoldenQuestion, ...] = (
+         ),
+     ),
+     # --- B: one near miss per theme ------------------------------------------
+-    GoldenQuestion(
+-        "B19", "B",
++    # --- 2026-11-07: four near misses that the candidates of that night answer
++    # (adelia/enrichment/candidates/lote_2026_11_06, docs/corpus/
++    # CANDIDATOS_2026_11_06.md). Each B became an A with its wording, as B5 and
++    # B10 became A17 and A18, and a near miss of the same theme that the corpus
++    # still does not cover took its place in group B (B28 to B31). This only
++    # holds once those candidate files are in data/: expect_source names their
++    # titles.
++    GoldenQuestion(
++        "A40", "A",
+         "¿A qué edad le puedo hacer los agujeros de las orejas para los pendientes? Tiene "
+         "3 meses",
+-        age_months=3, kind="adjacent",
++        age_months=3, distinct_sources=True,
++        expect_source="Ear Piercing|perforación en la oreja|Pierced ear",
++        every_citation_mentions="perfora|pendiente|oreja|lóbulo|piercing",
+         rationale=(
+-            "El corpus trata oídos (otitis, audición) y piel, nunca la perforación de las "
+-            "orejas: «agujero» solo sale en pilas de botón, caries y el chupete."
++            "Era B19. «Ear Piercing Symptoms» (KidsDoc, AAP): esperar a que el niño pueda "
++            "cuidar la perforación, lo habitual desde los 8 años; los menores de 4 años se tocan "
++            "los pendientes y pueden tragárselos. También AboutKidsHealth y HealthyChildren."
+         ),
+     ),
+     GoldenQuestion(
+-        "B21", "B",
++        "A41", "A",
+         "Mi bebé de 10 días tiene los pechitos hinchados y le sale una gotita de leche. "
+         "¿Es normal?",
+-        age_months=0, kind="adjacent",
++        age_months=0, distinct_sources=True,
++        expect_source="Newborn Appearance",
++        every_citation_mentions="pech|pezón|mama|hinch",
+         rationale=(
+-            "La hipertrofia mamaria del recién nacido no está en el corpus (ni pechos "
+-            "hinchados, ni crisis genital), pero «recién nacido», «leche» y «es normal» son las "
+-            "palabras de los fragmentos neonatales y de lactancia."
++            "Era B21. «Newborn Appearance Questions» (Seattle Children's): los pechos se hinchan "
++            "en la primera semana por los estrógenos de la madre, unas gotitas de líquido "
++            "lechoso son normales, dura de 2 a 4 semanas y nunca se aprietan."
+         ),
+     ),
+     GoldenQuestion(
+@@ -988,14 +1000,15 @@ CANDIDATES: tuple[GoldenQuestion, ...] = (
+         ),
+     ),
+     GoldenQuestion(
+-        "B24", "B",
++        "A42", "A",
+         "Le han salido en la tripa unas bolitas brillantes con un hoyito en el centro. "
+         "¿Es molusco contagioso? ¿Hay que quitárselas?",
+-        age_months=20, kind="adjacent",
++        age_months=20, distinct_sources=True,
++        expect_source="Molluscum|molusco",
++        every_citation_mentions="molusco|molluscum",
+         rationale=(
+-            "Vecina del eccema, las marcas de nacimiento y las picaduras, que el corpus cubre. "
+-            "Ninguna fuente habla del molusco contagioso; «bolitas» y no «granitos» para que "
+-            "el léxico no la empuje hacia el exantema."
++            "Era B24. NHS, EnFamilia (AEP), HealthyChildren y CDC: pápulas con un hoyito en el "
++            "centro, se curan solas en meses y no suele hacer falta quitarlas."
+         ),
+     ),
+     GoldenQuestion(
+@@ -1010,13 +1023,61 @@ CANDIDATES: tuple[GoldenQuestion, ...] = (
+         ),
+     ),
+     GoldenQuestion(
+-        "B27", "B",
++        "A43", "A",
+         "Ma fille a 14 mois, je peux remplacer le lait de vache par une boisson à l'avoine ?",
+-        locale="fr", age_months=14, kind="adjacent",
++        locale="fr", age_months=14, distinct_sources=True,
++        expect_source=(
++            "Cow's Milk and Milk Alternatives|Bebidas recomendadas|leches vegetales|"
++            "Drinks and cups"
++        ),
++        every_citation_mentions="vegetal|avena|leche|bebida|lácte",
++        rationale=(
++            "Era B27. «Cow's Milk and Milk Alternatives» (CDC): las bebidas vegetales, avena "
++            "incluida, sin azúcar y enriquecidas, nunca antes de los 12 meses; HealthyChildren: "
++            "no sustituyen a la leche de vaca salvo la de soja."
++        ),
++    ),
++    GoldenQuestion(
++        "B28", "B",
++        "Por las noches le rechinan los dientes, tiene 20 meses. ¿Es bruxismo? ¿Hay que hacer "
++        "algo?",
++        age_months=20, kind="adjacent",
++        rationale=(
++            "Ocupa el sitio de B19 en ojos, oídos y boca: dentición, caries y audición están en "
++            "el corpus; el bruxismo no (ni «bruxismo» ni «rechinar» en ningún fichero de data/ "
++            "ni de candidatos el 2026-11-07)."
++        ),
++    ),
++    GoldenQuestion(
++        "B29", "B",
++        "Le he notado una fosita en la piel justo encima de la raja del culete. Tiene 2 semanas. "
++        "¿Es algo malo?",
++        age_months=0, kind="adjacent",
++        rationale=(
++            "Ocupa el sitio de B21 en neonatal: la piel y la exploración del recién nacido están "
++            "en el corpus; la fosita sacra no (cero menciones de «fosita» o «sacro» el "
++            "2026-11-07)."
++        ),
++    ),
++    GoldenQuestion(
++        "B30", "B",
++        "Le ha salido en el brazo una mancha redonda con el borde rojo que le pica. ¿Es tiña? "
++        "¿Se contagia en casa?",
++        age_months=16, kind="adjacent",
++        rationale=(
++            "Ocupa el sitio de B24 en piel: eccema, manchas y molusco están en el corpus; la "
++            "tiña no (cero menciones el 2026-11-07)."
++        ),
++    ),
++    GoldenQuestion(
++        "B31", "B",
++        "Ma fille a 16 mois, est-ce qu'elle peut boire du kombucha ? Elle boit déjà de l'eau et "
++        "du lait.",
++        locale="fr", age_months=16, kind="adjacent",
+         rationale=(
+-            "La leche de vaca a partir del año sí está (hierro, segundo año); las bebidas "
+-            "vegetales no (avena, bebida vegetal: cero menciones). Una respuesta con cita "
+-            "aplicaría la regla de la leche de vaca a otra bebida."
++            "Ocupa el sitio de B27 en alimentación: agua, leche y bebidas vegetales están en el "
++            "corpus; la kombucha no (cero menciones el 2026-11-07). Una respuesta con cita "
++            "aplicaría la regla de otra bebida."
+         ),
+     ),
+ )
+@@ -1036,20 +1097,24 @@ CANDIDATE_MISSES_2026_11_06: dict[str, str] = {
+            "a los mocos de la pregunta y no nombraba la otitis.",
+     "A39": "Ninguna tarjeta bajo el corte: «Soporte vital pediátrico» quedó a 0,1977 (corte "
+            "0,19); el léxico no tenía entrada para la maniobra.",
+-    "B19": "Cuatro tarjetas bajo el corte (0,18) que no responden: prevención de accidentes, "
+-           "audición, atragantamiento con juguetes y dientes.",
+-    "B21": "Cuatro tarjetas bajo el corte (0,14 a 0,15) sobre la leche de la madre, ninguna "
+-           "sobre los pechos hinchados del recién nacido.",
+     "B22": "Cuatro tarjetas bajo el corte (0,17) de lactancia y crianza, ninguna sobre "
+            "anticonceptivos.",
+     "B23": "Mixta: las cuatro tarjetas (0,14 a 0,16) son de adaptación a la guardería, la mitad "
+            "cubierta; ninguna habla de valeriana.",
+-    "B24": "Cuatro tarjetas bajo el corte (0,18) sobre cuerpos extraños y pilas de botón, "
+-           "ninguna sobre el molusco contagioso.",
++    "A40": "Era B19: cuatro tarjetas bajo el corte (0,18) que no respondían; como A, sin medir, "
++           "porque su fuente es candidata (lote_2026_11_06).",
++    "A41": "Era B21: cuatro tarjetas (0,14 a 0,15) sobre la leche de la madre; como A, sin medir, "
++           "porque su fuente es candidata (lote_2026_11_06).",
++    "A42": "Era B24: cuatro tarjetas (0,18) sobre cuerpos extraños y pilas de botón; como A, sin "
++           "medir, porque su fuente es candidata (lote_2026_11_06).",
++    "A43": "Era B27: cuatro tarjetas (0,16) sobre la leche de vaca desde el año; como A, sin "
++           "medir, porque su fuente es candidata (lote_2026_11_06).",
+     "B25": "Dosis: cuatro tarjetas bajo el corte (0,14 a 0,16) sobre sibilancias y tos, ninguna "
+            "con salbutamol ni pulsaciones.",
+-    "B27": "Cuatro tarjetas bajo el corte (0,16) sobre la leche de vaca a partir del año; el "
+-           "corpus no nombra las bebidas vegetales, así que sigue siendo una B.",
++    "B28": "Escrita el 2026-11-07 en el sitio de B19; sin medir.",
++    "B29": "Escrita el 2026-11-07 en el sitio de B21; sin medir.",
++    "B30": "Escrita el 2026-11-07 en el sitio de B24; sin medir.",
++    "B31": "Escrita el 2026-11-07 en el sitio de B27; sin medir.",
+ }
+ 
+ 
+@@ -1059,8 +1124,8 @@ CANDIDATE_MISSES_2026_11_06: dict[str, str] = {
+ #: after a promotion. A literal on purpose: computed from CANDIDATES it would
+ #: shrink with every question promoted.
+ BLIND_SPOT_IDS_2026_11_06: tuple[str, ...] = (
+-    *(f"A{n}" for n in range(19, 40)),
+-    *(f"B{n}" for n in range(18, 28)),
++    *(f"A{n}" for n in range(19, 44)),
++    *(f"B{n}" for n in range(18, 32) if n not in (19, 21, 24, 27)),
+ )
+ 
+ 
+diff --git a/apps/api/tests/test_implicit_subject.py b/apps/api/tests/test_implicit_subject.py
+index 9d3df11..8e4ded2 100644
+--- a/apps/api/tests/test_implicit_subject.py
++++ b/apps/api/tests/test_implicit_subject.py
+@@ -217,10 +217,11 @@ def test_the_candidate_b_questions_that_get_the_second_search():
+     assert got == _CANDIDATE_B_WITH_VARIANT
+ 
+ 
+-#: Pierced ears, valerian drops and molluscum: none names the child. Candidates
+-#: are not in the deploy gate yet, but a promotion would be (B18, lice at
+-#: nursery, was promoted and is pinned with group B above).
+-_CANDIDATE_B_WITH_VARIANT: list[str] = ["B19", "B23", "B24"]
++#: Valerian drops, grinding teeth, a sacral dimple and ringworm: none names the
++#: child. Candidates are not in the deploy gate yet, but a promotion would be
++#: (B18, lice at nursery, was promoted and is pinned with group B above). B19
++#: and B24 left the list on 2026-11-07, when they became A40 and A42.
++_CANDIDATE_B_WITH_VARIANT: list[str] = ["B23", "B28", "B29", "B30"]
+ 
+ 
+ def test_the_group_a_questions_that_get_the_second_search():
+diff --git a/apps/api/tests/test_rag_golden.py b/apps/api/tests/test_rag_golden.py
+index 914d81f..dae3fe8 100644
+--- a/apps/api/tests/test_rag_golden.py
++++ b/apps/api/tests/test_rag_golden.py
+@@ -1309,10 +1309,12 @@ BLIND_THEMES = (
+ #: Which theme each 2026-11-06 B question stands next to. A B question has no
+ #: expect_source to read it from, so the table says it.
+ NOV6_B_THEMES = {
+-    "B18": "infecciones_fiebre", "B19": "ojos_oidos_boca_uro_neuro", "B20": "seguridad",
+-    "B21": "neonatal", "B22": "salud_madre_familia", "B23": "guarderia_adaptacion",
+-    "B24": "digestivo_piel", "B25": "respiratorio_sueno", "B26": "desarrollo_0_24m",
+-    "B27": "alimentacion_bebes",
++    "B18": "infecciones_fiebre", "B20": "seguridad", "B22": "salud_madre_familia",
++    "B23": "guarderia_adaptacion", "B25": "respiratorio_sueno", "B26": "desarrollo_0_24m",
++    # 2026-11-07: B19, B21, B24 and B27 became A40 to A43 (the candidates of that
++    # night answer them); these four took their place, one per theme.
++    "B28": "ojos_oidos_boca_uro_neuro", "B29": "neonatal", "B30": "digestivo_piel",
++    "B31": "alimentacion_bebes",
+ }
+ 
+ #: The urgencias_lactante sources no question reaches, and the wording a
+@@ -1351,7 +1353,7 @@ def test_every_2026_11_06_question_is_a_candidate_or_in_the_gate_never_both():
+     assert len(candidate_ids) == len(set(candidate_ids))
+     assert not gate_ids & set(candidate_ids)
+     assert [q.id for q in NOV6] == list(BLIND_SPOT_IDS_2026_11_06)
+-    assert len(NOV6) == 31
++    assert len(NOV6) == 35
+ 
+ 
+ def test_a_candidate_is_outside_the_gate():
+@@ -1367,7 +1369,7 @@ def test_the_2026_11_06_table_per_group_and_locale():
+         for g in ("A", "B") for loc in LOCALES
+     }
+     assert table == {
+-        ("A", "es"): 12, ("A", "en"): 4, ("A", "fr"): 5,
++        ("A", "es"): 15, ("A", "en"): 4, ("A", "fr"): 6,
+         ("B", "es"): 8, ("B", "en"): 1, ("B", "fr"): 1,
+     }
+ 
+diff --git a/docs/GOLDEN_GATE_DESPLIEGUE.md b/docs/GOLDEN_GATE_DESPLIEGUE.md
+index ecd9eec..effcbe1 100644
+--- a/docs/GOLDEN_GATE_DESPLIEGUE.md
++++ b/docs/GOLDEN_GATE_DESPLIEGUE.md
+@@ -254,8 +254,8 @@ alternativa de `expect_source` existe en el corpus.
+ 
+ | | es | en | fr |
+ |---|---|---|---|
+-| A (A19 a A39) | 12 | 4 | 5 |
+-| B (B18 a B27) | 8 | 1 | 1 |
++| A (A19 a A43) | 15 | 4 | 6 |
++| B (B18 a B31, sin B19, B21, B24 ni B27) | 8 | 1 | 1 |
+ 
+ Las B: piojos (B18), agujeros de las orejas (B19), silla del coche a los 4 años (B20, la para el
+ filtro de edad), pechos hinchados del recién nacido (B21), anticonceptivo en la lactancia (B22),
+@@ -263,6 +263,13 @@ adaptación más gotas de valeriana (B23, mixta), molusco contagioso (B24), puls
+ Ventolin (B25, dosis), lateralidad (B26), bebida de avena (B27). Si entran todas, las fuentes
+ pediátricas sin pregunta A bajan de 337 a 257 de 426.
+ 
++Al entrar en `data/` las fuentes candidatas que las responden
++(`docs/corpus/CANDIDATOS_2026_11_06.md`), cuatro de esas B pasaron a A: B19 es A40 (pendientes,
++KidsDoc), B21 es A41 (pechitos hinchados, Seattle Children's), B24 es A42 (molusco: NHS,
++EnFamilia, HealthyChildren, CDC) y B27 es A43 (bebida de avena, CDC). En su sitio entraron
++cuatro B del mismo tema que siguen sin respuesta: bruxismo (B28), fosita sacra (B29), tiña (B30)
++y kombucha (B31, en francés). Las ocho siguen en `CANDIDATES` hasta medirse.
++
+ ### Medidas en producción el 6 de noviembre de 2026
+ 
+ Pasaron 20 de 31 y están en `GOLDEN_SET` con su id, su texto y su vector: A19, A21 a A26, A28 a

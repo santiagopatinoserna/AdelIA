@@ -1,0 +1,33 @@
+{
+  "_meta": {
+    "topic": "Candidatas del dominio guarderia_adaptacion (0-24 meses), fuentes oficiales de muchos países leídas en su idioma y resumidas en español.",
+    "compiled": "2026-11-06",
+    "method": "Seis investigadores de Claude Code leyeron cada página con WebFetch y la pasaron por un subagente verificador (~/dev/adelia-night/research/corpus-*, verify.json). Al integrarlas se quitaron las fuentes cuyos términos prohíben adaptar, traducir o el uso comercial, los calendarios de vacunas de otros países y los duplicados con data/ y entre lotes; los teléfonos y servicios de otros sistemas de salud se reescribieron en palabras con el nivel de urgencia de la fuente, y cada fragmento sobre alarmas, urgencias, fiebre, respiración, convulsiones, deshidratación, ictericia o sepsis se volvió a comprobar contra el texto de la página descargado con curl. Idiomas del original: francés 1. Detalle en docs/corpus/CANDIDATOS_2026_11_06.md.",
+    "caveat": "Los fragmentos son paráfrasis breves en español, no traducciones literales ni citas; `language` es el idioma del fragmento (es) y `original_language` el de la página. Cada fragmento conserva las cifras, edades y el nivel de urgencia de su propia fuente, que pueden diferir entre países. No es consejo médico.",
+    "purpose": "Candidato: no lo carga el arranque. Se mide con scripts/golden_gate.sh --candidates antes de pasar a data/ como evidence_guarderia_adaptacion_2026_11.json."
+  },
+  "sources": [
+    {
+      "source_type": "guideline",
+      "title": "Survenue de maladies infectieuses dans une collectivité. Conduites à tenir (HCSP)",
+      "organization": "Haut Conseil de la santé publique (HCSP)",
+      "publication_year": 2012,
+      "url": "https://www.hcsp.fr/Explore.cgi/Telecharger?NomFichier=hcspr20120928_maladieinfectieusecollectivite.pdf",
+      "specialties": [
+        "pediatrics",
+        "general_medicine"
+      ],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "original_language": "fr",
+      "topics": [
+        "exclusion_guarderia"
+      ],
+      "chunks": [
+        "Survenue de maladies infectieuses dans une collectivité. Conduites à tenir (Haut Conseil de la santé publique, HCSP, Francia, 2012). Tema: conjuntivitis y crèche (guardería). Hallazgo: la guía francesa de referencia para colectividades (incluidas las de niños) indica que la conjuntivitis no conlleva exclusión (éviction) ni aislamiento: el niño con ojo rojo o pegado puede seguir yendo a la crèche. Es muy contagiosa y se transmite sobre todo por contacto directo con las lágrimas y las secreciones respiratorias, a veces a través de objetos; la causan virus (sobre todo adenovirus) o bacterias. La medida que se pide en la colectividad es aplicar de forma estricta la higiene, en especial el lavado de manos (fuente en francés).",
+        "Survenue de maladies infectieuses dans une collectivité. Conduites à tenir (Haut Conseil de la santé publique, HCSP, Francia, 2012). Tema: cuándo un niño enfermo no debería ir a la crèche aunque no haya exclusión. Hallazgo: el HCSP recuerda que, en cualquier niño enfermo (por ejemplo con fiebre, vómitos o diarrea abundante), no es deseable que acuda a la colectividad durante la fase aguda de la infección, aunque el germen no justifique por sí mismo una exclusión. El médico que lleva al niño puede decidir alargar la ausencia si su estado de salud lo necesita. Además, la guardería no tiene motivo para pedir un certificado de no contagio, y los médicos deben abstenerse de redactarlo (fuente en francés).",
+        "Survenue de maladies infectieuses dans une collectivité. Conduites à tenir (Haut Conseil de la santé publique, HCSP, Francia, 2012). Tema: otitis media aguda y crèche. Hallazgo: según la guía del HCSP para colectividades, la otitis media aguda no conlleva exclusión de la guardería y su contagiosidad es baja; la provocan virus respiratorios (como el VRS, el de la gripe o los rinovirus) o bacterias, y afecta sobre todo a lactantes y niños. Aun así, no es deseable que el niño acuda a la colectividad durante la fase aguda de la enfermedad. En el centro se pide aplicar estrictamente las medidas de higiene (fuente en francés)."
+      ]
+    }
+  ]
+}

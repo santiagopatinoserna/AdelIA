@@ -1,0 +1,1309 @@
+{
+  "_meta": {
+    "topic": "Candidatas del dominio digestivo_piel (0-24 meses), fuentes oficiales de muchos países leídas en su idioma y resumidas en español.",
+    "compiled": "2026-11-06",
+    "method": "Seis investigadores de Claude Code leyeron cada página con WebFetch y la pasaron por un subagente verificador (~/dev/adelia-night/research/corpus-*, verify.json). Al integrarlas se quitaron las fuentes cuyos términos prohíben adaptar, traducir o el uso comercial, los calendarios de vacunas de otros países y los duplicados con data/ y entre lotes; los teléfonos y servicios de otros sistemas de salud se reescribieron en palabras con el nivel de urgencia de la fuente, y cada fragmento sobre alarmas, urgencias, fiebre, respiración, convulsiones, deshidratación, ictericia o sepsis se volvió a comprobar contra el texto de la página descargado con curl. Idiomas del original: español 14, portugués 9, italiano 6, inglés 5, francés 5, árabe 4, sueco 4, coreano 2, neerlandés 2, polaco 2, danés 1, noruego 1. Detalle en docs/corpus/CANDIDATOS_2026_11_06.md.",
+    "caveat": "Los fragmentos son paráfrasis breves en español, no traducciones literales ni citas; `language` es el idioma del fragmento (es) y `original_language` el de la página. Cada fragmento conserva las cifras, edades y el nivel de urgencia de su propia fuente, que pueden diferir entre países. No es consejo médico.",
+    "purpose": "Candidato: no lo carga el arranque. Se mide con scripts/golden_gate.sh --candidates antes de pasar a data/ como evidence_digestivo_piel_2026_11.json."
+  },
+  "sources": [
+    {
+      "source_type": "reference",
+      "title": "استحمام الرضيع",
+      "organization": "Ministerio de Salud de Arabia Saudí (MOH)",
+      "publication_year": 2023,
+      "url": "https://www.moh.gov.sa/HealthAwareness/EducationalContent/BabyHealth/Pages/013.aspx",
+      "specialties": [
+        "pediatrics",
+        "neonatology",
+        "dermatology"
+      ],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "original_language": "ar",
+      "topics": [
+        "bano_higiene"
+      ],
+      "chunks": [
+        "استحمام الرضيع (Ministerio de Salud de Arabia Saudí, actualizado en 2023). Tema: cuándo y cuánto bañar al recién nacido. Hallazgo: la página cita la recomendación de la OMS de retrasar el primer baño hasta 24 horas después del nacimiento, o esperar al menos 6 horas, porque bañarlo pronto puede bajar la temperatura y el azúcar en sangre, y porque la capa blanca cerosa del nacimiento actúa como hidratante natural; tampoco se debe sumergir al bebé antes de que se caiga el cordón umbilical. Los recién nacidos no necesitan bañarse a diario: durante el primer año bastan 3 baños por semana, porque bañarlos más puede resecar la piel. (fuente en árabe)",
+        "استحمام الرضيع (Ministerio de Salud de Arabia Saudí, actualizado en 2023). Tema: seguridad y cuidado de la piel en el baño. Hallazgo: se usa una bañera de plástico rígido con base inclinada y antideslizante, sin aros flotadores ni asientos dentro, y nunca se deja al bebé solo ni un instante; si hay que atender el teléfono o la puerta, se lleva al bebé consigo. Su cara y cuerpo deben quedar muy por encima del agua, que debe estar tibia y comprobada antes. Se usa poco jabón, se lava el pelo 2-3 veces por semana con champú suave, se envuelve enseguida en una toalla y se puede aplicar una crema hidratante sin perfume para prevenir sequedad y eccema. (fuente en árabe)"
+      ]
+    },
+    {
+      "source_type": "reference",
+      "title": "الإسهال عند الأطفال",
+      "organization": "Ministerio de Salud de Arabia Saudí (MOH)",
+      "publication_year": 2023,
+      "url": "https://www.moh.gov.sa/HealthAwareness/EducationalContent/BabyHealth/Pages/diarrhea-in-children.aspx",
+      "specialties": [
+        "pediatrics",
+        "gastroenterology"
+      ],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "original_language": "ar",
+      "topics": [
+        "diarrea",
+        "deshidratacion",
+        "cuando_consultar",
+        "signos_alarma"
+      ],
+      "chunks": [
+        "الإسهال عند الأطفال (Ministerio de Salud de Arabia Saudí, actualizado en 2023). Tema: qué es la diarrea infantil y cuánto dura. Hallazgo: la página la describe como un síntoma frecuente, no una enfermedad, y rara vez grave: cualquier cambio respecto al patrón normal de heces, con más deposiciones, heces blandas o acuosas, moco o sangre. Puede provocar deshidratación y desequilibrio de sales. La diarrea aguda suele durar uno o dos días y se resuelve en unos 5-7 días; la crónica dura al menos 4 semanas. (fuente en árabe)",
+        "الإسهال عند الأطفال (Ministerio de Salud de Arabia Saudí, actualizado en 2023). Tema: cuándo consultar al médico. Hallazgo: se indica consultar si el bebé deja de mamar o de tomar biberón durante más de unas horas; si hay pocos pañales mojados durante 4-6 horas en lactantes y niños pequeños; si persisten signos de deshidratación tras usar la solución de rehidratación oral; si no hay lágrimas al llorar; si la diarrea lleva sangre; si hay vómitos intensos o frecuentes, dolor abdominal intenso, letargo o falta de respuesta, o sed y sequedad de boca. (fuente en árabe)",
+        "الإسهال عند الأطفال (Ministerio de Salud de Arabia Saudí, actualizado en 2023). Tema: grados de deshidratación y tratamiento. Hallazgo: hay deshidratación grave si aparecen al menos dos de estos signos: letargo o pérdida de conciencia, ojos hundidos, incapacidad para beber y pliegue de la piel que tarda 2 segundos o más en volver. Hay cierta deshidratación con dos o más de: inquietud e irritabilidad, ojos hundidos, mucha sed y beber con ansia. El tratamiento es la solución de rehidratación oral (agua limpia, azúcar, sal y minerales) y seguir con alimentos nutritivos, incluida la leche materna; la deshidratación grave requiere líquidos por vía intravenosa. Ayudan a prevenirla el agua segura, lavarse las manos, la lactancia exclusiva durante 6 meses y la vacuna contra el rotavirus. (fuente en árabe)"
+      ]
+    },
+    {
+      "source_type": "reference",
+      "title": "طفح الحفاضات",
+      "organization": "Ministerio de Salud de Arabia Saudí (MOH)",
+      "publication_year": 2025,
+      "url": "https://www.moh.gov.sa/HealthAwareness/EducationalContent/BabyHealth/Pages/017.aspx",
+      "specialties": [
+        "pediatrics",
+        "dermatology"
+      ],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "original_language": "ar",
+      "topics": [
+        "dermatitis_panal",
+        "bano_higiene",
+        "cuando_consultar"
+      ],
+      "chunks": [
+        "طفح الحفاضات (Ministerio de Salud de Arabia Saudí, actualizado en 2025). Tema: qué es y qué tipos hay. Hallazgo: es una inflamación frecuente de la piel causada por llevar pañal, normalmente por la humedad, y es más habitual entre los 9 y los 12 meses. La forma más común es la irritativa, por orina o heces, en nalgas, bajo vientre, genitales y parte alta de los muslos. La de hongos aparece si la irritación no se trata durante varios días, con zonas rojo oscuro, a veces con ampollas amarillas llenas de líquido, en los pliegues. La alérgica es menos común, con enrojecimiento, picor y descamación, y a veces la provocan las toallitas húmedas, por los conservantes que llevan algunas. (fuente en árabe)",
+        "طفح الحفاضات (Ministerio de Salud de Arabia Saudí, actualizado en 2025). Tema: cuidados y cuándo ir al médico. Hallazgo: ante la irritación se cambia el pañal con frecuencia, no se deja mojado ni sucio mucho rato, se aumenta el tiempo sin pañal si se puede, se lava con agua tibia sin jabón y se aplica una pomada en cada cambio de pañal. Las toallitas deben ser sin alcohol ni perfume y conviene evitarlas si la piel está irritada o con llagas. Hay que ver al médico si no mejora o empeora tras unos días de cuidados, si hay ampollas o llagas con pus, si la temperatura supera los 38 °C con el sarpullido o si hay sangre en las heces. (fuente en árabe)"
+      ]
+    },
+    {
+      "source_type": "reference",
+      "title": "مغص الرضع",
+      "organization": "Ministerio de Salud de Arabia Saudí (MOH)",
+      "publication_year": 2026,
+      "url": "https://www.moh.gov.sa/HealthAwareness/EducationalContent/BabyHealth/Pages/016.aspx",
+      "specialties": [
+        "pediatrics",
+        "gastroenterology"
+      ],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "original_language": "ar",
+      "topics": [
+        "colico",
+        "llanto",
+        "cuando_consultar"
+      ],
+      "chunks": [
+        "مغص الرضع (Ministerio de Salud de Arabia Saudí, actualizado en 2026). Tema: qué es el cólico del lactante. Hallazgo: es un llanto intenso, de más de 3 horas al día y más de 3 días por semana, sin causa conocida, que suele desaparecer hacia los 3-4 meses. El llanto normal puede llegar a 2 horas diarias, mientras que el del cólico supera las 3 horas, empieza de repente, a menudo por la tarde o noche, y es más intenso. (fuente en árabe)",
+        "مغص الرضع (Ministerio de Salud de Arabia Saudí, actualizado en 2026). Tema: qué descartar y cómo calmar al bebé. Hallazgo: antes de pensar en cólico hay que descartar hambre, dolor o inicio de enfermedad (tomar la temperatura y comprobar que ropa o pañal no aprietan), cansancio o exceso de estimulación y alergia alimentaria, que se sospecha si el bebé llora en la hora siguiente a mamar. Ayudan elegir un biberón que reduzca el aire tragado, mantenerlo en vertical al comer, llevarlo en brazos y pasear con él, darle un masaje y, si la madre se agobia, pedir a la familia o amistades un descanso breve. (fuente en árabe)",
+        "مغص الرضع (Ministerio de Salud de Arabia Saudí, actualizado en 2026). Tema: cuándo consultar al médico por llanto. Hallazgo: hay que consultar al médico si el llanto continúa más de 2 horas, si llora tras una lesión o caída, si rechaza comer o beber más de unas horas o vomita en exceso, si orina poco o hay sangre en las heces, si cambia su comportamiento (letargo o poca respuesta) o si el llanto excesivo sigue pasados los 4 meses. (fuente en árabe)"
+      ]
+    },
+    {
+      "source_type": "reference",
+      "title": "Spædbarnskolik (Sundhed.dk)",
+      "organization": "Sundhed.dk, Patienthåndbogen",
+      "publication_year": 2025,
+      "url": "https://www.sundhed.dk/borger/patienthaandbogen/boern/sygdomme/mave-tarm/spaedbarnskolik/",
+      "specialties": [
+        "pediatrics",
+        "gastroenterology"
+      ],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "original_language": "da",
+      "topics": [
+        "colico",
+        "llanto"
+      ],
+      "chunks": [
+        "Spædbarnskolik (Sundhed.dk, Patienthåndbogen, 2025). Tema: definición y evolución del cólico del lactante. Hallazgo: según la página, se trata de llanto o inquietud prolongados durante más de 3 horas al día, más de 3 días a la semana, en un bebé por lo demás sano, menor de 5 meses y con aumento normal de peso. Suele empezar en la segunda semana de vida y alcanza su máximo hacia las 6 semanas. Los episodios se concentran al final de la tarde y por la noche. Cesa en más del 90 % de los casos a los 3-4 meses y en casi todos a los 5 meses. Afecta al 8-40 % de los lactantes, según el estudio y el país.",
+        "Spædbarnskolik (Sundhed.dk, Patienthåndbogen, 2025). Tema: consejos y cuándo consultar. Hallazgo: la página considera el cólico inofensivo y sin relación conocida con enfermedades posteriores. Sugiere dejar que el bebé eructe durante las tomas, dejarle comer hasta saciarse, no cambiar de pecho demasiado deprisa, comprobar la postura de lactancia, y probar el sonido de una lavadora, un paseo en coche o una hamaca, además de mantener la calma y consultar a la enfermera de pediatría o al médico. Hay que buscar al médico si el bebé no quiere comer, vomita, no orina o está aletargado, o si una misma se siente superada y necesita hablar con el médico de la situación. Si no gana suficiente peso puede haber otra causa. La quiropráctica y la osteopatía no tienen efecto demostrado."
+      ]
+    },
+    {
+      "source_type": "reference",
+      "title": "Pooping By the Numbers: What's Normal for Infants? (HealthyChildren.org, AAP)",
+      "organization": "American Academy of Pediatrics",
+      "publication_year": 2024,
+      "url": "https://www.healthychildren.org/English/ages-stages/baby/Pages/Pooping-By-the-Numbers.aspx",
+      "specialties": [
+        "pediatrics",
+        "general_medicine",
+        "gastroenterology"
+      ],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "original_language": "en",
+      "topics": [
+        "heces",
+        "estrenimiento",
+        "diarrea"
+      ],
+      "chunks": [
+        "Pooping By the Numbers: What's Normal for Infants? (HealthyChildren.org, American Academy of Pediatrics, 2024). Tema: cuántas deposiciones son normales. Hallazgo: lo normal va desde una deposición cada varios días hasta varias al día. Los bebés más pequeños hacen más que los mayores, y los recién nacidos suelen hacer varias deposiciones diminutas seguidas. A los pediatras les importa más que todo avance con normalidad que la cifra exacta. Los lactantes amamantados suelen hacer más deposiciones que los alimentados con fórmula, aunque la página no da cifras concretas.",
+        "Pooping By the Numbers: What's Normal for Infants? (HealthyChildren.org, American Academy of Pediatrics, 2024). Tema: estreñimiento, diarrea y cuándo llamar. Hallazgo: el estreñimiento verdadero son heces duras, difíciles o poco frecuentes, y no es un problema habitual en lactantes pequeños; pasar de 5 a 7 días entre deposiciones no es necesariamente un problema si hizo deposiciones normales las dos primeras semanas y come y crece bien. Una deposición blanda que sale con facilidad es tranquilizadora aunque el bebé gruña, se esfuerce o se ponga rojo, y empujar con suavidad sus rodillas hacia el pecho puede ayudar. Se llama al pediatra si tiene problemas constantes para hacer caca (poco frecuentes o aparentemente dolorosas), si hay sangre o algo no parece normal, o si las heces del bebé son cada vez más acuosas o hace más deposiciones que tomas."
+      ]
+    },
+    {
+      "source_type": "guideline",
+      "title": "Vomiting in babies and children: causes, diagnosis and treatments (HSE)",
+      "organization": "Health Service Executive (HSE)",
+      "publication_year": 2023,
+      "url": "https://www2.hse.ie/conditions/vomiting-babies-children/",
+      "specialties": [
+        "pediatrics",
+        "general_medicine",
+        "gastroenterology"
+      ],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "original_language": "en",
+      "topics": [
+        "vomitos",
+        "deshidratacion"
+      ],
+      "chunks": [
+        "Vomiting in babies and children: causes, diagnosis and treatments (HSE, 2023). Tema: causas y cuidados en casa. Hallazgo: el vómito puede deberse a infecciones comunes como la gastroenteritis; otras causas más graves son meningitis, neumonía, infección urinaria, reflujo, intolerancia a la leche o alergia alimentaria, estenosis de píloro o invaginación intestinal, hernia estrangulada y apendicitis. La mayoría de los niños se cuida en casa: importan más los líquidos que la comida, se evitan el zumo y los refrescos hasta que se encuentre mejor, no se diluye la leche de fórmula, y los bebés amamantados o con fórmula siguen con sus tomas normales (los amamantados pueden querer más). Se pregunta al farmacéutico por una solución de rehidratación oral.",
+        "Vomiting in babies and children: causes, diagnosis and treatments (HSE, 2023). Tema: cuándo llamar al médico y cuándo ir a urgencias. Hallazgo: se llama al médico de inmediato si el niño ha vomitado más de 3 veces en 24 horas o durante más de 3 días, si hay signos de deshidratación, si ha viajado al extranjero hace poco y vomita más de lo habitual, si tiene 38 °C o más y menos de 3 meses o 39 °C o más y más de 3 meses, si hay dolor de barriga intenso o vómito con sangre, marrón o verde. Hay que llamar a una ambulancia de inmediato si vomita y tiene dolor de cabeza, rigidez de cuello y erupción. Se va a urgencias de inmediato ante signos de deshidratación grave (menos pañales mojados, somnolencia o dificultad para despertarlo, piel pálida o moteada, manos y pies fríos) o si el dolor empeora rápido y se extiende por la barriga. Se queda en casa al menos 48 horas tras el último vómito."
+      ]
+    },
+    {
+      "source_type": "guideline",
+      "title": "Dehydration In Babies & Children (KidsHealth New Zealand)",
+      "organization": "KidsHealth (Paediatric Society of New Zealand)",
+      "publication_year": 2026,
+      "url": "https://www.kidshealth.org.nz/dehydration-in-babies-children",
+      "specialties": [
+        "pediatrics",
+        "general_medicine",
+        "emergency_medicine"
+      ],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "original_language": "en",
+      "topics": [
+        "deshidratacion",
+        "diarrea",
+        "vomitos"
+      ],
+      "chunks": [
+        "Dehydration In Babies & Children (KidsHealth New Zealand, 2026). Tema: signos de deshidratación. Hallazgo: en los bebés son signos menos pañales mojados, labios y lengua secos, ausencia de lágrimas al llorar, más sueño de lo habitual, comer peor y pérdida de peso; en niños, orinar menos, orina amarillo oscuro, sed, boca o labios secos, cansancio, estar menos activo y dolor de cabeza. Los signos más graves son orinar muy poco o nada, manos y pies fríos, respiración rápida, ojos hundidos y mucho sueño o dificultad para despertarlo. En los menores de 6 meses la deshidratación puede agravarse con rapidez.",
+        "Dehydration In Babies & Children (KidsHealth New Zealand, 2026). Tema: qué hacer y cuándo consultar. Hallazgo: con deshidratación leve se dan pequeñas cantidades de líquido a menudo (mejor sorbos frecuentes que bebidas grandes), se sigue con el pecho ofreciendo tomas más a menudo y con la fórmula, salvo indicación del profesional, y se usa una solución de rehidratación oral si un profesional la recomienda. Se consulta si hay signos de deshidratación, vómitos sin retener líquidos, diarrea de más de unos días, fiebre persistente o si no mejora. Se ve a un profesional con urgencia si tiene menos de 6 meses y está enfermo, orina muy poco o nada, está muy adormilado, con manos y pies fríos, respira rápido, tiene dolor de barriga intenso o sangre en el vómito o las heces. Se llama a emergencias si está flácido, azulado alrededor de la boca, con dificultad para respirar o no responde."
+      ]
+    },
+    {
+      "source_type": "reference",
+      "title": "Toddler's Diarrhoea (KidsHealth New Zealand)",
+      "organization": "KidsHealth (Paediatric Society of New Zealand)",
+      "publication_year": 2025,
+      "url": "https://www.kidshealth.org.nz/toddlers-diarrhoea",
+      "specialties": [
+        "pediatrics",
+        "general_medicine",
+        "gastroenterology"
+      ],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "original_language": "en",
+      "topics": [
+        "diarrea",
+        "heces"
+      ],
+      "chunks": [
+        "Toddler's Diarrhoea (KidsHealth New Zealand, 2025). Tema: qué es la diarrea del niño pequeño. Hallazgo: son deposiciones frecuentes, sueltas y líquidas, habituales en niños pequeños desde 1 año hasta los 5 años, que no se deben a una infección ni a otra enfermedad y con las que el niño crece y se desarrolla con normalidad. No se conoce la causa exacta, pero el exceso de zumo de fruta, una dieta baja en grasa y alta en fibra y un aparato digestivo inmaduro pueden empeorarla. Hay 3 o más deposiciones sueltas al día, a menudo con restos de comida sin digerir (guisantes, trozos de maíz), y el niño sigue activo, con buen apetito y sin pérdida de peso ni dolor.",
+        "Toddler's Diarrhoea (KidsHealth New Zealand, 2025). Tema: cuándo buscar ayuda médica. Hallazgo: se busca ayuda médica urgente si el niño tiene diarrea con fiebre, vómitos, no come o bebe lo habitual, sangre en las heces, dolor de barriga, heces grasientas o aceitosas, escapes de heces o pérdida de peso, porque pueden indicar una infección u otra condición. Si el niño pequeño tiene diarrea, se consulta con su pediatra, y en una emergencia se llama a emergencias."
+      ]
+    },
+    {
+      "source_type": "reference",
+      "title": "Molluscum contagiosum (NHS)",
+      "organization": "NHS (National Health Service, Reino Unido)",
+      "publication_year": 2026,
+      "url": "https://www.nhs.uk/conditions/molluscum-contagiosum/",
+      "specialties": [
+        "pediatrics",
+        "dermatology",
+        "general_medicine"
+      ],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "original_language": "en",
+      "topics": [
+        "molusco_contagioso",
+        "cuando_consultar"
+      ],
+      "chunks": [
+        "Molluscum contagiosum (NHS, National Health Service, Reino Unido, 2026). Tema: cómo son los granitos del molusco contagioso y cuánto tardan en irse. Hallazgo: es una infección vírica de la piel, normalmente inofensiva, que rara vez necesita tratamiento y es más frecuente en niños. El síntoma principal son granitos agrupados, de unos 2 a 5 milímetros, abultados en forma de cúpula y con un hoyito blanco y brillante en el centro. En los niños suelen salir en el cuerpo y en los pliegues de la piel, como la ingle, detrás de las rodillas o las axilas. Sin tratamiento, los granitos suelen desaparecer en un plazo de 18 meses. Se contagia sobre todo por contacto directo piel con piel, pero el riesgo durante las actividades normales es pequeño, así que la mayoría puede seguir con su vida habitual (fuente en inglés).",
+        "Molluscum contagiosum (NHS, National Health Service, Reino Unido, 2026). Tema: qué hacer en casa y qué no hacer con las bolitas del molusco. Hallazgo: para aliviar la sequedad y el picor puede ayudar aplicar una toalla húmeda, darle baños frescos o hidratar la piel con un producto sin perfume. Conviene mantener los granitos tapados (con apósitos impermeables para nadar). No hay que apretarlos, reventarlos ni rascarlos, porque pueden infectarse o dejar cicatriz, y no se deben compartir baños, toallas, ropa de cama ni ropa. Como la infección se cura sola, el tratamiento rara vez hace falta; el médico puede valorarlo si los granitos dan problemas (fuente en inglés).",
+        "Molluscum contagiosum (NHS, National Health Service, Reino Unido, 2026). Tema: cuándo pedir cita con el médico por un molusco contagioso. Hallazgo: el NHS aconseja pedir cita con el médico de cabecera (no es urgente) si no estás seguro de que los granitos sean molusco contagioso; si pican mucho, duelen, están hinchados o tienen costra; si hay granitos cerca de los ojos o de los genitales, o si la persona tiene las defensas bajas. El médico puede tratar una infección de los granitos o la piel seca, irritada o con aspecto de eccema que a veces aparece a su alrededor, y puede derivar al especialista si hay muchos granitos, si están cerca de los ojos o los párpados o si afectan mucho a la vida diaria (fuente en inglés)."
+      ]
+    },
+    {
+      "source_type": "reference",
+      "title": "Llanto de Niños Mayores de 3 Meses de Edad – Irritabilidad Inconsolable (guía de síntomas KidsDoc, HealthyChildren, AAP)",
+      "organization": "American Academy of Pediatrics",
+      "publication_year": null,
+      "undated_reason": "Guía de síntomas KidsDoc (Barton Schmitt, Schmitt Pediatric Guidelines, copyright 2000-2025) sin fecha de publicación del tema; consultada el 2026-11-06.",
+      "url": "https://www.healthychildren.org/Spanish/tips-tools/symptom-checker/Paginas/symptomviewer.aspx?symptom=Llanto+de+Ni%C3%B1os+Mayores+de+3+Meses+de+Edad+%E2%80%93Irritabilidad+Inconsolable",
+      "specialties": [
+        "pediatrics",
+        "general_medicine"
+      ],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "original_language": "es",
+      "topics": [
+        "llanto",
+        "cuando_consultar"
+      ],
+      "chunks": [
+        "Llanto de Niños Mayores de 3 Meses de Edad (guía de síntomas KidsDoc, HealthyChildren.org, Academia Americana de Pediatría). Tema: por qué llora un bebé de más de 3 meses que no para de llorar sin causa clara. Hallazgo: la guía trata el llanto inconsolable cuando es el único síntoma en niños de más de 3 meses, casi siempre menores de 2 años que aún no pueden explicar qué les pasa. Las causas son empezar a ponerse enfermo (lloran aunque no tengan dolor), un dolor (oído, garganta, llagas en la boca, una dermatitis del pañal o estreñimiento), estar demasiado cansado, estrés, rabietas, ansiedad por separación, dificultad para dormir o hambre. Según la guía, los dientes ponen irritables a algunos bebés pero normalmente no causan llanto, y los gases que pasan por el intestino normalmente no causan dolor ni llanto.",
+        "Llanto de Niños Mayores de 3 Meses de Edad (guía de síntomas KidsDoc, HealthyChildren.org, AAP). Tema: cuándo el llanto inconsolable es una urgencia. Hallazgo: la guía indica llamar a emergencias si el niño no se mueve o está muy débil, o si crees que su vida corre peligro. Hay que ir a urgencias ya si tiene el cuello rígido o le cuesta mucho moverlo, un bulto en un lado, la ingle o el escroto hinchados, no mueve un brazo o una pierna con normalidad, llora cuando lo tocas o lo mueves, grita fuerte sin poder calmarse o no está alerta. Se llama al médico en ese momento si ha podido hacerse daño, si no para de llorar durante más de 2 horas pese a las medidas de la guía, si lleva más de 8 horas sin querer beber o bebiendo muy poco, si se le ve muy enfermo o si temes que alguien pueda hacerle daño o zarandearlo.",
+        "Llanto de Niños Mayores de 3 Meses de Edad (guía de síntomas KidsDoc, HealthyChildren.org, AAP). Tema: cuándo pedir cita y cómo calmarlo en casa. Hallazgo: hay que contactar con el médico en 24 horas si crees que llora por dolor, como un dolor de oído, o si hay un episodio nuevo sin causa clara aunque se calme; y en horario de consulta si la irritabilidad leve a ratos, sin causa aparente, dura más de 2 días o el llanto es un problema frecuente. En casa: cogerlo, mecerlo o darle un masaje hablándole en voz baja y tranquila; revisar que la ropa no apriete y que no tenga hinchazones como picaduras; si toma algún medicamento sin receta para la tos o el resfriado, dejar de dárselo, porque algunos pueden provocar llanto; tras suspenderlo, el llanto debería ceder en unas 4 horas. Nunca hay que sacudir a un bebé; si te desbordas, déjalo en un lugar seguro, pide ayuda y descansa."
+      ]
+    },
+    {
+      "source_type": "reference",
+      "title": "Llanto de Niños Menores de 3 Meses de Edad (guía de síntomas KidsDoc, HealthyChildren, AAP)",
+      "organization": "American Academy of Pediatrics",
+      "publication_year": null,
+      "undated_reason": "Guía de síntomas KidsDoc (Barton Schmitt, Schmitt Pediatric Guidelines, copyright 2000-2025) sin fecha de publicación del tema; consultada el 2026-11-06.",
+      "url": "https://www.healthychildren.org/Spanish/tips-tools/symptom-checker/Paginas/symptomviewer.aspx?symptom=Llanto+de+Ni%C3%B1os+Menores+de+3+Meses+de+Edad",
+      "specialties": [
+        "pediatrics",
+        "general_medicine"
+      ],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "original_language": "es",
+      "topics": [
+        "llanto",
+        "colico",
+        "cuando_consultar"
+      ],
+      "chunks": [
+        "Llanto de Niños Menores de 3 Meses de Edad (guía de síntomas KidsDoc, HealthyChildren.org, Academia Americana de Pediatría). Tema: cuánto llanto es normal y qué es el cólico cuando el bebé no para de llorar. Hallazgo: un bebé normal llora de 1 a 2 horas al día en varios ratos y está contento el resto del tiempo. Se habla de cólico (llanto excesivo) cuando llora más de 3 horas al día un bebé que crece bien y tiene una exploración normal: llanto intenso una o dos veces al día, se calma en brazos, entre episodios está bien, come bien y no está enfermo. El cólico tiene que ver con el temperamento del bebé, no con algo que los padres hayan hecho mal. Es peor entre las semanas 4 y 6, mejora a partir de los 2 meses y suele desaparecer a los 3 meses (a veces a los 4). Los gases y el reflujo normal no causan el llanto.",
+        "Llanto de Niños Menores de 3 Meses de Edad (guía de síntomas KidsDoc, HealthyChildren.org, AAP). Tema: cuándo el llanto de un bebé pequeño es una urgencia. Hallazgo: la guía indica llamar a emergencias (112) si el bebé no se mueve o está muy débil, e ir a urgencias ya si no está alerta. Hay que llamar al médico o buscar atención en ese momento si es menor de 1 mes y se le ve o se comporta de forma rara, si tiene fiebre y es menor de 12 semanas (sin darle nada para la fiebre antes de que lo vean), si vomita, si llora al tocarlo, moverlo o cogerlo, si tiene hinchada la ingle o el escroto, si ha podido hacerse daño, si no para de llorar durante más de 2 horas seguidas pese a probar las medidas para calmarlo, si lleva más de 8 horas sin querer tomar nada o tomando muy poco, si se le ve muy enfermo o si temes que alguien pueda hacerle daño o zarandearlo.",
+        "Llanto de Niños Menores de 3 Meses de Edad (guía de síntomas KidsDoc, HealthyChildren.org, AAP). Tema: cuándo pedir cita por el llanto y cuándo es normal. Hallazgo: hay que contactar con el médico en 24 horas si no gana peso o parece quedarse con hambre, si hay un episodio de llanto nuevo sin causa clara aunque se calme, o si la madre o el padre están agotados por el llanto. Conviene pedir cita en horario de consulta si al bebé nunca lo han revisado por llorar mucho, si los episodios empezaron después del primer mes o si llora 3 o más veces al día. Se puede manejar en casa el llanto normal de todos los bebés y el cólico, es decir, el llanto excesivo de un bebé sano que se deja consolar. La guía recuerda llamar si el bebé parece o actúa de forma anormal, el llanto continuo pasa de 2 horas o no logras calmarlo.",
+        "Llanto de Niños Menores de 3 Meses de Edad (guía de síntomas KidsDoc, HealthyChildren.org, AAP). Tema: cómo calmar a un bebé que no para de llorar y advertencia de no sacudirlo. Hallazgo: la guía aconseja coger al bebé y consolarlo, mecerlo con movimientos pequeños y rápidos, usar un columpio o una hamaca, pasearlo en el carrito, ofrecer el chupete, un masaje o un baño templado. Envolverlo en una manta es lo más útil, sin taparle la cabeza ni abrigarlo en exceso, y se deja de hacer cuando empieza a intentar darse la vuelta, hacia los 2 meses. Ayuda un ruido blanco suave, nunca muy alto. Si está cansado, se le acuesta boca arriba en la cuna y se sale de la habitación. Nunca hay que sacudir a un bebé: en pocos segundos puede causar una hemorragia cerebral y daño cerebral grave. Si te desbordas, deja al bebé en un lugar seguro, pide ayuda a alguien y descansa hasta calmarte."
+      ]
+    },
+    {
+      "source_type": "reference",
+      "title": "Molusco contagioso en niños: síntomas, tratamiento y prevención (HealthyChildren, AAP)",
+      "organization": "American Academy of Pediatrics",
+      "publication_year": 2024,
+      "url": "https://www.healthychildren.org/Spanish/health-issues/conditions/skin/Paginas/Molluscum-Contagiosum.aspx",
+      "specialties": [
+        "pediatrics",
+        "dermatology"
+      ],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "original_language": "es",
+      "topics": [
+        "molusco_contagioso",
+        "cuando_consultar"
+      ],
+      "chunks": [
+        "Molusco contagioso en niños: síntomas, tratamiento y prevención (HealthyChildren, AAP, 2024). Tema: cómo se reconoce el molusco y cuánto tarda en irse. Hallazgo: es una infección de la piel frecuente en la infancia, causada por un poxvirus, que produce bultitos pequeños e inofensivos que suelen desaparecer solos. Las pápulas son pequeñas, del color de la piel o rosadas, brillantes y a menudo tienen un hoyito en el centro. Salen sobre todo en el tronco, los brazos y las piernas, aunque pueden aparecer en la cara o la ingle, y se agrupan en zonas donde la piel roza, como las axilas, el pliegue del codo o detrás de las rodillas. Pueden picar, pero no suelen doler. Aparecen de 2 a 6 semanas después del contagio, que es sobre todo piel con piel o por toallas o ropa de cama compartidas, y sin tratamiento suelen desaparecer en 6 meses a 2 años; a veces dejan pequeñas marcas.",
+        "Molusco contagioso en niños: síntomas, tratamiento y prevención (HealthyChildren, AAP, 2024). Tema: si hay que tratarlo, cómo evitar el contagio y cuándo llamar al pediatra. Hallazgo: la mayoría de los niños no necesitan tratamiento; hay opciones que valora el médico si los bultitos molestan o preocupa que se extiendan, pero algunas pueden doler y, rara vez, dejar cicatriz o cambios de color en la piel. Antes de desaparecer, las pápulas pueden agrandarse, enrojecerse y doler; si duelen, puede ayudar una compresa tibia (un paño limpio mojado en agua tibia y escurrido) puesta sobre ellas durante 10 minutos. Para prevenir el contagio, lo más importante es lavarse las manos a menudo, no compartir toallas, ropa ni objetos personales y tapar las pápulas que no cubra la ropa. Llama al pediatra si te preocupan los bultitos o si ves una zona roja que se extiende alrededor de una pápula."
+      ]
+    },
+    {
+      "source_type": "reference",
+      "title": "Molluscum contagiosum (molusco) (EnFamilia, AEP)",
+      "organization": "Asociación Española de Pediatría",
+      "publication_year": null,
+      "undated_reason": "Página divulgativa de EnFamilia sin fecha de publicación visible; consultada el 2026-11-06.",
+      "url": "https://www.aeped.es/enfamilia/salud-en-familia/molluscum-contagiosum-molusco",
+      "specialties": [
+        "pediatrics",
+        "dermatology"
+      ],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "original_language": "es",
+      "topics": [
+        "molusco_contagioso",
+        "dermatitis_atopica"
+      ],
+      "chunks": [
+        "Molluscum contagiosum (molusco) (EnFamilia, AEP). Tema: qué es el molusco contagioso y cómo son las bolitas. Hallazgo: el molusco contagioso es una infección de la piel causada por un virus, igual que las verrugas; es benigna y autolimitada, es decir, acaba desapareciendo sola, y es más frecuente en niños que en adultos. En la cara, el cuello, los brazos, las axilas, el pecho, la tripa o las piernas salen unos granitos o bolitas pequeñas, de aspecto perlado, con el centro hundido como un ombligo (un hoyito en el centro); puede haber desde uno o dos hasta más de veinte. No suele dar síntomas, salvo algo de picor o leves molestias. Los niños con dermatitis atópica (eccema) son más propensos a tenerlo y a que se extienda por la piel afectada por la dermatitis.",
+        "Molluscum contagiosum (molusco) (EnFamilia, AEP). Tema: cómo evitar que se contagie o se extienda y si hay que quitar las bolitas. Hallazgo: la mayoría de las veces afecta a una sola persona de la familia, aunque se puede contagiar por contacto directo de la piel con las lesiones o por objetos como las toallas. La AEP aconseja evitar tocar o rascar las lesiones, lavarse las manos a menudo con agua y jabón, no compartir toallas, ropa ni otros objetos personales y, en la piscina, cubrir las lesiones con ropa o apósitos resistentes al agua, no compartir tablas ni juguetes de agua y evitar rozarse con las corcheras. Como las lesiones pueden desaparecer solas y sin dejar cicatriz, a menudo no se tratan; en ocasiones el pediatra o el dermatólogo las trata con técnicas poco agresivas para evitar que se extiendan a otras zonas o a otras personas. Ante cualquier duda, consulta al pediatra."
+      ]
+    },
+    {
+      "source_type": "reference",
+      "title": "Acerca del molusco contagioso (CDC)",
+      "organization": "CDC",
+      "publication_year": 2025,
+      "url": "https://www.cdc.gov/molluscum-contagiosum/es/about/index.html",
+      "specialties": [
+        "pediatrics",
+        "dermatology",
+        "general_medicine"
+      ],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "original_language": "es",
+      "topics": [
+        "molusco_contagioso"
+      ],
+      "chunks": [
+        "Acerca del molusco contagioso (CDC, Centros para el Control de Enfermedades de EE. UU., 2025). Tema: qué es, a quién afecta y cuánto dura. Hallazgo: es una infección de la piel causada por un poxvirus, frecuente y normalmente leve, que desaparece sin tratamiento. Es más habitual en niños de 1 a 10 años, y el riesgo es mayor en quienes tienen eccema o las defensas bajas. Las lesiones son bultitos firmes y abultados, blancos, rosados o del color de la piel, a veces con un hundimiento en el centro, de un tamaño entre la cabeza de un alfiler y la goma de un lápiz; pueden salir casi en cualquier parte del cuerpo y a veces pican, duelen, se enrojecen o se hinchan. Suelen desaparecer en 6 meses a 1 año, a veces más, y generalmente no dejan cicatriz. Se puede volver a tener si se está cerca de alguien infectado.",
+        "Acerca del molusco contagioso (CDC, Centros para el Control de Enfermedades de EE. UU., 2025). Tema: contagio, guardería, piscina y no reventar las bolitas. Hallazgo: se contagia por contacto directo con la persona infectada o con objetos que ha usado (toallas, ropa, juguetes, material de piscina), y el niño puede extenderlo a otras zonas al rascarse. La complicación más común es una infección bacteriana si las lesiones se rascan o se abren. El CDC advierte que no intentes quitar las bolitas ni sacarles el líquido por tu cuenta, y que los productos que se venden por internet pueden no funcionar y ser perjudiciales. No hay motivo para dejar al niño en casa sin ir a la guardería o al colegio, y puede bañarse en la piscina si no tiene lesiones abiertas. Para prevenirlo: lavarse las manos, no compartir toallas ni ropa y tapar las lesiones."
+      ],
+      "original_license": "public_domain"
+    },
+    {
+      "source_type": "reference",
+      "title": "Cólicos en niños y niñas",
+      "organization": "Chile Crece Contigo (Gobierno de Chile)",
+      "publication_year": null,
+      "undated_reason": "Página de crececontigo.gob.cl sin fecha de publicación visible; consultada el 2026-11-06. Columna del experto con la pediatra del MINSAL Heather Strain Henkes (rutas de imágenes de 2015, no confirma fecha).",
+      "url": "https://www.crececontigo.gob.cl/columna/colicos-en-ninos-y-ninas/",
+      "specialties": [
+        "pediatrics",
+        "gastroenterology"
+      ],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "original_language": "es",
+      "topics": [
+        "colico",
+        "signos_alarma",
+        "cuando_consultar"
+      ],
+      "chunks": [
+        "Cólicos en niños y niñas (Chile Crece Contigo, Chile). Tema: qué son los cólicos y cuánto llanto es normal. Hallazgo: son episodios de llanto y agitación en lactantes cuyas causas no están claras; la definición estricta es llanto de más de tres horas al día, al menos tres días a la semana. Afectan a cerca del 20 % de los bebés, con un pico desde las primeras tres semanas hasta los cuatro meses. El llanto normal ronda 1 h 45 min al día en la segunda semana, sube a 2 o 3 horas hacia el mes y medio y baja a cerca de 1 hora a los cuatro meses. Si el llanto dura media hora o una hora y no se consigue calmarlo, se recomienda que lo valoren o pedir ayuda; si pasados los cuatro meses los cólicos no disminuyen, conviene una evaluación más especializada (pediatra o gastroenterólogo).",
+        "Cólicos en niños y niñas (Chile Crece Contigo, Chile). Tema: qué hacer cuando el bebé llora por cólicos. Hallazgo: se pide ayuda para coger al bebé cuando la angustia crece, porque a veces basta con cambiarlo de brazos para que el episodio disminuya o termine; se le acuna, se le mece, se le canta y se le ofrece contacto piel con piel o un portabebé; los bebés que pasan al menos seis horas al día en brazos, frente a cuatro horas o menos, lloran alrededor de un 50 % menos. Ofrecer el pecho con frecuencia ayuda a calmar el dolor, y mejorar el agarre al pecho o, si toma biberón, usar una tetina que no deje tragar demasiado aire puede servir. También ayudan sonidos suaves como «shhh» o ruido blanco. Sentir rabia o impotencia es normal: se respira hondo o se pasa al bebé a otra persona, sin culpa.",
+        "Cólicos en niños y niñas (Chile Crece Contigo, Chile). Tema: qué no darle y signos de alarma. Hallazgo: en general los medicamentos no funcionan bien para los cólicos y no se recomiendan los espasmódicos; no hay que dar infusiones de anís estrella u orégano, porque el anís estrella puede causar intoxicaciones graves, ni otras infusiones, zumos ni agua sola, y antes de los 6 meses solo se usa solución de rehidratación oral por indicación médica. Son signos de alarma las deposiciones muy líquidas con sangre o cualquier cosa que parezca sangre en el pañal, el mal aumento de peso y los cólicos que persisten más allá de lo esperado. Si el bebé llora casi constantemente y duerme muy poco, no parece un cólico típico y conviene que lo valoren. Si estas medidas no funcionan, se consulta con el pediatra."
+      ]
+    },
+    {
+      "source_type": "guideline",
+      "title": "Problemas de salud frecuentes y uso de vacunas",
+      "organization": "Chile Crece Contigo (Gobierno de Chile)",
+      "publication_year": null,
+      "undated_reason": "Página de crececontigo.gob.cl sin fecha de publicación visible; consultada el 2026-11-06. Sección «Período 0 a 2 años»; menciona un calendario de vacunas 2019 solo como imagen.",
+      "url": "https://www.crececontigo.gob.cl/tema/problemas-de-salud-frecuentes/",
+      "specialties": [
+        "pediatrics",
+        "general_medicine"
+      ],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "original_language": "es",
+      "topics": [
+        "signos_alarma",
+        "cuando_consultar",
+        "vomitos",
+        "diarrea",
+        "estrenimiento"
+      ],
+      "chunks": [
+        "Problemas de salud frecuentes y uso de vacunas (Chile Crece Contigo, Chile). Tema: fiebre y temperatura baja en bebés. Hallazgo: los recién nacidos son muy delicados, así que ante estas señales se consulta a la brevedad, sin esperar a ver cómo evoluciona, y nunca se medica al bebé sin indicación de un profesional. Si tiene fiebre y es menor de 3 meses, hay que consultar a la brevedad. También se consulta si tiene menos de 6 meses, si la fiebre pasa de 38 grados durante más de 48 horas, si no baja de 39 grados o si hay rigidez de cuello, vómitos, diarrea, dolor de oídos o una erupción. Una temperatura inferior a 36 grados también requiere consulta, porque un valor muy bajo es peligroso.",
+        "Problemas de salud frecuentes y uso de vacunas (Chile Crece Contigo, Chile). Tema: tos, respiración y virus sincicial respiratorio. Hallazgo: es frecuente que en los primeros días el bebé estornude, pero si tose a menudo o la tos va con decaimiento, ruidos o agitación al respirar o fiebre, hay que consultar de inmediato. Si respira rápido o le cuesta respirar, se queja, se le hunden las costillas o le cuesta comer o dormir, hay que acudir al centro de salud. Un color pálido o azulado en la cara, sobre todo en los labios, requiere atención inmediata. El virus sincicial respiratorio es más peligroso en menores de 2 años; si el bebé tiene menos de 3 meses, nació prematuro o pesó menos de 2,5 kg al nacer y presenta alguno de estos síntomas, hay que acudir al servicio de urgencias más cercano. En los menores de 3 meses y en los prematuros la bronconeumonía no siempre da fiebre.",
+        "Problemas de salud frecuentes y uso de vacunas (Chile Crece Contigo, Chile). Tema: vómitos, diarrea y estreñimiento. Hallazgo: es normal que el bebé devuelva algo de leche tras mamar, pero hay que consultar con el equipo de salud lo antes posible si vomita pasada una hora y media de la toma o de forma repetida, o si los vómitos van con fiebre y decaimiento. También hay que pedir ayuda si vomita 3 o 4 veces en 2 horas o si al vomitar tiene un dolor de tripa fuerte o constante. Lengua seca y llanto sin lágrimas indican deshidratación: hay que llevarlo de inmediato al centro de salud más cercano. Los menores de 1 año que maman pueden pasar hasta 4 días sin hacer caca; si no se le ve incómodo se puede esperar, pero si tiene malestar hay que consultar. Lavarse bien las manos, lavar muy bien los biberones y mantener la lactancia ayuda a prevenir la diarrea.",
+        "Problemas de salud frecuentes y uso de vacunas (Chile Crece Contigo, Chile). Tema: vacunas del bebé. Hallazgo: si se ponen varias vacunas a la vez, se aplican en extremidades distintas. Un resfriado, la tos o una diarrea leve no suelen impedir la vacunación, pero ante fiebre alta hay que consultar al pediatra. Los prematuros se vacunan según su edad cronológica y, si hay retraso, el esquema se completa sin problema y cuanto antes. Para dudas, se consulta con el pediatra o el centro de salud."
+      ]
+    },
+    {
+      "source_type": "paper",
+      "title": "Terapias de masajes para el cólico infantil",
+      "organization": "Cochrane",
+      "publication_year": 2022,
+      "url": "https://cochrane.org/es/CD004796/BEHAV_terapias-de-masajes-para-el-colico-infantil",
+      "specialties": [
+        "pediatrics",
+        "general_medicine"
+      ],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "original_language": "es",
+      "topics": [
+        "colico",
+        "llanto"
+      ],
+      "chunks": [
+        "Terapias de masajes para el cólico infantil (Cochrane, 2022). Tema: terapias manuales llamadas «de masaje» (quiropraxis, osteopatía y manipulación craneal) para el cólico del lactante. Hallazgo: la revisión incluye 6 ensayos con 325 bebés menores de seis meses. Cinco de ellos sugirieron beneficio y el análisis combinado mostró de media 1 hora y 12 minutos menos de llanto al día. En un estudio, más padres de bebés tratados notaron una mejoría clínicamente importante (menos de dos horas de llanto al día o una reducción del llanto de más del 30 %), y otro estudio encontró más tiempo de sueño con el tratamiento.",
+        "Terapias de masajes para el cólico infantil (Cochrane, 2022). Tema: cuánta confianza dar a los resultados de la quiropraxis, la osteopatía y la manipulación craneal en el cólico. Hallazgo: en la mayoría de los estudios los padres sabían si su bebé recibía el tratamiento y eran ellos quienes valoraban el llanto. Al limitar el análisis a los estudios en los que no lo sabían, la diferencia en el llanto deja de ser estadísticamente significativa. Los estudios son pequeños y propensos a sesgos, y solo uno de los seis estudió los efectos adversos (no encontró ninguno). Por eso los autores no pueden concluir con seguridad ni la eficacia ni la seguridad de estas terapias, y piden ensayos en los que quien evalúa los resultados no sepa qué bebés recibieron el tratamiento."
+      ]
+    },
+    {
+      "source_type": "guideline",
+      "title": "Guía de práctica clínica: prevención, diagnóstico y tratamiento de la enfermedad diarreica aguda en niños menores de 5 años. Para padres y cuidadores",
+      "organization": "Ministerio de Salud y Protección Social (Colombia)",
+      "publication_year": 2013,
+      "url": "https://www.minsalud.gov.co/sites/rid/Lists/BibliotecaDigital/RIDE/INEC/IETS/GPC_Ptes_EDA.pdf",
+      "specialties": [
+        "pediatrics",
+        "gastroenterology",
+        "general_medicine"
+      ],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "original_language": "es",
+      "topics": [
+        "diarrea",
+        "deshidratacion",
+        "signos_alarma"
+      ],
+      "chunks": [
+        "Guía de práctica clínica de la enfermedad diarreica aguda, versión para padres (MinSalud de Colombia, 2013). Tema: qué es la diarrea y cuándo las deposiciones líquidas son normales. Hallazgo: la guía la define como un aumento de la frecuencia de las deposiciones con consistencia líquida o semilíquida; el mayor riesgo está en los menores de cinco años y, si no se trata adecuadamente, el niño corre peligro de muerte. Los recién nacidos y los bebés de los primeros 3 meses pueden tener a veces deposiciones completamente líquidas y eso es normal para ellos, siempre que no haya fiebre y no se afecte su apetito. La causa más frecuente son los virus, sobre todo el rotavirus, y no se recomienda pedir análisis de heces de rutina.",
+        "Guía de práctica clínica de la enfermedad diarreica aguda, versión para padres (MinSalud de Colombia, 2013). Tema: prevención de la diarrea en lactantes. Hallazgo: la leche materna exclusiva durante los primeros 6 meses protege frente a las infecciones intestinales; entre los 6 meses y el año se da antes de las comidas y hasta los 2 años después de ellas. Lavarse las manos con agua y jabón (niños y cuidadores) antes de comer, de dar de comer al niño y de manipular alimentos, y tras cambiar pañales y tras ir al baño, es una de las medidas más eficaces. Se recomienda la vacuna del rotavirus en menores de 6 meses. Los lácteos fermentados como el yogur o el kumis no han demostrado prevenir la diarrea ni acortarla.",
+        "Guía de práctica clínica de la enfermedad diarreica aguda, versión para padres (MinSalud de Colombia, 2013). Tema: signos de deshidratación y líquidos en casa. Hallazgo: un niño con diarrea sin deshidratación puede tratarse en casa. Signos de deshidratación: somnolencia o dificultad para despertar, sed ansiosa o rechazo de líquidos, ojos hundidos, piel del abdomen que tarda en volver al pellizcarla, irritabilidad con llanto difícil de calmar, y orina ausente o disminuida. Si aparecen, debe rehidratarse en un centro sanitario. Se ofrece más líquido del habitual, por ejemplo suero de rehidratación oral en sobre (repone lo perdido, no detiene la diarrea). A los menores de 6 meses no se les dan líquidos caseros: se aumenta la leche materna y, si hace falta, el suero. No se dan refrescos azucarados, bebidas con gas, bebidas deportivas ni zumos industriales, ni purgantes.",
+        "Guía de práctica clínica de la enfermedad diarreica aguda, versión para padres (MinSalud de Colombia, 2013). Tema: alimentación durante la diarrea y cuándo consultar. Hallazgo: nunca se interrumpe ni se diluye la alimentación habitual; el lactante mama tanto y tan a menudo como quiera y, si toma fórmula, sigue con la habitual (mejor en taza que en biberón). Tras la diarrea, una comida extra al día durante al menos dos semanas. Hay que consultar de inmediato si el niño empeora o no se ve bien, tiene más de 10 deposiciones muy líquidas en 24 horas, vomita todo, aparece fiebre que no tenía, no come ni bebe normalmente, hay sangre en las heces, o no mejora al tercer día. No se recomiendan los medicamentos para parar la diarrea o el vómito ni los preparados naturistas u homeopáticos."
+      ]
+    },
+    {
+      "source_type": "reference",
+      "title": "Los primeros seis meses",
+      "organization": "Osakidetza-Servicio vasco de salud (Osakidetza)",
+      "publication_year": 2024,
+      "url": "https://www.osakidetza.euskadi.eus/webosk00-oskenf/es/contenidos/informacion/osk_osaesk_recien_nacio/es_def/index.shtml",
+      "specialties": [
+        "pediatrics",
+        "general_medicine"
+      ],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "original_language": "es",
+      "topics": [
+        "llanto",
+        "colico",
+        "ictericia",
+        "signos_alarma"
+      ],
+      "chunks": [
+        "Los primeros seis meses (Osakidetza, 2024). Tema: cuidados generales del recién nacido y signos para consultar. Hallazgo: la primera visita con pediatría del centro de salud es hacia los 8 días de vida, y el peso perdido los primeros días se recupera en unas dos semanas. Es normal regurgitar un poco tras la toma, pero preocupa un vómito abundante, a chorro y en más de una toma. El cordón se cae entre el día 5 y el 15 y se limpia con agua tibia y jabón una vez al día o si se mancha, secándolo bien; hay que consultar si la piel de alrededor está enrojecida y hay secreción amarillenta y maloliente. Si el bebé tiene fiebre antes de los 3 meses, debe valorarlo pediatría.",
+        "Los primeros seis meses (Osakidetza, 2024). Tema: sueño y entorno seguro para dormir. Hallazgo: el recién nacido duerme unas 16-17 horas al día, con despertares frecuentes, cada una o dos horas, para comer, y a partir de los 3 meses empieza a regular el sueño. Para reducir el riesgo de muerte súbita: boca arriba hasta los 6 meses y preferiblemente hasta los 12, colchón firme, en la parte inferior de la cuna, tapado solo hasta las axilas y con la cabeza descubierta, sin almohadas ni juguetes blandos, cerca de su madre o su padre al menos los 6 primeros meses y en espacios sin humo. El chupete al acostarlo en el primer año, una vez establecida la lactancia, se asocia a menor riesgo. Es preferible no compartir cama si alguien fuma, está bajo los efectos del alcohol, tiene el estado de conciencia alterado o está muy cansado, y nunca en sofás o sillones, solo en cama.",
+        "Los primeros seis meses (Osakidetza, 2024). Tema: llanto y cólico del lactante. Hallazgo: el llanto aumenta las primeras semanas y empieza a disminuir pasadas las 6 semanas; menos del 5 % de los casos se debe a una enfermedad, que suele acompañarse de fiebre, rechazo de las tomas, vómitos, sangre en las heces o erupción en la piel. Ayuda probar uno o dos estímulos durante al menos 5 minutos antes de cambiar: ofrecer el pecho, hablarle con calma, cantarle algo suave, poner una mano sobre su pecho o abdomen, acunarlo o envolverlo en una manta y mecerlo suavemente. El cólico es un llanto de inicio brusco, más frecuente por la tarde y la noche, que dura de minutos a varias horas; es transitorio y desaparece solo con la edad, la mayoría de las veces entre la segunda semana y los 3-4 meses de vida.",
+        "Los primeros seis meses (Osakidetza, 2024). Tema: ictericia, piel y limpieza. Hallazgo: la ictericia fisiológica, un color amarillento más evidente entre los días 2 y 4, suele desaparecer en unas dos semanas. En el baño, la bañera no se llena más de 10 cm y nunca se deja al bebé solo, ni un momento. El hidrocele (escroto que a menudo parece inflamado) suele desaparecer entre los 3 y 6 meses, y la fimosis es normal y no se deben hacer retracciones forzadas. La costra láctea suele empezar antes de los 3 meses y desaparece sola hacia los 8 meses. En la escocedura del pañal se cambia el pañal con frecuencia, se deja el culete al aire y se consulta con pediatría si no mejora o empeora."
+      ]
+    },
+    {
+      "source_type": "guideline",
+      "title": "Mi hijo/a tiene diarrea: ¿Qué debo saber?",
+      "organization": "Sociedad Argentina de Pediatría (SAP)",
+      "publication_year": null,
+      "undated_reason": "Página divulgativa de Familia y Comunidad de la SAP sin fecha de publicación visible (solo copyright 1997-2026 del sitio); consultada el 2026-11-06. Autoría: Comité Nacional de Gastroenterología de la SAP.",
+      "url": "https://www.sap.org.ar/familia-y-comunidad/detalle/mi-hijoa-tiene-diarrea-que-debo-saber",
+      "specialties": [
+        "pediatrics",
+        "gastroenterology"
+      ],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "original_language": "es",
+      "topics": [
+        "diarrea",
+        "deshidratacion",
+        "signos_alarma",
+        "cuando_consultar"
+      ],
+      "chunks": [
+        "Mi hijo/a tiene diarrea: ¿Qué debo saber? (Comité Nacional de Gastroenterología, SAP, Argentina). Tema: qué es la diarrea aguda y cuándo consultar. Hallazgo: consiste en más deposiciones de lo habitual o más líquidas, es muy frecuente en menores de 5 años y en la mayoría de los casos es aguda, de corta duración y de origen viral; puede acompañarse de fiebre, vómitos, dolor abdominal y falta de apetito. La complicación principal es la deshidratación. Hay que consultar al pediatra si aparecen decaimiento o somnolencia, palidez, boca o labios secos, orina menos de lo habitual, vómitos persistentes que impiden hidratar, fiebre que no cede o sangre en las deposiciones.",
+        "Mi hijo/a tiene diarrea: ¿Qué debo saber? (Comité Nacional de Gastroenterología, SAP, Argentina). Tema: tratamiento en casa y prevención. Hallazgo: el pilar es la hidratación, ofreciendo solución de rehidratación oral, y no hay que suspender la lactancia materna ni la alimentación habitual. Se evitan las bebidas azucaradas, como refrescos y zumos industriales. No se recomienda el ayuno ni la medicación antidiarreica, ni los antibióticos sin indicación médica. Para prevenirla: lactancia materna exclusiva en los primeros meses, lavado de manos con agua y jabón (sobre todo al cambiar pañales), agua segura, manipulación higiénica de los alimentos y vacunación completa, incluida la del rotavirus, que reduce los cuadros graves y los ingresos."
+      ]
+    },
+    {
+      "source_type": "reference",
+      "title": "Alergia a las proteínas de la leche de vaca",
+      "organization": "Sociedad Española de Gastroenterología, Hepatología y Nutrición Pediátrica (SEGHNP)",
+      "publication_year": 2020,
+      "url": "https://www.seghnp.org/familias/alergia-proteinas-de-leche-de-vaca",
+      "specialties": [
+        "pediatrics",
+        "general_medicine"
+      ],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "original_language": "es",
+      "topics": [
+        "aplv"
+      ],
+      "chunks": [
+        "Alergia a las proteínas de la leche de vaca (SEGHNP, 2020). Tema: tipos de síntomas según el momento en que aparecen. Hallazgo: es una reacción del sistema inmune a las proteínas de la leche de vaca y no debe confundirse con la intolerancia a la lactosa. Si es mediada por IgE, los síntomas surgen en menos de una hora (habones, sobre todo en la cara, labios hinchados, a veces dificultad para respirar, vómitos o dolor abdominal). Si no es mediada por IgE, predominan los síntomas digestivos y aparecen pasadas 2 horas, desde cólicos o vómitos leves hasta palidez intensa, mal estado general, sangre en las heces o diarrea crónica.",
+        "Alergia a las proteínas de la leche de vaca (SEGHNP, 2020). Tema: cuándo consultar y lactancia materna. Hallazgo: el pediatra de Atención Primaria debe valorar el caso y decidir si deriva al gastroenterólogo pediátrico. Se consideran signos de alarma la pérdida o el estancamiento de peso, la anemia por falta de hierro, las proteínas bajas en sangre, la colitis grave y el eccema atópico grave. El diagnóstico es clínico: se retira la proteína de la dieta y se comprueba si desaparecen los síntomas, y muchas veces hace falta una prueba de provocación (reintroducción) para confirmarlo. Ante una sospecha fundamentada, con lactancia materna exclusiva se recomienda que la madre siga una dieta sin leche ni derivados."
+      ]
+    },
+    {
+      "source_type": "reference",
+      "title": "Alergia a la leche de vaca",
+      "organization": "Sociedad Española de Inmunología Clínica, Alergología y Asma Pediátrica (SEICAP)",
+      "publication_year": null,
+      "undated_reason": "La página no muestra fecha de publicación; solo «© 2022» como copyright del sitio (consulta 2026-11-06)",
+      "url": "https://seicap.es/alergia/alergias-a-los-alimentos/alergia-a-la-leche-de-vaca/",
+      "specialties": [
+        "pediatrics",
+        "general_medicine",
+        "allergy_immunology"
+      ],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "original_language": "es",
+      "topics": [
+        "aplv"
+      ],
+      "chunks": [
+        "Alergia a la leche de vaca (SEICAP). Tema: síntomas y momento de aparición según el tipo de alergia. Hallazgo: es la alergia alimentaria más frecuente en menores de 1 año; la causa son las proteínas de la leche y no la lactosa, por lo que «alergia a la lactosa» es un error. Puede dar síntomas en la piel (urticaria, hinchazón, dermatitis atópica), respiratorios, digestivos (cólicos, vómitos, regurgitaciones, diarrea, sangre en vómitos o heces). En la forma mediada por IgE los síntomas aparecen casi siempre antes de 1 hora; en la no mediada por IgE, más de 2 horas después y a veces tras varios días. También puede causar reacciones de anafilaxia.",
+        "Alergia a la leche de vaca (SEICAP). Tema: evolución, diagnóstico y lactancia materna. Hallazgo: la forma no mediada por IgE suele superarse hacia los 2 años mientras que la mediada por IgE la superan el 90 % de los niños a los 6 años. El diagnóstico se apoya en pruebas cutáneas, análisis de sangre y una prueba de exposición controlada que decide el especialista. El tratamiento es una dieta sin proteínas de leche de vaca, con lectura de etiquetas; los lactantes necesitan fórmulas especiales cuando la lactancia materna no basta. La madre que amamanta puede tomar alimentos con proteínas de leche de vaca salvo que el pediatra indique lo contrario."
+      ]
+    },
+    {
+      "source_type": "reference",
+      "title": "Lo que debes saber sobre la alergia a la proteína de leche de vaca",
+      "organization": "Sociedad Española de Inmunología Clínica, Alergología y Asma Pediátrica (SEICAP)",
+      "publication_year": 2023,
+      "url": "https://seicap.es/lo-que-debes-saber-sobre-la-alergia-a-la-proteina-de-leche-de-vaca/",
+      "specialties": [
+        "pediatrics",
+        "general_medicine",
+        "allergy_immunology"
+      ],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "original_language": "es",
+      "topics": [
+        "aplv",
+        "signos_alarma"
+      ],
+      "chunks": [
+        "Lo que debes saber sobre la alergia a la proteína de leche de vaca (SEICAP, 2023). Tema: qué es y cómo se presenta. Hallazgo: suele empezar en el primer año de vida, afecta a un 2 % de los menores de 4 años y es la alergia alimentaria más frecuente en lactantes y niños pequeños. Los síntomas aparecen desde la ingesta hasta dos horas después y van de leves (picor en la boca) a graves (anafilaxia); la forma más habitual es cutáneo-mucosa, con ronchas e hinchazón. La leche de vaca es uno de los alimentos que más a menudo causan anafilaxias mortales.",
+        "Lo que debes saber sobre la alergia a la proteína de leche de vaca (SEICAP, 2023). Tema: signos de alarma y cuándo avisar a emergencias. Hallazgo: hay que vigilar al niño si aparecen ronchas o habones en la cara, labios hinchados, dolor abdominal, náuseas o picor de ojos. Hay que actuar de inmediato si hay opresión en la garganta, voz ronca, tos repetitiva, dificultad para respirar o ahogo, pitidos en el pecho, labios azulados, mareo, sensación de muerte inminente o pulso débil; ante la sospecha de anafilaxia, la página indica avisar al 112.",
+        "Lo que debes saber sobre la alergia a la proteína de leche de vaca (SEICAP, 2023). Tema: evolución y cuándo se supera. Hallazgo: la mayoría de los niños desarrolla tolerancia espontánea antes de los 2 a 4 años. Según el estudio que cita la página, la superan un 28 a 56 % de los niños al año de edad, un 60 a 77 % a los 2 años, un 71 a 87 % a los 3 años y un 90 % a los 6 años. Un pequeño grupo no adquiere tolerancia y puede tener reacciones graves."
+      ]
+    },
+    {
+      "source_type": "reference",
+      "title": "Comment changer un nourrisson et faire sa toilette ? (ameli.fr)",
+      "organization": "Assurance Maladie (ameli.fr)",
+      "publication_year": 2025,
+      "url": "https://www.ameli.fr/assure/sante/bons-gestes/bebe/changer-bebe-faire-toilette",
+      "specialties": [
+        "pediatrics",
+        "general_medicine"
+      ],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "original_language": "fr",
+      "topics": [
+        "dermatitis_panal",
+        "bano_higiene",
+        "cuando_consultar"
+      ],
+      "chunks": [
+        "Comment changer un nourrisson et faire sa toilette ? (Assurance Maladie, 2025). Tema: cambio de pañal y aseo de la zona. Hallazgo: lavarse las manos, preparar un guante o algodón con agua tibia y un poco de jabón suave (o, si no hay agua a mano, por ejemplo de viaje, toallitas, mejor sin perfume), insistir en los pliegues de la ingle y entre las nalgas porque las heces y la orina irritan, y secar a toques. En la niña, limpiar la vulva de delante hacia atrás sin limpiar el interior; en el niño, lavar bolsa y pene sin retirar el prepucio, porque la fimosis es normal en el lactante y desaparece con el crecimiento. Una crema protectora no es necesaria salvo que la piel esté roja e irritada.",
+        "Comment changer un nourrisson et faire sa toilette ? (Assurance Maladie, 2025). Tema: cuidado del cordón. Hallazgo: el cordón cae en una a tres semanas. Se limpia con agua tibia y jabón y se seca por completo, sin tirar de él, al menos una vez al día y cada vez que haga falta. La desinfección es innecesaria salvo que el cordón deje de secarse y se ablande, su base enrojezca o huela mal; en ese caso no se usa alcohol y se pide consejo a un médico o farmacéutico. Su caída puede dejar unas manchas de sangre sin gravedad, y los cuidados cesan cuando cicatriza. El baño es posible aunque no haya caído el cordón; lo esencial es secar bien el cordón y su contorno.",
+        "Comment changer un nourrisson et faire sa toilette ? (Assurance Maladie, 2025). Tema: cara, nariz, oídos, uñas y cuándo consultar. Hallazgo: la cara se limpia con compresas y agua tibia; ante secreciones blanquecinas en el ojo, suero fisiológico y limpiar de fuera hacia dentro; si la nariz está tapada, suero fisiológico. No hace falta lavar el cuero cabelludo más de dos o tres veces por semana, pero se cepilla cada día con cepillo suave para limitar las costras de leche. En los oídos, limpiar con agua y jabón el pabellón y los surcos de detrás de la oreja y nunca usar bastoncillos. Cortar las uñas cuando sean lo bastante largas, con tijeras de punta redonda. Consultar con el médico o pediatra si hay ojo rojo con secreción purulenta (conjuntivitis bacteriana), y pedir consejo al médico o farmacéutico si el cordón deja de secarse y se ablanda, si enrojece en la base o si huele mal."
+      ]
+    },
+    {
+      "source_type": "reference",
+      "title": "Croûtes de lait du bébé : que faire et quand consulter ? (ameli.fr)",
+      "organization": "Assurance Maladie (ameli.fr)",
+      "publication_year": 2024,
+      "url": "https://www.ameli.fr/assure/sante/themes/croutes-lait/que-faire-quand-consulter",
+      "specialties": [
+        "pediatrics",
+        "general_medicine"
+      ],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "original_language": "fr",
+      "topics": [
+        "costra_lactea",
+        "dermatitis_atopica",
+        "cuando_consultar",
+        "bano_higiene"
+      ],
+      "chunks": [
+        "Croûtes de lait du bébé : que faire et quand consulter ? (Assurance Maladie, 2024). Tema: cuidados en casa de las costras de leche. Hallazgo: los cuidados precoces en casa suelen bastar para que desaparezcan, y lo hacen más fácilmente cuando son pocas, así que conviene empezar en cuanto aparecen. Con pocas costras, lavar el pelo con champú suave y retirarlas con suavidad con un cepillo blando, con baño diario, y cuando desaparezcan espaciar los baños a 2 o 3 por semana. Evitar rascar las placas con las uñas, un peine o un cepillo duro, porque puede herir el cuero cabelludo y hacerlo sangrar sin quitar las costras.",
+        "Croûtes de lait du bébé : que faire et quand consulter ? (Assurance Maladie, 2024). Tema: costras gruesas. Hallazgo: hay que intervenir en cada aseo diario. El método más eficaz de la página: aplicar vaselina dos horas antes del baño masajeando bien el cuero cabelludo, lavar con champú suave, aclarar a fondo, soltar las costras con un cepillo blando y cepillar varias veces al día con un cepillo blando lavado cada día con agua y jabón. Es normal que caigan algunos cabellos con las costras, porque volverán a crecer. Si no basta, masajear con vaselina por la noche y lavar la cabeza a la mañana siguiente.",
+        "Croûtes de lait du bébé : que faire et quand consulter ? (Assurance Maladie, 2024). Tema: cuándo consultar. Hallazgo: hay que ver al médico de cabecera o al pediatra si tras dos semanas de cuidados diarios en casa no hay mejoría, si las costras se extienden, si el niño tiene fiebre o está irritable por el picor, si se extienden por la cabeza y aparece una zona roja e irritada, si supuran o sangran, si la piel afectada está hinchada o si la dermatitis llega a otras zonas como las nalgas, los pliegues o el ombligo. La página no clasifica la situación como urgencia y no da teléfonos."
+      ]
+    },
+    {
+      "source_type": "reference",
+      "title": "Mon enfant a des coliques (HUG, Mon enfant est malade)",
+      "organization": "Hôpitaux universitaires de Genève (HUG)",
+      "publication_year": null,
+      "undated_reason": "la página no muestra fecha de publicación ni de actualización (consultada el 2026-11-06)",
+      "url": "https://www.monenfantestmalade.ch/fiches/coliques",
+      "specialties": [
+        "pediatrics",
+        "general_medicine"
+      ],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "original_language": "fr",
+      "topics": [
+        "colico",
+        "llanto",
+        "cuando_consultar"
+      ],
+      "chunks": [
+        "Mon enfant a des coliques (HUG). Tema: cómo son los cólicos del lactante. Hallazgo: la ficha describe a un lactante que llora mucho, grita y flexiona las rodillas sobre el vientre; las crisis pueden durar hasta unas horas y entre ellas el bebé está tranquilo y cómodo, sin fiebre, diarrea ni vómitos, con deposiciones habituales y buen apetito. Como el llanto es su único medio de expresión en los primeros meses, es difícil saber la causa. Se trata probablemente de cólicos del lactante, de causa poco conocida, que según la ficha no se deben ni a un dolor ni a una enfermedad; aparecen hacia las 2 o 3 semanas y desaparecen poco a poco con el crecimiento, en general a partir de los 3 meses. Es una etapa del desarrollo, aunque ponga a prueba la paciencia de los padres.",
+        "Mon enfant a des coliques (HUG). Tema: cómo aliviar al bebé. Hallazgo: mecerlo (mecedora, portabebés, paseo en coche o en cochecito), asegurarse de que come lo suficiente porque el hambre es una de las causas del llanto, limitar el aire que traga adaptando el flujo de la tetina, desvestirlo y comprobar que ningún adorno le molesta. La ficha también pide cuidar a los padres: descansar, pedir ayuda y echarse una siesta; si ningún método funciona, no hay que sentirse culpable por cerrar la puerta de la habitación; si a los padres les sienta bien, el bebé también se beneficia. Indica que no existe una solución medicamentosa milagrosa y que hay que pedir consejo al médico. Es falso que haya que dejar la lactancia o cambiar de leche por los cólicos: la leche materna no provoca cólicos.",
+        "Mon enfant a des coliques (HUG). Tema: cuándo consultar al pediatra. Hallazgo: consultar inmediatamente si el estado del bebé preocupa, si parece que sus gritos expresan dolor o si llora más de 2 horas seguidas sin poder consolarlo. Consultar en las 24 horas siguientes si tiene diarrea, estreñimiento o vómitos, si no gana peso y parece hambriento, o si los padres se sienten al límite."
+      ]
+    },
+    {
+      "source_type": "reference",
+      "title": "Mon enfant a une gastro-entérite (HUG, Mon enfant est malade)",
+      "organization": "Hôpitaux universitaires de Genève (HUG)",
+      "publication_year": null,
+      "undated_reason": "la página no muestra fecha de publicación ni de actualización (consultada el 2026-11-06)",
+      "url": "https://www.monenfantestmalade.ch/fiches/gastro-enterite",
+      "specialties": [
+        "pediatrics",
+        "general_medicine"
+      ],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "original_language": "fr",
+      "topics": [
+        "diarrea",
+        "vomitos",
+        "deshidratacion",
+        "cuando_consultar"
+      ],
+      "chunks": [
+        "Mon enfant a une gastro-entérite (HUG). Tema: qué es y signos de deshidratación. Hallazgo: es una infección del estómago y los intestinos, causada la mayoría de las veces por virus (rotavirus, adenovirus, calicivirus) y a veces por bacterias o parásitos. El niño pierde mucha agua por los vómitos y la diarrea; el peligro es la deshidratación, y la ficha insiste: cuanto más pequeño es el niño, más rápido aparece. No hay que interrumpir la lactancia materna, que incluso ayuda al lactante a curarse antes. Signos de deshidratación: cansancio, rechazo a jugar, permanecer tumbado, pérdida de peso, ojeras, piel, boca y lengua secas, ausencia de lágrimas al llorar y orina escasa, con el pañal de la mañana ligero y seco.",
+        "Mon enfant a une gastro-entérite (HUG). Tema: contagio y cuidados. Hallazgo: se transmite por los vómitos y las diarreas, a través de manos sucias o alimentos o agua contaminados; hay que lavarse las manos con jabón desinfectante en cada cambio de pañal y tras cada diarrea. Los síntomas duran en general de 5 a 7 días y se curan solos. El principio clave es ofrecer muy a menudo pequeñas cantidades de líquido; en la deshidratación más importante se usa una solución de rehidratación oral, que el intestino absorbe bien incluso durante la enfermedad, y no debe usarse sola más de 24 horas sin otro líquido. Al bebé se le pesa cada día. Cuando los vómitos están controlados, puede comer pequeñas cantidades de comida simple y ligera, sin fritos ni salsas; no hace falta ningún régimen especial. La ficha desaconseja los antidiarreicos.",
+        "Mon enfant a une gastro-entérite (HUG). Tema: cuándo consultar. Hallazgo: consultar al médico si un bebé ha perdido más del 3 % de su peso. Consulta inmediata si el niño parece realmente enfermo, cuesta mantenerlo despierto, ya no tiene lágrimas, no ha orinado en 8 horas, vomita un líquido verdoso o con sangre, tiene sangre en las heces o una diarrea muy frecuente y muy líquida. Consulta en 24 horas si la diarrea persiste más de 2 semanas sin vómitos. Puede volver a la guardería cuando ya no tenga fiebre ni vomite."
+      ]
+    },
+    {
+      "source_type": "reference",
+      "title": "Soleil et fortes chaleurs (ONE)",
+      "organization": "ONE (Office de la Naissance et de l'Enfance, Belgique)",
+      "publication_year": null,
+      "undated_reason": "Página de la sección Familles de one.be sin fecha de actualización visible; consultada el 2026-11-06.",
+      "url": "https://www.one.be/familles/0-12/soleil-et-fortes-chaleurs",
+      "specialties": [
+        "pediatrics",
+        "general_medicine"
+      ],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "original_language": "fr",
+      "topics": [
+        "proteccion_solar",
+        "deshidratacion"
+      ],
+      "chunks": [
+        "Soleil et fortes chaleurs (ONE, Office de la Naissance et de l'Enfance). Tema: proteger al bebé del sol. Hallazgo: los menores de 2 años no deben exponerse al sol y se mantienen a la sombra (sombrilla, árbol, lugar fresco). En el cochecito o el capazo hay que dejar circular el aire: no se cubre por completo con una tela ni se cierra la capota sin ventilación suficiente, porque dentro la temperatura puede subir muy deprisa. Para los niños, la página recomienda sombrero de ala ancha, ropa ligera y cubriente, gafas con filtro de norma CE3 o CE4 y, en las zonas descubiertas, crema solar resistente al agua de índice 50 con protección UVA y UVB, que no sustituye a la sombra, el sombrero ni la ropa. Con el cielo algo nublado, una parte importante de los rayos UV sigue atravesando las nubes, y a la sombra hasta el 50 % puede llegar a la piel por reflexión.",
+        "Soleil et fortes chaleurs (ONE, Office de la Naissance et de l'Enfance). Tema: olas de calor, hidratación y baño. Hallazgo: con calor intenso se cierran puertas, persianas y cortinas a las horas más calurosas, se ventila temprano, tarde o de noche, se refresca al niño varias veces al día (manopla húmeda, pulverizador, baño tibio), se le viste con ropa holgada y ligera y nunca se le deja solo en un coche aparcado, ni siquiera un momento. Un bebé de pecho puede pedir más veces, y no necesita agua adicional: la leche materna basta. A los niños más mayores se les puede proponer beber aproximadamente cada 30 minutos, sin esperar a que lo pidan, agua sin azúcar ni siropes. En el agua hay que entrar poco a poco, sobre todo tras el sol o el esfuerzo, para evitar una hidrocución, y siempre bajo la vigilancia de un adulto, aunque haya muy poca agua.",
+        "Soleil et fortes chaleurs (ONE, Office de la Naissance et de l'Enfance). Tema: golpe de calor, signos y qué hacer. Hallazgo: puede ser grave y exige reaccionar rápido. Entre los signos de alerta están fiebre alta, dolor de cabeza, cansancio inusual o somnolencia, piel muy caliente o seca, boca, lengua o mucosas secas, signos de deshidratación, náuseas, vómitos o diarrea, malestar, comportamiento inusual o pérdida de conocimiento. Ante una insolación o un malestar por el calor se lleva al niño a la sombra o a un lugar fresco, se le da agua con regularidad y se le refresca con compresas frescas (frente, cabeza, hombros, caderas). Después hay que contactar con el médico, y si el estado del niño preocupa o empeora rápido, contactar con urgencias."
+      ]
+    },
+    {
+      "source_type": "reference",
+      "title": "Bagnetto: una guida pratica",
+      "organization": "Ospedale Pediatrico Bambino Gesù",
+      "publication_year": 2021,
+      "url": "https://www.ospedalebambinogesu.it/bagnetto-una-guida-pratica-90414/",
+      "specialties": [
+        "pediatrics",
+        "neonatology",
+        "dermatology"
+      ],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "original_language": "it",
+      "topics": [
+        "bano_higiene"
+      ],
+      "chunks": [
+        "Bagnetto: una guida pratica (Ospedale Pediatrico Bambino Gesù, 2021). Tema: cómo organizar el baño del recién nacido. Hallazgo: la página recomienda 1-2 baños a la semana, más en verano. El agua debe estar entre 32 y 35 °C, se puede comprobar con un termómetro o con el codo, y la habitación bien caldeada y tranquila. Los primeros baños en casa no deberían pasar de cinco minutos; con los días se pueden alargar, pero nunca más de 15 minutos. El primer baño es preferible después de la caída del muñón umbilical; hasta entonces se lava con agua corriente o con esponja, prestando atención a cara, cuello y genitales (fuente en italiano).",
+        "Bagnetto: una guida pratica (Ospedale Pediatrico Bambino Gesù, 2021). Tema: seguridad y productos en el baño. Hallazgo: no se debe dejar nunca al bebé solo, hay que mantenerlo lejos de los grifos para evitar quemaduras o golpes, sostenerlo con los hombros apoyados en el antebrazo del adulto y poner una alfombrilla de goma antideslizante en el fondo de la bañera. En los primeros días se usa solo agua; no hacen falta cremas ni leche limpiadora y se debe evitar el talco porque puede inhalarse. Al salir, se cubre y se seca enseguida con una toalla suave, con toques, sin frotar (fuente en italiano)."
+      ]
+    },
+    {
+      "source_type": "reference",
+      "title": "Coliche gassose nel lattante",
+      "organization": "Ospedale Pediatrico Bambino Gesù",
+      "publication_year": 2024,
+      "url": "https://www.ospedalebambinogesu.it/coliche-gassose-nel-lattante-89850/",
+      "specialties": [
+        "pediatrics",
+        "gastroenterology"
+      ],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "original_language": "it",
+      "topics": [
+        "colico",
+        "cuando_consultar"
+      ],
+      "chunks": [
+        "Coliche gassose nel lattante (Ospedale Pediatrico Bambino Gesù, 2024). Tema: qué son los cólicos del lactante. Hallazgo: se manifiestan con agitación y llanto continuo, sobre todo entre los 2 y los 4 meses. Se habla de cólicos cuando un bebé sano llora más de 3 horas al día, más de 3 días a la semana y durante al menos 3 semanas. Las causas no están claras: se barajan el gas intestinal, cuyo papel real hoy se considera incierto, y el temperamento del bebé, con más sensibilidad a ruidos y luces. Se resuelven solos; según la hipótesis del temperamento, desaparecen con la maduración del sistema nervioso central (fuente en italiano).",
+        "Coliche gassose nel lattante (Ospedale Pediatrico Bambino Gesù, 2024). Tema: qué ayuda y qué no en los cólicos. Hallazgo: se han probado muchos fármacos para reducir los cólicos, pero ninguno parece muy eficaz. Pueden aliviar caminar con el bebé en brazos o en el cochecito, ayudarle a eructar con palmaditas en la espalda, dar una vuelta en coche, poner música a bajo volumen y no darle de comer más de lo necesario. La página subraya que muchas medidas se adoptan sin base científica sólida, como retirar alimentos alergénicos de la dieta de la madre que da el pecho, usar leches dietéticas por sospecha de alergia a la proteína de la leche de vaca o dar tratamientos por sospecha de reflujo (fuente en italiano).",
+        "Coliche gassose nel lattante (Ospedale Pediatrico Bambino Gesù, 2024). Tema: cuándo consultar con el pediatra por cólicos. Hallazgo: para estar razonablemente seguros de que solo son cólicos, el bebé debe estar bien y ganar peso, puede tener regurgitaciones pero no vómito asociado a pérdida de peso, y sus heces deben tener un aspecto normal. Si los cólicos continúan más allá de la edad típica, el pediatra debe valorar otros diagnósticos (fuente en italiano)."
+      ]
+    },
+    {
+      "source_type": "reference",
+      "title": "Dermatite da pannolino",
+      "organization": "Ospedale Pediatrico Bambino Gesù",
+      "publication_year": 2023,
+      "url": "https://www.ospedalebambinogesu.it/dermatite-da-pannolino-80049/",
+      "specialties": [
+        "pediatrics",
+        "dermatology"
+      ],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "original_language": "it",
+      "topics": [
+        "dermatitis_panal",
+        "bano_higiene"
+      ],
+      "chunks": [
+        "Dermatite da pannolino (Ospedale Pediatrico Bambino Gesù, 2023). Tema: tipos y causas de la dermatitis del pañal. Hallazgo: es muy frecuente en el lactante y, aunque es banal y a menudo transitoria, no hay que subestimarla por el riesgo de infecciones bacterianas o por hongos. La forma más común es la irritativa, cuya causa más frecuente es el contacto con la orina y las heces; también influye el roce directo del pañal sobre la piel, a veces favorecido por el sudor y la maceración. Suele curarse en pocos días. La candidiasis se presenta con placas rojas en la ingle o alrededor del ano, rodeadas de pápulas o pústulas, y la página avisa de no considerar toda irritación como candidiasis (fuente en italiano).",
+        "Dermatite da pannolino (Ospedale Pediatrico Bambino Gesù, 2023). Tema: cuidados y cuándo pedir valoración. Hallazgo: se lava la zona varias veces con agua tibia y limpiadores suaves, no necesariamente antisépticos, se cambia el pañal a menudo y se usan las cremas que aconseje el pediatra, sin aplicarlas con demasiada frecuencia ni en exceso. No se deben usar corticoides tópicos, sobre todo si se aplican sin prescripción, porque la dermatitis tiende a reaparecer al suspenderlos y aumentan el riesgo de sobreinfección. Como en casos raros la dermatitis es signo de otras enfermedades, no hay que subestimar nunca el problema y conviene llevar al bebé con tranquilidad a un control dermatológico; en la mayoría de los casos se descartarán enfermedades graves (fuente en italiano)."
+      ]
+    },
+    {
+      "source_type": "reference",
+      "title": "Dermatite seborroica",
+      "organization": "Ospedale Pediatrico Bambino Gesù",
+      "publication_year": 2025,
+      "url": "https://www.ospedalebambinogesu.it/dermatite-seborroica-89699/",
+      "specialties": [
+        "pediatrics",
+        "dermatology"
+      ],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "original_language": "it",
+      "topics": [
+        "costra_lactea",
+        "bano_higiene"
+      ],
+      "chunks": [
+        "Dermatite seborroica (Ospedale Pediatrico Bambino Gesù, 2025). Tema: costra láctea o dermatitis seborreica del lactante. Hallazgo: la página dice que el término costra láctea es erróneo. En el lactante aparece al nacer o en los primeros meses, con piel enrojecida y a menudo cubierta de escamas blanco-amarillentas, normalmente grasas, en el cuero cabelludo, detrás de las orejas, en las cejas y a los lados de la nariz, y a veces en axilas, ingle y cuello. No suele dar otros síntomas, evoluciona a oleadas y se cura sola sin secuelas, normalmente dentro de los tres primeros meses de vida (fuente en italiano).",
+        "Dermatite seborroica (Ospedale Pediatrico Bambino Gesù, 2025). Tema: cuidados de la dermatitis seborreica en el lactante. Hallazgo: en el lactante a menudo no hace falta un tratamiento específico; en la cara se pueden usar emolientes y se aconsejan champús frecuentes. Se desaconseja quitar de forma mecánica las escamas del cuero cabelludo o de la cara y también descuidar la higiene, que debe mantenerse para prevenir infecciones. No se aconsejan los corticoides tópicos. En casos rarísimos las lesiones cubren toda la piel (eritrodermia) y el estado general puede empeorar; esta forma eritrodérmica exige ingreso hospitalario (fuente en italiano)."
+      ]
+    },
+    {
+      "source_type": "reference",
+      "title": "Gastroenterite nel bambino",
+      "organization": "Ospedale Pediatrico Bambino Gesù",
+      "publication_year": 2025,
+      "url": "https://www.ospedalebambinogesu.it/gastroenteriti-nel-bambino-89888/",
+      "specialties": [
+        "pediatrics",
+        "gastroenterology",
+        "infectious_disease"
+      ],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "original_language": "it",
+      "topics": [
+        "diarrea",
+        "deshidratacion",
+        "cuando_consultar"
+      ],
+      "chunks": [
+        "Gastroenterite nel bambino (Ospedale Pediatrico Bambino Gesù, 2025). Tema: causas y síntomas de la gastroenteritis. Hallazgo: es una infección de estómago e intestino muy común en la infancia, sobre todo vírica (rotavirus, norovirus, adenovirus), seguida de la bacteriana y, con menos frecuencia, la parasitaria, que se contagia por tomar alimentos o agua contaminados o al llevarse a la boca las manos tras tocar objetos o superficies contaminados. Cursa con diarrea con o sin vómito, dolor abdominal, fiebre que no siempre aparece y rara vez es alta o prolongada y falta de apetito. La incubación es de 1-3 días y dura de media 4-7 días, aunque algunas infecciones llegan a 2 semanas. Una diarrea de más de dos semanas debe valorarla el pediatra (fuente en italiano).",
+        "Gastroenterite nel bambino (Ospedale Pediatrico Bambino Gesù, 2025). Tema: deshidratación y rehidratación. Hallazgo: el riesgo de deshidratación es mayor en lactantes y niños pequeños; los signos que la sugieren son labios y mucosas secos, ojeras, menos orina (pañales secos o menos mojados de lo habitual), hasta llegar a un estado de decaimiento, con somnolencia y poca reactividad. El tratamiento se centra en prevenirla y tratarla con soluciones de rehidratación oral dadas en pequeñas cantidades pero con frecuencia, y en la mayoría de los casos bastan en casa. No hay que restringir la dieta sin necesidad, y se deben evitar los alimentos ultraprocesados y las bebidas azucaradas, porque pueden empeorar la diarrea (fuente en italiano).",
+        "Gastroenterite nel bambino (Ospedale Pediatrico Bambino Gesù, 2025). Tema: cuándo consultar y prevención. Hallazgo: una diarrea de más de dos semanas debe valorarla el pediatra; con menos frecuencia se recurre a análisis de heces, por ejemplo si la diarrea se alarga, la fiebre alta persiste o la diarrea tiene sangre. A veces, por vómitos repetidos e incontrolables y deposiciones muy abundantes y frecuentes, la rehidratación oral no basta y hace falta un ingreso breve para rehidratar por vía intravenosa o con sonda nasogástrica. La clave de la prevención es la higiene de manos, además de conservar y preparar bien los alimentos. El pronóstico es bueno y en la mayoría de los casos se cura sola (fuente en italiano)."
+      ]
+    },
+    {
+      "source_type": "reference",
+      "title": "Pianto nel periodo neonatale",
+      "organization": "Ospedale Pediatrico Bambino Gesù",
+      "publication_year": 2024,
+      "url": "https://www.ospedalebambinogesu.it/pianto-nel-periodo-neonatale-80531/",
+      "specialties": [
+        "pediatrics",
+        "neonatology"
+      ],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "original_language": "it",
+      "topics": [
+        "llanto",
+        "colico",
+        "cuando_consultar"
+      ],
+      "chunks": [
+        "Pianto nel periodo neonatale (Ospedale Pediatrico Bambino Gesù, 2024). Tema: por qué llora un recién nacido y cuánto es normal. Hallazgo: el llanto es la forma de expresar necesidades y sentimientos; las causas incluyen hambre, pañal sucio, temperatura demasiado alta o baja, ruidos, dolor o el nerviosismo o la ansiedad excesivos de la familia, que se transmiten con facilidad. En el primer año, sobre todo en los tres primeros meses, los lactantes lloran normalmente unas 2-3 horas al día. Tras descartar problemas evidentes, se aconseja esperar un momento y entender el motivo, sin ofrecer enseguida chupete o pecho de forma mecánica (fuente en italiano).",
+        "Pianto nel periodo neonatale (Ospedale Pediatrico Bambino Gesù, 2024). Tema: cólicos y cuándo preocuparse por el llanto. Hallazgo: los cólicos empiezan hacia la segunda o tercera semana, con un llanto incesante que suele repetirse a las mismas horas, por la tarde o al anochecer, y que no cesa ni en brazos, agitación de brazos y piernas, que el bebé dobla y estira en todas direcciones, y espalda arqueada; ayudan un masaje suave del vientre, tenerlo boca abajo sobre el antebrazo y mecerlo con movimientos repetidos. Suelen acabar hacia el final del primer trimestre. Es motivo de preocupación que un bebé normalmente tranquilo llore fuerte y durante mucho rato sin un motivo evidente que se pueda corregir, y cuando el llanto no se consigue calmar se aconseja consultar al pediatra (fuente en italiano)."
+      ]
+    },
+    {
+      "source_type": "reference",
+      "title": "영아 산통 완화를 위한 팁",
+      "organization": "Korean Pediatric Society (대한소아청소년과학회)",
+      "publication_year": null,
+      "undated_reason": "la página no muestra fecha de publicación ni de actualización",
+      "url": "https://pediatrics.or.kr/bbs/index.html?category=&code=infantcare&gubun=&key=&keyfield=&mode=view&number=8812&page=9",
+      "specialties": [
+        "pediatrics",
+        "neonatology"
+      ],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "original_language": "ko",
+      "topics": [
+        "colico",
+        "llanto",
+        "aplv"
+      ],
+      "chunks": [
+        "영아 산통 완화를 위한 팁 (Korean Pediatric Society, sin fecha). Tema: primeras medidas ante el cólico del lactante y ajustes de la alimentación. Hallazgo: se aconseja llevar al bebé al pediatra para descartar una hernia u otra enfermedad que cause el dolor. Si toma el pecho, la madre puede probar a restringir temporalmente lácteos, cafeína, cebolla, col y comidas muy fuertes. Si toma fórmula, se puede hablar con el pediatra de una fórmula de proteína hidrolizada, y si el problema era la proteína, el cólico mejora en pocos días. También se aconseja no pasarse con la cantidad de cada toma. (fuente en coreano)",
+        "영아 산통 완화를 위한 팁 (Korean Pediatric Society, sin fecha). Tema: cómo calmar al bebé con cólico y aviso de seguridad. Hallazgo: puede ayudar pasear con él en brazos o en un portabebés con un ritmo suave, un ruido blanco de volumen bajo como el de una aspiradora o un ventilador. El chupete no se recomienda, aunque puede ayudar a tranquilizarlo. La página insiste en que nunca se debe zarandear al bebé con fuerza, porque puede causar el síndrome del bebé sacudido, con ceguera o daño cerebral. (fuente en coreano)"
+      ]
+    },
+    {
+      "source_type": "reference",
+      "title": "영아산통이란? – 울고 보채는 아기들",
+      "organization": "Korean Pediatric Society (대한소아청소년과학회)",
+      "publication_year": null,
+      "undated_reason": "la página no muestra fecha de publicación ni de actualización",
+      "url": "https://pediatrics.or.kr/bbs/index.html?category=A&code=infantcare&gubun=C&key=&keyfield=&mode=view&number=8811&page=1",
+      "specialties": [
+        "pediatrics",
+        "neonatology"
+      ],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "original_language": "ko",
+      "topics": [
+        "colico",
+        "cuando_consultar",
+        "signos_alarma"
+      ],
+      "chunks": [
+        "영아산통이란? – 울고 보채는 아기들 (Korean Pediatric Society, sin fecha). Tema: qué es el cólico del lactante y cuánto dura. Hallazgo: es un cuadro muy frecuente que se repite sobre todo por la noche, con un llanto casi a gritos que dura varias horas, movimientos de las piernas y gases, y afecta a cerca del 20 % de los bebés. Suele empezar entre las 2 y las 4 semanas, mejora solo hacia los 3-4 meses, aunque puede prolongarse hasta los 6 meses, y dura de media 1-2 horas al día. (fuente en coreano)",
+        "영아산통이란? – 울고 보채는 아기들 (Korean Pediatric Society, sin fecha). Tema: causas del cólico y cuándo sospechar otra causa. Hallazgo: no se conoce una causa clara; se piensa más en un bebé muy sensible a los estímulos o con el sistema nervioso inmaduro que en una causa orgánica, y puede haber reacción a algo que come la madre o a la proteína de la fórmula. Si el bebé está tranquilo cuando no tiene cólico y, cuando le da, se calma en pocas horas, no hace falta ninguna medida especial. Si el llanto no cede y los síntomas empeoran de día y de noche, hay que pensar que puede no ser un simple cólico, sino una hernia u otra causa orgánica de dolor abdominal. (fuente en coreano)"
+      ]
+    },
+    {
+      "source_type": "reference",
+      "title": "Huilen (Kind en Gezin)",
+      "organization": "Kind en Gezin (Agentschap Opgroeien)",
+      "publication_year": null,
+      "undated_reason": "Página de kindengezin.be sin fecha de publicación ni de revisión visible; consultada el 2026-11-06",
+      "url": "https://www.kindengezin.be/nl/thema/ontwikkeling-en-gedrag/gedrag-en-opvoeding/huilen",
+      "specialties": [
+        "pediatrics"
+      ],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "original_language": "nl",
+      "topics": [
+        "llanto",
+        "colico"
+      ],
+      "chunks": [
+        "Huilen (Kind en Gezin, Agentschap Opgroeien). Tema: cuánto llanto es normal en un bebé. Hallazgo: los bebés lloran por ratos («huiluurtjes»), sobre todo a última hora de la tarde y por la noche. Hacia las 6 semanas hay un pico de llanto, con una media de unas 2,5 horas al día, y después del tercer mes, en la mayoría de los bebés, baja a una media de 1,5 horas al día, que se mantiene el resto del primer año. Entre el 10 y el 30 % de los bebés menores de 4 meses lloran en exceso, y la página presenta el llanto más intenso como una situación excepcional dentro del patrón normal de llanto; el llanto excesivo suele desaparecer a los 4 o 5 meses y aparece tanto con lactancia materna como con biberón.",
+        "Huilen (Kind en Gezin, Agentschap Opgroeien). Tema: cómo calmar a un bebé que llora y cólicos. Hallazgo: la página propone llevarlo pegado al cuerpo (con un fular portabebés), mecerlo o acariciarlo, darle el chupete (mejor que el dedo), limitar los estímulos y mantener una rutina diaria con rituales para dormir. Si sospecha de cólicos, sugiere ponerlo boca abajo sobre la rodilla, masajear la barriga, aplicar un paño no demasiado caliente, mover las piernas como en bicicleta, darle un baño y mantener la calma. Con lactancia conviene revisar el agarre y la succión; con biberón, la preparación y la postura. Solo se cambia de alimentación si el médico lo considera necesario.",
+        "Huilen (Kind en Gezin, Agentschap Opgroeien). Tema: cuándo pedir ayuda por el llanto y no sacudir al bebé. Hallazgo: la página no enumera signos concretos que exijan ir al médico, pero aconseja hablar con un médico o enfermera sobre el llanto y el estrés que causa, y apuntar el llanto en una tabla (huilkaart) durante al menos varios días seguidos para comentarla. Insiste en no sacudir nunca a un bebé: si sube la tensión, se deja al bebé en un lugar seguro, la persona se aparta, respira hondo y se toma un momento. Para dudas o preguntas, la página remite a la enfermera de pediatría."
+      ]
+    },
+    {
+      "source_type": "guideline",
+      "title": "JGZ-richtlijn Excessief huilen",
+      "organization": "Nederlands Centrum Jeugdgezondheid (NCJ, JGZ-richtlijnen)",
+      "publication_year": 2025,
+      "url": "https://www.jgzrichtlijnen.nl/richtlijn/jgz-richtlijn-excessief-huilen/",
+      "specialties": [
+        "pediatrics",
+        "general_medicine"
+      ],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "original_language": "nl",
+      "topics": [
+        "llanto"
+      ],
+      "chunks": [
+        "JGZ-richtlijn Excessief huilen (Nederlands Centrum Jeugdgezondheid, 2025). Tema: cuánto llora un bebé y qué se considera llanto excesivo. Hallazgo: según la guía, hay dos patrones de llanto: un pico hacia las 4 semanas (entre 3 y 6), con una media de unos 100 minutos, o un llanto estable de unos 86 minutos cada 24 horas hasta las 8 semanas que luego baja a unos 46. Hacia las 8 semanas (entre 5 y 11) empieza a disminuir claramente en la mayoría de los bebés y, de las 12 semanas al año, lloran de media entre media hora y una hora al día. El llanto excesivo se define por los criterios Roma IV: el bebé tiene menos de 5 meses cuando empieza, hay periodos repetidos y prolongados de llanto, lloriqueo o irritabilidad sin causa clara que los padres no pueden evitar ni resolver, y no hay retraso del crecimiento ni del desarrollo, fiebre ni enfermedad.",
+        "JGZ-richtlijn Excessief huilen (Nederlands Centrum Jeugdgezondheid, 2025). Tema: señales de alarma ante un bebé que llora mucho. Hallazgo: la guía enumera entre sus banderas rojas la fiebre de más de 38 grados, un llanto que empeora de repente, una curva de crecimiento (longitud o peso) que se desvía hacia abajo, el vómito con sangre, la pérdida de sangre por el recto, el vómito verdoso (biliar), el vómito en proyectil y los síntomas de aumento de la presión dentro del cráneo, por el mayor riesgo de lesión cerebral provocada. También pide estar atento a que los padres puedan llegar a sacudir al bebé en un arrebato.",
+        "JGZ-richtlijn Excessief huilen (Nederlands Centrum Jeugdgezondheid, 2025). Tema: apoyo a los padres y prevención de sacudir al bebé. Hallazgo: la guía reconoce que el llanto excesivo es un factor de riesgo de maltrato, incluido el traumatismo craneal provocado. Considera señal de alarma los indicios o las ideas concretas de maltrato, o una frustración que pueda llevar a los padres a sacudir al bebé, y remite a las guías de problemas psicosociales y de maltrato infantil. Recuerda que el llanto es un comportamiento normal y que conviene informar a los padres de lo mucho que varía; en 95 de cada 100 bebés que lloran mucho no se encuentra ninguna enfermedad grave de base. Los consejos de internet o del entorno pueden hacerles sentir que lo hacen mal, y probar muchas intervenciones seguidas no suele funcionar. Entre los consejos figura arropar con firmeza o envolver al bebé."
+      ]
+    },
+    {
+      "source_type": "reference",
+      "title": "Kolikk hos spedbarn (Helsenorge)",
+      "organization": "Helsenorge.no (Helsedirektoratet)",
+      "publication_year": 2022,
+      "url": "https://www.helsenorge.no/sykdom/mage-og-tarm/kolikk/",
+      "specialties": [
+        "pediatrics",
+        "gastroenterology"
+      ],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "original_language": "no",
+      "topics": [
+        "colico",
+        "llanto"
+      ],
+      "chunks": [
+        "Kolikk hos spedbarn (Helsenorge, Helsedirektoratet, 2022). Tema: qué es el cólico del lactante y cuánto dura. Hallazgo: la página explica que los bebés con cólico no están enfermos pero lloran mucho más de lo habitual, y que se desconoce la causa. Suele empezar cuando el bebé tiene unas semanas y desaparece hacia los 4 o 5 meses. Se habla de cólico cuando el llanto dura al menos 3 horas al día, al menos 3 días a la semana y durante al menos 3 semanas. Es típico un llanto agudo y repentino que nada calma, a menudo por la tarde o la noche, con las piernas encogidas, los puños cerrados y la cara roja.",
+        "Kolikk hos spedbarn (Helsenorge, Helsedirektoratet, 2022). Tema: medidas que pueden ayudar a las familias. Hallazgo: la página sugiere dejar que el bebé termine un pecho antes de pasar al otro, sacarle los gases a mitad y al final de la toma, comprobar que el agujero de la tetina del biberón no sea demasiado grande y no dar de comer demasiado rápido. También propone probar un paseo en coche, una silla vibratoria, un masaje para bebés, ruido blanco (secador, aspiradora, el grifo de la bañera abierto) o cambiar de habitación. Señala que si la madre fuma durante el embarazo y después del parto, la probabilidad de que el bebé tenga cólico es el doble, y anima a cuidarse y a aceptar ayuda de familiares o amigos.",
+        "Kolikk hos spedbarn (Helsenorge, Helsedirektoratet, 2022). Tema: cuándo consultar al médico y qué no recomienda. Hallazgo: la página aconseja acudir al médico si hay preocupación, o si el bebé tiene fiebre, vómitos intensos, diarrea, sangre en las heces o un cambio brusco en el patrón de llanto. Si los síntomas continúan después de los 4 meses de edad o aparecen otros nuevos, es necesario que lo valore un médico. La quiropráctica no tiene más efecto que el placebo y la acupuntura tiene un efecto incierto, por lo que no se recomienda ninguna de las dos. Se desaconseja la homeopatía, los productos de hierbas están poco documentados y se desaconseja el hinojo por el estragol que contiene. La página no da teléfonos de urgencia."
+      ]
+    },
+    {
+      "source_type": "reference",
+      "title": "Postępowanie w ostrej biegunce u małych dzieci",
+      "organization": "Narodowe Centrum Edukacji Żywieniowej (NCEŻ), Narodowy Instytut Zdrowia Publicznego PZH - PIB",
+      "publication_year": 2018,
+      "url": "https://ncez.pzh.gov.pl/dzieci-i-mlodziez/postepowanie-w-ostrej-biegunce-u-malych-dzieci/",
+      "specialties": [
+        "pediatrics",
+        "gastroenterology",
+        "nutrition"
+      ],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "original_language": "pl",
+      "topics": [
+        "diarrea",
+        "deshidratacion",
+        "cuando_consultar"
+      ],
+      "chunks": [
+        "Postępowanie w ostrej biegunce u małych dzieci (NCEŻ, Instituto Nacional de Salud Pública PZH, 2018). Tema: qué es la diarrea aguda y cuánto dura. Hallazgo: consiste en heces sueltas o líquidas, a menudo más de 3 al día, y suele durar menos de una semana y como máximo 2 semanas; puede acompañarse de fiebre y vómitos. Las causas más frecuentes en niños europeos son los rotavirus y norovirus (sobre todo en lactantes), y entre las bacterias Salmonella y Campylobacter. El texto aclara que la diarrea puede tener otros orígenes, por lo que debe ser un médico quien valore la causa. (fuente en polaco)",
+        "Postępowanie w ostrej biegunce u małych dzieci (NCEŻ, Instituto Nacional de Salud Pública PZH, 2018). Tema: cuándo acudir al médico y cómo se valora la deshidratación. Hallazgo: se indica consultar si el niño tiene menos de 2 meses, una enfermedad crónica como la diabetes, vómitos prolongados, heces muy abundantes o si la familia cree que puede estar deshidratado. Una pérdida de peso superior al 10% se considera deshidratación grave y exige hospitalización; el médico valora además el estado general, los ojos y mucosas, la respiración, la elasticidad de la piel y el relleno capilar. (fuente en polaco)",
+        "Postępowanie w ostrej biegunce u małych dzieci (NCEŻ, Instituto Nacional de Salud Pública PZH, 2018). Tema: rehidratación y alimentación durante la diarrea. Hallazgo: la base es la solución de rehidratación oral con sodio, que según el artículo es tan eficaz como la rehidratación intravenosa, y se da en pequeñas porciones, por ejemplo con jeringa. Hay que mantener la lactancia materna y no se recomiendan dietas especiales (ligeras, sin lactosa o astringentes). Conviene limitar las bebidas con mucho azúcar, como los zumos, que pueden empeorar la diarrea, y no forzar al niño a comer. No se aconseja dar por cuenta propia antidiarreicos, porque pueden dificultar el diagnóstico. (fuente en polaco)"
+      ]
+    },
+    {
+      "source_type": "reference",
+      "title": "AZS - atopowe zapalenie skóry u dzieci",
+      "organization": "Narodowy Fundusz Zdrowia (NFZ), portal pacjent.gov.pl",
+      "publication_year": 2024,
+      "url": "https://pacjent.gov.pl/aktualnosc/azs-atopowe-zapalenie-skory-u-dzieci",
+      "specialties": [
+        "pediatrics",
+        "dermatology"
+      ],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "original_language": "pl",
+      "topics": [
+        "dermatitis_atopica",
+        "costra_lactea",
+        "bano_higiene",
+        "cuando_consultar"
+      ],
+      "chunks": [
+        "AZS - atopowe zapalenie skóry u dzieci (pacjent.gov.pl, NFZ, actualizado en 2024). Tema: cómo se presenta la dermatitis atópica en el bebé. Hallazgo: los primeros síntomas aparecen en lactantes entre el 3.º y el 6.º mes de vida. Hay picor intenso que empeora por la tarde y de noche, con problemas de sueño e irritabilidad, piel muy seca, enrojecimiento, granitos, ampollitas, exudado y descamación; las lesiones pueden aparecer en mejillas, cuello, lóbulos de las orejas, pliegues de brazos y piernas y cuero cabelludo. Puede confundirse con la dermatitis seborreica, que en bebés se ve como escamas grasas blancas o amarillas en el cuero cabelludo (costra láctea). (fuente en polaco)",
+        "AZS - atopowe zapalenie skóry u dzieci (pacjent.gov.pl, NFZ, actualizado en 2024). Tema: cuidado de la piel y cuándo consultar. Hallazgo: tras el baño se hidrata la piel con preparados que recomiende el médico, se evitan los productos de baño con perfume y los cosméticos con alcohol, se seca con toques suaves sin frotar y se viste al niño con ropa suave y transpirable de tejidos naturales. Los brotes empeoran con alérgenos o irritantes, estrés, cambios de temperatura, infecciones, piel reseca y baños largos. Ante síntomas preocupantes se consulta con el médico de atención primaria, que puede derivar a alergología o dermatología; la mejoría puede notarse ya a las 3 semanas de tratamiento. (fuente en polaco)"
+      ]
+    },
+    {
+      "source_type": "reference",
+      "title": "Alergia ao leite de vaca",
+      "organization": "Sociedade Brasileira de Pediatria (SBP)",
+      "publication_year": 2018,
+      "url": "https://www.sbp.com.br/pediatria-para-familias/doencas/alergia-ao-leite-de-vaca/",
+      "specialties": [
+        "pediatrics",
+        "gastroenterology",
+        "nutrition"
+      ],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "original_language": "pt",
+      "topics": [
+        "aplv",
+        "colico"
+      ],
+      "chunks": [
+        "Alergia ao leite de vaca (Sociedade Brasileira de Pediatria, 2018). Tema: qué es y cómo se manifiesta la alergia a la proteína de leche de vaca. Hallazgo: es la reacción alimentaria más común en la infancia y suele aparecer en el primer año de vida. La alergia es una reacción inmune a la proteína del alimento, distinta de la intolerancia, que afecta a la digestión y no al sistema inmune. Predominan los vómitos, la diarrea y la malabsorción, que pueden causar retraso del crecimiento o sangre en las heces; pueden aparecer también irritabilidad, cólico, llanto intenso y rechazo de la comida, y síntomas de piel y respiratorios como urticaria, rinitis, broncoespasmo o dermatitis atópica. (fuente en portugués)",
+        "Alergia ao leite de vaca (Sociedade Brasileira de Pediatria, 2018). Tema: diagnóstico, manejo y evolución. Hallazgo: ninguna prueba o combinación de pruebas es definitiva, y el médico debe valorar una prueba de provocación adaptada a cada paciente. Los casos que empiezan en los primeros meses suelen ser de predominio digestivo y más de la mitad se resuelve durante el primer año de vida. En lactantes con fórmula se usan fórmulas extensamente hidrolizadas o de aminoácidos; en lactancia exclusiva, la madre excluye la leche de vaca y derivados. No hay evidencia de que restringir la dieta materna en el embarazo o la lactancia prevenga la alergia, y solo se plantea si el bebé tiene reacciones documentadas, con orientación nutricional a la madre. (fuente en portugués)"
+      ]
+    },
+    {
+      "source_type": "reference",
+      "title": "Banho do bebê",
+      "organization": "Sociedade Brasileira de Pediatria (SBP)",
+      "publication_year": 2021,
+      "url": "https://www.sbp.com.br/pediatria-para-familias/primeira-infancia/banho-do-bebe/",
+      "specialties": [
+        "pediatrics",
+        "dermatology",
+        "neonatology"
+      ],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "original_language": "pt",
+      "topics": [
+        "bano_higiene"
+      ],
+      "chunks": [
+        "Banho do bebê (Sociedade Brasileira de Pediatria, 2021). Tema: primer baño y técnica. Hallazgo: la OMS recomienda retrasar el primer baño 24 horas tras el nacimiento y, si no es posible por motivos culturales, al menos 6 horas, y esperar a que la temperatura corporal sea estable. El baño temprano interrumpe la lactancia y el contacto piel con piel. Se recomienda el baño de inmersión, con el agua a la cintura, durante 5 a 10 minutos y con el agua a 37-37,5 grados, comprobándola siempre. Controla la temperatura de la habitación. No hace falta quitar la vérnix: se va cayendo sola. (fuente en portugués)",
+        "Banho do bebê (Sociedade Brasileira de Pediatria, 2021). Tema: frecuencia, jabón e hidratación. Hallazgo: se puede bañar a diario o 2 a 3 veces por semana, siempre que se limpien los pliegues, el muñón del cordón y la zona del pañal. Usa limpiadores suaves para piel de bebé, líquidos y sin perfume, que no alteren el pH ácido de la piel, y seca con suavidad con una toalla suave y limpia. Se pueden usar hidratantes, incluso en el periodo neonatal, preferiblemente tras el baño, a diario o al menos 3 veces por semana, hipoalergénicos y sin fragancia. (fuente en portugués)",
+        "Banho do bebê (Sociedade Brasileira de Pediatria, 2021). Tema: consejos prácticos y seguridad en el baño. Hallazgo: caldea el cuarto de baño antes de empezar, ten todo al alcance de la mano antes de meter al bebé en la bañera y háblale o cántale para que se sienta seguro. Nunca se debe dejar al bebé solo en la bañera. El padre siempre es bienvenido en el baño y se le anima a intentarlo solo algunas veces. La fuente no da instrucciones concretas de cuidado del cordón umbilical, solo indica limpiarlo durante el baño. (fuente en portugués)"
+      ]
+    },
+    {
+      "source_type": "reference",
+      "title": "Cólica do lactente",
+      "organization": "Sociedade Brasileira de Pediatria (SBP)",
+      "publication_year": 2023,
+      "url": "https://www.sbp.com.br/pediatria-para-familias/primeira-infancia/colica-do-lactente/",
+      "specialties": [
+        "pediatrics",
+        "gastroenterology"
+      ],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "original_language": "pt",
+      "topics": [
+        "colico",
+        "llanto"
+      ],
+      "chunks": [
+        "Cólica do lactente (Sociedade Brasileira de Pediatria, 2023). Tema: qué es el cólico del lactante. Hallazgo: el signo principal es el llanto inconsolable. El llanto forma parte del desarrollo neurológico y conductual del lactante y tiene otras causas frecuentes (frío, calor, pañal sucio, hambre), de modo que se sospecha cólico cuando persiste tras descartarlas. No todo llanto inconsolable es cólico, por eso debe valorarlo el pediatra. La definición clásica es la «regla de los 3»: llanto inconsolable, inquietud o irritabilidad durante al menos 3 horas, 3 días a la semana, y durante más de 3 semanas. Puede asociarse a mucha ansiedad en los padres y a más riesgo de depresión materna. (fuente en portugués)",
+        "Cólica do lactente (Sociedade Brasileira de Pediatria, 2023). Tema: causas y alimentación en el cólico. Hallazgo: las causas no se conocen con exactitud (factores del entorno, incluida la situación biopsicosocial de la familia, sistema nervioso central inmaduro, intolerancia a la lactosa, alteraciones de las hormonas gastrointestinales, de la motilidad y de la colonización del intestino). Es autolimitado, y que desaparezca solo sugiere que influye mucho el desarrollo del tubo digestivo. Aparece tanto con lactancia como con fórmula y puede ser motivo de numerosos cambios injustificados de fórmula. Nunca se debe interrumpir la lactancia exclusiva para reducir el cólico. La alergia a la proteína de leche de vaca es una causa rara. Los medicamentos para los gases no han demostrado que funcionen. (fuente en portugués)",
+        "Cólica do lactente (Sociedade Brasileira de Pediatria, 2023). Tema: medidas en casa ante el cólico. Hallazgo: coger al bebé en brazos, y se puede probar el contacto directo de la barriga del bebé con la de la madre; envolverlo en una manta; flexionarle los muslos hacia el vientre; baño tibio o compresas en la barriga; reducir los estímulos, evitando sitios con mucho ruido o mucha gente; buscar un ambiente tranquilo, quizá con música suave de fondo; y mantener una rutina de baño, sueño y paseos. Evitar los tés, los cambios de marca de fórmula y los medicamentos sin consejo del pediatra. (fuente en portugués)"
+      ]
+    },
+    {
+      "source_type": "reference",
+      "title": "Diarreias",
+      "organization": "Sociedade Brasileira de Pediatria (SBP)",
+      "publication_year": 2023,
+      "url": "https://www.sbp.com.br/pediatria-para-familias/doencas/diarreias/",
+      "specialties": [
+        "pediatrics",
+        "gastroenterology",
+        "infectious_disease"
+      ],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "original_language": "pt",
+      "topics": [
+        "diarrea",
+        "deshidratacion",
+        "signos_alarma"
+      ],
+      "chunks": [
+        "Diarreias (Sociedade Brasileira de Pediatria, 2023). Tema: qué es la diarrea y cuánto dura. Hallazgo: es el aumento del número de deposiciones al día, blandas o líquidas, y es un síntoma que pueden causar muchas enfermedades. La aguda dura menos de 14 días, suele ser infecciosa (gastroenteritis, por virus como rotavirus y norovirus o por bacterias) y conlleva riesgo de deshidratación; puede acompañarse de vómitos y fiebre. La persistente dura más de 14 días y la crónica más de 30. La lactancia materna reduce la frecuencia de los episodios y se asocia a una evolución menos grave; el contacto con personas con diarrea, la mala higiene y el destete precoz son factores de riesgo. (fuente en portugués)",
+        "Diarreias (Sociedade Brasileira de Pediatria, 2023). Tema: signos de deshidratación y urgencia. Hallazgo: la deshidratación es la principal complicación de la diarrea aguda; puede ser peligrosa, requiere siempre atención de urgencia y debe ser valorada y tratada sin demora por un pediatra. Sus signos son ausencia de lágrimas, ojos hundidos, poca saliva con boca y lengua secas, piel de aspecto marchito, menos orina, respiración rápida y superficial, extremidades frías y pulso débil. Se debe acudir al pediatra para que valore cada caso, vigilar la pérdida de peso, los signos de deshidratación o el empeoramiento de la diarrea, y volver a consulta siempre que sea necesario. (fuente en portugués)",
+        "Diarreias (Sociedade Brasileira de Pediatria, 2023). Tema: tratamiento y prevención de la diarrea aguda. Hallazgo: el objetivo es prevenir la deshidratación y la desnutrición con una ingesta correcta de líquidos, la solución de rehidratación oral (tratamiento preferido) y una alimentación adecuada; algunos casos necesitan hidratación intravenosa. En general no se necesitan medicamentos, y no se deben dar antibióticos a niños sanos con gastroenteritis, porque la diarrea se resuelve sola y alteran la flora intestinal. Para prevenir: fomentar la lactancia, mantener la dieta habitual, ofrecer pequeñas cantidades de comida a intervalos cortos, buena higiene, mantener hidratado al niño y acceso a la vacuna del rotavirus. (fuente en portugués)"
+      ]
+    },
+    {
+      "source_type": "reference",
+      "title": "Dificuldades comuns com o bebê",
+      "organization": "Sociedade Brasileira de Pediatria (SBP)",
+      "publication_year": 2024,
+      "url": "https://www.sbp.com.br/pediatria-para-familias/aleitamento-materno/dificuldades-comuns-com-o-bebe",
+      "specialties": [
+        "pediatrics",
+        "gastroenterology"
+      ],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "original_language": "pt",
+      "topics": [
+        "vomitos",
+        "estrenimiento",
+        "heces"
+      ],
+      "chunks": [
+        "Dificuldades comuns com o bebê (Sociedade Brasileira de Pediatria, 2024). Tema: regurgitaciones frecuentes. Hallazgo: la regurgitación es el retorno pasivo y sin esfuerzo de leche del estómago por la boca; es común en los primeros meses porque el aparato digestivo es inmaduro. Si el bebé está tranquilo, sin molestias y gana bien peso, no indica enfermedad y la mayoría de los casos no necesita medicación. Se recomienda mantenerlo en vertical un rato tras las tomas, no agitarlo, no levantarle mucho las piernas al cambiar el pañal y no vestirlo con ropa que comprima el estómago. Si se oye ruido en las tomas, revisar el agarre porque traga aire. (fuente en portugués)",
+        "Dificuldades comuns com o bebê (Sociedade Brasileira de Pediatria, 2024). Tema: cuándo consultar por regurgitación y esfuerzo al hacer caca. Hallazgo: se debe consultar al médico si la regurgitación se acompaña de rechazo de las tomas, pérdida de peso o mala ganancia para la edad, irritabilidad o llanto excesivo. Algunos bebés que solo toman leche lloran, se ponen rojos, se esfuerzan y gimen al evacuar: no es estreñimiento ni cólico, sino disquecia, un trastorno funcional por inmadurez y falta de coordinación que mejora con el crecimiento. Se les ayuda con consuelo y flexionando las piernas sobre la barriga o en posición de cuclillas; hay que evitar medicamentos, supositorios y estimulación anal. (fuente en portugués)"
+      ]
+    },
+    {
+      "source_type": "reference",
+      "title": "Quantas vezes o bebê pode evacuar por dia?",
+      "organization": "Sociedade Brasileira de Pediatria (SBP)",
+      "publication_year": 2020,
+      "url": "https://www.sbp.com.br/pediatria-para-familias/primeira-infancia/quantas-vezes-o-bebe-pode-evacuar-por-dia/",
+      "specialties": [
+        "pediatrics",
+        "gastroenterology",
+        "nutrition"
+      ],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "original_language": "pt",
+      "topics": [
+        "heces",
+        "diarrea"
+      ],
+      "chunks": [
+        "Quantas vezes o bebê pode evacuar por dia? (Sociedade Brasileira de Pediatria, 2020). Tema: frecuencia de las deposiciones del bebé amamantado. Hallazgo: en los primeros meses, sobre todo con lactancia exclusiva, es habitual hacer caca después de cada toma. Si el bebé está bien y sin otros síntomas, es normal y no es diarrea. Los bebés que solo toman leche materna pueden tener heces más líquidas sin que sea diarrea. Hacer 10 o más deposiciones al día puede ser normal si gana peso adecuadamente y no hay señales de alarma. (fuente en portugués)",
+        "Quantas vezes o bebê pode evacuar por dia? (Sociedade Brasileira de Pediatria, 2020). Tema: señales de alarma con muchas deposiciones. Hallazgo: aunque haga 10 o más deposiciones al día, hay que preocuparse si aparece fiebre, heces de color y olor distintos a los habituales, sangre en las heces o rechazo de las tomas. Si el bebé está hidratado, crece bien en peso y talla y está activo y con buen ánimo, no hace falta cambiar la alimentación ni dar medicamentos; ante cualquier duda, se consulta al pediatra. (fuente en portugués)",
+        "Quantas vezes o bebê pode evacuar por dia? (Sociedade Brasileira de Pediatria, 2020). Tema: por qué ocurre tras las tomas. Hallazgo: el reflejo gastrocólico hace que al comer se distienda el estómago, se active el intestino y se empuje la caca hacia el recto. La leche materna contiene sustancias que aceleran el movimiento intestinal y es baja en grasa. Los bebés con fórmula suelen tener heces más firmes, pero también pueden hacer caca tras comer; como los amamantados comen más a menudo, el reflejo es más frecuente y los padres pueden confundirlo con diarrea. (fuente en portugués)"
+      ]
+    },
+    {
+      "source_type": "reference",
+      "title": "Refluxo gastroesofágico",
+      "organization": "Sociedade Brasileira de Pediatria (SBP)",
+      "publication_year": 2025,
+      "url": "https://www.sbp.com.br/pediatria-para-familias/doencas/refluxo-gastroesofagico/",
+      "specialties": [
+        "pediatrics",
+        "gastroenterology"
+      ],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "original_language": "pt",
+      "topics": [
+        "vomitos",
+        "signos_alarma",
+        "cuando_consultar"
+      ],
+      "chunks": [
+        "Refluxo gastroesofágico (Sociedade Brasileira de Pediatria, 2025). Tema: reflujo fisiológico frente a enfermedad por reflujo. Hallazgo: el reflujo fisiológico es normal y frecuente en los primeros meses; hasta el 50% de los bebés sanos regurgita varias veces al día, aumenta entre los 2 y 4 meses y la mayoría se resuelve hacia el año. Pasa a ser enfermedad cuando es más intenso y frecuente y afecta al crecimiento, al desarrollo o a la calidad de vida; pueden aparecer irritabilidad y llanto intenso, pérdida de peso o mala ganancia, rechazo de las tomas, anemia y vómitos, incluso con sangre. Tienen más riesgo los prematuros, los niños con problemas neurológicos o pulmonares y los que tienen malformaciones digestivas. (fuente en portugués)",
+        "Refluxo gastroesofágico (Sociedade Brasileira de Pediatria, 2025). Tema: signos de alarma y cuidados en casa. Hallazgo: hay que acudir a urgencias si hay fiebre alta, somnolencia excesiva, fontanela muy abombada o tensa, convulsiones, abdomen hinchado, diarrea constante, sangre en el pañal o dificultad para respirar. En casa: no acostar al bebé justo después de comer, sino mantenerlo en vertical de 20 a 30 minutos; vigilar la inclinación de la silla portabebés, que puede comprimir el abdomen y empeorar el reflujo; esperar al menos 2 horas entre tomas; evitar ropa que apriete la barriga y no exponerlo al humo del tabaco. Nunca se debe dejar la lactancia, no cambiar la fórmula por cuenta propia ni iniciar medicación sin indicación del pediatra. (fuente en portugués)"
+      ]
+    },
+    {
+      "source_type": "reference",
+      "title": "Gastroenterite Aguda - Factos e Mitos",
+      "organization": "Sociedade Portuguesa de Pediatria (SPP)",
+      "publication_year": 2024,
+      "url": "https://criancaefamilia.spp.pt/doencas-comuns-e-outros-problemas/gastroenterite-aguda-factos-e-mitos/",
+      "specialties": [
+        "pediatrics",
+        "gastroenterology"
+      ],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "original_language": "pt",
+      "topics": [
+        "diarrea",
+        "deshidratacion",
+        "vomitos"
+      ],
+      "chunks": [
+        "Gastroenterite Aguda - Factos e Mitos (Sociedade Portuguesa de Pediatria, Portal Criança e Família, 2024). Tema: qué es la gastroenteritis aguda y cuánto dura. Hallazgo: es una inflamación del tubo digestivo causada sobre todo por virus, con diarrea, náuseas, vómitos, dolor abdominal, menos apetito y fiebre. Se contagia por vía fecal-oral, por ejemplo con las manos tras cambiar pañales, y en los niños los principales lugares de contagio son la guardería, la escuela y la propia casa. La diarrea suele durar de 5 a 7 días y no más de 2 semanas. No hay un tratamiento específico para la diarrea, y los antibióticos no se usan de forma rutinaria, solo en casos concretos como enfermedad grave, inmunodepresión o salmonela en menores de 3 meses. Lo esencial es reponer los líquidos perdidos. (fuente en portugués)",
+        "Gastroenterite Aguda - Factos e Mitos (Sociedade Portuguesa de Pediatria, Portal Criança e Família, 2024). Tema: hidratación y alimentación durante la gastroenteritis. Hallazgo: tras un vómito se hace una pausa de unos 30 minutos y después se da hidratación oral fraccionada, preferiblemente con suero de rehidratación oral, en pequeñas cantidades cada 5 minutos con cucharilla; se vende en farmacia sin receta. No se deben dar bebidas de cola ni té helado, ni quitar la leche ni imponer una dieta restrictiva: se mantiene la alimentación habitual evitando alimentos muy grasos y azucarados, y la leche, incluida la materna, debe continuar. No hay que forzar a comer. (fuente en portugués)",
+        "Gastroenterite Aguda - Factos e Mitos (Sociedade Portuguesa de Pediatria, Portal Criança e Família, 2024). Tema: signos de deshidratación y cuándo consultar al médico. Hallazgo: los bebés y niños pequeños son los más susceptibles a la deshidratación, que puede ser grave y requerir suero por vena. Son signos la boca seca, los ojos hundidos, orinar menos, la irritabilidad y la postración o mucho sueño. La página indica que deben motivar una valoración médica estos signos, la diarrea con sangre, muy abundante o de más de 2 semanas, los vómitos persistentes que impiden hidratar por la boca, el dolor abdominal intenso y persistente, la fiebre de más de 5 días o la gastroenteritis en un bebé de menos de 2 meses. (fuente en portugués)"
+      ]
+    },
+    {
+      "source_type": "reference",
+      "title": "Sol e proteção solar",
+      "organization": "Sociedade Portuguesa de Pediatria (SPP)",
+      "publication_year": 2021,
+      "url": "https://criancaefamilia.spp.pt/habitos-de-vida-saudavel/protecao-solar/sol-e-protecao-solar/",
+      "specialties": [
+        "pediatrics",
+        "dermatology"
+      ],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "original_language": "pt",
+      "topics": [
+        "proteccion_solar"
+      ],
+      "chunks": [
+        "Sol e proteção solar (Sociedade Portuguesa de Pediatria, Portal Criança e Família, 2021). Tema: sol y bebés pequeños. Hallazgo: la página, redactada por dermatólogas de un hospital universitario de Lisboa, afirma que los bebés no deben ir a la playa. Para los niños pequeños, sobre todo en el primer año, el protector solar más adecuado es el físico o mineral, y el químico solo debe usarse a partir de 1 año. La sombra de una sombrilla no garantiza protección total porque la arena, el agua y la nieve reflejan la radiación ultravioleta. Se aconsejan ropa fresca de manga larga, sombreros de ala y gafas de sol con filtro UV, tener siempre agua fresca disponible y recordar que los niños son más sensibles al calor y tienen más riesgo de deshidratación. (fuente en portugués)",
+        "Sol e proteção solar (Sociedade Portuguesa de Pediatria, Portal Criança e Família, 2021). Tema: horas de sol, índice UV y protector. Hallazgo: los niños no deben exponerse al sol, ni siquiera protegidos, cuando el índice UV es igual o superior a 8, lo que en verano significa no estar en la playa entre las 11 y las 16 horas; las medidas de protección se aplican siempre que el índice UV supere 6. El protector ideal es de amplio espectro (UVA y UVB), con factor 50+, resistente al agua y al roce, y debe reaplicarse aunque sea resistente al agua; el de filtros químicos se pone 30 minutos antes de salir y se vuelve a poner pasadas 2 horas o después del baño. Si hay quemadura solar, cremas refrescantes e hidratantes sin alcohol y evitar nueva exposición ese año. (fuente en portugués)"
+      ]
+    },
+    {
+      "source_type": "reference",
+      "title": "Kräkningar hos barn 0-1 år (1177)",
+      "organization": "1177 Vårdguiden (Inera)",
+      "publication_year": 2023,
+      "url": "https://www.1177.se/barn--gravid/vanliga-besvar-och-sjukdomar-hos-barn/vanliga-sjukdomar-och-besvar-hos-barn-0-1-ar/krakningar-hos-barn-0-1-ar/",
+      "specialties": [
+        "pediatrics",
+        "gastroenterology"
+      ],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "original_language": "sv",
+      "topics": [
+        "vomitos",
+        "deshidratacion"
+      ],
+      "chunks": [
+        "Kräkningar hos barn 0-1 år (1177 Vårdguiden, 2023). Tema: causas de los vómitos en el bebé. Hallazgo: son frecuentes sobre todo tras la toma. Los vómitos por exceso, cuando el bebé devuelve el alimento de más justo después de comer, no son dañinos y suelen cesar antes del año. Con el reflujo gastroesofágico el bebé puede vomitar a veces, sobre todo si acaba de comer; normalmente no necesita tratamiento y desaparece durante el primer año. Otras causas son gastroenteritis (sobre todo vírica), resfriados, otitis o alergia a la leche de vaca, y más raramente estenosis de píloro u obstrucción intestinal.",
+        "Kräkningar hos barn 0-1 år (1177 Vårdguiden, 2023). Tema: signos de alarma y cuándo consultar. Hallazgo: se acude con urgencia al centro de salud o a la consulta sin cita (o a urgencias si están cerrados) si el bebé vomita y tiene fiebre o está cansado, flojo y desinteresado, no retiene ningún líquido y orina mucho menos, o vomita sangre. Se llama al centro de salud para pedir consejo si el vómito es abundante o aparece al empezar con fórmula, papillas o gachas. Si se sospecha que ha tragado algo tóxico, se llama a emergencias y se pide consejo a un servicio de información toxicológica.",
+        "Kräkningar hos barn 0-1 år (1177 Vårdguiden, 2023). Tema: vómitos a chorro, vómito verde y deshidratación. Hallazgo: un vómito forzado a chorro puede indicar estenosis de píloro; suele empezar entre las 2 semanas y los 2 meses, se intensifica y se acompaña de poco aumento de peso, cansancio y desinterés por el entorno. Un vómito verde o amarillo con dolor de barriga, cada pocos minutos, puede indicar obstrucción intestinal, y la sangre en el vómito exige consulta urgente. Cuanto más pequeño es el bebé, más fácil es que se deshidrate, sobre todo antes del año, y la página recomienda ofrecer pequeñas cantidades de líquido a menudo desde los primeros vómitos."
+      ]
+    },
+    {
+      "source_type": "reference",
+      "title": "Magsjuka hos små barn (1177)",
+      "organization": "1177 Vårdguiden (Inera)",
+      "publication_year": 2025,
+      "url": "https://www.1177.se/barn--gravid/vanliga-besvar-och-sjukdomar-hos-barn/vanliga-sjukdomar-och-besvar-hos-barn-0-1-ar/magsjuka-hos-sma-barn/",
+      "specialties": [
+        "pediatrics",
+        "gastroenterology"
+      ],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "original_language": "sv",
+      "topics": [
+        "deshidratacion",
+        "vomitos",
+        "diarrea"
+      ],
+      "chunks": [
+        "Magsjuka hos små barn (1177 Vårdguiden, 2025). Tema: duración y cuándo llamar o consultar. Hallazgo: los vómitos suelen parar en uno o dos días y la diarrea puede durar hasta una semana. Se llama al centro de salud para pedir consejo si el niño tiene menos de 6 meses con vómitos y diarrea, si no ha mejorado en un día o si las heces sueltas duran más de dos semanas. Se contacta de inmediato con el centro de salud o la consulta sin cita si tiene diarrea y vómitos y además no consigue tomar líquidos u orina mucho menos, está cansado, sin fuerzas para jugar y ajeno a lo que le rodea, tiene un dolor de barriga fuerte que no cede o empeora, o hay sangre en el vómito o las heces.",
+        "Magsjuka hos små barn (1177 Vårdguiden, 2025). Tema: líquidos y alimentación durante la gastroenteritis. Hallazgo: se empieza a ofrecer líquidos pronto, en pequeñas cantidades y a menudo, porque cantidades grandes de golpe pueden provocar más vómitos; darle el líquido con cuchara ayuda si le cuesta beber. Con vómitos o diarrea intensos se recomienda una solución de rehidratación oral, preparada con medidas exactas si se hace en casa. Si toma el pecho o leche materna en biberón, se sigue igual pero más a menudo de lo habitual, aunque siga vomitando; si no toma el pecho, puede tomar fórmula en biberón, empezando con poca cantidad. Puede volver a comer cuando él quiera y ya no vomite tanto, mejor en pequeñas cantidades cada vez.",
+        "Magsjuka hos små barn (1177 Vårdguiden, 2025). Tema: deshidratación y vuelta a la guardería. Hallazgo: el riesgo de deshidratación aumenta si el niño tiene menos de 2 años o si no retiene ningún líquido y a la vez tiene diarrea intensa, y se consulta si el niño se vuelve muy cansado, flojo y sin fuerzas. Si el centro de salud y la consulta sin cita están cerrados se va a urgencias, avisando antes por teléfono porque algunos virus son muy contagiosos. En la guardería puede reincorporarse cuando coma con normalidad y lleve al menos dos días sin vómitos ni diarrea. Lavarse las manos con jabón antes de comer y tras ir al baño o cambiar pañales reduce el contagio."
+      ]
+    },
+    {
+      "source_type": "reference",
+      "title": "Skorv och seborroiskt eksem hos barn (1177)",
+      "organization": "1177 Vårdguiden (Inera)",
+      "publication_year": 2024,
+      "url": "https://www.1177.se/barn--gravid/vanliga-besvar-och-sjukdomar-hos-barn/vanliga-sjukdomar-och-besvar-hos-barn-0-1-ar/skorv-och-seborroiskt-eksem-hos-barn/",
+      "specialties": [
+        "pediatrics",
+        "dermatology"
+      ],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "original_language": "sv",
+      "topics": [
+        "costra_lactea",
+        "dermatitis_atopica"
+      ],
+      "chunks": [
+        "Skorv och seborroiskt eksem hos barn (1177 Vårdguiden, 2024). Tema: qué es la costra láctea (skorv). Hallazgo: es un tipo de eccema seborreico, más frecuente en menores de 1 año, que no es contagioso. Se ve como escamas grasas amarillo-marrón en el cuero cabelludo y las cejas, a veces con costras, y normalmente no pica ni molesta al niño. Puede aparecer también detrás de las orejas, en la cara, las axilas o la ingle. Suele desaparecer antes de los 2 años, aunque en algunos niños tarda más en desaparecer.",
+        "Skorv och seborroiskt eksem hos barn (1177 Vårdguiden, 2024). Tema: cuidados en casa y cuándo consultar. Hallazgo: se aplica un aceite para bebés en el cuero cabelludo por la noche, por la mañana se lava con champú suave sin perfume y se frota con una toalla o un cepillo blando para soltar las escamas; lavar el pelo unas veces por semana ayuda a evitar que vuelva. La mayoría de los casos no necesita atención médica. Se contacta con su pediatra o la enfermera de pediatría si la erupción está roja y con descamación, pica o molesta, supura o está en carne viva, o no mejora tras una semana de tratamiento del eccema."
+      ]
+    },
+    {
+      "source_type": "reference",
+      "title": "Spädbarnskolik (1177)",
+      "organization": "1177 Vårdguiden (Inera)",
+      "publication_year": 2025,
+      "url": "https://www.1177.se/barn--gravid/vanliga-besvar-och-sjukdomar-hos-barn/vanliga-sjukdomar-och-besvar-hos-barn-0-1-ar/spadbarnskolik/",
+      "specialties": [
+        "pediatrics",
+        "gastroenterology"
+      ],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "original_language": "sv",
+      "topics": [
+        "colico"
+      ],
+      "chunks": [
+        "Spädbarnskolik (1177 Vårdguiden, 2025). Tema: qué es el cólico del lactante. Hallazgo: se llama así cuando un bebé llora de forma intensa varias horas, al menos tres veces por semana y normalmente a la misma hora del día, sobre todo por la tarde y la noche. Es más frecuente entre las 2 semanas y los 5 meses, con el pico hacia las 6 a 8 semanas, y suele pasar en unos meses. El bebé puede ponerse rojo del esfuerzo, encoger las rodillas, estirar y tensar las piernas o tener ruidos de barriga. Normalmente no hace falta atención médica porque se resuelve solo.",
+        "Spädbarnskolik (1177 Vårdguiden, 2025). Tema: cuándo consultar con un cólico. Hallazgo: se consulta con su pediatra o la enfermera de pediatría si el bebé llora mucho durante muchos días seguidos, parece infeliz gran parte del día, los padres se sienten agotados o quieren apoyo, o el bebé toma fórmula y se sospecha que es sensible a la leche de vaca o a otro alimento. Se contacta de inmediato con urgencias si el bebé llora a rachas sin consuelo (sobre todo si ha recibido la vacuna contra el rotavirus en la última semana) o si no está como siempre (aletargado, no quiere comer, llora de otra manera, gimotea o se queja).",
+        "Spädbarnskolik (1177 Vårdguiden, 2025). Tema: qué puede ayudar y cuidado de los padres. Hallazgo: hacer pausas durante la toma para que el bebé descanse y eructe, mamar a menudo y en pequeñas cantidades, sostenerlo en brazos con la cara apoyada en el hombro para que eructe, contacto cercano, masaje, porteo o chupete si tiene mucha necesidad de succión. Las dietas de eliminación solo se prueban tras consultar a un médico, que debe examinar antes al bebé, porque hacerlas por cuenta propia puede retrasar el diagnóstico. El cólico no se debe a que los padres hagan algo mal. Nunca se debe sacudir al bebé: si se está a punto de hacerlo, se le deja a salvo en la cuna y se sale de la habitación hasta calmarse."
+      ]
+    }
+  ]
+}

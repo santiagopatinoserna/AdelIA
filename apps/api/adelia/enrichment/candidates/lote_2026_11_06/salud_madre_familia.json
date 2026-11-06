@@ -1,0 +1,438 @@
+{
+  "_meta": {
+    "topic": "Candidatas del dominio salud_madre_familia (0-24 meses), fuentes oficiales de muchos países leídas en su idioma y resumidas en español.",
+    "compiled": "2026-11-06",
+    "method": "Seis investigadores de Claude Code leyeron cada página con WebFetch y la pasaron por un subagente verificador (~/dev/adelia-night/research/corpus-*, verify.json). Al integrarlas se quitaron las fuentes cuyos términos prohíben adaptar, traducir o el uso comercial, los calendarios de vacunas de otros países y los duplicados con data/ y entre lotes; los teléfonos y servicios de otros sistemas de salud se reescribieron en palabras con el nivel de urgencia de la fuente, y cada fragmento sobre alarmas, urgencias, fiebre, respiración, convulsiones, deshidratación, ictericia o sepsis se volvió a comprobar contra el texto de la página descargado con curl. Idiomas del original: español 5, italiano 3, inglés 2, francés 2, neerlandés 2, sueco 2, noruego 1, portugués 1. Detalle en docs/corpus/CANDIDATOS_2026_11_06.md.",
+    "caveat": "Los fragmentos son paráfrasis breves en español, no traducciones literales ni citas; `language` es el idioma del fragmento (es) y `original_language` el de la página. Cada fragmento conserva las cifras, edades y el nivel de urgencia de su propia fuente, que pueden diferir entre países. No es consejo médico.",
+    "purpose": "Candidato: no lo carga el arranque. Se mide con scripts/golden_gate.sh --candidates antes de pasar a data/ como evidence_salud_madre_familia_2026_11.json."
+  },
+  "sources": [
+    {
+      "source_type": "reference",
+      "title": "The 4th Trimester: Navigating Your First Few Months With a New Baby (HealthyChildren.org, AAP)",
+      "organization": "American Academy of Pediatrics",
+      "publication_year": 2026,
+      "url": "https://www.healthychildren.org/English/ages-stages/baby/Pages/The-4th-Trimester-Navigating-Your-First-Few-Months-With-a-New-Baby-.aspx",
+      "specialties": [
+        "pediatrics",
+        "general_medicine",
+        "neonatology",
+        "gynecology"
+      ],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "original_language": "en",
+      "topics": [
+        "depresion_posparto",
+        "cansancio_extremo"
+      ],
+      "chunks": [
+        "The 4th Trimester: Navigating Your First Few Months With a New Baby (HealthyChildren.org, American Academy of Pediatrics, 2026). Tema: cuidar al bebé en las primeras 12 semanas. Hallazgo: el cuarto trimestre son las primeras 12 semanas tras el nacimiento. Para calmar al bebé ayudan envolverlo (siempre se acuesta boca arriba), mecerlo en brazos, portabebés o cochecito y el contacto piel con piel, que también puede hacer la pareja. Se alimenta a demanda, según las señales de hambre y no por horario, y el pediatra vigila el peso en las primeras semanas. Se busca una asesora de lactancia si hay dificultades con el agarre o dudas sobre si toma suficiente. La AAP recomienda lactancia exclusiva los primeros 6 meses y seguir con la lactancia junto con alimentos complementarios hasta los 2 años o más si madre e hijo lo desean; la alimentación mixta es aceptable.",
+        "The 4th Trimester: Navigating Your First Few Months With a New Baby (HealthyChildren.org, American Academy of Pediatrics, 2026). Tema: salud de la madre en el posparto. Hallazgo: se duerme cuando se puede, se acepta ayuda de la pareja, la familia y los amigos, se come de forma equilibrada y se busca tratamiento si hace falta, sin elegir entre tratamiento y lactancia. La tristeza posparto afecta al 50 % a 80 % de los nuevos padres, y estas emociones también pueden afectar a la pareja y a los padres adoptivos; la depresión o ansiedad posparto afecta al 20 % de las madres que han dado a luz. No poder dormir lo suficiente, no llegar a las tareas de casa o que hasta las cosas pequeñas la alteren puede indicar que se pasa de la tristeza a una depresión o ansiedad. Pensar en hacerse daño o en hacérselo al bebé exige pedir ayuda inmediata, sin esperar a la visita posparto rutinaria."
+      ]
+    },
+    {
+      "source_type": "reference",
+      "title": "Postnatal depression (RCPsych)",
+      "organization": "Royal College of Psychiatrists",
+      "publication_year": 2018,
+      "url": "https://www.rcpsych.ac.uk/mental-health/mental-illnesses-and-mental-health-problems/postnatal-depression",
+      "specialties": [
+        "pediatrics",
+        "gynecology",
+        "general_medicine"
+      ],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "original_language": "en",
+      "topics": [
+        "depresion_posparto",
+        "cansancio_extremo"
+      ],
+      "chunks": [
+        "Postnatal depression (Royal College of Psychiatrists, Reino Unido, 2018). Tema: tristeza posparto (baby blues) frente a depresión posparto. Hallazgo: más de la mitad de las madres tienen tristeza posparto; suele empezar a los 3 o 4 días del parto, con cambios de humor, ganas de llorar, irritabilidad, ánimo bajo y ansiedad, y suele pasar hacia los 10 días sin necesidad de tratamiento. Si dura más de dos semanas, hay que contárselo a la enfermera que hace el seguimiento del bebé o al médico de cabecera, que pueden valorar si es una depresión posparto. Esta afecta a unas 10 a 15 de cada 100 madres, suele empezar en el primer o segundo mes tras el parto (a veces meses después) y puede pasarle a cualquiera: no es culpa de la madre. (fuente en inglés)",
+        "Postnatal depression (Royal College of Psychiatrists, Reino Unido, 2018). Tema: síntomas y pensamientos que asustan. Hallazgo: puede haber ánimo bajo y llanto (peor a ciertas horas), irritabilidad con la pareja, el bebé o los otros hijos, agotamiento y falta de energía, no poder dormir aunque el bebé duerma, cambios de apetito, no disfrutar de nada (ni del bebé), sentirse mala madre o culpable, ansiedad intensa por la salud del bebé o la propia, evitar a la gente, desesperanza o ideas de suicidio o de hacerse daño. Muchas madres tienen a veces pensamientos repentinos y angustiosos de hacer daño al bebé; casi nunca se llevan a cabo, pero conviene contarlo: los profesionales quieren ayudar a la madre a seguir cuidando de su bebé, no separarlos. (fuente en inglés)",
+        "Postnatal depression (Royal College of Psychiatrists, Reino Unido, 2018). Tema: a quién acudir, tratamiento y qué ayuda en casa. Hallazgo: el primer paso es hablar con el médico de cabecera, la enfermera o la matrona; pueden derivar a un servicio de salud mental perinatal. Las terapias psicológicas (asesoramiento, terapia cognitivo-conductual) son el tratamiento principal, y en casos más graves o si no mejora, el médico valorará con la madre otros tratamientos, teniendo en cuenta si da el pecho. Sin tratamiento la mayoría mejora en 3 a 6 meses, pero 1 de cada 4 sigue deprimida cuando el hijo cumple un año: cuanto menos dure, mejor, y nunca es tarde para pedir ayuda. Ayuda contar cómo te sientes, descansar cuando se pueda y pedir que otros hagan alguna toma nocturna, comer con regularidad, moverse un poco, ir a grupos de madres y aceptar ayuda con la casa. (fuente en inglés)",
+        "Postnatal depression (Royal College of Psychiatrists, Reino Unido, 2018). Tema: cuándo pedir ayuda urgente y cómo puede ayudar la pareja. Hallazgo: hay que pedir ayuda urgente al médico, a un servicio de crisis de salud mental o ir a urgencias del hospital más cercano si la madre no puede cuidarse a sí misma o al bebé, si tiene planes de hacerse daño o si oye voces o tiene ideas extrañas; la psicosis posparto, rara y grave, puede empezar a los pocos días o semanas del parto y necesita atención médica inmediata. La pareja y la familia deben escucharla, tratar la depresión como una enfermedad (no algo que se supera con fuerza de voluntad), tomarse en serio cualquier comentario sobre no querer vivir o hacerse daño y buscar ayuda urgente, y ayudar con el bebé y las tareas. (fuente en inglés)"
+      ]
+    },
+    {
+      "source_type": "guideline",
+      "title": "La salud desde el principio. Guía de salud materno-infantil",
+      "organization": "Consejería de Sanidad de la Junta de Castilla y León",
+      "publication_year": 2018,
+      "url": "https://www.saludcastillayleon.es/ventanafamilias/es/publicaciones/guia-salud-materno-infantil.ficheros/1978788-Libro%20Salud%20desde%20el%20principio%20Interactivo%20FINAL%20%282%29.pdf",
+      "specialties": [
+        "pediatrics",
+        "general_medicine"
+      ],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "original_language": "es",
+      "topics": [
+        "puerperio",
+        "depresion_posparto",
+        "signos_alarma",
+        "cuando_consultar"
+      ],
+      "chunks": [
+        "La salud desde el principio. Guía de salud materno-infantil (Junta de Castilla y León, 2018). Tema: puerperio y emociones tras el parto. Hallazgo: el puerperio dura de 6 a 8 semanas, unos 40 días; el útero se contrae y puede dar molestias llamadas entuertos, más intensas al dar de mamar, y los loquios (secreción vaginal) duran unas 2-3 semanas. Hay que descansar adaptándose al ritmo del bebé y pedir ayuda a familiares o amigos. En los primeros días se puede sentir ansiedad, llanto o tristeza por el cansancio y los cambios hormonales, y dura 2 o 3 días; si se prolonga más de dos semanas hay que consultar con el médico, porque puede tratarse de depresión posparto. Si la zona de los puntos se enrojece, se inflama o huele mal, también hay que consultar con el médico.",
+        "La salud desde el principio. Guía de salud materno-infantil (Junta de Castilla y León, 2018). Tema: fiebre y cuándo acudir al pediatra o a urgencias. Hallazgo: hay fiebre con más de 37 ºC en la axila o la ingle, más de 37,5 ºC en el oído o la boca, o más de 38 ºC en el recto, que es el lugar más adecuado en menores de 4 años; los termómetros de mercurio deberían desecharse. Hay que acudir al médico si la fiebre dura más de 48 horas, llega a 40 ºC, es difícil de controlar o el niño tiene menos de 3 meses, y también si tiene aspecto de enfermedad grave, mirada perdida, decaimiento o no se le puede despertar, parece que no tiene fuerza, llanto débil o inconsolable, color pálido o morado, manchas en la piel por pequeñas que sean, dificultad para respirar, convulsiones, dolor o rigidez de nuca, vómitos con dolor de cabeza o que no ceden, dolor de barriga o molestias al orinar."
+      ]
+    },
+    {
+      "source_type": "reference",
+      "title": "Tristeza puerperal. Depresión posparto (Ventana abierta a la familia, Junta de Castilla y León)",
+      "organization": "Consejería de Sanidad, Junta de Castilla y León",
+      "publication_year": null,
+      "undated_reason": "Página de Ventana abierta a la familia (Sacyl) sin fecha visible; consultada el 2026-11-06.",
+      "url": "https://www.saludcastillayleon.es/ventanafamilias/es/embarazo-parto/posparto/puerperio/tristeza-puerperal-depresion-posparto",
+      "specialties": [
+        "pediatrics",
+        "gynecology",
+        "general_medicine"
+      ],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "original_language": "es",
+      "topics": [
+        "depresion_posparto",
+        "cansancio_extremo"
+      ],
+      "chunks": [
+        "Tristeza puerperal. Depresión posparto (Ventana abierta a la familia, Consejería de Sanidad, Junta de Castilla y León). Tema: es normal llorar los primeros días tras el parto. Hallazgo: en los primeros días después del parto la madre puede vivir sentimientos contradictorios: tristeza, ganas de llorar, falta de concentración o ansiedad por cómo cuidar al recién nacido. Suelen deberse a la tensión y el cansancio acumulados durante el parto, a los cambios hormonales y a la nueva situación, y forman parte de lo normal. Si ese malestar se prolonga más de dos semanas, o afecta a la capacidad de la madre para cuidarse a sí misma o para cuidar de su bebé, conviene consultar con el médico de familia.",
+        "Tristeza puerperal. Depresión posparto (Ventana abierta a la familia, Consejería de Sanidad, Junta de Castilla y León). Tema: qué ayuda a la madre en el posparto. Hallazgo: para sobrellevar el malestar de los primeros días tras el parto es fundamental el apoyo afectivo de la pareja y de la familia, compartir con ellos las preocupaciones y el cuidado del bebé, descansar siempre que sea posible, evitar las situaciones estresantes, mantener una alimentación equilibrada y hacer ejercicio físico según la comodidad de cada momento. Si a pesar de ello el malestar se prolonga más de dos semanas, o le impide cuidar de sí misma o del bebé, conviene consultar con el médico de familia."
+      ]
+    },
+    {
+      "source_type": "reference",
+      "title": "Síndrome del bebé zarandeado",
+      "organization": "Consellería de Sanidade y Servicio Gallego de Salud (Sergas, Xunta de Galicia)",
+      "publication_year": 2022,
+      "url": "https://vida-saudable.sergas.gal/cartafol/1ano-sindrome-bebe-zarandeado?idioma=es",
+      "specialties": [
+        "pediatrics",
+        "general_medicine"
+      ],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "original_language": "es",
+      "topics": [
+        "bebe_sacudido",
+        "signos_alarma"
+      ],
+      "chunks": [
+        "Síndrome del bebé zarandeado (Xunta de Galicia, 2022). Tema: qué es y por qué es peligroso. Hallazgo: también se llama trauma craneal no accidental y es una forma de maltrato físico infantil. Los bebés tienen débiles los músculos del cuello y les cuesta sostener la cabeza, de modo que con las sacudidas el cerebro se mueve dentro del cráneo y puede sufrir hematomas, hinchazón y sangrado, con deterioro mental de intensidad variable y, en ocasiones, lesiones y secuelas graves en el sistema nervioso central. Según la página es la causa más frecuente de traumatismo craneoencefálico grave en el lactante antes del primer año. Ocurre siempre antes de los tres años, sobre todo en el primer año, y muchas veces son los propios padres y madres quienes lo sacuden como parte de un juego o al manejar mal una situación difícil, sin conocer sus consecuencias.",
+        "Síndrome del bebé zarandeado (Xunta de Galicia, 2022). Tema: qué hacer y cuándo buscar ayuda urgente. Hallazgo: no hay ninguna justificación para zarandear a un bebé. Si cuesta controlar las emociones que genera la llegada del bebé, hay que pedir ayuda: unos segundos bastan para causar daños irreparables. Quienes ayudan a cuidar al bebé (cuidadores, hermanos, abuelos) deben conocer estos peligros. Si se sospecha que el bebé ha sufrido lesiones por una sacudida violenta, hay que buscar ayuda de inmediato: contactar con el pediatra o acudir a la urgencia hospitalaria más cercana, porque la atención rápida puede salvarle la vida o evitar problemas graves de salud."
+      ]
+    },
+    {
+      "source_type": "guideline",
+      "title": "Señales de alerta en el puerperio",
+      "organization": "Ministerio de Salud de la Nación (Argentina)",
+      "publication_year": null,
+      "undated_reason": "Página de Crecer con Salud (argentina.gob.ar) sin fecha de publicación ni de actualización visible; consultada el 2026-11-06.",
+      "url": "https://www.argentina.gob.ar/salud/crecerconsalud/embarazo-parto-puerperio/puerperio/alertas",
+      "specialties": [
+        "pediatrics",
+        "general_medicine"
+      ],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "original_language": "es",
+      "topics": [
+        "signos_alarma",
+        "cuando_consultar",
+        "depresion_posparto"
+      ],
+      "chunks": [
+        "Señales de alerta en el puerperio (Ministerio de Salud de la Nación, Argentina). Tema: síntomas físicos de la madre tras el parto que requieren consulta. Hallazgo: el ministerio indica acudir lo antes posible al centro de salud u hospital más cercano si la madre presenta fiebre alta, mareos, dolor intenso o pérdidas vaginales con mal olor.",
+        "Señales de alerta en el puerperio (Ministerio de Salud de la Nación, Argentina). Tema: pechos, herida de cesárea y estado de ánimo en el posparto. Hallazgo: hay que consultar lo antes posible si aparece una zona roja, caliente o endurecida en uno o ambos pechos, con o sin fiebre, y también si hay una tristeza profunda y persistente o pensamientos de muerte. Tras una cesárea hay que vigilar la herida: dolor, enrojecimiento, hinchazón, pus o fiebre son motivo de consulta lo antes posible en el centro de salud o el hospital más cercano."
+      ]
+    },
+    {
+      "source_type": "reference",
+      "title": "Depresión perinatal (NIMH)",
+      "organization": "National Institute of Mental Health (NIMH)",
+      "publication_year": 2024,
+      "url": "https://www.nimh.nih.gov/health/publications/espanol/depresion-perinatal",
+      "specialties": [
+        "pediatrics",
+        "gynecology",
+        "general_medicine"
+      ],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "original_language": "es",
+      "topics": [
+        "depresion_posparto",
+        "cansancio_extremo"
+      ],
+      "chunks": [
+        "Depresión perinatal (NIMH, Instituto Nacional de la Salud Mental de EE. UU., 2024). Tema: tristeza posparto (baby blues) frente a depresión posparto. Hallazgo: tras el parto es frecuente sentir cambios leves del ánimo, preocupación y cansancio; es la llamada tristeza posparto o baby blues, que suele durar como mucho las dos primeras semanas después del parto. Si la tristeza o los demás síntomas son muy intensos o duran más de dos semanas, pueden indicar una depresión posparto, y quien la tiene no se sentirá mejor hasta recibir tratamiento. La mayoría de los episodios empiezan entre cuatro y ocho semanas después del nacimiento. Si la tristeza y la falta de ganas siguen más allá de esas dos semanas, hay que consultar con un profesional sanitario.",
+        "Depresión perinatal (NIMH, Instituto Nacional de la Salud Mental de EE. UU., 2024). Tema: síntomas de la depresión posparto. Hallazgo: los síntomas incluyen sentirse triste, ansiosa o vacía casi todos los días durante al menos dos semanas, desesperanza o pesimismo, irritabilidad, culpa o sensación de no valer nada, perder el interés o el placer por lo que antes gustaba (no tener ganas de nada), mucho cansancio, problemas de sueño, de concentración o de apetito, dificultad para crear vínculo con el bebé, dudar todo el tiempo de la propia capacidad para cuidarlo y pensamientos de muerte o de hacerse daño a sí misma o al bebé. Puede afectar a cualquier madre, sin importar su edad, origen, ingresos o estudios, y no es culpa suya ni el resultado de algo que haya hecho o dejado de hacer.",
+        "Depresión perinatal (NIMH, Instituto Nacional de la Salud Mental de EE. UU., 2024). Tema: tiene tratamiento y a quién acudir. Hallazgo: la depresión posparto se puede tratar. El primer paso es pedir cita con un profesional sanitario, como el médico de cabecera, o con un profesional de salud mental (psicólogo, psiquiatra o trabajador social), que valorará si los síntomas se deben a la depresión o a otra causa y hablará de las opciones. El tratamiento suele basarse en psicoterapia, como la terapia cognitivo-conductual o la interpersonal, y en otros tratamientos que valore el médico; si se está dando el pecho hay que decírselo siempre, para que tenga en cuenta al bebé al elegir el tratamiento. Los grupos de apoyo a madres también ayudan.",
+        "Depresión perinatal (NIMH, Instituto Nacional de la Salud Mental de EE. UU., 2024). Tema: cuándo es urgente y cómo puede ayudar la familia. Hallazgo: si la madre tiene pensamientos de hacerse daño o de suicidio, o está en crisis, debe pedir ayuda inmediata; ante un riesgo para la vida hay que llamar a emergencias. La psicosis posparto (ideas extrañas, ver u oír cosas que no existen, confusión) es una urgencia psiquiátrica que requiere ingreso en el hospital: hay que llamar a emergencias o ir a urgencias de inmediato. La pareja, la familia y los amigos pueden ser los primeros en notar los signos: pueden animarla a hablar con un profesional, acompañarla a las citas, darle apoyo emocional y ayudar con el bebé y las tareas de casa. (fuente de EE. UU.)"
+      ],
+      "original_license": "public_domain"
+    },
+    {
+      "source_type": "reference",
+      "title": "Bébé secoué (ONE)",
+      "organization": "ONE (Office de la Naissance et de l'Enfance, Belgique)",
+      "publication_year": null,
+      "undated_reason": "Página de la sección Familles de one.be sin fecha de actualización visible; consultada el 2026-11-06.",
+      "url": "https://www.one.be/familles/0-12/bebe-secoue",
+      "specialties": [
+        "pediatrics",
+        "general_medicine"
+      ],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "original_language": "fr",
+      "topics": [
+        "bebe_sacudido",
+        "cuando_consultar",
+        "signos_alarma"
+      ],
+      "chunks": [
+        "Bébé secoué (ONE, Office de la Naissance et de l'Enfance). Tema: por qué es peligroso sacudir a un bebé. Hallazgo: sacudir a un bebé puede tener consecuencias muy graves para su salud. Su cerebro es frágil, su cabeza pesada y su cuello no tiene músculos suficientes para sostenerla; al sacudirlo, la cabeza se balancea rápidamente de delante atrás, el cerebro puede chocar contra el cráneo y los vasos sanguíneos que lo rodean pueden romperse y sangrar, causando lesiones cerebrales. La página cita que alrededor del 10 % de los bebés sacudidos fallece y que cerca del 50 % queda con una discapacidad de por vida, y recomienda informar de este peligro a todas las personas que cuidan al niño. Incluso en un momento de pérdida de control, sacudir a un bebé es una forma de maltrato, por lo que es esencial prevenirlo y hablar de ello.",
+        "Bébé secoué (ONE, Office de la Naissance et de l'Enfance). Tema: llanto y cómo calmar al bebé. Hallazgo: el llanto es el principal medio del bebé para expresar una necesidad, una molestia o una emoción (hambre, sueño, pañal sucio, demasiado calor o frío, demasiado ruido o demasiada gente, necesidad de mimos); es normal, pero puede resultar agotador si dura mucho o se repite. Para calmarlo la página propone ofrecerle un poco de agua o de leche según su edad y sus necesidades, comprobar que no tenga demasiado calor o frío, llevarlo a un lugar tranquilo o pasearlo, cambiarle el pañal, mecerlo con suavidad o masajearle el vientre o la espalda. Si sigue llorando, se hace una pausa, se respira hondo, se deja al bebé en un lugar seguro, se sale unos instantes de la habitación y, si es posible, se pide a alguien que tome el relevo.",
+        "Bébé secoué (ONE, Office de la Naissance et de l'Enfance). Tema: reconocer los propios límites y pedir ayuda. Hallazgo: Estar cansado y decirlo está permitido y no significa en absoluto que no se quiera al hijo; reconocer los propios límites es una forma de proteger al hijo y de cuidarse uno mismo. Se puede acudir a la pareja, la familia, amigos, vecinos, un servicio de escucha telefónica, la enfermera de pediatría, una matrona, un equipo de protección de la infancia o el médico.",
+        "Bébé secoué (ONE, Office de la Naissance et de l'Enfance). Tema: cuándo pedir ayuda y a quién llamar. Hallazgo: la página distingue tres situaciones. Si crecen el agotamiento y la tensión, se deja al bebé en un lugar seguro, por ejemplo su cuna, y se aleja uno unos instantes; pedir ayuda o dejarlo llorar unos minutos en un sitio seguro es preferible a un gesto brusco. Si se tiene la sensación de perder el control, se llama a un amigo, a un familiar, al médico de cabecera, al pediatra, a la enfermera de pediatría o a un servicio de escucha anónimo disponible las 24 horas. Si se teme poner al bebé en peligro, si un bebé ha sido sacudido (por uno mismo o por otra persona) o si sufre un desvanecimiento, se llama inmediatamente a emergencias (112)."
+      ]
+    },
+    {
+      "source_type": "reference",
+      "title": "Rééducation périnéale après l'accouchement (ONE)",
+      "organization": "ONE (Office de la Naissance et de l'Enfance, Belgique)",
+      "publication_year": null,
+      "undated_reason": "Página de la sección Familles de one.be sin fecha de actualización visible; consultada el 2026-11-06.",
+      "url": "https://www.one.be/familles/perinatalite/reeducation-perineale-apres-laccouchement",
+      "specialties": [
+        "pediatrics",
+        "general_medicine"
+      ],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "original_language": "fr",
+      "topics": [
+        "puerperio",
+        "cuando_consultar"
+      ],
+      "chunks": [
+        "Rééducation périnéale après l'accouchement (ONE, Office de la Naissance et de l'Enfance). Tema: qué es el periné y por qué reeducarlo. Hallazgo: el periné o suelo pélvico es un conjunto de músculos que sostiene la vejiga, el útero y el recto, asegura la continencia y permite el paso del bebé en un parto vaginal. Incluso tras una cesárea se recomienda la reeducación perineal. Tras el parto, reforzar el tono y la elasticidad del periné ayuda a prevenir un descenso de órganos.",
+        "Rééducation périnéale après l'accouchement (ONE, Office de la Naissance et de l'Enfance). Tema: cuándo empezar y cuántas sesiones. Hallazgo: En algunos casos puede empezar una reeducación suave al volver a casa, si el fisioterapeuta de la maternidad ha dado los consejos adecuados; lo más frecuente es que la reeducación abdomino-perineal empiece 6 semanas después del parto, prescrita en la visita posnatal. Suelen prescribirse 9 sesiones de fisioterapia (a veces bastan 4 o 5, a veces hacen falta más).",
+        "Rééducation périnéale après l'accouchement (ONE, Office de la Naissance et de l'Enfance). Tema: la primera sesión. Hallazgo: la primera sesión consiste en una conversación en la que el fisioterapeuta se informa de cómo fue el parto y responde a las preguntas; después evalúa y explica los métodos posibles, individuales o en grupo, y con el acuerdo de la mujer puede realizar un tacto vaginal para valorar la capacidad de contracción y la resistencia de los músculos.",
+        "Rééducation périnéale après l'accouchement (ONE, Office de la Naissance et de l'Enfance). Tema: técnicas, participación y a quién consultar. Hallazgo: Según los resultados, puede proponer técnicas manuales, electroestimulación, biofeedback o gimnasia vaginal hipopresiva. Las sesiones buscan restablecer poco a poco el tono y la resistencia del periné, y la participación activa, la motivación y los ejercicios en casa son esenciales. La página no describe situaciones de urgencia: recomienda hablar de la reeducación con un profesional de salud (matrona, ginecólogo, médico o fisioterapeuta), que puede responder a las preguntas y orientar hacia la atención adecuada."
+      ]
+    },
+    {
+      "source_type": "reference",
+      "title": "Le coliche nel lattante",
+      "organization": "Azienda Ospedaliero Universitaria Meyer IRCCS",
+      "publication_year": 2023,
+      "url": "https://www.meyer.it/index.php/newsletter/settembre-2023/4857-le-coliche-nel-lattante",
+      "specialties": [
+        "pediatrics",
+        "gastroenterology",
+        "neonatology"
+      ],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "original_language": "it",
+      "topics": [
+        "llanto_inconsolable",
+        "bebe_sacudido",
+        "cuando_consultar"
+      ],
+      "chunks": [
+        "Le coliche nel lattante (Azienda Ospedaliero Universitaria Meyer IRCCS, 2023). Tema: definición y edad de los cólicos del lactante. Hallazgo: se usa la regla del tres: el bebé, por lo demás sano, llora o se agita más de tres horas al día, más de tres días a la semana y durante más de tres semanas. Tienen su pico entre la cuarta y la sexta semana y tienden a desaparecer pasado el cuarto mes. Afectan a un 20-25% de los lactantes y el llanto suele ser vespertino. No hay consenso sobre la causa, y se dan con la misma frecuencia con pecho que con fórmula (fuente en italiano).",
+        "Le coliche nel lattante (Azienda Ospedaliero Universitaria Meyer IRCCS, 2023). Tema: qué puede ayudar y qué no en los cólicos. Hallazgo: no existe una cura; lo que funciona varía según el bebé, como mecerlo, el contacto piel con piel, el chupete o el pecho. Cuidar a los padres también cuenta: descansar, cuidarse y pedir ayuda. Pasar a una fórmula sin leche (soja, arroz o hidrolizados) no mejora los cólicos según numerosos estudios, y los fármacos de uso habitual no han demostrado eficacia en estudios rigurosos, aunque a menudo se prescriben (fuente en italiano).",
+        "Le coliche nel lattante (Azienda Ospedaliero Universitaria Meyer IRCCS, 2023). Tema: cuándo consultar y riesgo de sacudir al bebé. Hallazgo: si los padres están preocupados por la cantidad de llanto, el pediatra debe hacer una valoración a fondo del bebé para descartar causas orgánicas y elegir las medidas adecuadas. El artículo recuerda que el llanto excesivo es una de las principales causas del síndrome del bebé sacudido, que puede tener graves consecuencias, por lo que el estrés de los padres debe tomarse en serio (fuente en italiano)."
+      ]
+    },
+    {
+      "source_type": "reference",
+      "title": "Perché è pericoloso scuotere un neonato",
+      "organization": "Azienda Ospedaliero Universitaria Meyer IRCCS",
+      "publication_year": 2017,
+      "url": "https://www.meyer.it/index.php/newsletter/settembre-2017/3058-perche-e-pericoloso-scuotere-un-neonato",
+      "specialties": [
+        "pediatrics",
+        "neonatology",
+        "emergency_medicine"
+      ],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "original_language": "it",
+      "topics": [
+        "bebe_sacudido",
+        "llanto_inconsolable"
+      ],
+      "chunks": [
+        "Perché è pericoloso scuotere un neonato (Azienda Ospedaliero Universitaria Meyer IRCCS, 2017). Tema: por qué sacudir a un bebé es peligroso. Hallazgo: los pediatras lo consideran un verdadero síndrome. Los músculos del cuello del recién nacido aún son débiles y los movimientos bruscos de la cabeza pueden dañar de forma irreversible su sistema nervioso. Las consecuencias incluyen convulsiones, daños motores e intelectuales, problemas de visión e incluso la muerte. A menudo se produce por un estado de exasperación. El mensaje clave es nunca sacudir al bebé (fuente en italiano).",
+        "Perché è pericoloso scuotere un neonato (Azienda Ospedaliero Universitaria Meyer IRCCS, 2017). Tema: qué hacer cuando el bebé llora sin parar. Hallazgo: el llanto más intenso empieza hacia las dos semanas de vida, puede durar hasta las 12 semanas y alcanza su pico entre la quinta y la sexta semana; puede durar horas sin que haya un problema de salud real. Se puede cogerlo en brazos, mecerlo, cantarle suavemente, darle un baño caliente o sacarlo en coche o cochecito. Si el adulto está agotado, debe dejarlo boca arriba en la cuna y hacer una pausa, y pedir ayuda a familiares y amigos (fuente en italiano)."
+      ]
+    },
+    {
+      "source_type": "reference",
+      "title": "Shaken Baby Syndrome: 10 cose che ogni genitore dovrebbe sapere per preservare la salute del proprio bambino",
+      "organization": "Società Italiana di Pediatria (SIP)",
+      "publication_year": 2018,
+      "url": "https://sip.it/2018/05/27/shaken-baby-syndrome-10-cose-sapere-per-salute-bambino/",
+      "specialties": [
+        "pediatrics",
+        "emergency_medicine",
+        "neonatology"
+      ],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "original_language": "it",
+      "topics": [
+        "bebe_sacudido",
+        "llanto_inconsolable",
+        "signos_alarma"
+      ],
+      "chunks": [
+        "Shaken Baby Syndrome: 10 cose che ogni genitore dovrebbe sapere per preservare la salute del proprio bambino (Società Italiana di Pediatria (SIP), 2018). Tema: qué es el síndrome del bebé sacudido y por qué es peligroso. Hallazgo: es una forma grave de maltrato que afecta sobre todo a menores de 2 años, con pico entre las 2 semanas y los 6 meses, cuando el llanto es más intenso y el bebé aún no controla la cabeza. A menudo lo provoca la exasperación ante un llanto inconsolable; suelen ser los propios padres, pero también abuelos, canguros o educadoras de escuela infantil. Una sacudida violenta, aunque dure solo unos segundos, puede causar lesiones muy graves, sobre todo en menores de un año, y llevar al coma o la muerte hasta en 1 de cada 4 casos diagnosticados. Ni los juegos habituales ni las caídas del sofá u otro mueble causan este daño. (fuente en italiano)",
+        "Shaken Baby Syndrome: 10 cose che ogni genitore dovrebbe sapere per preservare la salute del proprio bambino (Società Italiana di Pediatria (SIP), 2018). Tema: cómo manejar el llanto sin sacudir al bebé. Hallazgo: el llanto es la única forma que tiene el recién nacido de comunicar hambre, sueño, calor, frío, necesidad de que lo cambien o necesidad de contacto, y nunca hay que sacudirlo para calmarlo. Se puede probar a mecerlo en el cochecito, dar un paseo en coche, un baño relajante, envolverlo con las extremidades flexionadas o ponerle ruidos continuos como la lavadora o el aspirador. Si el llanto resulta exasperante, lo mejor es dejarlo en un lugar seguro y alejarse hasta recuperar la calma, pedir ayuda a familiares o amigos y, si hay dudas sobre su salud, llevarlo al médico. (fuente en italiano)"
+      ]
+    },
+    {
+      "source_type": "reference",
+      "title": "Post-partumdepressie (Kind en Gezin)",
+      "organization": "Kind en Gezin (Agentschap Opgroeien)",
+      "publication_year": null,
+      "undated_reason": "Página de kindengezin.be sin fecha de publicación ni de revisión visible; consultada el 2026-11-06",
+      "url": "https://www.kindengezin.be/nl/thema/zwangerschap-en-geboorte/geboorte/post-partumdepressie",
+      "specialties": [
+        "pediatrics",
+        "psychiatry"
+      ],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "original_language": "nl",
+      "topics": [
+        "depresion_posparto"
+      ],
+      "chunks": [
+        "Post-partumdepressie (Kind en Gezin, Agentschap Opgroeien). Tema: diferencia entre tristeza posparto y depresión posparto. Hallazgo: poco después del parto muchas madres tienen unos días de llanto por los cambios hormonales y físicos. La depresión posparto afecta a entre el 10 y el 20 % de las madres y puede sospecharse cuando el bajo estado de ánimo se prolonga más de 10 a 14 días. Suele empezar en las primeras 6 semanas, pero los síntomas pueden aparecer hasta un año después del parto, también tras una pérdida temprana del embarazo, y la pareja también puede sufrirla. Sin tratamiento puede durar años.",
+        "Post-partumdepressie (Kind en Gezin, Agentschap Opgroeien). Tema: señales de depresión posparto. Hallazgo: la página enumera tristeza y pensamientos pesimistas, falta de interés o de iniciativa y poco disfrute del bebé, ausencia de sentimiento maternal o preocupación excesiva por el bebé, cansancio extremo, llanto, irritabilidad, problemas de concentración, insomnio o necesidad extrema de dormir, cambios en el apetito, baja autoestima, sensación de vacío, desesperanza, culpa y ansiedad, y también pensamientos de muerte o de suicidio. Pueden aparecer hasta un año después del parto.",
+        "Post-partumdepressie (Kind en Gezin, Agentschap Opgroeien). Tema: qué hacer y psicosis posparto. Hallazgo: se recomienda tomarse en serio las molestias, hablar con las personas cercanas, aceptar ayuda con la casa y el bebé y reservar tiempo de descanso. Si hay preocupación o los síntomas duran más de 10 a 14 días tras el parto, se pide ayuda profesional a la enfermera, al médico o a la matrona, que pueden derivar a atención especializada. La psicosis posparto aparece en 1 o 2 de cada 1.000 mujeres que dan a luz, normalmente en la primera semana, con percepción de la realidad muy alterada, alucinaciones o pensamiento confuso. Es una urgencia psiquiátrica que suele requerir ingreso hospitalario inmediato."
+      ]
+    },
+    {
+      "source_type": "reference",
+      "title": "Schudden is schaden (SIS) (Kind en Gezin)",
+      "organization": "Kind en Gezin (Agentschap Opgroeien)",
+      "publication_year": null,
+      "undated_reason": "Página de kindengezin.be sin fecha de publicación ni de revisión visible; consultada el 2026-11-06",
+      "url": "https://www.kindengezin.be/nl/thema/veiligheid/ongevallen/schudden-schaden-sis",
+      "specialties": [
+        "pediatrics",
+        "emergency_medicine"
+      ],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "original_language": "nl",
+      "topics": [
+        "bebe_sacudido",
+        "llanto_inconsolable"
+      ],
+      "chunks": [
+        "Schudden is schaden (Kind en Gezin, Agentschap Opgroeien). Tema: por qué es peligroso sacudir a un bebé. Hallazgo: sacudir a un niño es muy peligroso y puede causar lesiones graves o la muerte. La cabeza del bebé es grande en relación con el cuerpo, los músculos del cuello aún no la sostienen bien y su cerebro y sus vasos sanguíneos son muy frágiles; al sacudirlo, la cabeza se mueve muy deprisa hacia delante y hacia atrás con mucha fuerza, y pueden romperse vasos pequeños y producirse hemorragias en el cerebro. El mayor riesgo es hasta unos 12 meses. Entre las consecuencias figuran ceguera, sordera, problemas de desarrollo psicomotor, discapacidad intelectual y muerte. Jugar con normalidad con el bebé no provoca estas lesiones.",
+        "Schudden is schaden (Kind en Gezin, Agentschap Opgroeien). Tema: prevención cuando se pierden los nervios y qué hacer si ocurre. Hallazgo: si hay rabia, frustración, agotamiento o el bebé no para de llorar, se deja al bebé en un sitio seguro, como la cama o el parque, se aleja del bebé y se pide a otra persona que se haga cargo un rato. Si el niño deja de moverse o de responder, se frotan con fuerza los pies, se sopla en la cara y se le habla, y se llama al 112 de inmediato si no respira, no tiene latido o hay vasos sanguíneos claramente rojos en los ojos. Si se ha sacudido al niño o se sospecha, se acude enseguida al médico aunque parezca estar bien, y a urgencias ante signos de alarma como vómitos, somnolencia o que cueste despertarlo."
+      ]
+    },
+    {
+      "source_type": "reference",
+      "title": "Fødselsdepresjon (Helsenorge)",
+      "organization": "Helsenorge.no (Helsedirektoratet)",
+      "publication_year": 2026,
+      "url": "https://www.helsenorge.no/sykdom/psykiske-lidelser/depresjon/fodselsdepresjon/",
+      "specialties": [
+        "pediatrics",
+        "psychiatry"
+      ],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "original_language": "no",
+      "topics": [
+        "depresion_posparto"
+      ],
+      "chunks": [
+        "Fødselsdepresjon (Helsenorge, Helsedirektoratet, 2026). Tema: frecuencia y síntomas de la depresión relacionada con el embarazo y el parto. Hallazgo: según la página, en Noruega aproximadamente 1 de cada 10 mujeres tiene síntomas depresivos relacionados con el embarazo y el parto, y 1 de cada 20 una depresión más grave; cerca de un tercio de los casos empieza durante el embarazo. Los síntomas son parecidos a los de una depresión normal: sensación persistente de que el día a día es pesado y gris, apatía, vacío y sensación de que todo carece de sentido. Esa indiferencia puede extenderse a la lactancia, la alimentación y el cuidado del bebé, y algunas personas se vuelven menos sensibles a sus señales y necesidades.",
+        "Fødselsdepresjon (Helsenorge, Helsedirektoratet, 2026). Tema: tristeza posparto normal y cuándo buscar ayuda. Hallazgo: emocionarse con facilidad y llorar más de lo habitual en los días tras el parto (barseltårer) afecta al 50-80 % de quienes dan a luz, suele durar un par de días y es normal. Si persisten más allá de la primera semana o son muy intensos, pueden indicar el inicio de una depresión. Hay que acudir al médico, a la matrona o a la enfermera si falta iniciativa o capacidad de disfrutar, hay irritabilidad o ánimo bajo durante tiempo, llanto fácil, o pensamientos y fantasías angustiosos de perder el control y hacerse daño a una misma o al bebé.",
+        "Fødselsdepresjon (Helsenorge, Helsedirektoratet, 2026). Tema: tratamiento y apoyo. Hallazgo: la página señala que el apoyo de la enfermera, las conversaciones de apoyo, reforzar la red social y la psicoterapia son eficaces, y que los casos graves se derivan a especialistas. La mayoría de las personas que reciben el tratamiento adecuado se recuperan por completo. Como autoayuda propone hablar con alguien de confianza, pedir ayuda para organizar el día a día y así poder dormir y descansar lo suficiente, limitar las visitas si estresan y decir a los demás qué se necesita. La depresión suele mejorar tras unos seis meses, aunque a veces tarda más."
+      ]
+    },
+    {
+      "source_type": "reference",
+      "title": "Síndrome da Criança Abanada – Conhecer e Prevenir",
+      "organization": "Sociedade Portuguesa de Pediatria (SPP)",
+      "publication_year": 2025,
+      "url": "https://criancaefamilia.spp.pt/comportamentos-e-parentalidade/seguranca/sindrome-da-crianca-abanada-conhecer-e-prevenir/",
+      "specialties": [
+        "pediatrics"
+      ],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "original_language": "pt",
+      "topics": [
+        "bebe_sacudido",
+        "llanto_inconsolable"
+      ],
+      "chunks": [
+        "Síndrome da Criança Abanada – Conhecer e Prevenir (Sociedade Portuguesa de Pediatria, Portal Criança e Família, 2025). Tema: qué es el síndrome del bebé sacudido y sus consecuencias. Hallazgo: es una lesión cerebral grave causada por sacudir con fuerza a un bebé o niño pequeño; es una forma grave de maltrato castigada por la ley y ocurre sobre todo en momentos de frustración, rabia o agotamiento, a menudo porque el niño no deja de llorar. Puede haber somnolencia o poca respuesta, irritabilidad o rechazo del alimento, que no respire, convulsiones, vómitos y moretones o chichones en la cabeza. En casos leves el niño puede parecer normal y mostrar cambios de conducta más tarde. A largo plazo hay riesgo de ceguera, retraso del desarrollo, epilepsia o parálisis cerebral, y una sacudida breve puede causar lesiones irreversibles o la muerte. (fuente en portugués)",
+        "Síndrome da Criança Abanada – Conhecer e Prevenir (Sociedade Portuguesa de Pediatria, Portal Criança e Família, 2025). Tema: qué hacer cuando el bebé llora sin parar. Hallazgo: hay que entender que llorar es normal y que en los primeros meses de vida puede ser la única forma que tiene el bebé de comunicarse, y comprobar si se debe a hambre, sed, sueño o dolor. Se puede probar a calmarlo cantando o hablando con voz suave, con piel con piel, paseándolo en coche o cochecito o meciéndolo, dándole de comer despacio y haciéndolo eructar. Si el adulto nota que se está agotando y piensa que podría pegarle, hacerle daño o zarandearlo, debe dejarlo en un lugar seguro, como la cuna boca arriba, y alejarse un momento para calmarse. También conviene pedir ayuda a familiares, amigos, vecinos o profesionales de salud y hacer un curso de preparación para la parentalidad. (fuente en portugués)",
+        "Síndrome da Criança Abanada – Conhecer e Prevenir (Sociedade Portuguesa de Pediatria, Portal Criança e Família, 2025). Tema: factores de riesgo de zarandear a un bebé. Hallazgo: la página señala como factores de riesgo las expectativas poco realistas sobre el comportamiento de los bebés, la juventud de los padres, las familias monoparentales, las situaciones familiares inestables, el estrés de los cuidadores, los antecedentes de depresión en el padre o la madre, el abuso de alcohol o drogas, el antecedente de maltrato en la infancia y la violencia doméstica. La página señala que encontrar estrategias para gestionar el cansancio y las situaciones estresantes es esencial en la crianza. (fuente en portugués)"
+      ]
+    },
+    {
+      "source_type": "reference",
+      "title": "Depression i samband med att du får barn (1177)",
+      "organization": "1177 Vårdguiden (Inera)",
+      "publication_year": 2024,
+      "url": "https://www.1177.se/sjukdomar--besvar/psykiska-sjukdomar-och-besvar/depression/depression-i-samband-med-att-du-far-barn/",
+      "specialties": [
+        "pediatrics",
+        "psychiatry",
+        "obstetrics"
+      ],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "original_language": "sv",
+      "topics": [
+        "depresion_posparto"
+      ],
+      "chunks": [
+        "Depression i samband med att du får barn (1177 Vårdguiden, 2024). Tema: diferencia entre tristeza pasajera y depresión posparto. Hallazgo: la tristeza pasajera (baby blues) suele empezar 2 o 3 días después del parto y se resuelve en unas dos semanas. Se habla de depresión cuando el ánimo bajo se da casi todos los días durante más de dos semanas, con síntomas como pérdida de disfrute, problemas de sueño, cansancio, culpa, ansiedad, dificultad para cuidar al bebé o pensamientos de hacerse daño a una misma o al bebé. Sentirse ansiosa, cambiante o agotada es frecuente y no siempre significa depresión.",
+        "Depression i samband med att du får barn (1177 Vårdguiden, 2024). Tema: dónde pedir ayuda y tratamiento. Hallazgo: si se sospecha depresión se contacta con el centro de salud, la consulta de matrona o la enfermera de pediatría; también se puede pedir consejo sanitario por teléfono para valorar los síntomas. Hay buen tratamiento para la depresión, como la terapia de conversación. También la pareja o la persona adoptante puede pedir ayuda a la enfermera de pediatría o en el centro de salud. Suele pasar en un plazo de seis meses, aunque a veces tarda más.",
+        "Depression i samband med att du får barn (1177 Vårdguiden, 2024). Tema: psicosis posparto, una urgencia. Hallazgo: es rara pero grave y puede ser peligrosa para ella misma y para el bebé. Suele aparecer entre 2 semanas y 3 meses tras el parto, con ideas delirantes, oír voces, pensamiento desorganizado o cambios bruscos (en un momento todo parece normal y al siguiente dice cosas extrañas y cuesta comunicarse con ella), y antes es frecuente que haya problemas de sueño, ánimo bajo o que esté muy acelerada. Si ella u otra persona tiene síntomas de psicosis posparto, se acude de inmediato a urgencias psiquiátricas o a urgencias generales o se llama al 112."
+      ]
+    },
+    {
+      "source_type": "reference",
+      "title": "När små barn skriker (1177)",
+      "organization": "1177 Vårdguiden (Inera)",
+      "publication_year": 2022,
+      "url": "https://www.1177.se/barn--gravid/att-skota-ett-nyfott-barn/nar-sma-barn-skriker/",
+      "specialties": [
+        "pediatrics"
+      ],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "original_language": "sv",
+      "topics": [
+        "llanto_inconsolable",
+        "bebe_sacudido"
+      ],
+      "chunks": [
+        "När små barn skriker (1177 Vårdguiden, 2022). Tema: por qué llora un bebé y qué lo calma. Hallazgo: las causas habituales son querer contacto, hambre o sed, aburrimiento, necesidad de calma, dolor (sobre todo molestias de barriga en los primeros meses), pañal sucio, postura incómoda o exceso de calor o frío. Hasta los 3 o 4 meses puede haber un periodo de llanto más difícil de calmar, normalmente al final de la tarde y por la noche. Ayudan la cercanía y el contacto físico en brazos o sobre el pecho, el porteo, salir a pasear o mover el cochecito con suavidad dentro de casa, ruidos de fondo (aspiradora, música), una toma y un masaje suave; conviene no cambiar de método demasiado deprisa, porque así el bebé no tiene tiempo de reaccionar y sigue llorando.",
+        "När små barn skriker (1177 Vårdguiden, 2022). Tema: cuándo consultar por el llanto. Hallazgo: se consulta con su pediatra o la enfermera de pediatría si preocupa la cantidad de llanto, si se sospecha cólico (entre 2 semanas y 4 meses de edad) o si hace falta apoyo. Se contacta de inmediato con el centro de salud o la consulta sin cita si el bebé llora de forma intensa o a rachas sin consuelo, grita o llora gran parte del día, llora de forma distinta a la habitual o parece no ser él mismo. Si están cerrados, se acude a urgencias.",
+        "När små barn skriker (1177 Vårdguiden, 2022). Tema: bebé sacudido y cuidado de quien lo cuida. Hallazgo: sacudir a un bebé o agarrarlo con fuerza puede poner en peligro su vida; unos segundos bastan para causar daños permanentes, y nunca se debe gritarle, sacudirlo ni agarrarlo con brusquedad. Si la persona se siente muy frustrada o enfadada, es especialmente importante que busque apoyo. Si no hay nadie en casa que pueda ayudar, puede dejar al bebé unos minutos en un lugar seguro del que no pueda caerse y hacer una pausa en otra habitación. También se aconseja intentar dormir o descansar de día cuando el bebé duerme, comer bien y pedir ayuda con las tareas de casa."
+      ]
+    }
+  ]
+}

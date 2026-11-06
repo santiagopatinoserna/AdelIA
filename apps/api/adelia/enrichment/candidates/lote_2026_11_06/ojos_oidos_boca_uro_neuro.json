@@ -1,0 +1,227 @@
+{
+  "_meta": {
+    "topic": "Candidatas del dominio ojos_oidos_boca_uro_neuro (0-24 meses), fuentes oficiales de muchos países leídas en su idioma y resumidas en español.",
+    "compiled": "2026-11-06",
+    "method": "Seis investigadores de Claude Code leyeron cada página con WebFetch y la pasaron por un subagente verificador (~/dev/adelia-night/research/corpus-*, verify.json). Al integrarlas se quitaron las fuentes cuyos términos prohíben adaptar, traducir o el uso comercial, los calendarios de vacunas de otros países y los duplicados con data/ y entre lotes; los teléfonos y servicios de otros sistemas de salud se reescribieron en palabras con el nivel de urgencia de la fuente, y cada fragmento sobre alarmas, urgencias, fiebre, respiración, convulsiones, deshidratación, ictericia o sepsis se volvió a comprobar contra el texto de la página descargado con curl. Idiomas del original: inglés 4, portugués 3, italiano 2, español 1. Detalle en docs/corpus/CANDIDATOS_2026_11_06.md.",
+    "caveat": "Los fragmentos son paráfrasis breves en español, no traducciones literales ni citas; `language` es el idioma del fragmento (es) y `original_language` el de la página. Cada fragmento conserva las cifras, edades y el nivel de urgencia de su propia fuente, que pueden diferir entre países. No es consejo médico.",
+    "purpose": "Candidato: no lo carga el arranque. Se mide con scripts/golden_gate.sh --candidates antes de pasar a data/ como evidence_ojos_oidos_boca_uro_neuro_2026_11.json."
+  },
+  "sources": [
+    {
+      "source_type": "reference",
+      "title": "Ear Piercing Symptoms (KidsDoc, HealthyChildren, AAP)",
+      "organization": "American Academy of Pediatrics",
+      "publication_year": null,
+      "undated_reason": "Guía de síntomas KidsDoc sin fecha de revisión visible (solo copyright 2000-2025 de Schmitt Pediatric Guidelines); consultada el 2026-11-06.",
+      "url": "https://www.healthychildren.org/English/tips-tools/symptom-checker/Pages/symptomviewer.aspx?symptom=Ear+Piercing+Symptoms",
+      "specialties": [
+        "pediatrics",
+        "dermatology"
+      ],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "original_language": "en",
+      "topics": [
+        "pendientes_perforacion",
+        "cuando_consultar"
+      ],
+      "chunks": [
+        "Ear Piercing Symptoms (KidsDoc, HealthyChildren.org, American Academy of Pediatrics). Tema: edad recomendada para perforar las orejas y riesgos en bebés y niños pequeños. Hallazgo: la guía aconseja esperar a que el niño pueda participar en el cuidado de la perforación, lo más habitual a partir de los 8 años. Los menores de 4 años suelen tocarse mucho los pendientes y, con las manos sucias, eso favorece las infecciones; además, los pequeños pueden sacarse el pendiente y llevárselo a la boca, con riesgo de tragárselo o atragantarse con él. Los postes que contienen níquel pueden causar una alergia con picor. (fuente en inglés)",
+        "Ear Piercing Symptoms (KidsDoc, HealthyChildren.org, American Academy of Pediatrics). Tema: por qué se infecta una oreja recién perforada y cómo prevenirlo. Hallazgo: las infecciones en las primeras 6 semanas se deben a material de perforación o postes no estériles, no limpiar el lóbulo a diario, quitar el pendiente antes de que cure el agujero (unas 6 semanas), tocarlo con las manos sucias o llevar el cierre demasiado apretado, que reduce la circulación del lóbulo. Para prevenirlo: dejar el pendiente puesto 6 semanas, lavarse las manos antes de tocar la oreja, limpiar dos veces al día con solución para orejas perforadas y girar el pendiente, dejar el cierre algo holgado, usar una funda de almohada limpia y tener cuidado al peinar. (fuente en inglés)",
+        "Ear Piercing Symptoms (KidsDoc, HealthyChildren.org, American Academy of Pediatrics). Tema: cuándo llevar al médico por una oreja perforada infectada. Hallazgo: hay que llamar al médico o acudir ya si la oreja parece infectada y hay fiebre, si una perforación en la parte alta de la oreja (cartílago) está roja e hinchada o si el niño parece muy enfermo. Hay que consultar en 24 horas si el pendiente o su cierre se ha quedado metido dentro del lóbulo o si el enrojecimiento se extiende más allá del agujero. Pedir cita si hay un ganglio hinchado junto al lóbulo, no mejora tras 3 días de cuidados en casa, sale un sarpullido con picor por pendientes con níquel o se forma una cicatriz gruesa. Un poco de rojez o costra suele poder cuidarse en casa. (fuente en inglés)"
+      ]
+    },
+    {
+      "source_type": "reference",
+      "title": "Sticky eyes in babies and toddlers: symptoms, causes and treatments (HSE)",
+      "organization": "Health Service Executive (HSE)",
+      "publication_year": 2023,
+      "url": "https://www2.hse.ie/conditions/sticky-eyes-babies-toddlers/",
+      "specialties": [
+        "pediatrics",
+        "general_medicine"
+      ],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "original_language": "en",
+      "topics": [
+        "lagrimal_obstruido"
+      ],
+      "chunks": [
+        "Sticky eyes in babies and toddlers: symptoms, causes and treatments (HSE, 2023). Tema: legañas en recién nacidos y cuidado en casa. Hallazgo: las legañas amarillas o blancas son habituales en recién nacidos y bebés pequeños y suelen deberse a lagrimales estrechos o bloqueados que aún se están desarrollando; suelen abrirse solos en los primeros meses, por lo que el ojo mejora sin tratamiento, aunque a veces el lagrimal bloqueado se infecta. Puede hacer falta limpiar los ojos si tienen costras y al bebé le cuesta abrirlos: con las manos lavadas, algodón estéril humedecido en suero fisiológico, del ángulo interno al externo, con un algodón nuevo para cada pasada. La toalla del bebé no se comparte. El médico o la enfermera pueden enseñar el masaje del lagrimal, y el médico puede derivarlo a un especialista si sigue pegajoso pasados los 12 meses.",
+        "Sticky eyes in babies and toddlers: symptoms, causes and treatments (HSE, 2023). Tema: cuándo acudir a urgencias o al médico. Hallazgo: se lleva al bebé a urgencias o se llama a emergencias si con un ojo pegajoso tiene dolor intenso o llanto inconsolable, está sin energía o cuesta despertarlo, no puede abrir el ojo por la hinchazón, está pálido, moteado y muy frío, tiene pausas de más de 10 segundos al respirar, quejido o labios azulados, una convulsión o una erupción que no se aclara al presionar. Se consulta al médico sin urgencia si el blanco del ojo se pone rosa o rojo (posible conjuntivitis), si el ojo empeora, está rojo y dolorido, el bebé se frota mucho los ojos, parece tener dolor o no quiere abrirlos."
+      ]
+    },
+    {
+      "source_type": "reference",
+      "title": "Clubfoot In Babies & Children (KidsHealth New Zealand)",
+      "organization": "KidsHealth (Paediatric Society of New Zealand)",
+      "publication_year": 2026,
+      "url": "https://www.kidshealth.org.nz/clubfoot-in-babies-children",
+      "specialties": [
+        "pediatrics",
+        "general_medicine"
+      ],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "original_language": "en",
+      "topics": [
+        "ortopedia"
+      ],
+      "chunks": [
+        "Clubfoot In Babies & Children (KidsHealth New Zealand, 2026). Tema: qué es el pie zambo. Hallazgo: es una condición presente al nacer en la que el pie está torcido y fuera de su posición normal. El nombre médico es talipes equinovaro congénito. Puede afectar a uno o a los dos pies; el pie afectado puede verse más pequeño y los músculos de la pantorrilla de ese lado también. No es doloroso para el bebé. La causa no se conoce del todo, probablemente intervienen factores genéticos y ambientales, y no se debe a nada que los padres hicieran o dejaran de hacer en el embarazo. Puede darse solo o junto con otras condiciones, como la espina bífida.",
+        "Clubfoot In Babies & Children (KidsHealth New Zealand, 2026). Tema: tratamiento y pronóstico. Hallazgo: el tratamiento suele empezar poco después del nacimiento, idealmente en las primeras semanas, y continúa durante la infancia. El método más habitual es el de Ponseti: estiramientos y escayolas que se cambian cada semana, normalmente durante varias semanas; a menudo una pequeña intervención para liberar un tendón tenso del tobillo, y después botas con barra, al principio casi todo el tiempo y luego solo al dormir. Seguir el plan ayuda a evitar que reaparezca. La mayoría de los niños tratados pronto crecen y andan, corren y juegan con normalidad, aunque el pie puede quedar algo más pequeño."
+      ]
+    },
+    {
+      "source_type": "reference",
+      "title": "Pierced ear infection (AboutKidsHealth, SickKids)",
+      "organization": "The Hospital for Sick Children (SickKids, AboutKidsHealth)",
+      "publication_year": 2024,
+      "url": "https://www.aboutkidshealth.ca/healthaz/dermatology/pierced-ear-infection/",
+      "specialties": [
+        "pediatrics",
+        "dermatology"
+      ],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "original_language": "en",
+      "topics": [
+        "pendientes_perforacion",
+        "cuando_consultar"
+      ],
+      "chunks": [
+        "Pierced ear infection (AboutKidsHealth, The Hospital for Sick Children, Canadá, 2024). Tema: material del pendiente, alergia al níquel y cómo prevenir la infección. Hallazgo: la infección de una oreja perforada suele deberse a bacterias de la piel que entran por el agujero, por material de perforación no estéril, no limpiar en casa, tocarla con los dedos sucios, compartir pendientes, cierres demasiado apretados o un pendiente que se queda incrustado. La alergia al níquel produce piel seca, picor, sarpullido o ampollas, y la piel irritada se infecta más, por eso los primeros pendientes deben ser de oro de 14 quilates o de acero inoxidable. Conviene elegir a alguien con experiencia y cualificado, con material adecuado y guantes, y cierres de presión cómoda o de rosca. (fuente en inglés)",
+        "Pierced ear infection (AboutKidsHealth, The Hospital for Sick Children, Canadá, 2024). Tema: cuidados de la oreja perforada y cuándo pedir cita. Hallazgo: limpiar la perforación dos veces al día con las manos lavadas, agua tibia y jabón suave, secar bien y girar el poste tres vueltas completas. No usar alcohol, limpiadores antibacterianos ni agua oxigenada; el alcohol y el agua oxigenada resecan la piel y retrasan la curación. Esperar al menos seis semanas para cambiar el pendiente. Los signos de infección (dolor, rojez, hinchazón, supuración amarilla) suelen aparecer a los pocos días. Hay que pedir cita si afecta al cartílago, si el dolor, la hinchazón o la rojez se extienden más allá de la perforación o hay fiebre, si no mejora tras 48 horas de cuidados o si el pendiente se queda metido en el lóbulo. (fuente en inglés)"
+      ]
+    },
+    {
+      "source_type": "reference",
+      "title": "¿Cómo evitar que una perforación en la oreja se infecte? (HealthyChildren, AAP)",
+      "organization": "American Academy of Pediatrics",
+      "publication_year": 2023,
+      "url": "https://www.healthychildren.org/Spanish/health-issues/conditions/ear-nose-throat/Paginas/Avoiding-Infection-After-Ear-Piercing.aspx",
+      "specialties": [
+        "pediatrics",
+        "dermatology"
+      ],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "original_language": "es",
+      "topics": [
+        "pendientes_perforacion"
+      ],
+      "chunks": [
+        "¿Cómo evitar que una perforación en la oreja se infecte? (HealthyChildren.org, American Academy of Pediatrics, 2023). Tema: a qué edad hacer los agujeros de las orejas para los pendientes. Hallazgo: la Academia Americana de Pediatría explica que, si la perforación se hace con cuidado y se cuida bien después, el riesgo es bajo a cualquier edad. Aun así, como norma general aconseja posponer los agujeros de las orejas hasta que el niño o la niña sea lo bastante mayor para cuidar la zona por sí mismo. La perforación debe hacerla un médico, una enfermera o un técnico con experiencia, desinfectando la zona con alcohol u otro desinfectante para reducir el riesgo de infección.",
+        "¿Cómo evitar que una perforación en la oreja se infecte? (HealthyChildren.org, American Academy of Pediatrics, 2023). Tema: qué pendiente poner y cómo cuidar la oreja recién perforada. Hallazgo: el primer pendiente debe ser redondo y con el poste (la parte que atraviesa la oreja) de oro, porque el oro reduce el riesgo de alergia e inflamación; algunos aparatos colocan el pendiente en el mismo momento de perforar, lo que evita manipular más la oreja. Después se desinfecta la zona dos veces al día durante unos días, no se quita el pendiente en cuatro a seis semanas y se gira suavemente cada día. Si la zona se pone roja o duele al tocarla puede estar infectándose, y hay que consultar al médico de inmediato."
+      ]
+    },
+    {
+      "source_type": "reference",
+      "title": "Ernia ombelicale",
+      "organization": "Ospedale Pediatrico Bambino Gesù",
+      "publication_year": 2023,
+      "url": "https://www.ospedalebambinogesu.it/ernia-ombelicale-80124/",
+      "specialties": [
+        "pediatrics",
+        "neonatology"
+      ],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "original_language": "it",
+      "topics": [
+        "hernias"
+      ],
+      "chunks": [
+        "Ernia ombelicale (Ospedale Pediatrico Bambino Gesù, 2023). Tema: qué es la hernia umbilical y cómo se manifiesta. Hallazgo: es un defecto congénito de la pared abdominal por el que sobresale un saco herniario por el anillo umbilical. Afecta a cerca del 20% de los recién nacidos a término y hasta al 80% de los prematuros. Se ve como un bulto en el ombligo que aumenta con el llanto, la defecación o el esfuerzo; es blando, se reduce fácilmente y suele ser indoloro. El diagnóstico es clínico y rara vez hace falta una ecografía (fuente en italiano).",
+        "Ernia ombelicale (Ospedale Pediatrico Bambino Gesù, 2023). Tema: evolución, tratamiento y mitos de la hernia umbilical. Hallazgo: cerca del 80% se resuelve sola, a menudo cuando el niño empieza a andar. La cirugía es el único tratamiento y, por regla general, no se hace antes de los 4-5 años, salvo defecto grande o complicaciones, que son muy raras. No existe prevención, porque es un defecto congénito, y no se aconsejan la faja umbilical ni poner objetos como monedas para comprimir el bulto (fuente en italiano)."
+      ]
+    },
+    {
+      "source_type": "reference",
+      "title": "Plagiocefalia: come prevenire la testa piatta nel neonato",
+      "organization": "Ospedale Pediatrico Bambino Gesù",
+      "publication_year": 2024,
+      "url": "https://www.ospedalebambinogesu.it/plagiocefalia-come-prevenire-la-testa-piatta-nel-neonato-90422/",
+      "specialties": [
+        "pediatrics",
+        "neonatology"
+      ],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "original_language": "it",
+      "topics": [
+        "plagiocefalia"
+      ],
+      "chunks": [
+        "Plagiocefalia: come prevenire la testa piatta nel neonato (Ospedale Pediatrico Bambino Gesù, 2024). Tema: causa de la plagiocefalia posicional y cómo conciliarla con el sueño seguro. Hallazgo: se debe a mantener la cabeza mucho tiempo en la misma posición. Dormir boca arriba se recomienda para reducir el riesgo de muerte súbita, pero es también la causa más frecuente de plagiocefalia posicional, así que debe mantenerse junto con otras medidas: alternar hacia qué lado gira la cabeza, girarla con suavidad si el bebé no lo hace, cambiar la orientación de la cuna y alternar siempre el brazo con el que se sujeta al bebé durante las tomas (fuente en italiano).",
+        "Plagiocefalia: come prevenire la testa piatta nel neonato (Ospedale Pediatrico Bambino Gesù, 2024). Tema: tiempo boca abajo, prevención y cuándo consultar. Hallazgo: se recomienda favorecer el contacto cara a cara durante el juego, poner al bebé boca abajo en el regazo o sobre las piernas de la madre mientras se le mece o se le hacen mimos y, desde el tercer mes, ponerlo boca abajo más rato también en el cambiador, en la cama grande o en una alfombrilla, con los brazos hacia delante y una toalla enrollada a la altura del pecho, siempre vigilado. Conviene prevenirla en los primeros meses porque a partir de los 6-7 meses es cada vez más difícil y pueden hacer falta rehabilitación u ortesis. Si persiste a pesar de las medidas o hay dudas sobre la forma o el tamaño de la cabeza, conviene consultar al pediatra de familia, que indicará a qué especialista acudir (fuente en italiano)."
+      ]
+    },
+    {
+      "source_type": "reference",
+      "title": "Cuidados com a saúde oral nos primeiros mil dias de vida",
+      "organization": "Sociedade Brasileira de Pediatria (SBP)",
+      "publication_year": 2026,
+      "url": "https://www.sbp.com.br/pediatria-para-familias/primeira-infancia/cuidados-com-a-saude-oral-nos-primeiros-mil-dias-de-vida/",
+      "specialties": [
+        "pediatrics",
+        "nutrition"
+      ],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "original_language": "pt",
+      "topics": [
+        "caries_fluor"
+      ],
+      "chunks": [
+        "Cuidados com a saúde oral nos primeiros mil dias de vida (Sociedade Brasileira de Pediatria, 2026). Tema: alimentación y salud bucal del bebé. Hallazgo: los primeros mil días son 270 de embarazo y 730 tras el nacimiento (hasta los 2 años). La lactancia materna es la base de la salud bucal infantil: nutre en una fase clave de la formación de los dientes, favorece el equilibrio del microbioma oral, el desarrollo de los huesos y músculos de la boca y la cara, y la respiración nasal. Se recomienda exclusiva durante 6 meses y continuada hasta los 2 años o más. La alimentación complementaria empieza después de los 6 meses, y hay que evitar alimentos y bebidas con azúcar añadido hasta los 2 años. (fuente en portugués)",
+        "Cuidados com a saúde oral nos primeiros mil dias de vida (Sociedade Brasileira de Pediatria, 2026). Tema: higiene dental y primera visita. Hallazgo: antes del primer diente no se recomienda limpiar la boca del bebé con lactancia exclusiva, porque la leche materna ya la protege. Cuando sale el primer diente se cepilla por la mañana y por la noche con un cepillo infantil extrasuave y una cantidad pequeña, como un grano de arroz, de pasta de dientes infantil, limpiando también encías y lengua. Cepillo y pasta se guardan fuera del alcance del bebé. La primera visita al odontopediatra es al salir el primer diente o, como muy tarde, antes del primer cumpleaños. (fuente en portugués)",
+        "Cuidados com a saúde oral nos primeiros mil dias de vida (Sociedade Brasileira de Pediatria, 2026). Tema: chupete y salud bucal. Hallazgo: la succión intensa y prolongada del chupete puede modificar el paladar, la posición de los dientes, el movimiento de la lengua, la postura de los labios y el habla, y llevar a respirar por la boca. Lo ideal es no ofrecerlo y, si se usa, retirarlo lo antes posible. En el recién nacido, el examen bucal debe hacerse en la maternidad, en la UCI neonatal o por un odontopediatra tras el alta, y se aconseja a los padres sobre alimentación, hábitos nocivos e higiene. (fuente en portugués)"
+      ]
+    },
+    {
+      "source_type": "reference",
+      "title": "O primeiro dente de leite está chegando, e agora?",
+      "organization": "Sociedade Brasileira de Pediatria (SBP)",
+      "publication_year": 2026,
+      "url": "https://www.sbp.com.br/pediatria-para-familias/primeira-infancia/o-primeiro-dente-de-leite-esta-chegando/",
+      "specialties": [
+        "pediatrics",
+        "nutrition"
+      ],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "original_language": "pt",
+      "topics": [
+        "caries_fluor"
+      ],
+      "chunks": [
+        "O primeiro dente de leite está chegando, e agora? (Sociedade Brasileira de Pediatria, 2026). Tema: cuándo salen los dientes y primera visita al dentista. Hallazgo: los dientes de leche suelen empezar a aparecer entre los 6 y los 8 meses y los 20 deben estar presentes alrededor de los 2 años y medio. Hay que estar atentos, porque la salida puede adelantarse o retrasarse de forma fisiológica o por alguna condición genética, sistémica, metabólica, nutricional o local; en prematuros se valora con la edad corregida. Los dientes presentes al nacer o que aparecen en los primeros 28 días hacen fundamental una exploración y una radiografía dentales inmediatas. La primera visita al odontopediatra se recomienda al salir el primer diente o, si no ha salido ninguno, antes del primer cumpleaños. (fuente en portugués)",
+        "O primeiro dente de leite está chegando, e agora? (Sociedade Brasileira de Pediatria, 2026). Tema: síntomas de la dentición y cómo aliviarlos. Hallazgo: son habituales molestias en las encías, irritabilidad, problemas de sueño, menos apetito y babeo, aunque no todos los bebés los tienen. Si los signos son distintos o más graves, pueden no deberse a la dentición y pueden requerir una consulta médica. Ayudan el cariño, un masaje suave en encías y cuerpo y los mordedores apropiados para esta etapa, seguros y sin sustancias nocivas. No se deben congelar los mordedores, no se deben dar productos con anestésico local y hay que evitar collares o pulseras de ámbar por los elevados riesgos para la seguridad del bebé. (fuente en portugués)",
+        "O primeiro dente de leite está chegando, e agora? (Sociedade Brasileira de Pediatria, 2026). Tema: hábitos para dientes sanos. Hallazgo: lactancia exclusiva 6 meses y después con alimentos hasta los 2 años o más si es posible; evitar alimentos y bebidas con azúcar hasta los 2 años; evitar biberones y chupetes, porque ninguno es ortodóntico; limpiar a diario con cepillo infantil y una cantidad pequeña de pasta de dientes con flúor, tras el desayuno y antes de acostarse. Los adultos cepillan a los niños hasta los 5 años y deben quedarse en el baño para evitar caídas, atragantamientos y que se trague demasiada pasta. (fuente en portugués)"
+      ]
+    },
+    {
+      "source_type": "reference",
+      "title": "Espasmo do choro",
+      "organization": "Sociedade Portuguesa de Pediatria (SPP)",
+      "publication_year": 2025,
+      "url": "https://criancaefamilia.spp.pt/primeiro-ano-de-vida/espasmo-do-choro/",
+      "specialties": [
+        "pediatrics"
+      ],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "original_language": "pt",
+      "topics": [
+        "espasmo_del_sollozo",
+        "signos_alarma"
+      ],
+      "chunks": [
+        "Espasmo do choro (Sociedade Portuguesa de Pediatria, Portal Criança e Família, 2025). Tema: qué es el espasmo del sollozo. Hallazgo: afecta a cerca del 5 % de los niños sanos y el primer episodio suele aparecer entre los 6 y los 18 meses, pudiendo prolongarse hasta los 6 años. Durante el llanto el niño aguanta la respiración de forma súbita e involuntaria, con cambio de color (morado o pálido) y de tono muscular, a veces pierde brevemente la consciencia y rara vez convulsiona. Suele recuperarse en menos de 1 minuto. Lo desencadenan emociones negativas como miedo, rabia, frustración o dolor, y se ha asociado a la anemia por falta de hierro. Es benigno, sin secuelas, y tiende a desaparecer solo. (fuente en portugués)",
+        "Espasmo do choro (Sociedade Portuguesa de Pediatria, Portal Criança e Família, 2025). Tema: qué hacer durante y después del episodio. Hallazgo: mantener la calma, tumbar al niño de lado en un lugar seguro, comprobar que no haya objetos ni comida en la boca, no sacudirlo, no echarle agua ni meterle objetos o la mano en la boca, y controlar el tiempo. Se llama al 112 si no hay un desencadenante, si dura más de 1 minuto o si cuesta despertarlo. Después se retoma la relación normal, sin ceder al comportamiento si el episodio vino tras una llamada de atención, y no se deja de educar por miedo a nuevos episodios. El diagnóstico es clínico y no está indicada ninguna medicación para tratarlo ni prevenirlo. (fuente en portugués)"
+      ]
+    }
+  ]
+}
