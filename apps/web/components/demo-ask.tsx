@@ -1,12 +1,14 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { type ReactNode, useEffect, useRef, useState } from "react";
 import { useLocale, useTranslations } from "next-intl";
-import { ArrowUpRight, Loader2, Mic, MicOff, Phone, ShieldAlert } from "lucide-react";
+import { signIn } from "next-auth/react";
+import { ArrowUpRight, Loader2, Mic, MicOff, Phone, ShieldAlert, Stethoscope } from "lucide-react";
 import { AnswerSources } from "@/components/answer-sources";
 import { AnswerContent, type AnswerCorpusStats } from "@/components/answer-content";
 import { useDictation } from "@/hooks/use-dictation";
 import type { DemoAnswerKind, DemoClarify, DemoIntent, EvidenceCitation } from "@/lib/chat-types";
+import { keepLandingQuestion } from "@/lib/landing-question";
 
 const SPEECH_LANG: Record<string, string> = { es: "es-ES", en: "en-GB", fr: "fr-FR" };
 
@@ -26,11 +28,32 @@ type DemoAnswer = {
 
 type Clarification = { field: DemoClarify["field"]; value: string };
 
-export function DemoAsk({ suggested, corpusStats }: {
+// "La demo es la app real" (2026-11-06). Her first question, a suggestion or
+// "Grabar la consulta" opens the real panel with Lucía: a guest session is
+// created without asking for anything (lib/auth.ts, provider "guest") and the
+// question is answered there by the agent, once. Only when the guest cannot
+// be created (the API's anti-bot brake, an outage) does this page answer
+// itself through the keyless /api/demo/ask, so the question is never lost.
+// `hasSession`: she already has a space (or an account) in this browser.
+async function openGuestSpace(locale: string, hasSession: boolean): Promise<boolean> {
+  if (hasSession) return true;
+  try {
+    const res = await signIn("guest", { redirect: false, locale });
+    return Boolean(res?.ok && !res.error);
+  } catch {
+    return false;
+  }
+}
+
+export function DemoAsk({ suggested, corpusStats, hasSession = false, consentNote }: {
   suggested: string[];
   corpusStats?: AnswerCorpusStats;
+  hasSession?: boolean;
+  /** What asking keeps and where to delete it, drawn by the page under the button. */
+  consentNote?: ReactNode;
 }) {
   const t = useTranslations("demo");
+  const tg = useTranslations("guestSpace");
   const locale = useLocale();
   const [question, setQuestion] = useState("");
   const [busy, setBusy] = useState(false);
@@ -81,14 +104,24 @@ export function DemoAsk({ suggested, corpusStats }: {
     if (trimmed.length < 3 || trimmed.length > 300 || pending.current) return;
     const controller = new AbortController();
     pending.current = controller;
-    // A bounded request always leaves the visitor an actionable retry.
+    // A bounded wait always leaves the visitor an actionable retry. It covers
+    // opening her space AND the fallback answer: one wait, one bound.
     const timeout = setTimeout(() => controller.abort(), 60000);
+    let leaving = false;
     setBusy(true);
     setSlow(false);
     setAsked(trimmed);
     setError(null);
     setResult(null);
     try {
+      // A clarify press belongs to an answer this page already drew (the
+      // keyless fallback): it stays here.
+      if (!clarification && (await openGuestSpace(locale, hasSession)) && !controller.signal.aborted) {
+        leaving = true;
+        const key = keepLandingQuestion(trimmed);
+        window.location.assign(`/${locale}/dashboard?ask=${encodeURIComponent(key)}`);
+        return;
+      }
       const res = await fetch("/api/demo/ask", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -106,8 +139,12 @@ export function DemoAsk({ suggested, corpusStats }: {
       setError(t("errorGeneric"));
     } finally {
       clearTimeout(timeout);
-      pending.current = null;
-      setBusy(false);
+      // Leaving for the panel: stay busy until the page goes, so a second
+      // tap cannot send the question twice.
+      if (!leaving) {
+        pending.current = null;
+        setBusy(false);
+      }
     }
   }
 
@@ -198,6 +235,31 @@ export function DemoAsk({ suggested, corpusStats }: {
             {busy ? t("askBusy") : t("askCta")}
           </button>
         </div>
+        {consentNote && (
+          <p data-testid="landing-consent" className="mt-2 text-sm leading-relaxed text-ink-soft">
+            {consentNote}
+          </p>
+        )}
+        {/* The appointment recorder of the real app, in her guest space. */}
+        <button
+          type="button"
+          data-testid="landing-record"
+          disabled={busy}
+          onClick={async () => {
+            if (pending.current) return;
+            setBusy(true);
+            if (await openGuestSpace(locale, hasSession)) {
+              window.location.assign(`/${locale}/dashboard/consulta/grabar`);
+              return;
+            }
+            setBusy(false);
+            setError(t("errorUnavailable"));
+          }}
+          className="mt-3 inline-flex min-h-11 items-center gap-2 text-sm font-medium text-primary-text underline underline-offset-4 disabled:opacity-60"
+        >
+          <Stethoscope className="h-4 w-4" aria-hidden />
+          {tg("landingRecord")}
+        </button>
       </form>
 
       {/* Short, persistent live region, rather than announcing every citation. */}

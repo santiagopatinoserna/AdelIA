@@ -21,7 +21,13 @@ export function AccountSettingsView({
   billing?: BillingStatus | null;
 }) {
   const t = useTranslations("settings");
+  const tg = useTranslations("guestSpace");
   const locale = useLocale();
+  // A guest of the landing (2026-11-06) has no email to type, no
+  // subscription and no way back in once signed out: she confirms the
+  // erasure with her baby's name and saves the account instead of paying.
+  const isGuest = billing?.is_guest === true;
+  const confirmWord = isGuest ? "Lucía" : email;
   const [confirmText, setConfirmText] = useState("");
   const [acknowledged, setAcknowledged] = useState(false);
   const [busy, setBusy] = useState(false);
@@ -30,7 +36,9 @@ export function AccountSettingsView({
   // Two safeguards before we arm the button: an explicit "I understand"
   // acknowledgement AND typing the full account email. Both must pass.
   const armed =
-    acknowledged && confirmText.trim().toLowerCase() === email.toLowerCase();
+    acknowledged &&
+    confirmText.trim().toLowerCase().normalize("NFD").replace(/\p{M}/gu, "") ===
+      confirmWord.toLowerCase().normalize("NFD").replace(/\p{M}/gu, "");
 
   async function deleteAccount() {
     if (!armed || busy) return;
@@ -71,10 +79,14 @@ export function AccountSettingsView({
     // cajas"). The danger zone keeps its tinted box: that one is a warning.
     <main className="mx-auto max-w-2xl px-5 py-8 sm:px-6 sm:py-12">
       <h1 className="text-title text-ink">{t("title")}</h1>
-      <p className="mt-1 mb-6 break-all text-ink-soft">
-        <span className="sr-only">{t("emailLabel")}: </span>
-        {email}
-      </p>
+      {isGuest ? (
+        <p className="mt-1 mb-6 text-ink-soft">{tg("settingsGuestBody")}</p>
+      ) : (
+        <p className="mt-1 mb-6 break-all text-ink-soft">
+          <span className="sr-only">{t("emailLabel")}: </span>
+          {email}
+        </p>
+      )}
 
       {/* GDPR art. 20 portability: a plain <a download> — the browser
           handles the stream, no JS blob juggling, and the endpoint sets
@@ -102,6 +114,15 @@ export function AccountSettingsView({
           account the button opens the Stripe portal (card, invoices, cancel);
           without one there is nothing for the portal to show, so the link
           goes to /billing instead of a button that would answer 400. */}
+      {isGuest ? (
+      <section className="border-t border-line py-6">
+        <h2 className="font-sans text-lg font-semibold text-ink">{tg("saveTitle")}</h2>
+        <p className="mt-1.5 text-ink-soft">{tg("saveBody")}</p>
+        <Link href="/dashboard/guardar" className="ad-btn ad-btn-primary mt-3 min-h-[44px] px-3.5 py-2 text-sm">
+          {tg("saveLink")}
+        </Link>
+      </section>
+      ) : (
       <section className="border-t border-line py-6">
         <h2 className="font-sans text-lg font-semibold text-ink">{t("subscriptionTitle")}</h2>
         <p className="mt-1.5 text-ink-soft">{subscriptionBody}</p>
@@ -119,6 +140,7 @@ export function AccountSettingsView({
           )}
         </div>
       </section>
+      )}
 
       {/* On phones the header has no language pill (it ate 174px of a
           390px bar): this is where the language lives on mobile. */}
@@ -138,6 +160,7 @@ export function AccountSettingsView({
           called signOut otherwise, so on a shared or lost phone her baby's
           records stayed open (RECORRIDO_POC.md). A full navigation, so no
           in-memory state of this account survives in the tab. */}
+      {!isGuest && (
       <section className="border-t border-line py-6">
         <h2 className="font-sans text-lg font-semibold text-ink">{t("signOutTitle")}</h2>
         <p className="mt-1.5 text-ink-soft">{t("signOutBody")}</p>
@@ -153,6 +176,7 @@ export function AccountSettingsView({
           {t("signOutCta")}
         </button>
       </section>
+      )}
 
       <section className="mt-6 rounded-2xl border border-error-tint-line bg-error-tint p-5">
         <h2 className="flex items-center gap-2 font-display text-lg font-semibold text-error-text">
@@ -170,7 +194,7 @@ export function AccountSettingsView({
           <span>{t("ackIrreversible")}</span>
         </label>
         <label htmlFor="confirm-delete" className="mt-3 block text-sm font-medium text-error-text">
-          {t("confirmLabel", { email })}
+          {isGuest ? tg("deleteConfirmLabel") : t("confirmLabel", { email })}
           <input
             id="confirm-delete"
             type="text"
@@ -178,7 +202,7 @@ export function AccountSettingsView({
             onChange={(e) => setConfirmText(e.target.value)}
             autoComplete="off"
             className="mt-1.5 min-h-[44px] w-full rounded-lg border border-error-tint-line bg-surface px-3 py-2 font-mono text-sm text-ink focus:border-error"
-            placeholder={email}
+            placeholder={confirmWord}
           />
         </label>
         {error && (

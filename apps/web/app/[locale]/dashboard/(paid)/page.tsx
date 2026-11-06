@@ -3,9 +3,17 @@ import { auth } from "@/lib/auth";
 import { Link } from "@/lib/navigation";
 import { AgentCanvas } from "@/components/agent/agent-canvas";
 import { TodayFollowsChild, TodaySlot } from "@/components/today-follows-child";
-import { today } from "@/lib/api-client";
+import { agentThread, billingStatus, today } from "@/lib/api-client";
 
-export default async function DashboardHome() {
+export default async function DashboardHome({
+  searchParams,
+}: {
+  searchParams: Promise<{ ask?: string }>;
+}) {
+  // `ask`: the key of the question she typed on the landing (components/
+  // demo-ask). The text itself waits in this tab's sessionStorage, not in the
+  // URL, so a health question never lands in a server log or the history bar.
+  const { ask } = await searchParams;
   const locale = await getLocale();
   const t = await getTranslations("agent");
   // The layout already redirects when there is no session; the id only
@@ -17,7 +25,15 @@ export default async function DashboardHome() {
   // the ProfileProvider starts on. Fail-open to nothing: a transient API
   // error must not stand between a mother and the greeting. When she picks
   // another child, TodayFollowsChild asks for that child's day in the browser.
-  const due = await today(locale).catch(() => null);
+  //
+  // The conversation she was in (stored since 2026-11-06, GET /agent/thread),
+  // so a reload picks it up, and whether she is a guest, for "Guardar mi
+  // cuenta". Both fail open to nothing, like "Hoy".
+  const [due, thread, billing] = await Promise.all([
+    today(locale).catch(() => null),
+    agentThread().catch(() => null),
+    billingStatus().catch(() => null),
+  ]);
   // No ProfileProvider here any more: it moved up to (paid)/layout.tsx so the
   // recorder, the upload zone, the chat and the briefing form share this
   // page's active child instead of each falling back to an empty context
@@ -26,7 +42,14 @@ export default async function DashboardHome() {
   return (
       <div className="relative">
         <TodayFollowsChild initial={due} locale={locale}>
-          <AgentCanvas locale={locale} userId={userId} today={<TodaySlot />} />
+          <AgentCanvas
+            locale={locale}
+            userId={userId}
+            today={<TodaySlot />}
+            initialThread={thread}
+            askKey={ask ?? null}
+            isGuest={billing?.is_guest === true}
+          />
         </TodayFollowsChild>
         {/* Desktop only: on mobile it overlapped the greeting, and the
             bottom nav's "Historial" tab covers the same destination. */}

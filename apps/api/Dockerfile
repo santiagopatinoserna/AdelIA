@@ -39,9 +39,14 @@ EXPOSE 8000
 
 # Migrations run on boot — idempotent, single-writer safe for one replica.
 # Scale-out later moves this to a release command (fly deploy --release-command).
-# --proxy-headers: behind the Fly/compose edge every client shares the
-# proxy IP otherwise — the limiter anonymous buckets would collapse.
-CMD ["sh", "-c", "uv run alembic upgrade head && uv run uvicorn adelia.main:app --host 0.0.0.0 --port 8000 --proxy-headers --forwarded-allow-ips=*"]
+# --no-proxy-headers: request.client stays the connection's peer. It used to be
+# --proxy-headers --forwarded-allow-ips=*, which made the client the FIRST
+# X-Forwarded-For entry, written by the client: a forged one per request was a
+# fresh rate-limit bucket each time (PR #57 review). Behind Cloudflare the real
+# address comes from CF-Connecting-IP instead (TRUST_CF_CONNECTING_IP,
+# adelia/ratelimit.client_ip). The API builds no URL from the request, so the
+# forwarded scheme is not needed either.
+CMD ["sh", "-c", "uv run alembic upgrade head && uv run uvicorn adelia.main:app --host 0.0.0.0 --port 8000 --no-proxy-headers"]
 
 # The deploy gate's image: built only with `--target golden` (the compose
 # overlay infra/docker-compose.golden.yml), run once and thrown away.

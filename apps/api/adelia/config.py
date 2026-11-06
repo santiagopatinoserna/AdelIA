@@ -311,6 +311,11 @@ class Settings(BaseSettings):
     cors_origins: str = "http://localhost:3000,http://localhost:3001"
     # In-process per-identity rate limiting (disable only for test suites).
     rate_limit_enabled: bool = True
+    # Whose address the per-address limits count (ratelimit.client_ip). On only
+    # where every public request crosses Cloudflare, which overwrites
+    # CF-Connecting-IP with the real one; anywhere else a client could pick its
+    # own bucket with that header, so the default is the connection's peer.
+    trust_cf_connecting_ip: bool = False
     # DB connection pool — defaults too small for concurrent uploads.
     db_pool_size: int = 20
     db_max_overflow: int = 20

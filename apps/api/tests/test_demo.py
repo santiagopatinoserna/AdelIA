@@ -1,4 +1,7 @@
-"""The public demo answers without an account and writes nothing (4.6).
+"""The public demo endpoint answers without an account and writes nothing (4.6).
+
+Since 2026-11-06 the landing's main path is a guest account (services/guest.py,
+tests/test_guest.py); /demo/ask is its keyless fallback and keeps these rules.
 
 The audit's third existential risk is that nobody has checked whether anyone
 wants this, and the reason nobody could check is that seeing AdelIA answer one
@@ -193,7 +196,14 @@ async def test_nothing_in_the_corpus_means_a_refusal_not_an_invention(client):
 @pg_only
 async def test_the_demo_writes_nothing_but_its_own_counter(client):
     """No user, no document, no chunk, no chat session. The only row the demo
-    can create is an integer in funnel_counters."""
+    can create is an integer in funnel_counters.
+
+    Since 2026-11-06 the landing no longer asks this endpoint first: "la demo
+    es la app real", and a visitor's question creates a guest account that
+    keeps everything she does (tests/test_guest.py holds that decision). This
+    endpoint stays as the keyless fallback when a guest cannot be created
+    (the anti-bot brake answered 429) and for old links, and as such it still
+    writes nothing: the fallback must not become a second way to store."""
     async def _retrieve(session, **kwargs):
         return []
 

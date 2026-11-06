@@ -2,6 +2,10 @@ import { expect, test } from "@playwright/test";
 import AxeBuilder from "@axe-core/playwright";
 import { homedir } from "node:os";
 import { join } from "node:path";
+import { forceKeylessDemo } from "./utils/keyless-demo";
+
+// The landing's own answer, drawn when no guest can be created (see the helper).
+test.beforeEach(async ({ page }) => forceKeylessDemo(page));
 
 // UI fixtures only: these responses do not verify retrieval or clinical quality.
 const shots = join(homedir(), "dev/adelia-design/shots/ux-v2");

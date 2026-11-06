@@ -21,22 +21,35 @@ from tests.db_helpers import make_user
 from tests.pg_gate import PG_AVAILABLE
 
 
+def _fake_delete_only(deleted: list[str], mine: set[str]):
+    """A storage delete that records this test's keys and refuses anybody else's.
+
+    The sweep under test is the full one (every due tombstone), and the dev
+    database is shared: other tests and sessions leave due tombstones in it.
+    Recording those made the exact assertions depend on what the database
+    held (a guest erasure's leftovers failed this file on 2026-11-06), and
+    "deleting" them dropped their tombstones with the blobs still in place.
+    Refused, they take the sweep's real path for a failed delete: kept."""
+    async def fake_delete(key: str) -> None:
+        if key not in mine:
+            raise RuntimeError(f"not this test's blob: {key}")
+        deleted.append(key)
+    return fake_delete
+
+
 @pytest.mark.skipif(not PG_AVAILABLE, reason="PG required — run locally with docker compose up postgres")
 @pytest.mark.asyncio
 async def test_sweep_skips_future_tombstones(monkeypatch):
     from adelia.db import AsyncSessionLocal
 
-    deleted: list[str] = []
-
-    async def fake_delete(key):
-        deleted.append(key)
-
-    monkeypatch.setattr("adelia.routers.users.storage.delete_object", fake_delete)
-
     now = datetime.now(timezone.utc)
     old_key = f"users/x/old-blob-{uuid.uuid4()}"
     expired_key = f"users/x/expired-{uuid.uuid4()}"
     fresh_key = f"users/x/fresh-audio-{uuid.uuid4()}"
+
+    deleted: list[str] = []
+    monkeypatch.setattr("adelia.routers.users.storage.delete_object",
+                        _fake_delete_only(deleted, {old_key, expired_key, fresh_key}))
 
     async with AsyncSessionLocal() as session:
         session.add_all([
@@ -463,11 +476,7 @@ async def test_erasing_the_account_deletes_audio_now_not_in_seven_days(client, m
     assert (await _tombstone(s3_key)).not_before is not None  # 7 days out
 
     deleted: list[str] = []
-
-    async def fake_delete(key):
-        deleted.append(key)
-
-    monkeypatch.setattr(users_mod.storage, "delete_object", fake_delete)
+    monkeypatch.setattr(users_mod.storage, "delete_object", _fake_delete_only(deleted, {s3_key}))
 
     # Exactly what delete_my_account does inside the erase transaction.
     async with AsyncSessionLocal() as session:

@@ -4,6 +4,10 @@ import { expect, test, type Browser, type Page } from "@playwright/test";
 import enMessages from "@/messages/en.json";
 import esMessages from "@/messages/es.json";
 import frMessages from "@/messages/fr.json";
+import { forceKeylessDemo } from "./utils/keyless-demo";
+
+// The landing's own answer, drawn when no guest can be created (see the helper).
+test.beforeEach(async ({ page }) => forceKeylessDemo(page));
 
 // Voice dictation in the public demo field. The demo has no account, so audio
 // never leaves the phone: the browser's own Web Speech API transcribes and we
@@ -55,6 +59,7 @@ async function phone(browser: Browser, init: string, scheme: "light" | "dark" = 
   });
   await context.addInitScript(init);
   const page = await context.newPage();
+  await forceKeylessDemo(page);
   return { context, page };
 }
 

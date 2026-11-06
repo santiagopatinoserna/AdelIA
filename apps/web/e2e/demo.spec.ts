@@ -1,5 +1,9 @@
 import AxeBuilder from "@axe-core/playwright";
 import { expect, test, type Page } from "@playwright/test";
+import { forceKeylessDemo } from "./utils/keyless-demo";
+
+// The landing's own answer, drawn when no guest can be created (see the helper).
+test.beforeEach(async ({ page }) => forceKeylessDemo(page));
 
 // The public demo (audit 4.6): the only screen that shows the product working
 // without an email, a magic link and a credit card, in that order.
@@ -48,8 +52,12 @@ test.describe("public demo", () => {
 
     // Privacy explanation is now in the optional information, not above the field.
     await page.getByTestId("home-about").locator("summary").click();
-    // ...and the promise that nothing is stored.
-    await expect(page.getByText(/Nada de lo que escribas aquí se guarda/)).toBeVisible();
+    // ...and what happens to what she does: since 2026-11-06 it is kept in her
+    // space with Lucía (the demo is the real app), and she can delete it. Since
+    // the PR #57 review the line is her consent, under "Preguntar".
+    const consent = page.getByTestId("landing-consent");
+    await expect(consent.getByText(/se guarde en tu espacio con Lucía/)).toBeVisible();
+    await expect(consent.getByText(/Puedes borrarlo en Ajustes/)).toBeVisible();
   });
 
   test("offers suggested questions and a free-text box", async ({ page }) => {
@@ -124,6 +132,7 @@ test.describe("public demo", () => {
         reducedMotion: "reduce",
       });
       const page = await context.newPage();
+      await forceKeylessDemo(page);
       await page.goto("/es");
       await page.waitForLoadState("networkidle").catch(() => {});
       const results = await new AxeBuilder({ page }).analyze();
@@ -272,6 +281,7 @@ test.describe("public demo: sending from the keyboard", () => {
       hasTouch: true,
     });
     const page = await context.newPage();
+    await forceKeylessDemo(page);
     await interceptAsk(page);
     await page.goto("/es");
     const ask = page.getByTestId("demo-ask");

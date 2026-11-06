@@ -1,3 +1,4 @@
+import type { AgentThread } from "./agent-types";
 // Shared endpoint definitions, parameterized by fetcher so the same surface
 // works server-side (authedFetch signs with the session JWT) and browser-side
 // (proxy fetch through /api/backend, which signs server-side).
@@ -90,6 +91,9 @@ export type BillingStatus = {
    *  anything to open. Settings shows "manage" when true and "subscribe" when
    *  false, instead of a one-click button that answers 400. */
   can_manage?: boolean;
+  /** A guest of the landing (2026-11-06): no card, no end date, and
+   *  "Guardar mi cuenta" instead of a subscription. */
+  is_guest?: boolean;
 };
 
 export function makeApi(fetcher: Fetcher) {
@@ -101,6 +105,36 @@ export function makeApi(fetcher: Fetcher) {
       const res = await fetcher(`/today?${q}`);
       if (!res.ok) throw new Error(`today: ${res.status}`);
       return res.json();
+    },
+
+    /** The agent conversation she is in, or null (GET /agent/thread). */
+    async agentThread(profileId?: string | null): Promise<AgentThread | null> {
+      const q = new URLSearchParams();
+      if (profileId) q.set("profile_id", profileId);
+      const res = await fetcher(`/agent/thread?${q}`);
+      if (!res.ok) throw new Error(`agentThread: ${res.status}`);
+      return ((await res.json()) as { thread: AgentThread | null }).thread;
+    },
+
+    /** "Guardar mi cuenta": a claim token for the magic link (POST /guest/claim). */
+    async claimGuest(email: string): Promise<string> {
+      const res = await fetcher("/guest/claim", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email }),
+      });
+      if (!res.ok) throw new Error(`claimGuest: ${res.status}`);
+      return ((await res.json()) as { token: string }).token;
+    },
+
+    /** The account the magic link signed in adopts the guest (POST /guest/adopt). */
+    async adoptGuest(token: string): Promise<boolean> {
+      const res = await fetcher("/guest/adopt", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ token }),
+      });
+      return res.ok;
     },
 
     async billingStatus(): Promise<BillingStatus> {
