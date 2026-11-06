@@ -1,5 +1,6 @@
 import NextAuth, { type NextAuthConfig } from "next-auth";
 import Resend from "next-auth/providers/resend";
+import Credentials from "next-auth/providers/credentials";
 import { SignJWT, decodeJwt } from "jose";
 
 import { AdeliaPgAdapter } from "./auth-adapter";
@@ -13,6 +14,38 @@ declare module "next-auth" {
 // JWT is Record<string,unknown> in next-auth v5 — use a helper type for our custom fields
 type AdeliaToken = { rawJwt?: string };
 
+const API_URL =
+  process.env.API_INTERNAL_URL ?? process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:8000";
+
+// "La demo es la app real" (2026-11-06). A visitor's first question on the
+// landing signs her in as a guest: the API creates the row and Lucía
+// (POST /guest, adelia/services/guest.py) and this provider puts that id in
+// the SAME session JWT an account gets, so every dashboard route, the proxy
+// and the API's own checks treat her like anyone else. Nothing she sends is
+// read: the only input is the language, and the address is forwarded so the
+// API's per-address brake on guest creation sees her, not this server.
+const guestProvider = Credentials({
+  id: "guest",
+  name: "guest",
+  credentials: { locale: {} },
+  async authorize(credentials, request) {
+    const locale = typeof credentials?.locale === "string" ? credentials.locale.slice(0, 8) : "es";
+    const headers: Record<string, string> = { "Content-Type": "application/json" };
+    const forwarded = request?.headers?.get?.("x-forwarded-for");
+    if (forwarded) headers["X-Forwarded-For"] = forwarded;
+    try {
+      const res = await fetch(`${API_URL}/guest`, {
+        method: "POST", headers, body: JSON.stringify({ locale }), cache: "no-store",
+      });
+      if (!res.ok) return null;
+      const { user_id } = (await res.json()) as { user_id?: string };
+      return user_id ? { id: user_id } : null;
+    } catch {
+      return null;
+    }
+  },
+});
+
 export const authConfig: NextAuthConfig = {
   adapter: AdeliaPgAdapter(),
   providers: [
@@ -20,6 +53,7 @@ export const authConfig: NextAuthConfig = {
       from: "AdelIA <noreply@adelia.godi.ai>",
       apiKey: process.env.RESEND_API_KEY,
     }),
+    guestProvider,
   ],
   // Bare path — the next-intl middleware prefixes the active locale.
   pages: { signIn: "/signin" },

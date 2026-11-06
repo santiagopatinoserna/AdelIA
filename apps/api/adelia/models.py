@@ -48,6 +48,14 @@ class User(Base):
     # loads to prove the account exists.
     token_version = Column(Integer, nullable=False, server_default=text("0"))
 
+    # A guest of the landing (migration 0025, decision of 2026-11-06): the demo
+    # is the real app, so a visitor gets a real row, a real child (Lucía) and
+    # keeps what she does. `email` then holds a synthetic `.invalid` address
+    # (services/guest.py); this flag is what the code reads. It grants access
+    # without a card and without an end date (auth.user_has_access), and it is
+    # cleared the day she saves the account with her email.
+    is_guest = Column(Boolean, nullable=False, server_default=text("false"))
+
 
 class Document(Base):
     __tablename__ = "documents"
@@ -268,6 +276,9 @@ class ChatSession(Base):
         UUID(as_uuid=True), ForeignKey("profiles.id", ondelete="CASCADE"), nullable=True
     )
     title = Column(String, nullable=False, default="Nueva conversación")
+    # 'chat' (the RAG chat) or 'agent' (the /dashboard agent, stored since 0025
+    # so a reload keeps the conversation and the history lists it).
+    surface = Column(String(16), nullable=False, server_default=text("'chat'"))
     created_at = Column(DateTime(timezone=True), server_default=func.now())
     updated_at = Column(DateTime(timezone=True), server_default=func.now(), onupdate=func.now())
     deleted_at = Column(DateTime(timezone=True))
@@ -281,6 +292,8 @@ class ChatMessage(Base):
     role = Column(String, nullable=False)  # 'user' | 'assistant'
     content = Column(Text, nullable=False)
     citations = Column(JSONB)  # list of {chunk_id, document_id, raw_quote, page}
+    # The [ev_N] cards of an agent answer (0025), so a restored turn keeps its sources.
+    evidence_citations = Column(JSONB)
     created_at = Column(DateTime(timezone=True), server_default=func.now())
 
     __table_args__ = (
@@ -558,3 +571,30 @@ class FunnelCounter(Base):
     day = Column(Date, primary_key=True)
     event = Column(String(32), primary_key=True)
     count = Column(BigInteger, nullable=False, server_default=text("0"))
+
+
+class GuestClaim(Base):
+    """"Guardar mi cuenta" in flight (migration 0025, services/guest.py).
+
+    Only the sha256 of the token is stored: the token itself travels in the
+    magic link, and whoever opens that link has proved the email, which is the
+    one thing the claim needs to know.
+    """
+
+    __tablename__ = "guest_claims"
+    token_hash = Column(String(64), primary_key=True)
+    guest_id = Column(
+        UUID(as_uuid=True), ForeignKey("users.id", ondelete="CASCADE"), nullable=False, index=True
+    )
+    email = Column(String, nullable=False)
+    expires_at = Column(DateTime(timezone=True), nullable=False)
+    created_at = Column(DateTime(timezone=True), server_default=func.now(), nullable=False)
+
+
+class DemoSeedEmbedding(Base):
+    """One vector per text of Lucía's seeded record, shared by every guest (0025)."""
+
+    __tablename__ = "demo_seed_embeddings"
+    content_sha256 = Column(String(64), primary_key=True)
+    embedding = Column(Vector(1024), nullable=False)
+    created_at = Column(DateTime(timezone=True), server_default=func.now(), nullable=False)

@@ -2,19 +2,20 @@
 import { useEffect, useRef, useState } from "react";
 import { useTranslations } from "next-intl";
 import { streamAgent, getSuggestions } from "@/lib/agent-client-browser";
-import type { AgentCard } from "@/lib/agent-types";
+import type { AgentCard, AgentThread } from "@/lib/agent-types";
 import type { Citation, EvidenceCitation } from "@/lib/chat-types";
 import { AnswerContent } from "@/components/answer-content";
 import { CitationCard } from "@/components/citation-card";
 import { EvidenceCard } from "@/components/evidence-card";
-import { Database, BookMarked, RotateCcw } from "lucide-react";
+import { Database, BookMarked, Mic, RotateCcw, UserRoundCheck } from "lucide-react";
 import { CardRenderer, type CardActionHandler } from "./cards/card-renderer";
 import { AgentInput } from "./agent-input";
 import { ProfileSwitcher } from "./profile-switcher";
 import { CapabilityShowcase } from "@/components/capability-showcase";
 import { GrowthMark, useGrowthMarkLabel } from "./growth-mark";
 import { useActiveProfile } from "@/lib/profile-context";
-import { useRouter } from "@/lib/navigation";
+import { Link, useRouter } from "@/lib/navigation";
+import { takeLandingQuestion } from "@/lib/landing-question";
 
 // An assistant turn now carries what it cited (audit 3.7). Empty arrays on a
 // user turn and on any answer that cited nothing, which is most of them.
@@ -64,16 +65,29 @@ const TELEGRAM_BOT_URL = `https://t.me/${process.env.NEXT_PUBLIC_TELEGRAM_BOT ??
 // page fetches it and swaps it when she picks another child; the canvas only
 // decides where it sits, under the greeting and before the showcase, and only
 // while the thread is empty.
+//
+// `initialThread` is the stored conversation she was in (GET /agent/thread),
+// read on the server. The panel still opens on her baby and "Hoy", as every
+// account's always has; "Seguir la conversación" brings the thread back in one
+// tap. `askKey` names the question she typed on the landing
+// (lib/landing-question): it is sent once, on mount.
 export function AgentCanvas({
   locale,
   userId,
   today = null,
+  initialThread = null,
+  askKey = null,
+  isGuest = false,
 }: {
   locale: string;
   userId: string;
   today?: React.ReactNode;
+  initialThread?: AgentThread | null;
+  askKey?: string | null;
+  isGuest?: boolean;
 }) {
   const t = useTranslations("agent");
+  const tg = useTranslations("guestSpace");
   const router = useRouter();
   const { activeId, profiles } = useActiveProfile();
   // Her baby's name in the greeting when we have it: the same server-fed
@@ -83,7 +97,26 @@ export function AgentCanvas({
   const active = profiles.find((p) => p.id === activeId);
   const activeName = active?.relationship === "child" ? active.display_name?.trim() : undefined;
   const growthMark = useGrowthMarkLabel();
+  // Only a thread about the child on screen can be resumed; one about a
+  // sibling stays in the history.
+  const resumable =
+    initialThread && initialThread.messages.length > 0 &&
+    (!initialThread.profile_id || initialThread.profile_id === activeId)
+      ? initialThread
+      : null;
   const [messages, setMessages] = useState<Msg[]>([]);
+  // The stored conversation the next turn continues (services/agent_thread).
+  const threadRef = useRef<string | null>(null);
+  const [resumed, setResumed] = useState(false);
+  function resume() {
+    if (!resumable) return;
+    threadRef.current = resumable.id;
+    setResumed(true);
+    setMessages(resumable.messages.map((m) => ({
+      role: m.role, content: m.content,
+      citations: m.citations ?? [], evidence_citations: m.evidence_citations ?? [],
+    })));
+  }
   const [cards, setCards] = useState<AgentCard[]>([]);
   const [busy, setBusy] = useState(false);
   const abortRef = useRef<AbortController | null>(null);
@@ -103,6 +136,17 @@ export function AgentCanvas({
     getSuggestions(activeId, locale).then((c) => { if (alive) setCards(withSuggestions(c)); }).catch(() => {});
     return () => { alive = false; };
   }, [activeId, locale]);
+
+  // The landing's question, answered here and only once: taking it out of
+  // sessionStorage is what makes a second mount (React's dev double effect, a
+  // reload) find nothing to send. The ?ask key leaves the address bar too.
+  useEffect(() => {
+    if (!askKey) return;
+    const question = takeLandingQuestion(askKey);
+    router.replace("/dashboard");
+    if (question) void drive({ message: question });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [askKey]);
 
   // `display` is what her bubble shows when it differs from what the API
   // gets: a clarify press sends her question again with the value, and the
@@ -136,11 +180,16 @@ export function AgentCanvas({
       ]);
     try {
       for await (const ev of streamAgent(
-        { ...body, profile_id: activeId, locale, ...(history ? { history } : {}) },
+        {
+          ...body, profile_id: activeId, locale, thread_id: threadRef.current,
+          ...(history ? { history } : {}),
+        },
         controller.signal,
       )) {
         if (stale()) break;
-        if (ev.type === "token") {
+        if (ev.type === "thread") {
+          threadRef.current = ev.thread_id;
+        } else if (ev.type === "token") {
           setMessages((p) => { const n = [...p]; const last = n[n.length - 1];
             if (last?.role === "assistant") n[n.length - 1] = { ...last, content: last.content + ev.content }; return n; });
         } else if (ev.type === "card") {
@@ -239,6 +288,56 @@ export function AgentCanvas({
       {/* Chat column — the page's main landmark */}
       <main className="flex min-h-0 flex-1 flex-col">
         <ProfileSwitcher />
+        {/* "Falta el botón para grabar la cita con el médico" (2026-11-06):
+            the real recorder, consent first, one tap from the main screen,
+            for every account, and visible while a conversation is open too.
+            A guest also finds here the one way to keep what she did. */}
+        {/* A <header>, not a <div>: the thread below stays the first div of
+            this column, the scroll area whose bottom is the fold
+            (e2e/showcase.spec.ts measures it as `main > div`). */}
+        <header className="flex flex-wrap items-center gap-2 px-3 pt-2">
+          <Link
+            href="/dashboard/consulta/grabar"
+            data-testid="record-consult"
+            className="ad-btn ad-btn-ghost min-h-[44px] px-3.5 text-sm"
+          >
+            <Mic className="h-4 w-4" strokeWidth={2.2} aria-hidden />
+            {tg("recordConsult")}
+          </Link>
+          {messages.length === 0 && resumable && !resumed && !askKey && (
+            <button
+              type="button"
+              data-testid="continue-conversation"
+              onClick={resume}
+              className="ad-btn ad-btn-ghost min-h-[44px] px-3.5 text-sm"
+            >
+              {tg("continueConversation")}
+            </button>
+          )}
+          {/* A conversation hides the greeting and "Hoy": this is the way
+              back to them. The conversation stays in the history. */}
+          {messages.length > 0 && (
+            <button
+              type="button"
+              data-testid="new-conversation"
+              disabled={busy}
+              onClick={() => { threadRef.current = null; setMessages([]); }}
+              className="ad-btn ad-btn-ghost min-h-[44px] px-3.5 text-sm"
+            >
+              {tg("newConversation")}
+            </button>
+          )}
+          {isGuest && (
+            <Link
+              href="/dashboard/guardar"
+              data-testid="save-account"
+              className="inline-flex min-h-[44px] items-center gap-1.5 px-2 text-sm font-medium text-primary-text underline underline-offset-4"
+            >
+              <UserRoundCheck className="h-4 w-4" strokeWidth={2} aria-hidden />
+              {tg("saveLink")}
+            </Link>
+          )}
+        </header>
         {/* Empty state on md+: the greeting, the mark and the showcase are
             the only children, so `justify-content` centres the block instead
             of leaving 44 % of the column blank under it with nothing to
@@ -363,7 +462,10 @@ export function AgentCanvas({
             ).map((c) => <CardRenderer key={c.id} card={c} onAction={onCardAction} />)}
           </div>
         </div>
+        {/* After an answer the field says it continues the same topic: the
+            history of this conversation rides with the next question. */}
         <AgentInput locale={locale} disabled={busy} onStop={() => abortRef.current?.abort()}
+                    placeholder={messages.length > 0 ? tg("followUpPlaceholder") : undefined}
                     onSubmit={(text) => void drive({ message: text })} />
       </main>
       {/* Desktop: card rail beside the chat. It is rendered unconditionally on

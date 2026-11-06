@@ -1,5 +1,6 @@
 from __future__ import annotations
 import json
+import logging
 import uuid
 from typing import Annotated, Literal
 
@@ -12,7 +13,9 @@ from adelia.auth import get_current_user_id, require_active_subscription
 from adelia.agent.events import AgentEvent
 from adelia.agent.orchestrator import run_turn
 from adelia.agent.suggestions import build_suggestions
+from adelia.services import agent_thread
 
+logger = logging.getLogger(__name__)
 router = APIRouter(prefix="/agent", tags=["agent"])
 # A turn is up to MAX_STEPS model calls plus a full RAG answer per tool call;
 # the suggestion cards on the dashboard are a cheap read of her own state.
@@ -80,6 +83,9 @@ class AgentTurnRequest(BaseModel):
     history: list[AgentMessage] | None = Field(
         default=None, max_length=HISTORY_HARD_LIMIT_MESSAGES
     )
+    #: The stored conversation this turn continues (services/agent_thread);
+    #: the `start` frame hands it to the browser on the first turn.
+    thread_id: uuid.UUID | None = None
 
     @field_validator("history")
     @classmethod
@@ -137,13 +143,41 @@ async def post_turn(payload: AgentTurnRequest,
     history = [m.model_dump() for m in payload.history] if payload.history else None
 
     async def event_publisher():
-        yield {"event": "start", "data": json.dumps({})}
+        # The browser's thread when it has one. A first stored turn opens one,
+        # and the `thread` frame after `final` hands its id back.
+        thread_id = payload.thread_id
+        yield {"event": "start", "data": json.dumps(
+            {"thread_id": str(thread_id) if thread_id else None})}
         clarification = payload.clarification.model_dump() if payload.clarification else None
+        answer: list[str] = []
+        final: AgentEvent | None = None
+        failed = False
         async for event in run_turn(user_id=user_id, profile_id=payload.profile_id,
                                     message=payload.message, card_action=card_action,
                                     history=history, locale=payload.locale,
                                     clarification=clarification):
+            if event.type == "token":
+                answer.append(event.content)
+            elif event.type == "final":
+                final = event
+            elif event.type == "error":
+                failed = True
             yield _map_event(event)
+        if failed:
+            return
+        try:
+            stored = await agent_thread.record_turn(
+                user_id=user_id, thread_id=thread_id, profile_id=payload.profile_id,
+                message=None if clarification else payload.message,
+                answer="".join(answer),
+                citations=final.citations if final else [],
+                evidence_citations=final.evidence_citations if final else [],
+            )
+        except Exception:  # noqa: BLE001 — she has her answer; storing it is second
+            logger.exception("agent turn not stored for user %s", user_id)
+            return
+        if stored is not None and stored != thread_id:
+            yield {"event": "thread", "data": json.dumps({"thread_id": str(stored)})}
 
     return EventSourceResponse(event_publisher())
 
@@ -151,3 +185,13 @@ async def post_turn(payload: AgentTurnRequest,
 async def get_suggestions(user_id: Annotated[uuid.UUID, Depends(get_current_user_id)],
                           profile_id: uuid.UUID | None = None, locale: str = "es"):
     return {"cards": await build_suggestions(user_id=user_id, profile_id=profile_id, locale=locale)}
+
+
+@router.get("/thread")
+async def get_thread(user_id: Annotated[uuid.UUID, Depends(get_current_user_id)],
+                     profile_id: uuid.UUID | None = None):
+    """The conversation she is in, to pick it up after a reload (null when none).
+
+    Not behind the paywall, like the suggestions: it reads her own record.
+    """
+    return {"thread": await agent_thread.latest_thread(user_id=user_id, profile_id=profile_id)}

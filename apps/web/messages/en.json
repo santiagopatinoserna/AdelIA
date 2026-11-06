@@ -1069,7 +1069,13 @@
     "readMoreTitleAnswer": "What this answer is based on",
     "readMoreTitleExperience": "Where these experiences come from",
     "readMoreSources": "{count, plural, one {# source to read} other {# sources to read}}",
-    "plan": {"today": "Today", "watch": "Watch for", "doctor": "When to see a doctor", "remember": "Don’t forget", "mothers": "What other mothers say"},
+    "plan": {
+      "today": "Today",
+      "watch": "Watch for",
+      "doctor": "When to see a doctor",
+      "remember": "Don’t forget",
+      "mothers": "What other mothers say"
+    },
     "mothersLabel": "Other families’ experience, not medical evidence",
     "experienceBadge": "Experience",
     "sourcesExperienceTitle": "What other mothers and fathers say",
@@ -1095,5 +1101,26 @@
   "today": {
     "title": "Today",
     "titleWithName": "Today with {name}"
+  },
+  "guestSpace": {
+    "landingNote": "No account, no card. What you do here is kept in your space with Lucía, and you can delete it whenever you want in Settings.",
+    "landingRecord": "Record the appointment with the doctor",
+    "recordConsult": "Record the appointment",
+    "followUpPlaceholder": "Ask more about this",
+    "saveLink": "Save my account",
+    "saveTitle": "Save my account",
+    "saveBody": "Enter your email and we will send you a link. Lucía and everything you did stay with you.",
+    "saveEmailLabel": "Your email",
+    "saveCta": "Send the link",
+    "saveSent": "We sent you a link. Open it to save your account.",
+    "saveError": "We could not send it. Check the email and try again.",
+    "saveFailed": "That link no longer works. Ask for a new one from Save my account.",
+    "settingsGuestBody": "You are using AdelIA without an account. If you delete your space, Lucía and everything you did are deleted.",
+    "privacyTitle": "If you use AdelIA without an account",
+    "privacyBody": "When you ask your first question on the home page we open a guest space for you, without asking for an email. Lucía lives there, a baby we invented so you can try AdelIA, and that is where we keep what you do: your questions and the answers, what you note, documents, recordings and reports. It is treated like an account, with the same providers and the same encryption, and nobody else sees it. It is not deleted on its own: you can delete all of it in Settings, or save it with your email so you do not lose it. Your browser keeps a session cookie to bring you back to your space; if you clear it, we cannot give you access again.",
+    "backToPanel": "Back to AdelIA",
+    "deleteConfirmLabel": "Type Lucía to confirm",
+    "newConversation": "New conversation",
+    "continueConversation": "Continue the conversation"
   }
 }

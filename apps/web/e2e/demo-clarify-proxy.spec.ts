@@ -1,5 +1,9 @@
 import { expect, test } from "@playwright/test";
 import es from "../messages/es.json";
+import { forceKeylessDemo } from "./utils/keyless-demo";
+
+// The landing's own answer, drawn when no guest can be created (see the helper).
+test.beforeEach(async ({ page }) => forceKeylessDemo(page));
 
 // The clarify loop through the REAL proxy (app/api/demo/ask/route.ts) and the
 // real API, with nothing mocked. 2026-10-23: the proxy forwarded only

@@ -24,6 +24,9 @@ export async function generateMetadata({
 
 export default function PrivacyPage() {
   const t = useTranslations("privacy");
+  // Guests of the landing (2026-11-06): their own block of keys, drafted for
+  // Santiago's review, rendered after the sections every account reads.
+  const tg = useTranslations("guestSpace");
 
   const sections = [
     ["whatTitle", "whatBody"],
@@ -81,6 +84,10 @@ export default function PrivacyPage() {
               </p>
             </section>
           ))}
+          <section data-testid="privacy-guest" className="ad-card p-6">
+            <h2 className="font-display text-xl font-semibold text-ink">{tg("privacyTitle")}</h2>
+            <p className="mt-3 text-[15px] leading-relaxed text-ink">{tg("privacyBody")}</p>
+          </section>
         </div>
       </main>
     </div>

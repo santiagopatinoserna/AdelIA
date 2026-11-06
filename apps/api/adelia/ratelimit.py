@@ -38,6 +38,13 @@ ROUTE_BUDGETS: list[tuple[str, str, int]] = [
     # launch day.
     ("POST", "/demo", 20),
     ("GET", "/demo", 600),           # the fixture: no spend, page-view rate
+    # Guest accounts (routers/guest.py, 2026-11-06). Saving and adopting are
+    # one click each; "/guest/" comes first so they do not spend the brake on
+    # creation below. Creation is public and anti-bot only: a guest spends
+    # nothing at birth (no model call), so this caps identities per address,
+    # not money. The hourly ceiling lives in the router (GUEST_SIGNUPS_PER_HOUR).
+    ("POST", "/guest/", 20),
+    ("POST", "/guest", 5),
     ("POST", "/documents", 10),      # upload + OCR pipeline
     ("POST", "/briefings", 6),       # 5-stage LLM pipeline
     ("POST", "/enrichment/genomics", 5),
@@ -119,6 +126,22 @@ def check(method: str, path: str, identity: str, now: float | None = None) -> tu
             ):
                 del _windows[k]
 
+    return True, 0.0
+
+
+def check_window(
+    group: str, identity: str, budget: int, window_seconds: float, now: float | None = None
+) -> tuple[bool, float]:
+    """One extra fixed window beside the per-minute ones, for a route that also
+    needs a longer ceiling (guest creation per hour). Same store and cap."""
+    now = now if now is not None else time.monotonic()
+    key = (group, identity)
+    window_start, count = _windows.get(key, (now, 0))
+    if now - window_start >= window_seconds:
+        window_start, count = now, 0
+    if count >= budget:
+        return False, max(0.0, window_seconds - (now - window_start))
+    _windows[key] = (window_start, count + 1)
     return True, 0.0
 
 

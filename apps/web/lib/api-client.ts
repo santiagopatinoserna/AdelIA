@@ -39,4 +39,7 @@ export const enrichment = api.enrichment;
 export const billingStatus = api.billingStatus;
 export const onboarding = api.onboarding;
 export const today = api.today;
+export const agentThread = api.agentThread;
+export const claimGuest = api.claimGuest;
+export const adoptGuest = api.adoptGuest;
 export type { BabyOnboarding, BillingStatus, OnboardingStatus, TodayDTO, TodayItem } from "./api-endpoints";

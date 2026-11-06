@@ -4,6 +4,10 @@ import path from "node:path";
 import es from "../messages/es.json";
 import en from "../messages/en.json";
 import fr from "../messages/fr.json";
+import { forceKeylessDemo } from "./utils/keyless-demo";
+
+// The landing's own answer, drawn when no guest can be created (see the helper).
+test.beforeEach(async ({ page }) => forceKeylessDemo(page));
 
 const root = process.cwd();
 const homeCss = readFileSync(path.join(root, "app/[locale]/home.module.css"), "utf8");
@@ -57,14 +61,15 @@ test("composition: secondary controls are usable with one hand", async ({ page }
 });
 
 test("composition: data handling is disclosed before optional product information", () => {
-  expect(homePage.indexOf('t("demo.noStore")'))
+  // Since 2026-11-06 the line says what is kept and where to delete it.
+  expect(homePage.indexOf('t("guestSpace.landingNote")'))
     .toBeLessThan(homePage.indexOf('data-testid="home-about"'));
 });
 
 test("composition: clinical footer stays outside optional product information", () => {
   const supportEnd = homePage.indexOf("</details>");
   expect(homePage.indexOf('t("home.footerDisclaimer")')).toBeGreaterThan(supportEnd);
-  expect(homePage).toContain('t("demo.noStore")');
+  expect(homePage).toContain('t("guestSpace.landingNote")');
   expect(homePage).toContain('t("home.footerPrivacy")');
   expect(homePage).toContain('t("home.footerTerms")');
 });

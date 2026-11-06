@@ -1069,7 +1069,13 @@
     "readMoreTitleAnswer": "Sur quoi repose cette réponse",
     "readMoreTitleExperience": "D’où viennent ces expériences",
     "readMoreSources": "{count, plural, one {# source à consulter} other {# sources à consulter}}",
-    "plan": {"today": "Aujourd’hui", "watch": "À surveiller", "doctor": "Quand consulter", "remember": "À ne pas oublier", "mothers": "Ce que racontent d’autres mères"},
+    "plan": {
+      "today": "Aujourd’hui",
+      "watch": "À surveiller",
+      "doctor": "Quand consulter",
+      "remember": "À ne pas oublier",
+      "mothers": "Ce que racontent d’autres mères"
+    },
     "mothersLabel": "Expériences d’autres familles, pas une preuve médicale",
     "experienceBadge": "Expérience",
     "sourcesExperienceTitle": "Ce que racontent d’autres mères et pères",
@@ -1095,5 +1101,26 @@
   "today": {
     "title": "Aujourd’hui",
     "titleWithName": "Aujourd’hui avec {name}"
+  },
+  "guestSpace": {
+    "landingNote": "Sans compte et sans carte. Ce que tu fais ici est gardé dans ton espace avec Lucía, et tu peux l’effacer quand tu veux dans Réglages.",
+    "landingRecord": "Enregistrer la consultation chez le médecin",
+    "recordConsult": "Enregistrer la consultation",
+    "followUpPlaceholder": "Demande-en plus à ce sujet",
+    "saveLink": "Garder mon compte",
+    "saveTitle": "Garder mon compte",
+    "saveBody": "Écris ton e-mail et on t’envoie un lien. Lucía et tout ce que tu as fait restent avec toi.",
+    "saveEmailLabel": "Ton e-mail",
+    "saveCta": "Envoyer le lien",
+    "saveSent": "On t’a envoyé un lien. Ouvre-le pour garder ton compte.",
+    "saveError": "On n’a pas pu l’envoyer. Vérifie l’e-mail et réessaie.",
+    "saveFailed": "Ce lien ne marche plus. Demandes-en un autre depuis Garder mon compte.",
+    "settingsGuestBody": "Tu utilises AdelIA sans compte. Si tu effaces ton espace, Lucía et tout ce que tu as fait sont effacés.",
+    "privacyTitle": "Si tu utilises AdelIA sans compte",
+    "privacyBody": "À ta première question sur la page d’accueil, on t’ouvre un espace invité, sans te demander d’e-mail. Lucía y vit, une bébé inventée pour que tu puisses essayer AdelIA, et c’est là qu’on garde ce que tu fais : tes questions et les réponses, ce que tu notes, les documents, les enregistrements et les comptes rendus. C’est traité comme un compte, avec les mêmes prestataires et le même chiffrement, et personne d’autre ne le voit. Rien ne s’efface tout seul : tu peux tout effacer dans Réglages, ou le garder avec ton e-mail pour ne pas le perdre. Ton navigateur garde un cookie de session pour te ramener à ton espace ; si tu l’effaces, on ne peut pas te rendre l’accès.",
+    "backToPanel": "Retour à AdelIA",
+    "deleteConfirmLabel": "Écris Lucía pour confirmer",
+    "newConversation": "Nouvelle conversation",
+    "continueConversation": "Reprendre la conversation"
   }
 }

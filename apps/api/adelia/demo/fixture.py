@@ -1,9 +1,12 @@
-"""The demo baby (audit 4.6). Invented, in memory, in three languages.
+"""The demo baby (audit 4.6). Invented, in three languages.
 
-Nothing here is a person and nothing here is written anywhere. The fixture is
-a module-level constant the demo endpoints read; the public demo therefore
-cannot create a user, cannot touch another account's record, and cannot leave
-a row behind, because there is no code path from /demo to a write.
+Nothing here is a person. The fixture is a module-level constant the demo
+endpoints read, and /demo itself still has no code path to a write.
+
+Since 2026-11-06 ("la demo es la app real") the same story is also the seed
+of every guest account: services/guest.py copies it into a guest's own rows,
+so the panel, "Hoy" and the agent read Lucía as they read any child. The text
+is copied, never generated, and this module stays the one source of it.
 
 Three properties this fixture must keep:
 
@@ -56,7 +59,7 @@ _CONTENT: dict[str, dict] = {
         "banner": (
             "Esta es la historia de Lucía, creada para que puedas probar AdelIA. "
             "Sus revisiones y consultas te ayudarán a ver cómo tiene en cuenta "
-            "lo que le ha ido pasando. No se guarda nada de lo que escribas aquí."
+            "lo que le ha ido pasando."
         ),
         "record_title": "La historia de Lucía",
         "record_note": "Su historia hasta hoy",
@@ -112,8 +115,7 @@ _CONTENT: dict[str, dict] = {
         "age_label": "5 months",
         "banner": (
             "Lucía’s story was created so you can try AdelIA. Her check-ups and "
-            "appointments show how her history informs the answers. "
-            "Nothing you type is saved."
+            "appointments show how her history informs the answers."
         ),
         "record_title": "Lucía's story",
         "record_note": "Her story so far",
@@ -169,8 +171,7 @@ _CONTENT: dict[str, dict] = {
         "age_label": "5 mois",
         "banner": (
             "L’histoire de Lucía a été créée pour que tu puisses essayer AdelIA. "
-            "Ses consultations montrent comment son histoire éclaire les réponses. "
-            "Rien de ce que tu écris ici n’est conservé."
+            "Ses consultations montrent comment son histoire éclaire les réponses."
         ),
         "record_title": "L’histoire de Lucía",
         "record_note": "Son histoire jusqu’ici",

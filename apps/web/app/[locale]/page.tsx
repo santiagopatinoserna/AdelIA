@@ -5,6 +5,7 @@ import { DemoAsk } from "@/components/demo-ask";
 import { DemoRecord } from "@/components/demo-record";
 import { FunnelVisit, StartLink } from "@/components/funnel";
 import { LocaleSwitcher } from "@/components/locale-switcher";
+import { auth } from "@/lib/auth";
 import { getCorpusStats } from "@/lib/corpus-stats";
 import { loadDemoProfile } from "@/lib/demo-profile";
 import { Link } from "@/lib/navigation";
@@ -54,9 +55,12 @@ export async function generateMetadata({
 export default async function HomePage() {
   const t = await getTranslations();
   const locale = await getLocale();
-  const [stats, profile] = await Promise.all([
+  // `session`: a visitor who already has her space (a guest) or an account in
+  // this browser goes straight back to it with her question (DemoAsk).
+  const [stats, profile, session] = await Promise.all([
     getCorpusStats(),
     loadDemoProfile(locale),
+    auth().catch(() => null),
   ]);
 
   const number = new Intl.NumberFormat(locale);
@@ -156,6 +160,7 @@ export default async function HomePage() {
             <DemoAsk
               suggested={profile?.suggested ?? []}
               corpusStats={stats ? { sources: stats.sources, chunks: stats.chunks } : undefined}
+              hasSession={Boolean(session?.jwt)}
             />
           </div>
         </section>
@@ -163,7 +168,7 @@ export default async function HomePage() {
         {/* 2. Who it is about: fictional, folded */}
         <div className={styles.record}>
           <DemoRecord profile={profile} />
-          <p className="mt-3 text-sm leading-relaxed text-ink-soft">{t("demo.noStore")}</p>
+          <p className="mt-3 text-sm leading-relaxed text-ink-soft">{t("guestSpace.landingNote")}</p>
         </div>
 
         </div>

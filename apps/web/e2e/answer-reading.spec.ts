@@ -13,6 +13,10 @@ import type { AnswerSourceContext as SourceContextType } from "@/components/answ
 import es from "../messages/es.json";
 import en from "../messages/en.json";
 import fr from "../messages/fr.json";
+import { forceKeylessDemo } from "./utils/keyless-demo";
+
+// The landing's own answer, drawn when no guest can be created (see the helper).
+test.beforeEach(async ({ page }) => forceKeylessDemo(page));
 
 // These responses exercise presentation only, not the model or clinical correctness.
 test.use({ viewport: { width: 390, height: 844 } });

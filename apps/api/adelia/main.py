@@ -21,6 +21,7 @@ from adelia.routers import (
     documents,
     enrichment,
     funnel,
+    guest,
     health,
     ingestion,
     ingestion_webhooks,
@@ -174,6 +175,8 @@ async def lifespan(app: FastAPI):
     from adelia.routers.users import drain_erasure_sweeps
 
     await drain_erasure_sweeps()
+    # And the embedding fills a guest's creation starts after its 201.
+    await guest.drain_seed_tasks()
     for task in (sweep_task, reminder_task):
         if task is None:
             continue
@@ -286,4 +289,5 @@ app.include_router(today.router)
 # Public, unauthenticated, and deliberately last so the list reads as
 # "everything above needs a session; these two do not" (audit 4.6, 4.8).
 app.include_router(demo.router)
+app.include_router(guest.router)
 app.include_router(funnel.router)

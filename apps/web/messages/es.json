@@ -1069,7 +1069,13 @@
     "readMoreTitleAnswer": "En qué se basa esta respuesta",
     "readMoreTitleExperience": "De dónde salen estas experiencias",
     "readMoreSources": "{count, plural, one {# fuente para consultar} other {# fuentes para consultar}}",
-    "plan": {"today": "Hoy", "watch": "Vigila", "doctor": "Cuándo ir al médico", "remember": "No olvides", "mothers": "Lo que cuentan otras madres"},
+    "plan": {
+      "today": "Hoy",
+      "watch": "Vigila",
+      "doctor": "Cuándo ir al médico",
+      "remember": "No olvides",
+      "mothers": "Lo que cuentan otras madres"
+    },
     "mothersLabel": "Experiencias de otras familias, no evidencia médica",
     "experienceBadge": "Experiencia",
     "sourcesExperienceTitle": "Lo que cuentan otras madres y padres",
@@ -1095,5 +1101,26 @@
   "today": {
     "title": "Hoy",
     "titleWithName": "Hoy con {name}"
+  },
+  "guestSpace": {
+    "landingNote": "Sin cuenta y sin tarjeta. Lo que hagas aquí se guarda en tu espacio con Lucía, y puedes borrarlo cuando quieras en Ajustes.",
+    "landingRecord": "Grabar la consulta con el médico",
+    "recordConsult": "Grabar la consulta",
+    "followUpPlaceholder": "Pregunta más sobre esto",
+    "saveLink": "Guardar mi cuenta",
+    "saveTitle": "Guardar mi cuenta",
+    "saveBody": "Escribe tu correo y te mandamos un enlace. Lucía y todo lo que has hecho se quedan contigo.",
+    "saveEmailLabel": "Tu correo",
+    "saveCta": "Mandar el enlace",
+    "saveSent": "Te hemos mandado un enlace. Ábrelo para guardar tu cuenta.",
+    "saveError": "No hemos podido mandarlo. Revisa el correo y vuelve a probar.",
+    "saveFailed": "Ese enlace ya no sirve. Pide otro desde Guardar mi cuenta.",
+    "settingsGuestBody": "Ahora usas AdelIA sin cuenta. Si borras tu espacio, se borran Lucía y todo lo que has hecho.",
+    "privacyTitle": "Si usas AdelIA sin cuenta",
+    "privacyBody": "Al hacer tu primera pregunta en la portada te abrimos un espacio de invitado, sin pedirte correo. Ahí está Lucía, una bebé inventada para que pruebes AdelIA, y ahí guardamos lo que hagas: tus preguntas y las respuestas, lo que anotes, los documentos, las grabaciones y los informes. Se trata igual que una cuenta, con los mismos proveedores y el mismo cifrado, y nadie más lo ve. No se borra solo: puedes borrarlo entero en Ajustes, o guardarlo con tu correo para no perderlo. Tu navegador guarda una cookie de sesión para volver a tu espacio; si la borras, no podemos devolverte el acceso.",
+    "backToPanel": "Volver a AdelIA",
+    "deleteConfirmLabel": "Escribe Lucía para confirmar",
+    "newConversation": "Nueva conversación",
+    "continueConversation": "Seguir la conversación"
   }
 }

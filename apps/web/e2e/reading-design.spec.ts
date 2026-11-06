@@ -1,4 +1,8 @@
 import { expect, test } from "@playwright/test";
+import { forceKeylessDemo } from "./utils/keyless-demo";
+
+// The landing's own answer, drawn when no guest can be created (see the helper).
+test.beforeEach(async ({ page }) => forceKeylessDemo(page));
 
 for (const locale of ["es", "en", "fr"]) {
   test(`landing: the main idea fits in four lines on a phone (${locale})`, async ({ page }) => {
