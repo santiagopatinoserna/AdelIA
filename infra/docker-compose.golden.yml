@@ -1,0 +1,23 @@
+# The deploy's clinical gate (docs/GOLDEN_GATE_DESPLIEGUE.md). An overlay,
+# always passed AFTER the production file and only by
+# scripts/prod-golden-gate.sh:
+#   docker compose -f infra/docker-compose.prod.yml -f infra/docker-compose.golden.yml \
+#     --env-file .env.prod --profile golden run --rm --no-deps api-golden ...
+#
+# `api-golden` is the api service (same environment, same network, same
+# .env.prod) built from the `golden` stage of apps/api/Dockerfile, which is
+# the new production image plus tests/ and the dev tools. `run` never
+# publishes its ports and `--no-deps` never touches postgres or minio. The
+# profile keeps a bare `up` from ever starting it.
+services:
+  api-golden:
+    extends:
+      file: docker-compose.prod.yml
+      service: api
+    build:
+      context: ../apps/api
+      target: golden
+    profiles: ["golden"]
+    restart: "no"
+    healthcheck:
+      disable: true

@@ -67,6 +67,7 @@ from adelia.agent import lay_terms  # noqa: E402
 from adelia.agent import record as rec  # noqa: E402
 from adelia.agent.route import RouteDecision  # noqa: E402
 from adelia.clinical import red_flags  # noqa: E402
+from adelia.clinical.golden import is_refusal  # noqa: E402
 from adelia.clinical.age_scope import child_outside_scope  # noqa: E402
 from adelia.config import settings  # noqa: E402
 from adelia.db import AsyncSessionLocal  # noqa: E402
@@ -670,6 +671,36 @@ def _cited_only(cards: list[dict], answer: str) -> list[dict]:
     return [c for c in cards if c.get("tag") in tags]
 
 
+_EX_MARKER = re.compile(r"\[(ex_\d+)\]")
+
+
+def _refuses(text: str) -> bool:
+    """Whether the model's text carries the coded refusal, in any language.
+
+    The same check the golden gate scores with (`golden.is_refusal`), over
+    every locale: a parent may write in English under the Spanish locale and
+    the model answers in her language.
+    """
+    return any(is_refusal(text, locale) for locale in PLAN_HEADINGS)
+
+
+def _refusal_cards(evidence: list[dict], text: str) -> list[dict]:
+    """The cards a text with the coded refusal in it may carry.
+
+    Measured in prod on 2026-11-05 (demo, Claude): B8 refused the jaundice
+    question and went out with a colic post from the mothers tier; B17
+    refused tongue-tie with teethers, crying and babywearing underneath. A
+    parent reads "no tengo evidencia" and then cards: it reads as sourced
+    and unrelated at once. So such a text keeps only what it names: a whole
+    refusal names nothing and carries no card. A mixed answer (B9, B11: one
+    half cited, the coded refusal for the other) keeps its cited evidence
+    (already pruned by `_cited_only`) and only the mothers it cites with
+    [ex_N]: B9 had three sleep posts under a vegetables-and-melatonin answer.
+    """
+    named = set(_EX_MARKER.findall(text))
+    return [c for c in evidence if c.get("tier") != "experience" or c.get("tag") in named]
+
+
 async def compose(state: AgentState) -> dict:
     """The response the surfaces send: citations by kind, and the fixed disclaimer.
 
@@ -698,6 +729,10 @@ async def compose(state: AgentState) -> dict:
             )
         if kind != "answer":
             patient = []
+        elif _refuses(state.get("answer", "")):
+            evidence = _refusal_cards(evidence, state.get("answer", ""))
+            if not markers_in(state.get("answer", ""))[0]:
+                patient = []
     text = state.get("answer", "")
     if text and not state.get("streamed") and kind not in ("clarify", "confirm"):
         _emit({"type": "token", "content": text})

@@ -36,6 +36,35 @@ async def _ask(question: str, *, age_months: int | None = 6):
     return events, seen
 
 
+async def test_a_refusal_in_the_chat_carries_no_card_from_her_record_or_the_corpus():
+    """The demo's B8 and B17 shape, on the chat: the model wrote the coded
+    refusal, and her documents and the guideline it was given went out as
+    cards under "No tengo evidencia"."""
+    from types import SimpleNamespace
+
+    from adelia.services.answer_contract import no_evidence_reply
+
+    chunk = SimpleNamespace(chunk_id=uuid4(), document_id=uuid4(), page=1,
+                            content="Revisión de los 4 meses", parent_content=None)
+
+    async def fake_stream(system_prompt, user_message, history=None, **kwargs):
+        yield no_evidence_reply("es")
+
+    with patch("adelia.services.chat_orchestrator.detect_temporal_intent", return_value=None), \
+         patch("adelia.services.chat_orchestrator.retrieve_relevant_chunks",
+               return_value=[chunk]), \
+         patch("adelia.services.chat_orchestrator.embed_texts", return_value=[[0.1] * 1024]), \
+         patch("adelia.services.chat_orchestrator._retrieve_evidence_for_query",
+               return_value=[_evidence_match()]), \
+         patch("adelia.services.chat_orchestrator._stream_llm_tokens", fake_stream):
+        events = [e async for e in answer_question_streaming(
+            user_id=uuid4(), question="¿Es la ictericia del recién nacido?", locale="es",
+            age_months=4)]
+    final = events[-1]
+    assert final.type == "final"
+    assert final.citations == [] and final.evidence_citations == []
+
+
 async def test_a_fact_question_streams_the_short_answer():
     events, seen = await _ask("¿A qué edad empiezan a gatear?")
     assert seen["system"] == chat_system_prompt("es", shape="question")
