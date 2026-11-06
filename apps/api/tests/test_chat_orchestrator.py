@@ -685,6 +685,10 @@ async def test_with_the_subject_on_the_chat_also_searches_with_the_baby(
     mock_embed.assert_awaited_once_with([_NO_SUBJECT, f"Mi bebé de 7 meses: {_NO_SUBJECT}"])
     assert mock_chunks.call_args.kwargs["query_embedding"] == [0.1] * 1024
     assert [c.args[0] for c in mock_evidence.await_args_list] == [[0.1] * 1024, [0.2] * 1024]
+    # Her sentence under the calibrated cut, the baby put back under its own
+    # stricter one (tests/test_agent_graph.py has the measurement).
+    cuts = [c.kwargs.get("max_distance") for c in mock_evidence.await_args_list]
+    assert cuts == [None, settings.implicit_subject_max_distance]
     assert out.evidence == [found]
 
 

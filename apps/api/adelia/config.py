@@ -237,6 +237,16 @@ class Settings(BaseSettings):
     # question under the cut and the server golden gate passes; off, retrieval makes
     # exactly the calls it made before this setting existed.
     implicit_subject_expansion: bool = False
+    # The cut-off for that second search only; her own sentence keeps
+    # evidence_max_distance. Measured in prod on 2026-11-06 with
+    # scripts/eval_implicit_subject.py (75 probes): every subject-less worry the
+    # variant rescued matched at 0.1248-0.1631 (fever 0.1273, diarrhoea 0.1329,
+    # cough 0.1371, "She won't eat" 0.1631), while the one golden B it pulled under
+    # 0.19 did so at 0.1834 (B18, head lice at nursery: generic nursery-exclusion
+    # fragments that never mention lice; B3 0.1953 and B2 0.2027 behind it). The
+    # variant is our rewrite of her words, so it must match clearly to admit
+    # anything. Never above evidence_max_distance (the lower of the two applies).
+    implicit_subject_max_distance: float = 0.17
 
     # "Cuándo ir al médico" from the library (agent/warning_signs.py). Measured in prod on
     # 2026-11-06 (demo, Claude, 30 real questions): the croup plan cited AEP, AEPap and

@@ -266,6 +266,7 @@ async def _retrieve_evidence_for_query(
     top_k: int = 4,
     query_text: str | None = None,
     locale: str | None = None,
+    max_distance: float | None = None,
 ) -> list[EvidenceMatch]:
     """Best-effort evidence retrieval. Returns [] on any error (graceful degradation).
 
@@ -273,6 +274,8 @@ async def _retrieve_evidence_for_query(
     cut-off comes from settings.evidence_max_distance (calibrated, see
     docs/CALIBRACION_UMBRAL_EVIDENCIA.md), not from a literal: the literal it
     replaces (0.45) was above the corpus's own diameter and filtered nothing.
+    `max_distance` may only tighten it (the implicit-subject variant passes
+    settings.implicit_subject_max_distance); the lower of the two applies.
 
     `specialties=["pediatrics"]` is what makes the calibration describe the
     code. evidence_chunks also holds 8 adult sources (atrial fibrillation,
@@ -294,7 +297,10 @@ async def _retrieve_evidence_for_query(
                 query_embedding=query_embedding,
                 specialties=["pediatrics"],
                 top_k=top_k,
-                max_distance=settings.evidence_max_distance,
+                max_distance=(
+                    settings.evidence_max_distance if max_distance is None
+                    else min(max_distance, settings.evidence_max_distance)
+                ),
                 relative_margin=settings.evidence_relative_margin,
                 query_text=query_text,
                 locale=locale,
@@ -468,10 +474,18 @@ async def retrieve_for_account(
     evidence_matches = await _retrieve_evidence_for_query(
         evidence_embedding, query_text=question, locale=locale
     )
-    also = [
-        await _retrieve_evidence_for_query(extra, query_text=question, locale=locale)
-        for extra in (widened_embedding, subject_embedding) if extra is not None
-    ]
+    also = []
+    if widened_embedding is not None:
+        also.append(await _retrieve_evidence_for_query(
+            widened_embedding, query_text=question, locale=locale
+        ))
+    if subject_embedding is not None:
+        # Our rewrite of her words admits only under its own, stricter cut
+        # (config.implicit_subject_max_distance has the measurement).
+        also.append(await _retrieve_evidence_for_query(
+            subject_embedding, query_text=question, locale=locale,
+            max_distance=settings.implicit_subject_max_distance,
+        ))
     if also:
         evidence_matches = merge_by_best_distance(
             [evidence_matches, *also], top_k=4, relative_margin=settings.evidence_relative_margin

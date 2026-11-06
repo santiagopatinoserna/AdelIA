@@ -856,7 +856,8 @@ async def test_with_the_subject_off_retrieval_is_exactly_what_it_was(monkeypatch
 
 
 async def test_with_the_subject_on_her_sentence_and_the_baby_are_both_searched(monkeypatch):
-    """One embedding call, the same cut-offs on both searches, the demo's age."""
+    """One embedding call, the demo's age; her sentence under the usual cut-offs,
+    the baby put back under its own stricter cut (see the next test)."""
     from adelia.config import settings
 
     _subject_on(monkeypatch)
@@ -868,10 +869,28 @@ async def test_with_the_subject_on_her_sentence_and_the_baby_are_both_searched(m
     assert [s["query_embedding"][0] for s in searches] == [0.0, 1.0]
     for s in searches:
         assert s["specialties"] == ["pediatrics"] and s["top_k"] == 4
-        assert s["max_distance"] == settings.evidence_max_distance
         assert s["relative_margin"] == settings.evidence_relative_margin
+    assert searches[0]["max_distance"] == settings.evidence_max_distance
+    assert searches[1]["max_distance"] == settings.implicit_subject_max_distance
     (_, experience), = [c for c in calls if c[0] == "experience"]
     assert experience["query_embedding"][0] == 0.0, "other mothers: her sentence only"
+
+
+def test_the_baby_put_back_admits_only_under_its_own_stricter_cut():
+    """Measured in prod on 2026-11-06 (scripts/eval_implicit_subject.py, 75 probes):
+    every subject-less worry the variant rescued matched at 0.1248-0.1631 (fever
+    0.1273, diarrhoea 0.1329, cough 0.1371, "She won't eat" 0.1631), while the one
+    golden B it pulled under 0.19 did so at 0.1834 (B18, head lice at nursery:
+    generic nursery-exclusion fragments that never mention lice), with B3 at
+    0.1953 and B2 at 0.2027 behind it. The variant is our rewrite of her words,
+    not her words: it must match clearly to admit anything. Her own sentence keeps
+    the calibrated cut."""
+    from adelia.config import Settings, settings
+
+    cut = Settings.model_fields["implicit_subject_max_distance"].default
+    assert cut == 0.17
+    assert 0.1631 < cut < 0.1834
+    assert cut <= settings.evidence_max_distance
 
 
 async def test_what_only_the_baby_found_is_an_answer_and_the_better_distance_wins(monkeypatch):
