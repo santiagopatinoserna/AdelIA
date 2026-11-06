@@ -110,6 +110,11 @@ services:
       # Off by default; switched on only after scripts/eval_lay_language.py shows
       # more coverage and no group B question under the cut in production.
       LAY_QUERY_EXPANSION: ${LAY_QUERY_EXPANSION:-false}
+      # Warning signs with a source (agent/warning_signs.py) and no refusal for a part
+      # she did not ask (answer_contract.NO_UNASKED_REFUSALS_RULE). Off by default; on
+      # only after scripts/probe_warning_signs.py and the server golden gate pass.
+      WARNING_SIGNS_RETRIEVAL: ${WARNING_SIGNS_RETRIEVAL:-false}
+      NO_UNASKED_REFUSALS: ${NO_UNASKED_REFUSALS:-false}
     ports:
       - "${API_PORT:-8000}:8000"
     healthcheck:
