@@ -11,7 +11,12 @@ from pathlib import Path
 
 import pytest
 
-from adelia.services.answer_contract import CONTRACTS, PLAN_HEADINGS, answer_contract
+from adelia.services.answer_contract import (
+    CONTRACTS,
+    NO_UNASKED_REFUSALS_RULE,
+    PLAN_HEADINGS,
+    answer_contract,
+)
 
 WEB_MESSAGES = Path(__file__).resolve().parents[2] / "web" / "messages"
 
@@ -106,3 +111,80 @@ def test_the_web_catalogue_uses_the_same_plan_headings(locale):
     plan = messages["demo"]["plan"]
     for key, title in PLAN_HEADINGS[locale].items():
         assert plan[key] == title
+
+
+# --- the refusal is only for what she asked (settings.no_unasked_refusals) --------
+#
+# Measured in prod on 2026-11-06 (demo, Claude, 30 real questions): four good
+# plans carried a section the model made up and closed with the coded refusal:
+# "Cremas o pomadas para el pañal", "Edad exacta en meses", "Cómo corregirla"
+# and, under the croup plan, "Señales de alarma y cuándo acudir a urgencias:
+# No tengo evidencia...". She asked none of them. Behind the setting, the
+# contract says the refusal is for what she asked and the sources do not cover,
+# and an unasked part without a source is left out like an empty plan section.
+
+SHAPES_ = ("plan", "question")
+
+
+@pytest.mark.parametrize("locale, required", [
+    ("es", ("solo para lo que la madre ha preguntado y las fuentes no cubren",
+            "que ella no ha pedido", "cremas", "una edad exacta", "cómo corregirlo",
+            "omítelo", "como se omite un apartado vacío del plan",
+            "nunca quita una señal de alarma que las fuentes sí traen")),
+    ("en", ("only for what the parent asked and the sources do not cover",
+            "she did not ask for", "creams", "an exact age", "how to correct it",
+            "leave it out", "the way an empty plan section is left out",
+            "never removes a warning sign the sources do carry")),
+    ("fr", ("réservée à ce que le parent a demandé et que les sources ne couvrent pas",
+            "qu’il n’a pas demandé", "crèmes", "un âge exact", "comment le corriger",
+            "omets-le", "comme on omet une rubrique vide du plan",
+            "n’enlève jamais un signe d’alerte que les sources apportent")),
+])
+def test_the_unasked_refusal_rule_says_the_same_in_each_language(locale, required):
+    for clause in required:
+        assert clause in NO_UNASKED_REFUSALS_RULE[locale]
+
+
+@pytest.mark.parametrize("locale", ["es", "en", "fr"])
+@pytest.mark.parametrize("shape", SHAPES_)
+def test_with_the_setting_off_the_contract_is_what_it_was(monkeypatch, locale, shape):
+    from adelia.config import Settings, settings
+
+    assert Settings.model_fields["no_unasked_refusals"].default is False
+    monkeypatch.setattr(settings, "no_unasked_refusals", False)
+    contract = answer_contract(locale, shape=shape)
+    assert all(rule not in contract for rule in NO_UNASKED_REFUSALS_RULE.values())
+
+
+@pytest.mark.parametrize("locale", ["es", "en", "fr"])
+@pytest.mark.parametrize("shape", SHAPES_)
+def test_with_the_setting_on_the_rule_is_one_more_line_and_nothing_else(
+    monkeypatch, locale, shape
+):
+    from adelia.config import settings
+
+    monkeypatch.setattr(settings, "no_unasked_refusals", False)
+    off = answer_contract(locale, shape=shape)
+    monkeypatch.setattr(settings, "no_unasked_refusals", True)
+    on = answer_contract(locale, shape=shape)
+    line = f"- {NO_UNASKED_REFUSALS_RULE[locale]}\n"
+    assert on.count(line) == 1
+    assert on.replace(line, "", 1) == off
+
+
+@pytest.mark.parametrize("locale", ["es", "en", "fr"])
+def test_with_the_rule_on_a_mixed_question_still_refuses_its_dose(monkeypatch, locale):
+    """B9 and B11: she asked the dose, so the dose half keeps the coded refusal."""
+    from adelia.config import settings
+
+    monkeypatch.setattr(settings, "no_unasked_refusals", True)
+    contract = answer_contract(locale)
+    assert "Si solo una parte de la pregunta tiene respaldo en las fuentes" in contract
+    assert "una dosis que ningún fragmento menciona" in contract
+    assert contract.count(CONTRACTS[locale].refusal) == 2
+    assert "Si no tienes ninguna base documental" in contract
+    assert CONTRACTS[locale].language_rule in contract
+    # The rule sits right after the partial-coverage clause it narrows.
+    assert contract.index("Si solo una parte") < contract.index(
+        NO_UNASKED_REFUSALS_RULE[locale]
+    ) < contract.index("Si no tienes ninguna base documental")

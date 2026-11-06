@@ -156,6 +156,32 @@ def merge_by_best_distance(
     return dedupe_by_source(within_relative_margin(ranked, relative_margin), top_k)
 
 
+def add_warning_fragments(
+    main: Sequence[EvidenceMatch], extra: Sequence[EvidenceMatch], *, limit: int = 2
+) -> list[EvidenceMatch]:
+    """The main search, then up to `limit` fragments of the warning-signs search.
+
+    For settings.warning_signs_retrieval (agent/warning_signs.py). Unlike
+    `merge_by_best_distance` this does not re-rank: the main list keeps its
+    order, so the [ev_N] the model reads for it are the numbers of before, and
+    the new fragments come after it. A fragment already in the main list is not
+    added again. The paragraph on when to go is usually a later fragment of a
+    guideline the plan already cites (the croup guide of AEPap), so fragments of
+    the sources already retrieved come first, then the others, each group by
+    distance. That can put two fragments of one source in the list; they are
+    two different paragraphs and the answer cites the one it uses (compose
+    keeps only cited cards). An empty main list stays empty: this never turns
+    a question without evidence into one with evidence.
+    """
+    if not main:
+        return []
+    have = {m.chunk_id for m in main}
+    sources = {m.source_id for m in main}
+    new = [m for m in extra if m.chunk_id not in have]
+    ranked = sorted(new, key=lambda m: (m.source_id not in sources, m.distance))
+    return [*main, *ranked[: max(limit, 0)]]
+
+
 async def retrieve_evidence(
     session: AsyncSession,
     *,

@@ -65,6 +65,7 @@ from langgraph.runtime import Runtime  # noqa: E402
 
 from adelia.agent import lay_terms  # noqa: E402
 from adelia.agent import record as rec  # noqa: E402
+from adelia.agent import warning_signs  # noqa: E402
 from adelia.agent.route import RouteDecision  # noqa: E402
 from adelia.clinical import red_flags  # noqa: E402
 from adelia.clinical.golden import is_refusal  # noqa: E402
@@ -72,6 +73,7 @@ from adelia.clinical.age_scope import child_outside_scope  # noqa: E402
 from adelia.config import settings  # noqa: E402
 from adelia.db import AsyncSessionLocal  # noqa: E402
 from adelia.enrichment.evidence_retrieval import (  # noqa: E402
+    add_warning_fragments,
     evidence_citations_for_response,
     format_evidence_for_prompt,
     format_experience_for_prompt,
@@ -469,6 +471,14 @@ async def retrieve(state: AgentState, runtime: Runtime[GraphDeps]) -> dict:
     # the calls below are the ones this node always made.
     widened = lay_terms.expanded_query(text) if settings.lay_query_expansion else None
     texts = [text] if widened is None else [text, widened]
+    # A plan's "Cuándo ir al médico", from the library (agent/warning_signs.py):
+    # the same topic plus the warning-sign words, embedded in the same call and
+    # searched only if the main search found evidence. Off by default, and a
+    # short answer never runs it.
+    warning_index = None
+    if settings.warning_signs_retrieval and state.get("intent") == "plan":
+        texts.append(warning_signs.warning_query(widened or text, _locale(state)))
+        warning_index = len(texts) - 1
     try:
         embeds = await deps.embed(texts)
     except Exception as exc:  # noqa: BLE001 - no key, no network, provider down
@@ -489,6 +499,11 @@ async def retrieve(state: AgentState, runtime: Runtime[GraphDeps]) -> dict:
             evidence = merge_by_best_distance(
                 [evidence, also], top_k=cuts["top_k"], relative_margin=cuts["relative_margin"]
             )
+        if evidence and warning_index is not None and len(embeds) > warning_index:
+            alarm = await deps.retrieve_evidence(
+                session, query_embedding=embeds[warning_index], **cuts
+            )
+            evidence = add_warning_fragments(evidence, alarm)
     # Other mothers are searched with her sentence alone: the experience tier
     # is not what the lexicon was measured for.
     return {"evidence": list(evidence), "query_embedding": embeds[0]}
