@@ -47,11 +47,55 @@ def test_every_written_probe_reaches_retrieval(probe_id, locale, question):
 
 
 def test_the_controls_carry_no_lay_word_and_the_rest_do():
+    """L22 ("No duerme nada por la noche") was a control until 2026-11-06,
+    when prod showed 19 sleep sources out of its reach and the lexicon got a
+    night-waking entry; L23 (her own exhaustion) stays the control."""
     for probe_id, _, question in ev.COLLOQUIAL:
-        if probe_id in ("L22", "L23"):
+        if probe_id == "L23":
             assert clinical_terms(question) == (), probe_id
         else:
             assert clinical_terms(question), probe_id
+
+
+def test_the_everyday_complaints_are_probed_and_reach_retrieval():
+    """The 2026-11-06 entries are measured like the others, and so are the two
+    complaints the lexicon leaves alone on purpose (gas: B11; evening crying)."""
+    assert len(ev.EVERYDAY) >= 10
+    groups = [p.group for p in ev.probes()]
+    assert groups.count("everyday") == len(ev.EVERYDAY)
+    ids = [i for i, _, _ in ev.PROD_MISSES + ev.COLLOQUIAL + ev.EVERYDAY]
+    assert len(ids) == len(set(ids))
+    for _, locale, question in ev.EVERYDAY:
+        assert red_flags.detect(question, locale=locale, age_months=ev.AGE_MONTHS) is None
+        assert not child_outside_scope(question)
+    unmapped = {i for i, _, q in ev.EVERYDAY if not clinical_terms(q)}
+    assert unmapped == {"E9", "E10"}
+
+
+async def test_the_probes_embed_with_backoff_and_pause_between_probes(monkeypatch):
+    """Prod run of 2026-11-06: Mistral answered 429 halfway through and the
+    run died. The script embeds through embed_with_retry (backoff on 429/5xx)
+    and waits two seconds between probes."""
+    import argparse
+
+    calls: list[str] = []
+    pauses: list[float] = []
+
+    async def _probe(probe, *, on, translate, cache):
+        calls.append(probe.id)
+        return ev.ModeResult(kind="no_evidence")
+
+    async def _pause(seconds):
+        pauses.append(seconds)
+
+    three = [ev.Probe(i, "lay", "es", "x", 5) for i in ("X1", "X2", "X3")]
+    monkeypatch.setattr(ev, "probes", lambda: three)
+    monkeypatch.setattr(ev, "run_probe", _probe)
+    monkeypatch.setattr(ev, "_pause", _pause)
+    await ev.main_async(argparse.Namespace(no_translate=True, json=None))
+    assert calls == ["X1", "X1", "X2", "X2", "X3", "X3"]
+    assert pauses == [2.0, 2.0]
+    assert ev.embed_with_retry.__module__ == "adelia.enrichment.evidence_loader"
 
 
 def _result(cards):
@@ -108,7 +152,7 @@ async def test_every_session_is_read_only_before_its_first_query(monkeypatch):
         await session.execute("SELECT 1")
         return [match]
 
-    monkeypatch.setattr(ev, "embed_texts", _embed)
+    monkeypatch.setattr(ev, "embed_with_retry", _embed)
     monkeypatch.setattr(ev, "retrieve_evidence", _retrieve)
     probe = ev.Probe("P2", "prod", "es", "Tiene el culito muy rojo del pañal", 5)
 
@@ -128,7 +172,7 @@ async def test_a_guarded_probe_searches_nothing_in_either_mode(monkeypatch):
     async def _no(*args, **kwargs):
         raise AssertionError("a guarded probe reached retrieval")
 
-    monkeypatch.setattr(ev, "embed_texts", _no)
+    monkeypatch.setattr(ev, "embed_with_retry", _no)
     probe = ev.Probe("C1", "C", "es", "Mi bebé de 2 meses tiene 38,2 y granitos", 2)
     for on in (False, True):
         result = await ev.run_probe(probe, on=on, translate=False, cache={})

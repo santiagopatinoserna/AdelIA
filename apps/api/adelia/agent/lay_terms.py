@@ -67,7 +67,10 @@ def fold(text: str) -> str:
     return "".join(ch for ch in decomposed if not unicodedata.combining(ch))
 
 
-_SPOTS_ES = r"(granit\w*|granos?|ampoll\w*|llag\w*|pupas?|vejigas?|puntitos|sarpullido|manchitas)"
+_SPOTS_ES = (
+    r"(granit\w*|granos?|ampoll\w*|llag\w*|pupas?|vejigas?|puntitos|sarpullido|manchitas|"
+    r"manchas)"
+)
 _RED_ES = (
     r"(roj[oa]s?|rojez|rojit[oa]s?|irritad[oa]s?|irritacion|rozad[oa]s?|rozaduras?|"
     r"escoc\w*|en carne viva|granit[oa]s|pupas?)"
@@ -261,6 +264,71 @@ LEXICON: tuple[LayEntry, ...] = (
             r"\brojeces\s+en\s+(las\s+)?mejillas\b",
         ),
         ("dermatitis atópica", "eccema"),
+    ),
+    # 2026-11-06, the complaints mothers bring most. Sleep first: "No duerme nada
+    # por la noche, se despierta cada hora" stayed at 0.217 in prod with 19 sleep
+    # sources in the corpus. B9 ("para que duerma toda la noche") and B12, B15
+    # (an older child's sleep) must stay out, so nothing here reads "duerma",
+    # "sleep" or "dormir" alone. Hard to wake is not night waking.
+    LayEntry(
+        "despertares",
+        _rx(
+            r"\bno\s+(se\s+|me\s+)?duerme\b",
+            r"\bduerme\s+(fatal|muy\s+mal|mal|muy\s+poco|poquisimo|nada)\b",
+            r"\bse\s+despierta\w*\b",
+            r"\bdespert(ares|ando)\b",
+            r"\bse\s+reveill\w*|\bne\s+dort\s+(pas|plus|jamais)\b|\breveils?\s+nocturnes?\b",
+            r"\bwak(es|ing)\s+(up\s+)?(every|all|at|several|constantly|a\s+lot)\b",
+            r"\b(won'?t|doesn'?t|does\s+not|will\s+not)\s+sleep\b|\bnight\s+wak\w*",
+        ),
+        ("despertares nocturnos", "sueño del bebé"),
+        unless=_rx(r"\bno\s+(se\s+)?despierta\w*\b", r"\bcuesta\w*\s+despertar\w*"),
+    ),
+    # Not eating. Only "no come" and its kin: B9 and B14 refuse vegetables, and
+    # refusing one food is not a lack of appetite. No breast entry: the corpus
+    # never writes a refused breast, and appetite fragments are for older babies.
+    LayEntry(
+        "inapetencia",
+        _rx(
+            r"\bno\s+(me\s+|le\s+)?(come|quiere\s+comer)\b",
+            r"\bcome\s+(muy\s+)?poco\b|\bno\s+tiene\s+hambre\b",
+            r"\b(no\s+(me\s+)?quiere|rechaza\w*)\s+(el\s+|los\s+)?biberon\w*",
+            r"\bne\s+mange\s+(pas|plus|rien)\b|\bn'?a\s+pas\s+faim\b",
+            r"\b(won'?t|doesn'?t|does\s+not|will\s+not|refuses\s+to)\s+eat\b|\bnot\s+eating\b",
+        ),
+        ("falta de apetito", "inapetencia", "rechazo del alimento"),
+    ),
+    # Vomiting. Milk coming back after a feed stays reflux (it yields). No French
+    # pattern: B13 ("vomit depuis hier", a 10-year-old) must get nothing.
+    LayEntry(
+        "vomitos",
+        _rx(
+            r"\bvomit(a|an|ando|ado|ada)\b|\bvomitos?\b",
+            r"\bvomit(ing|ed|s)\b|\bthr(ow\w*|ew)\s+up\b|\bbeing\s+sick\b",
+        ),
+        ("vómitos",),
+        yields_to=("regurgitacion",),
+    ),
+    LayEntry(
+        "sudoracion",
+        _rx(
+            r"\b(suda|sudan|sudando|sudad[oa]s?|sudor|sudores)\b",
+            r"\btranspir\w*|\bsweat(s|ing|y)?\b",
+        ),
+        ("sudoración", "sudor"),
+    ),
+    # Noisy breathing and snoring. "Está ronca" is hoarse (croup, L15), not a
+    # snore, so the verb only counts with what follows it.
+    LayEntry(
+        "respiracion_ruidosa",
+        _rx(
+            r"\bronc(an|ando|ar)\b|\bronca\s+(mucho|muchisimo|por|toda|cada|al|cuando)\b",
+            r"\bronquidos?\b",
+            r"\brespira\w*\s+(\w+\s+){0,2}ruido\w*|\bruido\w*\s+al\s+respirar\b",
+            r"\bronfl\w*|\brespir\w*\s+(\w+\s+)?bruyam\w*",
+            r"\bsnor(e|es|ing)\b|\bnoisy\s+breathing\b",
+        ),
+        ("ronquido", "respiración ruidosa"),
     ),
 )
 

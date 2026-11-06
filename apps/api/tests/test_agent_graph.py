@@ -202,6 +202,115 @@ async def test_an_answer_that_cites_nothing_shows_no_clinical_card():
     assert out["evidence_citations"] == []
 
 
+MOTHERS = [_match("experience", t) for t in ("Mordedores", "Llanto", "Porteo")]
+
+
+async def test_a_refusal_with_evidence_retrieved_goes_out_with_no_card():
+    """B8 in prod (2026-11-05): the model refused the jaundice question and a
+    colic post from the mothers tier still went out under "No tengo evidencia"."""
+    fakes = Fakes(intent="plan", experience=[MOTHERS[1]], output=no_evidence_reply("es"))
+    out = await _run(fakes, "Mi bebé de 4 meses tiene la piel amarilla, ¿es la ictericia?")
+    assert out["kind"] == "answer"
+    assert out["answer"] == no_evidence_reply("es")
+    assert out["evidence_citations"] == [] and out["citations"] == []
+
+
+async def test_a_refusal_in_english_carries_no_mothers_cards():
+    """B17 in prod: the tongue-tie refusal came with teethers, crying and
+    babywearing underneath."""
+    fakes = Fakes(intent="plan", experience=MOTHERS, output=no_evidence_reply("en"))
+    out = await _run(fakes, "My 6-month-old seems tongue-tied, does it need cutting?",
+                     locale="en")
+    assert out["evidence_citations"] == [] and out["citations"] == []
+
+
+async def test_a_refusal_in_another_language_than_the_locale_is_still_a_refusal():
+    fakes = Fakes(intent="plan", experience=MOTHERS, output=no_evidence_reply("en"))
+    out = await _run(fakes, "Is it tongue-tie?", locale="es")
+    assert out["evidence_citations"] == [] and out["citations"] == []
+
+
+async def test_a_refusal_that_cites_her_record_keeps_that_citation():
+    """Prod, neonatal jaundice: "el perfil es el de Lucía, de 5 meses [1]",
+    then the refusal. The [1] is a fact from her record, cited, and its card
+    stays; the guideline the text never cites does not."""
+    from adelia.agent.graph import Retrieved
+
+    record = {"chunk_id": "c1", "raw_quote": "Lucía, 5 meses"}
+
+    async def _retrieve(state):
+        return Retrieved(evidence=[EVIDENCE], patient_context="[1] Lucía, 5 meses",
+                         citations=[record])
+
+    fakes = Fakes(intent="question",
+                  output=f"Lucía tiene 5 meses [1]. {no_evidence_reply('es')}")
+    out = await _run(fakes, "¿Es normal que esté amarillo?", retrieve=_retrieve)
+    assert out["citations"] == [record]
+    assert out["evidence_citations"] == []
+
+
+B9_MIXED = (
+    "Ofrécele la verdura sin presionarla: hasta 10-15 ofertas [ev_1][ev_2].\n\n"
+    f"**Dosis de melatonina:** {no_evidence_reply('es')}\n\n"
+    "## Hoy\n- Vuelve a ofrecérsela unos días después [ev_2].\n\n"
+    "## No olvides\n- La pediatra recomendó empezar a los 6 meses [1]."
+)
+
+
+async def test_a_mixed_answer_keeps_its_evidence_and_drops_mothers_it_does_not_use():
+    """B9 in prod: half answered with sources, half refused, and three sleep
+    posts under a vegetables-and-melatonin answer that cites none of them."""
+    second = _match("evidence", "Second")
+    fakes = Fakes(intent="plan", evidence=[EVIDENCE, second], experience=MOTHERS,
+                  output=B9_MIXED)
+    out = await _run(fakes, "Rechaza la verdura, ¿y qué dosis de melatonina le doy?")
+    assert [(c["tag"], c["tier"]) for c in out["evidence_citations"]] == [
+        ("ev_1", "evidence"), ("ev_2", "evidence"),
+    ]
+
+
+async def test_a_mixed_answer_keeps_the_mothers_it_cites():
+    cited = B9_MIXED + "\n\n## Lo que cuentan otras madres\n- Probó con el puré [ex_2]."
+    fakes = Fakes(intent="plan", experience=MOTHERS, output=cited)
+    out = await _run(fakes, "Rechaza la verdura, ¿y qué dosis de melatonina le doy?")
+    assert [(c["tag"], c["title"]) for c in out["evidence_citations"]] == [
+        ("ev_1", "A real guideline"), ("ex_2", "Llanto"),
+    ]
+
+
+async def test_a_mixed_short_answer_keeps_its_evidence():
+    """B11 in prod: what the AAP says about gas drops, cited, then the coded
+    refusal for the dose. The source is the answer to the first half."""
+    output = (
+        "The AAP notes that gas drops have never been shown to work [ev_1].\n\n"
+        f"**Simethicone dose:** {no_evidence_reply('en')}"
+    )
+    fakes = Fakes(intent="question", output=output)
+    out = await _run(fakes, "How many drops of simethicone for trapped wind?", locale="en")
+    assert [c["tag"] for c in out["evidence_citations"]] == ["ev_1"]
+
+
+async def test_the_umbilical_cord_refusal_is_the_model_not_the_code():
+    """Diagnosis of "¿Cuándo se le cae el cordón umbilical y cómo lo cuido?"
+    (prod 2026-11-05, docs/specs/RECHAZOS_Y_TARJETAS.md): retrieval found
+    three cord sources and kind stayed "answer". No node replaces a cited
+    answer: given one, the graph sends it verbatim with its three cards. The
+    refusal came from the model, which reads the contract's clause on a
+    source for another age next to a demo baby of 5 months."""
+    from adelia.demo.fixture import demo_patient_context
+
+    cord = [_match("evidence", t) for t in ("Cuidados del cordón", "Cordón AAP", "KidsDoc")]
+    cited = "Se cae entre los 5 y los 15 días [ev_1]. Mantenlo limpio y seco [ev_2][ev_3]."
+    fakes = Fakes(intent="question", evidence=cord, output=cited)
+    question = "¿Cuándo se le cae el cordón umbilical y cómo lo cuido?"
+    out = await _run(fakes, question, patient_context=demo_patient_context("es"))
+    assert out["kind"] == "answer" and out["answer"] == cited
+    assert [c["tag"] for c in out["evidence_citations"]] == ["ev_1", "ev_2", "ev_3"]
+    (_, system, user), = [c for c in fakes.calls if c[0] == "generate"]
+    assert "guía de recién nacidos" in system, "the clause the model obeyed"
+    assert "5 meses" in user, "the demo baby's age the model reads"
+
+
 async def test_evidence_only_still_shows_every_fragment():
     """No answer to cite them: the fragments ARE the answer (unchanged)."""
     second = _match("evidence", "Second")

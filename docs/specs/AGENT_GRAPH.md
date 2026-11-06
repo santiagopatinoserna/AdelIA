@@ -159,6 +159,9 @@ tarjeta de confirmación.
 Poda y renumera citas (`services/citations.prune_and_renumber`), añade
 descargo, emite los eventos SSE que ya consume el front (`token`, `card`,
 `final`). El front no cambia de protocolo.
+Un texto con el rechazo fijo sale solo con lo que cita: un rechazo entero, sin
+ninguna tarjeta; una respuesta mixta, con su evidencia citada y las madres que
+cita `[ex_N]` (2026-11-06, `docs/specs/RECHAZOS_Y_TARJETAS.md`).
 
 ## Qué se reutiliza y qué es nuevo
 

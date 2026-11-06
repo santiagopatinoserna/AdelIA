@@ -20,8 +20,9 @@ only, and prints for each probe:
   * the terms the lexicon added.
 
 Probes: the seven production misses of 2026-11-05, 23 colloquial questions
-(every domain, es/fr/en, two controls with no lay word), and groups A and B
-of the golden set (clinical/golden.py). The summary counts, per mode, the
+(every domain, es/fr/en, L23 the control with no lay word), the everyday
+complaints added on 2026-11-06 (two left out of the lexicon on purpose), and
+groups A and B of the golden set (clinical/golden.py). The summary counts, per mode, the
 probes answered with evidence, the group A probes whose expected source is in
 the cards, and the group B probes that fall UNDER the cut. Any B that moves
 under the cut with the setting on is a reason to keep it off.
@@ -31,7 +32,9 @@ before the first query, so a write would fail rather than happen; no spending
 gate is called (the demo's daily counter is not touched), the router is a
 fixed stub and generation a constant string, so the only paid calls are the
 embeddings and, for fr/en probes, one translation each (cached across modes,
-as `corpus_query` is in production). Guarded probes (a red flag, or a child
+as `corpus_query` is in production). Embeddings go through `embed_with_retry`
+(backoff on 429 and 5xx) and the script waits PAUSE_SECONDS between probes:
+the prod run of 2026-11-06 died halfway on a Mistral 429. Guarded probes (a red flag, or a child
 of 3 or more) never search, in either mode, and are shown as such.
 
 Exit status: 0 when no group B probe is under the cut with the setting on
@@ -57,7 +60,7 @@ from adelia.db import AsyncSessionLocal
 from adelia.demo.fixture import AGE_MONTHS, retrieval_query
 from adelia.enrichment.evidence_retrieval import retrieve_evidence
 from adelia.enrichment.profile_service import ProfileFacts
-from adelia.workers.embed import embed_texts
+from adelia.enrichment.evidence_loader import embed_with_retry
 
 #: Measured in production on 2026-11-05 (~/dev/adelia-design/shots/prod-domains-eval.json),
 #: word for word. The corpus covers every one of them.
@@ -71,8 +74,9 @@ PROD_MISSES: tuple[tuple[str, str, str], ...] = (
     ("P7", "es", "Tiene tos de perro por la noche, ¿qué puedo hacer en casa?"),
 )
 
-#: Colloquial questions written for this measurement. L22 and L23 are controls
-#: with no lay word: both modes must return the same thing for them.
+#: Colloquial questions written for this measurement. L23 is the control with
+#: no lay word: both modes must return the same thing for it. L22 was one too
+#: until the night-waking entry of 2026-11-06.
 COLLOQUIAL: tuple[tuple[str, str, str], ...] = (
     ("L1", "es", "Tiene muchos mocos verdes y la nariz tapada, ¿qué hago?"),
     ("L2", "es", "Echa la leche después de cada toma, ¿es normal?"),
@@ -98,6 +102,27 @@ COLLOQUIAL: tuple[tuple[str, str, str], ...] = (
     ("L22", "es", "No duerme nada por la noche, se despierta cada hora"),
     ("L23", "es", "Estoy agotada y lloro todos los días desde el parto"),
 )
+
+#: The complaints mothers of 0-24 months bring most, added to the lexicon on
+#: 2026-11-06 (agent/lay_terms.py). E9 and E10 have no entry on purpose: gas is
+#: B11's word, and evening crying is pinned as a false friend of a weeping eye.
+EVERYDAY: tuple[tuple[str, str, str], ...] = (
+    ("E1", "es", "Se despierta cinco veces cada noche, ¿es normal?"),
+    ("E2", "es", "No come nada desde hace dos días"),
+    ("E3", "es", "No quiere el biberón, ¿qué hago?"),
+    ("E4", "es", "Ha vomitado dos veces esta mañana"),
+    ("E5", "es", "Suda mucho cuando duerme"),
+    ("E6", "es", "Ronca mucho por la noche"),
+    ("E7", "es", "Respira con mucho ruido pero no tiene fiebre"),
+    ("E8", "es", "Le están saliendo los dientes y está muy molesto"),
+    ("E9", "es", "Tiene muchos gases y se retuerce"),
+    ("E10", "es", "Llora mucho por las tardes"),
+    ("E11", "fr", "Il se réveille toutes les heures la nuit"),
+    ("E12", "en", "He won't eat anything since yesterday"),
+)
+
+#: Seconds between probes, so a run of ~110 probes stays under Mistral's rate.
+PAUSE_SECONDS = 2.0
 
 
 @dataclass
@@ -134,6 +159,7 @@ class ModeResult:
 def probes() -> list[Probe]:
     out = [Probe(i, "prod", loc, q, AGE_MONTHS) for i, loc, q in PROD_MISSES]
     out += [Probe(i, "lay", loc, q, AGE_MONTHS) for i, loc, q in COLLOQUIAL]
+    out += [Probe(i, "everyday", loc, q, AGE_MONTHS) for i, loc, q in EVERYDAY]
     for group in ("A", "B"):
         out += [
             Probe(q.id, group, q.locale, q.question, q.age_months, q.expect_source)
@@ -165,7 +191,7 @@ async def run_probe(probe: Probe, *, on: bool, translate: bool, cache: dict) -> 
         return RouteDecision(intent="question", confidence=1.0, via="rule")
 
     async def _embed(texts):
-        vectors = await embed_texts(list(texts))
+        vectors = await embed_with_retry(list(texts))
         embedded.extend(zip(texts, vectors))
         return vectors
 
@@ -255,12 +281,18 @@ def print_row(probe: Probe, off: ModeResult, on: ModeResult) -> None:
             print(f"       terms   {', '.join(res.terms)}")
 
 
+async def _pause(seconds: float) -> None:
+    await asyncio.sleep(seconds)
+
+
 async def main_async(args) -> int:
     cache: dict = {}
     rows: list[tuple[Probe, ModeResult, ModeResult]] = []
     original = settings.lay_query_expansion
     try:
-        for probe in probes():
+        for n, probe in enumerate(probes()):
+            if n:
+                await _pause(PAUSE_SECONDS)
             off = await run_probe(probe, on=False, translate=not args.no_translate, cache=cache)
             on = await run_probe(probe, on=True, translate=not args.no_translate, cache=cache)
             rows.append((probe, off, on))
