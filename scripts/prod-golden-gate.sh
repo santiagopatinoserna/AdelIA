@@ -14,9 +14,19 @@
 #      evidence tables. No family's record leaves the live database.
 #   3. Run apps/api/scripts/golden_gate.sh in a throwaway api-golden
 #      container pointed at the scratch copy: migrate it to the new head,
-#      load the new release's corpus as boot would, run the golden set with
-#      the production keys and provider.
+#      load the new release's corpus as boot would, run the golden set.
 #   4. Drop the scratch database, whatever happened.
+#
+# Without a model by default (2026-11-06, Santiago's rule: the app's
+# Anthropic budget is 200 $ a month and the mothers who ask pay it): real
+# retrieval and cut-offs on the production corpus, no generation, no routing
+# model, no Anthropic call. The full pass on the production provider is
+# opt-in, and so is measuring a candidate corpus on top of the copy:
+#
+#   bash scripts/prod-golden-gate.sh                      # without a model
+#   bash scripts/prod-golden-gate.sh --with-model         # or GOLDEN_WITH_MODEL=1
+#   bash scripts/prod-golden-gate.sh --candidates 'apps/api/adelia/enrichment/candidates/*.json'
+#                                    # or GOLDEN_CANDIDATE_GLOB=...; always without a model
 #
 # Why a scratch copy and not the live database: migrations run when the new
 # container boots (apps/api/Dockerfile CMD), and new corpus files are loaded
@@ -42,6 +52,38 @@ COMPOSE=(docker compose
 SCRATCH_DB=adelia_golden_gate
 
 say() { printf 'golden gate: %s\n' "$*"; }
+
+WITH_MODEL="${GOLDEN_WITH_MODEL:-0}"
+CANDIDATES="${GOLDEN_CANDIDATE_GLOB:-}"
+while [[ $# -gt 0 ]]; do
+  case "$1" in
+    --with-model) WITH_MODEL=1 ;;
+    --candidates)
+      CANDIDATES="${2:-}"
+      [[ -n "${CANDIDATES}" ]] || { say "NOT RUN: --candidates needs a glob"; exit 2; }
+      shift ;;
+    *) say "NOT RUN: unknown argument $1 (known: --with-model, --candidates GLOB)"; exit 2 ;;
+  esac
+  shift
+done
+case "${WITH_MODEL}" in
+  0|1) ;;
+  *) say "NOT RUN: GOLDEN_WITH_MODEL=${WITH_MODEL} (0 or 1)"; exit 2 ;;
+esac
+if [[ "${WITH_MODEL}" -eq 1 && -n "${CANDIDATES}" ]]; then
+  say "NOT RUN: candidates are measured without a model only; drop GOLDEN_WITH_MODEL"
+  exit 2
+fi
+# Arguments for golden_gate.sh in the container. An env var through `compose
+# run -e` would do too; an argument keeps the run line the tests pin.
+GATE_ARGS=()
+if [[ "${WITH_MODEL}" -eq 1 ]]; then
+  GATE_ARGS+=(--with-model)
+  MODE="con modelo (el proveedor de producción genera y enruta)"
+else
+  MODE="sin modelo (ni una llamada a Anthropic; --with-model o GOLDEN_WITH_MODEL=1 para la pasada completa)"
+fi
+[[ -n "${CANDIDATES}" ]] && GATE_ARGS+=(--candidates "${CANDIDATES}")
 
 # Run inside the postgres container, with the scratch name in its env. The
 # guard makes it impossible to drop or overwrite the live database even if
@@ -92,9 +134,9 @@ if ! copy_corpus; then
   exit 2
 fi
 
-say "running the golden set in a throwaway api-golden container"
+say "running the golden set in a throwaway api-golden container, ${MODE}"
 "${COMPOSE[@]}" run --rm --no-deps -e POSTGRES_DB="${SCRATCH_DB}" api-golden \
-  bash scripts/golden_gate.sh
+  bash scripts/golden_gate.sh ${GATE_ARGS[@]+"${GATE_ARGS[@]}"}
 rc=$?
 case "${rc}" in
   0) verdict="PASSED" ;;

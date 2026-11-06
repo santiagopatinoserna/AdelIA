@@ -51,6 +51,14 @@ A guarded question is embedded for the recording only.
 --questions FILE reads questions exported with --export, so the script can run
 in a container whose clinical/golden.py predates the candidates.
 
+--no-model (2026-11-06, Santiago's rule that tests never spend the mothers'
+Anthropic budget; the candidate evaluation of golden_gate.sh runs it): no
+model call at all, only embeddings. A French or English question is searched
+with the translation recorded in tests/fixtures/golden_query_embeddings.json
+(made by the production model when its vectors were recorded) or, when there
+is none, as she wrote it, and the verdict says "sin traducir": production
+would have translated it, so such a verdict is pessimistic for that question.
+
 Exit status: 0 when every group A question found its source with clean cards
 and no group B question fell under the cut; 1 when one did not; 2 when the
 run could not measure (no embedding key, provider down), as golden_gate.sh
@@ -96,6 +104,16 @@ PAUSE_SECONDS = 2.0
 NEAREST_K = 4
 #: "No cut-off": cosine distance never reaches 2.
 _UNCUT = 2.0
+#: --no-model: never translate with a model (see the module docstring).
+NO_MODEL = False
+#: (text, locale) pairs searched untranslated because NO_MODEL had no recording.
+_UNTRANSLATED: set[tuple[str, str]] = set()
+#: Where the recorded translations live: next to this script in the repo and in
+#: the golden image, or under the working directory when the script was copied.
+_FIXTURES = (
+    Path(__file__).resolve().parents[1] / "tests" / "fixtures" / "golden_query_embeddings.json",
+    Path("tests") / "fixtures" / "golden_query_embeddings.json",
+)
 
 
 @dataclass
@@ -116,6 +134,8 @@ class Verdict:
     hit: bool | None = None
     defects: list[str] = field(default_factory=list)
     passed: bool = False
+    #: --no-model and no recorded translation: searched as she wrote it.
+    untranslated: bool = False
 
 
 # --- which questions ------------------------------------------------------------
@@ -197,8 +217,31 @@ async def _nearest(vectors: list[list[float]]) -> list[tuple[str, float]]:
 async def _translate(text: str, locale: str, cache: dict) -> str:
     key = (text, locale)
     if key not in cache:
-        cache[key] = await corpus_query(text, locale)
+        if NO_MODEL and needs_translation(locale):
+            _UNTRANSLATED.add(key)
+            cache[key] = text
+        else:
+            cache[key] = await corpus_query(text, locale)
     return cache[key]
+
+
+def recorded_translations(qs: list[GoldenQuestion]) -> dict[tuple[str, str], str]:
+    """The fixture's Spanish text per French or English question, keyed as the cache.
+
+    Only for a question whose recorded wording is the current one: a question
+    rewritten since its recording is searched as written, not as it used to be."""
+    for path in _FIXTURES:
+        if path.exists():
+            data = json.loads(path.read_text(encoding="utf-8"))
+            break
+    else:
+        return {}
+    texts, recorded = data.get("corpus_queries") or {}, data.get("questions") or {}
+    return {
+        (q.question, q.locale): texts[q.id]
+        for q in qs
+        if needs_translation(q.locale) and q.id in texts and recorded.get(q.id) == q.question
+    }
 
 
 async def _vector(text: str, embedded: dict[str, list[float]]) -> list[float]:
@@ -264,6 +307,8 @@ async def preview(q: GoldenQuestion, *, cache: dict, recording: dict | None) -> 
         deps,
     )
     verdict = Verdict(q.id, q.group, q.locale, q.question)
+    key = (q.question, q.locale)
+    verdict.untranslated = key in _UNTRANSLATED and cache.get(key) == q.question
     if out.get("kind") == "red_flag":
         flag = out.get("flag")
         verdict.guard = f"red_flag:{getattr(flag, 'code', '?')}"
@@ -290,6 +335,8 @@ def _fmt_verdict(q: GoldenQuestion, v: Verdict) -> str:
         lines.append(f"  espera: {q.expect_source}")
     if v.guard:
         lines.append(f"  guard: {v.guard}, sin búsqueda")
+    if v.untranslated:
+        lines.append("  sin traducir (sin modelo y sin traducción grabada; producción la traduciría)")
     for searched in v.searched:
         lines.append(f"  busca:   {searched.replace(chr(10), ' | '):.110}")
     for c in v.cards:
@@ -340,15 +387,18 @@ async def main_async(args) -> int:
         export(qs, args.export)
         print(f"{len(qs)} preguntas exportadas a {args.export}")
         return 0
+    global NO_MODEL
+    NO_MODEL = bool(getattr(args, "no_model", False))
     print(
         f"golden preview: {len(qs)} preguntas; corte {settings.evidence_max_distance:.2f}, "
         f"margen {settings.evidence_relative_margin:.2f}, "
         f"léxico de madre {'encendido' if settings.lay_query_expansion else 'apagado'}"
+        + ("; sin modelo (solo embeddings, traducciones grabadas)" if NO_MODEL else "")
     )
     coverage = _coverage_line(qs)
     if coverage:
         print(f"  {coverage}")
-    cache: dict = {}
+    cache: dict = recorded_translations(qs) if NO_MODEL else {}
     recording = empty_recording() if args.record else None
     verdicts: list[Verdict] = []
     try:
@@ -389,6 +439,10 @@ def main() -> None:
     parser.add_argument("--export", help="write the selected questions to this file and stop")
     parser.add_argument("--record", help="write the vectors embedded, in the fixture's shape")
     parser.add_argument("--json", help="also write every verdict to this file")
+    parser.add_argument(
+        "--no-model", action="store_true",
+        help="no model call at all: recorded translations, or the question as written",
+    )
     sys.exit(asyncio.run(main_async(parser.parse_args())))
 
 

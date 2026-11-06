@@ -33,10 +33,24 @@ In a deploy
 `scripts/deploy-prod.sh` runs this file on the server before it replaces the
 API container (scripts/prod-golden-gate.sh, docs/GOLDEN_GATE_DESPLIEGUE.md),
 with `ADELIA_GOLDEN_DEPLOY=1`. There, and only there, a skip of A and B is a
-failure that says "no ejecutado", the answers come from the provider
-production is configured with (not the Mistral the suite pins), and the
-questions run four at a time under a 300 s ceiling. The report counts the
-model calls and the wall time.
+failure that says "no ejecutado", and the questions run four at a time under
+a 300 s ceiling. In the full pass (`GOLDEN_WITH_MODEL=1`) the answers come
+from the provider production is configured with (not the Mistral the suite
+pins); by default the deploy runs without a model (below). The report counts
+the model calls and the wall time.
+
+Without a model
+---------------
+Since 2026-11-06 the deploy runs this file WITHOUT a model unless the operator
+asks for the full pass (`GOLDEN_WITH_MODEL=1`): apps/api/scripts/golden_gate.sh
+sets `ADELIA_GOLDEN_MODEL_FREE=1`. The app's Anthropic budget is 200 $ a month,
+paid by the mothers who ask, and the full pass spent about 40 generations and
+a few dozen routing calls per release. Retrieval, the cut-offs and the guard
+are the real ones; generation is a fixed text that cites every card it was
+given (`MODEL_FREE_ANSWER`), routing is the rules and their `plan` fallback,
+and a fake Anthropic client stops the run if anything still reaches it. What
+only generated text shows (orphan and repeated or off-topic cards, a group B
+refusal written by the model) is published as None, never as 0.
 
 Publishing
 ----------
@@ -52,10 +66,12 @@ import asyncio
 import contextvars
 import json
 import os
+import re
+import sys
 import time
 from collections.abc import Iterator
 from contextlib import ExitStack, contextmanager
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from pathlib import Path
 from unittest.mock import patch
 from uuid import uuid4
@@ -111,8 +127,21 @@ GOLDEN_CONCURRENCY = 4
 _CURRENT_QUESTION: contextvars.ContextVar = contextvars.ContextVar("golden_question")
 
 
+#: Set by apps/api/scripts/golden_gate.sh unless the operator passed
+#: GOLDEN_WITH_MODEL=1: the gate without a model (see the module docstring).
+MODEL_FREE_ENV = "ADELIA_GOLDEN_MODEL_FREE"
+#: What every answer that reaches generation says without a model. Followed by
+#: every [ev_N] of the prompt, so compose keeps all the retrieval's cards.
+MODEL_FREE_ANSWER = "Respuesta fija del golden sin modelo."
+_PROMPT_TAG = re.compile(r"^\[(ev_\d+)\]", re.MULTILINE)
+
+
 def _in_deploy() -> bool:
     return os.environ.get(DEPLOY_ENV) == "1"
+
+
+def _model_free() -> bool:
+    return os.environ.get(MODEL_FREE_ENV) == "1"
 
 
 # ---------------------------------------------------------------------------
@@ -389,6 +418,52 @@ class _ModelCalls:
 
     generation: int = 0
     routing: int = 0
+    #: Without a model: answers given the fixed text, routing calls refused
+    #: (the rules abstained and `plan` was taken), and every attempt to build
+    #: an Anthropic client, which must stay at zero.
+    stubbed: int = 0
+    fallbacks: int = 0
+    anthropic: int = 0
+    #: French or English questions searched as written: no recorded translation.
+    untranslated: set = field(default_factory=set)
+
+
+def _model_free_stream(calls: _ModelCalls):
+    """The generative stream without a model: the fixed text and every card's tag."""
+
+    async def _stream(system_prompt, user_message, history=None, *, provider=None):
+        calls.stubbed += 1
+        tags = " ".join(f"[{t}]" for t in dict.fromkeys(_PROMPT_TAG.findall(user_message)))
+        yield f"{MODEL_FREE_ANSWER} {tags}".rstrip()
+
+    return _stream
+
+
+def _anthropic_tripwires(calls: _ModelCalls) -> list[tuple[object, str, object]]:
+    """(module, name, fake) for every way the app builds an Anthropic client.
+
+    `get_anthropic_client` is imported by name into each module that calls it,
+    so each loaded adelia module that holds it (or the SDK class) gets the
+    fake. The fake counts and raises; the run checks the count afterwards,
+    because the answering path swallows a provider error into a fallback."""
+
+    def _fake(*args, **kwargs):
+        calls.anthropic += 1
+        raise RuntimeError("golden sin modelo: no se llama a Anthropic")
+
+    out = []
+    for name, mod in list(sys.modules.items()):
+        if mod is None or not (name == "adelia" or name.startswith("adelia.")):
+            continue
+        for attr in ("get_anthropic_client", "AsyncAnthropic"):
+            if hasattr(mod, attr):
+                out.append((mod, attr, _fake))
+    # The SDK's own classes: agent/provider.py imports AsyncAnthropic from the
+    # SDK inside a function, out of reach of the module attributes above.
+    sdk = sys.modules.get("anthropic")
+    if sdk is not None:
+        out.extend((sdk, attr, _fake) for attr in ("AsyncAnthropic", "Anthropic") if hasattr(sdk, attr))
+    return out
 
 
 @contextmanager
@@ -412,6 +487,7 @@ def _answering_path(
     live = embeddings is None or _in_deploy()
     router = _LIVE_COMPLETE_JSON if live else _route._complete_json
     stream = _chat._stream_llm_tokens
+    model_free = _model_free()
 
     def _counted_stream(*args, **kwargs):
         calls.generation += 1
@@ -427,16 +503,36 @@ def _answering_path(
         return [rec[1] if rec and t == rec[0] else embeddings[q.id] for t in texts]
 
     async def _recorded_corpus_query(text, locale, **kwargs):
-        rec = corpus.get(_CURRENT_QUESTION.get().id)
+        q = _CURRENT_QUESTION.get()
+        rec = corpus.get(q.id)
+        if rec is None and needs_translation(locale):
+            calls.untranslated.add(q.id)
         return rec[0] if rec else text
+
+    async def _refused_router(*args, **kwargs):
+        # The rules abstained: `route` takes its `plan` fallback, as it does
+        # whenever the model is down. In the chat that changes the shape the
+        # model would be asked for, not retrieval or the coded refusal.
+        calls.fallbacks += 1
+        raise RuntimeError("golden sin modelo: el enrutado decide por reglas")
 
     provider = settings.llm_provider
     with ExitStack() as stack:
+        if embeddings is not None or model_free:
+            # Without a model the corpus translation is the recorded one (made
+            # by the production model when the vectors were recorded), or the
+            # question as she wrote it: never a new call.
+            stack.enter_context(patch.object(_chat, "corpus_query", _recorded_corpus_query))
         if embeddings is not None:
             stack.enter_context(patch.object(_chat, "embed_texts", _recorded_embed))
-            stack.enter_context(patch.object(_chat, "corpus_query", _recorded_corpus_query))
-        stack.enter_context(patch.object(_chat, "_stream_llm_tokens", _counted_stream))
-        stack.enter_context(patch.object(_route, "_complete_json", _counted_router))
+        if model_free:
+            stack.enter_context(patch.object(_chat, "_stream_llm_tokens", _model_free_stream(calls)))
+            stack.enter_context(patch.object(_route, "_complete_json", _refused_router))
+            for mod, attr, fake in _anthropic_tripwires(calls):
+                stack.enter_context(patch.object(mod, attr, fake))
+        else:
+            stack.enter_context(patch.object(_chat, "_stream_llm_tokens", _counted_stream))
+            stack.enter_context(patch.object(_route, "_complete_json", _counted_router))
         if _in_deploy():
             settings.llm_provider = _CONFIGURED_PROVIDER
         try:
@@ -484,11 +580,18 @@ async def _answer_all(
     with _answering_path(embeddings, calls):
         tasks = [asyncio.create_task(_bounded(q)) for q in qs]
         try:
-            return list(await asyncio.gather(*tasks))
+            answers = list(await asyncio.gather(*tasks))
         finally:
             for task in tasks:
                 task.cancel()
             await asyncio.gather(*tasks, return_exceptions=True)
+    if calls.anthropic:
+        # Checked here, not where it happened: the path turns a provider error
+        # into a fallback, so the attempt would otherwise pass unseen.
+        raise AssertionError(
+            f"modo sin modelo: se intentó llamar al cliente de Anthropic {calls.anthropic} vez/veces"
+        )
+    return answers
 
 
 @pytest.mark.asyncio
@@ -496,6 +599,9 @@ async def _answer_all(
 async def test_groups_a_and_b_meet_the_deploy_gate():
     reason = await _skip_reason()
     report = run_red_flag_group()
+    model_free = _model_free()
+    if model_free:
+        report.mode = "no_model"
     if reason:
         report.skipped_reason = reason
         _publish(report)
@@ -520,6 +626,10 @@ async def test_groups_a_and_b_meet_the_deploy_gate():
         raise
     report.elapsed_seconds = time.monotonic() - started
     report.generation_calls, report.routing_calls = calls.generation, calls.routing
+    if model_free:
+        report.generation_stubbed, report.routing_fallbacks = calls.stubbed, calls.fallbacks
+        report.untranslated = [q.id for q in (*a_questions, *b_questions)
+                               if q.id in calls.untranslated]
     a_answers, b_answers = answers[: len(a_questions)], answers[len(a_questions) :]
 
     hits = 0
@@ -533,11 +643,14 @@ async def test_groups_a_and_b_meet_the_deploy_gate():
             report.misses.append(f"{q.id}: {q.expect_source!r} fuera del top-{TOP_K} ({titles[:120]})")
         # Counted apart from recall: the right guideline can be in the top four
         # and still sit beside a repeat of itself or a card about something else.
-        defects = citation_defects(q, evidence)
+        # Without a model the cards are the retrieval's, not the ones an answer
+        # cites: not measured.
+        defects = [] if model_free else citation_defects(q, evidence)
         report.misses.extend(f"{q.id}: {defect}" for defect in defects)
         report.citation_defects += len(defects)
         report.mark(q, hit and not defects)
-        n_orphans = count_orphan_citations(answer, evidence)
+        # Without a model nothing was written that could leave a card orphaned.
+        n_orphans = 0 if model_free else count_orphan_citations(answer, evidence)
         if n_orphans:
             # Name the answer: the first real run in production failed on
             # "citas huérfanas: 1" with no way to tell which question.
@@ -547,27 +660,40 @@ async def test_groups_a_and_b_meet_the_deploy_gate():
     report.recall_at_4 = hits / report.a_ran
 
     refusals = 0
+    reached: list[str] = []
     for q, (answer, evidence) in zip(b_questions, b_answers, strict=True):
+        if model_free and answer.startswith(MODEL_FREE_ANSWER):
+            # Cards under the cut: in production the model refuses or answers.
+            # Nobody did here, so it is named and left out of the rate.
+            reached.append(q.id)
+            report.mark(q, None, reached_model=True)
+            continue
         refused = is_refusal(answer, q.locale)
         if refused:
             refusals += 1
         else:
             report.misses.append(f"{q.id}: respondió en vez de negarse ({answer[:120]!r})")
         report.mark(q, refused)
-        n_orphans = count_orphan_citations(answer, evidence)
+        n_orphans = 0 if model_free else count_orphan_citations(answer, evidence)
         if n_orphans:
             # Name the answer: the first real run in production failed on
             # "citas huérfanas: 1" with no way to tell which question.
             report.misses.append(f"{q.id}: {n_orphans} tarjeta(s) sin citar en la respuesta")
         orphans += n_orphans
     report.b_ran = len(questions("B"))
-    report.refusal_rate = refusals / report.b_ran
-    report.orphan_citations = orphans
+    if model_free:
+        decided = report.b_ran - len(reached)
+        report.b_reached_model = reached
+        report.refusal_rate = refusals / decided if decided else None
+        report.orphan_citations = report.citation_defects = None
+    else:
+        report.refusal_rate = refusals / report.b_ran
+        report.orphan_citations = orphans
 
     _publish(report)
     assert not report.failures(), report.render()
     assert report.recall_at_4 >= RECALL_AT_4_MIN
-    assert report.refusal_rate >= REFUSAL_RATE_MIN
+    assert report.refusal_rate is None or report.refusal_rate >= REFUSAL_RATE_MIN
 
 
 def _publish(report: GoldenReport) -> None:
@@ -783,8 +909,11 @@ def _drive_the_gate(
 
     # Canned answers measure the wiring, never a provider: inside the deploy's
     # golden container (ADELIA_GOLDEN_DEPLOY=1) the gate would otherwise switch
-    # routing to the live model for these runs too.
+    # routing to the live model for these runs too. The same container runs
+    # this whole file without a model (ADELIA_GOLDEN_MODEL_FREE=1): these
+    # canned runs pin the full pass's wiring, so they set the mode themselves.
     monkeypatch.delenv(DEPLOY_ENV, raising=False)
+    monkeypatch.delenv(MODEL_FREE_ENV, raising=False)
     monkeypatch.setattr(module, "_skip_reason", _no_skip)
     monkeypatch.setattr(module, "_answer", _canned)
     monkeypatch.setattr(module, "_usable_recording", lambda: _full_recording())
@@ -1517,3 +1646,377 @@ async def test_in_a_deploy_a_question_without_its_vector_is_measured_live(monkey
     data = json.loads((tmp_path / "golden_report.json").read_text(encoding="utf-8"))
     assert data["skipped_reason"] is None
     assert data["results"]["A97"]["passed"] and data["results"]["B97"]["passed"]
+
+
+# ---------------------------------------------------------------------------
+# The gate without a model (Santiago's rule of 2026-11-06)
+#
+# The app's Anthropic budget is 200 $ a month and the mothers who ask pay it.
+# Every API deploy ran this file against the production model: about 40
+# generations and a few dozen routing calls. ADELIA_GOLDEN_MODEL_FREE=1 (set by
+# apps/api/scripts/golden_gate.sh unless the operator passes GOLDEN_WITH_MODEL=1)
+# keeps the real retrieval and the real cut-offs and replaces every model
+# call: generation by a fixed text that cites every card it was given, routing
+# by the rules and their `plan` fallback. A, B and C keep their questions and
+# their thresholds; what only generated text can show is published as None.
+# ---------------------------------------------------------------------------
+
+
+def _ab_reaching_retrieval() -> list:
+    return [q for q in questions("A") if q.id not in KNOWN_A_QUESTIONS_THAT_TRIP_THE_DETECTOR]
+
+
+def _real_path_with_fake_retrieval(monkeypatch, module):
+    """The real answering path (graph, guard, route, compose) on fake retrieval.
+
+    Each A question finds one fragment of its expected source; B finds nothing.
+    No database and no embedding: the recorded vectors stand in for the
+    embedder and the fragments are made up here."""
+    from adelia.enrichment.evidence_retrieval import EvidenceMatch
+
+    async def _evidence(query_embedding, **kwargs):
+        q = module._CURRENT_QUESTION.get()
+        if q.group != "A":
+            return []
+        title = f"Guía: {q.expect_source.split('|')[0]}"
+        content = q.every_citation_mentions.split("|")[0] or title
+        return [EvidenceMatch(
+            chunk_id=uuid4(), source_id=uuid4(), source_title=title, organization="AEP",
+            publication_year=2024, url=None, content=content, chunk_index=0, distance=0.1,
+        )]
+
+    async def _no_chunks(**kwargs):
+        return []
+
+    async def _no_skip() -> None:
+        return None
+
+    monkeypatch.setattr(_chat, "_retrieve_evidence_for_query", _evidence)
+    monkeypatch.setattr(_chat, "retrieve_relevant_chunks", _no_chunks)
+    monkeypatch.setattr(module, "_skip_reason", _no_skip)
+
+
+def _anthropic_tripwire(monkeypatch) -> list[str]:
+    """A fake Anthropic client factory that fails, and remembers, when called."""
+    from adelia import llm
+
+    called: list[str] = []
+
+    def _fake_client(*args, **kwargs):
+        called.append("anthropic")
+        raise AssertionError("the Anthropic client was called")
+
+    for mod in (llm, _chat, _route):
+        monkeypatch.setattr(mod, "get_anthropic_client", _fake_client)
+    monkeypatch.setattr(settings, "anthropic_api_key", "placeholder-not-a-key")
+    return called
+
+
+@pytest.mark.asyncio
+async def test_without_a_model_a_deploy_on_anthropic_never_reaches_its_client(
+    monkeypatch, tmp_path
+):
+    """Production configured on Claude, the deploy's container, the real
+    answering path: not one call to the Anthropic client, for generation or
+    for routing, and the gate still measures and passes."""
+    import sys
+
+    module = sys.modules[__name__]
+    _real_path_with_fake_retrieval(monkeypatch, module)
+    called = _anthropic_tripwire(monkeypatch)
+    monkeypatch.setenv(DEPLOY_ENV, "1")
+    monkeypatch.setenv(MODEL_FREE_ENV, "1")
+    monkeypatch.setattr(module, "_CONFIGURED_PROVIDER", "anthropic")
+    monkeypatch.setattr(module, "REPORT_PATH", tmp_path / "golden_report.json")
+
+    await module.test_groups_a_and_b_meet_the_deploy_gate()
+
+    assert called == []
+    data = json.loads((tmp_path / "golden_report.json").read_text(encoding="utf-8"))
+    assert data["mode"] == "no_model"
+    assert data["generation_calls"] == 0 and data["routing_calls"] == 0
+    assert data["generation_stubbed"] == len(_ab_reaching_retrieval())
+    assert data["recall_at_4"] == 1.0 and data["refusal_rate"] == 1.0
+    assert data["skipped_reason"] is None
+
+
+@pytest.mark.asyncio
+async def test_with_the_model_the_same_run_does_reach_the_anthropic_client(
+    monkeypatch, tmp_path
+):
+    """The control: the previous test's fake client is reachable, so its
+    silence there is the mode's doing and not the fake's."""
+    import sys
+
+    module = sys.modules[__name__]
+    _real_path_with_fake_retrieval(monkeypatch, module)
+    called = _anthropic_tripwire(monkeypatch)
+    monkeypatch.setenv(DEPLOY_ENV, "1")
+    monkeypatch.delenv(MODEL_FREE_ENV, raising=False)
+    monkeypatch.setattr(module, "_CONFIGURED_PROVIDER", "anthropic")
+    monkeypatch.setattr(module, "REPORT_PATH", tmp_path / "golden_report.json")
+
+    with pytest.raises(AssertionError):
+        await module.test_groups_a_and_b_meet_the_deploy_gate()
+    assert called, "the full pass must answer with the configured provider"
+
+
+@pytest.mark.asyncio
+async def test_without_a_model_a_call_to_anthropic_stops_the_run_as_not_measured(
+    monkeypatch, tmp_path
+):
+    """A code path nobody thought of that still reaches Claude: the run ends
+    as "did not run", never as a pass that spent money."""
+    import sys
+
+    from adelia import llm
+
+    path, module = _drive_the_gate(monkeypatch, tmp_path)
+    monkeypatch.setenv(MODEL_FREE_ENV, "1")
+    monkeypatch.setattr(settings, "anthropic_api_key", "placeholder-not-a-key")
+    canned = module._answer
+
+    async def _sneaky(q, embeddings):
+        if q.id == "A2":
+            try:
+                sys.modules["adelia.llm"].get_anthropic_client()
+            except Exception:  # noqa: BLE001 - the path swallows it, the gate must not
+                pass
+        return await canned(q, embeddings)
+
+    monkeypatch.setattr(module, "_answer", _sneaky)
+    with pytest.raises(AssertionError, match="Anthropic"):
+        await module.test_groups_a_and_b_meet_the_deploy_gate()
+    data = json.loads(path.read_text(encoding="utf-8"))
+    assert "Anthropic" in data["skipped_reason"]
+    assert data["recall_at_4"] is None
+    assert llm.get_anthropic_client is not None
+
+
+def _model_free_canned(monkeypatch, tmp_path, **kwargs):
+    """`_drive_the_gate` in the mode without a model: an answer that reached
+    generation is the fixed text, as the real stub writes it."""
+    reached = kwargs.pop("reached_b", ())
+    path, module = _drive_the_gate(monkeypatch, tmp_path, **kwargs)
+    monkeypatch.setenv(MODEL_FREE_ENV, "1")
+    canned = module._answer
+
+    async def _answer(q, embeddings):
+        text, cards = await canned(q, embeddings)
+        if q.group == "A":
+            return f"{module.MODEL_FREE_ANSWER} [ev_1]", cards
+        if q.id in reached:
+            return f"{module.MODEL_FREE_ANSWER} [ev_1]", [{"tag": "ev_1", "title": "Otra"}]
+        return text, cards
+
+    monkeypatch.setattr(module, "_answer", _answer)
+    return path, module
+
+
+@pytest.mark.asyncio
+async def test_without_a_model_the_generation_metrics_are_none_never_zero(monkeypatch, tmp_path):
+    path, module = _model_free_canned(monkeypatch, tmp_path)
+    await module.test_groups_a_and_b_meet_the_deploy_gate()
+    text = path.read_text(encoding="utf-8")
+    data = json.loads(text)
+    assert data["mode"] == "no_model"
+    assert data["orphan_citations"] is None and data["citation_defects"] is None
+    assert set(data["not_measured"]) >= {"orphan_citations", "citation_defects"}
+    # Group C's referral is code, not generated text: its dose check still runs.
+    assert data["red_flag_dosage"] == 0 and data["red_flag_rate"] == 1.0
+    assert data["recall_at_4"] == 1.0 and data["refusal_rate"] == 1.0
+    assert '\n  "skipped_reason": null,\n' in text
+
+
+def test_the_rendered_report_says_not_measured_and_why():
+    report = run_red_flag_group()
+    report.mode = "no_model"
+    report.orphan_citations = report.citation_defects = None
+    report.b_reached_model = ["B8", "B9"]
+    text = report.render()
+    assert "sin modelo" in text
+    assert "citas huérfanas:           no medido" in text
+    assert "citas repetidas o ajenas:  no medido" in text
+    assert "B8, B9" in text
+    assert report.failures() == []
+
+
+@pytest.mark.asyncio
+async def test_without_a_model_the_card_checks_are_not_evaluated(monkeypatch, tmp_path):
+    """A14 with its source twice fails the full pass (see above); without a
+    model the cards are the retrieval's, not the ones an answer cites, so the
+    check is not run and does not fail the gate."""
+    path, module = _model_free_canned(monkeypatch, tmp_path, repeated_a=("A14",))
+    await module.test_groups_a_and_b_meet_the_deploy_gate()
+    data = json.loads(path.read_text(encoding="utf-8"))
+    assert data["citation_defects"] is None and data["results"]["A14"]["passed"] is True
+
+
+@pytest.mark.asyncio
+async def test_without_a_model_recall_keeps_its_threshold(monkeypatch, tmp_path):
+    path, module = _model_free_canned(
+        monkeypatch, tmp_path,
+        bad_a=("A10", "A11", "A12", "A16", "A26", "A32", "A34", "A36"),
+    )
+    with pytest.raises(AssertionError) as failed:
+        await module.test_groups_a_and_b_meet_the_deploy_gate()
+    assert "recall@4" in str(failed.value)
+    data = json.loads(path.read_text(encoding="utf-8"))
+    assert data["recall_at_4"] == pytest.approx(27 / 35)
+
+
+@pytest.mark.asyncio
+async def test_without_a_model_a_b_that_reaches_the_model_is_named_and_not_scored(
+    monkeypatch, tmp_path
+):
+    """Cards under the cut hand a B question to the model, whose refusal is
+    what the full pass scores. Without a model nobody refused or answered: it
+    is named, kept out of the rate, and never counted as a pass."""
+    path, module = _model_free_canned(monkeypatch, tmp_path, reached_b=("B8", "B9"))
+    await module.test_groups_a_and_b_meet_the_deploy_gate()
+    data = json.loads(path.read_text(encoding="utf-8"))
+    assert data["b_reached_model"] == ["B8", "B9"]
+    assert data["results"]["B8"]["passed"] is None
+    assert data["results"]["B8"]["reached_model"] is True
+    assert data["refusal_rate"] == 1.0
+    assert "refusal_after_the_model" in data["not_measured"]
+    assert data["rates_by_locale"]["B"]["es"] == 1.0
+
+
+@pytest.mark.asyncio
+async def test_without_a_model_a_b_answered_by_code_still_fails_the_gate(monkeypatch, tmp_path):
+    """A coded path that stops refusing (here a B6 that comes back with a dose
+    and no stub) is still a refusal miss: the threshold is the same."""
+    path, module = _model_free_canned(monkeypatch, tmp_path, bad_b=("B6",))
+    with pytest.raises(AssertionError) as failed:
+        await module.test_groups_a_and_b_meet_the_deploy_gate()
+    assert "tasa de rechazo" in str(failed.value)
+    data = json.loads(path.read_text(encoding="utf-8"))
+    assert data["results"]["B6"]["passed"] is False
+
+
+@pytest.mark.asyncio
+async def test_the_fixed_answer_cites_every_card_it_is_given():
+    """compose keeps only the cards the answer cites; the fixed text cites
+    them all, so recall@4 reads the retrieval's top four."""
+    import sys
+
+    module = sys.modules[__name__]
+    calls = module._ModelCalls()
+    stream = module._model_free_stream(calls)
+    user = "Pregunta\n\n## Clinical evidence (cite as [ev_N]):\n[ev_1] A\nx\n\n[ev_2] B\ny\n"
+    text = "".join([piece async for piece in stream("system", user)])
+    assert text.startswith(module.MODEL_FREE_ANSWER)
+    assert "[ev_1]" in text and "[ev_2]" in text
+    assert calls.stubbed == 1 and calls.generation == 0
+
+
+@pytest.mark.asyncio
+async def test_without_a_model_an_uncited_card_is_not_named_as_an_orphan(monkeypatch, tmp_path):
+    """Orphans are a property of an answer the model wrote; with no answer the
+    report must not name one in its misses either."""
+    path, module = _model_free_canned(monkeypatch, tmp_path)
+    canned = module._answer
+
+    async def _extra_card(q, embeddings):
+        text, cards = await canned(q, embeddings)
+        if q.id == "A3":
+            cards = [*cards, {"tag": "ev_2", "title": "Sin citar", "source_id": "x", "snippet": ""}]
+        return text, cards
+
+    monkeypatch.setattr(module, "_answer", _extra_card)
+    await module.test_groups_a_and_b_meet_the_deploy_gate()
+    data = json.loads(path.read_text(encoding="utf-8"))
+    assert data["orphan_citations"] is None
+    assert not [m for m in data["misses"] if "sin citar" in m]
+
+
+# --- a group B question that reaches the model must be one we know about ------
+#
+# Without a model a B question with cards under the cut cannot be scored. The
+# six that do so on the corpus of 2026-11-06 are pinned in
+# golden.B_REACHING_THE_MODEL; the full pass scores them. Any other B question
+# that starts to reach the model (a looser cut, a new source next to it) is a
+# refusal nobody checked, so the gate without a model stops and says to run
+# the full pass, instead of keeping it out of the rate and passing.
+
+
+def test_the_known_b_questions_that_reach_the_model_are_group_b_questions():
+    from adelia.clinical.golden import B_REACHING_THE_MODEL
+
+    ids = {q.id for q in questions("B")}
+    assert B_REACHING_THE_MODEL and set(B_REACHING_THE_MODEL) <= ids
+
+
+@pytest.mark.asyncio
+async def test_without_a_model_an_unknown_b_reaching_the_model_fails_the_gate(
+    monkeypatch, tmp_path
+):
+    path, module = _model_free_canned(monkeypatch, tmp_path, reached_b=("B8", "B1"))
+    with pytest.raises(AssertionError) as failed:
+        await module.test_groups_a_and_b_meet_the_deploy_gate()
+    assert "B1" in str(failed.value) and "GOLDEN_WITH_MODEL=1" in str(failed.value)
+    data = json.loads(path.read_text(encoding="utf-8"))
+    assert data["b_reached_model"] == ["B1", "B8"]
+    assert data["skipped_reason"] is None
+
+
+def test_a_gate_where_no_b_question_was_decided_by_code_fails():
+    from adelia.clinical.golden import B_REACHING_THE_MODEL
+
+    report = run_red_flag_group()
+    report.mode = "no_model"
+    report.b_reached_model = [q.id for q in questions("B")]
+    report.refusal_rate = None
+    unknown = [q for q in report.b_reached_model if q not in B_REACHING_THE_MODEL]
+    failures = " ".join(report.failures())
+    assert unknown and all(qid in failures for qid in unknown)
+
+
+@pytest.mark.asyncio
+async def test_without_a_model_an_untranslated_question_is_named_in_the_report(
+    monkeypatch, tmp_path
+):
+    """A French or English question with no recorded translation is searched
+    as she wrote it: production would translate it, so the report says so."""
+    import sys
+
+    module = sys.modules[__name__]
+    _real_path_with_fake_retrieval(monkeypatch, module)
+    full = _recorded_corpus()
+    fr = next(q for q in questions("A") if q.locale == "fr")
+    vectors = _recorded_embeddings()
+    monkeypatch.setattr(module, "_recorded_corpus",
+                        lambda: {k: v for k, v in full.items() if k != fr.id})
+    # Its own vector is recorded; only its Spanish rendering is missing.
+    monkeypatch.setattr(module, "_usable_recording", lambda: vectors)
+    monkeypatch.setenv(MODEL_FREE_ENV, "1")
+    monkeypatch.setattr(module, "REPORT_PATH", tmp_path / "golden_report.json")
+    await module.test_groups_a_and_b_meet_the_deploy_gate()
+    data = json.loads((tmp_path / "golden_report.json").read_text(encoding="utf-8"))
+    assert data["untranslated"] == [fr.id]
+
+
+@pytest.mark.asyncio
+async def test_without_a_model_the_sdk_class_itself_is_a_tripwire(monkeypatch, tmp_path):
+    """agent/provider.py imports AsyncAnthropic from the SDK inside a function,
+    out of reach of a patch on adelia's modules: the SDK's class is patched too."""
+    path, module = _model_free_canned(monkeypatch, tmp_path)
+    canned = module._answer
+
+    async def _sdk(q, embeddings):
+        if q.id == "A2":
+            from anthropic import AsyncAnthropic
+
+            try:
+                AsyncAnthropic(api_key="placeholder-not-a-key")
+            except Exception:  # noqa: BLE001 - the path would swallow it too
+                pass
+        return await canned(q, embeddings)
+
+    monkeypatch.setattr(module, "_answer", _sdk)
+    with pytest.raises(AssertionError, match="Anthropic"):
+        await module.test_groups_a_and_b_meet_the_deploy_gate()
+    import anthropic
+
+    assert isinstance(anthropic.AsyncAnthropic, type), "the SDK class is put back"

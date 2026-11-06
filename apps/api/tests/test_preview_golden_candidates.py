@@ -321,3 +321,81 @@ async def test_a_run_that_cannot_embed_exits_two_not_one(monkeypatch, capsys):
     args = argparse.Namespace(ids=None, questions=None, export=None, record=None, json=None)
     assert await pv.main_async(args) == 2
     assert "A90" in capsys.readouterr().out
+
+
+# --- without a model (2026-11-06) ----------------------------------------------
+#
+# The candidate evaluation (docs/GOLDEN_GATE_DESPLIEGUE.md) runs this preview with
+# and without a candidate corpus and must not spend a model call: the only call
+# it made besides the embeddings was the corpus translation of a French or
+# English question. With --no-model that is the translation recorded in the
+# fixture (made by the production model when the vectors were recorded), or
+# the question as she wrote it, said out loud.
+
+
+def _explode_translation(monkeypatch):
+    async def _no(*args, **kwargs):
+        raise AssertionError("the preview without a model asked a model to translate")
+
+    monkeypatch.setattr(pv, "corpus_query", _no)
+
+
+_FR = GoldenQuestion("A93", "A", "Il a des croûtes de lait", locale="fr", age_months=2,
+                     expect_source="costra láctea", rationale="sin modelo")
+
+
+async def test_without_a_model_a_recorded_translation_is_searched(monkeypatch):
+    from adelia.config import settings
+
+    monkeypatch.setattr(settings, "lay_query_expansion", False)
+    embedded: list[str] = []
+    _offline(monkeypatch, [], [], embedded)
+    _explode_translation(monkeypatch)
+    monkeypatch.setattr(pv, "NO_MODEL", True)
+    cache = {(_FR.question, "fr"): "Tiene costra láctea"}
+    verdict = await pv.preview(_FR, cache=cache, recording=None)
+    assert verdict.searched == ["Tiene costra láctea"] and not verdict.untranslated
+
+
+async def test_without_a_model_an_unrecorded_question_is_searched_as_written(monkeypatch):
+    from adelia.config import settings
+
+    monkeypatch.setattr(settings, "lay_query_expansion", False)
+    embedded: list[str] = []
+    _offline(monkeypatch, [], [], embedded)
+    _explode_translation(monkeypatch)
+    monkeypatch.setattr(pv, "NO_MODEL", True)
+    verdict = await pv.preview(_FR, cache={}, recording=None)
+    assert verdict.searched == [_FR.question] and verdict.untranslated
+    assert "sin traducir" in pv._fmt_verdict(_FR, verdict)
+
+
+def test_the_recorded_translations_come_from_the_fixture_only_for_the_current_wording():
+    gate_fr = next(q for q in GOLDEN_SET if q.locale == "fr" and q.group == "A")
+    found = pv.recorded_translations([gate_fr, _FR])
+    assert set(found) == {(gate_fr.question, "fr")}
+    assert found[(gate_fr.question, "fr")] != gate_fr.question
+
+
+async def test_main_without_a_model_fills_the_translations_and_says_so(monkeypatch, capsys):
+    seen: dict = {}
+
+    async def _preview(q, *, cache, recording):
+        seen.update(cache)
+        seen["no_model"] = pv.NO_MODEL
+        return pv.Verdict(q.id, q.group, q.locale, q.question, passed=True)
+
+    async def _dispose():
+        return None
+
+    gate_fr = next(q for q in GOLDEN_SET if q.locale == "fr" and q.group == "A")
+    monkeypatch.setattr(pv, "NO_MODEL", False)
+    monkeypatch.setattr(pv, "select", lambda ids: [gate_fr])
+    monkeypatch.setattr(pv, "preview", _preview)
+    monkeypatch.setattr(pv, "_dispose", _dispose)
+    args = argparse.Namespace(
+        ids=None, questions=None, export=None, record=None, json=None, no_model=True
+    )
+    assert await pv.main_async(args) == 0
+    assert seen["no_model"] is True and (gate_fr.question, "fr") in seen
+    assert "sin modelo" in capsys.readouterr().out

@@ -305,3 +305,54 @@ def test_the_real_report_of_group_c_compares_with_itself():
     data = run_red_flag_group().as_dict()
     comparison, status, _ = run(data, data)
     assert status == 0 and comparison.changes and not comparison.regressions()
+
+
+# --- the gate without a model (2026-11-06) -------------------------------------
+
+
+def _no_model(data: dict) -> dict:
+    return {
+        **data, "mode": "no_model", "orphan_citations": None, "citation_defects": None,
+        "not_measured": ["orphan_citations", "citation_defects"],
+    }
+
+
+def test_a_report_with_the_model_and_one_without_do_not_compare(tmp_path, capsys):
+    """Without a model a B with cards under the cut is not scored at all, and
+    the cards are the retrieval's, not the ones an answer cites: set against a
+    full pass, every such B would read as dropped and every metric as moved."""
+    base = report(a=ALL_PASS_A, b=ALL_PASS_B, c=ALL_PASS_C)
+    cand = _no_model(base)
+    b_path, c_path = tmp_path / "base.json", tmp_path / "cand.json"
+    b_path.write_text(json.dumps(base), encoding="utf-8")
+    c_path.write_text(json.dumps(cand), encoding="utf-8")
+    assert compare_golden.main([str(b_path), str(c_path)]) == 2
+    assert "modo" in capsys.readouterr().err
+
+
+def test_two_reports_without_a_model_compare_and_say_not_measured(tmp_path, capsys):
+    base = _no_model(report(a=ALL_PASS_A, b=ALL_PASS_B, c=ALL_PASS_C))
+    b_path = tmp_path / "base.json"
+    b_path.write_text(json.dumps(base), encoding="utf-8")
+    assert compare_golden.main([str(b_path), str(b_path)]) == 0
+    out = capsys.readouterr().out
+    assert "no medido" in out and "no ejecutado" not in out.split("por idioma")[0]
+
+
+def test_a_report_from_before_the_mode_field_is_a_full_pass():
+    old = report(a=ALL_PASS_A, b=ALL_PASS_B, c=ALL_PASS_C)
+    old.pop("mode", None)
+    assert compare_golden.report_mode(old) == "model"
+
+
+def test_a_b_that_starts_reaching_the_model_is_a_regression_named_as_such():
+    """Without a model a B with cards under the cut has passed None and
+    reached_model; set against a refusal by code it is a regression, not a
+    question that vanished from the candidate."""
+    base = _no_model(report(a=ALL_PASS_A, b=ALL_PASS_B, c=ALL_PASS_C))
+    cand = json.loads(json.dumps(base))
+    cand["results"]["B1"].update(passed=None, reached_model=True)
+    comparison, status, text = run(base, cand)
+    assert status == 1
+    assert [c.id for c in comparison.regressions()] == ["B1"] and not comparison.dropped
+    assert "llega al modelo" in text and "ya no está" not in text
