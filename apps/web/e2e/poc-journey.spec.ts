@@ -258,6 +258,9 @@ for (const L of LOCALES) {
     await hydrated(page.getByLabel(m.settings.ackIrreversible));
     await page.getByLabel(m.settings.ackIrreversible).check();
     await page.locator("#confirm-delete").fill(email);
+    // Armed only once both safeguards reached React state; a press before that
+    // does nothing and the test would wait 20 s for a navigation that never comes.
+    await expect(page.getByRole("button", { name: m.settings.deleteButton })).toBeEnabled();
     await page.getByRole("button", { name: m.settings.deleteButton }).click();
     await page.waitForURL((u) => !u.pathname.includes("/dashboard"), { timeout: 20_000 });
     expect(await query("SELECT 1 FROM users WHERE email = $1", [email])).toHaveLength(0);
