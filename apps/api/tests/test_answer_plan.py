@@ -13,6 +13,7 @@ import pytest
 
 from adelia.services.answer_contract import (
     CONTRACTS,
+    NO_UNASKED_DOCTOR_RULE,
     NO_UNASKED_REFUSALS_RULE,
     PLAN_HEADINGS,
     answer_contract,
@@ -161,6 +162,8 @@ def test_with_the_setting_off_the_contract_is_what_it_was(monkeypatch, locale, s
 def test_with_the_setting_on_the_rule_is_one_more_line_and_nothing_else(
     monkeypatch, locale, shape
 ):
+    """On, the contract gains the unasked-refusal line and, for a plan only, the
+    doctor-section line right after it; nothing else moves."""
     from adelia.config import settings
 
     monkeypatch.setattr(settings, "no_unasked_refusals", False)
@@ -168,8 +171,42 @@ def test_with_the_setting_on_the_rule_is_one_more_line_and_nothing_else(
     monkeypatch.setattr(settings, "no_unasked_refusals", True)
     on = answer_contract(locale, shape=shape)
     line = f"- {NO_UNASKED_REFUSALS_RULE[locale]}\n"
+    if shape == "plan":
+        line += f"- {NO_UNASKED_DOCTOR_RULE[locale]}\n"
     assert on.count(line) == 1
     assert on.replace(line, "", 1) == off
+
+
+@pytest.mark.parametrize("locale", ["es", "en", "fr"])
+def test_a_short_answer_never_gets_the_doctor_section_line(monkeypatch, locale):
+    """A short answer has no plan sections: the clause would only push one in."""
+    from adelia.config import settings
+
+    monkeypatch.setattr(settings, "no_unasked_refusals", True)
+    assert NO_UNASKED_DOCTOR_RULE[locale] not in answer_contract(locale, shape="question")
+    assert NO_UNASKED_DOCTOR_RULE[locale] in answer_contract(locale, shape="plan")
+
+
+@pytest.mark.parametrize("locale", ["es", "en", "fr"])
+def test_the_doctor_section_is_never_an_unasked_one(locale):
+    """Measured in prod on 2026-11-06 with the rule on: croup and bronchiolitis
+    plans had the urgency fragment ("Ve a urgencias si hace ruido al coger aire
+    aunque esté tranquila", Laringitis AEPap; SEUP and AEP for bronchiolitis)
+    and still left the signs under Vigila with no action and no doctor section,
+    while the same croup question with a dose in it wrote the section. The
+    section is never 'unasked', and a sign whose action a source gives never
+    stays only under the watch heading."""
+    rule = NO_UNASKED_DOCTOR_RULE[locale]
+    headings = PLAN_HEADINGS[locale]
+    assert headings["doctor"] in rule and headings["watch"] in rule
+    assert {"es": "nunca es un apartado que ella no ha pedido",
+            "en": "never a section she did not ask for",
+            "fr": "n’est jamais une rubrique qu’il n’a pas demandée"}[locale] in rule
+    assert {"es": "la urgencia que da la fuente",
+            "en": "the urgency the source gives",
+            "fr": "l’urgence que donne la source"}[locale] in rule
+    assert CONTRACTS[locale].refusal not in rule
+    assert "—" not in rule and "–" not in rule
 
 
 @pytest.mark.parametrize("locale", ["es", "en", "fr"])
