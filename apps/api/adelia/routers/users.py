@@ -35,8 +35,9 @@ async def delete_my_account(
 
     DB graph goes via ON DELETE CASCADE (0011): documents → entities/chunks,
     briefings → citations/share_links, chat sessions → messages, profiles,
-    ingestion links. S3 blobs are deleted best-effort AFTER the commit —
-    a failed blob delete must not resurrect the account (logged for ops).
+    ingestion links. S3 blobs are deleted best-effort after the response,
+    from their tombstones; a failed blob delete must not resurrect the
+    account (logged for ops, retried by the next sweep).
     """
     result = await db.execute(
         sa.select(Document.s3_key).where(Document.user_id == user_id)
@@ -58,7 +59,16 @@ async def delete_my_account(
     await db.execute(sa.delete(User).where(User.id == user_id))
     await db.commit()
 
-    await sweep_blob_tombstones()
+    # Her blobs go AFTER the 204, and only hers. This request used to await a
+    # sweep of every due tombstone in the system before answering. With object
+    # storage unreachable each key costs 4 to 9 s of botocore retries, and a
+    # backlog of failed keys only grows, so the answer took 21.6 s in CI (the
+    # e2e job runs no MinIO) and 30 to 52 s locally: the page sat on its
+    # deleting state and e2e/poc-journey step 15 flaked in French, the run
+    # that deletes later. She is erased at the commit above; the tombstones
+    # are durable, and the boot and hourly sweeps own anybody else's backlog.
+    if s3_keys:
+        _spawn_erasure_sweep(s3_keys)
 
     logger.info("account erased user_id=%s blobs=%d", user_id, len(s3_keys))
     return None
@@ -81,7 +91,7 @@ async def _sweep_after_erasure(keys: list[str]) -> None:
     try:
         await sweep_blob_tombstones(keys=keys)
     except Exception:  # noqa: BLE001 — tombstones kept, next sweep retries
-        logger.exception("sweep after erasure failed (tombstones kept)")
+        logger.exception("sweep after an erasure failed (tombstones kept)")
 
 
 async def drain_erasure_sweeps(grace_s: float = 10.0) -> None:
