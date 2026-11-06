@@ -622,3 +622,134 @@ async def test_with_the_expansion_on_a_french_question_expands_its_spanish_rende
     mock_embed.assert_awaited_once_with([question, _LAY, expanded_query(_LAY)])
     assert mock_chunks.call_args.kwargs["query_embedding"] == [0.1] * 1024
     assert [c.args[0] for c in mock_evidence.await_args_list] == [[0.2] * 1024, [0.3] * 1024]
+
+
+# --- the baby she does not name (agent/implicit_subject.py) ----------------------
+#
+# The chat and the /dashboard agent search the corpus here, so
+# settings.implicit_subject_expansion reaches them here too: off, the calls of
+# before; on, her sentence with the baby put back as one more text in the same
+# embedding call and one more evidence search, merged by best distance. Her
+# own documents are searched with what she wrote.
+
+_NO_SUBJECT = "Tiene diarrea desde ayer, ¿qué hago?"
+
+
+@patch("adelia.services.chat_orchestrator._retrieve_evidence_for_query", return_value=[])
+@patch("adelia.services.chat_orchestrator.retrieve_relevant_chunks", return_value=[])
+@patch("adelia.services.chat_orchestrator.embed_texts")
+@patch("adelia.services.chat_orchestrator.detect_temporal_intent", return_value=None)
+async def test_with_the_subject_off_the_chat_searches_exactly_as_before(
+    mock_temporal, mock_embed, mock_chunks, mock_evidence, monkeypatch,
+):
+    from adelia.agent import implicit_subject
+    from adelia.config import settings
+    from adelia.services.chat_orchestrator import retrieve_for_account
+    from adelia.services.scope import Scope
+
+    monkeypatch.setattr(settings, "implicit_subject_expansion", False)
+    monkeypatch.setattr(settings, "lay_query_expansion", False)
+
+    def _never(*args, **kwargs):
+        raise AssertionError("the subject rules are read with the setting off")
+
+    monkeypatch.setattr(implicit_subject, "subject_query", _never)
+    mock_embed.return_value = [[0.1] * 1024]
+    await retrieve_for_account(Scope(user_id=uuid4()), question=_NO_SUBJECT, locale="es",
+                               age_months=7, baby_name="Nora")
+
+    mock_embed.assert_awaited_once_with([_NO_SUBJECT])
+    mock_evidence.assert_awaited_once_with([0.1] * 1024, query_text=_NO_SUBJECT, locale="es")
+
+
+@patch("adelia.services.chat_orchestrator._retrieve_evidence_for_query")
+@patch("adelia.services.chat_orchestrator.retrieve_relevant_chunks", return_value=[])
+@patch("adelia.services.chat_orchestrator.embed_texts")
+@patch("adelia.services.chat_orchestrator.detect_temporal_intent", return_value=None)
+async def test_with_the_subject_on_the_chat_also_searches_with_the_baby(
+    mock_temporal, mock_embed, mock_chunks, mock_evidence, monkeypatch,
+):
+    from adelia.config import settings
+    from adelia.services.chat_orchestrator import retrieve_for_account
+    from adelia.services.scope import Scope
+
+    monkeypatch.setattr(settings, "implicit_subject_expansion", True)
+    monkeypatch.setattr(settings, "lay_query_expansion", False)
+    found = _evidence_match()
+    mock_evidence.side_effect = [[], [found]]
+    mock_embed.return_value = [[0.1] * 1024, [0.2] * 1024]
+
+    out = await retrieve_for_account(Scope(user_id=uuid4()), question=_NO_SUBJECT,
+                                     locale="es", age_months=7)
+
+    mock_embed.assert_awaited_once_with([_NO_SUBJECT, f"Mi bebé de 7 meses: {_NO_SUBJECT}"])
+    assert mock_chunks.call_args.kwargs["query_embedding"] == [0.1] * 1024
+    assert [c.args[0] for c in mock_evidence.await_args_list] == [[0.1] * 1024, [0.2] * 1024]
+    assert out.evidence == [found]
+
+
+@patch("adelia.services.chat_orchestrator._retrieve_evidence_for_query", return_value=[])
+@patch("adelia.services.chat_orchestrator.retrieve_relevant_chunks", return_value=[])
+@patch("adelia.services.chat_orchestrator.embed_texts")
+@patch("adelia.services.chat_orchestrator.detect_temporal_intent", return_value=None)
+async def test_the_child_s_name_counts_as_the_subject_in_the_chat(
+    mock_temporal, mock_embed, mock_chunks, mock_evidence, monkeypatch,
+):
+    from adelia.config import settings
+    from adelia.services.chat_orchestrator import retrieve_for_account
+    from adelia.services.scope import Scope
+
+    monkeypatch.setattr(settings, "implicit_subject_expansion", True)
+    monkeypatch.setattr(settings, "lay_query_expansion", False)
+    mock_embed.return_value = [[0.1] * 1024]
+    question = "Nora tiene diarrea desde ayer"
+    await retrieve_for_account(Scope(user_id=uuid4()), question=question, locale="es",
+                               age_months=7, baby_name="Nora")
+    mock_embed.assert_awaited_once_with([question])
+
+
+@patch("adelia.services.chat_orchestrator._retrieve_evidence_for_query", return_value=[])
+@patch("adelia.services.chat_orchestrator.retrieve_relevant_chunks", return_value=[])
+@patch("adelia.services.chat_orchestrator.embed_texts")
+@patch("adelia.services.chat_orchestrator.detect_temporal_intent", return_value=None)
+@patch("adelia.services.chat_orchestrator.corpus_query")
+async def test_with_the_subject_on_a_french_question_gets_the_baby_in_spanish(
+    mock_corpus, mock_temporal, mock_embed, mock_chunks, mock_evidence, monkeypatch,
+):
+    from adelia.config import settings
+    from adelia.services.chat_orchestrator import retrieve_for_account
+    from adelia.services.scope import Scope
+
+    monkeypatch.setattr(settings, "implicit_subject_expansion", True)
+    monkeypatch.setattr(settings, "lay_query_expansion", False)
+    question = "Elle a la diarrhée depuis hier"
+    mock_corpus.return_value = "Tiene diarrea desde ayer"
+    mock_embed.return_value = [[0.1] * 1024, [0.2] * 1024, [0.3] * 1024]
+
+    await retrieve_for_account(Scope(user_id=uuid4()), question=question, locale="fr",
+                               age_months=9)
+
+    mock_embed.assert_awaited_once_with(
+        [question, "Tiene diarrea desde ayer", "Mi bebé de 9 meses: Tiene diarrea desde ayer"]
+    )
+    assert mock_chunks.call_args.kwargs["query_embedding"] == [0.1] * 1024
+    assert [c.args[0] for c in mock_evidence.await_args_list] == [[0.2] * 1024, [0.3] * 1024]
+
+
+@patch("adelia.services.chat_orchestrator.detect_temporal_intent", return_value=None)
+@patch("adelia.services.chat_orchestrator.retrieve_relevant_chunks", return_value=[])
+@patch("adelia.services.chat_orchestrator.embed_texts")
+@patch("adelia.services.chat_orchestrator._retrieve_evidence_for_query", return_value=[])
+@patch("adelia.services.chat_orchestrator._stream_llm_tokens", _explode)
+async def test_the_chat_hands_the_profile_age_to_the_subject(
+    mock_evidence, mock_embed, mock_chunks, mock_temporal, monkeypatch,
+):
+    from adelia.config import settings
+
+    monkeypatch.setattr(settings, "implicit_subject_expansion", True)
+    monkeypatch.setattr(settings, "lay_query_expansion", False)
+    mock_embed.return_value = [[0.1] * 1024, [0.2] * 1024]
+    await _collect_events(
+        answer_question_streaming(user_id=uuid4(), question=_NO_SUBJECT, age_months=7)
+    )
+    mock_embed.assert_awaited_once_with([_NO_SUBJECT, f"Mi bebé de 7 meses: {_NO_SUBJECT}"])

@@ -127,6 +127,9 @@ falta algo, se responde con lo que hay y se dice qué cambiaría.
 Lo que hoy hace `routers/demo.py`: `retrieval_query` neutraliza el nombre, embed,
 `retrieve_evidence` con corte 0.19 y margen 0.08, luego `retrieve_experience`
 (mejor esfuerzo). `decide` fija `kind` solo con la evidencia.
+Detrás de `implicit_subject_expansion` (apagado), una frase que no nombra a nadie
+(«Tiene diarrea desde ayer») se busca también como «Mi bebé de N meses: …», con los
+mismos cortes y la mejor distancia por fragmento (`agent/implicit_subject.py`).
 
 ### `plan`
 Contrato actual de plan (Hoy / Vigila / Cuándo ir al médico / No olvides /

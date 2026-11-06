@@ -63,6 +63,7 @@ from langgraph.config import get_stream_writer  # noqa: E402
 from langgraph.graph import END, START, StateGraph  # noqa: E402
 from langgraph.runtime import Runtime  # noqa: E402
 
+from adelia.agent import implicit_subject  # noqa: E402
 from adelia.agent import lay_terms  # noqa: E402
 from adelia.agent import record as rec  # noqa: E402
 from adelia.agent import warning_signs  # noqa: E402
@@ -463,14 +464,27 @@ async def retrieve(state: AgentState, runtime: Runtime[GraphDeps]) -> dict:
             "patient_context": found.patient_context,
             "citations": list(found.citations),
         }
-    text = deps.retrieval_text(state["message"])
+    spoken = deps.retrieval_text(state["message"])
+    text = spoken
     if deps.corpus_text is not None:
-        text = await deps.corpus_text(text, _locale(state))
+        text = await deps.corpus_text(spoken, _locale(state))
     # Her words, rendered in the corpus's terms, as a second search
     # (agent/lay_terms.py). Off by default: then the lexicon is not read and
     # the calls below are the ones this node always made.
     widened = lay_terms.expanded_query(text) if settings.lay_query_expansion else None
     texts = [text] if widened is None else [text, widened]
+    # The baby she did not name, put back, as its own search
+    # (agent/implicit_subject.py). Off by default, and then not read either.
+    subject_index = None
+    if settings.implicit_subject_expansion:
+        facts = state.get("facts")
+        subject = implicit_subject.subject_query(
+            text, locale=_locale(state), spoken=spoken, age_months=_age(state),
+            name=facts.display_name if facts is not None else None,
+        )
+        if subject is not None:
+            texts.append(subject)
+            subject_index = len(texts) - 1
     # A plan's "Cuándo ir al médico", from the library (agent/warning_signs.py):
     # the same topic plus the warning-sign words, embedded in the same call and
     # searched only if the main search found evidence. Off by default, and a
@@ -494,10 +508,16 @@ async def retrieve(state: AgentState, runtime: Runtime[GraphDeps]) -> dict:
     }
     async with AsyncSessionLocal() as session:
         evidence = await deps.retrieve_evidence(session, query_embedding=embeds[0], **cuts)
+        also: list = []
         if widened is not None and len(embeds) > 1:
-            also = await deps.retrieve_evidence(session, query_embedding=embeds[1], **cuts)
+            also.append(await deps.retrieve_evidence(session, query_embedding=embeds[1], **cuts))
+        if subject_index is not None and len(embeds) > subject_index:
+            also.append(await deps.retrieve_evidence(
+                session, query_embedding=embeds[subject_index], **cuts
+            ))
+        if also:
             evidence = merge_by_best_distance(
-                [evidence, also], top_k=cuts["top_k"], relative_margin=cuts["relative_margin"]
+                [evidence, *also], top_k=cuts["top_k"], relative_margin=cuts["relative_margin"]
             )
         if evidence and warning_index is not None and len(embeds) > warning_index:
             alarm = await deps.retrieve_evidence(

@@ -249,3 +249,41 @@ async def test_a_normal_turn_still_surfaces_a_missing_key_as_an_error():
         events = await _collect(run_turn(
             user_id=uuid4(), profile_id=None, message="hola"))
     assert any(e.type == "error" for e in events)
+
+
+async def test_the_agent_hands_the_profile_name_and_age_to_the_subject(monkeypatch):
+    """settings.implicit_subject_expansion (agent/implicit_subject.py): the
+    /dashboard agent searches through the chat's retrieval, with the active
+    child's age in the prefix and her name counted as the subject."""
+    from adelia.config import settings
+    from adelia.enrichment.profile_service import ProfileFacts
+
+    monkeypatch.setattr(settings, "implicit_subject_expansion", True)
+    monkeypatch.setattr(settings, "lay_query_expansion", False)
+    facts = ProfileFacts(profile_id=None, display_name="Nora", date_of_birth=None,
+                         sex=None, age_months=7)
+    texts: list[list[str]] = []
+
+    async def fake_embed(batch):
+        texts.append(list(batch))
+        return [[0.1] * 1024 for _ in batch]
+
+    async def fake_stream(*args, **kwargs):
+        yield "Claro"
+
+    for message in ("Tiene diarrea desde ayer, ¿qué hago?", "Nora tiene diarrea, ¿qué hago?"):
+        with patch("adelia.agent.orchestrator.load_profile_facts", return_value=facts), \
+             patch("adelia.services.chat_orchestrator.detect_temporal_intent",
+                   return_value=None), \
+             patch("adelia.services.chat_orchestrator.retrieve_relevant_chunks",
+                   return_value=[]), \
+             patch("adelia.services.chat_orchestrator.embed_texts", fake_embed), \
+             patch("adelia.services.chat_orchestrator._retrieve_evidence_for_query",
+                   return_value=[]), \
+             patch("adelia.services.chat_orchestrator._stream_llm_tokens", fake_stream):
+            await _collect(run_turn(user_id=uuid4(), profile_id=None, message=message))
+    assert texts == [
+        ["Tiene diarrea desde ayer, ¿qué hago?",
+         "Mi bebé de 7 meses: Tiene diarrea desde ayer, ¿qué hago?"],
+        ["Nora tiene diarrea, ¿qué hago?"],
+    ]

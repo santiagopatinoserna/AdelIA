@@ -226,6 +226,18 @@ class Settings(BaseSettings):
     # retrieval makes exactly the calls it made before this setting existed.
     lay_query_expansion: bool = False
 
+    # The baby she does not name, put back for the search (agent/implicit_subject.py).
+    # Measured in prod on 2026-11-06: "Tiene 38,3 de fiebre desde esta mañana, ¿qué hago?"
+    # and "Tiene diarrea desde ayer, ¿qué hago?" were refused with their sources at
+    # 0.197-0.229, just past the cut, while "Mi bebé de 10 meses tiene 38,5 de fiebre"
+    # found five at 0.12-0.14. On, a sentence that names nobody (no baby, no name, no
+    # other person) is also searched as "Mi bebé de N meses: ..." under the same
+    # cut-offs, and each fragment keeps its better distance. Neither cut-off moves. OFF
+    # until scripts/eval_implicit_subject.py, run in production, shows no group B
+    # question under the cut and the server golden gate passes; off, retrieval makes
+    # exactly the calls it made before this setting existed.
+    implicit_subject_expansion: bool = False
+
     # "Cuándo ir al médico" from the library (agent/warning_signs.py). Measured in prod on
     # 2026-11-06 (demo, Claude, 30 real questions): the croup plan cited AEP, AEPap and
     # SEUP and then said it had no evidence on when to go to the emergency room. The
