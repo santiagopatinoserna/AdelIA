@@ -1,4 +1,4 @@
-import { expect, test, type Page } from "@playwright/test";
+import { expect, test, type Locator, type Page } from "@playwright/test";
 import { readFileSync } from "node:fs";
 import path from "node:path";
 import { Pool } from "pg";
@@ -71,6 +71,18 @@ test.afterAll(async () => {
 
 const sse = (events: [string, unknown][]) =>
   events.map(([e, d]) => `event: ${e}\ndata: ${JSON.stringify(d)}\n\n`).join("");
+
+// React attaches its props to a DOM node when it hydrates it; before that a
+// file chosen, a box ticked or a button pressed goes nowhere and leaves no
+// error. CI under load can hand the test a page that has loaded but not yet
+// hydrated: the upload never left (stored/refused both false for 30 s) and the
+// delete button never armed (no navigation in 20 s). Wait for the handlers.
+async function hydrated(locator: Locator) {
+  await locator.waitFor({ state: "attached" });
+  await expect
+    .poll(() => locator.evaluate((el) => Object.keys(el).some((k) => k.startsWith("__reactProps$"))))
+    .toBe(true);
+}
 
 async function ask(page: Page, placeholder: string, text: string) {
   const box = page.getByPlaceholder(placeholder);
@@ -167,6 +179,7 @@ for (const L of LOCALES) {
     // 8. A PDF report. Without a key it cannot be read, and the history says
     //    so next to a name she can still recognise.
     await page.goto(`/${L.locale}/dashboard/upload`);
+    await hydrated(page.locator('input[type="file"]'));
     await page.locator('input[type="file"]').setInputFiles(PDF);
     const stored = async () =>
       (await query("SELECT 1 FROM documents WHERE user_id = $1", [user.id])).length === 1;
@@ -228,6 +241,7 @@ for (const L of LOCALES) {
     expect(JSON.parse(exported).adelia.observations).toHaveLength(1);
 
     // 13. Sign out from settings, and the panel is closed behind her.
+    await hydrated(page.getByRole("button", { name: m.settings.signOutCta }));
     await page.getByRole("button", { name: m.settings.signOutCta }).click();
     await page.waitForURL((u) => !u.pathname.includes("/dashboard"), { timeout: 20_000 });
     await page.goto(`/${L.locale}/dashboard`);
@@ -241,6 +255,7 @@ for (const L of LOCALES) {
 
     // 15. Delete the account: nothing of hers is left.
     await page.goto(`/${L.locale}/dashboard/settings`);
+    await hydrated(page.getByLabel(m.settings.ackIrreversible));
     await page.getByLabel(m.settings.ackIrreversible).check();
     await page.locator("#confirm-delete").fill(email);
     await page.getByRole("button", { name: m.settings.deleteButton }).click();

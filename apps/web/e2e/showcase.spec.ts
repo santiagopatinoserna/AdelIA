@@ -583,6 +583,9 @@ test("home: the height mark carries the baby's real name and age, once, and noth
   const mark = page.getByTestId("growth-mark");
   await expect(mark).toHaveCount(1); // one warm signal on the screen, exactly one
   await expect(mark).toHaveText("Martina · 7 meses");
+  // The list can land a beat after the mark under CI load; the order check
+  // below reads it from the DOM and used to throw on a null (2026-11-06).
+  await expect(page.getByTestId("showcase-grid")).toBeVisible();
   // It is a mark, not an ornament and not a rule: it sits between the greeting
   // and the list and costs one line of height. (It used to draw a flex-1
   // hairline, which at 1280 became a 781 px divider between the greeting and
