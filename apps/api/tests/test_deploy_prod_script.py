@@ -71,7 +71,9 @@ main "$@"
 """
 
 
-def _deploy(tmp_path: Path, *args: str, gate_rc: int = 0) -> tuple[subprocess.CompletedProcess, list[str]]:
+def _deploy(
+    tmp_path: Path, *args: str, gate_rc: int = 0, extra_env: dict[str, str] | None = None
+) -> tuple[subprocess.CompletedProcess, list[str]]:
     bin_dir = tmp_path / "bin"
     bin_dir.mkdir(exist_ok=True)
     log = tmp_path / "ssh.log"
@@ -96,6 +98,9 @@ exit 0
         "DEPLOY": str(DEPLOY),
         "FAKE_GATE_RC": str(gate_rc),
     }
+    for name in ("GOLDEN_WITH_MODEL", "GOLDEN_CANDIDATE_GLOB"):
+        env.pop(name, None)
+    env.update(extra_env or {})
     proc = subprocess.run(
         ["bash", str(harness), *args], env=env, capture_output=True, text=True, timeout=60
     )
@@ -175,7 +180,8 @@ def test_a_service_merely_named_like_api_does_not_trigger_the_gate(tmp_path):
 
 
 def _server_gate(
-    tmp_path: Path, *, build_rc: int = 0, copy_rc: int = 0, run_rc: int = 0
+    tmp_path: Path, *, build_rc: int = 0, copy_rc: int = 0, run_rc: int = 0,
+    args: tuple[str, ...] = (), extra_env: dict[str, str] | None = None,
 ) -> tuple[subprocess.CompletedProcess, list[str]]:
     root = tmp_path / "opt-adelia"
     (root / "scripts").mkdir(parents=True)
@@ -203,8 +209,11 @@ exit 0
         "FAKE_COPY_RC": str(copy_rc),
         "FAKE_RUN_RC": str(run_rc),
     }
+    for name in ("GOLDEN_WITH_MODEL", "GOLDEN_CANDIDATE_GLOB"):
+        env.pop(name, None)
+    env.update(extra_env or {})
     proc = subprocess.run(
-        ["bash", str(root / "scripts" / SERVER_GATE.name)],
+        ["bash", str(root / "scripts" / SERVER_GATE.name), *args],
         env=env, capture_output=True, text=True, timeout=60, cwd=tmp_path,
     )
     return proc, _lines(log)
@@ -297,6 +306,8 @@ def _container_gate(
     load_rc: int = 0,
     pytest_rc: int = 0,
     report: str | None = _REPORT_RAN,
+    args: tuple[str, ...] = (),
+    candidate_load_rc: int = 0,
 ) -> tuple[subprocess.CompletedProcess, list[str]]:
     app = tmp_path / "app"
     (app / "scripts").mkdir(parents=True)
@@ -318,17 +329,26 @@ exit {alembic_rc}
         f"""#!/usr/bin/env bash
 if [ "$1" = "-m" ] && [ "$2" = "pytest" ]; then
   printf 'pytest deploy=%s %s\\n' "${{ADELIA_GOLDEN_DEPLOY:-}}" "$*" >> "{log}"
-  [ -f "{report_src}" ] && cp "{report_src}" golden_report.json
+  printf 'model_free=%s\\n' "${{ADELIA_GOLDEN_MODEL_FREE:-}}" >> "{log}.env"
+  printf 'anthropic_key=%s\\n' "${{ANTHROPIC_API_KEY+set}}" >> "{log}.key"
+  if [ -f "{report_src}" ] && ! {{ [ -n "${{FAKE_NO_SECOND_REPORT:-}}" ] && [ -f golden_report.sin_candidatos.json ]; }}; then
+    cp "{report_src}" golden_report.json
+  fi
   exit {pytest_rc}
 fi
 printf 'python %s\\n' "$(printf '%s ' "$@" | tr '\\n' ' ')" >> "{log}"
+case "$*" in
+  *"golden_candidates.py load"*) exit {candidate_load_rc} ;;
+  *preview_golden_candidates.py*|*"golden_candidates.py compare"*) exit 0 ;;
+esac
 exit {load_rc}
 """,
     )
     env = {**os.environ, "POSTGRES_DB": db}
     env.pop("ADELIA_GOLDEN_DEPLOY", None)
+    env.pop("ADELIA_GOLDEN_MODEL_FREE", None)
     proc = subprocess.run(
-        ["bash", str(app / "scripts" / CONTAINER_GATE.name)],
+        ["bash", str(app / "scripts" / CONTAINER_GATE.name), *args],
         env=env, capture_output=True, text=True, timeout=60, cwd=tmp_path,
     )
     return proc, _lines(log)
@@ -375,6 +395,192 @@ def test_inside_the_container_a_corpus_load_that_crashes_stops_before_the_set(tm
     proc, calls = _container_gate(tmp_path, load_rc=1)
     assert proc.returncode == 2
     assert not [c for c in calls if c.startswith("pytest")], calls
+
+
+def _model_free_log(tmp_path: Path) -> list[str]:
+    return _lines(tmp_path / "venv.log.env")
+
+
+# --- without a model, by default (Santiago's rule of 2026-11-06) -------------------
+#
+# The app's Anthropic budget (200 $ a month) is paid by the mothers who ask; a
+# deploy's gate must not spend it. All three layers run the golden set without a
+# model unless the operator asks for the full pass with GOLDEN_WITH_MODEL=1.
+
+
+def test_the_deploy_gate_runs_without_a_model_by_default(tmp_path):
+    proc, ssh = _deploy(tmp_path, "api")
+    assert proc.returncode == 0, proc.stderr
+    assert ssh[_index(ssh, "prod-golden-gate.sh")] == "cd /opt/adelia && bash scripts/prod-golden-gate.sh"
+    assert "sin modelo" in proc.stderr and "GOLDEN_WITH_MODEL=1" in proc.stderr
+
+
+def test_golden_with_model_asks_the_server_for_the_full_pass(tmp_path):
+    proc, ssh = _deploy(tmp_path, "api", extra_env={"GOLDEN_WITH_MODEL": "1"})
+    assert proc.returncode == 0, proc.stderr
+    gate = ssh[_index(ssh, "prod-golden-gate.sh")]
+    assert gate == "cd /opt/adelia && bash scripts/prod-golden-gate.sh --with-model"
+    assert "con modelo" in proc.stderr
+
+
+@pytest.mark.parametrize("value", ["yes", "true", "2"])
+def test_a_golden_with_model_that_is_not_0_or_1_stops_before_anything(tmp_path, value):
+    """A typo must not quietly pick a mode: "true" is neither 1 nor the default."""
+    proc, ssh = _deploy(tmp_path, "api", extra_env={"GOLDEN_WITH_MODEL": value})
+    assert proc.returncode != 0
+    assert ssh == []
+    assert "GOLDEN_WITH_MODEL" in proc.stderr
+
+
+def test_a_candidate_glob_reaches_the_server_gate_as_one_argument(tmp_path):
+    glob = "apps/api/adelia/enrichment/candidates/*.json"
+    proc, ssh = _deploy(tmp_path, "api", extra_env={"GOLDEN_CANDIDATE_GLOB": glob})
+    assert proc.returncode == 0, proc.stderr
+    gate = ssh[_index(ssh, "prod-golden-gate.sh")]
+    assert gate.startswith("cd /opt/adelia && bash scripts/prod-golden-gate.sh --candidates ")
+    # Quoted for the remote shell: it reaches the server as the glob, unexpanded.
+    out = subprocess.run(["bash", "-c", f"printf '%s|' {gate.split('--candidates ', 1)[1]}"],
+                         capture_output=True, text=True, cwd=tmp_path)
+    assert out.stdout == f"{glob}|"
+
+
+def test_candidates_with_the_model_are_refused_before_anything(tmp_path):
+    proc, ssh = _deploy(tmp_path, "api", extra_env={
+        "GOLDEN_WITH_MODEL": "1", "GOLDEN_CANDIDATE_GLOB": "apps/api/x/*.json",
+    })
+    assert proc.returncode != 0 and ssh == []
+    assert "sin modelo" in proc.stderr
+
+
+_MAC_HALF = """
+set -euo pipefail
+source "$DEPLOY"
+REPO_ROOT="$FAKE_REPO"
+run_golden_gate 0
+"""
+
+
+@pytest.mark.parametrize(("with_model", "want"), [("", "1"), ("0", "1"), ("1", "0")])
+def test_the_mac_half_runs_without_a_model_unless_asked(tmp_path, with_model, want):
+    bin_dir = tmp_path / "bin"
+    bin_dir.mkdir()
+    (tmp_path / "repo" / "apps" / "api").mkdir(parents=True)
+    log = tmp_path / "uv.log"
+    _executable(bin_dir / "uv", f"""#!/usr/bin/env bash
+printf 'model_free=%s %s\\n' "${{ADELIA_GOLDEN_MODEL_FREE:-}}" "$*" >> "{log}"
+""")
+    harness = tmp_path / "mac.sh"
+    harness.write_text(_MAC_HALF, encoding="utf-8")
+    env = {**os.environ, "PATH": f"{bin_dir}{os.pathsep}{os.environ['PATH']}",
+           "DEPLOY": str(DEPLOY), "FAKE_REPO": str(tmp_path / "repo"),
+           "GOLDEN_WITH_MODEL": with_model}
+    env.pop("ADELIA_GOLDEN_MODEL_FREE", None)
+    proc = subprocess.run(["bash", str(harness)], env=env, capture_output=True, text=True,
+                          timeout=60)
+    assert proc.returncode == 0, proc.stderr
+    calls = _lines(log)
+    assert len(calls) == 1 and "tests/test_rag_golden.py" in calls[0]
+    assert calls[0].startswith(f"model_free={want} "), calls
+
+
+def test_the_server_gate_passes_no_flag_by_default_and_says_without_a_model(tmp_path):
+    proc, docker = _server_gate(tmp_path)
+    assert proc.returncode == 0, proc.stdout + proc.stderr
+    assert docker[_index(docker, " run ")].rstrip().endswith("bash scripts/golden_gate.sh")
+    assert "sin modelo" in proc.stdout
+
+
+@pytest.mark.parametrize(
+    ("args", "extra_env"),
+    [(("--with-model",), None), ((), {"GOLDEN_WITH_MODEL": "1"})],
+)
+def test_the_server_gate_asks_the_container_for_the_full_pass(tmp_path, args, extra_env):
+    proc, docker = _server_gate(tmp_path, args=args, extra_env=extra_env)
+    assert proc.returncode == 0, proc.stdout + proc.stderr
+    assert docker[_index(docker, " run ")].rstrip().endswith("golden_gate.sh --with-model")
+    assert "con modelo" in proc.stdout
+
+
+@pytest.mark.parametrize(
+    ("args", "extra_env"),
+    [
+        (("--candidates", "apps/api/adelia/enrichment/candidates/*.json"), None),
+        ((), {"GOLDEN_CANDIDATE_GLOB": "apps/api/adelia/enrichment/candidates/*.json"}),
+    ],
+)
+def test_the_server_gate_hands_the_candidates_to_the_container(tmp_path, args, extra_env):
+    proc, docker = _server_gate(tmp_path, args=args, extra_env=extra_env)
+    assert proc.returncode == 0, proc.stdout + proc.stderr
+    run = docker[_index(docker, " run ")].rstrip()
+    assert run.endswith("golden_gate.sh --candidates apps/api/adelia/enrichment/candidates/*.json")
+
+
+@pytest.mark.parametrize("bad", [("--with-model", "--candidates", "x/*.json"), ("--loud",)])
+def test_the_server_gate_refuses_what_it_cannot_do_before_building(tmp_path, bad):
+    proc, docker = _server_gate(tmp_path, args=bad)
+    assert proc.returncode == 2
+    assert not [line for line in docker if " build " in line or " run " in line], docker
+
+
+def test_inside_the_container_the_set_runs_without_a_model_by_default(tmp_path):
+    proc, calls = _container_gate(tmp_path)
+    assert proc.returncode == 0, proc.stdout + proc.stderr
+    assert _model_free_log(tmp_path) == ["model_free=1"]
+    assert "sin modelo" in proc.stdout
+
+
+def test_inside_the_container_with_model_is_the_full_pass(tmp_path):
+    proc, calls = _container_gate(tmp_path, args=("--with-model",))
+    assert proc.returncode == 0, proc.stdout + proc.stderr
+    assert _model_free_log(tmp_path) == ["model_free=0"]
+    assert "con modelo" in proc.stdout
+
+
+@pytest.mark.parametrize("bad", [("--with-model", "--candidates", "x/*.json"), ("--loud",)])
+def test_inside_the_container_what_it_cannot_do_is_refused_before_migrating(tmp_path, bad):
+    proc, calls = _container_gate(tmp_path, args=bad)
+    assert proc.returncode == 2 and calls == []
+
+
+_GLOB = "apps/api/adelia/enrichment/candidates/*.json"
+
+
+def test_inside_the_container_candidates_are_measured_without_then_with(tmp_path):
+    proc, calls = _container_gate(tmp_path, args=("--candidates", _GLOB))
+    assert proc.returncode == 0, proc.stdout + proc.stderr
+    first = _index(calls, "pytest deploy=1")
+    preview_without = _index(calls, "preview_golden_candidates.py")
+    load = _index(calls, "golden_candidates.py load")
+    second = max(i for i, c in enumerate(calls) if c.startswith("pytest"))
+    preview_with = max(i for i, c in enumerate(calls) if "preview_golden_candidates.py" in c)
+    compare = _index(calls, "golden_candidates.py compare")
+    assert first < preview_without < load < second < preview_with < compare
+    assert _GLOB in calls[load]
+    assert "--no-model" in calls[preview_without] and "--no-model" in calls[preview_with]
+    assert "golden_preview.sin_candidatos.json" in calls[preview_without]
+    assert "golden_preview.con_candidatos.json" in calls[preview_with]
+    assert "golden_report.sin_candidatos.json" in calls[compare]
+    assert "golden_report.con_candidatos.json" in calls[compare]
+    assert _model_free_log(tmp_path) == ["model_free=1", "model_free=1"]
+    # The release's verdict is the run without candidates, and its report is the one left.
+    assert (tmp_path / "app" / "golden_report.json").read_text(encoding="utf-8") == _REPORT_RAN
+
+
+def test_inside_the_container_candidates_that_do_not_load_leave_the_verdict_alone(tmp_path):
+    proc, calls = _container_gate(tmp_path, args=("--candidates", _GLOB), candidate_load_rc=2)
+    assert proc.returncode == 0, proc.stdout
+    assert len([c for c in calls if c.startswith("pytest")]) == 1
+    assert "candidatos" in proc.stdout and "NO SE PUDIERON CARGAR" in proc.stdout
+
+
+@pytest.mark.parametrize(("pytest_rc", "report", "want"), [(1, _REPORT_RAN, 1), (1, _REPORT_SKIPPED, 2)])
+def test_inside_the_container_the_verdict_with_candidates_is_the_one_without(
+    tmp_path, pytest_rc, report, want
+):
+    proc, calls = _container_gate(
+        tmp_path, args=("--candidates", _GLOB), pytest_rc=pytest_rc, report=report
+    )
+    assert proc.returncode == want, proc.stdout
 
 
 # ---------------------------------------------------------------------------
@@ -486,3 +692,32 @@ def test_an_api_that_does_not_answer_fails_the_verification(tmp_path):
     assert proc.returncode != 0
     assert "FAIL: GET /healthz -> 503" in proc.stderr
     assert "Deployment verified OK." not in proc.stderr
+
+
+def test_inside_the_container_a_with_run_that_writes_no_report_is_never_the_without_one(
+    tmp_path, monkeypatch
+):
+    """The run with candidates crashes before its report: the comparison must
+    not find the run without them under the other name and call it a tie."""
+    monkeypatch.setenv("FAKE_NO_SECOND_REPORT", "1")
+    proc, calls = _container_gate(tmp_path, args=("--candidates", _GLOB))
+    assert proc.returncode == 0, proc.stdout
+    assert not (tmp_path / "app" / "golden_report.con_candidatos.json").exists()
+
+
+@pytest.mark.parametrize(("args", "want"), [((), "anthropic_key="), (("--with-model",), "anthropic_key=set")])
+def test_inside_the_container_the_run_without_a_model_has_no_anthropic_key(
+    tmp_path, monkeypatch, args, want
+):
+    """The fake client in the test catches what reaches it; without the key in
+    the environment, nothing the test did not foresee can spend either."""
+    monkeypatch.setenv("ANTHROPIC_API_KEY", "placeholder-not-a-key")
+    proc, _ = _container_gate(tmp_path, args=args)
+    assert proc.returncode == 0, proc.stdout
+    assert _lines(tmp_path / "venv.log.key") == [want]
+
+
+def test_the_server_gate_refuses_candidates_without_a_glob(tmp_path):
+    proc, docker = _server_gate(tmp_path, args=("--candidates",))
+    assert proc.returncode == 2
+    assert not [line for line in docker if " build " in line], docker

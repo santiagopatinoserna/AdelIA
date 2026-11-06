@@ -37,6 +37,11 @@ the failing ids are read from `misses`, and a question counts as a
 regression when the candidate misses it and the baseline ran its group
 without missing it.
 
+Both reports must come from the same mode (`mode` in the report, 2026-11-06):
+the gate without a model scores retrieval only and leaves a B with cards
+under the cut unscored, so against a full pass it would read as a regression
+it is not. Two modes exit with status 2.
+
 The baseline must come from the same set of questions as the candidate. Edit
 the set in one change, record a fresh baseline, and only then change the
 model: otherwise "new question" and "regression" are indistinguishable.
@@ -73,6 +78,7 @@ METRICS: tuple[tuple[str, str, str, str, float, str], ...] = (
 GROUP_METRIC = {"A": "recall_at_4", "B": "refusal_rate", "C": "red_flag_rate"}
 
 _MISS_ID = re.compile(r"^([ABC]\d+):")
+REACHED = "llega al modelo"
 
 
 class CompareError(Exception):
@@ -83,17 +89,20 @@ class CompareError(Exception):
 class QuestionChange:
     id: str
     group: str
-    before: str  # "pasa" | "falla" | "no estaba" | "no se ejecutó"
+    #: "pasa" | "falla" | "llega al modelo" | "no estaba" | "no se ejecutó".
+    #: "llega al modelo" is a group B question with cards under the cut in a
+    #: report without a model: its refusal is the model's and was not scored.
+    before: str
     after: str
     locale: str = ""
 
     @property
     def regressed(self) -> bool:
-        return self.before == "pasa" and self.after == "falla"
+        return self.before == "pasa" and self.after in ("falla", REACHED)
 
     @property
     def fixed(self) -> bool:
-        return self.before == "falla" and self.after == "pasa"
+        return self.before in ("falla", REACHED) and self.after == "pasa"
 
 
 @dataclass
@@ -127,7 +136,9 @@ def _status(report: dict) -> dict[str, str]:
     """Question id -> "pasa" | "falla", for the questions this report knows about."""
     out: dict[str, str] = {}
     for qid, r in (report.get("results") or {}).items():
-        if r.get("passed") is True:
+        if r.get("reached_model"):
+            out[qid] = REACHED
+        elif r.get("passed") is True:
             out[qid] = "pasa"
         elif r.get("passed") is False:
             out[qid] = "falla"
@@ -197,14 +208,21 @@ def _has_results(report: dict) -> bool:
     return bool(report.get("results"))
 
 
-def _fmt(value, kind: str) -> str:
+def report_mode(report: dict) -> str:
+    """"model" or "no_model"; a report from before the field is a full pass."""
+    return report.get("mode") or "model"
+
+
+def _fmt(value, kind: str, *, unmeasured: bool = False) -> str:
     if value is None:
-        return "no ejecutado"
+        return "no medido" if unmeasured else "no ejecutado"
     return f"{value:.2f}" if kind == "rate" else str(int(value))
 
 
 def _metric_rows(baseline: dict, candidate: dict) -> list[str]:
     rows = [f"  {'métrica':32s} {'base':>13s} {'candidato':>13s} {'cambio':>9s}  umbral"]
+    b_free = set(baseline.get("not_measured") or [])
+    a_free = set(candidate.get("not_measured") or [])
     for key, label, _group, better, threshold, kind in METRICS:
         b, a = baseline.get(key), candidate.get(key)  # None: skipped, or the baseline predates the field
         if b is not None and a is not None:
@@ -220,7 +238,8 @@ def _metric_rows(baseline: dict, candidate: dict) -> list[str]:
             clears = a >= threshold if better == "higher" else a <= threshold
             ok = "cumple" if clears else "NO CUMPLE"
         rows.append(
-            f"  {label:32s} {_fmt(b, kind):>13s} {_fmt(a, kind):>13s} {moved:>9s}  "
+            f"  {label:32s} {_fmt(b, kind, unmeasured=key in b_free):>13s} "
+            f"{_fmt(a, kind, unmeasured=key in a_free):>13s} {moved:>9s}  "
             f"{sign} {threshold:g} {ok}{mark}"
         )
     return rows
@@ -258,7 +277,8 @@ def render(baseline: dict, candidate: dict, comparison: Comparison, *, show_all:
     ):
         lines.append(f"    {title}: {len(items)}")
         for c in items:
-            lines.append(f"      {c.id} [{c.group}{'/' + c.locale if c.locale else ''}]")
+            reached = f" ({REACHED})" if REACHED in (c.before, c.after) else ""
+            lines.append(f"      {c.id} [{c.group}{'/' + c.locale if c.locale else ''}]{reached}")
     if show_all:
         same = [c for c in comparison.changes if c.before == c.after == "pasa"]
         lines.append(f"    sin cambio, pasan: {len(same)}  " + " ".join(c.id for c in same))
@@ -318,6 +338,13 @@ def main(argv: list[str] | None = None) -> int:
         baseline, candidate = _load(args.baseline), _load(args.candidate)
     except CompareError as exc:
         print(f"compare_golden: {exc}", file=sys.stderr)
+        return 2
+    if report_mode(baseline) != report_mode(candidate):
+        print(
+            f"compare_golden: modos distintos ({report_mode(baseline)} frente a "
+            f"{report_mode(candidate)}): un golden sin modelo solo se compara con otro sin modelo",
+            file=sys.stderr,
+        )
         return 2
     comparison = compare(baseline, candidate)
     print(render(baseline, candidate, comparison, show_all=args.all))

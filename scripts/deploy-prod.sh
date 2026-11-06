@@ -20,6 +20,14 @@
 #   ./scripts/deploy-prod.sh --skip-golden      # EMERGENCY ONLY: skip the
 #                                               # clinical golden-set gate,
 #                                               # on the Mac AND on the server
+#   GOLDEN_WITH_MODEL=1 ./scripts/deploy-prod.sh api
+#                       # the golden set's full pass, on the production model
+#                       # (default: without a model, see section 1c)
+#   GOLDEN_CANDIDATE_GLOB='apps/api/adelia/enrichment/candidates/*.json' \
+#     ./scripts/deploy-prod.sh api
+#                       # also measure those files on top of the production
+#                       # corpus, without a model; the verdict stays the
+#                       # release's own (docs/GOLDEN_GATE_DESPLIEGUE.md)
 #
 # Steps: check working tree -> golden set on the Mac (group C) -> discover
 # host -> rsync code -> golden set on the server (groups A and B, new image,
@@ -211,8 +219,41 @@ check_tree_is_deployable() {
 # ejecutado" and the deploy goes on to the server, where
 # run_prod_golden_gate (section 3) runs them for real and a skip there stops
 # the deploy. Bypass both halves with --skip-golden, out loud.
+#
+# Both halves run WITHOUT a model unless GOLDEN_WITH_MODEL=1 (2026-11-06,
+# Santiago's rule: the app's Anthropic budget is 200 $ a month and the mothers
+# who ask pay it). Without a model the gate measures retrieval, the cut-offs,
+# the red flags and every refusal the code writes, with no call to Anthropic;
+# what only the model writes (its citations, its refusal of a group B
+# question with cards under the cut) waits for the full pass. A release that
+# changes the prompts, the model or the answer contract wants that pass.
+
+# Dies on a GOLDEN_WITH_MODEL that is neither 0 nor 1, or on candidates asked
+# for with the model: a typo must not pick a mode, or spend one.
+check_golden_options() {
+  case "${GOLDEN_WITH_MODEL:-0}" in
+    0|1|"") ;;
+    *) die "GOLDEN_WITH_MODEL=${GOLDEN_WITH_MODEL} (0 or 1; 1 is the full pass on the production model)" ;;
+  esac
+  if [[ "${GOLDEN_WITH_MODEL:-0}" == "1" && -n "${GOLDEN_CANDIDATE_GLOB:-}" ]]; then
+    die "GOLDEN_CANDIDATE_GLOB is measured sin modelo only; unset GOLDEN_WITH_MODEL"
+  fi
+}
+
+golden_with_model() {
+  [[ "${GOLDEN_WITH_MODEL:-0}" == "1" ]]
+}
+
+golden_mode_label() {
+  if golden_with_model; then
+    printf 'con modelo (pasada completa, gasta el presupuesto de Anthropic)'
+  else
+    printf 'sin modelo (ni una llamada a Anthropic; GOLDEN_WITH_MODEL=1 para la pasada completa)'
+  fi
+}
+
 run_golden_gate() {
-  local skip="$1"
+  local skip="$1" free=1
   if [[ "${skip}" -eq 1 ]]; then
     log "WARNING: --skip-golden. Deploying without the clinical gate."
     return 0
@@ -221,8 +262,10 @@ run_golden_gate() {
     log "WARNING: uv not found; the golden set did not run."
     return 0
   fi
-  log "Golden set (clinical gate)..."
-  if ( cd "${REPO_ROOT}/apps/api" && uv run pytest -q tests/test_rag_golden.py -rs ); then
+  golden_with_model && free=0
+  log "Golden set (clinical gate), $(golden_mode_label)..."
+  if ( cd "${REPO_ROOT}/apps/api" \
+       && ADELIA_GOLDEN_MODEL_FREE="${free}" uv run pytest -q tests/test_rag_golden.py -rs ); then
     if [[ -f "${REPO_ROOT}/apps/api/golden_report.json" ]]; then
       sed 's/^/[deploy]   /' "${REPO_ROOT}/apps/api/golden_report.json"
     fi
@@ -293,8 +336,9 @@ sync_code() {
 # production was deployed three times like that. scripts/prod-golden-gate.sh
 # builds the new image, copies the production corpus into a scratch
 # database, migrates the copy, loads the new release's corpus into it and
-# runs the golden set with the production keys in a throwaway container of
-# the new image. It never touches the live containers or the live database.
+# runs the golden set in a throwaway container of the new image, without a
+# model unless GOLDEN_WITH_MODEL=1 (section 1c). It never touches the live
+# containers or the live database.
 #
 # Only a pass reaches `up -d`. A failure (exit 1) and a gate that could not
 # run (exit 2, or ssh dropping) both stop the deploy with the previous
@@ -306,11 +350,15 @@ services_include_api() {
 }
 
 run_prod_golden_gate() {
-  local host="$1" rc
-  log "Golden set A/B on the server, against the new image, before up -d..."
+  local host="$1" rc flags=""
+  golden_with_model && flags+=" --with-model"
+  # %q: the remote shell must hand the glob over unexpanded.
+  [[ -n "${GOLDEN_CANDIDATE_GLOB:-}" ]] \
+    && flags+=" --candidates $(printf '%q' "${GOLDEN_CANDIDATE_GLOB}")"
+  log "Golden set A/B on the server, against the new image, before up -d, $(golden_mode_label)..."
   set +e
   ssh "${SSH_OPTS[@]}" "${REMOTE_USER}@${host}" \
-    "cd ${REMOTE_DIR} && bash scripts/prod-golden-gate.sh" 2>&1 | sed 's/^/[deploy]   /' >&2
+    "cd ${REMOTE_DIR} && bash scripts/prod-golden-gate.sh${flags}" 2>&1 | sed 's/^/[deploy]   /' >&2
   rc="${PIPESTATUS[0]}"
   set -e
   if [[ "${rc}" -eq 0 ]]; then
@@ -558,6 +606,7 @@ main() {
   local host
 
   log "==> AdelIA prod deploy"
+  check_golden_options
 
   # Before anything reaches the server, and before the LAN scan wastes a
   # minute: is this tree even deployable?

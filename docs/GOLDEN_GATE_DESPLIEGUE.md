@@ -2,9 +2,73 @@
 
 Desde el 6 de noviembre de 2026 los grupos A (recall de fuentes) y B (rechazos) del golden set
 (`adelia/clinical/golden.py`, auditoría 3.1 y 3.2) corren en cada despliegue que toca la API,
-en el servidor, con la base de datos y las claves de producción, antes de sustituir el
-contenedor que sirve a las madres. Un fallo, o un golden que no pudo correr, para el despliegue
-y la versión anterior sigue sirviendo.
+en el servidor, sobre una copia del corpus de producción, antes de sustituir el contenedor que
+sirve a las madres. Un fallo, o un golden que no pudo correr, para el despliegue y la versión
+anterior sigue sirviendo.
+
+Desde la misma fecha corre **sin modelo** por defecto (regla de Santiago: las pruebas no gastan
+tokens de Anthropic; el presupuesto de la API es de 200 $ al mes y lo pagan las madres que
+preguntan). La pasada completa, con el modelo de producción, se pide a mano con
+`GOLDEN_WITH_MODEL=1`. Ver «Los dos modos».
+
+## Los dos modos
+
+| | Sin modelo (por defecto) | Con modelo (`GOLDEN_WITH_MODEL=1`) |
+|---|---|---|
+| Recuperación, cortes (0,19 y 0,08), léxico, guard | reales, los de producción | reales, los de producción |
+| Generación | texto fijo que cita todas las tarjetas que recibe | el proveedor de producción (`LLM_PROVIDER`) |
+| Enrutado | reglas; donde se abstienen, el respaldo `plan` | reglas y, donde se abstienen, el modelo |
+| Traducción al español de las preguntas fr/en | la grabada en `tests/fixtures/golden_query_embeddings.json`, o el texto tal cual | la grabada, o en vivo si falta la grabación |
+| Llamadas a Anthropic | ninguna (un cliente falso para la pasada si alguna llega) | unas 40 de generación y las de enrutado |
+| Embeddings de Mistral | los de los fragmentos nuevos del corpus y los de las preguntas sin vector grabado | igual |
+
+Qué mide cada uno, con las mismas preguntas y los mismos umbrales:
+
+| Métrica | Sin modelo | Con modelo |
+|---|---|---|
+| A, recall@4 (umbral 0,8) | sí, sobre las tarjetas de la recuperación | sí, sobre las tarjetas que cita la respuesta |
+| B, tasa de rechazo (umbral 1,0) | sí, sobre las B que decide el código (bandera roja, filtro de edad, nada bajo el corte) | sí, sobre todas |
+| B con tarjetas bajo el corte | se nombran en `b_reached_model` y no entran en la tasa: su rechazo lo escribe el modelo. Solo se admiten las conocidas (`golden.B_REACHING_THE_MODEL`); cualquier otra para el gate y pide la pasada completa | puntuadas por la negativa del modelo |
+| C, banderas rojas y dosis en la derivación | sí (es código) | sí |
+| Citas huérfanas | `null`, no medido | sí (umbral 0) |
+| Citas repetidas o de otro tema | `null`, no medido | sí (umbral 0) |
+
+Notas:
+
+- El JSON lleva `"mode": "no_model"` o `"model"`, y `not_measured` con las claves que valen `null`
+  por el modo (`orphan_citations`, `citation_defects` y, si alguna B llega al modelo,
+  `refusal_after_the_model`). `null` nunca es 0: ningún umbral lo lee y `compare_golden.py` lo
+  imprime como «no medido». `compare_golden.py` se niega a comparar dos informes de modos
+  distintos (salida 2).
+- Las «banderas rojas con dosis» se siguen midiendo sin modelo: la respuesta de una bandera roja
+  es el texto fijo de `red_flag_reply`, no texto generado.
+- El texto fijo cita cada `[ev_N]` del prompt porque `compose` solo deja salir las tarjetas que la
+  respuesta cita. Así recall@4 lee las cuatro de la recuperación. En producción el modelo puede
+  citar menos, así que el recall sin modelo es un techo del recall con modelo.
+- Enrutado: en el chat (la superficie que mide el golden) toda intención acaba en la
+  recuperación; el enrutado solo elige si el modelo escribe un plan o una respuesta corta. Sin
+  modelo, donde las reglas se abstienen (35 de 53 en la base de desarrollo el 6 de noviembre) se
+  toma `plan`, como cuando el modelo no responde. No cambia la recuperación ni el rechazo.
+- Medido el 6 de noviembre contra la base de desarrollo, sin clave: 0 llamadas al modelo,
+  recall@4 0,97 (falla A16, ya conocida), 12 de 12 B decididas por el código, 6 B llegan al modelo
+  (B8, B9, B11, B14, B16, B17), C 15 de 15, 0,5 s.
+- Las seis B que llegan al modelo están fijadas en `golden.B_REACHING_THE_MODEL` (medidas el 6
+  de noviembre en la copia de desarrollo). Si otra B empieza a recibir tarjetas bajo el corte (un
+  corte más laxo, una fuente nueva a su lado), el gate sin modelo falla con «grupo B, llegan al
+  modelo sin estar entre las conocidas: ...; pasada completa con GOLDEN_WITH_MODEL=1»: era un
+  rechazo que escribía el código y ya nadie lo comprueba. Si producción tuviera ya otra, el
+  primer despliegue sin modelo lo dirá así; se pasa una vez con modelo y, si el modelo la
+  rechaza, se añade a la lista.
+- Una pregunta fr/en sin traducción grabada (una pregunta nueva antes de grabar sus vectores)
+  se busca tal cual y el informe la nombra en `untranslated` («sin traducir»): producción la
+  traduciría, así que para ella el resultado sin modelo no es el de producción.
+- Sin modelo, `golden_gate.sh` además quita `ANTHROPIC_API_KEY` del entorno de la pasada: lo que
+  la trampa del test no prevea tampoco puede gastar. La trampa cubre `get_anthropic_client` en
+  cada módulo de `adelia` y las clases del propio SDK.
+- Qué no ve el modo sin modelo: un cambio de prompt, de modelo o del contrato de respuesta que
+  haga que el modelo deje de negarse en esas 6 B, o que deje tarjetas sin citar. Un despliegue
+  que toque `services/answer_contract.py`, los prompts o el proveedor y los modelos va con
+  `GOLDEN_WITH_MODEL=1`.
 
 ## Por qué
 
@@ -19,9 +83,9 @@ Tres scripts, uno por máquina:
 
 | Dónde | Script | Qué hace |
 |---|---|---|
-| Mac | `scripts/deploy-prod.sh` | Grupo C en local (no necesita clave ni base de datos, falla rápido). Tras el rsync, si el despliegue incluye `api`, llama por ssh al gate del servidor y solo con un 0 hace `up -d`. |
-| Servidor | `scripts/prod-golden-gate.sh` | Construye la imagen nueva y su etapa `golden`, copia el corpus de producción a una base de datos efímera, ejecuta el golden en un contenedor desechable de la imagen nueva y borra la copia. |
-| Contenedor | `apps/api/scripts/golden_gate.sh` | Migra la copia a la cabeza nueva, carga el corpus de la versión nueva como lo haría el arranque y ejecuta `tests/test_rag_golden.py` con `ADELIA_GOLDEN_DEPLOY=1`. |
+| Mac | `scripts/deploy-prod.sh` | Grupo C en local (no necesita clave ni base de datos, falla rápido). Tras el rsync, si el despliegue incluye `api`, llama por ssh al gate del servidor y solo con un 0 hace `up -d`. Lee `GOLDEN_WITH_MODEL` (0 o 1; otro valor para el despliegue) y `GOLDEN_CANDIDATE_GLOB`, y se los pasa al servidor como `--with-model` y `--candidates`. |
+| Servidor | `scripts/prod-golden-gate.sh` | Construye la imagen nueva y su etapa `golden`, copia el corpus de producción a una base de datos efímera, ejecuta el golden en un contenedor desechable de la imagen nueva y borra la copia. Acepta `--with-model` y `--candidates GLOB` (o las mismas variables) para lanzarlo a mano. |
+| Contenedor | `apps/api/scripts/golden_gate.sh` | Migra la copia a la cabeza nueva, carga el corpus de la versión nueva como lo haría el arranque y ejecuta `tests/test_rag_golden.py` con `ADELIA_GOLDEN_DEPLOY=1` y, salvo `--with-model`, `ADELIA_GOLDEN_MODEL_FREE=1`. |
 
 Orden en el servidor:
 
@@ -59,10 +123,18 @@ Solo dentro del contenedor del despliegue:
 
 - Si A y B no pueden correr (sin corpus, sin clave, sin grabación), el test falla con «grupos A y
   B NO EJECUTADOS en el despliegue: motivo», en vez de saltarse.
-- La generación usa el proveedor configurado en producción (`LLM_PROVIDER`), no el Mistral que
-  `conftest.py` fija para la suite, y el modelo de enrutado es el real.
+- Con `GOLDEN_WITH_MODEL=1`, la generación usa el proveedor configurado en producción
+  (`LLM_PROVIDER`), no el Mistral que `conftest.py` fija para la suite, y el modelo de enrutado
+  es el real. Sin esa opción no se llama a ningún modelo (ver «Los dos modos»).
 
-Fuera del despliegue (CI, Mac) todo sigue igual: A y B se saltan con aviso.
+Fuera del despliegue (CI, Mac) todo sigue igual: A y B se saltan con aviso. Con la base de
+desarrollo levantada y sin clave se puede pasar el golden sin modelo en local, sin gastar nada:
+
+```
+cd apps/api
+ADELIA_GOLDEN_MODEL_FREE=1 POSTGRES_PORT=5434 .venv/bin/python -m pytest -q -rsP \
+  tests/test_rag_golden.py::test_groups_a_and_b_meet_the_deploy_gate
+```
 
 En todos los casos las preguntas de A y B (53 desde la promoción del 6 de noviembre; 33 antes)
 corren con concurrencia 4 (`GOLDEN_CONCURRENCY`), con un techo de 300 s para el test. Medido el 6
@@ -89,7 +161,11 @@ segundos.
 Cada línea del servidor sale con el prefijo `[deploy]   `: el build, `corpus copied: N chunks`,
 la migración, el resumen del golden (recall@4, tasa de rechazo, citas huérfanas, llamadas al
 modelo y duración, preguntas que fallan), `golden_report.json` entero y
-`golden gate: PASSED|FAILED|NOT RUN (duración del gate: Ns, build y copia incluidos)`.
+`golden gate: PASSED|FAILED|NOT RUN (duración del gate: Ns, build y copia incluidos)`. El modo sale
+en tres sitios: la línea del Mac (`Golden set A/B on the server ..., sin modelo (...)`), la del
+servidor (`running the golden set ..., sin modelo`) y la cabecera del resumen (`Golden set
+(auditoría 3.1/3.2), modo sin modelo: ...`), que además nombra las B que llegan al modelo y dice
+cuántas veces el enrutado tomó `plan`.
 
 ## Excepciones
 
@@ -102,7 +178,62 @@ modelo y duración, preguntas que fallan), `golden_report.json` entero y
 `apps/api/tests/test_deploy_prod_script.py` ejecuta los tres scripts con `ssh`, `docker` y el
 venv falsos en el PATH: el gate va antes de `up -d`, un fallo no llama a `up -d` y sale distinto
 de cero, «no ejecutado» también para, `--skip-golden` sigue funcionando y un despliegue solo de
-web no ejecuta A y B.
+web no ejecuta A y B. También fija los modos: sin modelo por defecto en las tres capas,
+`GOLDEN_WITH_MODEL=1` pide la pasada completa, un valor que no sea 0 ni 1 para antes de nada, y
+el orden de la evaluación de candidatos.
+
+`apps/api/tests/test_rag_golden.py` pasa el camino de respuesta real (grafo, guard, enrutado,
+compose) con la recuperación falsa y producción configurada en Anthropic, con un cliente de
+Anthropic falso que falla si lo llaman: sin modelo no se le llama nunca; con modelo, sí (el
+control). Las métricas de generación salen `null`.
+
+## Evaluar un corpus candidato sin modelo
+
+Para qué: antes de pasar a `enrichment/data/` fuentes nuevas (las que reúnen otros agentes, en
+muchos idiomas y traducidas al español con el formato de `evidence_*.json`), saber si sube el
+recall@4 de A y si se rompe algún rechazo de B. Un fichero en `data/` entra en producción en el
+siguiente arranque; uno en otra carpeta no lo carga nada (`main.load_startup_corpora` solo lee
+`data/evidence_*.json`, y `tests/test_golden_candidates.py` lo fija).
+
+1. Los ficheros, en `apps/api/adelia/enrichment/candidates/` (o cualquier carpeta fuera de
+   `data/`): mismo formato que `evidence_*.json`, `tier` ausente o `evidence`, `source_type` de
+   evidencia, `chunks` no vacíos y `specialties` con `pediatrics` (sin esa etiqueta la
+   recuperación de un bebé no los ve; se avisa). Un fichero que no cumple para la carga antes de
+   escribir nada.
+2. Que lleguen al servidor y a la imagen: van en `apps/`, así que los sube el rsync del
+   despliegue, o se copian a mano a la misma ruta en `/opt/adelia`.
+3. Lanzarlo, siempre sin modelo (con `GOLDEN_WITH_MODEL=1` se niega):
+   - en un despliegue: `GOLDEN_CANDIDATE_GLOB='apps/api/adelia/enrichment/candidates/*.json'
+     ./scripts/deploy-prod.sh api`; el veredicto del despliegue sigue siendo el de la versión sin
+     candidatos;
+   - a mano en el servidor, sin desplegar (no toca los contenedores vivos):
+     `cd /opt/adelia && bash scripts/prod-golden-gate.sh --candidates
+     'apps/api/adelia/enrichment/candidates/*.json'`.
+4. Qué hace `golden_gate.sh` dentro del contenedor, sobre la copia efímera:
+   1. el golden sin modelo, sin candidatos (`golden_report.sin_candidatos.json`);
+   2. la previsualización de las preguntas `CANDIDATES` con `--no-model`
+      (`golden_preview.sin_candidatos.json`);
+   3. `scripts/golden_candidates.py load GLOB`: se niega si la base no termina en `_golden_gate`,
+      valida todos los ficheros y los carga con el cargador del arranque (`load_sources`: mismos
+      embeddings, idempotente por título; una fuente con un título que ya está se salta sin
+      tocar sus metadatos);
+   4. el golden y la previsualización otra vez, con candidatos (`..._con_candidatos.json`);
+   5. `scripts/golden_candidates.py compare`: recall@4 sin y con, las A que pasan y las que
+      dejan de pasar, las B que pasan a llegar al modelo (un rechazo que el código hacía y ahora
+      queda en manos del modelo), las B que el código deja de rechazar, C sin y con, y la
+      previsualización de `CANDIDATES` sin y con. Termina en «candidatos: APTOS» o «NO APTOS»
+      (una B que empeora, o recall@4 con candidatos bajo 0,8).
+
+   La copia se borra al acabar, pase lo que pase, como siempre. Si los candidatos no se pueden
+   cargar, la salida lo dice («NO SE PUDIERON CARGAR») y el veredicto sigue siendo el de la
+   versión.
+5. Si salen aptos: medirlos con modelo antes de moverlos a `data/` (las B que llegan al modelo
+   con los candidatos solo las puntúa la pasada completa) y moverlos en una rama propia, por
+   ámbito, como dice el relevo.
+
+La previsualización sin modelo busca cada pregunta fr/en con la traducción grabada en el
+fichero de vectores; las `CANDIDATES` fr/en no tienen grabación, así que se buscan como están
+escritas y el veredicto lo dice («sin traducir»): para ellas el resultado es pesimista.
 
 ## Añadir preguntas sin parar el despliegue (candidatas, 6 de noviembre de 2026)
 
