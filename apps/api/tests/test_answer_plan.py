@@ -225,3 +225,162 @@ def test_with_the_rule_on_a_mixed_question_still_refuses_its_dose(monkeypatch, l
     assert contract.index("Si solo una parte") < contract.index(
         NO_UNASKED_REFUSALS_RULE[locale]
     ) < contract.index("Si no tienes ninguna base documental")
+
+
+# --- a plan she can read with the baby in her arms (settings.plan_brevity) --------
+#
+# Measured on 29 prod plans of 2026-11-06 (subject-prod, warnsigns-prod and the
+# "on" answers of warning-signs-warnpara-{1,2}): median 365 words. The doctor
+# section is the largest share (26 %, median 85 words) and is the growth we
+# wanted, so it is exempt. The rest is where the rule bites: an opening of two
+# sentences and 42 words, 16 loose "Evita / No le des" paragraphs under Hoy (466
+# words), Hoy up to 7 bullets, and No olvides bullets of two sentences in 33 of 62.
+
+def _brevity_line(locale):
+    from adelia.services.answer_contract import PLAN_BREVITY_RULE
+
+    return f"- {PLAN_BREVITY_RULE[locale]}\n"
+
+
+@pytest.mark.parametrize("locale", ["es", "en", "fr"])
+@pytest.mark.parametrize("shape", SHAPES_)
+@pytest.mark.parametrize("unasked", [False, True])
+def test_with_plan_brevity_off_the_contract_is_what_it_was(monkeypatch, locale, shape, unasked):
+    from adelia.config import Settings, settings
+    from adelia.services.answer_contract import PLAN_BREVITY_RULE
+
+    assert Settings.model_fields["plan_brevity"].default is False
+    monkeypatch.setattr(settings, "no_unasked_refusals", unasked)
+    monkeypatch.setattr(settings, "plan_brevity", False)
+    contract = answer_contract(locale, shape=shape)
+    assert all(rule not in contract for rule in PLAN_BREVITY_RULE.values())
+
+
+@pytest.mark.parametrize("locale", ["es", "en", "fr"])
+@pytest.mark.parametrize("unasked", [False, True])
+def test_with_plan_brevity_on_a_plan_gains_one_line_after_the_format_rule(
+    monkeypatch, locale, unasked
+):
+    """On, a plan's contract is the off contract plus one line, right after the
+    format clause it narrows; nothing else moves, whatever the other setting."""
+    from adelia.config import settings
+
+    monkeypatch.setattr(settings, "no_unasked_refusals", unasked)
+    monkeypatch.setattr(settings, "plan_brevity", False)
+    off = answer_contract(locale, shape="plan")
+    monkeypatch.setattr(settings, "plan_brevity", True)
+    on = answer_contract(locale, shape="plan")
+    line = _brevity_line(locale)
+    assert on.count(line) == 1
+    assert on.replace(line, "", 1) == off
+    assert f"- {CONTRACTS[locale].language_rule}\n{line}" in on
+
+
+@pytest.mark.parametrize("locale", ["es", "en", "fr"])
+@pytest.mark.parametrize("unasked", [False, True])
+def test_a_short_answer_never_gets_the_brevity_rule(monkeypatch, locale, unasked):
+    """A short answer has no sections to count: the rule would only push a plan in."""
+    from adelia.config import settings
+
+    monkeypatch.setattr(settings, "no_unasked_refusals", unasked)
+    monkeypatch.setattr(settings, "plan_brevity", False)
+    off = answer_contract(locale, shape="question")
+    monkeypatch.setattr(settings, "plan_brevity", True)
+    assert answer_contract(locale, shape="question") == off
+
+
+def _sentences(rule):
+    return [s for s in rule.replace(";", ".").split(". ") if s.strip()]
+
+
+@pytest.mark.parametrize("locale", ["es", "en", "fr"])
+def test_the_brevity_rule_never_limits_the_doctor_section(locale):
+    """Every sentence that carries a number is about another section, and the
+    sentence that names the doctor heading lifts every count and asks for all the
+    sources' signs, grouped by the urgency the source gives."""
+    from adelia.services.answer_contract import PLAN_BREVITY_RULE
+
+    rule = PLAN_BREVITY_RULE[locale]
+    doctor = PLAN_HEADINGS[locale]["doctor"]
+    named = [s for s in _sentences(rule) if doctor in s]
+    assert named, "the rule names the doctor section"
+    for sentence in named:
+        assert not any(ch.isdigit() for ch in sentence), sentence
+    exempt = {"es": ("no tiene límite de viñetas ni de palabras", "todas las señales",
+                     "sin quitar ninguna", "agrupadas por la urgencia que da cada fuente"),
+              "en": ("has no limit on bullets or words", "every sign",
+                     "leaving none out", "grouped by the urgency each source gives"),
+              "fr": ("n’a pas de limite de puces ni de mots", "tous les signes",
+                     "sans en enlever aucun", "regroupés selon l’urgence que donne chaque source"),
+              }[locale]
+    joined = " ".join(named)
+    for clause in exempt:
+        assert clause in joined, clause
+
+
+@pytest.mark.parametrize("locale, today, watch, remember, opening", [
+    ("es", "como máximo 3 viñetas de acción", "como máximo 3 viñetas",
+     "como máximo 2 viñetas", "menos de 25 palabras"),
+    ("en", "at most 3 action bullets", "at most 3 bullets", "at most 2 bullets",
+     "fewer than 25 words"),
+    ("fr", "au maximum 3 puces d’action", "au maximum 3 puces", "au maximum 2 puces",
+     "moins de 25 mots"),
+])
+def test_the_brevity_rule_counts_only_the_other_sections(locale, today, watch, remember,
+                                                        opening):
+    from adelia.services.answer_contract import PLAN_BREVITY_RULE
+
+    rule = PLAN_BREVITY_RULE[locale]
+    h = PLAN_HEADINGS[locale]
+    sentences = [s.strip() for s in _sentences(rule)]
+    quote = {"es": "«{}»", "en": "“{}”", "fr": "« {} »"}[locale]
+
+    assert any(opening in s for s in sentences)
+    for key, limit in (("today", today), ("watch", watch), ("remember", remember)):
+        opens = [s for s in sentences if s.startswith(quote.format(h[key]))]
+        assert len(opens) == 1 and limit in opens[0], key
+    # The mothers' section keeps its own rule (1 to 3 bullets); this one leaves it alone.
+    assert h["mothers"] not in rule
+
+
+@pytest.mark.parametrize("locale, required", [
+    ("es", ("nunca quita una señal de alarma, una precaución ni una condición",
+            "«No le des» o «Evita»", "una sola frase corta",
+            "no hay párrafos sueltos", "no repitas ahí una señal",
+            "la frase de rechazo exacta", "nunca se omite")),
+    ("en", ("never removes a warning sign, a precaution or a condition",
+            "“Do not give” or “Avoid”", "one short sentence",
+            "no loose paragraphs", "do not repeat there a sign",
+            "the exact refusal sentence", "nothing is left out")),
+    ("fr", ("n’enlève jamais un signe d’alerte, une précaution ou une condition",
+            "« Ne lui donnez pas » ou « Évitez »", "une seule phrase courte",
+            "pas de paragraphe isolé", "n’y répète pas un signe",
+            "la phrase de refus exacte", "rien n’est omis")),
+])
+def test_the_brevity_rule_moves_safety_never_drops_it(locale, required):
+    """Where the words went (loose "Evita" paragraphs, a second sentence of
+    explanation) is where the rule cuts; a precaution becomes one Hoy bullet, a
+    sign goes to the doctor section, and the coded refusal paragraph of a
+    half-covered question (B9, B11) is the one paragraph it keeps."""
+    from adelia.services.answer_contract import PLAN_BREVITY_RULE
+
+    for clause in required:
+        assert clause in PLAN_BREVITY_RULE[locale], clause
+
+
+@pytest.mark.parametrize("locale", ["es", "en", "fr"])
+def test_the_brevity_rule_has_no_long_dashes_and_no_refusal(locale):
+    from adelia.services.answer_contract import PLAN_BREVITY_RULE
+
+    rule = PLAN_BREVITY_RULE[locale]
+    assert "—" not in rule and "–" not in rule
+    assert CONTRACTS[locale].refusal not in rule
+    assert set(PLAN_BREVITY_RULE) == {"es", "en", "fr"}
+
+
+def test_the_prod_compose_passes_plan_brevity_off_by_default():
+    """Compose hands the api only the variables it lists: without this line,
+    PLAN_BREVITY=true in .env.prod would switch nothing on, and the server
+    golden gate (which extends the same service) would measure it off."""
+    compose = Path(__file__).resolve().parents[3] / "infra" / "docker-compose.prod.yml"
+    assert "PLAN_BREVITY: ${PLAN_BREVITY:-false}" in compose.read_text(encoding="utf-8")
