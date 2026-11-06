@@ -26,7 +26,7 @@ import unicodedata
 import pytest
 
 from adelia.agent.lay_terms import LEXICON, clinical_terms, expanded_query
-from adelia.clinical.golden import CORPUS_DATA_DIR, questions
+from adelia.clinical.golden import CORPUS_DATA_DIR, questions, written_2026_11_06
 
 
 def _plain(text: str) -> str:
@@ -251,3 +251,14 @@ def test_the_b_group_is_the_fifteen_this_review_covered():
         "B1", "B2", "B3", "B4", "B6", "B7", "B8", "B9",
         "B11", "B12", "B13", "B14", "B15", "B16", "B17",
     ]
+
+
+@pytest.mark.parametrize(
+    "question", [q for q in written_2026_11_06() if q.group == "B"], ids=lambda q: q.id
+)
+def test_no_candidate_b_question_gets_a_term(question):
+    """The B questions of 2026-11-06 (clinical/golden.CANDIDATES until they
+    join the gate) obey the same rule first: the expansion is on in production,
+    so a term here would pull a near miss towards the corpus. B24 says
+    "bolitas" and not "granitos" for this reason."""
+    assert clinical_terms(question.question) == ()

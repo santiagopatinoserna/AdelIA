@@ -100,3 +100,150 @@ modelo y duración, preguntas que fallan), `golden_report.json` entero y
 venv falsos en el PATH: el gate va antes de `up -d`, un fallo no llama a `up -d` y sale distinto
 de cero, «no ejecutado» también para, `--skip-golden` sigue funcionando y un despliegue solo de
 web no ejecuta A y B.
+
+## Añadir preguntas sin parar el despliegue (candidatas, 6 de noviembre de 2026)
+
+El primer informe del gate en el servidor dijo que la mayoría del corpus no está vigilado
+(`blind_spots`: infecciones_fiebre 37 de 37 fuentes sin pregunta del grupo A, ojos_oidos 39 de
+39, seguridad 38 de 38...). Una pregunta nueva no puede entrar directamente en `GOLDEN_SET`: si
+en producción falla, el siguiente despliegue se para. Por eso las preguntas escritas para esos
+huecos viven en `golden.CANDIDATES`, que ni `questions()` ni el despliegue leen, hasta que se
+miden en producción.
+
+### Las candidatas
+
+31 preguntas (`golden.BLIND_SPOT_IDS_2026_11_06`): dos del grupo A y una del grupo B por tema,
+y una sola A para urgencias_lactante, porque todas las frases probadas para anafilaxia y
+convulsión febril disparan el detector (los tests lo fijan). Ninguna dispara una bandera roja,
+ninguna A queda fuera de la edad, ninguna B recibe términos del léxico de madre y cada
+alternativa de `expect_source` existe en el corpus.
+
+| | es | en | fr |
+|---|---|---|---|
+| A (A19 a A39) | 12 | 4 | 5 |
+| B (B18 a B27) | 8 | 1 | 1 |
+
+Las B: piojos (B18), agujeros de las orejas (B19), silla del coche a los 4 años (B20, la para el
+filtro de edad), pechos hinchados del recién nacido (B21), anticonceptivo en la lactancia (B22),
+adaptación más gotas de valeriana (B23, mixta), molusco contagioso (B24), pulsaciones de
+Ventolin (B25, dosis), lateralidad (B26), bebida de avena (B27). Si entran todas, las fuentes
+pediátricas sin pregunta A bajan de 337 a 257 de 426.
+
+### Cómo se miden (lo hace una persona, nunca el despliegue)
+
+`apps/api/scripts/preview_golden_candidates.py` pasa cada pregunta por el guard y el nodo de
+recuperación del grafo, con los cortes y el léxico que tenga producción, sin generar respuesta
+(el enrutado es un stub y la respuesta una constante). Cada sesión de base de datos empieza con
+`SET TRANSACTION READ ONLY`. Imprime, por pregunta: si la para una bandera roja o el filtro de
+edad, las tarjetas bajo el corte con su distancia, las cuatro fuentes más cercanas sin corte y
+el veredicto con las reglas del gate (fuente en las tarjetas y citas limpias para A; nada bajo el
+corte para B). Sale con 0 si todas pasan, 1 si alguna falla y 2 si no pudo medir (sin clave de
+embeddings, proveedor caído). Gasta embeddings y, para fr/en, una traducción por pregunta.
+
+1. En el Mac, desde esta rama (sin base de datos ni clave):
+
+   ```
+   cd apps/api
+   .venv/bin/python scripts/preview_golden_candidates.py --export /tmp/golden_candidates.json
+   ```
+
+2. En el servidor, dentro del contenedor `api` que sirve (su código puede ser anterior a las
+   candidatas, por eso se le pasan exportadas). Antes, copiar a `/tmp` del servidor el script
+   (`apps/api/scripts/preview_golden_candidates.py`) y el fichero exportado. Desde `/opt/adelia`:
+
+   ```
+   C="docker compose -f infra/docker-compose.prod.yml --env-file .env.prod"
+   $C cp /tmp/preview_golden_candidates.py api:/tmp/
+   $C cp /tmp/golden_candidates.json api:/tmp/
+   $C exec -T -e PYTHONPATH=/app -w /app api .venv/bin/python /tmp/preview_golden_candidates.py \
+     --questions /tmp/golden_candidates.json \
+     --record /tmp/golden_candidate_vectors.json --json /tmp/golden_preview.json
+   $C cp api:/tmp/golden_candidate_vectors.json /tmp/
+   ```
+
+   `--record` guarda los vectores que acaba de medir con la forma de
+   `tests/fixtures/golden_query_embeddings.json` (el de la pregunta y, en fr/en, el texto en
+   español con el que se busca y su vector).
+
+3. En el Mac, sin clave:
+
+   ```
+   .venv/bin/python -m tests.record_golden_embeddings --merge /tmp/golden_candidate_vectors.json
+   ```
+
+   Añade solo los ids que faltan y no toca ninguna entrada existente (volver a grabarlo todo
+   retraduciría cada pregunta fr/en y cambiaría lo que miden). Se niega si el modelo de
+   embeddings no es el del fichero, si un vector no tiene 1024 dimensiones, si un id no es una
+   pregunta del golden o si la redacción no es la actual. Una pregunta fr/en cuya traducción
+   falló se deja fuera nombrándola: hay que volver a medirla.
+
+4. Promover las que dijeron PASA: mover cada una de `CANDIDATES` a `GOLDEN_SET`, con su id y su
+   texto. Las que fallen se quedan como candidatas o se reescriben y se vuelven a medir. Al
+   promover cambian a propósito estos recuentos publicados, que hay que actualizar a mano:
+   `test_the_set_is_forty_eight_questions_in_three_groups`,
+   `test_the_count_per_group_and_locale_is_the_published_table`,
+   `test_the_gate_passes_with_canned_perfect_answers_and_publishes_every_question`,
+   `test_a_group_b_answer_that_gives_a_dose_instead_of_refusing_fails_the_gate` (la tasa),
+   `test_an_a_question_whose_source_is_missing_is_recorded_as_a_miss` (con más preguntas A,
+   cuatro fallos ya no bajan de 0,8: hacen falta más), `test_lay_terms.py::
+   test_the_b_group_is_the_fifteen_this_review_covered` y `test_eval_lay_language.py::
+   test_the_probes_include_groups_a_and_b_of_the_golden_set`. Los tests de las candidatas
+   (`written_2026_11_06`) siguen valiendo después de moverlas. Se ha simulado la promoción
+   completa con vectores falsos: solo fallan esos siete.
+
+5. Lo que la previsualización no mide: todo lo que depende de la respuesta del modelo. Las
+   citas huérfanas (una tarjeta que la respuesta no cita) solo las ve el gate. Para las B no
+   hay hueco: la previsualización exige que nada caiga bajo el corte, más estricto que el gate,
+   que deja al modelo negarse. Para las A, la primera ejecución del gate tras promover es la
+   que lo dice; si falla por huérfanas, la pregunta vuelve a candidata.
+
+6. El tiempo: hoy el gate hace unas 23 llamadas al modelo generativo con un techo de 300 s.
+   Promoverlas todas añade 21 respuestas del grupo A, más las B que caigan bajo el corte. Antes de
+   promover, mirar `elapsed_seconds` del último informe: si al crecer en proporción se acerca al
+   techo, promover por tandas o subir el `timeout` del test (su propio test admite hasta 600 s).
+
+### Si una pregunta no tiene vector
+
+Nunca pasa en verde sin medirse, y está fijado en `tests/test_rag_golden.py`: fuera del
+despliegue y sin clave, A y B se saltan nombrando los ids sin vector; en el despliegue, con la
+clave, la grabación incompleta se descarta y todas las preguntas se embeben en vivo y se
+puntúan; en el despliegue sin clave, el gate sale «NO EJECUTADOS» y para.
+
+### A16 («¿Puedo darle cacahuete a mi bebé de 8 meses?»): por qué no recupera su fuente
+
+Medido sin embeddings, contra los ficheros del corpus:
+
+- No es el idioma. La pregunta es española y no se traduce, y los fragmentos de las dos fuentes
+  que espera (SFP 2015 y Santé publique France 2021) están escritos en español aunque el título
+  sea francés.
+- No es el léxico. «cacahuete» no se lee como «caca» (`\bcacas?\b` necesita fin de palabra) ni
+  activa ninguna otra entrada: `expanded_query` devuelve None, así que el léxico no la acerca ni
+  la aleja. `test_lay_terms.py::test_a_false_friend_gets_no_term` fija esta frase exacta sin
+  términos.
+- Es el tema de los fragmentos. «cacahuete» sale en seis fragmentos pediátricos y en ninguno
+  es el tema. Dos lo nombran de pasada (la textura de las heces, AAP; el aceite que no se usa en
+  la costra láctea, NHS). Los otros cuatro lo nombran como alimento dentro de otro tema: «hitos y
+  cantidades por edad» (Pas à pas, fragmento 2), las recomendaciones prácticas y la evidencia
+  sobre alergia de SFP 2015 (fragmentos 0 y 1, la palabra pasado el carácter 800), y «a qué edad
+  empieza la diversificación» de sante.fr 2025, las cuatro de organizaciones francesas. Una
+  pregunta corta del tipo «¿puedo darle X a los 8 meses?» cae cerca de los fragmentos
+  generales sobre qué come un bebé a esa edad, que es lo que devolvió la demo el 14 de octubre.
+- Falta una fuente española cuyo tema sea la introducción de alérgenos. Ninguna fuente española
+  del corpus dice cuándo dar cacahuete.
+
+Arreglo propuesto, en orden:
+
+1. Medir antes de cambiar nada: `preview_golden_candidates.py --ids A16` en producción enseña
+   sus tarjetas y las cuatro fuentes más cercanas con su distancia.
+2. «Tout savoir sur la diversification alimentaire» (Santé publique France 2025, en
+   desarrollo_0_24m) entró después del 14 de octubre y nombra el cacahuete entre los alérgenos que
+   se introducen entre los 4 y los 6 meses. Por la regla de A16 (una fuente que hable de
+   cacahuete) sería una respuesta válida, pero no está en su `expect_source`. Si la medición la
+   enseña en las tarjetas, el fallo es de la expectativa y no de la recuperación. Añadirla hace
+   la pregunta más fácil de pasar, así que lo decide Santiago; no se ha tocado.
+3. Si no aparece: una fuente española verificada (organización, año y URL comprobados) con un
+   fragmento cuyo tema sea la introducción de los alimentos alergénicos, medida con el golden y
+   sin falsos positivos nuevos en el grupo B. No se ha añadido: sin red para verificar la URL ni
+   embeddings para medirla, sería una fuente sin comprobar.
+4. Una entrada del léxico (cacahuete hacia «alimentos alergénicos») está descartada: el test de
+   arriba fija que esta frase no recibe términos, y cambiarlo sería aflojarlo.

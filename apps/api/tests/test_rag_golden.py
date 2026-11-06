@@ -1126,3 +1126,268 @@ async def test_an_answer_that_errors_is_published_as_not_measured(monkeypatch, t
     assert "A3: MISTRAL_API_KEY not set" in data["skipped_reason"]
     assert data["recall_at_4"] is None and data["refusal_rate"] is None
     assert '"skipped_reason": null' not in path.read_text(encoding="utf-8")
+
+
+# ---------------------------------------------------------------------------
+# Candidates: questions waiting for their production measurement
+#
+# The first gate run on the server (2026-11-06) printed the blind spots: most
+# of the corpus had no group A question at all (infecciones_fiebre 37 of 37
+# sources, ojos_oidos_boca_uro_neuro 39 of 39, seguridad 38 of 38, ...).
+# `golden.CANDIDATES` holds the questions written for them. They are not part
+# of the gate until scripts/preview_golden_candidates.py has run them against
+# the production corpus: a question added straight to GOLDEN_SET that misses
+# in production stops the next deploy (docs/GOLDEN_GATE_DESPLIEGUE.md).
+#
+# The tests below describe the 2026-11-06 questions wherever they live
+# (`written_2026_11_06`), so moving one into GOLDEN_SET breaks none of them.
+# ---------------------------------------------------------------------------
+
+from adelia.clinical.golden import (  # noqa: E402
+    BLIND_SPOT_IDS_2026_11_06,
+    CANDIDATES,
+    GoldenQuestion,
+    written_2026_11_06,
+)
+
+#: The themes of the 2026-11-06 report, each of which gets two group A
+#: questions and one group B question. urgencias_lactante is apart: see
+#: `test_urgencias_gets_one_question_because_the_rest_are_red_flags`.
+BLIND_THEMES = (
+    "infecciones_fiebre", "ojos_oidos_boca_uro_neuro", "seguridad", "neonatal",
+    "salud_madre_familia", "guarderia_adaptacion", "digestivo_piel", "respiratorio_sueno",
+    "desarrollo_0_24m", "alimentacion_bebes",
+)
+
+#: Which theme each 2026-11-06 B question stands next to. A B question has no
+#: expect_source to read it from, so the table says it.
+NOV6_B_THEMES = {
+    "B18": "infecciones_fiebre", "B19": "ojos_oidos_boca_uro_neuro", "B20": "seguridad",
+    "B21": "neonatal", "B22": "salud_madre_familia", "B23": "guarderia_adaptacion",
+    "B24": "digestivo_piel", "B25": "respiratorio_sueno", "B26": "desarrollo_0_24m",
+    "B27": "alimentacion_bebes",
+}
+
+#: The urgencias_lactante sources no question reaches, and the wording a
+#: mother would use for each. Every one fires the detector, so the question
+#: is answered by the referral and could never measure retrieval.
+URGENCIAS_ONLY_AS_RED_FLAGS = (
+    ("Anafilaxia en Pediatría", "Le han recetado un autoinyector de adrenalina. "
+     "¿En qué momento tengo que usarlo?", 14, "anaphylaxis"),
+    ("Anafilaxia en Pediatría", "¿Qué es la anafilaxia y cuándo se usa la adrenalina?", 14,
+     "anaphylaxis"),
+    ("Convulsiones febriles", "Le han dicho que tuvo una convulsión febril simple. "
+     "¿Le volverá a pasar?", 18, "seizure"),
+    ("Convulsiones febriles", "¿Hay que hacerle una punción lumbar si tiene una convulsión con "
+     "la fiebre?", 14, "seizure"),
+)
+
+NOV6 = written_2026_11_06()
+
+
+def _pediatric_titles_by_theme() -> dict[str, list[str]]:
+    from adelia.clinical.golden import CORPUS_DATA_DIR
+
+    out: dict[str, list[str]] = {}
+    for path in sorted(CORPUS_DATA_DIR.glob("evidence_*.json")):
+        payload = json.loads(path.read_text(encoding="utf-8"))
+        out[path.stem.removeprefix("evidence_")] = [
+            str(s["title"]) for s in payload["sources"]
+            if "pediatrics" in (s.get("specialties") or [])
+        ]
+    return out
+
+
+def test_every_2026_11_06_question_is_a_candidate_or_in_the_gate_never_both():
+    gate_ids = {q.id for q in GOLDEN_SET}
+    candidate_ids = [q.id for q in CANDIDATES]
+    assert len(candidate_ids) == len(set(candidate_ids))
+    assert not gate_ids & set(candidate_ids)
+    assert [q.id for q in NOV6] == list(BLIND_SPOT_IDS_2026_11_06)
+    assert len(NOV6) == 31
+
+
+def test_a_candidate_is_outside_the_gate():
+    """`questions()` and the deploy read GOLDEN_SET only."""
+    for group in ("A", "B", "C"):
+        assert not {q.id for q in questions(group)} & {q.id for q in CANDIDATES}
+
+
+def test_the_2026_11_06_table_per_group_and_locale():
+    """The table in docs/GOLDEN_GATE_DESPLIEGUE.md; a drift is a question changed silently."""
+    table = {
+        (g, loc): sum(1 for q in NOV6 if q.group == g and q.locale == loc)
+        for g in ("A", "B") for loc in LOCALES
+    }
+    assert table == {
+        ("A", "es"): 12, ("A", "en"): 4, ("A", "fr"): 5,
+        ("B", "es"): 8, ("B", "en"): 1, ("B", "fr"): 1,
+    }
+
+
+def test_every_2026_11_06_question_declares_what_it_expects_and_why():
+    for q in NOV6:
+        assert q.rationale, q.id
+        assert q.locale in LOCALES, q.id
+        assert q.age_months is not None, q.id
+        if q.group == "A":
+            assert q.expect_source and not q.kind, q.id
+            assert 0 <= q.age_months <= 24, q.id
+        else:
+            assert q.kind in NEAR_MISS_KINDS, q.id
+            assert not q.expect_source and not q.every_citation_mentions, q.id
+            if q.kind != "age_band":
+                assert 0 <= q.age_months <= 24, q.id
+
+
+def test_every_candidate_source_alternative_names_a_real_corpus_title():
+    titles = [t for ts in _pediatric_titles_by_theme().values() for t in ts]
+    for q in (*NOV6, *CANDIDATES):
+        if q.group == "A":
+            for alt in q.expect_source.split("|"):
+                assert any(source_matches(alt, t) for t in titles), f"{q.id}: {alt!r}"
+
+
+@pytest.mark.parametrize("q", [*NOV6, *CANDIDATES], ids=lambda q: q.id)
+def test_no_candidate_trips_the_red_flag_detector(q):
+    """Group A can never be a red flag: the referral answers it and retrieval never runs."""
+    from adelia.clinical.red_flags import detect
+
+    flag = detect(q.question, locale=q.locale, age_months=q.age_months)
+    assert flag is None, f"{q.id} fires {flag.code}"
+
+
+def test_only_the_age_band_questions_are_outside_the_age_scope():
+    from adelia.clinical.age_scope import child_outside_scope
+
+    outside = {q.id for q in NOV6 if child_outside_scope(q.question)}
+    assert outside == {q.id for q in NOV6 if q.kind == "age_band"} == {"B20"}
+    assert not any(child_outside_scope(q.question) for q in CANDIDATES if q.group == "A")
+
+
+def test_each_blind_theme_gets_two_a_questions_and_one_b():
+    by_theme = _pediatric_titles_by_theme()
+    for theme in BLIND_THEMES:
+        aimed = [
+            q.id for q in NOV6 if q.group == "A"
+            and any(source_matches(q.expect_source, t) for t in by_theme[theme])
+        ]
+        assert len(aimed) >= 2, f"{theme}: {aimed}"
+    assert sorted(NOV6_B_THEMES) == sorted(q.id for q in NOV6 if q.group == "B")
+    assert sorted(NOV6_B_THEMES.values()) == sorted(BLIND_THEMES)
+
+
+def test_the_2026_11_06_questions_touch_new_sources_in_every_blind_theme(monkeypatch):
+    from adelia.clinical import golden
+
+    nov6 = {q.id for q in NOV6}
+    monkeypatch.setattr(golden, "GOLDEN_SET", tuple(q for q in GOLDEN_SET if q.id not in nov6))
+    before = {t["theme"]: t["untouched"] for t in golden.corpus_blind_spots()}
+    after = {t["theme"]: t["untouched"] for t in golden.corpus_blind_spots(also=NOV6)}
+    for theme in (*BLIND_THEMES, "urgencias_lactante"):
+        assert after[theme] <= before[theme] - 2, f"{theme}: {before[theme]} -> {after[theme]}"
+
+
+def test_the_blind_spots_count_extra_questions_only_when_asked():
+    """The deploy report keeps measuring the gate as it is, not as it may become."""
+    probe = GoldenQuestion(
+        "A98", "A", "?", age_months=3, expect_source="Tortícolis congénita", rationale="sonda",
+    )
+    assert corpus_blind_spots() == corpus_blind_spots(also=())
+    base = {t["theme"]: t["untouched"] for t in corpus_blind_spots()}
+    more = {t["theme"]: t["untouched"] for t in corpus_blind_spots(also=(probe,))}
+    assert more["ojos_oidos_boca_uro_neuro"] == base["ojos_oidos_boca_uro_neuro"] - 1
+
+
+@pytest.mark.parametrize(
+    ("title", "question", "age", "code"), URGENCIAS_ONLY_AS_RED_FLAGS,
+    ids=[f"{code}-{n}" for n, (_, _, _, code) in enumerate(URGENCIAS_ONLY_AS_RED_FLAGS)],
+)
+def test_urgencias_gets_one_question_because_the_rest_are_red_flags(title, question, age, code):
+    from adelia.clinical.red_flags import detect
+
+    flag = detect(question, locale="es", age_months=age)
+    assert flag is not None and flag.code == code
+    assert any(title in t for t in _pediatric_titles_by_theme()["urgencias_lactante"])
+
+
+def test_the_2026_11_06_questions_speak_all_three_locales_in_both_groups():
+    for group in ("A", "B"):
+        assert {q.locale for q in NOV6 if q.group == group} == set(LOCALES), group
+
+
+# --- a question without its vector never passes unmeasured -------------------
+
+#: Two questions the recording has never seen, one Spanish and one French, as a
+#: promotion without its vectors would leave them.
+_UNRECORDED = (
+    GoldenQuestion("A97", "A", "¿Cuándo se le cae el cordón?", age_months=0,
+                   expect_source="cordón umbilical", rationale="sin vector"),
+    GoldenQuestion("B97", "B", "Il a des poux, quel shampooing ?", locale="fr",
+                   age_months=20, kind="adjacent", rationale="sin vector"),
+)
+
+
+def _with_unrecorded(monkeypatch):
+    """GOLDEN_SET as a promotion would leave it: two questions more, no vectors."""
+    import sys
+
+    from adelia.clinical import golden
+
+    grown = (*GOLDEN_SET, *_UNRECORDED)
+    monkeypatch.setattr(golden, "GOLDEN_SET", grown)
+    monkeypatch.setattr(sys.modules[__name__], "GOLDEN_SET", grown)
+    return sys.modules[__name__]
+
+
+@pytest.mark.asyncio
+async def test_a_promoted_question_without_its_vector_skips_naming_it(monkeypatch):
+    """Outside a deploy, with no key: a skip that names the new ids, never a pass."""
+    recorded = {q.id: [0.0] for q in GOLDEN_SET if q.group in ("A", "B")}
+    corpus = {q.id: ("texto", [0.0]) for q in GOLDEN_SET if q.group in ("A", "B")}
+    module = _with_unrecorded(monkeypatch)
+    monkeypatch.delenv("MISTRAL_API_KEY", raising=False)
+    monkeypatch.setattr(module, "_recorded_embeddings", lambda: recorded)
+    monkeypatch.setattr(module, "_recorded_corpus", lambda: corpus)
+    assert module._missing_recordings(recorded) == ["A97", "B97"]
+    assert module._usable_recording() is None
+    reason = await module._skip_reason()
+    assert reason is not None and "A97" in reason and "B97" in reason
+
+
+@pytest.mark.asyncio
+async def test_in_a_deploy_a_question_without_its_vector_is_measured_live(monkeypatch, tmp_path):
+    """The deploy has the key: a recording that misses a question is set aside
+    and every A and B question is embedded live and scored, so the new one is
+    measured like the rest instead of skipped or waved through."""
+    recorded = {q.id: [0.0] for q in GOLDEN_SET if q.group in ("A", "B")}
+    module = _with_unrecorded(monkeypatch)
+
+    async def _corpus_500() -> int:
+        return 500
+
+    seen: dict[str, object] = {}
+
+    async def _canned(q, embeddings):
+        seen[q.id] = embeddings
+        if q.group == "A":
+            card = {"tag": "ev_1", "title": f"Guía: {q.expect_source.split('|')[0]}",
+                    "source_id": f"src-{q.id}", "snippet": q.every_citation_mentions.split("|")[0]}
+            return "Respuesta con fuente [ev_1].", [card]
+        return no_evidence_reply(q.locale), []
+
+    monkeypatch.setenv(DEPLOY_ENV, "1")
+    monkeypatch.setenv("MISTRAL_API_KEY", "placeholder-not-a-key")
+    monkeypatch.setattr(module, "_CONFIGURED_PROVIDER", "mistral")
+    monkeypatch.setattr(module, "_recorded_embeddings", lambda: recorded)
+    monkeypatch.setattr(module, "_corpus_size", _corpus_500)
+    monkeypatch.setattr(module, "_answer", _canned)
+    monkeypatch.setattr(module, "REPORT_PATH", tmp_path / "golden_report.json")
+    await module.test_groups_a_and_b_meet_the_deploy_gate()
+    ab = [q.id for q in GOLDEN_SET if q.group in ("A", "B")]
+    assert "A97" in ab and "B97" in ab
+    assert sorted(seen) == sorted(ab)
+    assert all(v is None for v in seen.values()), "a partial recording must not be used"
+    data = json.loads((tmp_path / "golden_report.json").read_text(encoding="utf-8"))
+    assert data["skipped_reason"] is None
+    assert data["results"]["A97"]["passed"] and data["results"]["B97"]["passed"]
