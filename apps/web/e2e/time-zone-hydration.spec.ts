@@ -127,5 +127,9 @@ test("dates read the same on the server in UTC and on a phone in Madrid", async 
     month: "short",
   }).format(seededAt);
   await page.goto("/es/dashboard/briefings");
+  // The route's loading skeleton is a second <main aria-busy="true"> until the
+  // page streams in; reading "main" before it leaves is a strict-mode error
+  // (CI, 2026-11-06, run 42155414490). Wait for it, then read the page's own.
+  await expect(page.locator('main[aria-busy="true"]')).toHaveCount(0);
   await expect(page.locator("main")).toContainText(madridDay);
 });
