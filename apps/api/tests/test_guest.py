@@ -23,7 +23,7 @@ from adelia import ratelimit
 from adelia.config import settings
 from adelia.db import AsyncSessionLocal
 from adelia.models import (
-    ChatMessage, ChatSession, Chunk, DemoSeedEmbedding, Document, Entity, GuestClaim,
+    BlobTombstone, ChatMessage, ChatSession, Chunk, DemoSeedEmbedding, Document, Entity, GuestClaim,
     Observation, Profile, User,
 )
 from adelia.services import guest as guest_service
@@ -210,6 +210,25 @@ async def test_guest_creation_also_has_an_hourly_ceiling(client, monkeypatch):
     assert codes == [201, 201, 429]
 
 
+@pg_only
+async def test_guest_creation_from_the_web_counts_the_mothers_address(client, monkeypatch):
+    """POST /guest is called by the web server (lib/auth.ts, the "guest"
+    provider), so the connection's peer is the web container for every mother.
+    Behind Cloudflare the web forwards CF-Connecting-IP, and the brake must
+    count that address: one mother's spent ceiling cannot lock out the next."""
+    from adelia.routers import guest as guest_router
+
+    monkeypatch.setattr(settings, "rate_limit_enabled", True)
+    monkeypatch.setattr(settings, "trust_cf_connecting_ip", True)
+    monkeypatch.setattr(guest_router, "GUEST_SIGNUPS_PER_HOUR", 1)
+    ratelimit.reset()
+    first, second = {"CF-Connecting-IP": "203.0.113.7"}, {"CF-Connecting-IP": "198.51.100.9"}
+    with patch("adelia.services.guest.fill_seed_embeddings", return_value=0):
+        codes = [(await client.post("/guest", json={}, headers=h)).status_code
+                 for h in (first, first, second)]
+    assert codes == [201, 429, 201]
+
+
 # --- "Guardar mi cuenta" --------------------------------------------------------
 
 
@@ -304,16 +323,35 @@ async def test_only_a_guest_can_claim_and_only_with_a_real_address(client):
 
 @pg_only
 async def test_deleting_a_guest_erases_everything_she_did(client):
+    """Also her blobs. The seed writes documents with an s3_key and no blob
+    (their text is in the row), and erasure tombstones every key. The sweep
+    production spawns after the 204 must still clear them: deleting an object
+    that does not exist is a success in S3, so a seeded key cannot wedge it.
+    The sweep is run here by hand against the real storage, only on her keys;
+    while it was patched out and never run, every run left due tombstones in
+    the shared database for the next full sweep (test_audio_retention) to find."""
+    from adelia.routers.users import sweep_blob_tombstones
+
     guest, lucia = await _new_guest(client)
     await client.post("/agent/turn", headers=_bearer(guest), json={"message": RED_FLAG})
     assert await _count(ChatSession, guest) == 1
-    with patch("adelia.routers.users._spawn_erasure_sweep"):
+    async with AsyncSessionLocal() as session:
+        keys = list((await session.execute(
+            sa.select(Document.s3_key).where(Document.user_id == guest))).scalars())
+    assert keys, "the seed gives her documents"
+    with patch("adelia.routers.users._spawn_erasure_sweep") as spawn:
         resp = await client.delete("/users/me", headers=_bearer(guest))
     assert resp.status_code == 204
     for model in (Document, Chunk, Entity, Observation, ChatSession, ChatMessage, Profile):
         assert await _count(model, guest) == 0, model.__tablename__
     async with AsyncSessionLocal() as session:
         assert await session.get(User, guest) is None
+    assert sorted(spawn.call_args.args[0]) == sorted(keys)
+    await sweep_blob_tombstones(keys=keys)
+    async with AsyncSessionLocal() as session:
+        left = (await session.execute(sa.select(sa.func.count()).select_from(BlobTombstone)
+                                      .where(BlobTombstone.s3_key.in_(keys)))).scalar_one()
+    assert left == 0
 
 
 # --- The agent: red flag first, stored turns, follow-ups with context ----------

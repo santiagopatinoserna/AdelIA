@@ -197,10 +197,7 @@ SLOW_REQUEST_THRESHOLD_S = 2.0
 async def rate_limiting(request: Request, call_next):
     """Outermost guard: cheap fixed-window limits before any real work."""
     if settings.rate_limit_enabled and request.url.path != "/health":
-        identity = ratelimit.identity_from(
-            request.headers.get("authorization"),
-            request.client.host if request.client else "unknown",
-        )
+        identity = ratelimit.identity_for(request)
         allowed, retry_after = ratelimit.check(
             request.method, request.url.path, identity
         )

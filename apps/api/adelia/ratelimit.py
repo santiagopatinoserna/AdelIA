@@ -11,7 +11,12 @@ exhaustion. Memory is hard-capped at MAX_KEYS with oldest-window eviction.
 from __future__ import annotations
 
 import heapq
+import ipaddress
 import time
+from typing import TYPE_CHECKING
+
+if TYPE_CHECKING:
+    from starlette.requests import Request
 
 # route-prefix → requests/minute. First match wins; order matters.
 ROUTE_BUDGETS: list[tuple[str, str, int]] = [
@@ -74,6 +79,40 @@ def _budget_for(method: str, path: str) -> tuple[str, int]:
         if method == m and path.startswith(prefix):
             return f"{m} {prefix}", budget
     return "default", DEFAULT_BUDGET
+
+
+def client_ip(request: Request) -> str:
+    """The one place that decides whose address a request counts against.
+
+    Every per-address limit asks here (the middleware, the hourly brake on
+    guests, the briefing charge in routers/agent). Until the PR #57 review the
+    answer was request.client behind `uvicorn --forwarded-allow-ips=*`, i.e.
+    the first X-Forwarded-For entry, which the client writes: one forged value
+    per request was a fresh bucket each time, and the guests it minted spend
+    the app's model budget. X-Forwarded-For is never read now (the Dockerfile
+    runs uvicorn with --no-proxy-headers, so request.client is the peer).
+
+    Behind the Cloudflare tunnel the peer is the tunnel or the web container,
+    the same for everyone, while Cloudflare sets CF-Connecting-IP to the real
+    address on each request, overwriting any the client sent. That header is
+    the client only where the operator says Cloudflare is in front
+    (TRUST_CF_CONNECTING_IP); a home LAN request skips Cloudflare and is
+    trusted as it already is. A value that is not an address is ignored.
+    """
+    from adelia.config import settings
+
+    if settings.trust_cf_connecting_ip:
+        forwarded = (request.headers.get("cf-connecting-ip") or "").strip()
+        try:
+            return str(ipaddress.ip_address(forwarded))
+        except ValueError:
+            pass
+    return request.client.host if request.client else "unknown"
+
+
+def identity_for(request: Request) -> str:
+    """identity_from() for a live request: its bearer token, else client_ip()."""
+    return identity_from(request.headers.get("authorization"), client_ip(request))
 
 
 def identity_from(auth_header: str | None, client_ip: str) -> str:

@@ -53,9 +53,11 @@ test.describe("public demo", () => {
     // Privacy explanation is now in the optional information, not above the field.
     await page.getByTestId("home-about").locator("summary").click();
     // ...and what happens to what she does: since 2026-11-06 it is kept in her
-    // space with Lucía (the demo is the real app), and she can delete it.
-    await expect(page.getByText(/se guarda en tu espacio con Lucía/)).toBeVisible();
-    await expect(page.getByText(/puedes borrarlo cuando quieras en Ajustes/)).toBeVisible();
+    // space with Lucía (the demo is the real app), and she can delete it. Since
+    // the PR #57 review the line is her consent, under "Preguntar".
+    const consent = page.getByTestId("landing-consent");
+    await expect(consent.getByText(/se guarde en tu espacio con Lucía/)).toBeVisible();
+    await expect(consent.getByText(/Puedes borrarlo en Ajustes/)).toBeVisible();
   });
 
   test("offers suggested questions and a free-text box", async ({ page }) => {

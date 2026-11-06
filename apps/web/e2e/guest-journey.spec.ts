@@ -22,7 +22,7 @@ test("a visitor's question opens her own space with Lucía, and it is kept", asy
   mkdirSync(SHOTS, { recursive: true });
   await page.setViewportSize({ width: 390, height: 844 });
   await page.goto("/es");
-  await expect(page.getByText(/se guarda en tu espacio con Lucía/)).toBeVisible();
+  await expect(page.getByText(/se guarde en tu espacio con Lucía/)).toBeVisible();
 
   const turns: Record<string, unknown>[] = [];
   await page.route("**/api/backend/agent/turn", async (route) => {

@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { type ReactNode, useEffect, useRef, useState } from "react";
 import { useLocale, useTranslations } from "next-intl";
 import { signIn } from "next-auth/react";
 import { ArrowUpRight, Loader2, Mic, MicOff, Phone, ShieldAlert, Stethoscope } from "lucide-react";
@@ -45,10 +45,12 @@ async function openGuestSpace(locale: string, hasSession: boolean): Promise<bool
   }
 }
 
-export function DemoAsk({ suggested, corpusStats, hasSession = false }: {
+export function DemoAsk({ suggested, corpusStats, hasSession = false, consentNote }: {
   suggested: string[];
   corpusStats?: AnswerCorpusStats;
   hasSession?: boolean;
+  /** What asking keeps and where to delete it, drawn by the page under the button. */
+  consentNote?: ReactNode;
 }) {
   const t = useTranslations("demo");
   const tg = useTranslations("guestSpace");
@@ -233,6 +235,11 @@ export function DemoAsk({ suggested, corpusStats, hasSession = false }: {
             {busy ? t("askBusy") : t("askCta")}
           </button>
         </div>
+        {consentNote && (
+          <p data-testid="landing-consent" className="mt-2 text-sm leading-relaxed text-ink-soft">
+            {consentNote}
+          </p>
+        )}
         {/* The appointment recorder of the real app, in her guest space. */}
         <button
           type="button"

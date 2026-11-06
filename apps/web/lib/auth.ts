@@ -4,6 +4,7 @@ import Credentials from "next-auth/providers/credentials";
 import { SignJWT, decodeJwt } from "jose";
 
 import { AdeliaPgAdapter } from "./auth-adapter";
+import { guestSignupHeaders } from "./guest-signup-headers";
 
 declare module "next-auth" {
   interface Session {
@@ -22,17 +23,16 @@ const API_URL =
 // (POST /guest, adelia/services/guest.py) and this provider puts that id in
 // the SAME session JWT an account gets, so every dashboard route, the proxy
 // and the API's own checks treat her like anyone else. Nothing she sends is
-// read: the only input is the language, and the address is forwarded so the
-// API's per-address brake on guest creation sees her, not this server.
+// read: the only input is the language, and her Cloudflare address is
+// forwarded so the API's per-address brake on guest creation sees her, not
+// this server (lib/guest-signup-headers.ts).
 const guestProvider = Credentials({
   id: "guest",
   name: "guest",
   credentials: { locale: {} },
   async authorize(credentials, request) {
     const locale = typeof credentials?.locale === "string" ? credentials.locale.slice(0, 8) : "es";
-    const headers: Record<string, string> = { "Content-Type": "application/json" };
-    const forwarded = request?.headers?.get?.("x-forwarded-for");
-    if (forwarded) headers["X-Forwarded-For"] = forwarded;
+    const headers = guestSignupHeaders(request?.headers);
     try {
       const res = await fetch(`${API_URL}/guest`, {
         method: "POST", headers, body: JSON.stringify({ locale }), cache: "no-store",

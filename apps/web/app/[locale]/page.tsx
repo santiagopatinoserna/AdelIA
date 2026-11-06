@@ -161,6 +161,16 @@ export default async function HomePage() {
               suggested={profile?.suggested ?? []}
               corpusStats={stats ? { sources: stats.sources, chunks: stats.chunks } : undefined}
               hasSession={Boolean(session?.jwt)}
+              // Health data: asking keeps what she does, so the consent sits
+              // under "Preguntar", not further down (PR #57 review, draft).
+              consentNote={
+                <>
+                  {t("guestSpace.landingNote")}{" "}
+                  <Link href="/privacidad#sin-cuenta" className="underline underline-offset-4">
+                    {t("guestSpace.landingPrivacyLink")}
+                  </Link>
+                </>
+              }
             />
           </div>
         </section>
@@ -168,7 +178,6 @@ export default async function HomePage() {
         {/* 2. Who it is about: fictional, folded */}
         <div className={styles.record}>
           <DemoRecord profile={profile} />
-          <p className="mt-3 text-sm leading-relaxed text-ink-soft">{t("guestSpace.landingNote")}</p>
         </div>
 
         </div>

@@ -123,6 +123,11 @@ services:
       # on only after scripts/probe_plan_brevity.py and the server golden gate pass,
       # and Santiago agrees: it changes how every plan reads.
       PLAN_BREVITY: ${PLAN_BREVITY:-false}
+      # Every public request reaches this server through the Cloudflare tunnel,
+      # which sets CF-Connecting-IP to the real address, so the per-address
+      # limits count that one (adelia/ratelimit.client_ip). Off by default in
+      # config.py for installs with no Cloudflare in front.
+      TRUST_CF_CONNECTING_IP: ${TRUST_CF_CONNECTING_IP:-true}
     ports:
       - "${API_PORT:-8000}:8000"
     healthcheck:

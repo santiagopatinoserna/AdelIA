@@ -129,10 +129,7 @@ async def post_turn(payload: AgentTurnRequest,
         and card_action.get("intent") == "confirm"
         and card_action.get("tool_name") == "generar_briefing"
     ):
-        identity = ratelimit.identity_from(
-            request.headers.get("authorization"),
-            request.client.host if request.client else "unknown",
-        )
+        identity = ratelimit.identity_for(request)
         allowed, retry_after = ratelimit.check("POST", "/briefings", identity)
         if not allowed:
             raise HTTPException(

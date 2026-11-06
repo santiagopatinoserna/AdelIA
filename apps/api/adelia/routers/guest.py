@@ -6,6 +6,9 @@ an account gets. It needs no secret because the id alone opens nothing; only
 the web, holding AUTH_SECRET, can turn it into a session. What it does need is
 a brake, so a bot cannot mint identities by the thousand: 5 a minute
 (ratelimit.ROUTE_BUDGETS) and GUEST_SIGNUPS_PER_HOUR an hour, per address.
+The caller is the web server, not the mother, so the address is the one the
+web forwards in CF-Connecting-IP when Cloudflare is trusted
+(ratelimit.client_ip); without it every guest shares the web's bucket.
 
 `POST /guest/claim` and `POST /guest/adopt` are "Guardar mi cuenta": the guest
 asks for a token for her email, the magic link carries it, and the account the
@@ -50,9 +53,8 @@ class AdoptRequest(BaseModel):
 @router.post("", status_code=status.HTTP_201_CREATED)
 async def create_guest(payload: GuestRequest, request: Request) -> dict[str, str]:
     if settings.rate_limit_enabled:
-        ip = request.client.host if request.client else "unknown"
         allowed, retry_after = ratelimit.check_window(
-            "guest-hour", f"ip:{ip}", GUEST_SIGNUPS_PER_HOUR, 3600.0)
+            "guest-hour", f"ip:{ratelimit.client_ip(request)}", GUEST_SIGNUPS_PER_HOUR, 3600.0)
         if not allowed:
             raise HTTPException(status_code=429, detail="Rate limit exceeded",
                                 headers={"Retry-After": str(int(retry_after) + 1)})

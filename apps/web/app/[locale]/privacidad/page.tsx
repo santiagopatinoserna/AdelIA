@@ -75,7 +75,12 @@ export default function PrivacyPage() {
 
         <div className="space-y-8">
           {sections.map(([titleKey, bodyKey]) => (
-            <section key={titleKey} className="ad-card p-6">
+            <section
+              key={titleKey}
+              // The guest section links here instead of repeating the list.
+              id={titleKey === "whereTitle" ? "encargados" : undefined}
+              className="ad-card p-6"
+            >
               <h2 className="font-display text-xl font-semibold text-ink">
                 {t(titleKey)}
               </h2>
@@ -84,9 +89,15 @@ export default function PrivacyPage() {
               </p>
             </section>
           ))}
-          <section data-testid="privacy-guest" className="ad-card p-6">
+          <section id="sin-cuenta" data-testid="privacy-guest" className="ad-card p-6">
             <h2 className="font-display text-xl font-semibold text-ink">{tg("privacyTitle")}</h2>
-            <p className="mt-3 text-[15px] leading-relaxed text-ink">{tg("privacyBody")}</p>
+            <p className="mt-3 text-[15px] leading-relaxed text-ink">
+              {tg.rich("privacyBody", {
+                processors: (chunks) => (
+                  <a href="#encargados" className="underline underline-offset-4">{chunks}</a>
+                ),
+              })}
+            </p>
           </section>
         </div>
       </main>
