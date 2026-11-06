@@ -76,8 +76,12 @@ trap drop_scratch EXIT
 trap 'exit 2' HUP INT TERM
 
 SECONDS=0
-say "building api and api-golden (the image about to serve)"
-if ! "${COMPOSE[@]}" build api api-golden; then
+# Only api-golden: building `api` here would retag the serving image before
+# the verdict, and after a failed gate any later `up -d api` (an .env.prod
+# change, a restart) would roll out the code that failed. Both targets share
+# the `base` layers, so the `up -d --build api` that follows a pass is cached.
+say "building api-golden (the new code, same base layers as the image about to serve)"
+if ! "${COMPOSE[@]}" build api-golden; then
   say "NOT RUN: the new image does not build"
   exit 2
 fi

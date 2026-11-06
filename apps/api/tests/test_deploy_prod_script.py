@@ -213,7 +213,7 @@ exit 0
 def test_the_server_gate_builds_copies_runs_and_cleans_up_in_that_order(tmp_path):
     proc, docker = _server_gate(tmp_path)
     assert proc.returncode == 0, proc.stdout + proc.stderr
-    build = _index(docker, " build api api-golden")
+    build = _index(docker, " build api-golden")
     copy = _index(docker, "pg_dump")
     run = _index(docker, " run ")
     drop = max(i for i, line in enumerate(docker) if "dropdb" in line and "pg_dump" not in line)
@@ -226,6 +226,19 @@ def test_the_server_gate_builds_copies_runs_and_cleans_up_in_that_order(tmp_path
     assert "run --rm --no-deps -e POSTGRES_DB=adelia_golden_gate api-golden bash scripts/golden_gate.sh" in docker[run]
     assert '{"recall_at_4": 0.94}' in proc.stdout
     assert "duración del gate" in proc.stdout
+
+
+def test_the_server_gate_never_rebuilds_the_image_that_serves(tmp_path):
+    """Building `api` in the gate would retag the serving image before the
+    verdict: after a failed gate, any later `docker compose up -d api` (an
+    .env.prod change, a restart) would quietly roll out the code that failed.
+    The gate builds only `api-golden`; `up -d --build` builds `api` after."""
+    proc, docker = _server_gate(tmp_path)
+    assert proc.returncode == 0, proc.stdout + proc.stderr
+    builds = [line for line in docker if " build " in line]
+    assert builds, docker
+    for line in builds:
+        assert line.rstrip().endswith(" build api-golden"), line
 
 
 def test_the_server_gate_never_starts_stops_or_migrates_the_live_stack(tmp_path):

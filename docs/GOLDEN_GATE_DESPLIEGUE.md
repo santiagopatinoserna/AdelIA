@@ -25,7 +25,9 @@ Tres scripts, uno por máquina:
 
 Orden en el servidor:
 
-1. `docker compose ... build api api-golden`. La etapa `golden` de `apps/api/Dockerfile` es la
+1. `docker compose ... build api-golden` (nunca `api`: reetiquetaría la imagen que sirve antes del
+   veredicto, y tras un gate fallido cualquier `up -d api` posterior desplegaría el código que
+   falló; `up -d --build api` la construye después, desde la caché). La etapa `golden` de `apps/api/Dockerfile` es la
    imagen de producción más `tests/` y las herramientas de desarrollo (pytest), sobre las mismas
    capas: se mide el código que va a servir. La última etapa (`runtime`) sigue siendo la imagen
    por defecto, sin tests, para `up -d` y para Fly.
