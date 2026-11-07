@@ -956,6 +956,12 @@
       "import": "Importar"
     }
   },
+  "showcaseAsk": {
+    "young": "Regurgita después de cada toma, ¿hacia cuándo mejora?",
+    "solids": "No quiere la verdura, ¿cuántas veces se la ofrezco?",
+    "toddler": "¿Es normal que solo quiera leche materna?",
+    "noAge": "¿Es normal que coma menos estos días?"
+  },
   "professionals": {
     "title": "Información para profesionales sanitarios",
     "intro": "Una familia usa AdelIA para guardar el historial de salud de su bebé. Con su permiso explícito, puede grabar la consulta para transcribirla a ese historial.",
