@@ -28,6 +28,9 @@
 #   bash scripts/prod-golden-gate.sh --candidates 'apps/api/adelia/enrichment/candidates/*.json'
 #                                    # or GOLDEN_CANDIDATE_GLOB=...; always without a model
 #   bash scripts/prod-golden-gate.sh --candidates '...' --explain A1,A5,B6
+#   bash scripts/prod-golden-gate.sh --candidates "$LOTE/seguridad.json,$LOTE/neonatal.json"
+#                                    # a subset: files or globs separated by commas, so a
+#                                    # domain that keeps failing does not hold the others back
 #                                    # or GOLDEN_EXPLAIN=...: those questions' nearest
 #                                    # sources, distance and file, without and with
 #
@@ -69,13 +72,15 @@ while [[ $# -gt 0 ]]; do
     --with-model) WITH_MODEL=1 ;;
     --candidates)
       CANDIDATES="${2:-}"
-      [[ -n "${CANDIDATES}" ]] || { say "NOT RUN: --candidates needs a glob"; exit 2; }
+      [[ -n "${CANDIDATES}" ]] || {
+        say "NOT RUN: --candidates needs a glob or files separated by commas"; exit 2; }
       shift ;;
     --explain)
       EXPLAIN="${2:-}"
       [[ -n "${EXPLAIN}" ]] || { say "NOT RUN: --explain needs question ids, e.g. A1,A5,B6"; exit 2; }
       shift ;;
-    *) say "NOT RUN: unknown argument $1 (known: --with-model, --candidates GLOB, --explain IDS)"
+    *) say "NOT RUN: unknown argument $1" \
+         "(known: --with-model, --candidates GLOB[,FILE...], --explain IDS)"
        exit 2 ;;
   esac
   shift

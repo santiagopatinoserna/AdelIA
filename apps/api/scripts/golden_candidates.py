@@ -2,6 +2,7 @@
 
     # inside the api-golden container, on the scratch copy (golden_gate.sh does this)
     python scripts/golden_candidates.py load "apps/api/adelia/enrichment/candidates/*.json"
+    python scripts/golden_candidates.py load "$LOTE/seguridad.json,$LOTE/neonatal.json"
     python scripts/golden_candidates.py compare --without golden_report.sin_candidatos.json \\
         --with golden_report.con_candidatos.json \\
         --preview-without golden_preview.sin_candidatos.json \\
@@ -81,19 +82,33 @@ class CandidateError(Exception):
 # --- which files ------------------------------------------------------------------
 
 
-def resolve(pattern: str, *, api_dir: Path = API_DIR) -> list[Path]:
-    """The files `pattern` names, sorted, from the repo root or from apps/api."""
-    p = pattern.strip()
-    if not p:
-        raise CandidateError("GOLDEN_CANDIDATE_GLOB está vacío")
+def _under_api(item: str, api_dir: Path) -> str:
     for prefix in _REPO_PREFIXES:
-        if p.startswith(prefix):
-            p = p[len(prefix):]
+        if item.startswith(prefix):
+            item = item[len(prefix):]
             break
-    full = p if os.path.isabs(p) else str(api_dir / p)
-    files = sorted(Path(f) for f in glob.glob(full) if Path(f).is_file())
-    if not files:
-        raise CandidateError(f"ningún fichero coincide con {pattern!r} (buscado en {full})")
+    return item if os.path.isabs(item) else str(api_dir / item)
+
+
+def resolve(pattern: str, *, api_dir: Path = API_DIR) -> list[Path]:
+    """The files `pattern` names, sorted, from the repo root or from apps/api.
+
+    `pattern` is a glob or (2026-11-07) several, separated by commas, each a
+    glob or a file: the second server run of the 2026-11-06 batch was broken by
+    a few files out of twelve, and a domain that keeps failing must not hold
+    the others back. Every item has to name at least one file, so a typo in a
+    list is an error rather than one domain fewer measured."""
+    items = [i.strip() for i in pattern.split(",") if i.strip()]
+    if not items:
+        raise CandidateError("GOLDEN_CANDIDATE_GLOB está vacío")
+    found: set[Path] = set()
+    for item in items:
+        full = _under_api(item, api_dir)
+        files = [Path(f) for f in glob.glob(full) if Path(f).is_file()]
+        if not files:
+            raise CandidateError(f"ningún fichero coincide con {item!r} (buscado en {full})")
+        found.update(files)
+    files = sorted(found)
     data_dir = (api_dir / "adelia" / "enrichment" / "data").resolve()
     in_data = [f.name for f in files if f.resolve().parent == data_dir]
     if in_data:
@@ -327,7 +342,7 @@ def explain(without: list[dict], with_: list[dict] | None) -> str:
         n_sin = len(v.get("cards") or [])
         if w is None:
             lines.append(f"  tarjetas bajo el corte: {n_sin or 'ninguna'}")
-            lines += ["  sin candidatos", *_explain_block(v, before=None)]
+            lines += ["  sin candidatos", *_explain_block(v, before=None), *_query_blocks(v, None)]
             continue
         n_con = len(w.get("cards") or [])
         lines.append(f"  tarjetas bajo el corte: {n_sin or 'ninguna'} sin; {n_con or 'ninguna'} con")
@@ -336,7 +351,40 @@ def explain(without: list[dict], with_: list[dict] | None) -> str:
         top_after = {n[0] for n in (w.get("nearest") or [])[:_TOP]}
         gone = [n[0] for n in (v.get("nearest") or [])[:_TOP] if n[0] not in top_after]
         lines.append(f"  sale con los candidatos: {_ids(gone)}")
+        lines += _query_blocks(v, w)
     return "\n".join(lines)
+
+
+def _query_blocks(v: dict, w: dict | None) -> list[str]:
+    """Each search of the graph and the gate (preview --explain, 2026-11-07), without and with.
+
+    The merged nearest list above hid where A21 was lost: the lexicon found the
+    tear-duct sources, the gate's own search (one recorded vector) found the
+    crying ones first. A block per search, with its own newcomers and losses."""
+    before = {b.get("name"): b for b in v.get("queries") or []}
+    origins = {**(v.get("origins") or {}), **((w or {}).get("origins") or {})}
+    lines: list[str] = []
+    for b in (w if w is not None else v).get("queries") or []:
+        name = b.get("name")
+        old = before.get(name) or {}
+        lines.append(f"  consulta {name} (corte {b.get('cut', 0):.2f})"
+                     + (f": {b['note']}" if b.get("note") else ""))
+        if not b.get("top") and not old.get("top"):
+            continue
+        runs = (("sin candidatos", old, None), ("con candidatos", b, old)) if w is not None \
+            else (("sin candidatos", b, None),)
+        for label, block, ref in runs:
+            view = {"group": v.get("group"), "expect_source": v.get("expect_source"),
+                    "cards": [{"title": t} for t in block.get("cards") or ()],
+                    "nearest": block.get("top") or [], "origins": origins}
+            prior = None if ref is None else {"nearest": ref.get("top") or []}
+            lines += [f"    {label}", *("  " + r for r in _explain_block(view, before=prior))]
+        if w is None:
+            continue
+        top_after = {n[0] for n in (b.get("top") or [])[:_TOP]}
+        gone = [n[0] for n in (old.get("top") or [])[:_TOP] if n[0] not in top_after]
+        lines.append(f"    sale con los candidatos: {_ids(gone)}")
+    return lines
 
 
 # --- the command line ---------------------------------------------------------------
@@ -378,7 +426,8 @@ def main(argv: list[str] | None = None) -> int:
     )
     sub = parser.add_subparsers(dest="command", required=True)
     load = sub.add_parser("load", help="load the candidate files into the scratch copy")
-    load.add_argument("glob", help="e.g. apps/api/adelia/enrichment/candidates/*.json")
+    load.add_argument("glob", help="e.g. apps/api/adelia/enrichment/candidates/*.json, or "
+                      "several globs or files separated by commas")
     cmp_ = sub.add_parser("compare", help="compare the gate runs without and with them")
     cmp_.add_argument("--without", required=True)
     cmp_.add_argument("--with", dest="with_", required=True)

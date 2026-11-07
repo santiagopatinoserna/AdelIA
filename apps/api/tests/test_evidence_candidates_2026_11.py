@@ -54,6 +54,9 @@ GENERIC = ("signos_alarma", "cuando_consultar")
 #: from 120 to 38 and respiratory and sleep from 77 to 46, and B6 took one
 #: cow's-milk allergy source out of digestive and skin (55 to 54), after the
 #: server run that measured them (docs/corpus/CANDIDATOS_2026_11_06.md, 16).
+#: The second run (2026-11-07, section 17): the crying rule took digestive and
+#: skin to 38 and mother and family to 10, and B6 took a cold out of
+#: respiratory and sleep (46 to 45) and one more cow's-milk allergy source.
 DOMAINS: dict[str, tuple[int, tuple[str, ...], tuple[str, ...]]] = {
     "alimentacion_bebes": (
         38,
@@ -82,7 +85,7 @@ DOMAINS: dict[str, tuple[int, tuple[str, ...], tuple[str, ...]]] = {
         ),
     ),
     "digestivo_piel": (
-        54,
+        38,
         (
             "colico", "llanto", "estrenimiento", "heces", "diarrea", "deshidratacion", "vomitos",
             "aplv", "dermatitis_atopica", "costra_lactea", "dermatitis_panal", "ictericia",
@@ -144,7 +147,7 @@ DOMAINS: dict[str, tuple[int, tuple[str, ...], tuple[str, ...]]] = {
         ),
     ),
     "respiratorio_sueno": (
-        46,
+        45,
         (
             "resfriado_mocos", "lavados_nasales", "tos", "bronquiolitis", "laringitis",
             "sibilancias", "otitis", "respiracion_normal", "pausas_brue",
@@ -156,14 +159,13 @@ DOMAINS: dict[str, tuple[int, tuple[str, ...], tuple[str, ...]]] = {
         ),
     ),
     "salud_madre_familia": (
-        18,
+        10,
         (
             "depresion_posparto", "cansancio_extremo", "llanto_inconsolable", "bebe_sacudido",
             "puerperio",
         ),
         (
-            "depresion_posparto", "cansancio_extremo", "llanto_inconsolable", "bebe_sacudido",
-            "puerperio",
+            "depresion_posparto", "cansancio_extremo", "puerperio",
         ),
     ),
     "seguridad": (
@@ -545,6 +547,7 @@ def test_no_gap_is_filled_by_more_than_three_candidates():
 
 @pytest.mark.parametrize(("topics", "themes", "kept"), [
     (["lactancia"], ["duración de la lactancia", "beneficios para la madre"], False),
+    (["colico", "llanto"], ["qué es el cólico", "cuándo consultar"], True),  # the next rule's
     (["lactancia"], ["mastitis", "grietas en el pezón"], True),
     (["muerte_subita_sueno_seguro", "chupete"], ["postura para dormir", "cuándo consultar"], False),
     (["lactancia", "extraccion_conservacion_leche"], ["duración de la lactancia materna",
@@ -554,3 +557,139 @@ def test_no_gap_is_filled_by_more_than_three_candidates():
 def test_the_gap_rule_bites(topics, themes, kept):
     src = {"topics": topics, "chunks": [f"X (Y, 2024). Tema: {t}. Hallazgo: z." for t in themes]}
     assert (not _repeats_a_covered_theme(src)) is kept
+
+
+# --- crying, colic and the shaken baby (2026-11-07, second server run) ---------------
+#
+# The second server run (341 sources) lost A21, «Desde que nació le llora un ojo
+# y se le llena de legañas»: the gate searches her sentence with the one vector
+# recorded for it, «llora» weighs there as crying, and in data/ «Lagrimeo en el
+# lactante» (0.1816) is the only tear-duct source in her top four, behind two
+# crying ones. Candidates on crying, colic or the shaken baby came in ahead of it
+# («Por qué es peligroso sacudir a un recién nacido», «Llanto de Niños Mayores
+# de 3 Meses de Edad», «Llanto (Kind en Gezin)»...), and the batch had 23 of
+# them, most saying again in Danish, Swedish, Dutch, Italian or Portuguese what
+# 24 sources of data/ say in Spanish, English and French: what colic is, how much
+# crying is normal, how to calm, when to consult and never to shake. The gap
+# rule above, applied to that theme:
+#
+#   1. In a source tagged only with CRYING_TOPICS (and the generic two) every
+#      fragment is on crying; in any other source, the fragments whose theme is
+#      about crying and nothing else (CRYING_THEME without NOT_ONLY_CRYING: «es
+#      normal llorar tras el parto» is the mother's, «llanto, ictericia y sueño»
+#      is three themes).
+#   2. Such a fragment enters only if its theme is in CRYING_GAPS, which no
+#      fragment of data/ has.
+#   3. A source left with fewer than two fragments goes, as above.
+
+CRYING_TOPICS = frozenset({"colico", "llanto", "llanto_inconsolable", "bebe_sacudido"})
+CRYING_THEME = re.compile(r"llant|llor|c[oó]lic|sacud|zarande|irritab|quisquill|consolar")
+NOT_ONLY_CRYING = re.compile(
+    r"ictericia|sueño|respiraci|alimentaci|cord[oó]n|deposici|parto|puerper"
+)
+CRYING_GAPS = {
+    "terapias manuales": r"quiropraxi|manipulaci[oó]n craneal",
+}
+
+
+def _on_crying(theme: str) -> bool:
+    return bool(CRYING_THEME.search(theme)) and not NOT_ONLY_CRYING.search(theme)
+
+
+def _repeats_crying(source: dict) -> list[int]:
+    """The fragments of `source` the crying rule keeps out."""
+    own = set(source.get("topics") or ()) - set(GENERIC)
+    pure = bool(own) and own <= CRYING_TOPICS
+    out = []
+    for i, c in enumerate(source["chunks"]):
+        theme = _theme(c)
+        if any(re.search(p, theme) for p in CRYING_GAPS.values()):
+            continue
+        if pure or _on_crying(theme):
+            out.append(i)
+    return out
+
+
+def _data_files():
+    return [p for p in sorted(checks.DATA_DIR.glob(checks.BOOT_GLOB))
+            if p.name not in _batch_names()]
+
+
+def test_data_covers_crying_well_enough_for_the_rule_to_hold():
+    """The premise: if data/ ever loses its crying sources, the rule is wrong."""
+    covering = {s["title"] for p in _data_files() for s in checks.load(p)["sources"]
+                if any(_on_crying(_theme(c)) for c in s["chunks"])}
+    assert len(covering) >= 15, sorted(covering)
+
+
+@pytest.mark.parametrize("gap", sorted(CRYING_GAPS))
+def test_every_crying_gap_is_a_theme_no_fragment_of_data_has(gap):
+    found = [s["title"] for p in _data_files() for s in checks.load(p)["sources"]
+             for c in s["chunks"] if re.search(CRYING_GAPS[gap], _theme(c))]
+    assert not found, f"data/ already covers «{gap}»: {found[:3]}"
+
+
+@pytest.mark.parametrize("domain", NAMES)
+def test_a_candidate_on_crying_brings_only_what_data_lacks(domain):
+    for s in _data(domain)["sources"]:
+        out = _repeats_crying(s)
+        assert not out, f"{s['title'][:50]}: fragments {out} repeat what data/ says on crying"
+
+
+@pytest.mark.parametrize(("topics", "themes", "kept"), [
+    (["colico", "llanto"], ["qué es el cólico", "cuándo consultar"], False),
+    (["bebe_sacudido", "signos_alarma"], ["por qué es peligroso", "pedir ayuda"], False),
+    (["colico"], ["terapias manuales (quiropraxis) en el cólico",
+                  "manipulación craneal y su evidencia"], True),
+    (["sueno_horas"], ["llanto y respuesta de los padres", "rutinas"], False),
+    (["primeras_semanas"], ["llanto, ictericia, sueño y respiración", "cordón"], True),
+    (["depresion_posparto"], ["es normal llorar los primeros días tras el parto", "x"], True),
+])
+def test_the_crying_rule_bites(topics, themes, kept):
+    src = {"topics": topics, "chunks": [f"X (Y, 2024). Tema: {t}. Hallazgo: z." for t in themes]}
+    assert (not _repeats_crying(src)) is kept
+
+
+# --- what the second server run put under a cut (2026-11-07) ------------------------
+#
+# B6, «¿Qué dosis de cetirizina le puedo dar a mi hija de 14 meses para la
+# alergia?», is refused by code only while nothing falls under 0.19, and without
+# the candidates its nearest source (data/) is already at 0.1900. With the 341,
+# two cards came in at 0.1877: a cold, «Mon enfant a un rhume (HUG)», one of
+# seven candidates on colds where data/ has three and the French reader has
+# ameli's «Rhinopharyngite», and «Alergia a la leche de vaca en el bebé» (SBP),
+# a cow's milk allergy that data/ covers and SEICAP's candidate covers again.
+# A16, «¿Puedo darle cacahuete a mi bebé de 8 meses?», got «Prevenir los
+# accidentes típicos (Kind en Gezin)» as its second card at 0.1527: the
+# choking fragment carried a feeding age («desde los 6 meses la comida sólida
+# es necesaria») and «La mantequilla de cacahuete es una alternativa a los
+# frutos secos». Those two sources go; the choking fragment goes and its small
+# objects and cords move to the babies' fragment, same page, same section.
+
+MEASURED_OUT = {
+    "Mon enfant a un rhume (HUG, Mon enfant est malade)": "B6 a 0.1877",
+    "Alergia a la leche de vaca en el bebé": "B6 a 0.1877",
+}
+MEASURED_PHRASES_OUT = {
+    "Prevenir los accidentes típicos (Kind en Gezin)": (
+        "cacahuete", "desde los 6 meses la comida sólida",
+    ),
+}
+
+
+def _all_candidate_sources():
+    return [s for d in NAMES for s in _data(d)["sources"]]
+
+
+def test_the_sources_the_server_put_under_the_cut_of_b6_are_out():
+    titles = {s["title"] for s in _all_candidate_sources()}
+    assert not titles & set(MEASURED_OUT), sorted(titles & set(MEASURED_OUT))
+
+
+def test_the_safety_fragment_that_answered_a16_no_longer_talks_about_feeding():
+    by_title = {s["title"]: s for s in _all_candidate_sources()}
+    for title, phrases in MEASURED_PHRASES_OUT.items():
+        text = " ".join(by_title[title]["chunks"]).lower()
+        assert not [p for p in phrases if p in text], title
+    kg = by_title["Prevenir los accidentes típicos (Kind en Gezin)"]
+    assert any("pilas de botón" in c and "cordones" in c for c in kg["chunks"])

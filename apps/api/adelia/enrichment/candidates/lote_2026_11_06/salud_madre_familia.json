@@ -2,7 +2,7 @@
   "_meta": {
     "topic": "Candidatas del dominio salud_madre_familia (0-24 meses), fuentes oficiales de muchos países leídas en su idioma y resumidas en español.",
     "compiled": "2026-11-06",
-    "method": "Seis investigadores de Claude Code leyeron cada página con WebFetch y la pasaron por un subagente verificador (~/dev/adelia-night/research/corpus-*, verify.json). Al integrarlas se quitaron las fuentes cuyos términos prohíben adaptar, traducir o el uso comercial, los calendarios de vacunas de otros países y los duplicados con data/ y entre lotes; los teléfonos y servicios de otros sistemas de salud se reescribieron en palabras con el nivel de urgencia de la fuente, y cada fragmento sobre alarmas, urgencias, fiebre, respiración, convulsiones, deshidratación, ictericia o sepsis se volvió a comprobar contra el texto de la página descargado con curl. Idiomas del original: español 5, italiano 3, inglés 2, francés 2, neerlandés 2, sueco 2, noruego 1, portugués 1. Detalle en docs/corpus/CANDIDATOS_2026_11_06.md.",
+    "method": "Seis investigadores de Claude Code leyeron cada página con WebFetch y la pasaron por un subagente verificador (~/dev/adelia-night/research/corpus-*, verify.json). Al integrarlas se quitaron las fuentes cuyos términos prohíben adaptar, traducir o el uso comercial, los calendarios de vacunas de otros países y los duplicados con data/ y entre lotes; los teléfonos y servicios de otros sistemas de salud se reescribieron en palabras con el nivel de urgencia de la fuente, y cada fragmento sobre alarmas, urgencias, fiebre, respiración, convulsiones, deshidratación, ictericia o sepsis se volvió a comprobar contra el texto de la página descargado con curl. Idiomas del original: español 4, inglés 2, francés 1, neerlandés 1, noruego 1, sueco 1. Detalle en docs/corpus/CANDIDATOS_2026_11_06.md.",
     "caveat": "Los fragmentos son paráfrasis breves en español, no traducciones literales ni citas; `language` es el idioma del fragmento (es) y `original_language` el de la página. Cada fragmento conserva las cifras, edades y el nivel de urgencia de su propia fuente, que pueden diferir entre países. No es consejo médico.",
     "purpose": "Candidato: no lo carga el arranque. Se mide con scripts/golden_gate.sh --candidates antes de pasar a data/ como evidence_salud_madre_familia_2026_11.json."
   },
@@ -105,28 +105,6 @@
       ]
     },
     {
-      "source_type": "reference",
-      "title": "Síndrome del bebé zarandeado",
-      "organization": "Consellería de Sanidade y Servicio Gallego de Salud (Sergas, Xunta de Galicia)",
-      "publication_year": 2022,
-      "url": "https://vida-saudable.sergas.gal/cartafol/1ano-sindrome-bebe-zarandeado?idioma=es",
-      "specialties": [
-        "pediatrics",
-        "general_medicine"
-      ],
-      "license": "fair_use_snippet",
-      "language": "es",
-      "original_language": "es",
-      "topics": [
-        "bebe_sacudido",
-        "signos_alarma"
-      ],
-      "chunks": [
-        "Síndrome del bebé zarandeado (Xunta de Galicia, 2022). Tema: qué es y por qué es peligroso. Hallazgo: también se llama trauma craneal no accidental y es una forma de maltrato físico infantil. Los bebés tienen débiles los músculos del cuello y les cuesta sostener la cabeza, de modo que con las sacudidas el cerebro se mueve dentro del cráneo y puede sufrir hematomas, hinchazón y sangrado, con deterioro mental de intensidad variable y, en ocasiones, lesiones y secuelas graves en el sistema nervioso central. Según la página es la causa más frecuente de traumatismo craneoencefálico grave en el lactante antes del primer año. Ocurre siempre antes de los tres años, sobre todo en el primer año, y muchas veces son los propios padres y madres quienes lo sacuden como parte de un juego o al manejar mal una situación difícil, sin conocer sus consecuencias.",
-        "Síndrome del bebé zarandeado (Xunta de Galicia, 2022). Tema: qué hacer y cuándo buscar ayuda urgente. Hallazgo: no hay ninguna justificación para zarandear a un bebé. Si cuesta controlar las emociones que genera la llegada del bebé, hay que pedir ayuda: unos segundos bastan para causar daños irreparables. Quienes ayudan a cuidar al bebé (cuidadores, hermanos, abuelos) deben conocer estos peligros. Si se sospecha que el bebé ha sufrido lesiones por una sacudida violenta, hay que buscar ayuda de inmediato: contactar con el pediatra o acudir a la urgencia hospitalaria más cercana, porque la atención rápida puede salvarle la vida o evitar problemas graves de salud."
-      ]
-    },
-    {
       "source_type": "guideline",
       "title": "Señales de alerta en el puerperio",
       "organization": "Ministerio de Salud de la Nación (Argentina)",
@@ -178,32 +156,6 @@
     },
     {
       "source_type": "reference",
-      "title": "Bébé secoué (ONE)",
-      "organization": "ONE (Office de la Naissance et de l'Enfance, Belgique)",
-      "publication_year": null,
-      "undated_reason": "Página de la sección Familles de one.be sin fecha de actualización visible; consultada el 2026-11-06.",
-      "url": "https://www.one.be/familles/0-12/bebe-secoue",
-      "specialties": [
-        "pediatrics",
-        "general_medicine"
-      ],
-      "license": "fair_use_snippet",
-      "language": "es",
-      "original_language": "fr",
-      "topics": [
-        "bebe_sacudido",
-        "cuando_consultar",
-        "signos_alarma"
-      ],
-      "chunks": [
-        "Bébé secoué (ONE, Office de la Naissance et de l'Enfance). Tema: por qué es peligroso sacudir a un bebé. Hallazgo: sacudir a un bebé puede tener consecuencias muy graves para su salud. Su cerebro es frágil, su cabeza pesada y su cuello no tiene músculos suficientes para sostenerla; al sacudirlo, la cabeza se balancea rápidamente de delante atrás, el cerebro puede chocar contra el cráneo y los vasos sanguíneos que lo rodean pueden romperse y sangrar, causando lesiones cerebrales. La página cita que alrededor del 10 % de los bebés sacudidos fallece y que cerca del 50 % queda con una discapacidad de por vida, y recomienda informar de este peligro a todas las personas que cuidan al niño. Incluso en un momento de pérdida de control, sacudir a un bebé es una forma de maltrato, por lo que es esencial prevenirlo y hablar de ello.",
-        "Bébé secoué (ONE, Office de la Naissance et de l'Enfance). Tema: llanto y cómo calmar al bebé. Hallazgo: el llanto es el principal medio del bebé para expresar una necesidad, una molestia o una emoción (hambre, sueño, pañal sucio, demasiado calor o frío, demasiado ruido o demasiada gente, necesidad de mimos); es normal, pero puede resultar agotador si dura mucho o se repite. Para calmarlo la página propone ofrecerle un poco de agua o de leche según su edad y sus necesidades, comprobar que no tenga demasiado calor o frío, llevarlo a un lugar tranquilo o pasearlo, cambiarle el pañal, mecerlo con suavidad o masajearle el vientre o la espalda. Si sigue llorando, se hace una pausa, se respira hondo, se deja al bebé en un lugar seguro, se sale unos instantes de la habitación y, si es posible, se pide a alguien que tome el relevo.",
-        "Bébé secoué (ONE, Office de la Naissance et de l'Enfance). Tema: reconocer los propios límites y pedir ayuda. Hallazgo: Estar cansado y decirlo está permitido y no significa en absoluto que no se quiera al hijo; reconocer los propios límites es una forma de proteger al hijo y de cuidarse uno mismo. Se puede acudir a la pareja, la familia, amigos, vecinos, un servicio de escucha telefónica, la enfermera de pediatría, una matrona, un equipo de protección de la infancia o el médico.",
-        "Bébé secoué (ONE, Office de la Naissance et de l'Enfance). Tema: cuándo pedir ayuda y a quién llamar. Hallazgo: la página distingue tres situaciones. Si crecen el agotamiento y la tensión, se deja al bebé en un lugar seguro, por ejemplo su cuna, y se aleja uno unos instantes; pedir ayuda o dejarlo llorar unos minutos en un sitio seguro es preferible a un gesto brusco. Si se tiene la sensación de perder el control, se llama a un amigo, a un familiar, al médico de cabecera, al pediatra, a la enfermera de pediatría o a un servicio de escucha anónimo disponible las 24 horas. Si se teme poner al bebé en peligro, si un bebé ha sido sacudido (por uno mismo o por otra persona) o si sufre un desvanecimiento, se llama inmediatamente a emergencias (112)."
-      ]
-    },
-    {
-      "source_type": "reference",
       "title": "Rééducation périnéale après l'accouchement (ONE)",
       "organization": "ONE (Office de la Naissance et de l'Enfance, Belgique)",
       "publication_year": null,
@@ -225,81 +177,6 @@
         "Rééducation périnéale après l'accouchement (ONE, Office de la Naissance et de l'Enfance). Tema: cuándo empezar y cuántas sesiones. Hallazgo: En algunos casos puede empezar una reeducación suave al volver a casa, si el fisioterapeuta de la maternidad ha dado los consejos adecuados; lo más frecuente es que la reeducación abdomino-perineal empiece 6 semanas después del parto, prescrita en la visita posnatal. Suelen prescribirse 9 sesiones de fisioterapia (a veces bastan 4 o 5, a veces hacen falta más).",
         "Rééducation périnéale après l'accouchement (ONE, Office de la Naissance et de l'Enfance). Tema: la primera sesión. Hallazgo: la primera sesión consiste en una conversación en la que el fisioterapeuta se informa de cómo fue el parto y responde a las preguntas; después evalúa y explica los métodos posibles, individuales o en grupo, y con el acuerdo de la mujer puede realizar un tacto vaginal para valorar la capacidad de contracción y la resistencia de los músculos.",
         "Rééducation périnéale après l'accouchement (ONE, Office de la Naissance et de l'Enfance). Tema: técnicas, participación y a quién consultar. Hallazgo: Según los resultados, puede proponer técnicas manuales, electroestimulación, biofeedback o gimnasia vaginal hipopresiva. Las sesiones buscan restablecer poco a poco el tono y la resistencia del periné, y la participación activa, la motivación y los ejercicios en casa son esenciales. La página no describe situaciones de urgencia: recomienda hablar de la reeducación con un profesional de salud (matrona, ginecólogo, médico o fisioterapeuta), que puede responder a las preguntas y orientar hacia la atención adecuada."
-      ]
-    },
-    {
-      "source_type": "reference",
-      "title": "Los cólicos del lactante",
-      "original_title": "Le coliche nel lattante",
-      "organization": "Azienda Ospedaliero Universitaria Meyer IRCCS",
-      "publication_year": 2023,
-      "url": "https://www.meyer.it/index.php/newsletter/settembre-2023/4857-le-coliche-nel-lattante",
-      "specialties": [
-        "pediatrics",
-        "gastroenterology",
-        "neonatology"
-      ],
-      "license": "fair_use_snippet",
-      "language": "es",
-      "original_language": "it",
-      "topics": [
-        "llanto_inconsolable",
-        "bebe_sacudido",
-        "cuando_consultar"
-      ],
-      "chunks": [
-        "Los cólicos del lactante (Azienda Ospedaliero Universitaria Meyer IRCCS, 2023). Tema: definición y edad de los cólicos del lactante. Hallazgo: se usa la regla del tres: el bebé, por lo demás sano, llora o se agita más de tres horas al día, más de tres días a la semana y durante más de tres semanas. Tienen su pico entre la cuarta y la sexta semana y tienden a desaparecer pasado el cuarto mes. Afectan a un 20-25% de los lactantes y el llanto suele ser vespertino. No hay consenso sobre la causa, y se dan con la misma frecuencia con pecho que con fórmula (fuente en italiano).",
-        "Los cólicos del lactante (Azienda Ospedaliero Universitaria Meyer IRCCS, 2023). Tema: qué puede ayudar y qué no en los cólicos. Hallazgo: no existe una cura; lo que funciona varía según el bebé, como mecerlo, el contacto piel con piel, el chupete o el pecho. Cuidar a los padres también cuenta: descansar, cuidarse y pedir ayuda. Pasar a una fórmula sin leche (soja, arroz o hidrolizados) no mejora los cólicos según numerosos estudios, y los fármacos de uso habitual no han demostrado eficacia en estudios rigurosos, aunque a menudo se prescriben (fuente en italiano).",
-        "Los cólicos del lactante (Azienda Ospedaliero Universitaria Meyer IRCCS, 2023). Tema: cuándo consultar y riesgo de sacudir al bebé. Hallazgo: si los padres están preocupados por la cantidad de llanto, el pediatra debe hacer una valoración a fondo del bebé para descartar causas orgánicas y elegir las medidas adecuadas. El artículo recuerda que el llanto excesivo es una de las principales causas del síndrome del bebé sacudido, que puede tener graves consecuencias, por lo que el estrés de los padres debe tomarse en serio (fuente en italiano)."
-      ]
-    },
-    {
-      "source_type": "reference",
-      "title": "Por qué es peligroso sacudir a un recién nacido",
-      "original_title": "Perché è pericoloso scuotere un neonato",
-      "organization": "Azienda Ospedaliero Universitaria Meyer IRCCS",
-      "publication_year": 2017,
-      "url": "https://www.meyer.it/index.php/newsletter/settembre-2017/3058-perche-e-pericoloso-scuotere-un-neonato",
-      "specialties": [
-        "pediatrics",
-        "neonatology",
-        "emergency_medicine"
-      ],
-      "license": "fair_use_snippet",
-      "language": "es",
-      "original_language": "it",
-      "topics": [
-        "bebe_sacudido",
-        "llanto_inconsolable"
-      ],
-      "chunks": [
-        "Por qué es peligroso sacudir a un recién nacido (Azienda Ospedaliero Universitaria Meyer IRCCS, 2017). Tema: por qué sacudir a un bebé es peligroso. Hallazgo: los pediatras lo consideran un verdadero síndrome. Los músculos del cuello del recién nacido aún son débiles y los movimientos bruscos de la cabeza pueden dañar de forma irreversible su sistema nervioso. Las consecuencias incluyen convulsiones, daños motores e intelectuales, problemas de visión e incluso la muerte. A menudo se produce por un estado de exasperación. El mensaje clave es nunca sacudir al bebé (fuente en italiano).",
-        "Por qué es peligroso sacudir a un recién nacido (Azienda Ospedaliero Universitaria Meyer IRCCS, 2017). Tema: qué hacer cuando el bebé llora sin parar. Hallazgo: el llanto más intenso empieza hacia las dos semanas de vida, puede durar hasta las 12 semanas y alcanza su pico entre la quinta y la sexta semana; puede durar horas sin que haya un problema de salud real. Se puede cogerlo en brazos, mecerlo, cantarle suavemente, darle un baño caliente o sacarlo en coche o cochecito. Si el adulto está agotado, debe dejarlo boca arriba en la cuna y hacer una pausa, y pedir ayuda a familiares y amigos (fuente en italiano)."
-      ]
-    },
-    {
-      "source_type": "reference",
-      "title": "Síndrome del bebé sacudido: 10 cosas que todo padre debería saber para proteger la salud de su hijo",
-      "original_title": "Shaken Baby Syndrome: 10 cose che ogni genitore dovrebbe sapere per preservare la salute del proprio bambino",
-      "organization": "Società Italiana di Pediatria (SIP)",
-      "publication_year": 2018,
-      "url": "https://sip.it/2018/05/27/shaken-baby-syndrome-10-cose-sapere-per-salute-bambino/",
-      "specialties": [
-        "pediatrics",
-        "emergency_medicine",
-        "neonatology"
-      ],
-      "license": "fair_use_snippet",
-      "language": "es",
-      "original_language": "it",
-      "topics": [
-        "bebe_sacudido",
-        "llanto_inconsolable",
-        "signos_alarma"
-      ],
-      "chunks": [
-        "Síndrome del bebé sacudido: 10 cosas que todo padre debería saber para proteger la salud de su hijo (Società Italiana di Pediatria (SIP), 2018). Tema: qué es el síndrome del bebé sacudido y por qué es peligroso. Hallazgo: es una forma grave de maltrato que afecta sobre todo a menores de 2 años, con pico entre las 2 semanas y los 6 meses, cuando el llanto es más intenso y el bebé aún no controla la cabeza. A menudo lo provoca la exasperación ante un llanto inconsolable; suelen ser los propios padres, pero también abuelos, canguros o educadoras de escuela infantil. Una sacudida violenta, aunque dure solo unos segundos, puede causar lesiones muy graves, sobre todo en menores de un año, y llevar al coma o la muerte hasta en 1 de cada 4 casos diagnosticados. Ni los juegos habituales ni las caídas del sofá u otro mueble causan este daño. (fuente en italiano)",
-        "Síndrome del bebé sacudido: 10 cosas que todo padre debería saber para proteger la salud de su hijo (Società Italiana di Pediatria (SIP), 2018). Tema: cómo manejar el llanto sin sacudir al bebé. Hallazgo: el llanto es la única forma que tiene el recién nacido de comunicar hambre, sueño, calor, frío, necesidad de que lo cambien o necesidad de contacto, y nunca hay que sacudirlo para calmarlo. Se puede probar a mecerlo en el cochecito, dar un paseo en coche, un baño relajante, envolverlo con las extremidades flexionadas o ponerle ruidos continuos como la lavadora o el aspirador. Si el llanto resulta exasperante, lo mejor es dejarlo en un lugar seguro y alejarse hasta recuperar la calma, pedir ayuda a familiares o amigos y, si hay dudas sobre su salud, llevarlo al médico. (fuente en italiano)"
       ]
     },
     {
@@ -328,30 +205,6 @@
     },
     {
       "source_type": "reference",
-      "title": "Sacudir es dañar (SIS) (Kind en Gezin)",
-      "original_title": "Schudden is schaden (SIS) (Kind en Gezin)",
-      "organization": "Kind en Gezin (Agentschap Opgroeien)",
-      "publication_year": null,
-      "undated_reason": "Página de kindengezin.be sin fecha de publicación ni de revisión visible; consultada el 2026-11-06",
-      "url": "https://www.kindengezin.be/nl/thema/veiligheid/ongevallen/schudden-schaden-sis",
-      "specialties": [
-        "pediatrics",
-        "emergency_medicine"
-      ],
-      "license": "fair_use_snippet",
-      "language": "es",
-      "original_language": "nl",
-      "topics": [
-        "bebe_sacudido",
-        "llanto_inconsolable"
-      ],
-      "chunks": [
-        "Sacudir es dañar (Kind en Gezin, Agentschap Opgroeien). Tema: por qué es peligroso sacudir a un bebé. Hallazgo: sacudir a un niño es muy peligroso y puede causar lesiones graves o la muerte. La cabeza del bebé es grande en relación con el cuerpo, los músculos del cuello aún no la sostienen bien y su cerebro y sus vasos sanguíneos son muy frágiles; al sacudirlo, la cabeza se mueve muy deprisa hacia delante y hacia atrás con mucha fuerza, y pueden romperse vasos pequeños y producirse hemorragias en el cerebro. El mayor riesgo es hasta unos 12 meses. Entre las consecuencias figuran ceguera, sordera, problemas de desarrollo psicomotor, discapacidad intelectual y muerte. Jugar con normalidad con el bebé no provoca estas lesiones.",
-        "Sacudir es dañar (Kind en Gezin, Agentschap Opgroeien). Tema: prevención cuando se pierden los nervios y qué hacer si ocurre. Hallazgo: si hay rabia, frustración, agotamiento o el bebé no para de llorar, se deja al bebé en un sitio seguro, como la cama o el parque, se aleja del bebé y se pide a otra persona que se haga cargo un rato. Si el niño deja de moverse o de responder, se frotan con fuerza los pies, se sopla en la cara y se le habla, y se llama al 112 de inmediato si no respira, no tiene latido o hay vasos sanguíneos claramente rojos en los ojos. Si se ha sacudido al niño o se sospecha, se acude enseguida al médico aunque parezca estar bien, y a urgencias ante signos de alarma como vómitos, somnolencia o que cueste despertarlo."
-      ]
-    },
-    {
-      "source_type": "reference",
       "title": "Depresión posparto (Helsenorge)",
       "original_title": "Fødselsdepresjon (Helsenorge)",
       "organization": "Helsenorge.no (Helsedirektoratet)",
@@ -371,29 +224,6 @@
         "Depresión posparto (Helsenorge, Helsedirektoratet, 2026). Tema: frecuencia y síntomas de la depresión relacionada con el embarazo y el parto. Hallazgo: según la página, en Noruega aproximadamente 1 de cada 10 mujeres tiene síntomas depresivos relacionados con el embarazo y el parto, y 1 de cada 20 una depresión más grave; cerca de un tercio de los casos empieza durante el embarazo. Los síntomas son parecidos a los de una depresión normal: sensación persistente de que el día a día es pesado y gris, apatía, vacío y sensación de que todo carece de sentido. Esa indiferencia puede extenderse a la lactancia, la alimentación y el cuidado del bebé, y algunas personas se vuelven menos sensibles a sus señales y necesidades.",
         "Depresión posparto (Helsenorge, Helsedirektoratet, 2026). Tema: tristeza posparto normal y cuándo buscar ayuda. Hallazgo: emocionarse con facilidad y llorar más de lo habitual en los días tras el parto (barseltårer) afecta al 50-80 % de quienes dan a luz, suele durar un par de días y es normal. Si persisten más allá de la primera semana o son muy intensos, pueden indicar el inicio de una depresión. Hay que acudir al médico, a la matrona o a la enfermera si falta iniciativa o capacidad de disfrutar, hay irritabilidad o ánimo bajo durante tiempo, llanto fácil, o pensamientos y fantasías angustiosos de perder el control y hacerse daño a una misma o al bebé.",
         "Depresión posparto (Helsenorge, Helsedirektoratet, 2026). Tema: tratamiento y apoyo. Hallazgo: la página señala que el apoyo de la enfermera, las conversaciones de apoyo, reforzar la red social y la psicoterapia son eficaces, y que los casos graves se derivan a especialistas. La mayoría de las personas que reciben el tratamiento adecuado se recuperan por completo. Como autoayuda propone hablar con alguien de confianza, pedir ayuda para organizar el día a día y así poder dormir y descansar lo suficiente, limitar las visitas si estresan y decir a los demás qué se necesita. La depresión suele mejorar tras unos seis meses, aunque a veces tarda más."
-      ]
-    },
-    {
-      "source_type": "reference",
-      "title": "Síndrome del niño sacudido: conocer y prevenir",
-      "original_title": "Síndrome da Criança Abanada – Conhecer e Prevenir",
-      "organization": "Sociedade Portuguesa de Pediatria (SPP)",
-      "publication_year": 2025,
-      "url": "https://criancaefamilia.spp.pt/comportamentos-e-parentalidade/seguranca/sindrome-da-crianca-abanada-conhecer-e-prevenir/",
-      "specialties": [
-        "pediatrics"
-      ],
-      "license": "fair_use_snippet",
-      "language": "es",
-      "original_language": "pt",
-      "topics": [
-        "bebe_sacudido",
-        "llanto_inconsolable"
-      ],
-      "chunks": [
-        "Síndrome del niño sacudido: conocer y prevenir (Sociedade Portuguesa de Pediatria, Portal Criança e Família, 2025). Tema: qué es el síndrome del bebé sacudido y sus consecuencias. Hallazgo: es una lesión cerebral grave causada por sacudir con fuerza a un bebé o niño pequeño; es una forma grave de maltrato castigada por la ley y ocurre sobre todo en momentos de frustración, rabia o agotamiento, a menudo porque el niño no deja de llorar. Puede haber somnolencia o poca respuesta, irritabilidad o rechazo del alimento, que no respire, convulsiones, vómitos y moretones o chichones en la cabeza. En casos leves el niño puede parecer normal y mostrar cambios de conducta más tarde. A largo plazo hay riesgo de ceguera, retraso del desarrollo, epilepsia o parálisis cerebral, y una sacudida breve puede causar lesiones irreversibles o la muerte. (fuente en portugués)",
-        "Síndrome del niño sacudido: conocer y prevenir (Sociedade Portuguesa de Pediatria, Portal Criança e Família, 2025). Tema: qué hacer cuando el bebé llora sin parar. Hallazgo: hay que entender que llorar es normal y que en los primeros meses de vida puede ser la única forma que tiene el bebé de comunicarse, y comprobar si se debe a hambre, sed, sueño o dolor. Se puede probar a calmarlo cantando o hablando con voz suave, con piel con piel, paseándolo en coche o cochecito o meciéndolo, dándole de comer despacio y haciéndolo eructar. Si el adulto nota que se está agotando y piensa que podría pegarle, hacerle daño o zarandearlo, debe dejarlo en un lugar seguro, como la cuna boca arriba, y alejarse un momento para calmarse. También conviene pedir ayuda a familiares, amigos, vecinos o profesionales de salud y hacer un curso de preparación para la parentalidad. (fuente en portugués)",
-        "Síndrome del niño sacudido: conocer y prevenir (Sociedade Portuguesa de Pediatria, Portal Criança e Família, 2025). Tema: factores de riesgo de zarandear a un bebé. Hallazgo: la página señala como factores de riesgo las expectativas poco realistas sobre el comportamiento de los bebés, la juventud de los padres, las familias monoparentales, las situaciones familiares inestables, el estrés de los cuidadores, los antecedentes de depresión en el padre o la madre, el abuso de alcohol o drogas, el antecedente de maltrato en la infancia y la violencia doméstica. La página señala que encontrar estrategias para gestionar el cansancio y las situaciones estresantes es esencial en la crianza. (fuente en portugués)"
       ]
     },
     {
@@ -418,29 +248,6 @@
         "Depresión en relación con tener un hijo (1177 Vårdguiden, 2024). Tema: diferencia entre tristeza pasajera y depresión posparto. Hallazgo: la tristeza pasajera (baby blues) suele empezar 2 o 3 días después del parto y se resuelve en unas dos semanas. Se habla de depresión cuando el ánimo bajo se da casi todos los días durante más de dos semanas, con síntomas como pérdida de disfrute, problemas de sueño, cansancio, culpa, ansiedad, dificultad para cuidar al bebé o pensamientos de hacerse daño a una misma o al bebé. Sentirse ansiosa, cambiante o agotada es frecuente y no siempre significa depresión.",
         "Depresión en relación con tener un hijo (1177 Vårdguiden, 2024). Tema: dónde pedir ayuda y tratamiento. Hallazgo: si se sospecha depresión se contacta con el centro de salud, la consulta de matrona o la enfermera de pediatría; también se puede pedir consejo sanitario por teléfono para valorar los síntomas. Hay buen tratamiento para la depresión, como la terapia de conversación. También la pareja o la persona adoptante puede pedir ayuda a la enfermera de pediatría o en el centro de salud. Suele pasar en un plazo de seis meses, aunque a veces tarda más.",
         "Depresión en relación con tener un hijo (1177 Vårdguiden, 2024). Tema: psicosis posparto, una urgencia. Hallazgo: es rara pero grave y puede ser peligrosa para ella misma y para el bebé. Suele aparecer entre 2 semanas y 3 meses tras el parto, con ideas delirantes, oír voces, pensamiento desorganizado o cambios bruscos (en un momento todo parece normal y al siguiente dice cosas extrañas y cuesta comunicarse con ella), y antes es frecuente que haya problemas de sueño, ánimo bajo o que esté muy acelerada. Si ella u otra persona tiene síntomas de psicosis posparto, se acude de inmediato a urgencias psiquiátricas o a urgencias generales o se llama al 112."
-      ]
-    },
-    {
-      "source_type": "reference",
-      "title": "Cuando los niños pequeños lloran (1177)",
-      "original_title": "När små barn skriker (1177)",
-      "organization": "1177 Vårdguiden (Inera)",
-      "publication_year": 2022,
-      "url": "https://www.1177.se/barn--gravid/att-skota-ett-nyfott-barn/nar-sma-barn-skriker/",
-      "specialties": [
-        "pediatrics"
-      ],
-      "license": "fair_use_snippet",
-      "language": "es",
-      "original_language": "sv",
-      "topics": [
-        "llanto_inconsolable",
-        "bebe_sacudido"
-      ],
-      "chunks": [
-        "Cuando los niños pequeños lloran (1177 Vårdguiden, 2022). Tema: por qué llora un bebé y qué lo calma. Hallazgo: las causas habituales son querer contacto, hambre o sed, aburrimiento, necesidad de calma, dolor (sobre todo molestias de barriga en los primeros meses), pañal sucio, postura incómoda o exceso de calor o frío. Hasta los 3 o 4 meses puede haber un periodo de llanto más difícil de calmar, normalmente al final de la tarde y por la noche. Ayudan la cercanía y el contacto físico en brazos o sobre el pecho, el porteo, salir a pasear o mover el cochecito con suavidad dentro de casa, ruidos de fondo (aspiradora, música), una toma y un masaje suave; conviene no cambiar de método demasiado deprisa, porque así el bebé no tiene tiempo de reaccionar y sigue llorando.",
-        "Cuando los niños pequeños lloran (1177 Vårdguiden, 2022). Tema: cuándo consultar por el llanto. Hallazgo: se consulta con su pediatra o la enfermera de pediatría si preocupa la cantidad de llanto, si se sospecha cólico (entre 2 semanas y 4 meses de edad) o si hace falta apoyo. Se contacta de inmediato con el centro de salud o la consulta sin cita si el bebé llora de forma intensa o a rachas sin consuelo, grita o llora gran parte del día, llora de forma distinta a la habitual o parece no ser él mismo. Si están cerrados, se acude a urgencias.",
-        "Cuando los niños pequeños lloran (1177 Vårdguiden, 2022). Tema: bebé sacudido y cuidado de quien lo cuida. Hallazgo: sacudir a un bebé o agarrarlo con fuerza puede poner en peligro su vida; unos segundos bastan para causar daños permanentes, y nunca se debe gritarle, sacudirlo ni agarrarlo con brusquedad. Si la persona se siente muy frustrada o enfadada, es especialmente importante que busque apoyo. Si no hay nadie en casa que pueda ayudar, puede dejar al bebé unos minutos en un lugar seguro del que no pueda caerse y hacer una pausa en otra habitación. También se aconseja intentar dormir o descansar de día cuando el bebé duerme, comer bien y pedir ayuda con las tareas de casa."
       ]
     }
   ]

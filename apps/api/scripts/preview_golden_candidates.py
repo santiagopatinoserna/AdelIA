@@ -66,7 +66,23 @@ With --explain the nearest EXPLAIN_K sources of each question are printed and
 written to --json with their distance, whether they are under the cut, whether
 they are the expected source, and the file each comes from: data/ or one of
 the files --origins GLOB names (the candidates golden_gate.sh loads). Nothing
-else changes, the verdict included.
+else changes, the verdict included. --origins takes a glob or several globs and
+files separated by commas, as golden_candidates.py load does.
+
+--explain, one search at a time (2026-11-07). The second server run lost A21
+(«Desde que nació le llora un ojo y se le llena de legañas») while its nearest
+list showed the three tear-duct sources on top: that list merges every text the
+graph searches, and the lay lexicon's widening («conducto lagrimal, lagrimeo»)
+is what found them. The gate does not search that way. It embeds every text
+with the one vector recorded for her question (tests/test_rag_golden.py,
+_recorded_embed), so for a Spanish question the lexicon and the implicit
+subject add nothing there, and her sentence alone put the crying sources first.
+So each search is now its own block with its own QUERY_K nearest sources and
+its own cards: her sentence (principal), the lexicon, the implicit subject, the
+plan's warning signs (only fragments of the sources already cited, and only in
+the demo's plans) and the gate's own search with the recorded vector, which is
+the one whose cards the gate reads. A search production does not run is said,
+not run.
 
 Exit status: 0 when every group A question found its source with clean cards
 and no group B question fell under the cut; 1 when one did not; 2 when the
@@ -86,6 +102,7 @@ from pathlib import Path
 
 from sqlalchemy import text as sql
 
+from adelia.agent import implicit_subject, lay_terms, warning_signs
 from adelia.agent.corpus_query import corpus_query, needs_translation
 from adelia.agent.graph import GraphDeps, GraphUnavailable, run_graph
 from adelia.agent.route import RouteDecision
@@ -115,6 +132,8 @@ NEAREST_K = 4
 #: --explain: enough sources to see the expected one pushed down the list.
 EXPLAIN_K = 10
 EXPLAIN = False
+#: --explain: sources per search block (A21's last tear-duct source was sixth).
+QUERY_K = 8
 #: The corpus files production boots with (main.load_startup_corpora).
 _DATA_DIR = Path(__file__).resolve().parents[1] / "adelia" / "enrichment" / "data"
 _BOOT_GLOB = "evidence_*.json"
@@ -158,6 +177,9 @@ class Verdict:
     expect_source: str | None = None
     #: --explain: title -> the file it comes from, for the cards and the nearest.
     origins: dict[str, str] = field(default_factory=dict)
+    #: --explain: one block per search (explain_queries): name, text, cut, note,
+    #: top [[title, distance]] and cards [title].
+    queries: list[dict] = field(default_factory=list)
 
 
 # --- which questions ------------------------------------------------------------
@@ -267,16 +289,20 @@ def origin_of(title: str, origins: dict[str, str]) -> str:
 
 
 def _origin_files(pattern: str | None) -> list[Path]:
-    """The files --origins names, from the repo root or from apps/api, as the loader reads them."""
-    if not pattern:
-        return []
-    p = pattern.strip()
-    for prefix in ("./apps/api/", "apps/api/"):
-        if p.startswith(prefix):
-            p = p[len(prefix):]
-            break
-    full = p if Path(p).is_absolute() else str(_API_DIR / p)
-    return sorted(Path(f) for f in glob.glob(full) if Path(f).is_file())
+    """The files --origins names, from the repo root or from apps/api, as the loader reads them.
+
+    A glob, or several globs and files separated by commas (golden_candidates.resolve)."""
+    found: set[Path] = set()
+    for item in (i.strip() for i in (pattern or "").split(",")):
+        if not item:
+            continue
+        for prefix in ("./apps/api/", "apps/api/"):
+            if item.startswith(prefix):
+                item = item[len(prefix):]
+                break
+        full = item if Path(item).is_absolute() else str(_API_DIR / item)
+        found.update(Path(f) for f in glob.glob(full) if Path(f).is_file())
+    return sorted(found)
 
 
 async def _translate(text: str, locale: str, cache: dict) -> str:
@@ -307,6 +333,35 @@ def recorded_translations(qs: list[GoldenQuestion]) -> dict[tuple[str, str], str
         for q in qs
         if needs_translation(q.locale) and q.id in texts and recorded.get(q.id) == q.question
     }
+
+
+def _fixture() -> dict:
+    for path in _FIXTURES:
+        if path.exists():
+            return json.loads(path.read_text(encoding="utf-8"))
+    return {}
+
+
+def recorded_vector(q: GoldenQuestion) -> list[float] | None:
+    """The vector the gate searches `q` with, or None when the fixture has none for this wording.
+
+    tests/test_rag_golden.py answers every embedding of a question from the
+    recording: the Spanish rendering's vector for the corpus text of a French or
+    English question, her own question's vector for anything else."""
+    data = _fixture()
+    if (data.get("questions") or {}).get(q.id) != q.question:
+        return None
+    if needs_translation(q.locale):
+        return (data.get("corpus_embeddings") or {}).get(q.id)
+    return (data.get("embeddings") or {}).get(q.id)
+
+
+def _own_vector(q: GoldenQuestion) -> list[float] | None:
+    """The recorded vector of her sentence as written: the gate's, for the variants."""
+    data = _fixture()
+    if (data.get("questions") or {}).get(q.id) != q.question:
+        return None
+    return (data.get("embeddings") or {}).get(q.id)
 
 
 async def _vector(text: str, embedded: dict[str, list[float]]) -> list[float]:
@@ -383,12 +438,151 @@ async def preview(q: GoldenQuestion, *, cache: dict, recording: dict | None) -> 
         verdict.searched = list(searched)
         verdict.cards = evidence_citations_for_response(list(out.get("evidence") or []))
         verdict.nearest = await _nearest([embedded[t] for t in searched])
+        if EXPLAIN:
+            verdict.queries = await explain_queries(
+                q, searched=list(searched), embedded=embedded,
+                evidence=list(out.get("evidence") or []),
+            )
     verdict.passed, verdict.hit, verdict.defects = judge(
         q, guard=verdict.guard, cards=verdict.cards
     )
     if recording is not None:
         await _record(q, recording, embedded, cache)
     return verdict
+
+
+# --- --explain, one search at a time ------------------------------------------------
+
+
+def _block(name: str, text: str, cut: float, *, top=(), cards=(), note: str = "") -> dict:
+    return {"name": name, "text": text, "cut": round(cut, 4), "note": note,
+            "top": [list(t) for t in top], "cards": list(cards)}
+
+
+async def _search(
+    vector: list[float], *, cut: float, query_text: str | None = None, locale: str | None = None
+) -> tuple[list[tuple[str, float]], list[str]]:
+    """(the QUERY_K nearest sources with no cut-off, the titles under `cut` and the margin)."""
+    async with AsyncSessionLocal() as session:
+        await _read_only(session)
+        top = await retrieve_evidence(
+            session, query_embedding=vector, specialties=["pediatrics"], top_k=QUERY_K,
+            max_distance=_UNCUT, relative_margin=None,
+        )
+    async with AsyncSessionLocal() as session:
+        await _read_only(session)
+        cards = await retrieve_evidence(
+            session, query_embedding=vector, specialties=["pediatrics"], top_k=TOP_K,
+            max_distance=cut, relative_margin=settings.evidence_relative_margin,
+            query_text=query_text, locale=locale,
+        )
+    return [(m.source_title, round(m.distance, 4)) for m in top], [m.source_title for m in cards]
+
+
+async def _warning_block(text: str, vector: list[float], cut: float, evidence: list) -> dict:
+    """What a plan's warning search adds: other fragments of the sources already cited."""
+    async with AsyncSessionLocal() as session:
+        await _read_only(session)
+        found = await retrieve_evidence(
+            session, query_embedding=vector, specialties=["pediatrics"], top_k=TOP_K,
+            max_distance=cut, relative_margin=settings.evidence_relative_margin,
+            cited_sources=list(dict.fromkeys(m.source_id for m in evidence)),
+            cited_chunks=[m.chunk_id for m in evidence],
+        )
+    rows = [(m.source_title, round(m.distance, 4)) for m in found]
+    return _block(
+        "avisos", text, cut, top=rows, cards=[t for t, _ in rows],
+        note="solo en un plan de la demo, y solo otros fragmentos de las fuentes ya citadas: "
+             "no trae fuentes nuevas, y el gate no la busca",
+    )
+
+
+async def explain_queries(
+    q: GoldenQuestion, *, searched: list[str], embedded: dict[str, list[float]], evidence: list
+) -> list[dict]:
+    """One block per search the graph and the gate run for `q` (module docstring)."""
+    cut = settings.evidence_max_distance
+    main = searched[0]
+    top, cards = await _search(embedded[main], cut=cut)
+    blocks = [_block("principal", main, cut, top=top, cards=cards,
+                     note="su frase (o su traducción al español), como la busca la demo")]
+
+    widened = lay_terms.expanded_query(main) if settings.lay_query_expansion else None
+    if not settings.lay_query_expansion:
+        blocks.append(_block("léxico de madre", "", cut,
+                             note="apagado en este entorno (lay_query_expansion)"))
+    elif widened is None:
+        blocks.append(_block("léxico de madre", "", cut,
+                             note="el léxico no reconoce ninguna palabra de esta frase"))
+    else:
+        top, cards = await _search(await _vector(widened, embedded), cut=cut)
+        blocks.append(_block("léxico de madre", widened, cut, top=top, cards=cards))
+
+    subject_cut = min(cut, settings.implicit_subject_max_distance)
+    subject = implicit_subject.subject_query(
+        main, locale=q.locale, spoken=q.question, age_months=q.age_months, name=None,
+    ) if settings.implicit_subject_expansion else None
+    if not settings.implicit_subject_expansion:
+        blocks.append(_block("sujeto implícito", "", subject_cut,
+                             note="apagado en este entorno (implicit_subject_expansion)"))
+    elif subject is None:
+        blocks.append(_block("sujeto implícito", "", subject_cut,
+                             note="la frase ya nombra a alguien: no se reescribe"))
+    else:
+        top, cards = await _search(await _vector(subject, embedded), cut=subject_cut)
+        blocks.append(_block("sujeto implícito", subject, subject_cut, top=top, cards=cards))
+
+    if not settings.warning_signs_retrieval:
+        blocks.append(_block("avisos", "", cut,
+                             note="apagado en este entorno (warning_signs_retrieval)"))
+    elif not evidence:
+        blocks.append(_block("avisos", "", cut, note="sin evidencia no se busca"))
+    else:
+        text = warning_signs.warning_query(widened or main, q.locale)
+        blocks.append(await _warning_block(text, await _vector(text, embedded), cut, evidence))
+
+    vector = recorded_vector(q)
+    if vector is None:
+        blocks.append(_block(
+            "gate", "", cut,
+            note="sin vector grabado para esta redacción en "
+                 "tests/fixtures/golden_query_embeddings.json: el gate no la mide así",
+        ))
+        return blocks
+    top, cards = await _search(vector, cut=cut, query_text=q.question, locale=q.locale)
+    if needs_translation(q.locale):
+        note = ("el vector grabado de su traducción al español; las variantes (léxico, sujeto "
+                "implícito) las busca el gate con el vector de su frase sin traducir")
+    else:
+        note = ("el vector grabado de su pregunta. El gate busca con este mismo vector cada "
+                "variante (léxico, sujeto implícito), así que sus tarjetas salen de esta lista")
+    blocks.append(_block("gate", q.question, cut, top=top, cards=cards, note=note))
+    own = _own_vector(q) if needs_translation(q.locale) and (widened or subject) else None
+    if own is not None:
+        top, cards = await _search(own, cut=cut, query_text=q.question, locale=q.locale)
+        blocks.append(_block("gate, variantes", q.question, cut, top=top, cards=cards,
+                             note="el vector grabado de su frase sin traducir"))
+    return blocks
+
+
+def _fmt_blocks(q: GoldenQuestion, v: Verdict) -> list[str]:
+    lines = []
+    for b in v.queries:
+        head = f"  consulta {b['name']} (corte {b['cut']:.2f})"
+        if not b.get("top"):
+            lines.append(f"{head}: {b.get('note') or 'nada'}")
+            continue
+        lines.append(f"{head}: {b['text'].replace(chr(10), ' | '):.100}")
+        if b.get("note"):
+            lines.append(f"    nota: {b['note']}")
+        under = set(b.get("cards") or ())
+        for title, distance in b["top"]:
+            marks = ["bajo el corte" if title in under else "fuera del corte"]
+            if q.group == "A" and source_matches(q.expect_source or "", title):
+                marks.append("esperada")
+            lines.append(f"    {distance:.4f} {', '.join(marks)}: {title:.90} "
+                         f"[{origin_of(title, v.origins)}]")
+    return lines
 
 
 # --- the run ------------------------------------------------------------------------
@@ -418,6 +612,7 @@ def _fmt_verdict(q: GoldenQuestion, v: Verdict) -> str:
             marks.append("esperada")
         lines.append(f"  cercana {distance:.4f} {', '.join(marks)}: {title:.90} "
                      f"[{origin_of(title, v.origins)}]")
+    lines.extend(_fmt_blocks(q, v))
     for d in v.defects:
         lines.append(f"  defecto: {d}")
     verdict = "PASA" if v.passed else "FALLA"
@@ -488,6 +683,7 @@ async def main_async(args) -> int:
                 return 2
             if EXPLAIN:
                 titles = [t for t, _ in v.nearest] + [c.get("title") for c in v.cards]
+                titles += [t for b in v.queries for t, _ in b.get("top") or ()]
                 v.origins = {t: origin_of(t, origins) for t in titles if t}
             verdicts.append(v)
             print(_fmt_verdict(q, v))
@@ -526,7 +722,9 @@ def main() -> None:
         help=f"the {EXPLAIN_K} nearest sources per question, with the cut and their file",
     )
     parser.add_argument(
-        "--origins", help="with --explain: the candidate files whose titles to name (a glob)",
+        "--origins",
+        help="with --explain: the candidate files whose titles to name (a glob, or globs and "
+             "files separated by commas)",
     )
     sys.exit(asyncio.run(main_async(parser.parse_args())))
 

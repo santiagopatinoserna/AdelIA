@@ -8,8 +8,10 @@ es 109, fr 160). Aquí quedan integradas como **candidatas**: 455 fuentes y 1.19
 de esto llega a producción hasta que el golden lo mida y alguien mueva un fichero.
 
 **7 de noviembre**: la primera medición en el servidor las dio por no aptas (apartado 16). Tras
-la regla del hueco, los títulos en español y los arreglos de B6 quedan **341 fuentes y 877
-fragmentos**; las tablas de los apartados 10 y 11 son las de ahora.
+la regla del hueco, los títulos en español y los arreglos de B6 quedaron 341 fuentes y 877
+fragmentos. La segunda medición, con `--explain`, seguía en no aptas por A21 y B6 (apartado 17):
+tras la regla del llanto y tres arreglos medidos quedan **316 fuentes y 805 fragmentos**; las
+tablas de los apartados 10 y 11 son las de ahora.
 
 AdelIA responde con fuente o se abstiene, y una fuente fuera de tema o una cifra mal traducida
 en una urgencia es un riesgo para un bebé. Por eso se perdió más de lo que se ganó en volumen:
@@ -256,52 +258,54 @@ misma ruta):
 ```bash
 cd /opt/adelia && bash scripts/prod-golden-gate.sh \
   --candidates 'apps/api/adelia/enrichment/candidates/lote_2026_11_06/*.json' \
-  --explain A1,A5,A13,A37,A16,A21,B6
+  --explain A1,A5,A13,A16,A21,A37,B6
 ```
 
 `--explain` (7 de noviembre) añade, para esas preguntas, las fuentes más cercanas con su
-distancia y su fichero, sin y con candidatos (apartado 16.4).
+distancia y su fichero, sin y con candidatos (apartado 16.4), y desde la tercera vuelta un
+bloque por cada búsqueda: la principal, el léxico de madre, el sujeto implícito, los avisos y la
+del propio gate (apartado 17.1). Para medir solo unos ficheros, `--candidates` acepta también
+una lista separada por comas (apartado 17.5).
 
 Cómo leerlo: «candidatos: APTOS» si ninguna B pasa a llegar al modelo ni a responderse y
 recall@4 con candidatos sigue sobre 0,8. Cualquier B en «B que pasan a llegar al modelo» es un
 falso positivo nuevo y bloquea el fichero de su dominio. Los 12 ficheros pueden medirse también
-de uno en uno cambiando el glob, para saber cuál mueve cada cosa.
+de uno en uno o por grupos, con una lista de ficheros en lugar del glob.
 
 ## 10. Fuentes y fragmentos por dominio y por idioma original
 
-Después de la segunda vuelta (apartado 16). Entre paréntesis, las del 6 de noviembre.
+Después de la tercera vuelta (apartado 17). Entre paréntesis, las de la segunda (341).
 
 | dominio | fuentes | fragmentos | ar | da | de | en | es | fi | fr | it | ja | ko | nl | no | pl | pt | sv |
 |---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|
-| `alimentacion_bebes` | 38 (120) | 84 (318) |  |  | 3 | 13 | 13 |  | 3 | 2 |  |  | 2 |  | 1 | 1 |  |
-| `desarrollo_0_24m` | 54 (54) | 133 (133) | 1 | 1 |  | 18 | 9 |  | 10 | 8 |  |  | 3 | 1 | 1 | 2 |  |
-| `digestivo_piel` | 54 (55) | 140 (143) | 4 | 1 |  | 5 | 13 |  | 5 | 6 |  | 2 | 2 | 1 | 2 | 9 | 4 |
+| `alimentacion_bebes` | 38 (38) | 84 (84) |  |  | 3 | 13 | 13 |  | 3 | 2 |  |  | 2 |  | 1 | 1 |  |
+| `desarrollo_0_24m` | 54 (54) | 132 (133) | 1 | 1 |  | 18 | 9 |  | 10 | 8 |  |  | 3 | 1 | 1 | 2 |  |
+| `digestivo_piel` | 38 (54) | 95 (140) | 3 |  |  | 5 | 10 |  | 4 | 4 |  |  |  |  | 2 | 7 | 3 |
 | `guarderia_adaptacion` | 1 (1) | 3 (3) |  |  |  |  |  |  | 1 |  |  |  |  |  |  |  |  |
 | `infecciones_fiebre` | 30 (30) | 82 (82) | 1 | 1 | 1 | 9 | 3 | 1 | 3 | 5 |  |  | 2 | 1 |  | 2 | 1 |
-| `neonatal` | 35 (35) | 100 (100) | 1 |  | 1 | 3 | 13 |  | 2 | 5 |  |  | 1 | 1 |  | 7 | 1 |
+| `neonatal` | 35 (35) | 99 (100) | 1 |  | 1 | 3 | 13 |  | 2 | 5 |  |  | 1 | 1 |  | 7 | 1 |
 | `ojos_oidos_boca_uro_neuro` | 10 (10) | 23 (23) |  |  |  | 4 | 1 |  |  | 2 |  |  |  |  |  | 3 |  |
 | `pediatric_reflux` | 2 (2) | 6 (6) |  |  |  |  |  |  | 2 |  |  |  |  |  |  |  |  |
-| `respiratorio_sueno` | 46 (77) | 125 (209) |  | 1 |  | 7 | 15 |  | 11 | 4 |  |  |  | 1 |  | 5 | 2 |
-| `salud_madre_familia` | 18 (18) | 50 (50) |  |  |  | 2 | 5 |  | 2 | 3 |  |  | 2 | 1 |  | 1 | 2 |
-| `seguridad` | 47 (47) | 116 (116) | 2 |  | 5 | 5 | 2 |  | 8 | 7 | 1 |  | 6 | 1 | 1 | 9 |  |
+| `respiratorio_sueno` | 45 (46) | 122 (125) |  | 1 |  | 7 | 15 |  | 10 | 4 |  |  |  | 1 |  | 5 | 2 |
+| `salud_madre_familia` | 10 (18) | 29 (50) |  |  |  | 2 | 4 |  | 1 |  |  |  | 1 | 1 |  |  | 1 |
+| `seguridad` | 47 (47) | 115 (116) | 2 |  | 5 | 5 | 2 |  | 8 | 7 | 1 |  | 6 | 1 | 1 | 9 |  |
 | `urgencias_lactante` | 6 (6) | 15 (15) |  |  |  | 5 |  |  |  |  |  |  | 1 |  |  |  |  |
-| **total** | 341 (455) | 877 (1198) | 9 | 4 | 10 | 71 | 74 | 1 | 47 | 42 | 1 | 2 | 19 | 7 | 5 | 39 | 10 |
+| **total** | 316 (341) | 805 (877) | 8 | 3 | 10 | 71 | 70 | 1 | 44 | 37 | 1 |  | 16 | 6 | 5 | 36 | 8 |
 
 | idioma original | fuentes | fragmentos | título de la tarjeta |
 |---|---|---|---|
-| español (`es`) | 74 | 203 | el original |
 | inglés (`en`) | 71 | 163 | el original |
-| francés (`fr`) | 47 | 137 | el original |
-| italiano (`it`) | 42 | 97 | traducido al español |
-| portugués (`pt`) | 39 | 109 | traducido al español |
-| neerlandés (`nl`) | 19 | 46 | traducido al español |
+| español (`es`) | 70 | 189 | el original |
+| francés (`fr`) | 44 | 126 | el original |
+| italiano (`it`) | 37 | 85 | traducido al español |
+| portugués (`pt`) | 36 | 101 | traducido al español |
+| neerlandés (`nl`) | 16 | 37 | traducido al español |
 | alemán (`de`) | 10 | 21 | traducido al español |
-| sueco (`sv`) | 10 | 29 | traducido al español |
-| árabe (`ar`) | 9 | 23 | traducido al español |
-| noruego (`no`) | 7 | 19 | traducido al español |
+| sueco (`sv`) | 8 | 23 | traducido al español |
+| árabe (`ar`) | 8 | 20 | traducido al español |
+| noruego (`no`) | 6 | 16 | traducido al español |
 | polaco (`pl`) | 5 | 12 | traducido al español |
-| danés (`da`) | 4 | 10 | traducido al español |
-| coreano (`ko`) | 2 | 4 | traducido al español |
+| danés (`da`) | 3 | 8 | traducido al español |
 | finés (`fi`) | 1 | 2 | traducido al español |
 | japonés (`ja`) | 1 | 2 | traducido al español |
 
@@ -310,44 +314,42 @@ Después de la segunda vuelta (apartado 16). Entre paréntesis, las del 6 de nov
 | organización | idioma | fuentes |
 |---|---|---|
 | NHS (National Health Service, Reino Unido) | en | 26 |
-| Ospedale Pediatrico Bambino Gesù | it | 22 |
-| Sociedade Brasileira de Pediatria (SBP) | pt | 22 |
-| ONE (Office de la Naissance et de l'Enfance, Belgique) | fr | 18 |
+| Ospedale Pediatrico Bambino Gesù | it | 20 |
+| Sociedade Brasileira de Pediatria (SBP) | pt | 20 |
+| American Academy of Pediatrics | es | 17 |
+| ONE (Office de la Naissance et de l'Enfance, Belgique) | fr | 17 |
 | Assurance Maladie (ameli.fr) | fr | 16 |
 | Health Service Executive (HSE) | en | 13 |
-| American Academy of Pediatrics | es | 12 |
-| 1177 Vårdguiden (Inera) | sv | 10 |
-| CDC | en | 10 |
-| Kind en Gezin (Agentschap Opgroeien) | nl | 10 |
-| Hôpitaux universitaires de Genève (HUG) | fr | 9 |
-| Ministerio de Salud de Arabia Saudí (MOH) | ar | 9 |
+| CDC | en | 11 |
+| 1177 Vårdguiden (Inera) | sv | 8 |
 | Istituto Superiore di Sanità (ISS), EpiCentro | it | 8 |
-| Sociedade Portuguesa de Pediatria (SPP) | pt | 8 |
-| American Academy of Pediatrics | en | 7 |
-| Helsenorge.no (Helsedirektoratet) | no | 7 |
+| Kind en Gezin (Agentschap Opgroeien) | nl | 8 |
+| Ministerio de Salud de Arabia Saudí (MOH) | ar | 8 |
+| Hôpitaux universitaires de Genève (HUG) | fr | 7 |
 | KidsHealth (Paediatric Society of New Zealand) | en | 7 |
+| Sociedade Portuguesa de Pediatria (SPP) | pt | 7 |
 | Consejería de Sanidad de la Comunidad de Madrid | es | 6 |
+| Helsenorge.no (Helsedirektoratet) | no | 6 |
 | Sociedad Argentina de Pediatría (SAP) | es | 6 |
-| Azienda Ospedaliero Universitaria Meyer IRCCS | it | 5 |
 | Beratungsstelle für Unfallverhütung (bfu, Schweiz) | de | 5 |
 | Ministerio de Salud y Protección Social (Colombia) | es | 5 |
 | Ministerio de Sanidad (España) | es | 5 |
-| Società Italiana di Pediatria (SIP) | it | 5 |
-| Sundhed.dk, Patienthåndbogen | da | 4 |
+| Società Italiana di Pediatria (SIP) | it | 4 |
 | Asociación Española de Pediatría | es | 3 |
-| Chile Crece Contigo (Gobierno de Chile) | es | 3 |
+| Azienda Ospedaliero Universitaria Meyer IRCCS | it | 3 |
+| Cochrane | es | 3 |
 | Direção-Geral da Saúde (DGS, Portugal) | pt | 3 |
 | Organización Panamericana de la Salud (OPS) | es | 3 |
 | Sociedad Española de Inmunología Clínica, Alergología y Asma Pediátrica (SEICAP) | es | 3 |
 | Sociedad Española de Pediatría Extrahospitalaria y Atención Primaria (SEPEAP) | es | 3 |
+| Sundhed.dk, Patienthåndbogen | da | 3 |
 | VeiligheidNL (kenniscentrum letselpreventie) | nl | 3 |
 | Associação para a Promoção da Segurança Infantil (APSI) | pt | 2 |
 | Bundesinstitut für Risikobewertung (BfR) | de | 2 |
-| Cochrane | es | 2 |
+| Chile Crece Contigo (Gobierno de Chile) | es | 2 |
 | Consejería de Sanidad de la Junta de Castilla y León | es | 2 |
 | GroeiGids (GGD- en CJG-organisaties, Jeugdgezondheidszorg) | nl | 2 |
 | Healthdirect Australia | en | 2 |
-| Korean Pediatric Society (대한소아청소년과학회) | ko | 2 |
 | Ministerio de Salud de la Nación (Argentina) | es | 2 |
 | Narodowe Centrum Edukacji Żywieniowej (NCEŻ), Narodowy Instytut Zdrowia Publicznego PZH - PIB | pl | 2 |
 | Serviço Nacional de Saúde (SNS 24) | pt | 2 |
@@ -355,10 +357,7 @@ Después de la segunda vuelta (apartado 16). Entre paréntesis, las del 6 de nov
 | Stichting Voedingscentrum Nederland (Voedingscentrum) | nl | 2 |
 | World Health Organization (WHO) | es | 2 |
 | Berufsverband der Kinder- und Jugendärzt*innen (BVKJ, Kinder- und Jugendärzte im Netz) | de | 1 |
-| CDC | es | 1 |
-| Cochrane | en | 1 |
 | Consejería de Sanidad, Junta de Castilla y León | es | 1 |
-| Consellería de Sanidade y Servicio Gallego de Salud (Sergas, Xunta de Galicia) | es | 1 |
 | Consumer Affairs Agency (消費者庁, Japón) | ja | 1 |
 | Croix-Rouge française | fr | 1 |
 | Departamento de Salud de la Generalitat de Cataluña | es | 1 |
@@ -380,7 +379,6 @@ Después de la segunda vuelta (apartado 16). Entre paréntesis, las del 6 de nov
 | NICHD | en | 1 |
 | Narodowy Fundusz Zdrowia (NFZ), portal pacjent.gov.pl | pl | 1 |
 | National Institute of Mental Health (NIMH) | es | 1 |
-| Nederlands Centrum Jeugdgezondheid (NCJ, JGZ-richtlijnen) | nl | 1 |
 | Netzwerk Gesund ins Leben (Bundesanstalt für Landwirtschaft und Ernährung, BLE) | de | 1 |
 | Osakidetza-Servicio vasco de salud (Osakidetza) | es | 1 |
 | Resuscitation Council UK | en | 1 |
@@ -744,3 +742,200 @@ Herramientas, fuera del repositorio: `/tmp/cc-corpus-proxy/` (`proxy.py`, `apply
 | Uso de chupeta: os prós e os contras | Sociedade Brasileira de Pediatria (SBP) | pt | `respiratorio_sueno` | cubierto |
 | Plötslig spädbarnsdöd – förebyggande råd (1177) | 1177 Vårdguiden (Inera) | sv | `respiratorio_sueno` | cubierto |
 | Lo que debes saber sobre la alergia a la proteína de leche de vaca | SEICAP | es | `digestivo_piel` | B6 |
+
+## 17. Tercera vuelta, 7 de noviembre: lo que enseñó la segunda medición
+
+El supervisor midió las 341 en el servidor, sin modelo y con `--explain`. Mejora mucho, pero
+sigue **no apto**: recall@4 del grupo A 0,97 sin candidatos y 0,94 con ellos. Ya no se pierden
+A1, A5, A13 ni A37, pasa A39 y se pierde **A21**; **B6** sigue llegando al modelo con dos
+tarjetas a 0,1877; A16 trae dos tarjetas que no responden. Lo que cambia:
+
+### 17.1 A21: dónde se perdía de verdad
+
+A21 es «Desde que nació le llora un ojo y se le llena de legañas. ¿Se le pasará solo?». En el
+`--explain` del servidor sus tres fuentes del conducto lagrimal salían arriba (0,1092, 0,1141,
+0,1196), también con candidatos. Esa lista mezclaba todas las búsquedas del grafo, y quien las
+encontraba era el léxico de madre, que añade «conjuntivitis, secreción, conducto lagrimal,
+lagrimeo, obstrucción del conducto lagrimal». La búsqueda que decide el gate es otra: el test
+(`tests/test_rag_golden.py`, `_recorded_embed`) responde a cada texto con el vector grabado de
+la pregunta, así que en una pregunta en español el léxico y el sujeto implícito buscan con ese
+mismo vector y no añaden nada. Con su frase sola, «llora» pesa como llanto: en `data/`,
+«Qué hacer cuando su bebé llora mucho» (0,1764) y «Síndrome del niño zarandeado» (0,1791) van
+delante y «Lagrimeo en el lactante» (0,1816, distancia real) es la única fuente esperada entre
+las cuatro primeras. Tres candidatas de llanto o bebé sacudido entraban delante de ella en la
+aproximación («Por qué es peligroso sacudir a un recién nacido» 0,1797, «Llanto (Kind en Gezin)»
+0,1811, «El llanto en el periodo neonatal» 0,1814), y en el servidor «Llanto de Niños Mayores de
+3 Meses de Edad», y A21 perdía su fuente.
+
+Por eso `--explain` enseña ahora **un bloque por búsqueda**, cada uno con sus 8 fuentes más
+cercanas y sus tarjetas: `principal` (su frase), `léxico de madre`, `sujeto implícito` (con su
+corte de 0,17), `avisos` (solo fragmentos de las fuentes ya citadas, solo en un plan de la demo)
+y `gate`, la búsqueda con el vector grabado, con la que el gate lee sus tarjetas. Una búsqueda
+que este entorno tiene apagada se dice, no se hace. `golden_candidates.py explain` pone cada
+bloque sin y con candidatos, con sus nuevas y lo que sale de sus cuatro primeras.
+
+**Para Santiago**: el gate no mide el léxico de madre ni el sujeto implícito de las preguntas en
+español, porque solo tiene grabado un vector por pregunta. En producción A21 tiene el léxico a
+favor; en el gate, no. Arreglarlo es grabar también los vectores de esas variantes (necesita la
+clave de Mistral) y es otra tarea, no de este lote.
+
+### 17.2 La regla del llanto: 23 fuentes salen
+
+`data/` tiene 24 fuentes con fragmentos sobre llanto, cólico o bebé sacudido, en español, inglés
+y francés (AEPap, AEP, HealthyChildren, NHS, mpedia, ameli, PURPLE): qué es el cólico, cuánto
+llanto es normal, cómo calmar, cuándo consultar, no sacudir nunca y cuidar a los padres. El lote
+tenía 23 candidatas más sobre lo mismo, sobre todo en danés, sueco, noruego, neerlandés,
+italiano y portugués. La regla del hueco (16.1), aplicada a ese tema y fijada en
+`tests/test_evidence_candidates_2026_11.py` (`CRYING_TOPICS`, `CRYING_THEME`,
+`NOT_ONLY_CRYING`, `CRYING_GAPS`):
+
+1. En una fuente con solo temas de llanto, cólico o bebé sacudido, todos sus fragmentos son
+   sobre llanto; en cualquier otra, los fragmentos cuyo tema es el llanto y nada más («es normal
+   llorar tras el parto» es de la madre; «llanto, ictericia, sueño y respiración» son cuatro
+   temas y se queda).
+2. Se quedan solo los de un hueco que `data/` no tiene: las terapias manuales (quiropraxis,
+   manipulación craneal), y por eso se queda «Terapias de masajes para el cólico infantil».
+3. Una fuente con menos de dos fragmentos sale.
+
+Salen 23 fuentes enteras y pierden su fragmento de llanto «Los primeros seis meses»,
+«Grandir avec des repères (ONE)» y «Cuidados importantes del recién nacido(a)». Un test fija la
+premisa: si `data/` bajara de 15 fuentes sobre llanto, la regla dejaría de valer.
+
+En la aproximación, ninguna candidata queda ya delante de «Lagrimeo» (0,1816): la más cercana
+es «Tristeza puerperal» a 0,1845 (el llanto de la madre) y la siguiente «11 Common Conditions in
+Newborns» a 0,1911. Para perder A21 harían falta **dos** candidatas por delante de 0,1816, y
+con un error típico de 0,008 en la aproximación, y si los errores de las dos fueran
+independientes, la probabilidad de las dos a la vez es de un 4 %.
+Antes había tres delante.
+
+### 17.3 B6: las dos tarjetas a 0,1877 salen
+
+- «Mon enfant a un rhume (HUG)», un resfriado. El lote tenía siete candidatas sobre el
+  resfriado en sí (NHS, HealthyChildren dos veces, ameli «Rhinopharyngite», HUG, Bambino Gesù y SPP),
+  `data/` tiene tres en español (EnFamilia, Familia y Salud, SEUP) y la lectora francesa tiene
+  ameli. Reescribirla no daba margen: en la aproximación sus tres fragmentos quedaban a
+  0,1957, 0,1964 y 0,2026, y el servidor la midió 0,008 más cerca que eso; ninguna paráfrasis
+  de un resfriado se aleja 0,01 de una pregunta sobre alergia.
+- «Alergia a la leche de vaca en el bebé» (Sociedade Brasileira de Pediatria): `data/` tiene
+  esa alergia cuatro veces y la candidata de la SEICAP la cubre en español.
+
+Las dos son fuentes enteras fuera, así que su margen con B6 deja de existir. Las demás candidatas
+no cambian, y el servidor ya las midió por encima de 0,19 (no eran tarjetas). En la aproximación
+la más cercana que queda es «Alimentación de los niños de 1 a 3 años» a 0,1904, «De 1 a 3 meses:
+cuándo pedir consejo al pediatra» a 0,1914 y «AZS: dermatitis atópica» a 0,1917; ninguna B nueva
+con tarjetas en todo el grupo B.
+
+**Para Santiago: B6 vive a 0,0001 del corte también sin candidatos.** La fuente más cercana de
+`data/` («Alergia a la leche de vaca», EnFamilia) está a 0,1900 o 0,1901 con el corte en 0,19.
+Es una fragilidad del corpus de hoy, no de este lote: B6 está a 0,19 de casi todo lo pediátrico
+genérico (alergia, un niño de 14 meses, cuándo consultar), y cualquier fuente nueva sobre alergia
+o catarro, de este lote o de otro, puede cruzarlo. Lo que este lote puede hacer es no ser el que
+lo cruza, y eso es lo que mide el `--explain` de B6. El margen de verdad lo dará la decisión
+sobre el corte o sobre cómo se rechazan las dosis, que no es de este lote.
+
+### 17.4 A16: por qué salía «Prevenir los accidentes típicos (Kind en Gezin)»
+
+Su fragmento de atragantamiento traía dos frases de alimentación: «desde los 6 meses la comida
+sólida es necesaria» y «La mantequilla de cacahuete es una alternativa a los frutos secos». Es
+la única fuente de seguridad que nombraba el cacahuete como algo que se le da, y con una edad
+cerca, así que para «¿Puedo darle cacahuete a mi bebé de 8 meses?» entraba la segunda, a 0,1527.
+Quitar solo esas dos frases lo alejaba poco (0,1718 a 0,1749 en la aproximación). Sale el
+fragmento de comida entero; las pilas de botón, los juguetes pequeños y los cordones, de la
+misma sección de la página («Vergiftiging / stikken»), pasan al fragmento de bebés, y la frase de
+navegación «Los consejos de sueño seguro están en otra página» se va. Quedan dos fragmentos, y el
+más cercano a A16 está ahora a 0,2129 en la aproximación (antes 0,1718): con lo que el servidor
+la medía más cerca que la aproximación (0,019), unos 0,194, fuera del corte.
+
+Lo que no toqué, para decidir con el `--explain`: «Cow's Milk and Milk Alternatives (CDC)» a
+0,1708 tiene la misma forma que la pregunta («los niños pueden empezar con leche entera de vaca a
+los 12 meses»), otro alimento a otra edad. Y «Aspiración de un cuerpo extraño» (SBP) dice «no se
+dan alimentos duros o crujientes (palomitas, caramelos duros, cacahuetes) hasta los 4 años», que
+es el cacahuete entero y así lo dice la página («amendoins»), pero al lado de la SEICAP una madre
+puede leerlo como lo contrario.
+
+### 17.5 Promover por partes
+
+`--candidates` acepta ahora una lista separada por comas, cada elemento un fichero o un glob, en
+`prod-golden-gate.sh`, `golden_gate.sh`, `golden_candidates.py load` y `--origins`. Un elemento
+que no nombra ningún fichero es un error, para que una errata no mida once ficheros como si
+fueran doce. Qué ficheros tocan las preguntas de esta medición en la aproximación (A: un
+fragmento delante de su mejor fuente esperada de `data/`; B: bajo el corte), con una holgura de
+un error típico (0,008):
+
+| fichero | toca |
+|---|---|
+| `alimentacion_bebes` | A16, A37, B6 |
+| `desarrollo_0_24m` | A1, A16, B6 |
+| `digestivo_piel` | A16, B6 |
+| `infecciones_fiebre` | B6 |
+| `neonatal` | A16, B6 |
+| `ojos_oidos_boca_uro_neuro` | A16 |
+| `respiratorio_sueno` | B6 |
+| `salud_madre_familia` | A16, A21 |
+| `seguridad` | A16, A37 |
+| `guarderia_adaptacion`, `pediatric_reflux`, `urgencias_lactante` | ninguna |
+
+Sin holgura, solo cuatro tocan algo, y solo A16, que sin candidatos ya no pasa:
+`alimentacion_bebes` (la SEICAP, que es su respuesta), `desarrollo_0_24m`, `neonatal` y
+`seguridad`. Los otros ocho no tocan ninguna. B6 sale en casi todos con holgura porque está a
+0,19 de todo (17.3). Un subconjunto se mide así:
+
+```bash
+L=apps/api/adelia/enrichment/candidates/lote_2026_11_06
+cd /opt/adelia && bash scripts/prod-golden-gate.sh \
+  --candidates "$L/guarderia_adaptacion.json,$L/pediatric_reflux.json,$L/urgencias_lactante.json" \
+  --explain A1,A5,A13,A16,A21,A37,B6
+```
+
+### 17.6 La medición que falta
+
+En la aproximación, sobre las 316: recall@4 0,971 sin y 0,971 con candidatos (34 de 35), ninguna
+A perdida ni ganada y ninguna B nueva con tarjetas. Es una aproximación (16.6): la medición es
+esta, en el servidor, con el lote entero:
+
+```bash
+cd /opt/adelia && bash scripts/prod-golden-gate.sh \
+  --candidates 'apps/api/adelia/enrichment/candidates/lote_2026_11_06/*.json' \
+  --explain A1,A5,A13,A16,A21,A37,B6
+```
+
+Qué mirar: en A21, el bloque `gate` con candidatos («Lagrimeo» entre las cuatro primeras); en B6,
+el bloque `gate` (ninguna tarjeta) y la distancia de la primera candidata; en A16, que «Prevenir
+los accidentes típicos» no esté en las tarjetas.
+
+Herramientas de esta vuelta, fuera del repositorio: `/tmp/cc-corpus-proxy2/` (`apply_cry.py`,
+`calib.py`, `touch.py`, `var.py`, `tables.py`), sobre las de `/tmp/cc-corpus-proxy/`.
+
+### 17.7 Fuentes que salen (25) o pierden fragmentos (4) en la tercera vuelta
+
+| fuente | organización | idioma | dominio | motivo |
+|---|---|---|---|---|
+| Grandir avec des repères (ONE) (fragmentos 3 a 2) | ONE (Office de la Naissance et de l'Enfance, Belgique) | fr | `desarrollo_0_24m` | llanto |
+| El cólico del lactante | Ministerio de Salud de Arabia Saudí (MOH) | ar | `digestivo_piel` | llanto |
+| Cólico del lactante (Sundhed.dk) | Sundhed.dk, Patienthåndbogen | da | `digestivo_piel` | llanto |
+| Llanto de Niños Mayores de 3 Meses de Edad – Irritabilidad Inconsolable (guía de síntomas KidsDoc, HealthyChildren, AAP) | American Academy of Pediatrics | es | `digestivo_piel` | llanto |
+| Llanto de Niños Menores de 3 Meses de Edad (guía de síntomas KidsDoc, HealthyChildren, AAP) | American Academy of Pediatrics | es | `digestivo_piel` | llanto |
+| Cólicos en niños y niñas | Chile Crece Contigo (Gobierno de Chile) | es | `digestivo_piel` | llanto |
+| Los primeros seis meses (fragmentos 4 a 3) | Osakidetza-Servicio vasco de salud (Osakidetza) | es | `digestivo_piel` | llanto |
+| Mon enfant a des coliques (HUG, Mon enfant est malade) | Hôpitaux universitaires de Genève (HUG) | fr | `digestivo_piel` | llanto |
+| Cólicos por gases en el lactante | Ospedale Pediatrico Bambino Gesù | it | `digestivo_piel` | llanto |
+| El llanto en el periodo neonatal | Ospedale Pediatrico Bambino Gesù | it | `digestivo_piel` | llanto |
+| Consejos para aliviar el cólico del lactante | Korean Pediatric Society (대한소아청소년과학회) | ko | `digestivo_piel` | llanto |
+| ¿Qué es el cólico del lactante? Bebés que lloran y se inquietan | Korean Pediatric Society (대한소아청소년과학회) | ko | `digestivo_piel` | llanto |
+| Llanto (Kind en Gezin) | Kind en Gezin (Agentschap Opgroeien) | nl | `digestivo_piel` | llanto |
+| Guía JGZ: llanto excesivo | Nederlands Centrum Jeugdgezondheid (NCJ, JGZ-richtlijnen) | nl | `digestivo_piel` | llanto |
+| Cólico del lactante (Helsenorge) | Helsenorge.no (Helsedirektoratet) | no | `digestivo_piel` | llanto |
+| Alergia a la leche de vaca en el bebé | Sociedade Brasileira de Pediatria (SBP) | pt | `digestivo_piel` | B6 |
+| Cólico del lactante | Sociedade Brasileira de Pediatria (SBP) | pt | `digestivo_piel` | llanto |
+| Cólico del lactante (1177) | 1177 Vårdguiden (Inera) | sv | `digestivo_piel` | llanto |
+| Cuidados importantes del recién nacido(a) (fragmentos 3 a 2) | Chile Crece Contigo (Gobierno de Chile) | es | `neonatal` | llanto |
+| Mon enfant a un rhume (HUG, Mon enfant est malade) | Hôpitaux universitaires de Genève (HUG) | fr | `respiratorio_sueno` | B6 |
+| Síndrome del bebé zarandeado | Consellería de Sanidade y Servicio Gallego de Salud (Sergas, Xunta de Galicia) | es | `salud_madre_familia` | llanto |
+| Bébé secoué (ONE) | ONE (Office de la Naissance et de l'Enfance, Belgique) | fr | `salud_madre_familia` | llanto |
+| Los cólicos del lactante | Azienda Ospedaliero Universitaria Meyer IRCCS | it | `salud_madre_familia` | llanto |
+| Por qué es peligroso sacudir a un recién nacido | Azienda Ospedaliero Universitaria Meyer IRCCS | it | `salud_madre_familia` | llanto |
+| Síndrome del bebé sacudido: 10 cosas que todo padre debería saber para proteger la salud de su hijo | Società Italiana di Pediatria (SIP) | it | `salud_madre_familia` | llanto |
+| Sacudir es dañar (SIS) (Kind en Gezin) | Kind en Gezin (Agentschap Opgroeien) | nl | `salud_madre_familia` | llanto |
+| Síndrome del niño sacudido: conocer y prevenir | Sociedade Portuguesa de Pediatria (SPP) | pt | `salud_madre_familia` | llanto |
+| Cuando los niños pequeños lloran (1177) | 1177 Vårdguiden (Inera) | sv | `salud_madre_familia` | llanto |
+| Prevenir los accidentes típicos (Kind en Gezin) (fragmentos 3 a 2) | Kind en Gezin (Agentschap Opgroeien) | nl | `seguridad` | A16 |

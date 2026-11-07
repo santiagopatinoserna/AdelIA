@@ -774,6 +774,24 @@ def test_inside_the_container_explain_runs_without_then_with_and_keeps_the_verdi
     assert (tmp_path / "app" / "golden_report.json").read_text(encoding="utf-8") == _REPORT_RAN
 
 
+# 2026-11-07: a domain that keeps failing must not hold the others back, so
+# --candidates also takes files separated by commas (golden_candidates.resolve).
+_LIST = ("apps/api/adelia/enrichment/candidates/lote_2026_11_06/seguridad.json,"
+         "apps/api/adelia/enrichment/candidates/lote_2026_11_06/neonatal.json")
+
+
+def test_a_list_of_candidate_files_reaches_the_load_and_the_explanation_whole(tmp_path):
+    proc, docker = _server_gate(tmp_path, args=("--candidates", _LIST, "--explain", _IDS))
+    assert proc.returncode == 0, proc.stdout + proc.stderr
+    assert docker[_index(docker, " run ")].rstrip().endswith(
+        f"golden_gate.sh --candidates {_LIST} --explain {_IDS}")
+    proc, calls = _container_gate(tmp_path, args=("--candidates", _LIST, "--explain", _IDS))
+    assert proc.returncode == 0, proc.stdout + proc.stderr
+    assert calls[_index(calls, "golden_candidates.py load")].rstrip().endswith(f"load {_LIST}")
+    explains = [c for c in calls if "preview_golden_candidates.py" in c and "--explain" in c]
+    assert explains and all(f"--origins {_LIST}" in c for c in explains)
+
+
 def test_inside_the_container_explain_alone_explains_the_corpus_as_it_is(tmp_path):
     proc, calls = _container_gate(tmp_path, args=("--explain", "A16"))
     assert proc.returncode == 0, proc.stdout + proc.stderr

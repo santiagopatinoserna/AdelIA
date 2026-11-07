@@ -70,6 +70,50 @@ def test_a_production_corpus_file_is_not_a_candidate():
         gc.resolve("apps/api/adelia/enrichment/data/evidence_*.json", api_dir=API_DIR)
 
 
+# 2026-11-07: the second server run of the 2026-11-06 batch was still NOT FIT,
+# with one A and one B broken by two or three files out of twelve. A domain that
+# keeps failing must not hold the others back, so a subset is measured on its
+# own: files separated by commas, each a path or a glob.
+
+
+def _lote(tmp_path, *names):
+    cand = tmp_path / "adelia" / "enrichment" / "candidates" / "lote"
+    cand.mkdir(parents=True)
+    for name in names:
+        _file(cand, name, [_source(name)])
+    return cand
+
+
+def test_a_comma_separated_list_names_exactly_those_files(tmp_path):
+    cand = _lote(tmp_path, "seguridad.json", "neonatal.json", "digestivo_piel.json")
+    got = gc.resolve("apps/api/adelia/enrichment/candidates/lote/seguridad.json, "
+                     "adelia/enrichment/candidates/lote/neonatal.json", api_dir=tmp_path)
+    assert got == [cand / "neonatal.json", cand / "seguridad.json"]
+
+
+def test_a_list_may_mix_globs_and_files_and_names_each_file_once(tmp_path):
+    cand = _lote(tmp_path, "salud.json", "seguridad.json", "neonatal.json")
+    got = gc.resolve("adelia/enrichment/candidates/lote/s*.json,"
+                     "adelia/enrichment/candidates/lote/seguridad.json,", api_dir=tmp_path)
+    assert got == [cand / "salud.json", cand / "seguridad.json"]
+
+
+def test_a_listed_file_that_is_not_there_is_an_error_naming_it(tmp_path):
+    """A typo must not measure eleven files as if they were twelve."""
+    _lote(tmp_path, "seguridad.json")
+    with pytest.raises(gc.CandidateError, match="seguridda.json"):
+        gc.resolve("adelia/enrichment/candidates/lote/seguridad.json,"
+                   "adelia/enrichment/candidates/lote/seguridda.json", api_dir=tmp_path)
+
+
+def test_a_list_still_refuses_a_production_corpus_file(tmp_path):
+    cand = _lote(tmp_path, "seguridad.json")
+    with pytest.raises(gc.CandidateError, match="ya está en enrichment/data/"):
+        gc.resolve(f"{cand / 'seguridad.json'},"
+                   f"{API_DIR / 'adelia' / 'enrichment' / 'data' / 'evidence_seguridad.json'}",
+                   api_dir=API_DIR)
+
+
 @pytest.mark.parametrize(
     ("payload", "why"),
     [
@@ -392,3 +436,40 @@ def test_the_cli_explain_reads_the_previews_and_never_fails_the_gate(tmp_path, c
     assert gc.main(["explain", "--without", str(a)]) == 0
     assert "[A1]" in capsys.readouterr().out
     assert gc.main(["explain", "--without", str(tmp_path / "no.json")]) == 2
+
+
+def _block(name: str, top, cards=(), note: str = "") -> dict:
+    return {"name": name, "text": f"texto de {name}", "cut": 0.19, "note": note,
+            "top": [list(t) for t in top], "cards": list(cards)}
+
+
+def test_explain_puts_each_search_side_by_side_and_names_its_newcomers():
+    """A21, 2026-11-07: the merged list showed the tear-duct sources on top, the
+    gate's own search had the crying ones first. Each search is its own block."""
+    lagrimeo, llanto = ("Lagrimeo en el lactante (AEPap)", 0.1816), ("Llanto (Kind en Gezin)", 0.1797)
+    bloqueado = ("Conducto lagrimal bloqueado (AAP)", 0.1092)
+    without = [_explained("A21", "A", [bloqueado, lagrimeo], expect="lagrimal|Lagrimeo")]
+    without[0]["queries"] = [_block("gate", [("Qué hacer cuando llora mucho", 0.1764), lagrimeo],
+                                    cards=["Qué hacer cuando llora mucho", lagrimeo[0]]),
+                             _block("léxico de madre", [bloqueado])]
+    with_ = [_explained("A21", "A", [bloqueado, llanto, lagrimeo], expect="lagrimal|Lagrimeo",
+                        origins={llanto[0]: "candidato digestivo_piel.json"})]
+    with_[0]["queries"] = [_block("gate", [llanto, ("Qué hacer cuando llora mucho", 0.1764)],
+                                  cards=[llanto[0], "Qué hacer cuando llora mucho"]),
+                           _block("léxico de madre", [bloqueado])]
+    text = gc.explain(without, with_)
+    gate = text.split("consulta gate")[1].split("consulta léxico de madre")[0]
+    new = next(x for x in gate.split("con candidatos")[1].splitlines() if "Llanto" in x)
+    assert "nueva" in new and "bajo el corte" in new and "candidato digestivo_piel.json" in new
+    assert f"sale con los candidatos: {lagrimeo[0]}" in gate
+    lexicon = text.split("consulta léxico de madre")[1]
+    assert "sale con los candidatos: ninguna" in lexicon
+
+
+def test_explain_of_one_run_prints_its_searches_too():
+    v = _explained("A21", "A", [("Lagrimeo en el lactante (AEPap)", 0.1816)], expect="Lagrimeo")
+    v["queries"] = [_block("gate", [("Llanto (Kind en Gezin)", 0.1797)],
+                           cards=["Llanto (Kind en Gezin)"])]
+    text = gc.explain([v], None)
+    assert "consulta gate" in text and "0.1797 bajo el corte" in text
+    assert "con candidatos" not in text

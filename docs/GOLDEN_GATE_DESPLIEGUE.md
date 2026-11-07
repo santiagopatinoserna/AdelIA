@@ -209,6 +209,9 @@ siguiente arranque; uno en otra carpeta no lo carga nada (`main.load_startup_cor
    - a mano en el servidor, sin desplegar (no toca los contenedores vivos):
      `cd /opt/adelia && bash scripts/prod-golden-gate.sh --candidates
      'apps/api/adelia/enrichment/candidates/*.json'`.
+   - por partes (7 de noviembre de 2026): `--candidates` acepta también varios ficheros o globs
+     separados por comas, para que un dominio que sigue fallando no frene a los demás. Un
+     elemento que no nombra ningún fichero es un error, no un fichero menos.
 4. Qué hace `golden_gate.sh` dentro del contenedor, sobre la copia efímera:
    1. el golden sin modelo, sin candidatos (`golden_report.sin_candidatos.json`);
    2. la previsualización de las preguntas `CANDIDATES` con `--no-model`
@@ -244,7 +247,7 @@ A13, A37 y B6) pero no qué fuentes las rompían, y cada pasada más es un viaje
 ```bash
 cd /opt/adelia && bash scripts/prod-golden-gate.sh \
   --candidates 'apps/api/adelia/enrichment/candidates/lote_2026_11_06/*.json' \
-  --explain A1,A5,A13,A37,A16,A21,B6
+  --explain A1,A5,A13,A16,A21,A37,B6
 ```
 
 (o `GOLDEN_EXPLAIN=A1,B6`). Solo admite ids de pregunta separados por comas; otra cosa se
@@ -257,6 +260,16 @@ de producción, si es la esperada (grupo A) y el fichero del que sale (`data/<fi
 pone una al lado de la otra: cuántas tarjetas hay bajo el corte sin y con, qué fuentes son
 nuevas y cuáles salen de las cuatro primeras. Es un diagnóstico, sin modelo, y nunca cambia el
 código de salida. Sin `--candidates`, explica el corpus tal como está.
+
+Una búsqueda por bloque (segunda medición, 7 de noviembre). La lista de arriba mezcla todo lo
+que el grafo busca, y la segunda medición perdió A21 mientras esa lista enseñaba sus fuentes
+arriba: las encontraba el léxico de madre, y el gate no lo usa en una pregunta en español, porque
+`tests/test_rag_golden.py` responde a cada texto con el vector grabado de la pregunta. Por eso
+cada pregunta trae además un bloque por búsqueda, con sus 8 fuentes más cercanas y sus
+tarjetas: `principal` (su frase), `léxico de madre`, `sujeto implícito` (corte 0,17), `avisos`
+(solo otros fragmentos de las fuentes citadas, solo en un plan de la demo) y `gate` (el vector
+grabado, con el que el gate lee sus tarjetas). Lo que el entorno tiene apagado se dice y no se
+busca. `golden_candidates.py explain` pone cada bloque sin y con candidatos.
 
 ## Añadir preguntas sin parar el despliegue (candidatas, 6 de noviembre de 2026)
 

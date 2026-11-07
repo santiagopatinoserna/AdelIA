@@ -24,8 +24,9 @@
 # and no call to Anthropic at all. --with-model is the full pass on the
 # production provider (about 40 generations and the routing calls).
 #
-# --candidates GLOB (always without a model): after that run, the CANDIDATES
-# questions are previewed, the candidate files are loaded into this scratch
+# --candidates GLOB (always without a model; since 2026-11-07 also several globs
+# or files separated by commas, to measure a domain apart): after that run, the
+# CANDIDATES questions are previewed, the candidate files are loaded into this scratch
 # copy (scripts/golden_candidates.py, never the live database, never boot),
 # and the set and the preview run again; then both are compared. The exit
 # status is still the verdict on the release as it would serve, without the
@@ -63,7 +64,8 @@ while [[ $# -gt 0 ]]; do
     --with-model) WITH_MODEL=1 ;;
     --candidates)
       CANDIDATES="${2:-}"
-      [[ -n "${CANDIDATES}" ]] || { say "--candidates needs a glob"; exit 2; }
+      [[ -n "${CANDIDATES}" ]] || {
+        say "--candidates needs a glob or files separated by commas"; exit 2; }
       shift ;;
     --explain)
       EXPLAIN="${2:-}"
@@ -71,7 +73,7 @@ while [[ $# -gt 0 ]]; do
       [[ "${EXPLAIN}" =~ ^[ABC][0-9]+(,[ABC][0-9]+)*$ ]] || {
         say "--explain needs question ids separated by commas, e.g. A1,A5,B6"; exit 2; }
       shift ;;
-    *) say "unknown argument: $1 (known: --with-model, --candidates GLOB, --explain IDS)"
+    *) say "unknown argument: $1 (known: --with-model, --candidates GLOB[,FILE...], --explain IDS)"
        exit 2 ;;
   esac
   shift

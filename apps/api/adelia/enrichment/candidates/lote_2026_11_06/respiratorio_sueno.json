@@ -2,7 +2,7 @@
   "_meta": {
     "topic": "Candidatas del dominio respiratorio_sueno (0-24 meses), fuentes oficiales de muchos países leídas en su idioma y resumidas en español.",
     "compiled": "2026-11-06",
-    "method": "Seis investigadores de Claude Code leyeron cada página con WebFetch y la pasaron por un subagente verificador (~/dev/adelia-night/research/corpus-*, verify.json). Al integrarlas se quitaron las fuentes cuyos términos prohíben adaptar, traducir o el uso comercial, los calendarios de vacunas de otros países y los duplicados con data/ y entre lotes; los teléfonos y servicios de otros sistemas de salud se reescribieron en palabras con el nivel de urgencia de la fuente, y cada fragmento sobre alarmas, urgencias, fiebre, respiración, convulsiones, deshidratación, ictericia o sepsis se volvió a comprobar contra el texto de la página descargado con curl. Idiomas del original: español 19, francés 14, italiano 10, portugués 10, inglés 9, sueco 3, árabe 2, danés 2, japonés 2, neerlandés 2, noruego 2, alemán 1, coreano 1. Detalle en docs/corpus/CANDIDATOS_2026_11_06.md.",
+    "method": "Seis investigadores de Claude Code leyeron cada página con WebFetch y la pasaron por un subagente verificador (~/dev/adelia-night/research/corpus-*, verify.json). Al integrarlas se quitaron las fuentes cuyos términos prohíben adaptar, traducir o el uso comercial, los calendarios de vacunas de otros países y los duplicados con data/ y entre lotes; los teléfonos y servicios de otros sistemas de salud se reescribieron en palabras con el nivel de urgencia de la fuente, y cada fragmento sobre alarmas, urgencias, fiebre, respiración, convulsiones, deshidratación, ictericia o sepsis se volvió a comprobar contra el texto de la página descargado con curl. Idiomas del original: español 15, francés 10, inglés 7, portugués 5, italiano 4, sueco 2, danés 1, noruego 1. Detalle en docs/corpus/CANDIDATOS_2026_11_06.md.",
     "caveat": "Los fragmentos son paráfrasis breves en español, no traducciones literales ni citas; `language` es el idioma del fragmento (es) y `original_language` el de la página. Cada fragmento conserva las cifras, edades y el nivel de urgencia de su propia fuente, que pueden diferir entre países. No es consejo médico.",
     "purpose": "Candidato: no lo carga el arranque. Se mide con scripts/golden_gate.sh --candidates antes de pasar a data/ como evidence_respiratorio_sueno_2026_11.json."
   },
@@ -780,32 +780,6 @@
         "Mon bébé a une bronchiolite (HUG). Tema: qué es y cómo se previene. Hallazgo: la bronquiolitis es una infección respiratoria de los bronquios más finos, frecuente y muy contagiosa, que afecta sobre todo a los bebés porque pocas secreciones bastan para obstruirlos; es más seria antes de los 6 meses y a veces requiere hospitalización. El virus más conocido es el virus respiratorio sincitial (VRS), que provoca pequeñas epidemias de octubre a abril y se transmite por las secreciones, a menudo por las manos. Prevención: antes de los 3 meses evitar el contacto con personas con resfriado, tos o fiebre; mascarilla si se está resfriado; lavarse las manos antes y después del contacto; mantener alejados a los hermanos enfermos en la fase aguda, si es posible; evitar reuniones y lugares públicos; respetar el calendario vacunal; vacunarse contra la tos ferina y la gripe; y no fumar cerca del bebé.",
         "Mon bébé a une bronchiolite (HUG). Tema: cuidados en casa. Hallazgo: no existe medicamento contra el virus; los antibióticos son inútiles y los antitusivos no mejoran la situación. Se lava la nariz con suero fisiológico tantas veces como haga falta y luego se aspiran las secreciones con un aspirador nasal; con la nariz despejada se facilita la toma. Si el aire de la habitación está seco, se ventila; la temperatura ideal es de 18 °C. Hay que procurar que el bebé beba lo suficiente. La enfermedad dura de 1 a 2 semanas y puede volver a la guardería cuando ya no tenga fiebre y esté en forma.",
         "Mon bébé a une bronchiolite (HUG). Tema: cuándo consultar. Hallazgo: Consulta inmediata si el bebé preocupa, se fatiga y los labios se ponen azules, respira rápido, se le hunde la musculatura entre las costillas o la respiración se vuelve sibilante. Consulta en 24 horas si no consigue beber al menos la mitad de su cantidad habitual o si la fiebre dura más de 3 días."
-      ]
-    },
-    {
-      "source_type": "reference",
-      "title": "Mon enfant a un rhume (HUG, Mon enfant est malade)",
-      "organization": "Hôpitaux universitaires de Genève (HUG)",
-      "publication_year": null,
-      "undated_reason": "la página no muestra fecha de publicación ni de actualización (consultada el 2026-11-06)",
-      "url": "https://www.monenfantestmalade.ch/fiches/rhume",
-      "specialties": [
-        "pediatrics",
-        "general_medicine"
-      ],
-      "license": "fair_use_snippet",
-      "language": "es",
-      "original_language": "fr",
-      "topics": [
-        "resfriado_mocos",
-        "lavados_nasales",
-        "cuando_consultar",
-        "tos"
-      ],
-      "chunks": [
-        "Mon enfant a un rhume (HUG). Tema: qué es el resfriado y por qué afecta a los lactantes. Hallazgo: es una infección vírica de la nariz y la garganta, benigna pero frecuente y muy contagiosa, causada por muchos virus distintos; un niño puede tener de 8 a 10 al año. A menudo empieza con 2 o 3 días de fiebre moderada, y la secreción nasal, la congestión y la tos duran en general menos de una semana; el conjunto dura alrededor de una semana. Los lactantes son especialmente vulnerables porque aún no han desarrollado defensas frente a muchas infecciones y respiran sobre todo por la nariz: cuando está tapada, beber, respirar y tragar a la vez resulta muy difícil. El virus se transmite por las secreciones nasales, no por las corrientes de aire ni los enfriamientos, y lavarse las manos limita el contagio.",
-        "Mon enfant a un rhume (HUG). Tema: cuidados en casa. Hallazgo: para la nariz tapada, lavarla con suero fisiológico tantas veces como haga falta y luego pedirle que se suene; en un bebé demasiado pequeño para sonarse, aspirar las secreciones con un aspirador nasal. La tos es útil porque limpia los bronquios, y los jarabes contra la tos son ineficaces en niños y a veces peligrosos. La miel se desaconseja en menores de un año por el riesgo de botulismo. Si el aire de la habitación está muy seco, se ventila; la temperatura ideal es de 18 °C. Ningún medicamento acorta la duración del resfriado y los antibióticos son inútiles porque no actúan sobre los virus.",
-        "Mon enfant a un rhume (HUG). Tema: cuándo consultar al pediatra. Hallazgo: consulta inmediata si los padres están preocupados, si tiene menos de 3 meses y fiebre superior a 38 °C, o si tiene dificultades respiratorias que persisten aunque se le despeje la nariz. Consulta en 24 horas si tiene dolor de oído o de garganta, si la fiebre dura más de 3 días o si la secreción nasal es amarilla, como pus, y dura más de 10 días."
       ]
     },
     {

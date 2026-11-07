@@ -459,6 +459,169 @@ def test_explain_prints_distance_cut_and_file_for_every_nearest_source():
     assert "bajo el corte" not in line
 
 
+def test_origins_read_a_list_of_files_as_well_as_a_glob(tmp_path):
+    for name in ("seguridad.json", "neonatal.json", "salud.json"):
+        (tmp_path / name).write_text('{"sources": []}', encoding="utf-8")
+    got = pv._origin_files(f"{tmp_path / 'seguridad.json'}, {tmp_path / 'n*.json'}")
+    assert got == [tmp_path / "neonatal.json", tmp_path / "seguridad.json"]
+
+
+# --- --explain, one search at a time (2026-11-07) ------------------------------------
+#
+# The second server run lost A21 («Desde que nació le llora un ojo y se le llena
+# de legañas») with the candidates, while its --explain showed the three
+# tear-duct sources on top at 0.109 to 0.120. The nearest list merged every text
+# the graph searches: her sentence, the lay lexicon's widening (which adds
+# «conducto lagrimal, lagrimeo») and the implicit-subject rewrite. The gate does
+# not search that way: it embeds every variant with the one vector recorded for
+# her question (tests/test_rag_golden.py, _recorded_embed), so only her own
+# sentence decides, and there the crying sources came first. Each search is now
+# its own block with its own top, and the gate's own search is one of them.
+
+
+def _by_text(monkeypatch, tops: dict[str, list[EvidenceMatch]], embedded: list[str]):
+    """Retrieval that answers per text embedded: the first key found in the text."""
+    from adelia.agent import graph
+
+    log: list[list[str]] = []
+    monkeypatch.setattr(pv, "AsyncSessionLocal", lambda: _Session(log))
+    monkeypatch.setattr(graph, "AsyncSessionLocal", lambda: _Session(log))
+
+    async def _embed(texts):
+        out = []
+        for t in texts:
+            embedded.append(t)
+            out.append([float(len(embedded) - 1)] * 1024)
+        return out
+
+    def _top(vector):
+        n = int(vector[0])
+        text = "gate" if n < 0 else embedded[n]
+        return next(v for k, v in tops.items() if k in text)
+
+    async def _retrieve(session, **kwargs):
+        await session.execute("SELECT evidence")
+        found = [m for m in _top(kwargs["query_embedding"]) if m.distance <= kwargs["max_distance"]]
+        if kwargs.get("cited_sources"):
+            found = [m for m in found if m.source_id in set(kwargs["cited_sources"])]
+        return found[: kwargs["top_k"]]
+
+    monkeypatch.setattr(pv, "embed_with_retry", _embed)
+    monkeypatch.setattr(pv, "retrieve_evidence", _retrieve)
+    return log
+
+
+_A21 = GoldenQuestion(
+    "A91", "A", "Desde que nació le llora un ojo y se le llena de legañas. ¿Se le pasará solo?",
+    age_months=2, expect_source="conducto lagrimal|Lagrimeo", rationale="doble",
+)
+
+
+async def test_explain_shows_every_search_of_the_graph_with_its_own_top(monkeypatch):
+    from adelia.config import settings
+
+    monkeypatch.setattr(settings, "lay_query_expansion", True)
+    monkeypatch.setattr(settings, "implicit_subject_expansion", True)
+    monkeypatch.setattr(settings, "warning_signs_retrieval", True)
+    monkeypatch.setattr(pv, "EXPLAIN", True)
+    llanto = _match("Llanto (Kind en Gezin)", 0.1797)
+    lagrimeo = _match("Lagrimeo en el lactante (AEPap)", 0.1816)
+    bloqueado = _match("Conducto lagrimal bloqueado (AAP)", 0.1092)
+    embedded: list[str] = []
+    log = _by_text(monkeypatch, {
+        "gate": [llanto, lagrimeo],
+        "signos de alarma": [lagrimeo],  # first: the warning text carries the widening too
+        "conducto lagrimal": [bloqueado, llanto],
+        "Mi bebé de 2 meses": [lagrimeo, llanto],
+        "Desde que nació": [llanto, lagrimeo],
+    }, embedded)
+    monkeypatch.setattr(pv, "recorded_vector", lambda q: [-1.0] * 1024)
+
+    v = await pv.preview(_A21, cache={}, recording=None)
+
+    assert all(s[0] == "SET TRANSACTION READ ONLY" for s in log)
+    names = [b["name"] for b in v.queries]
+    assert names == ["principal", "léxico de madre", "sujeto implícito", "avisos", "gate"]
+    blocks = {b["name"]: b for b in v.queries}
+    assert blocks["principal"]["text"] == _A21.question
+    assert blocks["principal"]["top"][0] == ["Llanto (Kind en Gezin)", 0.1797]
+    assert "conducto lagrimal" in blocks["léxico de madre"]["text"]
+    assert blocks["léxico de madre"]["top"][0] == ["Conducto lagrimal bloqueado (AAP)", 0.1092]
+    subject = blocks["sujeto implícito"]
+    assert subject["text"].startswith("Mi bebé de 2 meses")
+    assert subject["cut"] == min(settings.evidence_max_distance,
+                                 settings.implicit_subject_max_distance)
+    # The plan's warning search reads only the sources the answer already cites.
+    assert "signos de alarma" in blocks["avisos"]["text"]
+    assert blocks["avisos"]["top"] == [["Lagrimeo en el lactante (AEPap)", 0.1816]]
+    gate = blocks["gate"]
+    assert gate["top"][0] == ["Llanto (Kind en Gezin)", 0.1797]
+    assert gate["cards"] == ["Llanto (Kind en Gezin)", "Lagrimeo en el lactante (AEPap)"]
+    assert "mismo vector" in gate["note"]
+    # The verdict is still the graph's: the merged search, untouched by the blocks.
+    assert v.passed and v.cards[0]["title"] == "Conducto lagrimal bloqueado (AAP)"
+
+
+async def test_explain_says_a_search_production_does_not_run_instead_of_running_it(monkeypatch):
+    from adelia.config import settings
+
+    monkeypatch.setattr(settings, "lay_query_expansion", False)
+    monkeypatch.setattr(settings, "implicit_subject_expansion", False)
+    monkeypatch.setattr(settings, "warning_signs_retrieval", False)
+    monkeypatch.setattr(pv, "EXPLAIN", True)
+    embedded: list[str] = []
+    _by_text(monkeypatch, {"Desde que nació": [_match("Lagrimeo en el lactante", 0.18)]},
+             embedded)
+    monkeypatch.setattr(pv, "recorded_vector", lambda q: None)
+
+    v = await pv.preview(_A21, cache={}, recording=None)
+
+    assert embedded == [_A21.question]  # nothing embedded for the explanation alone
+    blocks = {b["name"]: b for b in v.queries}
+    assert blocks["principal"]["top"] == [["Lagrimeo en el lactante", 0.18]]
+    for name in ("léxico de madre", "sujeto implícito", "avisos"):
+        assert blocks[name]["top"] == [] and "apagad" in blocks[name]["note"]
+    assert blocks["gate"]["top"] == [] and "sin vector grabado" in blocks["gate"]["note"]
+
+
+def test_the_recorded_vector_is_the_gate_s_own_and_only_for_the_current_wording():
+    fixture = json.loads((Path(__file__).parent / "fixtures" / "golden_query_embeddings.json")
+                         .read_text(encoding="utf-8"))
+    by_id = {q.id: q for q in GOLDEN_SET}
+    es = by_id["A21"]
+    assert pv.recorded_vector(es) == fixture["embeddings"]["A21"]
+    fr = next(q for q in GOLDEN_SET if q.locale == "fr" and q.id in fixture["corpus_embeddings"])
+    assert pv.recorded_vector(fr) == fixture["corpus_embeddings"][fr.id]
+    reworded = GoldenQuestion("A21", "A", "Otra forma de preguntarlo", age_months=2,
+                              expect_source="x", rationale="x")
+    assert pv.recorded_vector(reworded) is None
+
+
+def test_explain_prints_each_search_as_its_own_block():
+    v = pv.Verdict("A21", "A", "es", _A21.question, expect_source="conducto lagrimal|Lagrimeo",
+                   cards=[{"title": "Conducto lagrimal bloqueado (AAP)", "distance": 0.1092}],
+                   nearest=[("Conducto lagrimal bloqueado (AAP)", 0.1092)],
+                   origins={"Llanto (Kind en Gezin)": "candidato digestivo_piel.json"},
+                   queries=[
+                       {"name": "principal", "text": _A21.question, "cut": 0.19,
+                        "cards": ["Llanto (Kind en Gezin)"], "note": "",
+                        "top": [["Llanto (Kind en Gezin)", 0.1797],
+                                ["Lagrimeo en el lactante (AEPap)", 0.1816]]},
+                       {"name": "léxico de madre", "text": "", "cut": 0.19, "cards": [],
+                        "top": [], "note": "apagado en este entorno"},
+                   ])
+    q = GoldenQuestion("A21", "A", _A21.question, age_months=2,
+                       expect_source="conducto lagrimal|Lagrimeo")
+    text = pv._fmt_verdict(q, v)
+    head = next(x for x in text.splitlines() if "consulta principal" in x)
+    assert "0.19" in head
+    row = next(x for x in text.splitlines() if "0.1797" in x)
+    assert "bajo el corte" in row and "candidato digestivo_piel.json" in row
+    row = next(x for x in text.splitlines() if "0.1816" in x)
+    assert "esperada" in row and "fuera del corte" in row
+    assert any("léxico de madre" in x and "apagado" in x for x in text.splitlines())
+
+
 async def test_main_with_explain_maps_the_origins_and_writes_them(monkeypatch, tmp_path, capsys):
     seen: dict = {}
 
