@@ -95,7 +95,14 @@ async def _daily_diary_reminder() -> None:
             logger.exception("daily diary reminder failed")
 
 
-async def load_startup_corpora() -> None:
+#: Waits before trying again a corpus file that stopped on a 429 or a network
+#: error, after embed_with_retry's own 77 s of backoff ran out. The load runs
+#: beside the server (lifespan), so waiting costs nothing but time; the gate
+#: (scripts/golden_gate.sh) awaits the same function and waits with it.
+STARTUP_RETRY_DELAYS: tuple[float, ...] = (60.0, 300.0)
+
+
+async def load_startup_corpora() -> list[str]:
     """Load the clinical corpora, then the experience fixture, at boot.
 
     Clinical evidence: seed plus per-topic `enrichment/data/evidence_*.json`.
@@ -106,31 +113,66 @@ async def load_startup_corpora() -> None:
     separate glob, so no experience file can ever be swept into the clinical
     load by matching a name. Each stage swallows its own failure: evidence
     must never block boot, and experience must never block evidence.
+
+    A file that stops on an error waiting can fix (evidence_loader.
+    is_transient: a 429 that outlasted the backoff, the network) is tried
+    again after each of STARTUP_RETRY_DELAYS, from the source where it
+    stopped, because each source is committed whole, and the files after it
+    in that pass wait with it. Before 2026-11-07 the rest of it waited for the
+    next boot, and production boots on a deploy. With Mistral limiting all the
+    way through, the whole load gives up after about 10 minutes (three cuts
+    of 77 s plus the two waits), not one cut per file.
+
+    Returns the evidence files that did not load whole, so the golden gate
+    never measures a corpus smaller than the one about to serve.
     """
     if not settings.mistral_api_key:
-        return
+        return []
+    failed: list[str] = []
     try:
-        from pathlib import Path as _Path
-
         from adelia.enrichment import evidence_loader
 
+        # A seed that fails stops the files too, as before: loaded on an empty
+        # table they would make it non-empty, and the seed loads only then.
         await evidence_loader.load_seed_if_empty()
-        _data_dir = _Path(__file__).parent / "enrichment" / "data"
-        for _f in sorted(_data_dir.glob("evidence_*.json")):
-            if _f.name == "evidence_seed.json":
-                continue
-            try:
-                await evidence_loader.load_evidence_file(_f)
-            except Exception:  # noqa: BLE001 — one bad file must not skip the rest
-                logger.exception("startup evidence load failed for %s", _f.name)
+        _data_dir = Path(__file__).parent / "enrichment" / "data"
+        pending = [
+            f for f in sorted(_data_dir.glob("evidence_*.json")) if f.name != "evidence_seed.json"
+        ]
+        for delay in (None, *STARTUP_RETRY_DELAYS):
+            if not pending:
+                break
+            if delay is not None:
+                logger.warning("startup evidence load: %d file(s) cut short, again in %.0fs",
+                               len(pending), delay)
+                await asyncio.sleep(delay)
+            retry: list[Path] = []
+            for i, _f in enumerate(pending):
+                try:
+                    await evidence_loader.load_evidence_file(_f)
+                except Exception as exc:  # noqa: BLE001 — one bad file must not skip the rest
+                    logger.exception("startup evidence load failed for %s", _f.name)
+                    if not evidence_loader.is_transient(exc):
+                        failed.append(_f.name)
+                        continue
+                    # Each cut has already cost 77 s of backoff; the other
+                    # files would pay it too, so they wait for the next pass.
+                    retry = pending[i:]
+                    break
+            pending = retry
+        failed += [f.name for f in pending]
     except Exception:  # noqa: BLE001 — evidence load must never block boot
         logger.exception("startup evidence load failed")
+        failed.append("evidence (load aborted)")
     try:
         from adelia.enrichment import experience_loader
 
         await experience_loader.load_experience_dir()
     except Exception:  # noqa: BLE001 — experience load must never block boot
         logger.exception("startup experience load failed")
+    if failed:
+        logger.error("startup evidence load incomplete: %s", ", ".join(failed))
+    return failed
 
 
 @asynccontextmanager
@@ -158,7 +200,14 @@ async def lifespan(app: FastAPI):
             logger.warning("boot reconciliation requeued %d document(s)", len(requeued))
     except Exception:  # noqa: BLE001 — reconciliation must never block boot
         logger.exception("startup document reconciliation failed")
-    await load_startup_corpora()
+    # Beside the server, not before it (2026-11-07). The 2026-11-06 batch is
+    # 316 sources, one Mistral call each with SOURCE_PACING_S between them:
+    # minutes. Awaited here, uvicorn did not bind its port until it ended, so
+    # /health refused, the container went unhealthy after 5 checks 10 s apart
+    # (web waits on it being healthy) and deploy-prod.sh's 60 s of /healthz
+    # failed. Meanwhile retrieval reads the corpus loaded so far, which only
+    # grows, one whole source at a time.
+    corpus_task = asyncio.create_task(load_startup_corpora())
     sweep_task = asyncio.create_task(_periodic_tombstone_sweep())
     logger.info("periodic blob tombstone sweep scheduled every %ds", SWEEP_INTERVAL_S)
     reminder_task = None
@@ -177,7 +226,7 @@ async def lifespan(app: FastAPI):
     await drain_erasure_sweeps()
     # And the embedding fills a guest's creation starts after its 201.
     await guest.drain_seed_tasks()
-    for task in (sweep_task, reminder_task):
+    for task in (corpus_task, sweep_task, reminder_task):
         if task is None:
             continue
         task.cancel()

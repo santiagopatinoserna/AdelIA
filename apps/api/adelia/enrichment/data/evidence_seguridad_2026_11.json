@@ -1,0 +1,1123 @@
+{
+  "_meta": {
+    "topic": "Candidatas del dominio seguridad (0-24 meses), fuentes oficiales de muchos países leídas en su idioma y resumidas en español.",
+    "compiled": "2026-11-06",
+    "method": "Seis investigadores de Claude Code leyeron cada página con WebFetch y la pasaron por un subagente verificador (~/dev/adelia-night/research/corpus-*, verify.json). Al integrarlas se quitaron las fuentes cuyos términos prohíben adaptar, traducir o el uso comercial, los calendarios de vacunas de otros países y los duplicados con data/ y entre lotes; los teléfonos y servicios de otros sistemas de salud se reescribieron en palabras con el nivel de urgencia de la fuente, y cada fragmento sobre alarmas, urgencias, fiebre, respiración, convulsiones, deshidratación, ictericia o sepsis se volvió a comprobar contra el texto de la página descargado con curl. Idiomas del original: portugués 9, francés 8, italiano 7, neerlandés 6, alemán 5, inglés 5, árabe 2, español 2, japonés 1, noruego 1, polaco 1. Detalle en docs/corpus/CANDIDATOS_2026_11_06.md.",
+    "caveat": "Los fragmentos son paráfrasis breves en español, no traducciones literales ni citas; `language` es el idioma del fragmento (es) y `original_language` el de la página. Cada fragmento conserva las cifras, edades y el nivel de urgencia de su propia fuente, que pueden diferir entre países. No es consejo médico.",
+    "purpose": "Candidato: no lo carga el arranque. Se mide con scripts/golden_gate.sh --candidates antes de pasar a data/ como evidence_seguridad_2026_11.json."
+  },
+  "sources": [
+    {
+      "source_type": "reference",
+      "title": "La seguridad del lactante",
+      "original_title": "سلامة الرضيع",
+      "organization": "Ministerio de Salud de Arabia Saudí (MOH)",
+      "publication_year": 2026,
+      "url": "https://www.moh.gov.sa/HealthAwareness/EducationalContent/BabyHealth/Pages/014.aspx",
+      "specialties": [
+        "pediatrics"
+      ],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "original_language": "ar",
+      "topics": [
+        "quemaduras",
+        "atragantamiento_objetos"
+      ],
+      "chunks": [
+        "La seguridad del lactante (Ministerio de Salud de Arabia Saudí, actualizado en 2026). Tema: seguridad física del bebé en casa. Hallazgo: la página pide revisar la casa y retirar los objetos peligrosos para un bebé curioso, no sacudirlo nunca porque los músculos del cuello son débiles y sacudirlo puede causar daño cerebral o la muerte, y acostarlo siempre boca arriba para reducir el riesgo de muerte súbita. También advierte que se debe protegerlo del humo del tabaco sin dejar que nadie fume en casa, no dejarle jugar con juguetes pequeños que pueda tragarse con facilidad, impedir que juegue con cualquier cosa que le cubra la cara y no llevar bebidas ni comidas calientes cerca de él ni mientras se le sostiene. (fuente en árabe)",
+        "La seguridad del lactante (Ministerio de Salud de Arabia Saudí, actualizado en 2026). Tema: hábitos de salud y desarrollo del bebé. Hallazgo: se aconseja lactancia materna exclusiva durante los 6 primeros meses e intentar mantenerla hasta los 12 meses con alimentos complementarios sanos, ofrecidos con paciencia y sin forzar. El bebé debe estar activo y pasar tiempo en el suelo, sin dejarlo mucho rato en columpio o carrito, y no se le dan móviles ni tabletas antes de los 18 meses. Entre los 4 y los 12 meses duerme de 12 a 16 horas al día, siestas incluidas. Hablarle, leerle, abrazarlo y jugar con él cuando está despierto favorece su salud mental, y las vacunas deben ponerse a tiempo. (fuente en árabe)"
+      ]
+    },
+    {
+      "source_type": "reference",
+      "title": "La seguridad del niño en el coche",
+      "original_title": "سلامة الطفل في السيارة",
+      "organization": "Ministerio de Salud de Arabia Saudí (MOH)",
+      "publication_year": 2025,
+      "url": "https://www.moh.gov.sa/HealthAwareness/EducationalContent/BabyHealth/Pages/In-Car-Child-safety.aspx",
+      "specialties": [
+        "pediatrics",
+        "emergency_medicine"
+      ],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "original_language": "ar",
+      "topics": [
+        "silla_coche"
+      ],
+      "chunks": [
+        "La seguridad del niño en el coche (Ministerio de Salud de Arabia Saudí, actualizado en 2025). Tema: sillas de coche para bebés. Hallazgo: la página indica que la silla adecuada debe instalarse antes del nacimiento. La silla a contramarcha, orientada hacia atrás, se usa desde el nacimiento hasta los 2-4 años porque protege mejor cabeza, cuello y columna; el arnés va bien ajustado, con solo uno o dos dedos de holgura entre el pecho y la correa, y no se coloca en el asiento delantero de un coche con airbag. Se desaconsejan las sillas de segunda mano, porque no se sabe si estuvieron en un accidente. (fuente en árabe)",
+        "La seguridad del niño en el coche (Ministerio de Salud de Arabia Saudí, actualizado en 2025). Tema: uso de la silla con recién nacidos. Hallazgo: la página advierte de que los bebés de menos de 4 semanas no deberían pasar más de 30 minutos en la silla del coche, porque pueden tener dificultades para respirar. La silla del bebé va en la parte trasera y no se deja sin vigilancia; en viajes largos se hacen pausas regulares para sacarlo de la silla, y la silla se usa solo dentro del coche, no para darle de comer ni para dormir en casa. (fuente en árabe)"
+      ]
+    },
+    {
+      "source_type": "reference",
+      "title": "Asfixia: prevención y primeros auxilios (bfu)",
+      "original_title": "Ersticken – Prävention und Erste Hilfe (bfu)",
+      "organization": "Beratungsstelle für Unfallverhütung (bfu, Schweiz)",
+      "publication_year": null,
+      "undated_reason": "la página no muestra fecha de publicación ni de revisión; consultada el 2026-11-06",
+      "url": "https://www.bfu.ch/de/ratgeber/ersticken-praevention-erste-hilfe",
+      "specialties": [
+        "pediatrics",
+        "emergency_medicine"
+      ],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "original_language": "de",
+      "topics": [
+        "atragantamiento_objetos"
+      ],
+      "chunks": [
+        "Asfixia: prevención y primeros auxilios (bfu, Schweiz). Tema: prevenir el atragantamiento en bebés y niños pequeños. Hallazgo: la agencia suiza señala que los menores de cuatro años son un grupo especialmente expuesto. Los bebés hasta el año solo reciben alimentos que se ablandan en la boca, y hasta los 2 años solo comida fácil de masticar; los alimentos duros como nueces o zanahoria cruda se cuecen hasta ablandarlos, se rallan o se muelen, y los redondos como salchichas, gajos de mandarina, tomates cherry o uvas se cortan en trozos. Los objetos más pequeños que una pelota de pimpón o que el diámetro de un rollo de papel higiénico se guardan fuera del alcance.",
+        "Asfixia: prevención y primeros auxilios (bfu, Schweiz). Tema: qué hacer si un bebé se atraganta (Suiza). Hallazgo: con un bebé se le sujeta inclinado hacia delante con la cabeza hacia abajo, por ejemplo sobre el brazo o el muslo, y se le dan golpes enérgicos con la mano plana entre los omóplatos; no se intenta sacar el objeto de la garganta con los dedos. Si el cuerpo extraño no sale, se llama de inmediato a emergencias. Ante la sospecha de que haya tragado una pila o varios imanes, hay que llevar al niño enseguida a urgencias. En el primer año no se ponen almohadas ni peluches en la cama, y la cuna se decora con sencillez y sin cordones ni cintas, por el riesgo de estrangulamiento."
+      ]
+    },
+    {
+      "source_type": "reference",
+      "title": "Los niños y el agua: hace falta atención (bfu)",
+      "original_title": "Kinder und das Wasser – Aufmerksamkeit ist gefragt (bfu)",
+      "organization": "Beratungsstelle für Unfallverhütung (bfu, Schweiz)",
+      "publication_year": null,
+      "undated_reason": "la página no muestra fecha de publicación ni de revisión; consultada el 2026-11-06",
+      "url": "https://www.bfu.ch/de/ratgeber/kinder-und-das-wasser",
+      "specialties": [
+        "pediatrics",
+        "emergency_medicine"
+      ],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "original_language": "de",
+      "topics": [
+        "ahogamiento"
+      ],
+      "chunks": [
+        "Los niños y el agua: hace falta atención (bfu, Schweiz). Tema: ahogamiento de niños pequeños. Hallazgo: según la agencia suiza de prevención de accidentes, cada año se ahogan en Suiza de media dos niños de hasta los 9 años (otro apartado de la página habla de tres). Unos pocos centímetros de agua pueden ser mortales, y un niño pequeño puede ahogarse en pocos segundos. Los pequeños están más seguros al alcance de la mano y necesitan la atención plena de quien los cuida, sin distraerse con el móvil ni con una conversación, porque se desplazan más rápido de lo que se espera.",
+        "Los niños y el agua: hace falta atención (bfu, Schweiz). Tema: medidas concretas con bebés y niños pequeños junto al agua. Hallazgo: aunque lleven manguitos u otras ayudas para nadar, los niños deben vigilarse siempre, porque esas ayudas no dan seguridad suficiente. Las piscinas hinchables pequeñas se vacían después de usarlas. Estanques, biotopos, piscinas y piscinas hinchables se aseguran, a menudo mejor con una valla y una puerta que un niño pequeño no pueda abrir ni trepar. La página no indica una altura mínima de valla ni un número de emergencia."
+      ]
+    },
+    {
+      "source_type": "reference",
+      "title": "Una casa segura para los niños: ¿qué hay que tener en cuenta? (bfu)",
+      "original_title": "Kindersicheres Zuhause – worauf ist zu achten? (bfu)",
+      "organization": "Beratungsstelle für Unfallverhütung (bfu, Schweiz)",
+      "publication_year": null,
+      "undated_reason": "la página no muestra fecha de publicación ni de revisión; consultada el 2026-11-06",
+      "url": "https://www.bfu.ch/de/ratgeber/kindersicheres-zuhause",
+      "specialties": [
+        "pediatrics",
+        "general_medicine"
+      ],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "original_language": "de",
+      "topics": [
+        "caidas",
+        "intoxicaciones",
+        "quemaduras"
+      ],
+      "chunks": [
+        "Una casa segura para los niños: ¿qué hay que tener en cuenta? (bfu, Schweiz). Tema: evitar caídas y golpes en casa con niños pequeños. Hallazgo: la agencia suiza recomienda colocar barreras de escalera arriba y abajo, no usar andador porque provoca caídas y no enseña a andar antes, no dejar sillas, sofás o cajas junto a ventanas o barandillas del balcón y no dejar solo al niño en habitaciones con ventanas o puertas de balcón abiertas. Estanterías y televisores planos se fijan a la pared, y se usan topes en cajones y puertas y protectores de esquinas y cantos. Las piezas pequeñas se retiran: nada más pequeño que una pelota de pimpón o que el diámetro de un rollo de papel higiénico debe quedar por casa, porque los niños pequeños pueden atragantarse con ello.",
+        "Una casa segura para los niños: ¿qué hay que tener en cuenta? (bfu, Schweiz). Tema: quemaduras, intoxicaciones y enchufes en casa. Hallazgo: la página aconseja mantener fuera del alcance las ollas y sartenes con contenido caliente, instalar una protección en la cocina y dejar enfriar el horno con la puerta cerrada. Productos de limpieza, medicamentos, alcohol y productos de jardín se guardan cerrados y fuera del alcance; se evitan las plantas de interior tóxicas, y las pilas de botón y los imanes se mantienen inaccesibles. Se usan protectores de enchufes. Estanques, piscinas y bidones de lluvia se cubren o se cercan."
+      ]
+    },
+    {
+      "source_type": "reference",
+      "title": "Silla infantil: cómo sujetar bien a los niños en el coche (bfu)",
+      "original_title": "Kindersitz – Kinder im Auto richtig sichern (bfu)",
+      "organization": "Beratungsstelle für Unfallverhütung (bfu, Schweiz)",
+      "publication_year": null,
+      "undated_reason": "la página no muestra fecha de publicación ni de revisión; consultada el 2026-11-06",
+      "url": "https://www.bfu.ch/de/ratgeber/kindersitz",
+      "specialties": [
+        "pediatrics",
+        "general_medicine"
+      ],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "original_language": "de",
+      "topics": [
+        "silla_coche"
+      ],
+      "chunks": [
+        "Silla infantil: cómo sujetar bien a los niños en el coche (bfu, Schweiz). Tema: sillas de coche infantiles. Hallazgo: según la agencia suiza de prevención de accidentes, uno de cada dos niños va mal sujeto en el coche, y los niños sin sujeción tienen tres veces más riesgo de lesión grave o mortal en un accidente. La silla debe corresponder al tamaño y al peso del niño y llevar la etiqueta naranja de homologación ECE R44/03, R44/04 o R129.",
+        "Silla infantil: cómo sujetar bien a los niños en el coche (bfu, Schweiz). Tema: silla portabebés del coche y montaje. Hallazgo: la silla portabebés, para bebés de hasta año y medio, se monta siempre en sentido contrario a la marcha, preferiblemente en el asiento trasero; si va delante, hay que desactivar el airbag frontal. Se cambia a una silla mayor solo cuando la cabeza del niño sobresale de la carcasa. La silla debe quedar firmemente sujeta al coche, y el sistema Isofix, una conexión normalizada entre coche y silla, es obligatorio en coches nuevos desde 2014. Hay que seguir los manuales de la silla y del coche."
+      ]
+    },
+    {
+      "source_type": "reference",
+      "title": "Un día a día seguro con el bebé (bfu)",
+      "original_title": "Sicherer Alltag mit Baby (bfu)",
+      "organization": "Beratungsstelle für Unfallverhütung (bfu, Schweiz)",
+      "publication_year": null,
+      "undated_reason": "la página no muestra fecha de publicación ni de revisión; consultada el 2026-11-06",
+      "url": "https://www.bfu.ch/de/ratgeber/sicherer-alltag-mit-baby",
+      "specialties": [
+        "pediatrics",
+        "general_medicine"
+      ],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "original_language": "de",
+      "topics": [
+        "caidas",
+        "quemaduras"
+      ],
+      "chunks": [
+        "Un día a día seguro con el bebé (bfu, Schweiz). Tema: cambiador y baño del bebé. Hallazgo: la agencia suiza de prevención de accidentes aconseja colocar el cambiador en una esquina de la habitación, sujetar siempre al bebé con una mano y no soltarlo nunca; cambiarlo en el suelo es una buena opción, y el cambiador o la cómoda cambiador es aún más seguro si se atornilla a la pared. En el baño, mientras el bebé no sostenga la cabeza, hay que apoyarle la nuca sin soltarlo, no dejar nunca solos tampoco a los bebés más mayores, mantener los aparatos eléctricos lejos de la bañera y usar agua a 36 o 37 °C.",
+        "Un día a día seguro con el bebé (bfu, Schweiz). Tema: sueño seguro, cocina y comida del bebé. Hallazgo: el bebé duerme boca arriba, sin objetos ni almohada en la cuna, con saco de dormir en lugar de manta, con un colchón lo bastante firme para que la cara no se hunda boca abajo y decorando la cama con moderación y, sobre todo, sin cordones ni cintas. No se debe tener al bebé en brazos mientras se cocina ni beber una bebida caliente con él en brazos, y los mangos de las sartenes se giran hacia atrás. Solo se le dan alimentos que se ablanden en la boca, mejor papillas; con nueces, zanahorias crudas, salchichas, gajos de mandarina, tomates cherry o uvas hay que tener cuidado: los alimentos duros se cuecen hasta ablandarlos, se rallan o se muelen, y los redondos se cortan."
+      ]
+    },
+    {
+      "source_type": "reference",
+      "title": "Choking in babies under 1 year (HSE)",
+      "organization": "Health Service Executive (HSE)",
+      "publication_year": 2026,
+      "url": "https://www2.hse.ie/babies-children/first-aid/choking-in-babies/",
+      "specialties": [
+        "pediatrics",
+        "emergency_medicine"
+      ],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "original_language": "en",
+      "topics": [
+        "atragantamiento_objetos"
+      ],
+      "chunks": [
+        "Choking in babies under 1 year (HSE, servicio público de salud de Irlanda, 2026). Tema: señales de que mi bebé se ha atragantado y cuándo llamar a emergencias. Hallazgo: el bebé que se atraganta puede llorar o toser sin que salga ningún sonido (tos silenciosa), no poder toser, tener la cara pálida o los labios azulados (se pone morado) o no respirar bien. Si está inconsciente o no responde, llama enseguida a emergencias (112). Si está consciente pero no tose de forma eficaz, empieza los primeros auxilios, y si después de los golpes y las compresiones sigue sin poder toser, llama a emergencias (112). El HSE desaconseja los dispositivos antiatragantamiento por succión, porque no se ha estudiado bien si son seguros ni eficaces. (Fuente en inglés)",
+        "Choking in babies under 1 year (HSE, servicio público de salud de Irlanda, 2026). Tema: cómo se hacen los golpes en la espalda y las compresiones en el pecho. Hallazgo: siéntate y tumba al bebé boca abajo a lo largo del antebrazo, con el antebrazo apoyado en la rodilla, sujetándole la cabeza, la mandíbula y el cuello y con la cabeza más baja que el cuerpo. Dale 5 palmadas en la espalda, entre los omóplatos, con el talón de la otra mano. Si ves el objeto, intenta sacarlo, pero no le metas el dedo en la boca si no ves nada. Si las palmadas no funcionan, gírale boca arriba a lo largo del antebrazo, apoyado en el muslo y sujetándole la cabeza, busca el esternón en el centro del pecho, a la altura de las axilas, coloca 2 dedos y empuja de forma seca 5 veces. Si sigue sin poder toser, llama al 112 y sigue alternando 5 palmadas y 5 compresiones. (Fuente en inglés)",
+        "Choking in babies under 1 year (HSE, servicio público de salud de Irlanda, 2026). Tema: hasta cuándo seguir, qué hacer si deja de responder y por qué ir al médico después. Hallazgo: se alternan 5 golpes en la espalda y 5 compresiones en el pecho hasta que salga el objeto, llegue la ambulancia o el bebé deje de responder. Si deja de responder, empieza la RCP; la operadora de emergencias (112) te irá guiando. Si durante la RCP ves el objeto, sácalo con los dedos, pero no metas los dedos en la boca si no lo ves. Aunque el objeto haya salido, busca atención médica, porque puede quedar un trozo dentro o el bebé puede haberse lesionado. (Fuente en inglés)"
+      ]
+    },
+    {
+      "source_type": "guideline",
+      "title": "Heat exhaustion and heatstroke in children (HSE)",
+      "organization": "Health Service Executive (HSE)",
+      "publication_year": 2026,
+      "url": "https://www2.hse.ie/conditions/heat-exhaustion-and-heatstroke-in-children/",
+      "specialties": [
+        "pediatrics",
+        "general_medicine",
+        "emergency_medicine"
+      ],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "original_language": "en",
+      "topics": [
+        "sol_calor",
+        "signos_alarma"
+      ],
+      "chunks": [
+        "Heat exhaustion and heatstroke in children (HSE, 2026). Tema: golpe de calor frente a agotamiento por calor. Hallazgo: en el agotamiento por calor el niño suele estar cansado o irritable, con mucha sed, debilidad o desmayo, calambres, poco apetito, náuseas o vómitos, dolor de cabeza, sudor abundante con piel pálida y pegajosa y temperatura de más de 38 °C pero menos de 40 °C. El golpe de calor es una emergencia médica: el cuerpo ya no puede enfriarse, la piel está caliente y seca sin sudor, hay dolor de cabeza intenso, temperatura de 40 °C o más, respiración rápida, confusión, convulsión, pérdida de conciencia o falta de respuesta, o el niño sigue mal 30 minutos después de tratar el agotamiento.",
+        "Heat exhaustion and heatstroke in children (HSE, 2026). Tema: primeros auxilios y prevención. Hallazgo: ante un agotamiento por calor se lleva al niño a un lugar fresco o a la sombra, se le quita la ropa innecesaria, se le refresca la piel con agua fresca y se ponen compresas frías en cuello y axilas, y se le ofrece una bebida fresca sin forzarle si está adormilado. Con cualquier signo de golpe de calor se llama de inmediato a emergencias. Para prevenir, se ofrecen muchos líquidos, ropa holgada y de colores claros, se evita el sol entre las 11 y las 15 horas, no se deja nunca a un niño en un coche aparcado (puede calentarse 10 °C o más en 10 minutos) y la habitación del bebé se mantiene entre 16 y 20 °C."
+      ]
+    },
+    {
+      "source_type": "reference",
+      "title": "Baby and toddler play ideas (NHS)",
+      "organization": "NHS (National Health Service, Reino Unido)",
+      "publication_year": 2024,
+      "url": "https://www.nhs.uk/baby/babys-development/play-and-learning/baby-and-toddler-play-ideas/",
+      "specialties": [
+        "pediatrics",
+        "general_medicine"
+      ],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "original_language": "en",
+      "topics": [
+        "juguetes",
+        "ahogamiento",
+        "pantallas"
+      ],
+      "chunks": [
+        "Baby and toddler play ideas (NHS, 2024). Tema: ideas de juego por edad. Hallazgo: a cualquier edad se puede jugar con agua en la bañera o en un barreño con objetos irrompibles y leer al bebé desde pequeño, incluso antes de que hable. Desde los 4 meses se le habla y se le canta con alegría al sostenerlo, se ponen juguetes a su alcance y se miran libros. Desde los 18 meses se puede dibujar y pintar, hacer títeres con calcetines y animarle a andar; desde los 24 meses, disfraces con ropa vieja, limitando la pantalla diaria y viendo los programas juntos; desde los 30 meses, construcciones con cajas de cartón y pegamento infantil.",
+        "Baby and toddler play ideas (NHS, 2024). Tema: seguridad al jugar. Hallazgo: nunca se deja solo a un niño pequeño en la bañera ni jugando con agua, porque un bebé puede ahogarse en menos de 5 centímetros de agua. Al comprar juguetes hay que buscar los sellos de seguridad, tener cuidado con los de segunda mano y comprobar las advertencias de edad: un juguete marcado como no apto para menores de 36 meses no se da a un niño de menos de 3 años. Se revisan bordes cortantes y piezas pequeñas que pueda tragar. Las pilas de botón son un riesgo de atragantamiento y pueden causar quemaduras internas graves: se guardan fuera de su alcance, se comprueba que el compartimento de las pilas de los juguetes esté cerrado con un tornillo y, si se cree que se ha tragado una, hay que ir a urgencias de inmediato o llamar a emergencias."
+      ]
+    },
+    {
+      "source_type": "reference",
+      "title": "How to stop a child from choking (NHS)",
+      "organization": "NHS (National Health Service, Reino Unido)",
+      "publication_year": 2024,
+      "url": "https://www.nhs.uk/baby/first-aid-and-safety/first-aid/how-to-stop-a-child-from-choking/",
+      "specialties": [
+        "pediatrics",
+        "general_medicine",
+        "emergency_medicine"
+      ],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "original_language": "en",
+      "topics": [
+        "atragantamiento_objetos"
+      ],
+      "chunks": [
+        "How to stop a child from choking (NHS, National Health Service, Reino Unido, 2024). Tema: mi bebé se ha atragantado, ¿cómo sé si tose bien o necesita ayuda? Hallazgo: si el bebé o el niño tose con fuerza y hace ruido, hay que animarle a seguir tosiendo y quedarse a su lado, porque la tos puede expulsar lo que se ha tragado. Si la tos no es eficaz (es silenciosa o no puede coger aire bien), hay que pedir ayuda a gritos de inmediato y comprobar si sigue consciente; si lo está y no tose o su tos no es eficaz, se usan los golpes en la espalda o las compresiones, y si un método no funciona se prueba el otro. El NHS advierte que no se debe meter el dedo a ciegas en la boca para buscar el objeto: solo se saca si se ve. (Fuente en inglés)",
+        "How to stop a child from choking (NHS, National Health Service, Reino Unido, 2024). Tema: cómo se hacen los golpes en la espalda y las compresiones en el pecho en un bebé menor de 1 año. Hallazgo: siéntate y tumba al bebé boca abajo a lo largo del muslo o del antebrazo, sujetándole la cabeza y el cuello. Dale hasta 5 golpes secos en la espalda, entre los omóplatos, comprobando tras cada uno si ha salido el objeto. Si no funciona y sigue consciente, ponle boca arriba a lo largo de los muslos, con la cabeza más baja que los pies, coloca dos dedos en el centro del pecho, justo por debajo de la línea de los pezones, y haz hasta 5 compresiones secas en el pecho (empujones). Las compresiones en el abdomen se reservan para los mayores de 1 año. (Fuente en inglés)",
+        "How to stop a child from choking (NHS, National Health Service, Reino Unido, 2024). Tema: si no sale, cuándo llamar a emergencias y qué hacer si pierde el conocimiento. Hallazgo: se repiten los ciclos de golpes en la espalda y compresiones, comprobando cada vez. No dejes solo al bebé en ningún momento: si estás sola, pide ayuda a gritos. Llama a emergencias (112) si el objeto no sale tras los golpes en la espalda y las compresiones y sigue con los ciclos hasta que llegue la ayuda. Si el bebé deja de responder, túmbale sobre una superficie firme y plana, pide ayuda y llama a emergencias (112) con el altavoz puesto; ábrele la boca, saca el objeto solo si se ve claramente y es fácil de coger, y empieza la RCP. Aunque el objeto haya salido, hay que llevarle al médico, porque puede quedar un trozo o las maniobras pueden haberle hecho daño. (Fuente en inglés)",
+        "How to stop a child from choking (NHS, National Health Service, Reino Unido, 2024). Tema: niño de más de 1 año que se ha atragantado. Hallazgo: si el niño tiene más de 1 año, se le tumba boca abajo sobre el regazo si es posible o, si no, se le sujeta inclinado hacia delante y se le dan 5 golpes en la espalda desde atrás. Si no funciona y sigue consciente, a partir del año se hacen compresiones abdominales: desde detrás del niño, con el puño entre el ombligo y las costillas, hasta 5 tirones secos hacia dentro y hacia arriba, sin presionar la parte baja de la caja torácica. Si el objeto no sale, hay que llamar al 112 y seguir con el ciclo hasta que llegue la ayuda. Para prevenir, el NHS pide guardar fuera de su alcance objetos pequeños como canicas, cuentas o pilas de botón y preparar los alimentos cuidando su tamaño, forma y textura. (Fuente en inglés)"
+      ]
+    },
+    {
+      "source_type": "guideline",
+      "title": "What to do if your child has an accident (NHS)",
+      "organization": "NHS (National Health Service, Reino Unido)",
+      "publication_year": 2025,
+      "url": "https://www.nhs.uk/baby/first-aid-and-safety/first-aid/what-to-do-if-your-child-has-an-accident/",
+      "specialties": [
+        "pediatrics",
+        "general_medicine",
+        "emergency_medicine"
+      ],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "original_language": "en",
+      "topics": [
+        "quemaduras",
+        "caidas",
+        "intoxicaciones",
+        "signos_alarma"
+      ],
+      "chunks": [
+        "What to do if your child has an accident (NHS, 2025). Tema: cuándo llamar a emergencias tras un accidente. Hallazgo: el NHS indica llamar a emergencias si el niño deja de respirar o respira con dificultad, se atraganta, está inconsciente, flácido o no se despierta, tiene una convulsión, tiene la boca, los labios, la garganta o la lengua hinchados, tiene piel, labios o lengua azulados, grises, pálidos o moteados, se queda de repente confuso o angustiado, ha sufrido una lesión grave, ha tragado veneno o medicación en exceso, o sangra mucho o tiene un corte que no deja de sangrar o está muy abierto. Se acude a urgencias si tiene una lesión en un brazo o una pierna y no puede usarlo o si tiene una pila de botón alojada en la nariz o el oído; si se traga una pila de botón o un imán, o se sospecha que lo ha hecho, llamar a emergencias o ir a urgencias de inmediato.",
+        "What to do if your child has an accident (NHS, 2025). Tema: quemaduras y escaldaduras. Hallazgo: se retira la ropa y las joyas cercanas a la quemadura (también pañal, calcetines y zapatos), salvo lo que esté pegado a la piel, y se enfría de inmediato bajo agua fresca corriente durante 20 a 30 minutos, vigilando que el niño no se enfríe demasiado; si no hay agua corriente se usa agua fría u otro líquido frío como la leche, nunca hielo ni agua muy fría. Tras enfriar se cubre con film transparente puesto encima, sin envolver, una bolsa de plástico limpia o un paño limpio sin pelusa. No se aplica hielo, mantequilla, pasta de dientes, crema, gel, aceite ni pomada, y no se revientan las ampollas. Según la gravedad, se consulta con el pediatra o se acude a urgencias.",
+        "What to do if your child has an accident (NHS, 2025). Tema: cortes, objetos en nariz u oído y huesos rotos. Hallazgo: ante un sangrado importante se presiona con firmeza con un apósito o paño limpio sin pelusa; no se retira un objeto clavado, como un cristal, sino que se presiona alrededor, y se acude a urgencias si el corte sigue sangrando, tiene los bordes separados o algo dentro. Si el sangrado es grave, se llama a emergencias. Un objeto alojado en la nariz o el oído se deja donde está, porque intentar sacarlo puede empujarlo más adentro, y se va a urgencias. Si se sospecha lesión de cuello, columna o pelvis, se llama a emergencias y no se mueve al niño, pues un movimiento innecesario podría causar parálisis. Si preocupa el niño y no se sabe si necesita ayuda médica, se llama para pedir consejo médico."
+      ]
+    },
+    {
+      "source_type": "reference",
+      "title": "Prevención de asfixia por atragantamiento en bebés y niños (HealthyChildren, AAP)",
+      "organization": "American Academy of Pediatrics",
+      "publication_year": 2025,
+      "url": "https://www.healthychildren.org/Spanish/health-issues/injuries-emergencies/Paginas/Choking-Prevention.aspx",
+      "specialties": [
+        "pediatrics",
+        "emergency_medicine"
+      ],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "original_language": "es",
+      "topics": [
+        "atragantamiento_objetos",
+        "juguetes"
+      ],
+      "chunks": [
+        "Prevención de asfixia por atragantamiento en bebés y niños (HealthyChildren.org, American Academy of Pediatrics, 2025). Tema: cómo saber si un bebé se está atragantando. Hallazgo: el niño que se atraganta puede toser, tener dificultad para respirar, hacer un ruido agudo o sibilante o no hacer ningún ruido; puede ponerse azulado (se pone morado), llevarse las manos al cuello o agitar los brazos con pánico, quedarse flácido o perder el conocimiento. La AAP recuerda que dos de cada tres víctimas de atragantamiento son bebés menores de 1 año y que, si el cerebro pasa más de 4 minutos sin oxígeno, puede haber daño cerebral o muerte. La tos por atragantamiento suele parar en unos 15 minutos, haya salido o no el objeto.",
+        "Prevención de asfixia por atragantamiento en bebés y niños (HealthyChildren.org, American Academy of Pediatrics, 2025). Tema: alimentos con riesgo de atragantamiento al empezar los sólidos. Hallazgo: los alimentos peligrosos se mantienen lejos de los menores de 4 años, según el desarrollo y la madurez de cada niño. Los alimentos redondos y firmes, como las uvas o las salchichas, solo se dan cortados en trozos pequeños, y la crema de cacahuete u otros frutos secos se unta en capa fina. Son de riesgo los caramelos duros, pegajosos o de goma, el chicle, los frutos secos y las semillas, las uvas enteras, la verdura cruda como los palitos de zanahoria, los trozos grandes de fruta cruda como la manzana, las palomitas, las nubes, los trozos grandes de carne o de queso y el queso en hebras.",
+        "Prevención de asfixia por atragantamiento en bebés y niños (HealthyChildren.org, American Academy of Pediatrics, 2025). Tema: consejos para que el bebé no se atragante en las comidas y en casa. Hallazgo: corta la comida de los bebés y niños pequeños en trozos de no más de media pulgada (algo más de 1 cm) y enséñales a masticar bien; que coman siempre sentados y vigilados, y nunca corriendo, andando, jugando o tumbados con comida en la boca. Vigila a los hermanos mayores, porque muchos atragantamientos ocurren cuando dan comida, juguetes u objetos pequeños al pequeño. Aparta monedas, canicas, pilas de botón, capuchones, bolas pequeñas, jeringas de medicina y juguetes con piezas pequeñas; los globos son un riesgo hasta los 8 años. La AAP aconseja hacer un curso de primeros auxilios y RCP."
+      ]
+    },
+    {
+      "source_type": "reference",
+      "title": "Accidentes infantiles (Comunidad de Madrid)",
+      "organization": "Consejería de Sanidad de la Comunidad de Madrid",
+      "publication_year": 2026,
+      "url": "https://www.comunidad.madrid/salud/accidentes-infantiles",
+      "specialties": [
+        "pediatrics",
+        "general_medicine"
+      ],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "original_language": "es",
+      "topics": [
+        "caidas",
+        "quemaduras",
+        "intoxicaciones",
+        "atragantamiento_objetos",
+        "silla_coche",
+        "ahogamiento"
+      ],
+      "chunks": [
+        "Accidentes infantiles (Comunidad de Madrid, 2026). Tema: qué hacer ante un golpe en la cabeza o la ingestión de un producto químico. Hallazgo: tras un golpe en la cabeza se observa al bebé durante 24 horas; vómitos, signos neurológicos (hace o dice cosas extrañas) o somnolencia son motivo de consulta urgente, y hay que acudir a un hospital urgentemente si el golpe ha sido de cierta importancia o hay desmayo, sangrado por nariz u oído, convulsiones u otros signos de alarma. Si solo sale un chichón, se aplica hielo envuelto en un pañuelo o compresas frías. Si ingiere o se sospecha que ha ingerido un producto químico, se intenta averiguar qué producto es y se acude a urgencias lo antes posible o se llama al 112, al 061 o al Instituto Nacional de Toxicología (91 562 04 20, las 24 horas); no se provoca el vómito ni se da comida, bebida o medicamentos hasta que lo indiquen los expertos.",
+        "Accidentes infantiles (Comunidad de Madrid, 2026). Tema: prevención de caídas, quemaduras y sueño seguro. Hallazgo: nunca se deja al bebé solo sobre una superficie elevada (cama, cambiador, sofá), ni un momento; se usa el arnés en la trona, la silla de paseo y las hamacas, y las ventanas se mantienen cerradas y protegidas. Se controla la temperatura del agua del baño (mejor abrir primero el agua fría) y la del biberón y los alimentos, se protegen radiadores, chimeneas y braseros, y los mangos de cazos y sartenes se colocan hacia dentro. Para dormir, se acuesta al bebé boca arriba en la cuna, porque dormir boca abajo duplica el riesgo de muerte súbita; no se le abriga en exceso y se evita el humo de tabaco.",
+        "Accidentes infantiles (Comunidad de Madrid, 2026). Tema: atragantamiento, coche y agua. Hallazgo: no se deja al alcance cadenas, cintas, collares ni bolsas de plástico, no se introducen alimentos ni líquidos en la boca del bebé si llora, corre o duerme, y se retiran botones, canicas, monedas, imperdibles y juguetes con piezas pequeñas; frutos secos y caramelos duros, no antes de los 3 años. En el coche se usa siempre un sistema de retención homologado desde recién nacido, en sentido contrario a la marcha mientras sea posible, y nunca se deja al niño solo dentro. En el agua o cerca de ella hay que vigilarlo en todo momento."
+      ]
+    },
+    {
+      "source_type": "reference",
+      "title": "Brûlures de la peau (ameli.fr)",
+      "organization": "Assurance Maladie (ameli.fr)",
+      "publication_year": 2026,
+      "url": "https://www.ameli.fr/assure/sante/urgence/accidents-domestiques/brulures-peau",
+      "specialties": [
+        "pediatrics",
+        "general_medicine"
+      ],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "original_language": "fr",
+      "topics": [
+        "quemaduras",
+        "cuando_consultar",
+        "signos_alarma"
+      ],
+      "chunks": [
+        "Brûlures de la peau (Assurance Maladie, 2026). Tema: gravedad y cuándo llamar. Hallazgo: la gravedad depende de la profundidad y la extensión, y una quemadura es más grave en los menores de 5 años. En un lactante o en menores de 5 años hay que llamar al 15 o al 112 sea cual sea la superficie quemada. También es grave la quemadura en cara, manos, cuello o periné, la de tercer grado y las que se producen por explosión, electrocución, producto químico, accidente de tráfico o incendio en un lugar cerrado. Se puede llamar al 15 o 112 aunque el teléfono esté bloqueado o sin saldo; las personas sordas o con dificultades auditivas pueden usar el 114 por SMS o fax.",
+        "Brûlures de la peau (Assurance Maladie, 2026). Tema: primeros gestos. Hallazgo: apartar a la persona de la fuente de calor y enfriar la quemadura con agua templada, a 20 °C, durante 20 minutos o mientras persista el dolor, vigilando la temperatura corporal: el enfriamiento se detiene en cuanto aparece hipotermia. Retirar la ropa quemada salvo que esté pegada a la piel, cubrir la zona con un paño limpio y seco de algodón, no dar de beber ni de comer, y no aplicar crema, pomada, mantequilla, aceite, hielo ni agua helada. Al llamar, hablar con calma, dar el teléfono, los nombres, la dirección exacta y los signos observados, y no colgar hasta que lo pidan.",
+        "Brûlures de la peau (Assurance Maladie, 2026). Tema: prevención en niños. Hallazgo: regular el agua del baño a 37 °C y no dejar nunca al niño solo en la bañera. Girar hacia dentro los mangos de las cacerolas, alejar hervidores, soperas y freidoras, y probar la leche del biberón en el antebrazo. Proteger al niño de la puerta del horno, la plancha, las placas de cocción, el hogar de la chimenea y las bombillas accesibles. Todo hogar debe tener al menos un detector de humo y uno por planta en viviendas de varios niveles. En lactantes y menores de 5 años cualquier quemadura es grave, sea cual sea su superficie, y hay que llamar al 15 o al 112."
+      ]
+    },
+    {
+      "source_type": "reference",
+      "title": "Comment bien donner le bain à un bébé ? (ameli.fr)",
+      "organization": "Assurance Maladie (ameli.fr)",
+      "publication_year": 2025,
+      "url": "https://www.ameli.fr/assure/sante/bons-gestes/bebe/donner-bain-bebe",
+      "specialties": [
+        "pediatrics",
+        "general_medicine"
+      ],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "original_language": "fr",
+      "topics": [
+        "ahogamiento",
+        "quemaduras"
+      ],
+      "chunks": [
+        "Comment bien donner le bain à un bébé ? (Assurance Maladie, 2025). Tema: frecuencia y riesgos. Hallazgo: el baño puede darse desde la vuelta a casa aunque no se haya caído el cordón, secándolo bien. Basta un baño cada dos o tres días, porque los lactantes sudan y se ensucian poco mientras no andan, y los productos de baño pueden fragilizar su piel. Los riesgos son quemaduras, hipotermia y ahogamiento: un bebé puede ahogarse en unos minutos, sin ruido, aunque haya solo unos centímetros de agua. Nunca debe quedarse solo en la bañera, ni sentado ni con 2 o 3 años; si hay que salir, se le envuelve en una toalla y se lo lleva uno consigo.",
+        "Comment bien donner le bain à un bébé ? (Assurance Maladie, 2025). Tema: preparar el baño. Hallazgo: apagar el teléfono, comprobar que el cuarto de baño está entre 22 y 25 °C sin corrientes, tener a mano termómetro, producto limpiador, toalla y ropa, y lavarse las manos. El agua debe llegar a 8 a 12 cm y no pasar de 37 °C con termómetro; sin termómetro, el codo debe notarla agradable. Antes de que se siente se puede usar una bañera de bebé, mejor en el suelo, o la bañera del cuarto de baño con hamaca de baño, reservada a lactantes de menos de 8 kg y 70 cm; hacia los 7 a 9 meses, cuando ya se mantiene sentado de forma estable, la bañera familiar con alfombrilla antideslizante o un aro de baño.",
+        "Comment bien donner le bain à un bébé ? (Assurance Maladie, 2025). Tema: durante y después del baño. Hallazgo: sostenerlo por la axila, con la nuca y la cabeza sobre el antebrazo. Lavar el pelo con champú suave dos o tres veces por semana, enjabonar de la cabeza hacia abajo y terminar por las nalgas; no hace falta quitar el vernix, que desaparece solo, ni arrancar las costras de leche. Sacarlo con las dos manos, envolverlo en una toalla seca y secar bien los pliegues del cuello, axilas, detrás de las orejas y entre los dedos para evitar irritaciones y hongos, y los pliegues de las nalgas para prevenir el eritema del pañal. En el lactante, los padres descubren a menudo la hernia inguinal durante el baño o un cambio y se trata con cirugía para evitar su estrangulamiento."
+      ]
+    },
+    {
+      "source_type": "reference",
+      "title": "Corps étranger inhalé par fausse route (ameli.fr)",
+      "organization": "Assurance Maladie (ameli.fr)",
+      "publication_year": 2024,
+      "url": "https://www.ameli.fr/assure/sante/urgence/corps-etrangers/inhale",
+      "specialties": [
+        "pediatrics",
+        "emergency_medicine"
+      ],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "original_language": "fr",
+      "topics": [
+        "atragantamiento_objetos"
+      ],
+      "chunks": [
+        "Corps étranger inhalé par fausse route (ameli.fr, Assurance Maladie, Francia, 2024). Tema: señales de que un bebé menor de 2 años se ha atragantado y se está asfixiando. Hallazgo: en el lactante y el niño pequeño los signos del atragantamiento pueden notarse menos. Indican asfixia que no tosa, que no se le vean los movimientos de la respiración, que esté pálido o con los labios y las puntas de manos y pies azulados (se pone morado), o que se quede inmóvil, flojo o agitado. Si no se está asfixiando (tose sin gran dificultad para respirar), no se hace ninguna maniobra, porque cualquier maniobra puede mover el objeto: no se le meten los dedos en la boca, no se le golpea la espalda y nunca se le cuelga por los pies. El 80 % de los niños que se atragantan tienen menos de 3 años. (Fuente en francés)",
+        "Corps étranger inhalé par fausse route (ameli.fr, Assurance Maladie, Francia, 2024). Tema: qué hacer si el bebé menor de 2 años se atraganta y no puede respirar. Hallazgo: llama al 15 o al 112, gratis desde cualquier teléfono. Maniobra de Mofenson: siéntate y pon al bebé boca abajo sobre tu muslo flexionado, con la cabeza hacia abajo, sujetándole el vientre y el pecho con una mano y los dedos a ambos lados del cuello. Con la palma de la otra mano dale una palmada seca y fuerte entre los omóplatos; si no sale, repítela hasta 5 veces seguidas. Si sigue asfixiándose, gírale boca arriba sobre tu brazo apoyado en el muslo, con la cabeza algo más baja que el cuerpo, y haz 5 compresiones en el esternón con 2 dedos. Alterna palmadas y compresiones hasta que salga o lleguen los servicios de emergencia. (Fuente en francés)",
+        "Corps étranger inhalé par fausse route (ameli.fr, Assurance Maladie, Francia, 2024). Tema: después del atragantamiento y prevención en casa. Hallazgo: el Assurance Maladie indica que la hospitalización es indispensable en todos los casos para comprobar que el objeto ha salido del todo o para retirarlo; allí se hacen pruebas como la radiografía de tórax o la endoscopia bronquial. Durante el traslado se mantiene al bebé sentado. Para prevenirlo: nada de juguetes con piezas pequeñas o que se desmonten, respetar la edad de la etiqueta, guardar aparte los juguetes de los mayores, poner fuera de su alcance pilas pequeñas redondas, capuchones de bolígrafo, monedas, frutos secos y caramelos, recoger el pienso de las mascotas entre comidas y enseñarle a comer sentado. Si aspira una pila, llama enseguida al 15 o al 112: hay que retirarla lo antes posible. (Fuente en francés)"
+      ]
+    },
+    {
+      "source_type": "reference",
+      "title": "Intoxication par voie orale (par ingestion) (ameli.fr)",
+      "organization": "Assurance Maladie (ameli.fr)",
+      "publication_year": 2025,
+      "url": "https://www.ameli.fr/assure/sante/urgence/accidents-domestiques/intoxication-voie-orale-ingestion",
+      "specialties": [
+        "pediatrics",
+        "general_medicine"
+      ],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "original_language": "fr",
+      "topics": [
+        "intoxicaciones",
+        "cuando_consultar",
+        "signos_alarma"
+      ],
+      "chunks": [
+        "Intoxication par voie orale (par ingestion) (Assurance Maladie, 2025). Tema: intoxicaciones en el niño. Hallazgo: en el niño las intoxicaciones son la segunda causa de accidentes de la vida diaria tras los traumatismos; en el 85 % de los casos ocurren antes de los 4 años y son accidentales. En el niño se deben sobre todo a la ingestión de medicamentos, productos de limpieza y de bricolaje; la página señala las cápsulas de detergente líquido, que atraen a los niños por su color, y las pilas de botón, que pueden ser muy graves. Se sospecha una intoxicación ante una anomalía brusca e inexplicada: bajada de conciencia, dificultad para respirar, dolor abdominal, vómitos o diarrea, quemaduras o irritación de la boca o babeo.",
+        "Intoxication par voie orale (par ingestion) (Assurance Maladie, 2025). Tema: qué hacer. Hallazgo: si la persona está inconsciente, llamar de inmediato al 15 o al 112 y ponerla en posición lateral de seguridad. Si está consciente, llamar al centro antiveneno más cercano aunque no tenga síntomas, porque pueden aparecer más tarde, con los envases, prospectos y restos del producto a mano. Centros antiveneno, 24 h: Angers 02 41 48 21 21, Burdeos 05 56 96 40 80, Lille 08 00 59 59 59, Lyon 04 72 11 69 11, Marsella 04 91 75 25 25, Nancy 03 83 22 50 50, París 01 40 05 48 48 y Toulouse 05 61 77 74 47. También Samu 15, bomberos 18 y 112.",
+        "Intoxication par voie orale (par ingestion) (Assurance Maladie, 2025). Tema: qué evitar y prevención. Hallazgo: no dar de beber leche (sus grasas podrían acelerar la absorción), no dar agua si el producto es un detergente (riesgo de espuma), no provocar el vómito (riesgo de quemar de nuevo el esófago y la boca), no dejar sola a la persona ni trasladarla por cuenta propia. Si hay traslado al hospital, llevar el resto del producto, los envases, etiquetas y prospectos. Para prevenir: guardar los productos en su envase original y fuera del alcance de los niños, en un armario cerrado con llave, y los medicamentos en alto y bajo llave, sin dejarlos en un bolso ni sobre una mesa accesible."
+      ]
+    },
+    {
+      "source_type": "reference",
+      "title": "Que faire si mon bébé s'étouffe ? (Croix-Rouge française)",
+      "organization": "Croix-Rouge française",
+      "publication_year": 2021,
+      "url": "https://www.croix-rouge.fr/mes-infos-bebe/que-faire-si-mon-bebe-setouffe",
+      "specialties": [
+        "pediatrics",
+        "emergency_medicine"
+      ],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "original_language": "fr",
+      "topics": [
+        "atragantamiento_objetos"
+      ],
+      "chunks": [
+        "Que faire si mon bébé s'étouffe ? (Croix-Rouge française, 2021). Tema: mi bebé se ha atragantado, ¿obstrucción parcial o total? Hallazgo: si al bebé le cuesta respirar pero tose o hace ruidos poco habituales, la obstrucción es parcial y hay que dejarle toser. Si ya no puede toser, no emite sonidos ni llora, intenta coger aire y la cara se le pone azul rápidamente (se pone morado), la obstrucción es total: es una situación muy grave y una urgencia absoluta, y hay que actuar de inmediato. La Cruz Roja francesa insiste en que las palmadas deben ser enérgicas y en que lo importante es actuar; después, el bebé quedará en manos de los servicios médicos. (Fuente en francés)",
+        "Que faire si mon bébé s'étouffe ? (Croix-Rouge française, 2021). Tema: cómo se hacen los golpes en la espalda y las compresiones en el bebé. Hallazgo: pon al bebé boca abajo sobre tu antebrazo o tu pierna, con la cabeza más baja que el cuerpo, coloca el pulgar a un lado de su mandíbula y dos dedos al otro para mantenerle la boca abierta, y dale hasta 5 palmadas enérgicas entre los omóplatos con el talón de la mano. Si el objeto no sale, gírale boca arriba sujetándole la nuca y, con la yema de dos dedos, haz hasta 5 compresiones profundas, pero no demasiado rápidas, sobre la mitad inferior del esternón. Si ves el objeto en la boca, intenta sacarlo con el dedo meñique. Si sigue sin salir, alterna 5 palmadas y 5 compresiones, siempre con la cabeza más baja que el cuerpo, hasta que respire o lo expulse. (Fuente en francés)",
+        "Que faire si mon bébé s'étouffe ? (Croix-Rouge française, 2021). Tema: consultar después y prevenir el atragantamiento. Hallazgo: si el objeto sale y el bebé vuelve a respirar, cógele en brazos, tranquilízale y pide consejo médico de inmediato a los servicios de urgencias (15 SAMU, 18 bomberos, 112, o 114 para personas sordas o con dificultades auditivas); vigílale aunque parezca estar bien. Para prevenir, aparta de su alcance los objetos pequeños (canicas, monedas, pasas, juguetes pequeños), no le dejes nunca sin vigilancia mientras juega o come, corta los alimentos en trozos pequeños vigilando cómo traga y da ejemplo: no juegues a llevarte a la boca alimentos ni objetos pequeños, porque el niño imita los gestos de sus padres. (Fuente en francés)"
+      ]
+    },
+    {
+      "source_type": "reference",
+      "title": "Accidents domestiques (ONE)",
+      "organization": "ONE (Office de la Naissance et de l'Enfance, Belgique)",
+      "publication_year": null,
+      "undated_reason": "Página de la sección Familles de one.be sin fecha de actualización visible; consultada el 2026-11-06.",
+      "url": "https://www.one.be/familles/0-12/accidents-domestiques",
+      "specialties": [
+        "pediatrics",
+        "general_medicine"
+      ],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "original_language": "fr",
+      "topics": [
+        "quemaduras",
+        "caidas",
+        "intoxicaciones",
+        "ahogamiento"
+      ],
+      "chunks": [
+        "Accidents domestiques (ONE, Office de la Naissance et de l'Enfance). Tema: principios y cocina. Hallazgo: los riesgos cambian con la edad, el desarrollo, la movilidad y el temperamento del niño, y se combinan dos enfoques: adaptar la vivienda (barreras en las escaleras, tapas de enchufes, productos fuera de su alcance, ventanas aseguradas, objetos calientes y cortantes lejos) y acompañar al niño en su aprendizaje, explicando qué evitar. Estas medidas reducen los riesgos sin eliminarlos y no sustituyen la vigilancia de los adultos. En la cocina se giran los mangos de sartenes y cazos hacia dentro, se ponen fuera de alcance los recipientes calientes y los cuchillos, se comprueba la temperatura de los líquidos o alimentos recalentados, sobre todo en el microondas, y se guardan los productos peligrosos justo después de usarlos en un armario fuera del alcance de los niños o cerrado con llave.",
+        "Accidents domestiques (ONE, Office de la Naissance et de l'Enfance). Tema: salón, baño, garaje y jardín. Hallazgo: el moisés o la hamaca se dejan solo sobre un soporte estable; cerca de ventanas, balcones y terrazas se retiran muebles y objetos para trepar y se comprueba que las barandillas son sólidas. En el baño se mantiene siempre una mano sobre el niño en el cambiador, nunca se deja a un niño pequeño solo en la bañera ni un instante, y el agua, comprobada con el codo, no debe pasar de 37 °C; los medicamentos, los productos de aseo y de limpieza y las maquinillas de afeitar van fuera de su alcance, y los aparatos eléctricos lejos del agua. En el garaje y el jardín, herramientas, productos de bricolaje y de jardinería, combustibles y máquinas fuera de alcance, el garaje y el coche cerrados con llave, y cuidado con las plantas tóxicas o mal identificadas."
+      ]
+    },
+    {
+      "source_type": "reference",
+      "title": "Animaux domestiques (ONE)",
+      "organization": "ONE (Office de la Naissance et de l'Enfance, Belgique)",
+      "publication_year": null,
+      "undated_reason": "Página de la sección Familles de one.be sin fecha de actualización visible; consultada el 2026-11-06.",
+      "url": "https://www.one.be/familles/0-12/animaux-domestiques",
+      "specialties": [
+        "pediatrics",
+        "general_medicine"
+      ],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "original_language": "fr",
+      "topics": [
+        "juguetes"
+      ],
+      "chunks": [
+        "Animaux domestiques (ONE, Office de la Naissance et de l'Enfance). Tema: convivir con un perro de forma segura. Hallazgo: vivir con un animal puede ser positivo para un niño si se toman precauciones, y con un perro la vigilancia de un adulto sigue siendo esencial. La página insiste en no dejar nunca a un niño solo con un perro, ni siquiera brevemente, y presenta la presencia constante de un adulto como indispensable. Hay que extremar la vigilancia cuando el perro tiene miedo, se siente en peligro o no puede alejarse, le duele algo, protege a sus cachorros, está irritado, lo molestan o no puede escaparse, o defiende un espacio o un territorio. Incluso un perro acostumbrado a los niños puede reaccionar de forma inesperada, y las consecuencias de una mordedura son mayores con un perro grande. Hasta el perro más amable puede ladrar, mordisquear o morder, a veces de forma repentina.",
+        "Animaux domestiques (ONE, Office de la Naissance et de l'Enfance). Tema: respeto al perro. Hallazgo: el perro no es un juguete; el niño no debe hacerle daño, desafiarlo ni excitarlo, y debe dejarlo tranquilo cuando está en su cesta o en su rincón y mientras come. Si quiere jugar, debe llamarlo, sin tocarlo en ningún caso, y por motivos de higiene no debe dejarse lamer. A partir de los 3 años puede empezar a aprender el «lenguaje» del perro, aunque la presencia de un adulto sigue siendo importante.",
+        "Animaux domestiques (ONE, Office de la Naissance et de l'Enfance). Tema: perros desconocidos y perros amenazantes. Hallazgo: No debe acercarse solo a un perro que no conoce, en casa de amigos o en la calle, sino con el permiso y la presencia del dueño. Ante un perro amenazante no debe huir corriendo, porque eso puede provocar una persecución; ha de retroceder muy despacio, sin gestos bruscos, y evitar mirarlo a los ojos. La página no da indicaciones sobre qué hacer tras una mordedura ni teléfonos de urgencia."
+      ]
+    },
+    {
+      "source_type": "reference",
+      "title": "Sortir avec bébé (ONE)",
+      "organization": "ONE (Office de la Naissance et de l'Enfance, Belgique)",
+      "publication_year": null,
+      "undated_reason": "Página de la sección Familles de one.be sin fecha de actualización visible; consultada el 2026-11-06.",
+      "url": "https://www.one.be/familles/0-12/sortir-avec-bebe",
+      "specialties": [
+        "pediatrics",
+        "general_medicine"
+      ],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "original_language": "fr",
+      "topics": [
+        "sol_calor",
+        "caidas"
+      ],
+      "chunks": [
+        "Sortir avec bébé (ONE, Office de la Naissance et de l'Enfance). Tema: cuándo y cuánto salir. Hallazgo: desde las primeras semanas el bebé puede salir y le beneficia: se favorece su sistema inmunitario, respira un aire distinto, se aleja de los contaminantes del interior y la luz natural contribuye a sintetizar vitamina D, regular el ciclo del sueño y mejorar el humor. Se puede salir con el bebé hacia las 3 semanas de vida; antes es posible con tiempo suave, en capazo y bien abrigado. Pueden retrasarla las temperaturas negativas, un peso de nacimiento aún no recuperado o la prematuridad, y ante la duda la página aconseja consultar al pediatra. Para empezar bastan 15 a 20 minutos, que se alargan poco a poco para no estimularlo demasiado; tras algunas semanas puede plantearse una salida de una hora al día. Si el bebé está enfermo o irritable, mejor evitar la salida y dejarlo descansar.",
+        "Sortir avec bébé (ONE, Office de la Naissance et de l'Enfance). Tema: tiempo atmosférico y temperatura. Hallazgo: con calor intenso se sale por la mañana o al final de la tarde, evitando el sol directo y, en caso de pico de ozono, si se vive en una aglomeración urbana, se puede comprobar también la contaminación del aire; con frío, a la hora más cálida, hacia el mediodía; en las primeras salidas se evitan los vientos fuertes. La página da 0 °C como temperatura límite para salir con un bebé, porque por debajo de cero las vías respiratorias del recién nacido pueden fragilizarse.",
+        "Sortir avec bébé (ONE, Office de la Naissance et de l'Enfance). Tema: ciudad y ropa. Hallazgo: Si se vive en el centro de una ciudad, conviene evitar las horas punta y llevar al bebé en alto (en brazos o en portabebés) en lugar de pasearlo en cochecito, a la altura de los tubos de escape. En invierno, ropa en capas transpirables (el bebé lleva una capa más que el adulto), manos, pies y cabeza protegidos, y comprobar con regularidad que no suda para que no se enfríe rápido. En verano, colores claros, ropa ligera pero cubriente, crema solar de índice 50 y sombrilla para mantenerlo a la sombra."
+      ]
+    },
+    {
+      "source_type": "reference",
+      "title": "Intoxicaciones en casa: cómo prevenirlas",
+      "original_title": "Avvelenamento domestico, come prevenire",
+      "organization": "Azienda Ospedaliero Universitaria Meyer IRCCS",
+      "publication_year": 2022,
+      "url": "https://www.meyer.it/index.php/newsletter/ottobre-2022/4558-avvelenamento-domestico-come-prevenire",
+      "specialties": [
+        "pediatrics",
+        "emergency_medicine"
+      ],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "original_language": "it",
+      "topics": [
+        "intoxicaciones"
+      ],
+      "chunks": [
+        "Intoxicaciones en casa: cómo prevenirlas (Azienda Ospedaliero Universitaria Meyer IRCCS, 2022). Tema: intoxicación doméstica en niños pequeños. Hallazgo: es la tercera causa de muerte accidental en Europa y suele ocurrir en la propia casa o en la de los familiares que cuidan al niño. Las sustancias más implicadas son medicamentos, detergentes del hogar, pesticidas y plantas. Hay que mantener detergentes y productos químicos fuera de la vista y del alcance, guardarlos enseguida tras usarlos y poner cierres de seguridad en armarios y cajones (fuente en italiano).",
+        "Intoxicaciones en casa: cómo prevenirlas (Azienda Ospedaliero Universitaria Meyer IRCCS, 2022). Tema: cómo guardar los productos peligrosos y las plantas. Hallazgo: los productos no deben dejarse nunca sin vigilancia con un niño delante, se conservan en su envase original con cierre de seguridad y jamás en recipientes de comida o bebida, y conviene leer las etiquetas para detectar los productos tóxicos. También hay que poner a salvo las casas de los familiares donde pasa tiempo el niño. Algunas plantas comunes son peligrosas si se tocan, lamen, mastican o ingieren, y en algunos casos la ingesta puede ser mortal incluso en pequeña cantidad (fuente en italiano)."
+      ]
+    },
+    {
+      "source_type": "reference",
+      "title": "Accidentes domésticos y quemaduras: cómo prevenirlos",
+      "original_title": "Incidenti domestici e ustioni, come prevenirli",
+      "organization": "Azienda Ospedaliero Universitaria Meyer IRCCS",
+      "publication_year": 2016,
+      "url": "https://www.meyer.it/index.php/newsletter/maggio-2016/1230-incidenti-domestici-e-ustioni-come-prevenirli",
+      "specialties": [
+        "pediatrics",
+        "emergency_medicine"
+      ],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "original_language": "it",
+      "topics": [
+        "quemaduras",
+        "caidas",
+        "signos_alarma"
+      ],
+      "chunks": [
+        "Accidentes domésticos y quemaduras: cómo prevenirlos (Azienda Ospedaliero Universitaria Meyer IRCCS, 2016). Tema: prevención de quemaduras en casa. Hallazgo: la cocina es la habitación más peligrosa, aunque el baño también puede serlo, y las quemaduras son una de las causas más frecuentes de ingreso por accidente grave en la infancia, en la mayoría de los casos por líquidos muy calientes o por el contacto con objetos muy calientes. En la cocina se usan los fogones traseros, los mangos no deben sobresalir, los recipientes quedan fuera del alcance y se evita beber líquidos hirviendo con un bebé en brazos. Del microondas hay que comprobar el contenido, porque el recipiente puede parecer frío mientras la comida está muy caliente (fuente en italiano).",
+        "Accidentes domésticos y quemaduras: cómo prevenirlos (Azienda Ospedaliero Universitaria Meyer IRCCS, 2016). Tema: baño seguro y primeros auxilios tras una quemadura. Hallazgo: en el baño se ajusta el termostato por debajo de 50 grados, no se deja nunca al niño solo en la bañera y se comprueba la temperatura del agua con el codo. Si hay una quemadura: se desviste al niño, quitando ropa y pañal, se enfría la zona con agua fría del grifo durante cinco minutos, se protege la piel con ropa blanca limpia evitando que se enfríe en exceso y se lleva a urgencias (fuente en italiano)."
+      ]
+    },
+    {
+      "source_type": "reference",
+      "title": "Guía para el transporte de los niños: normas y sillas de coche",
+      "original_title": "Guida al trasporto dei bambini: norme e seggiolini auto",
+      "organization": "Federazione Italiana Medici Pediatri (FIMP)",
+      "publication_year": null,
+      "undated_reason": "La página no muestra fecha de publicación (solo el pie © 2026).",
+      "url": "https://www.fimp.pro/area-genitori/consigli-e-guide/bambini-in-auto-norme-per-il-trasporto-e-per-i-seggiolini-auto",
+      "specialties": [
+        "pediatrics",
+        "emergency_medicine"
+      ],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "original_language": "it",
+      "topics": [
+        "silla_coche",
+        "caidas"
+      ],
+      "chunks": [
+        "Guía para el transporte de los niños: normas y sillas de coche (Federazione Italiana Medici Pediatri (FIMP), sin fecha). Tema: tipos de silla de coche para el bebé según el peso. Hallazgo: para los bebés, el grupo 0 (capazo) es de 0 a 10 kg, unos 0-9 meses, y el bebé viaja tumbado; el grupo 0+ (huevito) llega hasta 13 kg, unos 0-15 meses, con más protección de cabeza y piernas. El grupo 1 es de 9 a 18 kg, desde los 9 meses hasta los 4-5 años, y se fija con el cinturón, que debe estar bien tenso. (fuente en italiano)",
+        "Guía para el transporte de los niños: normas y sillas de coche (Federazione Italiana Medici Pediatri (FIMP), sin fecha). Tema: silla a contramarcha. Hallazgo: hasta los 9 kg de peso la silla debe instalarse obligatoriamente en sentido contrario a la marcha. La FIMP aconseja mantener la posición a contramarcha el mayor tiempo posible, incluso por encima de 10 kg, porque en caso de choque el esqueleto y los músculos del niño, aún poco desarrollados, corren más riesgo de lesión si chocan contra el cinturón que contra la estructura de la silla. El momento adecuado para pasar al sentido de la marcha es cuando la altura del niño empieza a superar la del reposacabezas. (fuente en italiano)"
+      ]
+    },
+    {
+      "source_type": "reference",
+      "title": "Encuesta de 2025: exposición a pantallas",
+      "original_title": "Indagine 2025: esposizione a schermi",
+      "organization": "Istituto Superiore di Sanità (ISS), EpiCentro",
+      "publication_year": 2026,
+      "url": "https://www.epicentro.iss.it/sorveglianza02anni/indagine-2025-esposizione-schermi",
+      "specialties": [
+        "pediatrics"
+      ],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "original_language": "it",
+      "topics": [
+        "pantallas"
+      ],
+      "chunks": [
+        "Encuesta de 2025: exposición a pantallas (Istituto Superiore di Sanità (ISS), EpiCentro, 2026). Tema: pantallas en menores de 2 años. Hallazgo: la página, creada en mayo de 2026, señala que la exposición a pantallas es cada vez más frecuente desde los primeros años y que crecen las pruebas sobre sus riesgos. Recomienda evitar la exposición antes de los 2 años de edad. En la encuesta de 2025, el 14,6% de los bebés de 2-5 meses pasa tiempo delante de la televisión, el ordenador, la tableta o el móvil (22,1% en 2022); la mayoría menos de una hora al día y el 3,4% al menos 1-2 horas. (fuente en italiano)",
+        "Encuesta de 2025: exposición a pantallas (Istituto Superiore di Sanità (ISS), EpiCentro, 2026). Tema: pantallas hacia el año de vida y papel de los profesionales. Hallazgo: la exposición aumenta con la edad en todas las regiones; entre los 11 y los 15 meses es del 46,3% (58,1% en 2022), y la proporción que pasa al menos 1-2 horas al día va del 5% al 36,5% según la región, con más exposición en el sur. Los autores piden seguir informando a los padres y a todos los adultos que cuidan al niño sobre los riesgos de las pantallas, y destacan el papel de los profesionales sociosanitarios y de los educadores, que tienen ocasión de estar en contacto con los padres y los cuidadores. (fuente en italiano)"
+      ]
+    },
+    {
+      "source_type": "guideline",
+      "title": "Obstrucción de la vía aérea por un cuerpo extraño: maniobras de emergencia",
+      "original_title": "Ostruzione delle vie aeree da corpo estraneo, manovre di emergenza",
+      "organization": "Ospedale Pediatrico Bambino Gesù",
+      "publication_year": 2026,
+      "url": "https://www.ospedalebambinogesu.it/ostruzione-delle-vie-aeree-da-corpo-estraneo-manovre-di-emergenza-80273/",
+      "specialties": [
+        "pediatrics",
+        "emergency_medicine"
+      ],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "original_language": "it",
+      "topics": [
+        "atragantamiento_objetos",
+        "signos_alarma"
+      ],
+      "chunks": [
+        "Obstrucción de la vía aérea por un cuerpo extraño (Ospedale Pediatrico Bambino Gesù, 2026). Tema: distinguir obstrucción parcial y completa en el lactante. Hallazgo: si es parcial, el bebé todavía puede toser y llorar; entonces se avisa enseguida a emergencias, no se hacen maniobras, se le tranquiliza y se le anima a toser, y si el cuadro no se resuelve se llama a emergencias o se le lleva a las urgencias más cercanas. Si es completa, no puede toser, llorar ni emitir sonido: es una emergencia que exige intervenir de inmediato con las maniobras y avisar a emergencias. Es mucho más frecuente en niños de hasta 3 años, mientras comen o juegan con objetos pequeños (fuente en italiano).",
+        "Obstrucción de la vía aérea por un cuerpo extraño (Ospedale Pediatrico Bambino Gesù, 2026). Tema: maniobras en el lactante con obstrucción completa. Hallazgo: se alternan dos maniobras hasta que se resuelva la obstrucción o el bebé pierda el conocimiento. Primero 5 golpes enérgicos entre los omóplatos, con el bebé boca abajo sobre el antebrazo apoyado en el muslo, la cabeza algo extendida y más baja que el tronco, sujetándole la mandíbula. Después 5 compresiones torácicas profundas, de unos 3-4 cm, con el bebé boca arriba sobre un plano rígido, en el tercio medio del esternón, justo por debajo de la línea imaginaria que une los pezones, a un ritmo de una cada 3 segundos aproximadamente (fuente en italiano).",
+        "Obstrucción de la vía aérea por un cuerpo extraño (Ospedale Pediatrico Bambino Gesù, 2026). Tema: cuándo llamar a emergencias y si el bebé se desmaya. Hallazgo: en una obstrucción completa, además de hacer las maniobras, hay que activar el soporte vital avanzado llamando a emergencias. Si el lactante pierde el conocimiento, se llama a emergencias indicando que está inconsciente, se le tumba boca arriba sobre un plano rígido y se empieza la reanimación cardiopulmonar siguiendo las indicaciones del operador (fuente en italiano)."
+      ]
+    },
+    {
+      "source_type": "reference",
+      "title": "Primeros 1000 días: buenas prácticas y determinantes de salud",
+      "original_title": "Primi 1000 giorni, buone pratiche e determinanti di salute",
+      "organization": "Società Italiana di Pediatria (SIP)",
+      "publication_year": 2023,
+      "url": "https://sip.it/2023/05/22/primi-1000-giorni-buone-pratiche-e-determinanti-di-salute/",
+      "specialties": [
+        "pediatrics",
+        "general_medicine"
+      ],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "original_language": "it",
+      "topics": [
+        "pantallas",
+        "silla_coche"
+      ],
+      "chunks": [
+        "Primeros 1000 días: buenas prácticas y determinantes de salud (Società Italiana di Pediatria (SIP), 2023). Tema: lactancia y posición para dormir según la vigilancia italiana 0-2 años. Hallazgo: la segunda edición (2022), promovida por el Ministerio de Salud y coordinada por el ISS, entrevistó a más de 35.000 madres. El 30% de los bebés de 4-5 meses toma lactancia materna exclusiva y el 13% nunca tomó pecho; la OMS recomienda lactancia exclusiva hasta los 6 meses y después prolongada hasta más de 2 años. Para reducir el riesgo de muerte súbita se recomienda dormir boca arriba, y el 66,7% de las madres sigue esta recomendación. (fuente en italiano)",
+        "Primeros 1000 días: buenas prácticas y determinantes de salud (Società Italiana di Pediatria (SIP), 2023). Tema: lectura, pantallas y seguridad en casa y en el coche. Hallazgo: la lectura regular en edad precoz favorece el desarrollo cognitivo, emocional y relacional, pero en la semana previa no se leyó al 58,3% de los bebés de 2-5 meses. Se recomienda usar pantallas solo con un adulto y nada por debajo de 2 años, y el 22,1% de los bebés de 2-5 meses ya está ante una pantalla. El riesgo de accidente doméstico es elevado en menores de 5 años, y se recomienda el uso correcto de los sistemas de retención en el coche; el 19,3% de las madres de bebés de 2-5 meses halló difícil mantenerlos sentados y abrochados. (fuente en italiano)"
+      ]
+    },
+    {
+      "source_type": "reference",
+      "title": "La salud de los menores y lo digital",
+      "original_title": "Salute dei minori e digitale",
+      "organization": "Società Italiana di Pediatria (SIP)",
+      "publication_year": 2022,
+      "url": "https://sip.it/2022/11/30/salute-dei-minori-e-digitale/",
+      "specialties": [
+        "pediatrics",
+        "psychiatry"
+      ],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "original_language": "it",
+      "topics": [
+        "pantallas"
+      ],
+      "chunks": [
+        "La salud de los menores y lo digital (Società Italiana di Pediatria (SIP), 2022). Tema: pantallas en los primeros años según la SIP. Hallazgo: el comunicado del proyecto «Connessioni delicate» (ACP, FIMP y SIP) recuerda la recomendación de la SIP de evitar smartphones y tablets de 0 a 2 años, y de un máximo de 1 hora al día en niños mayores de 2 años y hasta los 5 años. El uso temprano, prolongado y no mediado por adultos en la primera infancia se asocia a efectos negativos sobre el sueño, la vista, el aparato musculoesquelético, el aprendizaje y el desarrollo cognitivo. (fuente en italiano)",
+        "La salud de los menores y lo digital (Società Italiana di Pediatria (SIP), 2022). Tema: móvil de los padres durante la toma y la relación con el bebé. Hallazgo: el uso del smartphone por parte de la madre puede reducir su atención a las señales del bebé, con posible repercusión en el desarrollo neuroevolutivo; la FIMP subraya que entre los 3 y los 6 meses la lactancia y las interacciones cara a cara son los contextos principales del vínculo. En la encuesta a unas 800 familias, el 72% de las que tenían hijos de 0 a 2 años usaba redes y chats durante las comidas y el 35% usaba dispositivos para entretener a los hijos; el 70% pedía más información a los pediatras. (fuente en italiano)"
+      ]
+    },
+    {
+      "source_type": "reference",
+      "title": "Cuidado con las caídas de los niños: caen en un instante; prevenga el accidente con medidas previas",
+      "original_title": "子どもの転落事故に注意! - 落ちるまではあっという間です。事前の対策で事故防止を -",
+      "organization": "Consumer Affairs Agency (消費者庁, Japón)",
+      "publication_year": 2022,
+      "url": "https://www.caa.go.jp/policies/policy/consumer_safety/caution/caution_061",
+      "specialties": [
+        "pediatrics",
+        "emergency_medicine"
+      ],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "original_language": "ja",
+      "topics": [
+        "caidas",
+        "signos_alarma"
+      ],
+      "chunks": [
+        "Cuidado con las caídas de los niños: caen en un instante; prevenga el accidente con medidas previas (Consumer Affairs Agency, 2022). Tema: frecuencia y gravedad de las caídas infantiles. Hallazgo: según la agencia (aviso del 20 de julio de 2022), alrededor del 40 % de los consumidores con experiencia criando bebés vivió una caída durante la crianza y cerca del 30 % de ellos acudió al médico. Entre los accidentes que exigieron ingreso, la caída fue la causa más común, con cerca del 30 %, y aproximadamente el 60 % de esas caídas lesionó la cabeza. Incluso caer desde poca altura causó fracturas en la cabeza y lesiones intracraneales. Además, los niños pequeños tienden a caer de cabeza, porque su cabeza es grande en proporción al cuerpo y su centro de gravedad está alto. (fuente en japonés)",
+        "Cuidado con las caídas de los niños: caen en un instante; prevenga el accidente con medidas previas (Consumer Affairs Agency, 2022). Tema: prevención de caídas desde muebles, brazos y escaleras en el bebé. Hallazgo: los accidentes con muebles afectan sobre todo a bebés de 0 años; se acuesta al bebé en la cuna siempre que se pueda, con la barandilla siempre subida, no se le deja ni un momento sobre una mesa u otro sitio alto y no se dejan alrededor objetos que puedan causar heridas o asfixia. Al llevarlo en brazos o a la espalda, la altura de caída supera 1 metro: se agacha uno para colocarlo, se sujeta con la mano al inclinarse y se revisan hebillas y correas. Hacia el año, al gatear o empezar a andar, hay que instalar bien la barrera de escaleras y mantenerla cerrada. (fuente en japonés)"
+      ]
+    },
+    {
+      "source_type": "reference",
+      "title": "Primeros auxilios en caso de accidente (EHBO) (Kind en Gezin)",
+      "original_title": "Eerste Hulp Bij Ongevallen (EHBO) (Kind en Gezin)",
+      "organization": "Kind en Gezin (Agentschap Opgroeien)",
+      "publication_year": null,
+      "undated_reason": "Página de kindengezin.be sin fecha de publicación ni de revisión visible; consultada el 2026-11-06",
+      "url": "https://www.kindengezin.be/nl/thema/veiligheid/ongevallen/eerste-hulp-bij-ongevallen-ehbo",
+      "specialties": [
+        "pediatrics",
+        "emergency_medicine"
+      ],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "original_language": "nl",
+      "topics": [
+        "atragantamiento_objetos",
+        "intoxicaciones"
+      ],
+      "chunks": [
+        "Primeros auxilios en caso de accidente (EHBO) (Kind en Gezin, Agentschap Opgroeien). Tema: atragantamiento en niños pequeños. Hallazgo: el atragantamiento leve suele ser inofensivo y el niño solo tiene una dificultad respiratoria pasajera. Las arcadas son una reacción natural del cuerpo: el niño hace ruido y no hace falta intervenir. En el atragantamiento grave un objeto bloquea la vía aérea total o casi totalmente. Si el niño ya no hace ruido o la comida se le queda atascada en la tráquea, hay que intervenir, porque un bebé que se atraganta gravemente podría asfixiarse. Nunca se deja al niño solo mientras come. A los menores de 1 año se les aplica una técnica distinta que a los mayores, que la página muestra en vídeo y sin pasos escritos.",
+        "Primeros auxilios en caso de accidente (EHBO) (Kind en Gezin, Agentschap Opgroeien). Tema: bebé que parece no respirar, señales de alarma e intoxicación. Hallazgo: si el bebé parece no respirar, se le toca, se le hacen cosquillas en los pies o se le sopla en la cara, sin sacudirlo, y se llama al 112 sin dudar, porque cada segundo cuenta y el operador da instrucciones. Se contacta de inmediato con un médico o con los servicios de emergencias ante hemorragias puntiformes de color rojo azulado en la piel, manchas puntiformes que no desaparecen al presionar, piel gris, somnolencia o dificultad para despertarlo, confusión, dificultad para respirar o quejidos, o convulsiones. Ante una intoxicación, se llama a un servicio de información toxicológica."
+      ]
+    },
+    {
+      "source_type": "reference",
+      "title": "Tiempo de pantalla (Kind en Gezin)",
+      "original_title": "Schermtijd (Kind en Gezin)",
+      "organization": "Kind en Gezin (Agentschap Opgroeien)",
+      "publication_year": null,
+      "undated_reason": "Página de kindengezin.be sin fecha de publicación ni de revisión visible; consultada el 2026-11-06",
+      "url": "https://www.kindengezin.be/nl/thema/spelen-en-bewegen/digitale-kinderwereld/schermtijd",
+      "specialties": [
+        "pediatrics"
+      ],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "original_language": "nl",
+      "topics": [
+        "pantallas"
+      ],
+      "chunks": [
+        "Tiempo de pantalla (Kind en Gezin, Agentschap Opgroeien). Tema: pantallas en menores de 2 años. Hallazgo: la página recoge que la OMS desaconseja el tiempo de pantalla en menores de 2 años. Mirar de cerca durante mucho tiempo sin interrupción puede acelerar el crecimiento del ojo y favorecer la miopía. La mirada de los bebés todavía no está enfocada y aún no pueden seguir bien las cosas, aunque les atraen los contrastes de color, la música y los sonidos. Hacia los 2 años los niños interactúan más con los medios y empiezan a seguir la historia y los personajes.",
+        "Tiempo de pantalla (Kind en Gezin, Agentschap Opgroeien). Tema: pantallas a partir de los 2 años y hasta los 5 años. Hallazgo: la OMS recomienda como máximo 1 hora de pantalla al día en ese tramo. Se sostiene la pantalla a más de 30 cm de los ojos y se hace una pausa cada 15 a 20 minutos. Las pantallas táctiles retienen durante más tiempo la atención de un niño pequeño y muchas aplicaciones para los más pequeños atraen, pero no son necesarias para un desarrollo sano. Los padres deciden qué ve el niño, revisan las aplicaciones antes de instalarlas y acompañan el uso. Hasta los 3 o 4 años el niño no distingue la fantasía de la realidad, así que se elige contenido que pueda asumir emocionalmente y se ve juntos para explicar y tranquilizar."
+      ]
+    },
+    {
+      "source_type": "reference",
+      "title": "Prevenir los accidentes típicos (Kind en Gezin)",
+      "original_title": "Typische ongevallen voorkomen (Kind en Gezin)",
+      "organization": "Kind en Gezin (Agentschap Opgroeien)",
+      "publication_year": null,
+      "undated_reason": "Página de kindengezin.be sin fecha de publicación ni de revisión visible; consultada el 2026-11-06",
+      "url": "https://www.kindengezin.be/nl/thema/veiligheid/ongevallen/typische-ongevallen-voorkomen",
+      "specialties": [
+        "pediatrics",
+        "emergency_medicine"
+      ],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "original_language": "nl",
+      "topics": [
+        "caidas",
+        "quemaduras",
+        "atragantamiento_objetos",
+        "ahogamiento",
+        "intoxicaciones"
+      ],
+      "chunks": [
+        "Prevenir los accidentes típicos (Kind en Gezin, Agentschap Opgroeien). Tema: accidentes típicos en bebés (caídas, quemaduras, calor, objetos pequeños y cordones). Hallazgo: nunca se deja a un bebé solo sobre un cambiador o un sofá ni se da la espalda sin sujetarlo; se usan los cinturones de la hamaca y de la silla del coche y no se coloca la hamaca sobre una mesa. Se comprueba la temperatura del agua del baño y de la leche y se mantienen las bebidas calientes lejos. Para evitar el sobrecalentamiento, el fular portabebés se usa de forma correcta, el bebé nunca se queda solo en el coche y el cochecito no se cubre del todo con un paño. No debe haber objetos pequeños en el suelo, como pilas de botón o juguetes de hermanos mayores, y se evitan cordones en chupetes, ropa, juguetes y persianas.",
+        "Prevenir los accidentes típicos (Kind en Gezin, Agentschap Opgroeien). Tema: gateadores y niños pequeños. Hallazgo: en la escalera no se deja al niño sin vigilancia; se usan cinturones en hamaca, cochecito, trona y sillita de bici, se protegen las esquinas, se fijan los armarios y no se usa mantel. Se mantienen fuera de alcance bebidas calientes, planchas y estufas, y los productos peligrosos; en días de calor los azulejos de terraza y los alféizares pueden quemar. No se deja al niño solo en el baño ni en una piscinita del jardín. En los niños pequeños, caerse forma parte de aprender a andar, pero hay que impedir que trepen a alturas peligrosas, como una silla junto a una ventana abierta."
+      ]
+    },
+    {
+      "source_type": "reference",
+      "title": "Seguro con tu bebé en el coche (VeiligheidNL)",
+      "original_title": "Veilig met je baby in de auto (VeiligheidNL)",
+      "organization": "VeiligheidNL (kenniscentrum letselpreventie)",
+      "publication_year": null,
+      "undated_reason": "La página no muestra fecha de publicación ni de actualización; consultada el 2026-11-06",
+      "url": "https://www.kinderveiligheid.nl/adviezen/tips-en-advies/de-4-van-veilig-je-baby-mee-in-de-auto",
+      "specialties": [
+        "pediatrics",
+        "emergency_medicine"
+      ],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "original_language": "nl",
+      "topics": [
+        "silla_coche"
+      ],
+      "chunks": [
+        "Seguro con tu bebé en el coche (VeiligheidNL). Tema: silla de coche para el bebé y orientación hacia atrás. Hallazgo: la página indica que el bebé debe viajar siempre en una silla de coche para bebés y que es importante usarla bien. Según la normativa R129 que cita, que se basa en la estatura y no en el peso, el bebé debe ir de espaldas a la marcha hasta los 15 meses, porque así se protege mejor el cuello en un choque.",
+        "Seguro con tu bebé en el coche (VeiligheidNL). Tema: arnés y cinturón del coche. Hallazgo: VeiligheidNL advierte de que 3 de cada 10 bebés llevan las correas flojas. Las correas del arnés se aprietan de modo que quepa como máximo un dedo entre la correa y el bebé. El cinturón del coche debe pasar por los puntos azules o verdes de la silla, y la página advierte de que no siempre está bien colocado al sujetar la silla."
+      ]
+    },
+    {
+      "source_type": "reference",
+      "title": "Evita que los niños pequeños se ahoguen",
+      "original_title": "Voorkom verdrinking bij jonge kinderen",
+      "organization": "VeiligheidNL (kenniscentrum letselpreventie)",
+      "publication_year": null,
+      "undated_reason": "La página no muestra fecha de publicación ni de actualización; consultada el 2026-11-06",
+      "url": "https://www.kinderveiligheid.nl/adviezen/tips-en-advies/de-4-van-veilig-in-en-om-water",
+      "specialties": [
+        "pediatrics",
+        "emergency_medicine"
+      ],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "original_language": "nl",
+      "topics": [
+        "ahogamiento"
+      ],
+      "chunks": [
+        "Evita que los niños pequeños se ahoguen (VeiligheidNL). Tema: riesgo de ahogamiento en la primera infancia. Hallazgo: los menores de 5 años corren el mayor riesgo. El ahogamiento puede ser rápido y silencioso, incluso con un adulto cerca, y puede producirse con solo 10 centímetros de agua. Una de cada cinco víctimas de ahogamiento atendidas en urgencias es un niño de 1 o 2 años, que todavía no sabe nadar. La mayoría de los incidentes ocurre en casa o cerca, por ejemplo en la bañera o en una piscina hinchable, y los niños también se ahogan con frecuencia en aguas al aire libre, como lagos o zanjas.",
+        "Evita que los niños pequeños se ahoguen (VeiligheidNL). Tema: vigilancia junto al agua. Hallazgo: se mantiene al niño siempre a la vista, sin distraerse con el móvil o un libro, y con los menores de 3 años hay que estar lo bastante cerca para tocarlos. Nunca se les deja solos, ni un momento, por ejemplo cuando suena el timbre. En grupo se acuerda con claridad quién vigila, y no se deja a los pequeños al cuidado de niños mayores. Los manguitos y flotadores pueden proteger, pero no sustituyen la vigilancia, y el agua al aire libre a principios del verano puede estar muy fría y provocar calambres o hipotermia."
+      ]
+    },
+    {
+      "source_type": "reference",
+      "title": "Evita que tu hijo se asfixie",
+      "original_title": "Voorkom verstikking bij jouw kind",
+      "organization": "VeiligheidNL (kenniscentrum letselpreventie)",
+      "publication_year": null,
+      "undated_reason": "La página no muestra fecha de publicación ni de actualización; consultada el 2026-11-06",
+      "url": "https://www.kinderveiligheid.nl/adviezen/tips-en-advies/voorkom-verstikking-bij-jouw-kind",
+      "specialties": [
+        "pediatrics",
+        "emergency_medicine"
+      ],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "original_language": "nl",
+      "topics": [
+        "atragantamiento_objetos"
+      ],
+      "chunks": [
+        "Evita que tu hijo se asfixie (VeiligheidNL). Tema: prevenir el atragantamiento en casa. Hallazgo: la página señala la comida como la causa principal de atragantamiento y pide cortar por la mitad o en trocitos los tomates cherry y las uvas; advierte de que los trozos de manzana y otros alimentos son igual de peligrosos. Otros peligros son las canicas, las pilas de botón y las piezas pequeñas de los juguetes, que deben quedar fuera del alcance, y conviene revisar los juguetes en busca de daños o piezas sueltas. También avisa de los cordones, por ejemplo de una capucha o una cortina. Durante las comidas se permanece junto al niño y se procura que esté sentado con calma.",
+        "Evita que tu hijo se asfixie (VeiligheidNL). Tema: chupete y qué hacer si el niño se atraganta. Hallazgo: el chupete debe tener orificios de ventilación en el escudo, nunca se cuelga de una cuerda al cuello del bebé y, si se sujeta a la ropa, la cinta no debe medir más de 22 centímetros. Si el niño se atraganta, la página indica dar golpes con la palma de la mano abierta en la espalda, entre los omóplatos. Si el niño pierde el conocimiento, se llama de inmediato al 112."
+      ]
+    },
+    {
+      "source_type": "reference",
+      "title": "Seguridad de los recién nacidos y los niños pequeños (Helsenorge)",
+      "original_title": "Sikkerhet for nyfødte og små barn (Helsenorge)",
+      "organization": "Helsenorge.no (Helsedirektoratet)",
+      "publication_year": 2025,
+      "url": "https://www.helsenorge.no/forstehjelp/sikkerhet-for-sma-barn/",
+      "specialties": [
+        "pediatrics",
+        "general_medicine"
+      ],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "original_language": "no",
+      "topics": [
+        "caidas",
+        "quemaduras",
+        "ahogamiento",
+        "atragantamiento_objetos"
+      ],
+      "chunks": [
+        "Seguridad de los recién nacidos y los niños pequeños (Helsenorge, Helsedirektoratet, 2025). Tema: caídas y quemaduras en bebés. Hallazgo: en los bebés los accidentes más comunes son caídas desde alturas como el cambiador, quemaduras por bebidas calientes y objetos pequeños atascados en la garganta. La página advierte de no dejar nunca al bebé solo en el cambiador, y de no dejarlo nunca solo en la trona aunque lleve arnés, porque las tronas altas pueden volcar; también aconseja proteger las escaleras con barrera y las ventanas con cierre. El agua del baño no debe estar a más de 37 grados, y la piel infantil es delicada: las quemaduras pueden producirse desde los 40 grados. Los alimentos y bebidas calientes se mantienen fuera de su alcance.",
+        "Seguridad de los recién nacidos y los niños pequeños (Helsenorge, Helsedirektoratet, 2025). Tema: ahogamiento, atragantamiento y cuna segura. Hallazgo: siempre hay que quedarse con el niño que se baña o juega en el agua, porque los niños pequeños pueden ahogarse incluso con 10 cm de profundidad. Se vigila al niño mientras come o toma el biberón, se comprueba que la tetina esté intacta, se mantienen fuera de su alcance los objetos pequeños y no se deja jugar con bolsas de plástico por el riesgo de asfixia. En la cuna, los barrotes deben tener una separación máxima de 6 cm y los laterales al menos 60 cm de alto desde donde el niño puede ponerse de pie. Los bebés deben dormir boca arriba."
+      ]
+    },
+    {
+      "source_type": "reference",
+      "title": "Qué hacer cuando un lactante se atraganta",
+      "original_title": "Postępowanie przy zadławieniu niemowlęcia",
+      "organization": "Główny Inspektorat Sanitarny (GIS, Polonia)",
+      "publication_year": null,
+      "undated_reason": "La página de gov.pl del Inspectorado Sanitario no muestra fecha de publicación ni de actualización.",
+      "url": "https://www.gov.pl/web/gis/postepowanie-przy-zadlawieniu-niemowlecia",
+      "specialties": [
+        "pediatrics",
+        "emergency_medicine"
+      ],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "original_language": "pl",
+      "topics": [
+        "atragantamiento_objetos",
+        "signos_alarma"
+      ],
+      "chunks": [
+        "Qué hacer cuando un lactante se atraganta (Główny Inspektorat Sanitarny, Polonia). Tema: distinguir el atragantamiento con tos de la obstrucción completa. Hallazgo: si el bebé abre la boca, intenta toser, escupe y tose y la cara se pone roja, la indicación es no ayudarle y dejar que expulse el alimento por sí solo, porque ayudar en exceso puede acabar en una obstrucción. Si el bebé está bastante callado, no puede emitir sonidos, le cuesta respirar y la cara se pone pálida, necesita que le ayuden. (fuente en polaco)",
+        "Qué hacer cuando un lactante se atraganta (Główny Inspektorat Sanitarny, Polonia). Tema: pasos ante un bebé de menos de 1 año con la vía aérea bloqueada. Hallazgo: si el cuerpo extraño se ve en la boca, se intenta sacar con un solo gesto suave y, si no sale, se deja. Si el bebé está consciente pero no tose o la tos es ineficaz, se le coloca boca abajo con la cabeza hacia abajo sobre el antebrazo, sujetando la mandíbula (no el cuello), y se dan 5 golpes entre los omóplatos. Si no funciona, se le gira boca arriba, con la cabeza hacia abajo y la nuca sujeta, y se dan 5 compresiones en la mitad inferior del esternón, a 1 cm bajo la línea entre los pezones. (fuente en polaco)",
+        "Qué hacer cuando un lactante se atraganta (Główny Inspektorat Sanitarny, Polonia). Tema: repetir las maniobras y cuándo llamar a emergencias. Hallazgo: hasta que salga el cuerpo extraño se alternan 5 golpes entre los omóplatos y 5 compresiones en el pecho. Si el bebé pierde el conocimiento, hay que llamar de inmediato a emergencias y empezar la reanimación. La página no indica fecha de publicación. (fuente en polaco)"
+      ]
+    },
+    {
+      "source_type": "reference",
+      "title": "Casa segura: conocer para proteger mejor. Tabla de las causas de los accidentes por edad",
+      "original_title": "Casa Segura: conhecer para melhor proteger. Tabela das causas dos acidentes por idade",
+      "organization": "Associação para a Promoção da Segurança Infantil (APSI)",
+      "publication_year": null,
+      "undated_reason": "El PDF de la APSI (anexo II del proyecto Casa Segura) no muestra fecha de publicación.",
+      "url": "https://www.apsi.org.pt/images/PDF/Projeto-Seguranca-Todos/Tabela-dos-Acidentes.pdf",
+      "specialties": [
+        "pediatrics",
+        "emergency_medicine"
+      ],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "original_language": "pt",
+      "topics": [
+        "caidas",
+        "quemaduras",
+        "ahogamiento",
+        "atragantamiento_objetos",
+        "intoxicaciones",
+        "silla_coche"
+      ],
+      "chunks": [
+        "Casa segura: conocer para proteger mejor. Tabla de las causas de los accidentes por edad (Associação para a Promoção da Segurança Infantil, sin fecha). Tema: coche y caídas en los primeros 15 meses. Hallazgo: nadie tiene fuerza para sujetar a un bebé en un choque, por lo que se transporta siempre en una silla propia y nunca en brazos, mirando hacia atrás porque su cuello es frágil, con el arnés ajustado (holgura máxima de un dedo medida en el hombro). No se le deja solo sobre el cambiador, la cama de los padres o el sofá, y la hamaca o el portabebés van en el suelo y con el cinturón apretado. Los andadores son peligrosos y no ayudan a andar. Se ponen barreras en el primer y último escalón, limitadores en las ventanas y guardas de balcón de al menos 110 cm con aberturas menores de 9 cm, sin sillas ni macetas cerca. (fuente en portugués)",
+        "Casa segura: conocer para proteger mejor. Tabla de las causas de los accidentes por edad (Associação para a Promoção da Segurança Infantil, sin fecha). Tema: quemaduras y ahogamiento. Hallazgo: al preparar el baño se echa primero el agua fría y luego la caliente, se comprueba siempre la temperatura antes de mojar al bebé y es preferible el grifo mezclador. Se agita el biberón y se comprueba su temperatura; no se bebe ni se lleva una bebida caliente con el niño en brazos, y los calefactores se alejan de sofás, camas y cortinas. En la cocina, el niño queda con otro adulto o tras una barrera y se usan los fuegos traseros. El ahogamiento es rápido y ocurre con poca agua: nunca se deja al niño solo en el baño, ni siquiera si ya se sienta, y se vacían cubos y palanganas. (fuente en portugués)",
+        "Casa segura: conocer para proteger mejor. Tabla de las causas de los accidentes por edad (Associação para a Promoção da Segurança Infantil, sin fecha). Tema: asfixia, atragantamiento, intoxicación y estrangulamiento. Hallazgo: se acuesta al bebé boca arriba, con los pies al fondo de la cama y la ropa hasta los hombros, con el colchón bien ajustado, barrotes con aberturas menores de 6 cm y sin almohadas, pañales, juguetes ni cordones de chupete. Como los bebés exploran con la boca, las piezas pequeñas, las bolsas, las pulseras y los anillos van fuera de su alcance, no se deja el biberón sin un adulto presente y se evitan alimentos duros, lisos y resbaladizos como frutos secos, altramuces, aceitunas o golosinas. Medicamentos y productos de limpieza van en lugares altos y cerrados, los cordones de persianas atados en alto y sin collares ni cordones en la ropa. (fuente en portugués)"
+      ]
+    },
+    {
+      "source_type": "reference",
+      "title": "Caídas en niños y adolescentes: las estrategias de prevención",
+      "original_title": "Quedas com crianças e adolescentes: as estratégias de prevenção",
+      "organization": "Associação para a Promoção da Segurança Infantil (APSI)",
+      "publication_year": 2014,
+      "url": "https://www.apsi.org.pt/images/PDF/InfoQuedas_site-verimpresao.pdf",
+      "specialties": [
+        "pediatrics",
+        "emergency_medicine"
+      ],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "original_language": "pt",
+      "topics": [
+        "caidas"
+      ],
+      "chunks": [
+        "Caídas en niños y adolescentes: las estrategias de prevención (Associação para a Promoção da Segurança Infantil, 2014). Tema: caídas en los primeros meses de vida. Hallazgo: las caídas ocurren desde los primeros días, cuando el bebé apenas se mueve, y muchas se relacionan con conductas erróneas de los adultos. Nunca se deja al bebé solo sobre la cama de los adultos, un sofá o el cambiador, ni siquiera un segundo ni aunque duerma; si hay que salir de la habitación se lleva consigo o se deja en la cuna, la cama con barrotes o en el suelo sobre una manta. Se evita usar el portabebés en casa y, si se usa, nunca sobre mesas ni muebles y con el arnés interno bien apretado, igual que en la hamaca, el cochecito y la trona. (fuente en portugués)",
+        "Caídas en niños y adolescentes: las estrategias de prevención (Associação para a Promoção da Segurança Infantil, 2014). Tema: caídas desde los 6 meses, cuando empieza a gatear y andar. Hallazgo: aumenta la probabilidad de caer de escaleras, ventanas, balcones y terrazas, sobre todo en casa. No se debe usar andador, el artículo infantil que más caídas provoca. Las barreras homologadas van en el primer y último escalón, con aberturas inferiores a 6 cm, altura de al menos 60 cm y sin barras horizontales para trepar, y arriba atornilladas. Las ventanas y puertas de balcón llevan limitadores que abran como máximo 9 cm, las guardas tienen al menos 110 cm y aberturas menores de 9 cm, y no se ponen muebles ni macetas cerca. Al intentar salir de la cuna, hacia los 18-24 meses, se baja la barandilla y se enseña a bajar boca abajo. (fuente en portugués)"
+      ]
+    },
+    {
+      "source_type": "reference",
+      "title": "Cartilla de salud del niño: niña, 12.ª edición",
+      "original_title": "Caderneta de Saúde da Criança: Menina, 12ª edição",
+      "organization": "Ministério da Saúde (Brasil)",
+      "publication_year": 2018,
+      "url": "https://bvsms.saude.gov.br/bvs/publicacoes/caderneta_saude_crianca_menina_12ed.pdf",
+      "specialties": [
+        "pediatrics",
+        "general_medicine"
+      ],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "original_language": "pt",
+      "topics": [
+        "signos_alarma",
+        "cuando_consultar",
+        "caidas",
+        "quemaduras",
+        "silla_coche"
+      ],
+      "chunks": [
+        "Cartilla de salud del niño (Ministério da Saúde (Brasil), 2018). Tema: señales de peligro en bebés menores de 2 meses. Hallazgo: hay que acudir de inmediato al servicio de salud más cercano si el bebé está muy flojo y se mueve menos de lo normal, está muy somnoliento y cuesta despertarlo, tiene convulsión o pérdida de conciencia, dificultad o cansancio para respirar o respiración rápida, no consigue mamar, vomita todo lo que toma, tiene el ombligo enrojecido o con secreción de mal olor, temperatura corporal igual o inferior a 35,5 ºC o fiebre igual o superior a 37,8 ºC, pus por el oído, color amarillo en piel que llega a brazos y piernas o que persiste pasadas 2 semanas, orina oscura o heces claras. (fuente en portugués)",
+        "Cartilla de salud del niño (Ministério da Saúde (Brasil), 2018). Tema: señales de peligro a partir de los 2 meses y signos de deshidratación con diarrea. Hallazgo: desde los 2 meses se debe acudir de inmediato al servicio de salud si hay dificultad para respirar o respiración rápida, si no puede mamar ni beber, si vomita todo lo que toma, si está muy somnoliento con dificultad para despertar o si tiene convulsión o pérdida de conciencia; ante una urgencia, llama a emergencias. Con diarrea, ojos hundidos, mucha sed, poca saliva, llanto sin lágrimas, piel seca y poca orina indican deshidratación y exigen llevar al niño al servicio de salud; si lo amamantan, se aumentan las tomas. (fuente en portugués)",
+        "Cartilla de salud del niño (Ministério da Saúde (Brasil), 2018). Tema: cuidados del recién nacido en los primeros días, sueño seguro y ombligo. Hallazgo: el bebé nunca debe dormir boca abajo; se recomienda que duerma boca arriba, con la boca y la nariz descubiertas; para abrigarlo es preferible ponerle más ropa que muchas mantas. Pierde algo de peso los primeros días y hacia el décimo día recupera el peso del nacimiento. El muñón del ombligo suele caerse antes del final de la segunda semana; sobre él no se ponen fajas, monedas ni ningún otro objeto o sustancia, y la secreción amarillenta con mal olor o el enrojecimiento alrededor sugieren infección y requieren valoración inmediata. No se usa talco, y nadie debe fumar dentro de casa. (fuente en portugués)",
+        "Cartilla de salud del niño (Ministério da Saúde (Brasil), 2018). Tema: prevención de accidentes en bebés de 0 a 2 años. Hallazgo: de 0 a 6 meses, la cuna con barrotes con un máximo de 6 cm entre ellos, no dejar al bebé solo sobre muebles, comprobar el agua del baño (37 ºC), no tomar líquidos calientes con el bebé en brazos y no dejarlo nunca solo en la bañera. De 6 meses a 1 año, redes en ventanas, barreras en escaleras, protector en el fogón, enchufes con protectores y productos de limpieza fuera de su alcance. De 1 a 2 años, proteger las esquinas y apartar objetos que pueda tragar. En una intoxicación, llama a emergencias o a un centro de información toxicológica. (fuente en portugués)"
+      ]
+    },
+    {
+      "source_type": "reference",
+      "title": "Ahogamiento",
+      "original_title": "Afogamento",
+      "organization": "Sociedade Brasileira de Pediatria (SBP)",
+      "publication_year": 2023,
+      "url": "https://www.sbp.com.br/pediatria-para-familias/seguranca-e-prevencao/afogamento/",
+      "specialties": [
+        "pediatrics",
+        "emergency_medicine"
+      ],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "original_language": "pt",
+      "topics": [
+        "ahogamiento"
+      ],
+      "chunks": [
+        "Ahogamiento (Sociedade Brasileira de Pediatria, 2023). Tema: riesgo de ahogamiento en niños pequeños. Hallazgo: en Brasil el ahogamiento es la primera causa de muerte desde el año de vida hasta los 4 años. Los niños menores de 5 años tienen el mayor riesgo: les atrae el agua, su cabeza y sus brazos pesan proporcionalmente mucho, pierden el equilibrio al inclinarse hacia delante y no pueden volver a levantarse. Basta una cantidad muy pequeña de agua en cubos, palanganas, bañeras o inodoros. La víctima consciente no puede gritar ni pedir ayuda: los niños pequeños no tienen fuerza para hacerlo y se quedan con la cara dentro del agua. (fuente en portugués)",
+        "Ahogamiento (Sociedade Brasileira de Pediatria, 2023). Tema: prevención del ahogamiento en bebés y niños pequeños. Hallazgo: nunca dejar a un bebé o niño solo en la bañera, piscina o cualquier recipiente con agua, ni siquiera un momento, y mantenerlo al alcance del brazo. Mantener cubos, palanganas y otros recipientes con agua fuera del alcance de los menores de 5 años, vaciar y desmontar las piscinas portátiles tras usarlas, cerrar la tapa del inodoro y no dejar juguetes ni otros atractivos cerca de depósitos o recipientes con agua ni dentro de ellos. No confiar en flotadores ni en otros dispositivos de flotación que no sean chalecos salvavidas, y aun con chaleco no dejarlo solo. En las piscinas, vallas por los cuatro lados de 1,5 m de altura, con no más de 12 cm entre barrotes, imposibles de trepar y con puerta con cierre. Los cuidadores deben saber reanimar. (fuente en portugués)"
+      ]
+    },
+    {
+      "source_type": "reference",
+      "title": "Aspiración de un cuerpo extraño",
+      "original_title": "Aspiração de corpo estranho",
+      "organization": "Sociedade Brasileira de Pediatria (SBP)",
+      "publication_year": 2023,
+      "url": "https://www.sbp.com.br/pediatria-para-familias/seguranca-e-prevencao/aspiracao-de-corpo-estranho/",
+      "specialties": [
+        "pediatrics",
+        "emergency_medicine"
+      ],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "original_language": "pt",
+      "topics": [
+        "atragantamiento_objetos",
+        "signos_alarma",
+        "juguetes"
+      ],
+      "chunks": [
+        "Aspiración de un cuerpo extraño (Sociedade Brasileira de Pediatria, 2023). Tema: riesgo y señales de atragantamiento. Hallazgo: los niños pequeños exploran con la boca, son muy activos mientras comen y no pueden masticar bien; el 84% de los episodios de atragantamiento ocurre en menores de 5 años. Un episodio presenciado seguido de tos, a menudo con labios azulados, sugiere aspiración. Son señales de alarma la dificultad repentina para respirar, la agitación, la respiración ruidosa, la tos, la palidez y los labios azules. Entre los alimentos frecuentes están palomitas, frutos secos, cacahuetes, maíz, judías, salchichas y huesos; entre los objetos, piezas de juguetes, monedas, pelotas, globos (generalmente mortales) y caramelos. (fuente en portugués)",
+        "Aspiración de un cuerpo extraño (Sociedade Brasileira de Pediatria, 2023). Tema: primeros auxilios ante el atragantamiento en un bebé menor de 1 año. Hallazgo: si el niño tose con eficacia no hay que interferir: no se le sacude, ni se le golpea la espalda, ni se le pone cabeza abajo, ni se intenta sacar con los dedos lo que no se ve; se anima a toser. Si el bebé no emite sonido: tumbarlo boca abajo sobre el antebrazo con la cabeza más baja que el cuerpo y dar 5 golpes con el talón de la mano entre los omóplatos; girarlo boca arriba y dar 5 compresiones con dos dedos en el esternón, justo por debajo de la línea imaginaria entre los pezones; repetir hasta que expulse el objeto o pierda la conciencia. Si pierde la conciencia, llama a emergencias y, si ves el objeto, retíralo con los dedos, sin barrer a ciegas. (fuente en portugués)",
+        "Aspiración de un cuerpo extraño (Sociedade Brasileira de Pediatria, 2023). Tema: prevención del atragantamiento. Hallazgo: comprobar que los juguetes estén en buen estado y sean adecuados a la edad, con certificación, ofrecer la comida en trozos pequeños y en poca cantidad, enseñar a masticar bien y despacio, y comer con el niño como ejemplo. No se dan alimentos duros o crujientes (palomitas, caramelos duros, cacahuetes) hasta los 4 años. Hay que tener mucho cuidado con los alimentos que pueden amoldarse a la vía aérea, como uvas, tomates cherry y salchichas, y con los globos. Comprobar que el niño esté despierto y alerta antes de darle de comer, y no ofrecer comida ni bebida si está tumbado, andando, jugando, hablando o llorando. (fuente en portugués)"
+      ]
+    },
+    {
+      "source_type": "reference",
+      "title": "Flotadores de cuello para bebés",
+      "original_title": "Boias de Pescoço para Bebês",
+      "organization": "Sociedade Brasileira de Pediatria (SBP)",
+      "publication_year": 2025,
+      "url": "https://www.sbp.com.br/pediatria-para-familias/seguranca-e-prevencao/boias-de-pescoco-para-bebes/",
+      "specialties": [
+        "pediatrics",
+        "emergency_medicine"
+      ],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "original_language": "pt",
+      "topics": [
+        "ahogamiento"
+      ],
+      "chunks": [
+        "Flotadores de cuello para bebés (Sociedade Brasileira de Pediatria, 2025). Tema: riesgos de los flotadores de cuello para bebés. Hallazgo: son anillos hinchables que se colocan alrededor del cuello para mantener al bebé a flote, en bañeras o piscinas. La fuente advierte de riesgo de ahogamiento, porque el bebé puede resbalar, girar o hundirse con rapidez, a veces con la cara sumergida, y el ahogamiento a esta edad puede ocurrir en segundos y sin ruido. También hay riesgo de sofocación por compresión de la vía aérea y de lesión del cuello, la columna o la tráquea, sobre todo en menores de 6 meses. Un bebé que parece relajado puede estar sufriendo fatiga muscular o falta leve de oxígeno. (fuente en portugués)",
+        "Flotadores de cuello para bebés (Sociedade Brasileira de Pediatria, 2025). Tema: qué recomienda la SBP en su lugar. Hallazgo: no se recomienda su uso a ninguna edad ni como juego, y la apariencia del dispositivo puede dar una falsa sensación de seguridad que lleva a vigilar menos. El bebé debe estar siempre sujeto directamente por un adulto, sin dispositivos que sustituyan el contacto físico; como alternativas más seguras se citan el baño supervisado sobre una superficie firme, con el bebé en el regazo del adulto, o en asientos de baño aprobados, siempre con vigilancia constante. El uso frecuente puede interferir además en el control postural y motor, porque el bebé queda como colgado del cuello. (fuente en portugués)"
+      ]
+    },
+    {
+      "source_type": "reference",
+      "title": "Quemaduras",
+      "original_title": "Queimaduras",
+      "organization": "Sociedade Brasileira de Pediatria (SBP)",
+      "publication_year": 2024,
+      "url": "https://www.sbp.com.br/pediatria-para-familias/seguranca-e-prevencao/queimaduras/",
+      "specialties": [
+        "pediatrics",
+        "emergency_medicine"
+      ],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "original_language": "pt",
+      "topics": [
+        "quemaduras",
+        "intoxicaciones"
+      ],
+      "chunks": [
+        "Quemaduras (Sociedade Brasileira de Pediatria, 2024). Tema: epidemiología y riesgo de quemaduras en los niños pequeños. Hallazgo: las quemaduras tienen un tratamiento largo y doloroso, a menudo obligan a un ingreso prolongado y pueden dejar secuelas. Según datos del Ministerio de Salud de Brasil de 2021, los ingresos por fuentes de calor y sustancias calientes fueron especialmente altos entre 1 y 4 años (62% de los casos en menores de 20 años) y cerca del 23% de las muertes por quemaduras ese año fue en ese mismo grupo. La mayoría ocurre en niños de hasta 4 años en accidentes domésticos, y las quemaduras térmicas son las más frecuentes, sobre todo las escaldaduras por líquidos calientes. La cocina es el lugar más peligroso. (fuente en portugués)",
+        "Quemaduras (Sociedade Brasileira de Pediatria, 2024). Tema: prevención de quemaduras. Hallazgo: no sostener líquidos calientes mientras se lleva a un niño en brazos, mantener tazas y recipientes calientes fuera de su alcance, y en el baño echar primero el agua fría y luego la caliente, comprobando con el codo o un termómetro. No dejar entrar en la cocina a niños menores de edad escolar sin un adulto responsable ni con el horno encendido, cocinar en los fuegos de atrás con los mangos hacia atrás y poner lo caliente en el centro de la mesa. Guardar cerillas, mecheros y velas fuera de su alcance, no dejar enfriar una plancha en el suelo, no fumar donde hay niños y mantener pilas y productos corrosivos fuera de su alcance, en su envase original y nunca en botellas de bebida. (fuente en portugués)",
+        "Quemaduras (Sociedade Brasileira de Pediatria, 2024). Tema: primeros auxilios ante una quemadura. Hallazgo: en la quemadura térmica, enfriar la zona cuanto antes bajo agua corriente fría, no helada, durante varios minutos; no tirar de la ropa pegada, no aplicar nada (mantequilla, aceite, café molido, pasta de dientes, hielo), no reventar ampollas, quitar joyas, ropa u otros objetos que puedan comprimir la zona si se hincha, cubrir con un paño limpio y buscar atención médica de inmediato. En la quemadura química se aclara con agua corriente al menos 20 minutos, y tragar o sospechar que se ha tragado un producto corrosivo es una emergencia. En la eléctrica no se toca a la víctima hasta cortar la corriente y se pide ayuda de inmediato. (fuente en portugués)"
+      ]
+    },
+    {
+      "source_type": "reference",
+      "title": "Traumatismo craneoencefálico leve en la infancia",
+      "original_title": "Traumatismo Cranioencefálico Leve na Infância",
+      "organization": "Sociedade Brasileira de Pediatria (SBP)",
+      "publication_year": 2025,
+      "url": "https://www.sbp.com.br/pediatria-para-familias/seguranca-e-prevencao/traumatismo-cranioencefalico-leve-na-infancia/",
+      "specialties": [
+        "pediatrics",
+        "emergency_medicine"
+      ],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "original_language": "pt",
+      "topics": [
+        "caidas",
+        "signos_alarma",
+        "cuando_consultar"
+      ],
+      "chunks": [
+        "Traumatismo craneoencefálico leve en la infancia (Sociedade Brasileira de Pediatria, 2025). Tema: cuándo acudir al hospital tras un golpe en la cabeza. Hallazgo: se considera leve si el niño sigue despierto, interactúa con normalidad y no tiene signos de lesión grave. Hay que ir al hospital de inmediato si hay pérdida de conciencia aunque sea breve, tres o más vómitos, somnolencia excesiva o dificultad para despertarlo, irritabilidad importante, confusión o habla farfullante, convulsión tras el golpe, sangre o líquido claro por nariz u oído, debilidad en brazos o piernas, dificultad para andar o postración, visión doble o movimientos anormales de los ojos, o si el mecanismo del golpe fue grave. En menores de 2 años también si hay llanto inconsolable, rechazo de las tomas, cambio de conducta o fontanela abombada. (fuente en portugués)",
+        "Traumatismo craneoencefálico leve en la infancia (Sociedade Brasileira de Pediatria, 2025). Tema: mecanismos de golpe graves y observación en casa. Hallazgo: se considera mecanismo grave una caída de más de 0,9 m en menores de 2 años (más de 1,5 m en mayores de 2), un accidente de tráfico con atropello, choque en el que muere otro ocupante, vuelco o expulsión del vehículo, un impacto directo de gran fuerza, una fractura de cráneo visible o palpable o una convulsión inmediata; en estos casos la valoración médica debe ser inmediata. Tras un golpe leve el niño puede dormir y no hace falta despertarlo cada hora, pero las primeras 24 a 48 horas son las más críticas: un adulto debe quedarse con él, y ante cualquier signo de alarma hay que acudir sin demora. (fuente en portugués)",
+        "Traumatismo craneoencefálico leve en la infancia (Sociedade Brasileira de Pediatria, 2025). Tema: cuidados tras el golpe y prevención. Hallazgo: la mayoría de los traumatismos leves se recuperan por completo; la mayoría de los niños mejora en 2 a 4 semanas y la cirugía es rara. En casa se mantiene al niño en un ambiente tranquilo y vigilado, con líquidos y comida ligera según el apetito, y se pueden aplicar compresas frías 10 a 20 minutos en las primeras 24 a 48 horas para el chichón; sin medicamentos que no haya recetado un médico. Para prevenir: sillas de coche adecuadas al peso, protectores en ventanas y escaleras, vigilancia en parques y no sacudir nunca a un bebé. (fuente en portugués)"
+      ]
+    },
+    {
+      "source_type": "reference",
+      "title": "Andador: un lío sobre ruedas",
+      "original_title": "Andarilho: um sarilho sobre rodas",
+      "organization": "Sociedade Portuguesa de Pediatria (SPP)",
+      "publication_year": 2024,
+      "url": "https://criancaefamilia.spp.pt/comportamentos-e-parentalidade/seguranca/andarilho-um-sarilho-sobre-rodas/",
+      "specialties": [
+        "pediatrics"
+      ],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "original_language": "pt",
+      "topics": [
+        "caidas",
+        "ahogamiento",
+        "juguetes"
+      ],
+      "chunks": [
+        "Andador: un lío sobre ruedas (Sociedade Portuguesa de Pediatria, Portal Criança e Família, 2024). Tema: riesgos de los andadores con ruedas. Hallazgo: se usan sobre todo entre los 6 y los 15 meses y dan una falsa sensación de seguridad que lleva a dejar al niño sin la supervisión adecuada. Pueden alcanzar hasta 1 metro por segundo, lo que aumenta las caídas por escaleras o suelos irregulares, los choques y el ahogamiento en piscinas, y permiten llegar a cajones, enchufes, calefactores, bebidas calientes, medicamentos y productos químicos. Se asocian a más lesiones que cualquier otro accesorio infantil: los traumatismos de cabeza y cuello aparecen hasta en el 90 % de los casos, y se han descrito muertes. (fuente en portugués)",
+        "Andador: un lío sobre ruedas (Sociedade Portuguesa de Pediatria, Portal Criança e Família, 2024). Tema: efecto en el desarrollo y alternativas más seguras. Hallazgo: los andadores no estimulan el desarrollo psicomotor y pueden retrasar la marcha autónoma; ponerlos de pie antes de controlar la cabeza, sentarse y gatear favorece posturas inadecuadas de pies y piernas e impide entrenar la fuerza muscular de las piernas. La mayoría de las organizaciones internacionales especializadas en pediatría desaconseja su uso. Como alternativas se proponen los parques, las alfombras de actividades, los centros de actividades estacionarios sin ruedas y las tronas. (fuente en portugués)"
+      ]
+    }
+  ]
+}

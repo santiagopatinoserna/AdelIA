@@ -1,0 +1,1105 @@
+{
+  "_meta": {
+    "topic": "Candidatas del dominio respiratorio_sueno (0-24 meses), fuentes oficiales de muchos países leídas en su idioma y resumidas en español.",
+    "compiled": "2026-11-06",
+    "method": "Seis investigadores de Claude Code leyeron cada página con WebFetch y la pasaron por un subagente verificador (~/dev/adelia-night/research/corpus-*, verify.json). Al integrarlas se quitaron las fuentes cuyos términos prohíben adaptar, traducir o el uso comercial, los calendarios de vacunas de otros países y los duplicados con data/ y entre lotes; los teléfonos y servicios de otros sistemas de salud se reescribieron en palabras con el nivel de urgencia de la fuente, y cada fragmento sobre alarmas, urgencias, fiebre, respiración, convulsiones, deshidratación, ictericia o sepsis se volvió a comprobar contra el texto de la página descargado con curl. Idiomas del original: español 15, francés 10, inglés 7, portugués 5, italiano 4, sueco 2, danés 1, noruego 1. Detalle en docs/corpus/CANDIDATOS_2026_11_06.md.",
+    "caveat": "Los fragmentos son paráfrasis breves en español, no traducciones literales ni citas; `language` es el idioma del fragmento (es) y `original_language` el de la página. Cada fragmento conserva las cifras, edades y el nivel de urgencia de su propia fuente, que pueden diferir entre países. No es consejo médico.",
+    "purpose": "Candidato: no lo carga el arranque. Se mide con scripts/golden_gate.sh --candidates antes de pasar a data/ como evidence_respiratorio_sueno_2026_11.json."
+  },
+  "sources": [
+    {
+      "source_type": "reference",
+      "title": "Virus respiratorio sincitial (Sundhed.dk)",
+      "original_title": "RS-virus (Sundhed.dk)",
+      "organization": "Sundhed.dk, Patienthåndbogen",
+      "publication_year": 2024,
+      "url": "https://www.sundhed.dk/borger/patienthaandbogen/boern/sygdomme/infektioner/rs-virus/",
+      "specialties": [
+        "pediatrics",
+        "general_medicine"
+      ],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "original_language": "da",
+      "topics": [
+        "bronquiolitis",
+        "cuando_consultar"
+      ],
+      "chunks": [
+        "Virus respiratorio sincitial (Sundhed.dk, Patienthåndbogen, 2024). Tema: frecuencia y evolución de la infección por virus respiratorio sincitial en niños pequeños. Hallazgo: es la causa más frecuente de infección respiratoria que requiere ingreso en niños pequeños; a los 2 años casi todos la han pasado al menos una vez. Aproximadamente el 3 % de los niños daneses ingresa al menos una vez en los dos primeros años de vida. Se presenta cada año en invierno. Sobre todo en los menores de 6 meses puede aparecer infección de vías bajas con dificultad para respirar, y los menores de 3 meses, los prematuros y los niños con enfermedad cardiaca, pulmonar u otra enfermedad crónica son grupos de riesgo de curso grave. La mayoría mejora en 3-5 días, aunque los síntomas pueden durar 2-3 semanas.",
+        "Virus respiratorio sincitial (Sundhed.dk, Patienthåndbogen, 2024). Tema: cuándo ver a un médico por virus respiratorio sincitial. Hallazgo: la página indica que el niño debe ser visto por un médico si respira con dificultad, con respiración rápida, sibilancias o hundimiento del pecho al respirar, si no quiere comer, tiene las mucosas secas, no orina u orina muy poco, o parece agotado. Otros signos de alarma citados son flacidez y coloración azulada de la piel. En menores de 6 meses destaca la respiración rápida, con pitidos o silbidos. La página no da teléfonos ni indica cuándo llamar al 112.",
+        "Virus respiratorio sincitial (Sundhed.dk, Patienthåndbogen, 2024). Tema: prevención en el hogar y vacunación de la embarazada. Hallazgo: se aconseja coger al niño en brazos durante los accesos de tos, evitar el humo del tabaco, ventilar varias veces al día y cuidar la higiene de manos. Los menores de 3 meses pueden protegerse evitando el contacto con otros niños, algo imposible si hay hermanos, y la asistencia a una guardería aumenta el riesgo. Según la página, vacunar a la embarazada frente a este virus reduce el riesgo de infección grave de vías bajas en el bebé en cerca de un 70 % durante los primeros 6 meses."
+      ]
+    },
+    {
+      "source_type": "reference",
+      "title": "Ear Infection Basics (CDC)",
+      "organization": "CDC",
+      "publication_year": 2024,
+      "url": "https://www.cdc.gov/ear-infection/about/index.html",
+      "specialties": [
+        "pediatrics",
+        "general_medicine"
+      ],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "original_language": "en",
+      "topics": [
+        "otitis",
+        "cuando_consultar",
+        "resfriado_mocos"
+      ],
+      "chunks": [
+        "Ear Infection Basics (CDC, Centros para el Control y la Prevención de Enfermedades, EE. UU., 2024). Tema: síntomas de otitis y cuándo consultar. Hallazgo: los síntomas de una infección de oído en los niños son dolor de oído, fiebre, irritabilidad, frotarse o tirarse de la oreja y dormir mal. Los CDC indican ir al médico si hay fiebre de 39 °C o más, sale pus, líquido o supuración del oído, los síntomas empeoran, duran más de 2 o 3 días o el niño oye peor. Si el bebé tiene menos de 3 meses y fiebre de 38 °C o más, hay que contactar con el médico enseguida. Ante cualquier síntoma intenso o que preocupe, consultar (fuente en inglés).",
+        "Ear Infection Basics (CDC, Centros para el Control y la Prevención de Enfermedades, EE. UU., 2024). Tema: por qué muchas otitis se curan solas y la espera vigilada. Hallazgo: el sistema inmunitario a menudo cura solo la otitis media, así que no siempre hace falta antibiótico. Para casos leves, el médico puede proponer una espera vigilada de 2 o 3 días para ver si mejora, o dar una receta diferida para usar solo si no mejora. Las infecciones graves o que duran más de 2 o 3 días sí necesitan que el médico las trate enseguida. Mientras tanto ayudan el descanso, ofrecer más líquidos y aliviar el dolor y la fiebre como indique el pediatra (fuente en inglés).",
+        "Ear Infection Basics (CDC, Centros para el Control y la Prevención de Enfermedades, EE. UU., 2024). Tema: causas y prevención de las otitis. Hallazgo: las otitis medias suelen deberse a bacterias, pero también a virus, como los del resfriado, y son más frecuentes en los niños que en los adultos. Para prevenirlas, los CDC recomiendan tener las vacunas al día (incluidas la de la gripe y la del neumococo), lavarse las manos con frecuencia, dar lactancia materna exclusiva hasta los 6 meses aproximadamente y mantenerla al menos hasta los 12 meses, y evitar el tabaco y el humo de tabaco ajeno (fuente en inglés)."
+      ],
+      "original_license": "public_domain"
+    },
+    {
+      "source_type": "reference",
+      "title": "RSV in Infants and Young Children (CDC)",
+      "organization": "CDC",
+      "publication_year": 2026,
+      "url": "https://www.cdc.gov/rsv/infants-young-children/index.html",
+      "specialties": [
+        "pediatrics",
+        "pulmonology",
+        "general_medicine"
+      ],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "original_language": "en",
+      "topics": [
+        "bronquiolitis",
+        "respiracion_normal",
+        "signos_alarma"
+      ],
+      "chunks": [
+        "RSV in Infants and Young Children (CDC, Centros para el Control y la Prevención de Enfermedades de EE. UU., 2026). Tema: cómo se manifiesta el VRS en bebés y cuándo buscar atención médica urgente. Hallazgo: los primeros signos son mocos, comer o beber menos y tos, que puede pasar a pitos (sibilancias) o a dificultad para respirar; al principio puede no ser grave y agravarse a los pocos días. En los menores de 6 meses los síntomas pueden incluir irritabilidad, menos actividad, comer o beber menos y apneas (pausas en la respiración de más de 10 segundos); muchos bebés con VRS no tienen fiebre. En el apartado de cuándo buscar atención urgente, los CDC aconsejan buscar atención médica si al niño le cuesta respirar, no bebe suficientes líquidos o los síntomas empeoran. (fuente en inglés)",
+        "RSV in Infants and Young Children (CDC, 2026). Tema: gravedad del VRS en lactantes y quién tiene más riesgo. Hallazgo: el VRS puede causar bronquiolitis (inflamación de las vías pequeñas del pulmón) o neumonía. Cada año ingresan por VRS 2 o 3 de cada 100 bebés menores de 3 meses; en el hospital pueden necesitar oxígeno, sueros por vena o ventilación mecánica (una máquina que les ayuda a respirar), y la mayoría vuelve a casa en pocos días. El riesgo es mayor cuanto más pequeño es el bebé, y también en los nacidos prematuros, los que tienen enfermedad pulmonar crónica o cardiopatía congénita, defensas bajas, fibrosis quística grave o enfermedades neuromusculares, sobre todo si les cuesta tragar o expulsar los mocos. La mayoría de los niños ha pasado el VRS antes de los 2 años. (fuente en inglés)"
+      ],
+      "original_license": "public_domain"
+    },
+    {
+      "source_type": "guideline",
+      "title": "How whooping cough affects children (HSE)",
+      "organization": "Health Service Executive (HSE)",
+      "publication_year": 2023,
+      "url": "https://www2.hse.ie/conditions/whooping-cough-babies-and-children/",
+      "specialties": [
+        "pediatrics",
+        "general_medicine",
+        "pulmonology"
+      ],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "original_language": "en",
+      "topics": [
+        "tos",
+        "signos_alarma"
+      ],
+      "chunks": [
+        "How whooping cough affects children (HSE, 2023). Tema: qué es la tosferina y por qué es más grave en bebés. Hallazgo: la tosferina es una infección muy contagiosa de los pulmones y las vías respiratorias que produce ataques repetidos de tos que pueden durar 2 meses o más. Es más grave en menores de 6 meses, que tienen más probabilidad de sufrir deshidratación, neumonía, dificultades para respirar, pérdida de peso, convulsiones, problemas de riñón, daño cerebral por falta de oxígeno y, rara vez, la muerte.",
+        "How whooping cough affects children (HSE, 2023). Tema: cuándo consultar. Hallazgo: si se cree que un bebé tiene tosferina, o si tiene menos de 1 año, se le lleva con urgencia al médico o al hospital, llamando antes por teléfono para que el centro pueda evitar el contagio a otros pacientes. La página remite a otras secciones sobre síntomas, vacunas y tratamiento, y no da criterios para llamar a una ambulancia."
+      ]
+    },
+    {
+      "source_type": "guideline",
+      "title": "Bronchiolitis: symptoms, causes and treatment (Healthdirect Australia)",
+      "organization": "Healthdirect Australia",
+      "publication_year": 2024,
+      "url": "https://www.healthdirect.gov.au/bronchiolitis",
+      "specialties": [
+        "pediatrics",
+        "general_medicine",
+        "pulmonology",
+        "emergency_medicine"
+      ],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "original_language": "en",
+      "topics": [
+        "bronquiolitis",
+        "sibilancias",
+        "respiracion_normal",
+        "signos_alarma"
+      ],
+      "chunks": [
+        "Bronchiolitis: symptoms, causes and treatment (Healthdirect Australia, 2024). Tema: qué es la bronquiolitis y quién tiene más riesgo. Hallazgo: es una infección vírica frecuente del pecho que dificulta la respiración; afecta sobre todo a bebés menores de 12 meses, es más común en otoño e invierno y se contagia de persona a persona. La causa más habitual es el virus respiratorio sincitial (VRS). Empieza como un catarro, con mocos, tos y fiebre, y puede empeorar a los pocos días, con respiración rápida y esfuerzo para respirar (costillas o piel del cuello que se hunden, aletas nasales), irritabilidad y dificultad para comer. Suele durar de 7 a 10 días y la tos puede alargarse unas semanas. Si el bebé nació prematuro o tiene otros problemas de salud, los síntomas pueden ser más graves, y fumar o vapear cerca de él puede empeorar la bronquiolitis.",
+        "Bronchiolitis: symptoms, causes and treatment (Healthdirect Australia, 2024). Tema: cuidados en casa y niveles de urgencia. Hallazgo: en casa se deja descansar al bebé, se ofrecen tomas pequeñas y frecuentes, se limpia la nariz con suero salino, no se fuma ni se vapea cerca de él, se le mantiene alejado de otros niños pequeños mientras esté enfermo y se lavan las manos con frecuencia. Hay que llamar a una ambulancia de inmediato si tiene dificultad para respirar, está agotado de tanto esforzarse, se pone azulado o deja de respirar unos segundos.",
+        "Bronchiolitis: symptoms, causes and treatment (Healthdirect Australia, 2024). Tema: cuándo llevarlo al médico. Hallazgo: Hay que llevarlo siempre al médico si está enfermo y tiene menos de 10 semanas o nació antes de tiempo, tiene enfermedad pulmonar o las defensas bajas, toma menos de la mitad de lo habitual en 2 o más tomas, rechaza las tomas o moja menos pañales, respira muy rápido, tiene sibilancias, está muy cansado, difícil de despertar o irritable, está pálido y sudoroso o empeora rápido."
+      ]
+    },
+    {
+      "source_type": "guideline",
+      "title": "Bronchiolitis (KidsHealth New Zealand)",
+      "organization": "KidsHealth (Paediatric Society of New Zealand)",
+      "publication_year": 2026,
+      "url": "https://www.kidshealth.org.nz/bronchiolitis",
+      "specialties": [
+        "pediatrics",
+        "general_medicine",
+        "pulmonology",
+        "emergency_medicine"
+      ],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "original_language": "en",
+      "topics": [
+        "bronquiolitis",
+        "sibilancias",
+        "respiracion_normal"
+      ],
+      "chunks": [
+        "Bronchiolitis (KidsHealth New Zealand, 2026). Tema: qué es y cómo evoluciona. Hallazgo: es una enfermedad frecuente del pecho causada por un virus (sobre todo el VRS o un rinovirus) que afecta a las vías aéreas más pequeñas; afecta sobre todo a bebés menores de 12 meses y es más común en invierno y primavera. Suele ser leve y lo esperable es que el bebé se recupere del todo por sí solo. Empieza como un resfriado con moqueo, con tos, respiración más fuerte y rápida, sibilancias y a veces fiebre. Los síntomas suelen empeorar durante unos días antes de mejorar; la tos suele durar de 10 a 14 días y puede llegar a un mes.",
+        "Bronchiolitis (KidsHealth New Zealand, 2026). Tema: cuidados en casa. Hallazgo: pueden quedarse en casa los bebés que comen bien, están contentos y activos y no hacen demasiado esfuerzo para respirar. Se ofrecen tomas más pequeñas y más a menudo, se mantiene despejada la nariz con suero salino de farmacia si está tapada o con costras, no se fuma ni se vapea en casa ni cerca del bebé, y se le mantiene en casa para no contagiar. Los antibióticos no ayudan, porque la causa es un virus.",
+        "Bronchiolitis (KidsHealth New Zealand, 2026). Tema: signos de dificultad respiratoria y urgencia. Hallazgo: se ve a un profesional con urgencia si el bebé tiene menos de 3 meses, respira rápido, tiene respiración ruidosa y hace más esfuerzo para respirar, tiene mal aspecto, toma menos de la mitad de sus tomas habituales o vomita. Hay que llamar a emergencias y pedir ayuda médica urgente si está azulado alrededor de la boca, lucha por respirar, cuesta despertarlo o está flácido. Si la respiración empeora o hay preocupación, se vuelve a un profesional, aunque ya lo hayan visto."
+      ]
+    },
+    {
+      "source_type": "reference",
+      "title": "Ear Infections In Children (KidsHealth New Zealand)",
+      "organization": "KidsHealth (Paediatric Society of New Zealand)",
+      "publication_year": 2026,
+      "url": "https://www.kidshealth.org.nz/ear-infections-in-children",
+      "specialties": [
+        "pediatrics",
+        "general_medicine"
+      ],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "original_language": "en",
+      "topics": [
+        "otitis"
+      ],
+      "chunks": [
+        "Ear Infections In Children (KidsHealth New Zealand, 2026). Tema: cómo se manifiesta la otitis en bebés. Hallazgo: son muy frecuentes en niños pequeños y pueden causar dolor de oído, fiebre y problemas de audición; los causan virus o bacterias y a menudo coinciden con un catarro, y la mayoría se cura por completo. En bebés y niños pequeños a veces el único signo es fiebre o mucho llanto; están difíciles de calmar o más molestos tumbados, pegajosos y quejicas, comen o beben menos y pueden tener problemas de equilibrio. También puede salir líquido del oído o tirarse de la oreja. El dolor suele empezar rápido y desaparecer en unas 24 horas.",
+        "Ear Infections In Children (KidsHealth New Zealand, 2026). Tema: cuándo consultar y prevención. Hallazgo: se ve a un profesional si se cree que hay otitis, y se vuelve si el dolor no cede tras 2 días, sale pus o líquido, el niño parece más enfermo o hay preocupación. Hay que volver con urgencia si hay hinchazón, enrojecimiento o dolor en o alrededor del oído, está flácido o más adormilado de lo normal, responde menos, o tiene rigidez de cuello o le molesta la luz (posible meningitis). Se revisa el oído tras la infección para comprobar que no queda líquido, y se consulta si preocupa el oído con líquido, que puede afectar a la audición y al habla. Ayudan un ambiente sin humo ni vapeo, amamantar (la lactancia más allá de los 6 meses protege más), una habitación caldeada y seca y las vacunas al día."
+      ]
+    },
+    {
+      "source_type": "reference",
+      "title": "Colds, coughs and ear infections in children (NHS)",
+      "organization": "NHS (National Health Service, Reino Unido)",
+      "publication_year": 2025,
+      "url": "https://www.nhs.uk/baby/health/colds-coughs-and-ear-infections-in-children/",
+      "specialties": [
+        "pediatrics",
+        "general_medicine",
+        "emergency_medicine"
+      ],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "original_language": "en",
+      "topics": [
+        "resfriado_mocos",
+        "tos",
+        "cuando_consultar",
+        "signos_alarma"
+      ],
+      "chunks": [
+        "Colds, coughs and ear infections in children (NHS, National Health Service, Reino Unido, 2025). Tema: mocos y nariz tapada en bebés y niños pequeños. Hallazgo: los niños pasan de media de 5 a 8 resfriados al año porque aún no tienen defensas frente a los cientos de virus del catarro. En los más pequeños, la mayoría de los resfriados se cura en 2 semanas. Si tiene la nariz tapada, el suero salino puede ablandar los mocos secos y despejarle la nariz; el NHS aconseja preguntar por él al farmacéutico, al médico o a la enfermera pediátrica. Hay que darle muchos líquidos y que toda la familia se lave las manos a menudo. Los menores de 6 años no deben tomar remedios sin receta para la tos y el resfriado, tampoco descongestivos, salvo que lo indique el médico o el farmacéutico. No hay que dar bebidas calientes a niños pequeños. (fuente en inglés)",
+        "Colds, coughs and ear infections in children (NHS, Reino Unido, 2025). Tema: cuándo la tos o el resfriado necesitan médico o urgencias. Hallazgo: con el resfriado suelen toser por los mocos que caen a la garganta. Si come, bebe y respira con normalidad y no tiene pitos, no suele ser preocupante. Hay que llevarlo al médico si la tos dura más de 3 semanas. Si tiene fiebre muy alta o está caliente, frío o con escalofríos, puede tener una infección del pecho: llévalo al médico o pide consejo médico urgente. Si es por bacterias, el médico le tratará la infección, aunque la tos no se va de inmediato. Una tos larga que empeora de noche o al correr puede ser asma. El NHS indica llamar a emergencias o ir a urgencias ya si le cuesta respirar, si tiene un crup intenso (tos perruna y ruido áspero al coger aire) y le cuesta respirar, o si no puede tragar líquidos ni saliva. (fuente en inglés)"
+      ]
+    },
+    {
+      "source_type": "reference",
+      "title": "Dificultad para respirar (guía de síntomas KidsDoc, HealthyChildren, AAP)",
+      "organization": "American Academy of Pediatrics",
+      "publication_year": null,
+      "undated_reason": "Guía de síntomas KidsDoc (Barton Schmitt, Schmitt Pediatric Guidelines, copyright 2000-2025) sin fecha de publicación del tema; consultada el 2026-11-06.",
+      "url": "https://www.healthychildren.org/Spanish/tips-tools/symptom-checker/Paginas/symptomviewer.aspx?symptom=Dificultad+para+respirar",
+      "specialties": [
+        "pediatrics",
+        "emergency_medicine",
+        "pulmonology"
+      ],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "original_language": "es",
+      "topics": [
+        "respiracion_normal",
+        "signos_alarma",
+        "cuando_consultar"
+      ],
+      "chunks": [
+        "Dificultad para respirar (guía de síntomas KidsDoc, HealthyChildren.org, Academia Americana de Pediatría). Tema: cómo reconocer que al bebé le cuesta respirar. Hallazgo: dificultad para respirar (disnea) significa tener que esforzarse mucho para respirar, cuando lo normal es respirar de forma fácil y tranquila. Los signos son: le cuesta cada respiración o le falta el aire, respira con tanto esfuerzo que apenas puede llorar, se le hunden las costillas o el pecho con cada respiración (tiraje), hace ruido al respirar (como pitos o sibilancias), respira mucho más rápido de lo normal o se le ponen morados o azulados los labios o la cara. Es la urgencia pediátrica más frecuente, y los menores de 1 año son los de más riesgo porque sus vías respiratorias son estrechas y se taponan con facilidad.",
+        "Dificultad para respirar (guía de síntomas KidsDoc, HealthyChildren.org, AAP). Tema: cuándo llamar a emergencias o ir a urgencias si respira raro. Hallazgo: llamar a emergencias (112) si la dificultad para respirar es grave (apenas puede llorar), si se desmaya o deja de respirar, si tiene los labios o la cara azulados sin estar tosiendo, si se ha atragantado con un objeto pequeño o si empieza a respirar mal de repente tras una picadura de abeja, un medicamento nuevo o un alimento al que es alérgico. Urgencias ya: bebé menor de 1 año con dificultad para respirar, costillas que se hunden al respirar, o dificultad para respirar con pitos fuertes o ruido áspero al coger aire (estridor). Se llama al médico ya si tiene pitos leves, respira mucho más rápido de lo normal, se pone morado al toser, la tos no le deja dormir, se le ve muy enfermo o tiene cualquier otra dificultad para respirar.",
+        "Dificultad para respirar (guía de síntomas KidsDoc, HealthyChildren.org, AAP). Tema: qué hacer mientras tanto en casa. Hallazgo: respirar vapor templado (por ejemplo, en el baño cerrado con la ducha de agua caliente abierta) relaja las vías respiratorias y ablanda los mocos. Si tiene la nariz tapada, la guía aconseja echar suero fisiológico en cada fosa nasal y aspirar después; si no hay suero, se puede usar agua embotellada o agua limpia del grifo, pero en menores de 1 año solo agua embotellada o agua del grifo hervida y enfriada. Hay que evitar el humo de tabaco, que empeora la tos y la respiración. La guía insiste en ir a urgencias de inmediato si el médico o la enfermera no devuelven la llamada en 30 minutos, si empiezan a hundírsele las costillas, si los pitos se vuelven fuertes o si respira peor."
+      ]
+    },
+    {
+      "source_type": "reference",
+      "title": "Estridor y laringomalacia: ¿la respiración ruidosa y ronca de mi bebé es grave? (HealthyChildren, AAP)",
+      "organization": "American Academy of Pediatrics",
+      "publication_year": 2022,
+      "url": "https://www.healthychildren.org/Spanish/health-issues/conditions/ear-nose-throat/Paginas/laryngomalacia-and-stridor-is-my-babys-noisy-breathing-serious.aspx",
+      "specialties": [
+        "pediatrics",
+        "pulmonology",
+        "neonatology"
+      ],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "original_language": "es",
+      "topics": [
+        "respiracion_normal"
+      ],
+      "chunks": [
+        "Estridor y laringomalacia: ¿la respiración ruidosa y ronca de mi bebé es grave? (HealthyChildren.org, Academia Americana de Pediatría, 2022). Tema: por qué un bebé hace ruido al respirar. Hallazgo: el estridor es un ruido fuerte y anormal al respirar, a menudo agudo o como un chillido repetido, que puede aparecer a ratos o en reposo e indica que la vía respiratoria alta está parcialmente estrechada. Es más frecuente en bebés porque sus vías son más estrechas. La causa más común en el lactante es la laringomalacia: el cartílago de la laringe del recién nacido es blando e inmaduro y sus tejidos se pliegan hacia dentro al coger aire. Otras causas son el crup, la inhalación de un objeto o problemas de las cuerdas vocales.",
+        "Estridor y laringomalacia: ¿la respiración ruidosa y ronca de mi bebé es grave? (HealthyChildren.org, AAP, 2022). Tema: evolución de la laringomalacia. Hallazgo: los síntomas suelen empezar en los primeros días o semanas de vida. En la mayoría de los bebés no es grave y no necesita tratamiento, porque el cartílago se fortalece al crecer: suele resolverse hacia el año, aunque puede tardar hasta los 18 meses o los 2 años, y conviene vigilar el crecimiento y el desarrollo. Muchos de estos bebés tienen también reflujo, que puede empeorar los síntomas. El diagnóstico lo suele hacer un otorrinolaringólogo infantil con una cámara fina que pasa por la nariz, en la consulta. Algunos bebés necesitan cirugía si tienen problemas respiratorios graves, problemas para comer o no ganan peso.",
+        "Estridor y laringomalacia: ¿la respiración ruidosa y ronca de mi bebé es grave? (HealthyChildren.org, AAP, 2022). Tema: qué signos obligan a que revisen al bebé que respira raro. Hallazgo: la página aconseja que se valore al bebé si tiene respiración ruidosa, dificultad para comer o hace ruidos de jadeo o de ahogo mientras come, regurgita a menudo y está molesto después de las tomas, se le hunde la piel del cuello o entre las costillas con cada respiración (tiraje) o hace pausas en la respiración mientras duerme. Ante cualquier preocupación por la salud del bebé, la recomendación es hablar con su pediatra."
+      ]
+    },
+    {
+      "source_type": "reference",
+      "title": "Infecciones de oído en niños: qué deben saber los padres (HealthyChildren, AAP)",
+      "organization": "American Academy of Pediatrics",
+      "publication_year": 2023,
+      "url": "https://www.healthychildren.org/Spanish/health-issues/conditions/ear-nose-throat/Paginas/Ear-Infection-Information.aspx",
+      "specialties": [
+        "pediatrics"
+      ],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "original_language": "es",
+      "topics": [
+        "otitis",
+        "resfriado_mocos"
+      ],
+      "chunks": [
+        "Infecciones de oído en niños: qué deben saber los padres (HealthyChildren.org, American Academy of Pediatrics, 2023). Tema: por qué aparece la otitis y sus síntomas. Hallazgo: la otitis media se produce cuando virus o bacterias infectan el oído medio, por lo general después de que un resfriado o una alergia tapone la trompa de Eustaquio; casi 5 de cada 6 niños tienen una antes de los 3 años. Da dolor de oído que puede ir y venir y suele empeorar por la noche, fiebre, sensación de oído tapado (el bebé puede no responder como siempre cuando le hablan) y a veces salida de líquido o pus. Tocarse o tirarse de la oreja por sí solo no basta para pensar en otitis, porque los bebés lo hacen para calmarse o jugando.",
+        "Infecciones de oído en niños: qué deben saber los padres (HealthyChildren.org, American Academy of Pediatrics, 2023). Tema: la mayoría se curan solas y cuándo es más probable que el pediatra decida tratar. Hallazgo: no siempre hace falta antibiótico: alrededor del 80 % de las otitis de los niños se curan sin medicamentos, y el pediatra puede esperar entre 48 y 72 horas, o vigilar durante unos días o una semana, antes de decidir. Aun así, no hay que retrasar la llamada al pediatra: es importante que vea al niño cuanto antes, porque la otitis puede doler mucho y quitar el sueño. Es más probable que el médico se plantee tratarla si el niño es menor de 2 años, la infección es grave o tiene dolor intenso o fiebre, los síntomas duran varios días y empeoran, o tiene las defensas bajas.",
+        "Infecciones de oído en niños: qué deben saber los padres (HealthyChildren.org, American Academy of Pediatrics, 2023). Tema: guardería, contagio y prevención de las otitis. Hallazgo: la otitis no es contagiosa, así que el niño puede volver a la guardería en cuanto se encuentre lo bastante bien, aunque aún se esté recuperando; eso sí, muchas empiezan con un virus respiratorio, como el del catarro, que sí se contagia. Aumentan el riesgo los resfriados, la gripe y las alergias, ir a la guardería, tomar el biberón tumbado (sobre todo para la siesta o por la noche) y el humo de tabaco, también el que queda en la ropa y la casa. Ayudan a prevenirlas el lavado de manos, la lactancia materna y tener al día las vacunas, incluida la de la gripe. La pérdida de audición por otitis es temporal, desaparece al curarse la infección y, por lo general, no deja daño permanente."
+      ]
+    },
+    {
+      "source_type": "reference",
+      "title": "Los niños y los resfriados (HealthyChildren, AAP)",
+      "organization": "American Academy of Pediatrics",
+      "publication_year": 2022,
+      "url": "https://www.healthychildren.org/Spanish/health-issues/conditions/ear-nose-throat/Paginas/Children-and-Colds.aspx",
+      "specialties": [
+        "pediatrics",
+        "general_medicine"
+      ],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "original_language": "es",
+      "topics": [
+        "resfriado_mocos",
+        "cuando_consultar",
+        "signos_alarma"
+      ],
+      "chunks": [
+        "Los niños y los resfriados (HealthyChildren.org, Academia Americana de Pediatría, 2022). Tema: por qué los niños pequeños tienen tantos mocos y cómo es un resfriado. Hallazgo: los niños pequeños tienen más resfriados que cualquier otra enfermedad; en sus dos primeros años, la mayoría tiene entre 8 y 10. Los causan virus que se contagian al toser, estornudar y con las manos que tocan la nariz. Los síntomas son mocos (primero transparentes y luego más espesos y de color), estornudos, fiebre leve (de 38,3 a 38,9 °C) sobre todo por la noche, menos apetito, dolor de garganta, tos, irritabilidad a ratos y ganglios algo inflamados. En un resfriado sin complicaciones, los síntomas deberían desaparecer en 7 a 10 días. No tiene cura; los antibióticos no sirven contra los virus, y lo que ayuda es la comodidad, el descanso y muchos líquidos.",
+        "Los niños y los resfriados (HealthyChildren.org, AAP, 2022). Tema: cuándo llamar al pediatra si el bebé está resfriado y respira mal. Hallazgo: en bebés de 3 meses o menos hay que llamar al pediatra al primer signo de enfermedad, porque los síntomas son difíciles de interpretar y un resfriado puede convertirse rápido en bronquiolitis, crup o neumonía. Por encima de los 3 meses, hay que llamar si se le abren las aletas de la nariz con cada respiración, se le hunde la piel por encima o por debajo de las costillas (tiraje), respira muy rápido o le cuesta respirar, tiene labios o uñas azulados, los mocos duran más de 10 a 14 días, la tos más de una semana, le duele el oído, tiene más de 38,9 °C o está más dormido o irritable de lo normal. Para prevenir, conviene alejar a los menores de 3 meses de personas enfermas, sobre todo en invierno."
+      ]
+    },
+    {
+      "source_type": "reference",
+      "title": "Resfriados (0-12 meses) (guía de síntomas KidsDoc, HealthyChildren, AAP)",
+      "organization": "American Academy of Pediatrics",
+      "publication_year": null,
+      "undated_reason": "Guía de síntomas KidsDoc (Barton Schmitt, Schmitt Pediatric Guidelines, copyright 2000-2025) sin fecha de publicación del tema; consultada el 2026-11-06.",
+      "url": "https://www.healthychildren.org/Spanish/tips-tools/Symptom-Checker/IFrame/Paginas/symptomviewer.aspx?symptom=Resfriados+%280-12+Meses%29",
+      "specialties": [
+        "pediatrics",
+        "general_medicine"
+      ],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "original_language": "es",
+      "topics": [
+        "resfriado_mocos",
+        "cuando_consultar"
+      ],
+      "chunks": [
+        "Resfriados (0-12 meses) (guía de síntomas KidsDoc, HealthyChildren.org, Academia Americana de Pediatría). Tema: qué es el resfriado del bebé que tiene mocos y cuánto dura. Hallazgo: el resfriado es una infección de las vías respiratorias altas causada por virus que da mocos (rinorrea) o nariz tapada (congestión nasal); los mocos empiezan transparentes y pueden volverse grises, amarillos o verdes. La mayoría de los bebés tiene fiebre al principio y a veces tos, ronquera, ojos llorosos o ganglios del cuello inflamados. Un bebé sano tiene unos 6 resfriados en su primer año. Lo esperable es que la fiebre dure 2 a 3 días, los mocos de 7 a 14 días y la tos de 2 a 3 semanas: un resfriado normal dura unas 2 semanas. Los antibióticos no sirven para el resfriado en sí y no hay medicamentos que aceleren la curación.",
+        "Resfriados (0-12 meses) (guía de síntomas KidsDoc, HealthyChildren.org, AAP). Tema: cuándo un bebé resfriado que respira mal o raro necesita urgencias. Hallazgo: la guía describe la dificultad para respirar como hacer mucho esfuerzo para respirar, respiraciones muy cortas, costillas que se hunden con cada respiración (tiraje), respiración ruidosa o mucho más rápida de lo normal y labios o cara azulados. Indica llamar a emergencias (112) si la dificultad para respirar es grave o hay riesgo para su vida, e ir a urgencias ya si el bebé no está alerta o se le hunden las costillas al respirar. Hay que llamar al médico o buscar atención en ese momento si le cuesta respirar aunque sea poco (salvo si se le pasa al limpiarle la nariz), si tiene pitos (sibilancias), respira mucho más rápido de lo normal, o si le cuesta tragar y empieza a babear.",
+        "Resfriados (0-12 meses) (guía de síntomas KidsDoc, HealthyChildren.org, AAP). Tema: otros motivos para consultar cuando el bebé está muy mocoso y cuándo basta con cuidarlo en casa. Hallazgo: también pide atención inmediata que tome menos de la mitad de la leche habitual, que haya signos de deshidratación (más de 8 horas sin orinar, orina oscura, boca muy seca y llanto sin lágrimas), fiebre en un menor de 12 semanas (sin darle nada para la fiebre antes de que lo vean) o de más de 40 °C. Hay que contactar con el médico en 24 horas si es menor de 6 meses, tiene dolor o supuración de oído, legañas amarillas o verdes, fiebre de más de 3 días o fiebre que vuelve tras más de 24 horas sin ella. En horario de consulta: si se despierta por la nariz tapada o los mocos duran más de 2 semanas. Un resfriado leve sin otros problemas se cuida en casa.",
+        "Resfriados (0-12 meses) (guía de síntomas KidsDoc, HealthyChildren.org, AAP). Tema: qué hacer en casa cuando el bebé tiene mocos y no puede respirar por la nariz. Hallazgo: la guía aconseja lavados nasales con suero fisiológico (o agua destilada, embotellada o hervida): echar suero en cada fosa nasal, aspirar los mocos y repetir hasta que salga transparente, y un buen momento es antes de las tomas. Para aspirar se usa con cuidado una pera de succión; conviene lavar la piel bajo la nariz con agua tibia y después protegerla con vaselina. Ofrecer más pecho o más fórmula previene la deshidratación y hace más líquidos los mocos; un humidificador ayuda si el aire es seco. Los medicamentos de farmacia para la tos y el resfriado no deben darse a niños pequeños: no son seguros y pueden causar efectos secundarios graves."
+      ]
+    },
+    {
+      "source_type": "reference",
+      "title": "Virus respiratorio sincitial (VRS): cuando es más que un simple resfriado (HealthyChildren, AAP)",
+      "organization": "American Academy of Pediatrics",
+      "publication_year": 2026,
+      "url": "https://www.healthychildren.org/Spanish/health-issues/conditions/chest-lungs/Paginas/rsv-when-its-more-than-just-a-cold.aspx",
+      "specialties": [
+        "pediatrics",
+        "pulmonology",
+        "general_medicine"
+      ],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "original_language": "es",
+      "topics": [
+        "bronquiolitis",
+        "resfriado_mocos",
+        "respiracion_normal"
+      ],
+      "chunks": [
+        "Virus respiratorio sincitial (VRS): cuando es más que un simple resfriado (HealthyChildren.org, Academia Americana de Pediatría, 2026). Tema: cómo empieza el VRS y cuándo deja de ser un catarro con mocos. Hallazgo: el VRS es un virus respiratorio muy común que casi todos los niños pasan antes de los 2 años; en la mayoría de los niños sanos parece un resfriado, pero es la causa más frecuente de ingreso en menores de 1 año. Empieza con fiebre (38 °C o más), tos, nariz tapada, mocos, estornudos, irritabilidad, comer peor y llanto o voz ronca. Después puede bajar a los pulmones (bronquiolitis o neumonía): respira rápido, se le abren las aletas de la nariz (aleteo nasal), cabecea, hace un quejido con cada respiración, respira con la tripa, se le hunden las costillas o el cuello (tiraje) o tiene pitos. Suele ser peor entre el día 3 y el 5 y dura de 7 a 14 días.",
+        "Virus respiratorio sincitial (VRS): cuando es más que un simple resfriado (HealthyChildren.org, AAP, 2026). Tema: cuándo llamar al pediatra de inmediato si al bebé le cuesta respirar. Hallazgo: la página pide llamar al pediatra de inmediato si hay signos de bronquiolitis (respiración rápida, tiraje, quejido o pitos), pausas en la respiración o dificultad para respirar, signos de deshidratación (menos de un pañal mojado cada 8 horas), piel, labios o uñas pálidos, grises o azulados, o si el bebé está mucho menos activo o despierto de lo normal. También hay que llamar si los síntomas empeoran o no mejoran a los 7 días, si un bebé menor de 3 meses tiene 38 °C o más de temperatura rectal, si la fiebre sube una y otra vez por encima de 40 °C, o si duerme mal o está irritable, tiene dolor en el pecho, se tira de la oreja o le supura el oído.",
+        "Virus respiratorio sincitial (VRS): cuando es más que un simple resfriado (HealthyChildren.org, AAP, 2026). Tema: cómo cuidar en casa al bebé con VRS leve que está muy mocoso. Hallazgo: no hay un tratamiento específico para el VRS, y no ayudan ni los corticoides ni los antibióticos. Lo que sirve es poner suero fisiológico en la nariz y aspirar suavemente después, para que respire y coma mejor, sobre todo antes de las tomas; un humidificador de vapor frío ayuda a soltar los mocos. Hay que ofrecer líquidos y tomas frecuentes y asegurarse de que no se deshidrata: con la nariz tapada, los bebés pueden comer despacio o tener pocas ganas de comer porque les cuesta respirar. Los bebés que toman pecho no necesitan agua ni fórmula añadida; si le cuesta mamar, la madre puede sacarse leche y dársela en vaso o biberón. No se deben dar medicamentos para la tos y el resfriado."
+      ]
+    },
+    {
+      "source_type": "reference",
+      "title": "Hoja de recomendaciones para padres: Episodio aparentemente letal (ALTE)",
+      "organization": "Hospital General Universitario Gregorio Marañón (Madrid)",
+      "publication_year": 2017,
+      "url": "https://www.comunidad.madrid/hospital/gregoriomaranon/file/3398/download?token=ug_kE_bG",
+      "specialties": [
+        "pediatrics",
+        "general_medicine"
+      ],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "original_language": "es",
+      "topics": [
+        "pausas_brue",
+        "muerte_subita_sueno_seguro",
+        "cuando_consultar"
+      ],
+      "chunks": [
+        "Hoja de recomendaciones para padres: Episodio aparentemente letal (ALTE) (Hospital Gregorio Marañón, 2017). Tema: qué es un episodio aparentemente letal en un lactante. Hallazgo: es un suceso inesperado y brusco que impresiona de riesgo vital al observador, con una combinación de pausa respiratoria, cambio de color (palidez, rubor o color azulado), cambio del tono muscular y/o atragantamiento o sofocación. Suele requerir la intervención del cuidador. Se habla de ALTE mayor si revierte tras estimulación vigorosa o reanimación, y menor si revierte solo o con estimulación leve.",
+        "Hoja de recomendaciones para padres: Episodio aparentemente letal (ALTE) (Hospital Gregorio Marañón, 2017). Tema: medidas en casa tras el alta hospitalaria. Hallazgo: acostar al bebé boca arriba, mejor que de lado, y evitar la posición boca abajo para dormir hasta los 6 meses; no fumar en casa ni delante del niño; preferir la lactancia materna; evitar colchones blandos, almohadones, colgantes al cuello y cualquier objeto que pueda provocar asfixia; no arropar en exceso, mantener la habitación a 20 a 22 grados y evitar que la cabeza quede cubierta por la ropa de cama.",
+        "Hoja de recomendaciones para padres: Episodio aparentemente letal (ALTE) (Hospital Gregorio Marañón, 2017). Tema: seguimiento y qué hacer si se repite. Hallazgo: acudir al pediatra para un control clínico entre 24 y 48 horas después del alta. Si el bebé presenta un nuevo episodio, se siguen los pasos de reanimación pediátrica enseñados antes del alta y se acude a urgencias para que lo valore el equipo médico."
+      ]
+    },
+    {
+      "source_type": "reference",
+      "title": "Información y consejos sobre bronquiolitis para padres y cuidadores",
+      "organization": "Hospital Infantil Universitario Niño Jesús (Madrid)",
+      "publication_year": 2019,
+      "url": "https://www.comunidad.madrid/hospital/ninojesus/file/3473/download?token=MSE2NRUX",
+      "specialties": [
+        "pediatrics",
+        "general_medicine"
+      ],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "original_language": "es",
+      "topics": [
+        "bronquiolitis",
+        "signos_alarma",
+        "cuando_consultar"
+      ],
+      "chunks": [
+        "Información y consejos sobre bronquiolitis para padres y cuidadores (Hospital Niño Jesús, 2019). Tema: qué es la bronquiolitis y cuánto dura. Hallazgo: es una infección vírica de niños menores de dos años que se manifiesta con dificultad para respirar y a veces ruidos de pitos en el pecho. Suele empezar con tos y mocos y, a los 3 o 4 días, aparece la dificultad respiratoria; el niño puede estar irritable, comer menos y tener fiebre. Los síntomas pueden persistir desde unos días hasta 4 semanas y desaparecen solos; no existe ningún medicamento que cure la bronquiolitis. Para evitar contagios, es muy recomendable que no acuda a la guardería los primeros 7 días tras el diagnóstico.",
+        "Información y consejos sobre bronquiolitis para padres y cuidadores (Hospital Niño Jesús, 2019). Tema: cuidados en casa y cuándo ir a urgencias. Hallazgo: mantener al niño incorporado para que respire mejor; si tiene mocos, hacer lavados nasales, preferiblemente antes de comer; dar tomas más pequeñas y frecuentes para que no se fatigue, y evitar ambientes cargados o con humo. Acudir a urgencias si tiene mal estado general, está irritable o adormilado; si se fatiga mucho con las tomas o casi no come; si se pone morado o pálido; o si le cuesta más respirar, respira cada vez más deprisa, se le marcan las costillas, mueve mucho el abdomen, se le hunde el pecho o deja de respirar durante unos segundos. Lavarse las manos con frecuencia es la medida más eficaz para prevenir la transmisión."
+      ]
+    },
+    {
+      "source_type": "guideline",
+      "title": "Orientación Técnica para el Manejo Clínico de la Bronquiolitis",
+      "organization": "Ministerio de Salud de Chile (MINSAL)",
+      "publication_year": 2024,
+      "url": "https://diprece.minsal.cl/wp-content/uploads/2024/11/Orientacion-Tecnica-Bronquiolitis_v1_IRA_menores_5.pdf",
+      "specialties": [
+        "pediatrics",
+        "general_medicine"
+      ],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "original_language": "es",
+      "topics": [
+        "bronquiolitis",
+        "signos_alarma",
+        "cuando_consultar",
+        "lavados_nasales"
+      ],
+      "chunks": [
+        "Orientación Técnica para el Manejo Clínico de la Bronquiolitis (Ministerio de Salud de Chile, 2024). Tema: signos de gravedad que debe vigilar la familia. Hallazgo: un bebé con bronquiolitis leve que se cuida en casa debe tener un control en atención primaria entre las 24 y las 48 horas del diagnóstico, según cada caso, porque un cuadro que al principio es leve puede empeorar. Además de acudir al control, la familia debe ir al servicio de urgencias más cercano si aparece dificultad para respirar (respiración rápida, uso de los músculos accesorios para respirar, quejido, aleteo nasal, color azulado o pausas en la respiración), rechazo parcial o total de las tomas, fiebre difícil de controlar, pañales secos una y otra vez, aspecto de estar muy enfermo o alteración de la consciencia.",
+        "Orientación Técnica para el Manejo Clínico de la Bronquiolitis (Ministerio de Salud de Chile, 2024). Tema: cuidados en casa y lo que no se recomienda. Hallazgo: las medidas son limpiar la nariz aspirando las secreciones con suavidad, sobre todo antes de las tomas y de dormir y siempre que haga falta, porque los lactantes pequeños solo respiran por la nariz; alimentar al bebé según lo que tolere y en tomas repartidas; y mantener la lactancia materna a demanda. Los bebés que toman pecho pueden pedir más a menudo y hacer tomas más cortas. En la bronquiolitis leve no se recomiendan broncodilatadores, corticoides, antibióticos, antialérgicos, antitusivos, mucolíticos ni descongestionantes, porque no han demostrado utilidad. Tampoco se aconseja la fisioterapia respiratoria de rutina.",
+        "Orientación Técnica para el Manejo Clínico de la Bronquiolitis (Ministerio de Salud de Chile, 2024). Tema: prevención en lactantes. Hallazgo: se recomienda la lactancia materna exclusiva al menos 6 meses, que reduce la gravedad de la bronquiolitis por virus respiratorio sincitial y el riesgo de ingreso por infección respiratoria baja en el primer año. Se aconseja evitar el humo del tabaco y los cigarrillos electrónicos, lavarse las manos con agua y jabón al menos 30 segundos, ventilar, evitar lugares concurridos con menores de un año, y alejarse de los enfermos. No se aconsejan las estufas de leña o carbón."
+      ]
+    },
+    {
+      "source_type": "guideline",
+      "title": "Cuidados en el invierno para embarazadas y niños",
+      "organization": "Ministerio de Salud de la Nación (Argentina)",
+      "publication_year": null,
+      "undated_reason": "Página de Crecer con Salud (argentina.gob.ar) sin fecha de publicación ni de actualización visible; consultada el 2026-11-06. Solo se usan los consejos para niños pequeños.",
+      "url": "https://www.argentina.gob.ar/salud/crecerconsalud/cuidadosinvierno",
+      "specialties": [
+        "pediatrics",
+        "general_medicine"
+      ],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "original_language": "es",
+      "topics": [
+        "signos_alarma",
+        "cuando_consultar",
+        "bronquiolitis"
+      ],
+      "chunks": [
+        "Cuidados en el invierno para embarazadas y niños (Ministerio de Salud de la Nación, Argentina). Tema: signos de alarma respiratoria en menores de 5 años. Hallazgo: el ministerio indica llevar al niño sin demora al centro de salud si respira rápido o con silbidos y ronquidos, si se le hunde el pecho al respirar, si está decaído y rechaza el alimento o si tiene fiebre alta (más de 38 °C). El riesgo es mayor si el bebé es menor de 3 meses, fue prematuro o tiene bajo peso. Se recomienda solo leche materna hasta los 6 meses y ofrecer el pecho con más frecuencia si el bebé está enfermo.",
+        "Cuidados en el invierno para embarazadas y niños (Ministerio de Salud de la Nación, Argentina). Tema: prevención de infecciones respiratorias y del monóxido de carbono. Hallazgo: se aconseja evitar que el bebé menor de 6 meses esté en contacto con personas enfermas con cuadros respiratorios, lavarse las manos con agua y jabón al volver de la calle, antes de comer, después de ir al baño y tras cambiar al bebé, y al toser o estornudar cubrirse siempre la boca con un pañuelo o con el pliegue del codo. Conviene tener el calendario de vacunación al día. Hay que ventilar todos los días todas las habitaciones y, para evitar la intoxicación por monóxido de carbono, dejar siempre una ventilación abierta donde haya aparatos de gas (estufas, cocinas, calentadores de agua)."
+      ]
+    },
+    {
+      "source_type": "guideline",
+      "title": "Guía de padres y cuidadores para la evaluación del riesgo y manejo inicial de la neumonía en niños y niñas menores de 5 años y bronquiolitis en niños y niñas menores de 2 años",
+      "organization": "Ministerio de Salud y Protección Social (Colombia)",
+      "publication_year": 2014,
+      "url": "https://www.minsalud.gov.co/sites/rid/Lists/BibliotecaDigital/RIDE/DE/CA/gpc-neumonia-ninos-menores-2-anos.pdf",
+      "specialties": [
+        "pediatrics",
+        "pulmonology",
+        "general_medicine"
+      ],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "original_language": "es",
+      "topics": [
+        "bronquiolitis",
+        "resfriado_mocos",
+        "signos_alarma",
+        "respiracion_normal",
+        "lavados_nasales"
+      ],
+      "chunks": [
+        "Guía de padres y cuidadores para la evaluación del riesgo y manejo de la neumonía y la bronquiolitis (MinSalud de Colombia, 2014). Tema: signos de alarma de un niño con infección respiratoria. Hallazgo: la mayoría de los niños con tos o dificultad respiratoria tienen una infección leve que la familia puede atender en casa. Hay que buscar ayuda de inmediato ante dificultad para respirar o respiración rápida (las madres la describen como entrecortada, cansada, agitada, ruidosa o rápida), hundimiento bajo las costillas (tiraje, que se ve con el niño boca arriba y con el pecho y el abdomen descubiertos), ruidos raros al respirar o cualquier signo general de peligro: no puede beber ni tomar el pecho, vomita todo, ha tenido convulsiones o está letárgico o inconsciente.",
+        "Guía de padres y cuidadores para la evaluación del riesgo y manejo de la neumonía y la bronquiolitis (MinSalud de Colombia, 2014). Tema: cuidados en casa de la infección respiratoria. Hallazgo: la fiebre es una defensa del cuerpo y no siempre hay que bajarla; se procura confort, más líquidos, ropa ligera y habitación fresca. Es normal que el niño pierda el apetito: se le ofrece comida a menudo y en pequeñas cantidades, y si toma pecho, que mame más a menudo y más tiempo; a los alimentados solo con leche materna no se les dan otros líquidos ni remedios. Para la nariz tapada se usa suero salino y se limpia antes de comer. No se recomiendan los jarabes para la tos con sedantes o alcohol ni los productos nasales medicados. El niño enfermo no debe ir a la guardería.",
+        "Guía de padres y cuidadores para la evaluación del riesgo y manejo de la neumonía y la bronquiolitis (MinSalud de Colombia, 2014). Tema: qué es la bronquiolitis. Hallazgo: se produce cuando las vías aéreas más pequeñas de los pulmones se inflaman, casi siempre por un virus, y es más frecuente en épocas de lluvias o invierno. Afecta sobre todo a menores de 2 meses o de 6 meses si fueron prematuros. Empieza como un resfriado y, a los pocos días, la tos puede empeorar y la respiración puede volverse más rápida, más costosa y ruidosa, con un silbido (sibilancias). En bebés muy pequeños puede causar pausas breves de la respiración (apneas). Algunos bebés, sobre todo los más pequeños, tienen dificultad para respirar o para comer y deben ir al hospital. Dura entre una semana y diez días y los antibióticos no ayudan.",
+        "Guía de padres y cuidadores para la evaluación del riesgo y manejo de la neumonía y la bronquiolitis (MinSalud de Colombia, 2014). Tema: neumonía y su prevención en casa. Hallazgo: la neumonía es una inflamación aguda de los pulmones que se manifiesta con tos, mocos, respiración rápida o con dificultad, hundimiento bajo las costillas y ruidos raros al respirar. Suele aparecer como complicación de una gripe o un resfriado, y un niño que se contagia de un adulto con gripe o resfriado puede desarrollarla con facilidad. Aumentan el riesgo no estar vacunado, el contacto con personas enfermas, el polvo y el humo en la vivienda y la desnutrición. La guía pide no fumar dentro de casa, ventilar las habitaciones y evitar el contacto del bebé con quien tiene gripe o resfriado."
+      ]
+    },
+    {
+      "source_type": "guideline",
+      "title": "Inmunización pasiva frente a virus respiratorio sincitial para la temporada 2025-2026: preguntas y respuestas ciudadanos",
+      "organization": "Ministerio de Sanidad (España)",
+      "publication_year": 2025,
+      "url": "https://www.sanidad.gob.es/areas/promocionPrevencion/vacunaciones/VRS/poblacionInfantil/docs/Preguntasyrespuestas_Inmunizacion_frente_VRS_Ciudadanos.pdf",
+      "specialties": [
+        "pediatrics",
+        "general_medicine"
+      ],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "original_language": "es",
+      "topics": [
+        "bronquiolitis"
+      ],
+      "chunks": [
+        "Inmunización pasiva frente a virus respiratorio sincitial para la temporada 2025-2026: preguntas y respuestas ciudadanos (Ministerio de Sanidad, 2025). Tema: qué es el VRS y a quién afecta. Hallazgo: es un virus que infecta las vías respiratorias y la principal causa de infecciones graves de las vías respiratorias bajas en menores de 1 año, con hospitalizaciones e ingresos en UCI; la temporada suele ir de octubre a marzo. La primera infección ocurre en los 2 primeros años y casi todos la pasan; lo más frecuente es un cuadro leve de vías altas y, en los casos graves, bronquiolitis. Tienen más riesgo los menores de 1 año que nacieron prematuros, que tienen enfermedades pulmonares o cardiacas o alguna condición que debilite el sistema inmunitario. Se estima que 1 de cada 56 recién nacidos menores de 12 meses requiere hospitalización por VRS, y el 58 % de ellos tiene menos de 3 meses.",
+        "Inmunización pasiva frente a virus respiratorio sincitial para la temporada 2025-2026: preguntas y respuestas ciudadanos (Ministerio de Sanidad, 2025). Tema: quién recibe la protección, cuándo y dónde. Hallazgo: para la temporada 2025-2026 se recomienda un anticuerpo monoclonal frente al VRS a los menores de 6 meses nacidos entre el 1 de abril de 2025 y el 31 de marzo de 2026, a los prematuros de menos de 35 semanas antes de cumplir 12 meses y a los menores de 24 meses con condiciones de alto riesgo. A los nacidos durante la temporada se les pone muy pronto, preferiblemente en las primeras 24-48 horas de vida, mediante inyección intramuscular, preferiblemente en la parte lateral del muslo, en el hospital o en el centro de salud según la comunidad autónoma. Protege de inmediato y durante al menos 5 meses; no es obligatorio, no se vende en farmacias y solo se pone en centros sanitarios.",
+        "Inmunización pasiva frente a virus respiratorio sincitial para la temporada 2025-2026: preguntas y respuestas ciudadanos (Ministerio de Sanidad, 2025). Tema: eficacia y seguridad de la protección. Hallazgo: un estudio nacional estimó un 83 % menos de riesgo de hospitalización por VRS en menores de 6 meses inmunizados. Lo más frecuente son reacciones locales en el lugar de la inyección (dolor y erupción cutánea) y fiebre, todas en menos del 1 % de los casos. No puede producir la infección, puede ponerse el mismo día que otras vacunas, en lugares distintos, y, si hay fiebre o síntomas de infección aguda, se recomienda posponerlo hasta que se resuelvan, salvo que sean leves. Solo está contraindicado tras una reacción alérgica grave a una inyección previa del mismo anticuerpo o a sus componentes; los niños con otras alergias (medicamentos, alimentos...) pueden recibirlo."
+      ]
+    },
+    {
+      "source_type": "guideline",
+      "title": "Bronquiolitis (Sociedad Argentina de Pediatría)",
+      "organization": "Sociedad Argentina de Pediatría (SAP)",
+      "publication_year": null,
+      "undated_reason": "Página divulgativa de Familia y Comunidad de la SAP sin fecha de publicación visible (solo copyright 1997-2026 del sitio); consultada el 2026-11-06. Autoría: Comité de Neumonología de la SAP.",
+      "url": "https://www.sap.org.ar/familia-y-comunidad/detalle/bronquiolitis",
+      "specialties": [
+        "pediatrics",
+        "general_medicine"
+      ],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "original_language": "es",
+      "topics": [
+        "bronquiolitis",
+        "signos_alarma",
+        "cuando_consultar"
+      ],
+      "chunks": [
+        "Bronquiolitis (Comité de Neumonología, SAP, Argentina). Tema: qué es la bronquiolitis y cuándo consultar. Hallazgo: es una enfermedad viral, frecuente en los meses de invierno, que afecta a niños pequeños hasta los 2 años y dificulta la respiración. Pueden tener una evolución más grave los bebés menores de 3 meses, los prematuros, los desnutridos y los que tienen una enfermedad del corazón congénita, una enfermedad respiratoria o una neuromuscular. La sociedad indica consultar al pediatra si hay fiebre de más de 38 grados, si el bebé se agita fácilmente o tiene una respiración dificultosa o ruidosa, con silbidos, si se le hunden las costillas al respirar, si le cuesta comer o dormir, si tiene vómitos que no se controlan o si tiene la piel pálida o azulada, también en labios y uñas.",
+        "Bronquiolitis (Comité de Neumonología, SAP, Argentina). Tema: cuidados en casa y prevención. Hallazgo: se recomienda mantener al bebé bien hidratado, en posición semisentada boca arriba y con la nariz libre de moco, y evitar el humo, sobre todo el del tabaco. Al ser un cuadro viral, no se trata con antibióticos y nunca hay que darle remedios caseros; siempre se debe acudir a consulta con el pediatra. Para prevenirla: mantener la lactancia materna, alejar al bebé de personas enfermas, resfriadas o con fiebre, lavarse las manos, limpiar juguetes y superficies, ventilar los ambientes y no fumar en casa."
+      ]
+    },
+    {
+      "source_type": "guideline",
+      "title": "Otitis Media (Sociedad Argentina de Pediatría)",
+      "organization": "Sociedad Argentina de Pediatría (SAP)",
+      "publication_year": null,
+      "undated_reason": "Página divulgativa de Familia y Comunidad de la SAP sin fecha de publicación visible (solo copyright 1997-2026 del sitio); consultada el 2026-11-06. Autoría: Grupo de Trabajo de ORL Pediátrica de la SAP.",
+      "url": "https://www.sap.org.ar/familia-y-comunidad/detalle/otitis-media",
+      "specialties": [
+        "pediatrics",
+        "general_medicine"
+      ],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "original_language": "es",
+      "topics": [
+        "otitis",
+        "cuando_consultar",
+        "signos_alarma"
+      ],
+      "chunks": [
+        "Otitis Media (Grupo de Trabajo de ORL Pediátrica, SAP, Argentina). Tema: frecuencia y síntomas de la otitis media aguda. Hallazgo: cerca del 80 % de los niños tiene al menos un episodio antes de los 3 años y la edad de mayor frecuencia es de los 6 a los 24 meses; suele aparecer tras un resfriado y se favorece porque la trompa de Eustaquio del lactante es corta, horizontal y blanda. Se manifiesta con dolor de oído (peor al acostarse), fiebre que puede llegar a 38-39,5 grados, irritabilidad y llanto persistente, tirarse o frotarse la oreja, mal dormir y, en bebés, rechazo de la toma por el dolor al succionar.",
+        "Otitis Media (Grupo de Trabajo de ORL Pediátrica, SAP, Argentina). Tema: cuándo acudir a urgencias y cuándo pedir cita. Hallazgo: se acude de inmediato a urgencias si el niño tiene menos de 3 a 6 meses con sospecha de infección o fiebre de más de 38 grados; si hay enrojecimiento, hinchazón o dolor detrás de la oreja con el pabellón desplazado hacia delante; si sale secreción amarillenta, verdosa o con sangre por el oído; o si hay síntomas neurológicos o un decaimiento intenso: dolor de cabeza muy fuerte, vómitos repetidos, somnolencia extrema o irritabilidad que no se calma ni con analgésicos. Ante la sospecha de otitis, hay que llevar al niño al pediatra en las primeras 24 a 48 horas para que revise el tímpano. No se deben poner conos de papel de periódico, aceite caliente ni otros remedios caseros en el oído.",
+        "Otitis Media (Grupo de Trabajo de ORL Pediátrica, SAP, Argentina). Tema: cuándo derivar al otorrino y por qué importa la audición. Hallazgo: el líquido acumulado tras la infección provoca una pérdida auditiva temporal que puede afectar al desarrollo del habla, el lenguaje y el aprendizaje. Se pide consulta programada con otorrinolaringología si hay otitis de repetición (3 o más infecciones en 6 meses o 4 episodios en un año) o si hay una pérdida de audición prolongada: el niño no oye bien, no responde a los sonidos o tiene retraso del habla semanas después de curada la infección. En los mayores de 6 meses sin señales de alarma, el dolor y la fiebre pueden manejarse al principio en casa, con consulta médica posterior."
+      ]
+    },
+    {
+      "source_type": "reference",
+      "title": "Neumonía infantil",
+      "organization": "World Health Organization (WHO)",
+      "publication_year": 2022,
+      "url": "https://www.who.int/es/news-room/fact-sheets/detail/pneumonia",
+      "specialties": [
+        "pediatrics",
+        "general_medicine"
+      ],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "original_language": "es",
+      "topics": [
+        "signos_alarma",
+        "respiracion_normal",
+        "cuando_consultar"
+      ],
+      "chunks": [
+        "Neumonía infantil (OMS, 2022). Tema: cómo se reconoce la neumonía en menores de 5 años, incluidos los lactantes. Hallazgo: en un menor de 5 años con tos o dificultad para respirar, con o sin fiebre, el diagnóstico se basa en la respiración rápida (taquipnea) o en el tiraje subcostal, es decir, el hundimiento de la parte baja del pecho al inspirar (al coger aire). Los síntomas de la neumonía vírica pueden ser más numerosos que los de la bacteriana, y las sibilancias son más frecuentes en las infecciones víricas.",
+        "Neumonía infantil (OMS, 2022). Tema: signos de gravedad y atención en lactantes. Hallazgo: los lactantes con afectación muy grave pueden ser incapaces de comer o beber y presentar pérdida de consciencia, temperatura corporal baja y convulsiones. Según la OMS, la mayoría de los casos requieren tratamiento por vía oral, que suele recetarse en un centro de salud, y la hospitalización se recomienda solo en los casos graves. En 2019 la neumonía causó la muerte de 740 180 menores de 5 años, el 14 % de todas las defunciones en esa edad.",
+        "Neumonía infantil (OMS, 2022). Tema: cómo prevenirla en el bebé. Hallazgo: la vacunación frente a Haemophilus influenzae tipo b, neumococo, sarampión y tos ferina es la forma más eficaz de prevenirla. La lactancia materna exclusiva durante los seis primeros meses de vida favorece las defensas naturales del niño. Otras medidas son lavarse las manos con jabón y reducir la contaminación del aire dentro de casa."
+      ]
+    },
+    {
+      "source_type": "reference",
+      "title": "Asthme du nourrisson : symptômes, diagnostic et évolution (ameli.fr)",
+      "organization": "Assurance Maladie (ameli.fr)",
+      "publication_year": 2026,
+      "url": "https://www.ameli.fr/assure/sante/themes/asthme-nourrisson/symptomes-diagnostic-evolution",
+      "specialties": [
+        "pediatrics",
+        "general_medicine"
+      ],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "original_language": "fr",
+      "topics": [
+        "sibilancias",
+        "respiracion_normal",
+        "cuando_consultar",
+        "bronquiolitis"
+      ],
+      "chunks": [
+        "Asthme du nourrisson : symptômes, diagnostic et évolution (Assurance Maladie, 2026). Tema: cómo se manifiesta el asma del lactante. Hallazgo: un episodio agudo aparece de forma bastante brusca, a menudo tras una rinofaringitis, normalmente de noche y sin fiebre, con tos seca, respiración rápida y sibilante, aleteo nasal, tiraje intercostal, mucha palidez, a veces labios y dedos azulados, y dificultad para comer y beber. En el lactante pequeño se parece a una bronquiolitis y es la repetición de los episodios lo que orienta hacia el asma. Ante uno o varios de estos síntomas, hay que consultar de inmediato al médico o a urgencias.",
+        "Asthme du nourrisson : symptômes, diagnostic et évolution (Assurance Maladie, 2026). Tema: síntomas atípicos y frecuencia respiratoria normal. Hallazgo: también puede haber sibilancias continuas sin tos fuera de una infección vírica, agravadas por el humo del tabaco, la contaminación, el llanto, la risa, las comidas y el esfuerzo, o una tos seca desencadenada por el esfuerzo o nocturna, o que no se calma tras una bronquiolitis. La frecuencia respiratoria normal es de 30 a 60 respiraciones por minuto al nacer, de 20 a 40 al año y de 20 a 30 a los dos años.",
+        "Asthme du nourrisson : symptômes, diagnostic et évolution (Assurance Maladie, 2026). Tema: diagnóstico y evolución. Hallazgo: el médico examina al bebé y pregunta por la frecuencia de los síntomas, los antecedentes familiares de asma o alergia, los signos de atopia como eccema y los desencadenantes; las sibilancias se oyen durante la crisis y fuera de ella la exploración suele ser normal. El diagnóstico se basa en un conjunto de criterios, por ejemplo al menos tres episodios agudos de dificultad respiratoria desde el nacimiento. El asma intermitente es el más frecuente y la persistente puede alterar la vida diaria. En la mayoría de los casos desaparece después de los 3 años; es más probable que persista con antecedentes familiares, eccema atópico, alergias o tabaquismo pasivo."
+      ]
+    },
+    {
+      "source_type": "reference",
+      "title": "Bronchiolite : que faire ? (ameli.fr)",
+      "organization": "Assurance Maladie (ameli.fr)",
+      "publication_year": 2026,
+      "url": "https://www.ameli.fr/assure/sante/themes/bronchiolite/bons-reflexes",
+      "specialties": [
+        "pediatrics",
+        "pulmonology",
+        "emergency_medicine"
+      ],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "original_language": "fr",
+      "topics": [
+        "bronquiolitis",
+        "respiracion_normal",
+        "signos_alarma"
+      ],
+      "chunks": [
+        "Bronchiolite : que faire ? (Assurance Maladie, ameli.fr, 2026). Tema: cuándo llamar al 15 o al 112 si un bebé con bronquiolitis respira mal. Hallazgo: hay que llamar sin demora al 15 (SAMU) o al 112 si el bebé tiene menos de 2 meses, nació antes de las 36 semanas, tiene una enfermedad cardiaca, respiratoria o de las defensas, o una discapacidad que le impide toser; si toma menos de la mitad de sus biberones en 3 tomas seguidas o no consigue mamar; si vomita todo lo que toma y puede deshidratarse; si duerme todo el rato y está flojo, o llora raro, está agitado y no se duerme; si está pálido, se queja o se le azulan los labios y los dedos; o si le cuesta cada vez más respirar: respira rápido y corto o irregular y lento, hace pausas, se le mueven las aletas de la nariz (aleteo nasal) o se le hunde la piel entre las costillas y por encima de las clavículas (tiraje). (fuente en francés)",
+        "Bronchiolite : que faire ? (Assurance Maladie, ameli.fr, 2026). Tema: cuándo basta con ir al médico en el día. Hallazgo: si el bebé tiene más de 2 meses, síntomas de bronquiolitis pero buen estado general y sigue comiendo, ameli pide consultar con su médico en el mismo día: la consulta es imprescindible y la bronquiolitis no se trata por cuenta propia. Hay que volver a consultar, también en el mismo día, si los síntomas empeoran o si, al cabo de unos días, la fiebre sube y las secreciones se vuelven espesas, amarillas o verdosas, porque puede haber una sobreinfección. Conviene vigilar sobre todo los 2 o 3 primeros días, ya que suele empeorar antes de mejorar; la tos suele durar de 8 a 10 días y a veces varias semanas. (fuente en francés)",
+        "Bronchiolite : que faire ? (Assurance Maladie, ameli.fr, 2026). Tema: qué hacer en casa con un bebé con bronquiolitis y muchos mocos. Hallazgo: hay que despejarle la nariz con lavados nasales antes de las tomas y tantas veces como haga falta, sobre todo antes de los 6 meses, cuando el bebé aún no respira por la boca. Despierto, mantenerlo bien incorporado; para dormir, boca arriba como siempre. Evitar el humo de tabaco, que agrava la enfermedad. Ofrecer agua a menudo, repartir las tomas en cantidades pequeñas si está cansado y seguir con su leche habitual; si toma pecho y está demasiado cansado para mamar, sacarse la leche. Ventilar la habitación sin pasar de 19 °C. No se deben dar medicamentos para la tos (antitusivos) ni para fluidificar los mocos (mucolíticos): están contraindicados en el niño pequeño y aumentan el riesgo de ingreso. (fuente en francés)"
+      ]
+    },
+    {
+      "source_type": "reference",
+      "title": "Laryngite : que faire ? (ameli.fr)",
+      "organization": "Assurance Maladie (ameli.fr)",
+      "publication_year": 2026,
+      "url": "https://www.ameli.fr/assure/sante/themes/laryngite-enfant/bons-reflexes-bons-gestes",
+      "specialties": [
+        "pediatrics",
+        "general_medicine"
+      ],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "original_language": "fr",
+      "topics": [
+        "laringitis",
+        "cuando_consultar",
+        "signos_alarma",
+        "tos"
+      ],
+      "chunks": [
+        "Laryngite : que faire ? (Assurance Maladie, 2026). Tema: cuándo consultar por laringitis. Hallazgo: la laringitis del niño no se trata por automedicación; hace falta un examen médico y hay que pedir cita sin esperar con el médico de cabecera o el pediatra, con consulta en el día. Se recomienda la consulta el mismo día si el niño tiene tos ronca y respiración ralentizada y ruidosa pero buen estado general, si ya fue examinado y la tos o las dificultades respiratorias persisten más de dos o tres días, o si ya fue examinado y la tos empeora y aparece fiebre.",
+        "Laryngite : que faire ? (Assurance Maladie, 2026). Tema: urgencias. Hallazgo: hay que llevar al niño a urgencias, sin acostarlo, o llamar de inmediato al Samu (15) o al 112 si tiene menos de seis meses y laringitis, si ya no come o rechaza beber con riesgo de deshidratación, si está muy pálido, si los labios o los dedos se ponen azules, si la respiración se vuelve irregular, si está agitado, somnoliento, confuso o muy cansado, si traga con dificultad, babea sin parar y tiene más de 39 °C de fiebre, si rechaza tragar o se queda sentado, o si tiene una cardiopatía o una enfermedad crónica.",
+        "Laryngite : que faire ? (Assurance Maladie, 2026). Tema: aliviar al niño. Hallazgo: proponer actividades tranquilas y tranquilizarlo, porque la agitación puede empeorar las dificultades respiratorias; desobstruir la nariz con lavado de suero fisiológico o agua de mar en el niño pequeño, con el aspirador nasal solo de forma ocasional; evitar el humo del tabaco, ofrecer agua con regularidad, mantener la habitación hacia 18 a 20 °C y no abrigar demasiado. Nunca usar pulverizadores nasales con vasoconstrictores: están prohibidos en los niños. Una temperatura entre 38 °C y 39 °C no es preocupante: es una defensa natural y suele desaparecer en dos a tres días."
+      ]
+    },
+    {
+      "source_type": "reference",
+      "title": "Otite moyenne aiguë : que faire et quand consulter ? (ameli.fr)",
+      "organization": "Assurance Maladie (ameli.fr)",
+      "publication_year": 2026,
+      "url": "https://www.ameli.fr/assure/sante/themes/otite-moyenne-aigue-enfant/bons-reflexes-que-faire",
+      "specialties": [
+        "pediatrics",
+        "general_medicine"
+      ],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "original_language": "fr",
+      "topics": [
+        "otitis",
+        "cuando_consultar"
+      ],
+      "chunks": [
+        "Otite moyenne aiguë : que faire et quand consulter ? (ameli.fr, Assurance Maladie, Francia, 2026). Tema: cuándo la otitis del niño es una urgencia. Hallazgo: si el niño tiene una otitis o síntomas que la sugieren (dolor de oído, fiebre), hay que consultar con el médico o el pediatra. La consulta es urgente si es menor de 3 meses y tiene fiebre; si tiene 40 °C o más a cualquier edad; si le cuesta respirar; si está adormilado, responde mal cuando lo estimulas y llora débilmente; si está muy pálido o tiene manchas moradas en la piel; si tiene un dolor de cabeza fuerte, vómitos o llanto sin explicación aunque no tenga fiebre; o si tiene diarrea o vómitos importantes con riesgo de deshidratación (fuente en francés).",
+        "Otite moyenne aiguë : que faire et quand consulter ? (ameli.fr, Assurance Maladie, Francia, 2026). Tema: cuidados en casa, cuándo volver al médico y si puede ir a la guardería. Hallazgo: hay que volver a consultar si la fiebre o el dolor duran más de 2 o 3 días, si reaparecen en los 4 días siguientes al final del tratamiento o si una tos asociada no mejora en diez días. En casa: habitación fresca y ventilada, ropa ligera sin desnudarlo del todo, ofrecerle a menudo de beber, limpiar la nariz con suero fisiológico, evitar el humo de tabaco y no mojar el oído si el tímpano está perforado. No es obligatorio que falte a la guardería u otra colectividad, pero se aconseja dejarlo en casa durante la fase aguda por su comodidad (fuente en francés)."
+      ]
+    },
+    {
+      "source_type": "reference",
+      "title": "Reconnaître la bronchiolite (ameli.fr)",
+      "organization": "Assurance Maladie (ameli.fr)",
+      "publication_year": 2026,
+      "url": "https://www.ameli.fr/assure/sante/themes/bronchiolite/reconnaitre-bronchiolite",
+      "specialties": [
+        "pediatrics",
+        "general_medicine"
+      ],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "original_language": "fr",
+      "topics": [
+        "bronquiolitis",
+        "respiracion_normal"
+      ],
+      "chunks": [
+        "Reconnaître la bronchiolite (Assurance Maladie, 2026). Tema: qué es y cómo evoluciona. Hallazgo: la bronquiolitis es una infección vírica aguda de los bronquiolos, los bronquios más pequeños, causada con más frecuencia por el virus respiratorio sincitial (VRS) y que afecta a los lactantes (menores de 2 años). Circula en epidemias cada año, de octubre al invierno, y dura de media diez días; los dos primeros días requieren una vigilancia importante y luego la respiración mejora con rapidez. La página la describe como una enfermedad la mayoría de las veces benigna, aunque los menores de 2 meses pueden tener una forma más grave que requiere ingreso.",
+        "Reconnaître la bronchiolite (Assurance Maladie, 2026). Tema: síntomas. Hallazgo: empieza como un resfriado con fiebre ligera, sigue con tos seca y después aparece dificultad respiratoria con respiración rápida y sibilante, ruidosa al espirar. El niño puede tener problemas para comer y dormir, y al principio de la bronquiolitis hace falta más vigilancia. Los síntomas disminuyen en unos días, la curación llega en 8 a 10 días y una tos residual puede durar unos quince días.",
+        "Reconnaître la bronchiolite (Assurance Maladie, 2026). Tema: lactantes más vulnerables y contagio. Hallazgo: son más vulnerables y se hospitalizan más a menudo los nacidos antes de las 36 semanas (a lo que pueden sumarse tabaco en el embarazo, tabaquismo pasivo, ausencia de lactancia materna, guardería o nacer en época de epidemia), los menores de 2 meses (edad corregida en prematuros) por el riesgo de apnea, y los que tienen fragilidad pulmonar, cardiopatía, déficit inmunitario, tos ineficaz o dificultad respiratoria precoz (menos de 48 horas tras el inicio de los síntomas). Adultos y niños mayores con el virus habitualmente no tienen síntomas o solo un resfriado y pueden contagiar sin saberlo, por secreciones, tos, estornudos y besos, o por manos, juguetes y objetos con saliva."
+      ]
+    },
+    {
+      "source_type": "reference",
+      "title": "Reconnaître une otite moyenne aiguë (ameli.fr)",
+      "organization": "Assurance Maladie (ameli.fr)",
+      "publication_year": 2026,
+      "url": "https://www.ameli.fr/assure/sante/themes/otite-moyenne-aigue-enfant/reconnaitre-otite-moyenne-aigue",
+      "specialties": [
+        "pediatrics",
+        "general_medicine"
+      ],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "original_language": "fr",
+      "topics": [
+        "otitis",
+        "resfriado_mocos"
+      ],
+      "chunks": [
+        "Reconnaître une otite moyenne aiguë (ameli.fr, Assurance Maladie, Francia, 2026). Tema: cómo se nota la otitis en un bebé que aún no habla. Hallazgo: en el lactante los síntomas de otitis suelen ser poco típicos: puede frotarse o tirarse de la oreja, a menudo con fiebre, llorar sin motivo aparente, despertarse por la noche, estar más irritable de lo habitual o sin energía, rechazar el biberón o tener molestias digestivas como vómitos o diarrea. Cuando el niño ya puede expresarlo, lo típico es dolor de oído, sensación de oído tapado y fiebre, por lo general por encima de 38 °C, y a veces sale un líquido amarillento por el oído (otorrea), que suele verse por la mañana en la almohada (fuente en francés).",
+        "Reconnaître une otite moyenne aiguë (ameli.fr, Assurance Maladie, Francia, 2026). Tema: por qué aparece la otitis después de un catarro con mocos. Hallazgo: la otitis media aguda es una infección del oído medio, vírica o bacteriana, que la mayoría de las veces aparece después de una rinofaringitis (el catarro con mocos del bebé). Favorecen las otitis los catarros repetidos, las vegetaciones grandes, la trompa de Eustaquio corta de los más pequeños, ir a la guardería (vida en colectividad), el humo de tabaco en casa, dar el biberón tumbado, haber nacido prematuro y, en el lactante, un reflujo gastroesofágico importante (fuente en francés)."
+      ]
+    },
+    {
+      "source_type": "reference",
+      "title": "Rhinopharyngite de l'enfant : que faire et quand consulter ? (ameli.fr)",
+      "organization": "Assurance Maladie (ameli.fr)",
+      "publication_year": 2026,
+      "url": "https://www.ameli.fr/assure/sante/themes/rhinopharyngite-enfant/que-faire-cas-faut-consulter",
+      "specialties": [
+        "pediatrics",
+        "general_medicine"
+      ],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "original_language": "fr",
+      "topics": [
+        "resfriado_mocos",
+        "lavados_nasales",
+        "cuando_consultar"
+      ],
+      "chunks": [
+        "Rhinopharyngite de l'enfant : que faire et quand consulter ? (Assurance Maladie, ameli.fr, 2026). Tema: qué hacer cuando el bebé tiene mocos o la nariz tapada por un resfriado. Hallazgo: la rinofaringitis (resfriado) es una infección por virus, a menudo benigna, que se cura sola en menos de diez días; hay que vigilar por si se complica. Que los mocos sean amarillentos y luego espesos y verdosos es la evolución normal y no significa por fuerza una sobreinfección; la tos es útil porque ayuda a despejar los bronquios. En casa: pañuelos desechables y suero fisiológico o agua de mar en monodosis, y lavarle la nariz si es demasiado pequeño para sonarse; no abusar del aspirador nasal; evitar el aire acondicionado y humidificar las habitaciones; ofrecerle agua a menudo para evitar la deshidratación y repartir las comidas en tomas más pequeñas para que no se canse. (fuente en francés)",
+        "Rhinopharyngite de l'enfant : que faire et quand consulter ? (Assurance Maladie, ameli.fr, 2026). Tema: cuándo consultar con urgencia si está mocoso y le cuesta respirar. Hallazgo: hay que consultar con urgencia si un bebé menor de 3 meses tiene fiebre; si tiene 40 °C o más, a cualquier edad; si le cuesta respirar; si está adormilado, reacciona poco y llora débil; si está muy pálido o tiene manchas moradas en la piel; si tiene un dolor de cabeza intenso, vómitos o un llanto sin explicación, aunque no tenga fiebre; o si tiene diarrea abundante o vómitos que puedan deshidratarlo. No se deben usar sprays descongestivos en menores de 15 años, ni medicamentos para la tos o para fluidificar los mocos antes de los 2 años. (fuente en francés)",
+        "Rhinopharyngite de l'enfant : que faire et quand consulter ? (Assurance Maladie, ameli.fr, 2026). Tema: cuándo pedir cita con el médico si el resfriado con mocos no mejora. Hallazgo: hay que consultar con el médico si el resfriado empeora, si el niño pasa de 38,5 °C durante más de tres días, si la fiebre aparece después de 3 días de resfriado, si la tos o los mocos no mejoran a los diez días, si le duele o le supura un oído, si tiene legañas con pus o los párpados hinchados, si tiene problemas digestivos (le cuesta comer, vómitos, diarrea) o si cambia de comportamiento y eso te preocupa. El resfriado es a menudo benigno y se cura solo en menos de diez días, pero estos signos pueden indicar una complicación. (fuente en francés)"
+      ]
+    },
+    {
+      "source_type": "guideline",
+      "title": "Bronchiolite aiguë du nourrisson : une prise en charge qui repose sur le lavage de nez et la surveillance active par les parents (HAS)",
+      "organization": "Haute Autorité de Santé (HAS)",
+      "publication_year": 2022,
+      "url": "https://www.has-sante.fr/jcms/p_3118107/fr/bronchiolite-aigue-du-nourrisson-une-prise-en-charge-qui-repose-sur-le-lavage-de-nez-et-la-surveillance-active-par-les-parents",
+      "specialties": [
+        "pediatrics",
+        "general_medicine"
+      ],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "original_language": "fr",
+      "topics": [
+        "bronquiolitis",
+        "lavados_nasales",
+        "cuando_consultar",
+        "signos_alarma"
+      ],
+      "chunks": [
+        "Bronchiolite aiguë du nourrisson : une prise en charge qui repose sur le lavage de nez et la surveillance active par les parents (HAS, 2022). Tema: cuánto afecta y cómo es. Hallazgo: cada invierno la bronquiolitis afecta al 30 % de los menores de 2 años, unos 480 000 niños. Suele ser una infección vírica benigna de los bronquios pequeños, con tos y respiración rápida y sibilante. La fase aguda dura de media 10 días, los dos primeros con vigilancia reforzada, y la epidemia suele alcanzar su pico de noviembre a finales del invierno. Cada año ingresan el 2 al 3 % de los menores de 1 año.",
+        "Bronchiolite aiguë du nourrisson : une prise en charge qui repose sur le lavage de nez et la surveillance active par les parents (HAS, 2022). Tema: cómo se maneja. Hallazgo: en la gran mayoría de los casos no hace falta ingreso. El gesto principal es el lavado de nariz regular con suero fisiológico, indoloro, para despejar las secreciones. La HAS y el Consejo Nacional Profesional de Pediatría distinguen formas leves (sin ingreso), moderadas (se valora si se sigue en consulta o en el hospital) y graves (derivación inmediata al hospital); los menores de 6 semanas tienen vigilancia hospitalaria sistemática. La fisioterapia tradicional con golpeteo y vibraciones y los jarabes antitusivos y fluidificantes están contraindicados; los antibióticos no se usan salvo en las raras sobreinfecciones bacterianas.",
+        "Bronchiolite aiguë du nourrisson : une prise en charge qui repose sur le lavage de nez et la surveillance active par les parents (HAS, 2022). Tema: cuándo consultar y cuándo llamar al 15. Hallazgo: el médico debe explicar a los padres la vigilancia, la alimentación, el espacio de sueño seguro y los signos de empeoramiento, con una ficha para padres. Hay que pedir cita con un médico si cambia el comportamiento del niño, se acelera su respiración, se le hunde el tórax o bebe menos desde hace varias tomas. Hay que llamar de inmediato al 15 si se pone azulado alrededor de la boca, tiene un malestar, hace pausas respiratorias o duerme todo el tiempo."
+      ]
+    },
+    {
+      "source_type": "reference",
+      "title": "Mon bébé a une bronchiolite (HUG, Mon enfant est malade)",
+      "organization": "Hôpitaux universitaires de Genève (HUG)",
+      "publication_year": null,
+      "undated_reason": "la página no muestra fecha de publicación ni de actualización (consultada el 2026-11-06)",
+      "url": "https://www.monenfantestmalade.ch/fiches/bronchiolite",
+      "specialties": [
+        "pediatrics",
+        "general_medicine"
+      ],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "original_language": "fr",
+      "topics": [
+        "bronquiolitis",
+        "cuando_consultar",
+        "lavados_nasales"
+      ],
+      "chunks": [
+        "Mon bébé a une bronchiolite (HUG). Tema: qué es y cómo se previene. Hallazgo: la bronquiolitis es una infección respiratoria de los bronquios más finos, frecuente y muy contagiosa, que afecta sobre todo a los bebés porque pocas secreciones bastan para obstruirlos; es más seria antes de los 6 meses y a veces requiere hospitalización. El virus más conocido es el virus respiratorio sincitial (VRS), que provoca pequeñas epidemias de octubre a abril y se transmite por las secreciones, a menudo por las manos. Prevención: antes de los 3 meses evitar el contacto con personas con resfriado, tos o fiebre; mascarilla si se está resfriado; lavarse las manos antes y después del contacto; mantener alejados a los hermanos enfermos en la fase aguda, si es posible; evitar reuniones y lugares públicos; respetar el calendario vacunal; vacunarse contra la tos ferina y la gripe; y no fumar cerca del bebé.",
+        "Mon bébé a une bronchiolite (HUG). Tema: cuidados en casa. Hallazgo: no existe medicamento contra el virus; los antibióticos son inútiles y los antitusivos no mejoran la situación. Se lava la nariz con suero fisiológico tantas veces como haga falta y luego se aspiran las secreciones con un aspirador nasal; con la nariz despejada se facilita la toma. Si el aire de la habitación está seco, se ventila; la temperatura ideal es de 18 °C. Hay que procurar que el bebé beba lo suficiente. La enfermedad dura de 1 a 2 semanas y puede volver a la guardería cuando ya no tenga fiebre y esté en forma.",
+        "Mon bébé a une bronchiolite (HUG). Tema: cuándo consultar. Hallazgo: Consulta inmediata si el bebé preocupa, se fatiga y los labios se ponen azules, respira rápido, se le hunde la musculatura entre las costillas o la respiración se vuelve sibilante. Consulta en 24 horas si no consigue beber al menos la mitad de su cantidad habitual o si la fiebre dura más de 3 días."
+      ]
+    },
+    {
+      "source_type": "reference",
+      "title": "Apprendre à se moucher (ONE)",
+      "organization": "ONE (Office de la Naissance et de l'Enfance, Belgique)",
+      "publication_year": null,
+      "undated_reason": "Página de la sección Familles de one.be sin fecha de actualización visible; consultada el 2026-11-06.",
+      "url": "https://www.one.be/familles/1-3/apprendre-a-se-moucher",
+      "specialties": [
+        "pediatrics",
+        "general_medicine"
+      ],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "original_language": "fr",
+      "topics": [
+        "resfriado_mocos",
+        "otitis",
+        "lavados_nasales"
+      ],
+      "chunks": [
+        "Apprendre à se moucher (ONE, Office de la Naissance et de l'Enfance). Tema: por qué y a qué edad enseñar a sonarse. Hallazgo: la página considera útil enseñar al niño a sonarse a partir de los 2 años. Una nariz despejada ayuda a respirar mejor, a percibir los olores y a apreciar el sabor de los alimentos, le ayuda a sentirse mejor cuando está resfriado y puede reducir el riesgo de otitis, porque con la nariz tapada pueden dificultarse la aireación y el drenaje del oído a través de la trompa de Eustaquio. Entre los 2 y los 3 años cada niño puede aprender poco a poco a sonarse; necesita observar, intentarlo y que le animen, y como suelen aprender imitando a los adultos, dar ejemplo ayuda. Puede tener su propio pañuelo desde muy pequeño para reconocerlo y usarlo poco a poco.",
+        "Apprendre à se moucher (ONE, Office de la Naissance et de l'Enfance). Tema: cómo hacerlo y qué pañuelos usar. Hallazgo: el principio es soplar por la nariz, una fosa nasal cada vez: se coloca un pañuelo sobre la nariz del niño, se tapa suavemente una fosa, se le pide que sople por la otra y se repite del otro lado; después se tira el pañuelo, sobre todo si hay resfriado. El aprendizaje puede llevar tiempo y hay que tener paciencia y animarle a intentarlo. Como truco, se puede poner una pluma pequeña o un trozo de papel en el dorso de su mano y pedirle que lo haga volar soplando por la nariz, para convertirlo en un juego. Durante un resfriado la página recomienda pañuelos de papel desechables, que se tiran a la basura justo después de usarlos para limitar la propagación de los microbios. No trata cuándo consultar ni da niveles de urgencia."
+      ]
+    },
+    {
+      "source_type": "reference",
+      "title": "Bronquiolitis: síntomas, diagnóstico y tratamiento",
+      "original_title": "Bronchiolite: sintomi, diagnosi, trattamento",
+      "organization": "Ospedale Pediatrico Bambino Gesù",
+      "publication_year": 2025,
+      "url": "https://www.ospedalebambinogesu.it/bronchiolite-sintomi-diagnosi-trattamento-79960/",
+      "specialties": [
+        "pediatrics",
+        "infectious_disease"
+      ],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "original_language": "it",
+      "topics": [
+        "bronquiolitis",
+        "cuando_consultar",
+        "lavados_nasales",
+        "signos_alarma"
+      ],
+      "chunks": [
+        "Bronquiolitis: síntomas, diagnóstico y tratamiento (Ospedale Pediatrico Bambino Gesù, 2025). Tema: qué es la bronquiolitis y qué bebés tienen más riesgo. Hallazgo: es una infección viral aguda de las vías respiratorias que afecta sobre todo a menores de un año, en especial en los primeros seis meses, y es más frecuente entre noviembre y marzo. La causa más habitual es el virus respiratorio sincitial. Aumentan el riesgo de una bronquiolitis grave la prematuridad, tener menos de 12 semanas, las cardiopatías congénitas, las anomalías congénitas de las vías respiratorias, la displasia broncopulmonar, la fibrosis quística y las inmunodeficiencias (fuente en italiano).",
+        "Bronquiolitis: síntomas, diagnóstico y tratamiento (Ospedale Pediatrico Bambino Gesù, 2025). Tema: síntomas y evolución de la bronquiolitis. Hallazgo: suele empezar con febrícula y mocos, y después pueden aparecer una tos insistente que empeora poco a poco y dificultad para respirar, con respiración más rápida y hundimiento de la piel en la base del cuello y entre las costillas al respirar. En la mayoría de los casos es benigna y se cura sola en unos 7-12 días. En prematuros o en bebés de menos de seis semanas hay más riesgo de apnea, es decir, pausas respiratorias prolongadas. Una saturación de oxígeno inferior al 92-94% indica gravedad y posible ingreso (fuente en italiano).",
+        "Bronquiolitis: síntomas, diagnóstico y tratamiento (Ospedale Pediatrico Bambino Gesù, 2025). Tema: manejo en casa y cuándo ingresar. Hallazgo: el bebé sin dificultad respiratoria, con saturación superior al 94% en aire ambiente y que puede alimentarse, puede seguirse en casa con su pediatra: lavados nasales, aspiración de secreciones y tomas pequeñas y frecuentes. Los antibióticos no se recomiendan de rutina y los corticoides por vía oral no han demostrado un beneficio significativo. Si el bebé se oxigena mal o rechaza el alimento, debe valorarlo el pediatra de urgencias, que decidirá si ingresa; pesan a favor del ingreso la prematuridad, tener menos de dos meses, las enfermedades crónicas o que los padres no puedan atenderlo en casa (fuente en italiano).",
+        "Bronquiolitis: síntomas, diagnóstico y tratamiento (Ospedale Pediatrico Bambino Gesù, 2025). Tema: prevención de la bronquiolitis. Hallazgo: las medidas principales son evitar el contacto de los bebés con personas enfermas, lavarse las manos, favorecer la lactancia materna, mantener una buena hidratación, hacer lavados nasales con suero y no fumar en casa. Existen además anticuerpos monoclonales contra el virus: uno se reserva a los bebés más frágiles (prematuros o con enfermedad pulmonar crónica o cardiopatía congénita) y otro, en una sola inyección, protege unos cinco meses; la indicación depende de la edad y de los factores de riesgo (fuente en italiano)."
+      ]
+    },
+    {
+      "source_type": "reference",
+      "title": "Otitis media aguda purulenta",
+      "original_title": "Otite media acuta purulenta",
+      "organization": "Ospedale Pediatrico Bambino Gesù",
+      "publication_year": 2024,
+      "url": "https://www.ospedalebambinogesu.it/otite-media-acuta-purulenta-89741/",
+      "specialties": [
+        "pediatrics",
+        "infectious_disease"
+      ],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "original_language": "it",
+      "topics": [
+        "otitis",
+        "cuando_consultar"
+      ],
+      "chunks": [
+        "Otitis media aguda purulenta (Ospedale Pediatrico Bambino Gesù, 2024). Tema: qué es la otitis media aguda y por qué es frecuente en niños pequeños. Hallazgo: es una infección aguda del oído medio, de comienzo rápido y que suele seguir a un resfriado, más frecuente en invierno. Se favorece porque la trompa de Eustaquio funciona mal (en los niños es más corta, más ancha y menos inclinada que en el adulto) y porque el sistema inmunitario es inmaduro. Puede causar fiebre, dolor de oído, irritabilidad, llanto inconsolable, dificultad para dormir, tocarse las orejas y salida de pus, aunque a veces los síntomas son sutiles o faltan. No se contagia de persona a persona (fuente en italiano).",
+        "Otitis media aguda purulenta (Ospedale Pediatrico Bambino Gesù, 2024). Tema: prevención y vida diaria con otitis. Hallazgo: se aconseja evitar el contacto con personas resfriadas, sobre todo en menores de un año; también ayudan lavar a menudo las manos y los juguetes, proteger al niño del humo del tabaco y dar el pecho al menos los primeros 6 meses. El diagnóstico lo hace el pediatra con el otoscopio. Si el tímpano se perfora, al salir el líquido el dolor suele desaparecer y la perforación suele cerrarse sola en pocas semanas, y hay que evitar que entre agua en el oído. Se desaconsejan los viajes en avión durante la otitis y se puede volver a la guardería o al colegio cuando la fiebre ha pasado por completo (fuente en italiano)."
+      ]
+    },
+    {
+      "source_type": "reference",
+      "title": "Resfriado",
+      "original_title": "Raffreddore",
+      "organization": "Ospedale Pediatrico Bambino Gesù",
+      "publication_year": 2025,
+      "url": "https://www.ospedalebambinogesu.it/raffreddore-89944/",
+      "specialties": [
+        "pediatrics",
+        "infectious_disease"
+      ],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "original_language": "it",
+      "topics": [
+        "resfriado_mocos",
+        "lavados_nasales",
+        "cuando_consultar",
+        "bronquiolitis"
+      ],
+      "chunks": [
+        "Resfriado (Ospedale Pediatrico Bambino Gesù, 2025). Tema: el resfriado en recién nacidos y lactantes. Hallazgo: el resfriado lo causan virus (más de 200 distintos), dura unos 3-4 días y es muy contagioso pero poco grave. Cursa con nariz tapada, mocos claros o amarillentos, tos, estornudos y febrícula. Si se extiende a los senos paranasales y a los oídos, puede complicarse con sinusitis u otitis. En recién nacidos y lactantes requiere más atención porque algunos virus pueden llegar a los bronquios y causar bronquiolitis. En menores de 6 meses es importante vigilar la alimentación y la aparición de tos insistente o dificultad para respirar (fuente en italiano).",
+        "Resfriado (Ospedale Pediatrico Bambino Gesù, 2025). Tema: cuidados y cuándo consultar. Hallazgo: se cura solo, de modo que el tratamiento es sintomático. Mientras el niño no sepa sonarse, son útiles los lavados nasales con suero fisiológico con jeringa sin aguja o dispositivos de farmacia. Los antibióticos no se recomiendan porque la enfermedad es vírica. Se aconseja seguir con la lactancia, hidratar bien y dejar descansar. Conviene consultar al pediatra si aparecen fiebre o tos, y para recién nacidos y lactantes siempre es aconsejable una visita; a los más pequeños puede hacer falta ingreso porque las secreciones dificultan comer y oxigenarse. Lavarse las manos es la medida preventiva más importante (fuente en italiano)."
+      ]
+    },
+    {
+      "source_type": "reference",
+      "title": "Virus respiratorio sincitial y bronquiolitis: todo lo que los padres deben saber",
+      "original_title": "Virus respiratorio sinciziale e bronchiolite, tutto quello che i genitori devono sapere",
+      "organization": "Società Italiana di Pediatria (SIP)",
+      "publication_year": 2021,
+      "url": "https://sip.it/2021/11/19/virus-respiratorio-sinciziale-e-bronchiolite-tutto-cio-che-i-genitori-devono-sapere/",
+      "specialties": [
+        "pediatrics",
+        "infectious_disease",
+        "emergency_medicine"
+      ],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "original_language": "it",
+      "topics": [
+        "bronquiolitis",
+        "cuando_consultar",
+        "signos_alarma",
+        "lavados_nasales"
+      ],
+      "chunks": [
+        "Virus respiratorio sincitial y bronquiolitis: todo lo que los padres deben saber (Società Italiana di Pediatria (SIP), 2021). Tema: cómo proteger al bebé de la bronquiolitis. Hallazgo: la leche materna aporta anticuerpos y reduce el riesgo de infección grave y de ingreso. Conviene lavarse las manos con agua y jabón o gel antes de tocar al bebé, ponerse mascarilla si se tiene catarro y no besarlo, mantenerlo lejos de personas con resfriado (también niños), limpiar superficies y juguetes que toca y no fumar en casa. En prematuros o con cardiopatía o enfermedad pulmonar, hay que preguntar al pediatra si procede una protección con anticuerpos monoclonales. (fuente en italiano)",
+        "Virus respiratorio sincitial y bronquiolitis: todo lo que los padres deben saber (Società Italiana di Pediatria (SIP), 2021). Tema: cuidados de la bronquiolitis. Hallazgo: no hay tratamientos eficaces para la bronquiolitis; en el hospital se dan cuidados de apoyo para mantener una buena hidratación y oxígeno si hace falta. En casa ayudan los lavados nasales con suero salino y la aspiración de secreciones, sobre todo antes de las tomas, ofreciendo líquidos a sorbos y comidas pequeñas y frecuentes. Los broncodilatadores, los corticoides y los antibióticos no están indicados de rutina; los antibióticos, en particular, no deben usarse porque la causa es un virus y las sobreinfecciones bacterianas son raras. (fuente en italiano)"
+      ]
+    },
+    {
+      "source_type": "reference",
+      "title": "Bronquiolitis (Helsenorge)",
+      "original_title": "Bronkiolitt (Helsenorge)",
+      "organization": "Helsenorge.no (Helsedirektoratet)",
+      "publication_year": 2026,
+      "url": "https://www.helsenorge.no/sykdom/lunger-og-luftveier/bronkiolitt-rs-virus/",
+      "specialties": [
+        "pediatrics",
+        "general_medicine"
+      ],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "original_language": "no",
+      "topics": [
+        "bronquiolitis",
+        "cuando_consultar"
+      ],
+      "chunks": [
+        "Bronquiolitis (Helsenorge, Helsedirektoratet, 2026). Tema: qué es la bronquiolitis y cuánto dura. Hallazgo: afecta sobre todo a niños menores de dos años y la mayoría se contagia en invierno. Los síntomas son respiración pesada, tos y sibilancias en el pecho, un resfriado intenso con moqueo, fiebre ligera, estado general disminuido y flacidez. La mayoría de los niños se cura sola en 1-2 semanas con reposo y suficiente líquido, aunque algunos pueden tener problemas respiratorios más graves.",
+        "Bronquiolitis (Helsenorge, Helsedirektoratet, 2026). Tema: cuándo contactar con un médico por bronquiolitis. Hallazgo: la página dice que hay que contactar con un médico si hay preocupación por el niño, y hacerlo rápido si el niño hace mucho esfuerzo para coger aire, tiene el pecho congestionado o respira pesadamente. También hay que contactar con un médico si le cuesta comer o beber. La página no da teléfonos. Explica que algunos niños ingresan en el hospital, donde se vigila la respiración y se asegura líquido y nutrición, y que algunos reciben oxígeno extra o líquido por vía intravenosa."
+      ]
+    },
+    {
+      "source_type": "reference",
+      "title": "Bronquiolitis: folleto informativo para padres y cuidadores",
+      "original_title": "Bronquiolite: folheto informativo para pais e cuidadores",
+      "organization": "Direção-Geral da Saúde (DGS, Portugal)",
+      "publication_year": 2012,
+      "url": "https://www.dgs.pt/ficheiros-de-upload-3/norma_016_2012_anexo-iii-para-impressao-pdf.aspx",
+      "specialties": [
+        "pediatrics"
+      ],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "original_language": "pt",
+      "topics": [
+        "bronquiolitis",
+        "cuando_consultar",
+        "signos_alarma"
+      ],
+      "chunks": [
+        "Bronquiolitis: folleto informativo para padres y cuidadores (Direção-Geral da Saúde, 2012). Tema: qué es la bronquiolitis y cómo prevenirla. Hallazgo: es una infección respiratoria aguda vírica de los dos primeros años de vida, con el virus sincitial respiratorio como principal responsable, más frecuente de noviembre a abril. Es muy contagiosa por las secreciones nasales, la tos y las manos, y los niños mayores y adultos pueden pasarla como un resfriado leve y contagiar. La medida más eficaz es lavarse las manos; también evitar lugares con mucha gente, no fumar ni dejar fumar donde está el bebé y amamantar, porque la lactancia reduce el riesgo de ingreso. (fuente en portugués)",
+        "Bronquiolitis: folleto informativo para padres y cuidadores (Direção-Geral da Saúde, 2012). Tema: síntomas, evolución y bebés de mayor riesgo. Hallazgo: suele haber mocos y tos seca que empeora poco a poco, a veces respiración ruidosa con pitos, más esfuerzo respiratorio con cansancio y respiración muy rápida, dificultad para comer y beber, vómitos con la tos y fiebre habitualmente baja. En la mayoría de los casos se resuelve en un plazo de hasta 2 semanas y puede volver a la guardería si está cómodo, sin fiebre y comiendo bien. Tienen más riesgo de enfermedad grave los menores de 12 semanas, los prematuros y los niños con enfermedad pulmonar crónica, cardiaca, neurológica grave, inmunodeficiencia o síndrome de Down. (fuente en portugués)",
+        "Bronquiolitis: folleto informativo para padres y cuidadores (Direção-Geral da Saúde, 2012). Tema: cuidados en casa y señales para consultar. Hallazgo: no hay tratamiento específico y los antibióticos no están indicados por ser vírica. En casa: dejarlo tranquilo, manipulándolo poco, fraccionar las tomas y mantenerlo incorporado después, limpiar la nariz, elevar algo el cabecero y vigilar la respiración. Hay que acudir a un servicio de salud o pedir consejo sanitario por teléfono si empeora la respiración (muy cansado, irritable o sin poder mamar), toma menos de la mitad de lo habitual en 2 o más tomas, vomita a menudo y en gran cantidad, rechaza la comida o los líquidos más de 4-6 horas o lleva el pañal seco más de 12 horas. Se llama al 112 si hay mucha dificultad para respirar o pausas, palidez o labios grisáceos o azulados, o somnolencia excesiva o postración. (fuente en portugués)"
+      ]
+    },
+    {
+      "source_type": "reference",
+      "title": "Bronquiolitis aguda",
+      "original_title": "Bronquiolite aguda",
+      "organization": "Sociedade Brasileira de Pediatria (SBP)",
+      "publication_year": 2026,
+      "url": "https://www.sbp.com.br/pediatria-para-familias/doencas/bronquiolite-aguda/",
+      "specialties": [
+        "pediatrics",
+        "infectious_disease"
+      ],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "original_language": "pt",
+      "topics": [
+        "bronquiolitis",
+        "signos_alarma",
+        "cuando_consultar"
+      ],
+      "chunks": [
+        "Bronquiolitis aguda (Sociedade Brasileira de Pediatria, 2026). Tema: qué es la bronquiolitis y cómo empieza. Hallazgo: es una infección vírica que afecta a la parte más delicada del pulmón de los bebés, los bronquiolos. El virus sincitial respiratorio es la causa principal, aunque también pueden causarla adenovirus, parainfluenza, gripe y rinovirus. Empieza como un resfriado, con nariz tapada, moco claro, tos, fiebre, rechazo de las tomas e irritabilidad. Tras uno o dos días puede haber más tos, dificultad para respirar, respiración rápida y sibilancias. (fuente en portugués)",
+        "Bronquiolitis aguda (Sociedade Brasileira de Pediatria, 2026). Tema: signos de gravedad y cuándo consultar. Hallazgo: en los casos más graves puede haber somnolencia, quejido, cianosis (labios y extremidades azulados) y pausas respiratorias. En casos de tos persistente, dificultad para respirar, respiración rápida y somnolencia, el bebé debe ser valorado por un médico de inmediato. Tienen más riesgo de enfermedad grave y de ingreso, a veces en cuidados intensivos, los menores de un año, los prematuros, los niños con cardiopatía o enfermedad pulmonar crónica, con inmunodeficiencia o con bajo peso al nacer. (fuente en portugués)",
+        "Bronquiolitis aguda (Sociedade Brasileira de Pediatria, 2026). Tema: manejo y prevención. Hallazgo: no hay tratamiento específico. La mayoría de los casos, sobre todo sin factores de riesgo, se resuelve sin medicamentos y los leves pueden seguirse en casa vigilando la fiebre y la respiración y manteniendo al bebé hidratado y bien alimentado. Los graves pueden necesitar oxígeno en el hospital. Para prevenir: evitar el contacto con personas resfriadas, lavarse las manos y usar alcohol al 70% antes de coger al bebé, evitar aglomeraciones, dar lactancia materna (exclusiva hasta los 6 meses), evitar el humo del tabaco y mantener las vacunas al día. (fuente en portugués)"
+      ]
+    },
+    {
+      "source_type": "reference",
+      "title": "Otitis media",
+      "original_title": "Otite Média",
+      "organization": "Sociedade Brasileira de Pediatria (SBP)",
+      "publication_year": 2023,
+      "url": "https://www.sbp.com.br/pediatria-para-familias/doencas/otite-media/",
+      "specialties": [
+        "pediatrics",
+        "infectious_disease"
+      ],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "original_language": "pt",
+      "topics": [
+        "otitis",
+        "signos_alarma"
+      ],
+      "chunks": [
+        "Otitis media (Sociedade Brasileira de Pediatria, 2023). Tema: por qué la otitis media es tan frecuente en los más pequeños y cómo se diagnostica. Hallazgo: los menores de 2 años son el grupo más afectado, por un sistema inmune inmaduro, los resfriados frecuentes por la guardería y una trompa de Eustaquio más corta, horizontal y flácida, que deja pasar secreciones al oído medio. Los síntomas por sí solos no bastan: el niño que se lleva la mano al oído suele tener picor o sensación de presión, y el dolor de oído y la fiebre son inespecíficos. El diagnóstico se hace mirando el tímpano con otoscopio, y el signo más característico es el abombamiento del tímpano. (fuente en portugués)",
+        "Otitis media (Sociedade Brasileira de Pediatria, 2023). Tema: manejo de la otitis media aguda y criterios de tratamiento inmediato. Hallazgo: no siempre son necesarios los antibióticos, porque la mayoría de los niños, sobre todo con afectación de un solo oído y sin supuración, mejora sin ellos. Se justifica el tratamiento inmediato si hay abombamiento en menores de 6 meses, abombamiento con dolor importante y temperatura superior a 39 grados, abombamiento en ambos oídos en menores de 2 años, o secreción mucopurulenta de inicio agudo. En los demás casos puede esperarse 48 horas, y si los síntomas persisten pasado ese tiempo hay que volver a consulta. La curación se juzga por los síntomas, no por el tímpano. (fuente en portugués)",
+        "Otitis media (Sociedade Brasileira de Pediatria, 2023). Tema: prevención de otitis repetidas y mastoiditis. Hallazgo: la vacuna antineumocócica reduce infecciones, consultas y cirugías para colocar drenajes en el tímpano. También ayudan evitar el chupete o limitarlo a las horas de sueño y que las clases de guardería tengan menos de 10 niños, y es muy probable que evitar el humo del tabaco (sobre todo el de la madre) reduzca las otitis. La profilaxis con antibióticos ya no se recomienda. En la inmensa mayoría de los casos la otitis media no evoluciona a mastoiditis; sus signos son enrojecimiento y calor detrás de la oreja, hinchazón con pérdida del surco y pabellón auricular desplazado. (fuente en portugués)"
+      ]
+    },
+    {
+      "source_type": "reference",
+      "title": "Resfriado (Sociedade Portuguesa de Pediatria)",
+      "original_title": "Constipação",
+      "organization": "Sociedade Portuguesa de Pediatria (SPP)",
+      "publication_year": 2020,
+      "url": "https://criancaefamilia.spp.pt/doencas-comuns-e-outros-problemas/constipacao/",
+      "specialties": [
+        "pediatrics"
+      ],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "original_language": "pt",
+      "topics": [
+        "resfriado_mocos",
+        "lavados_nasales",
+        "tos",
+        "cuando_consultar"
+      ],
+      "chunks": [
+        "Resfriado (Sociedade Portuguesa de Pediatria, Portal Criança e Família, 2020). Tema: qué es el resfriado en niños pequeños y cuánto dura. Hallazgo: es una infección vírica de las vías respiratorias altas que se resuelve sin tratamiento específico y es más común en otoño e invierno. Los menores de 6 años tienen con frecuencia entre 6 y 8 resfriados al año. Puede haber nariz tapada, mocos, al principio transparentes, que pueden volverse amarillentos con la evolución, dolor de garganta o de oídos, tos y fiebre. Dura de media entre 7 y 10 días y la tos puede persistir hasta 3 semanas. Lo causan más de 200 tipos de virus que se transmiten por secreciones, manos y objetos, y en los pequeños son más frecuentes por la guardería y por tener menos infecciones previas. (fuente en portugués)",
+        "Resfriado (Sociedade Portuguesa de Pediatria, Portal Criança e Família, 2020). Tema: cuidados en casa y prevención del resfriado. Hallazgo: la medida más eficaz es el lavado nasal con suero fisiológico, varias veces al día, sobre todo antes de comer y de dormir. Hay que asegurar la hidratación y ofrecer comida equilibrada en pequeñas cantidades varias veces al día. Se deben evitar los antibióticos y los jarabes para la tos, que no se recomiendan y pueden ser perjudiciales. Para prevenir, lo más importante es lavarse las manos, enseñar a toser y estornudar sobre un pañuelo o el codo y no llevar a la escuela a niños con fiebre. (fuente en portugués)",
+        "Resfriado (Sociedade Portuguesa de Pediatria, Portal Criança e Família, 2020). Tema: cuándo consultar y cuándo ir a urgencias. Hallazgo: se consulta sin urgencia si hay dificultad para comer o beber, fiebre de más de 4 días, dolor de garganta o de oídos de más de 1 semana o tos de más de 3 semanas. Se acude a urgencias si hay dolor en el pecho o dificultad respiratoria (respiración muy rápida, pausas respiratorias, hoyuelos en el pecho al respirar o quejido), un cambio importante del estado habitual como irritabilidad o postración, sobre todo sin fiebre, o fiebre con piel moteada, labios y uñas morados, sin importar los días de fiebre. (fuente en portugués)"
+      ]
+    },
+    {
+      "source_type": "reference",
+      "title": "Exposición al humo pasivo en la edad pediátrica: riesgos y problemas",
+      "original_title": "Exposição ao Fumo Passivo em Idade Pediátrica: Riscos e Problemas",
+      "organization": "Sociedade Portuguesa de Pediatria (SPP)",
+      "publication_year": null,
+      "undated_reason": "El artículo del Portal Criança e Família no indica fecha propia; solo muestra noticias relacionadas de marzo de 2026.",
+      "url": "https://criancaefamilia.spp.pt/habitos-de-vida-saudavel/tabagismo/exposicao-ao-fumo-passivo-em-idade-pediatrica-riscos-e-problemas/",
+      "specialties": [
+        "pediatrics"
+      ],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "original_language": "pt",
+      "topics": [
+        "muerte_subita_sueno_seguro",
+        "bronquiolitis",
+        "otitis",
+        "sibilancias"
+      ],
+      "chunks": [
+        "Exposición al humo pasivo en la edad pediátrica: riesgos y problemas (Sociedade Portuguesa de Pediatria, Portal Criança e Família, sin fecha). Tema: por qué el humo del tabaco daña más a lactantes y niños pequeños. Hallazgo: respiran más deprisa que los adultos, tienen los sistemas respiratorio, cardiovascular e inmunitario en desarrollo y pasan más tiempo en espacios cerrados. Se asocia a más bronquiolitis, bronquitis, neumonía y otitis media recurrente, más crisis de asma, tos crónica y sibilancias. La exposición en el embarazo o tras el nacimiento aumenta el riesgo de muerte súbita del lactante, y en el embarazo puede provocar bajo peso al nacer. También interfiere en la formación de los alvéolos pulmonares. (fuente en portugués)",
+        "Exposición al humo pasivo en la edad pediátrica: riesgos y problemas (Sociedade Portuguesa de Pediatria, Portal Criança e Família, sin fecha). Tema: humo de tercera mano, nuevas formas de nicotina y cómo proteger al niño. Hallazgo: las partículas tóxicas quedan en cortinas, muebles, ropa y piel y pueden inhalarse o ingerirse, sobre todo por bebés que se llevan objetos a la boca. La exposición a los cigarrillos electrónicos, el tabaco calentado y las bolsas de nicotina no es inocua, y las bolsas aumentan el riesgo de ingestión accidental e intoxicación en niños pequeños. Se recomienda no fumar ni usar otras formas de tabaco en casa ni en el coche, ni con las ventanas abiertas; la única forma realmente segura es que el niño viva y juegue en espacios totalmente libres de humo. Para dejar de fumar hay consultas específicas y líneas telefónicas de consejo sanitario. (fuente en portugués)"
+      ]
+    },
+    {
+      "source_type": "reference",
+      "title": "Tos en niños (1177)",
+      "original_title": "Hosta hos barn (1177)",
+      "organization": "1177 Vårdguiden (Inera)",
+      "publication_year": 2023,
+      "url": "https://www.1177.se/barn--gravid/vanliga-besvar-och-sjukdomar-hos-barn/vanliga-sjukdomar-och-besvar-hos-barn-0-1-ar/hosta/",
+      "specialties": [
+        "pediatrics",
+        "general_medicine",
+        "emergency_medicine"
+      ],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "original_language": "sv",
+      "topics": [
+        "tos",
+        "cuando_consultar"
+      ],
+      "chunks": [
+        "Tos en niños (1177 Vårdguiden, 2023). Tema: cuándo consultar por tos en niños pequeños. Hallazgo: se llama de inmediato a emergencias si el niño tiene dificultad para respirar con labios azulados o si se le ha metido algo en las vías respiratorias. Se contacta de inmediato con el centro de salud o la consulta sin cita (y, si están cerrados, con urgencias) si el niño está muy enfermo (por ejemplo, no tiene fuerzas para comer), babea y le cuesta tragar la saliva, o tiene menos de 6 meses y se ahoga al toser.",
+        "Tos en niños (1177 Vårdguiden, 2023). Tema: señales que piden consulta en horas o días. Hallazgo: se contacta con el centro de salud o la consulta sin cita si la tos viene con fiebre más de cuatro días, si hay pitidos al respirar, o si se sospecha tos ferina y hay contacto cercano con un menor de 1 año o con una embarazada de más de 27 semanas. Si la tos dura más de cuatro semanas sin mejorar, se consulta al centro de salud, porque entonces suelen intervenir causas distintas de la infección, como el asma. Tras un resfriado la tos puede durar varias semanas.",
+        "Tos en niños (1177 Vårdguiden, 2023). Tema: cuidados en casa y lo que se desaconseja. Hallazgo: se recomienda beber mucho (los bebés que toman el pecho pueden mamar más a menudo) y elevar la cabecera de la cama en los niños que tosen de noche. La página desaconseja los medicamentos para suprimir la tos, que no se consideran buenos porque toser limpia las mucosidades, y señala que los de venta libre no tienen efecto demostrado y no se dan a menores de 2 años sin consultar. No se debe dar miel a menores de 1 año por el riesgo de esporas bacterianas. Se evita el humo de tabaco y de fuego cerca del niño."
+      ]
+    },
+    {
+      "source_type": "reference",
+      "title": "Virus respiratorio sincitial en niños (1177)",
+      "original_title": "RS-virus hos barn (1177)",
+      "organization": "1177 Vårdguiden (Inera)",
+      "publication_year": 2026,
+      "url": "https://www.1177.se/barn--gravid/vanliga-besvar-och-sjukdomar-hos-barn/vanliga-sjukdomar-och-besvar-hos-barn-0-1-ar/rs-virus-hos-barn/",
+      "specialties": [
+        "pediatrics",
+        "emergency_medicine"
+      ],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "original_language": "sv",
+      "topics": [
+        "bronquiolitis"
+      ],
+      "chunks": [
+        "Virus respiratorio sincitial en niños (1177 Vårdguiden, 2026). Tema: síntomas del virus respiratorio sincitial (VRS) en bebés. Hallazgo: empieza como un resfriado, con mocos espesos y fiebre. Puede haber dificultad para comer o beber, que cansa al bebé, y problemas respiratorios (sobre todo en menores de 3 meses): respiración rápida y superficial, sibilancias y hundimiento del pecho o del vientre al respirar. Las pausas respiratorias se dan sobre todo en menores de 2 meses o prematuros. El niño suele estar peor entre 4 y 6 días después de los primeros síntomas, y curarse del todo puede llevar unas semanas.",
+        "Virus respiratorio sincitial en niños (1177 Vårdguiden, 2026). Tema: quién corre más riesgo y cuándo pedir ayuda. Hallazgo: tienen más riesgo de enfermar gravemente los menores de 6 meses, los prematuros y los niños con enfermedad del corazón, del pulmón, del sistema nervioso o del sistema inmunitario. La página indica llamar de inmediato a emergencias si el niño tiene dificultad para respirar. Para otros síntomas se puede pedir consejo a su pediatra, y en menores de 6 meses se le consulta antes de darle ninguna medicación.",
+        "Virus respiratorio sincitial en niños (1177 Vårdguiden, 2026). Tema: cuidados en casa y prevención. Hallazgo: se recomienda suero salino nasal, sobre todo antes de comer o dormir, un aspirador nasal después del suero, elevar la cabecera, dar el pecho o ofrecer líquidos con más frecuencia y, si la congestión le impide mamar, probar con biberón y, mientras tanto, extraerse leche a mano o con sacaleches. También evitar el humo cerca del niño."
+      ]
+    }
+  ]
+}

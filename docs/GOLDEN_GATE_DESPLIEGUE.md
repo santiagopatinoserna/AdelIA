@@ -84,7 +84,7 @@ Tres scripts, uno por máquina:
 | Dónde | Script | Qué hace |
 |---|---|---|
 | Mac | `scripts/deploy-prod.sh` | Grupo C en local (no necesita clave ni base de datos, falla rápido). Tras el rsync, si el despliegue incluye `api`, llama por ssh al gate del servidor y solo con un 0 hace `up -d`. Lee `GOLDEN_WITH_MODEL` (0 o 1; otro valor para el despliegue) y `GOLDEN_CANDIDATE_GLOB`, y se los pasa al servidor como `--with-model` y `--candidates`. |
-| Servidor | `scripts/prod-golden-gate.sh` | Construye la imagen nueva y su etapa `golden`, copia el corpus de producción a una base de datos efímera, ejecuta el golden en un contenedor desechable de la imagen nueva y borra la copia. Acepta `--with-model` y `--candidates GLOB` (o las mismas variables) para lanzarlo a mano. |
+| Servidor | `scripts/prod-golden-gate.sh` | Construye la imagen nueva y su etapa `golden`, copia el corpus de producción a una base de datos efímera, ejecuta el golden en un contenedor desechable de la imagen nueva y borra la copia. Acepta `--with-model`, `--candidates GLOB` y `--explain IDS` (o las mismas variables, y `GOLDEN_EXPLAIN`) para lanzarlo a mano. |
 | Contenedor | `apps/api/scripts/golden_gate.sh` | Migra la copia a la cabeza nueva, carga el corpus de la versión nueva como lo haría el arranque y ejecuta `tests/test_rag_golden.py` con `ADELIA_GOLDEN_DEPLOY=1` y, salvo `--with-model`, `ADELIA_GOLDEN_MODEL_FREE=1`. |
 
 Orden en el servidor:
@@ -113,6 +113,10 @@ Orden en el servidor:
   `adelia/main.py`). Contra la base viva, el golden mediría el corpus de la versión ANTERIOR,
   que es justo lo que no queremos con el crawler añadiendo fuentes. En la copia se cargan antes
   de medir. Coste: los fragmentos nuevos se embeben dos veces (en la copia y al arrancar).
+  Desde el 7 de noviembre de 2026 el arranque no espera a esa carga: va al lado del servidor,
+  y `/health` y `/healthz` contestan mientras tanto. El gate sí la espera, y si un fichero no
+  termina de cargarse (un 429 que dura más que todos los reintentos) el gate dice que no pudo
+  correr (salida 2) en lugar de medir un corpus más pequeño que el que va a servir.
 - El camino de respuesta del golden solo lee, pero la copia hace imposible que un test escriba
   en la base viva. `golden_gate.sh` se niega a migrar una base cuyo nombre no termine en
   `_golden_gate`, y el copiado se niega si el nombre efímero coincide con el vivo.
@@ -209,6 +213,9 @@ siguiente arranque; uno en otra carpeta no lo carga nada (`main.load_startup_cor
    - a mano en el servidor, sin desplegar (no toca los contenedores vivos):
      `cd /opt/adelia && bash scripts/prod-golden-gate.sh --candidates
      'apps/api/adelia/enrichment/candidates/*.json'`.
+   - por partes (7 de noviembre de 2026): `--candidates` acepta también varios ficheros o globs
+     separados por comas, para que un dominio que sigue fallando no frene a los demás. Un
+     elemento que no nombra ningún fichero es un error, no un fichero menos.
 4. Qué hace `golden_gate.sh` dentro del contenedor, sobre la copia efímera:
    1. el golden sin modelo, sin candidatos (`golden_report.sin_candidatos.json`);
    2. la previsualización de las preguntas `CANDIDATES` con `--no-model`
@@ -235,6 +242,40 @@ La previsualización sin modelo busca cada pregunta fr/en con la traducción gra
 fichero de vectores; las `CANDIDATES` fr/en no tienen grabación, así que se buscan como están
 escritas y el veredicto lo dice («sin traducir»): para ellas el resultado es pesimista.
 
+### Explicar preguntas concretas (`--explain`, 7 de noviembre de 2026)
+
+La primera medición de los candidatos del 6 de noviembre dijo qué preguntas se rompían (A1, A5,
+A13, A37 y B6) pero no qué fuentes las rompían, y cada pasada más es un viaje al servidor. Con
+`--explain IDS` la misma ejecución lo dice:
+
+```bash
+cd /opt/adelia && bash scripts/prod-golden-gate.sh \
+  --candidates 'apps/api/adelia/enrichment/candidates/lote_2026_11_06/*.json' \
+  --explain A1,A5,A13,A16,A21,A37,B6
+```
+
+(o `GOLDEN_EXPLAIN=A1,B6`; ese lote pasó a `data/` el 7 de noviembre tras la tercera medición, y
+el ejemplo queda como forma de uso con otro lote). Solo admite ids de pregunta separados por comas; otra cosa se
+niega antes de construir nada. Tras el golden sin candidatos, y otra vez tras cargarlos,
+`preview_golden_candidates.py --no-model --ids IDS --explain` escribe
+`golden_explain.sin_candidatos.json` y `golden_explain.con_candidatos.json`: para cada pregunta,
+las 10 fuentes más cercanas (una por fuente, sin corte), con su distancia, si está bajo el corte
+de producción, si es la esperada (grupo A) y el fichero del que sale (`data/<fichero>`,
+`candidato <fichero>` o «sin fichero», el crawler). Al final `golden_candidates.py explain` las
+pone una al lado de la otra: cuántas tarjetas hay bajo el corte sin y con, qué fuentes son
+nuevas y cuáles salen de las cuatro primeras. Es un diagnóstico, sin modelo, y nunca cambia el
+código de salida. Sin `--candidates`, explica el corpus tal como está.
+
+Una búsqueda por bloque (segunda medición, 7 de noviembre). La lista de arriba mezcla todo lo
+que el grafo busca, y la segunda medición perdió A21 mientras esa lista enseñaba sus fuentes
+arriba: las encontraba el léxico de madre, y el gate no lo usa en una pregunta en español, porque
+`tests/test_rag_golden.py` responde a cada texto con el vector grabado de la pregunta. Por eso
+cada pregunta trae además un bloque por búsqueda, con sus 8 fuentes más cercanas y sus
+tarjetas: `principal` (su frase), `léxico de madre`, `sujeto implícito` (corte 0,17), `avisos`
+(solo otros fragmentos de las fuentes citadas, solo en un plan de la demo) y `gate` (el vector
+grabado, con el que el gate lee sus tarjetas). Lo que el entorno tiene apagado se dice y no se
+busca. `golden_candidates.py explain` pone cada bloque sin y con candidatos.
+
 ## Añadir preguntas sin parar el despliegue (candidatas, 6 de noviembre de 2026)
 
 El primer informe del gate en el servidor dijo que la mayoría del corpus no está vigilado
@@ -254,14 +295,21 @@ alternativa de `expect_source` existe en el corpus.
 
 | | es | en | fr |
 |---|---|---|---|
-| A (A19 a A39) | 12 | 4 | 5 |
-| B (B18 a B27) | 8 | 1 | 1 |
+| A (A19 a A43) | 15 | 4 | 6 |
+| B (B18 a B31, sin B19, B21, B24 ni B27) | 8 | 1 | 1 |
 
 Las B: piojos (B18), agujeros de las orejas (B19), silla del coche a los 4 años (B20, la para el
 filtro de edad), pechos hinchados del recién nacido (B21), anticonceptivo en la lactancia (B22),
 adaptación más gotas de valeriana (B23, mixta), molusco contagioso (B24), pulsaciones de
 Ventolin (B25, dosis), lateralidad (B26), bebida de avena (B27). Si entran todas, las fuentes
 pediátricas sin pregunta A bajan de 337 a 257 de 426.
+
+Al entrar en `data/` las fuentes candidatas que las responden
+(`docs/corpus/CANDIDATOS_2026_11_06.md`), cuatro de esas B pasaron a A: B19 es A40 (pendientes,
+KidsDoc), B21 es A41 (pechitos hinchados, Seattle Children's), B24 es A42 (molusco: NHS,
+EnFamilia, HealthyChildren, CDC) y B27 es A43 (bebida de avena, CDC). En su sitio entraron
+cuatro B del mismo tema que siguen sin respuesta: bruxismo (B28), fosita sacra (B29), tiña (B30)
+y kombucha (B31, en francés). Las ocho siguen en `CANDIDATES` hasta medirse.
 
 ### Medidas en producción el 6 de noviembre de 2026
 

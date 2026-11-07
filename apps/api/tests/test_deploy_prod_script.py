@@ -721,3 +721,93 @@ def test_the_server_gate_refuses_candidates_without_a_glob(tmp_path):
     proc, docker = _server_gate(tmp_path, args=("--candidates",))
     assert proc.returncode == 2
     assert not [line for line in docker if " build " in line], docker
+
+
+# --- --explain: the cards of named questions, without and with the candidates -----
+#
+# 2026-11-07: the first server run of the 2026-11-06 candidates said which
+# questions broke but not which sources broke them. --explain IDS asks the gate
+# for the nearest sources of those questions, with distance and file, in the
+# same run; it is a diagnostic and never changes the verdict.
+
+_IDS = "A1,A5,A13,A37,A16,B6"
+
+
+@pytest.mark.parametrize(
+    ("args", "extra_env"),
+    [
+        (("--candidates", _GLOB, "--explain", _IDS), None),
+        (("--candidates", _GLOB), {"GOLDEN_EXPLAIN": _IDS}),
+    ],
+)
+def test_the_server_gate_hands_the_questions_to_explain_to_the_container(
+    tmp_path, args, extra_env
+):
+    proc, docker = _server_gate(tmp_path, args=args, extra_env=extra_env)
+    assert proc.returncode == 0, proc.stdout + proc.stderr
+    run = docker[_index(docker, " run ")].rstrip()
+    assert run.endswith(f"golden_gate.sh --candidates {_GLOB} --explain {_IDS}")
+
+
+@pytest.mark.parametrize("bad", ["A1;rm -rf /", "A1,,B6", "a1", "", "A1 B6"])
+def test_the_server_gate_refuses_ids_that_are_not_question_ids(tmp_path, bad):
+    proc, docker = _server_gate(tmp_path, args=("--candidates", _GLOB, "--explain", bad))
+    assert proc.returncode == 2
+    assert not [line for line in docker if " build " in line], docker
+
+
+def test_inside_the_container_explain_runs_without_then_with_and_keeps_the_verdict(tmp_path):
+    proc, calls = _container_gate(tmp_path, args=("--candidates", _GLOB, "--explain", _IDS))
+    assert proc.returncode == 0, proc.stdout + proc.stderr
+    explains = [i for i, c in enumerate(calls)
+                if "preview_golden_candidates.py" in c and "--explain" in c]
+    load = _index(calls, "golden_candidates.py load")
+    side_by_side = _index(calls, "golden_candidates.py explain")
+    assert len(explains) == 2 and explains[0] < load < explains[1] < side_by_side
+    for i in explains:
+        assert f"--ids {_IDS}" in calls[i] and "--no-model" in calls[i]
+        assert f"--origins {_GLOB}" in calls[i]
+    assert "golden_explain.sin_candidatos.json" in calls[explains[0]]
+    assert "golden_explain.con_candidatos.json" in calls[explains[1]]
+    assert "--without golden_explain.sin_candidatos.json" in calls[side_by_side]
+    assert "--with golden_explain.con_candidatos.json" in calls[side_by_side]
+    assert (tmp_path / "app" / "golden_report.json").read_text(encoding="utf-8") == _REPORT_RAN
+
+
+# 2026-11-07: a domain that keeps failing must not hold the others back, so
+# --candidates also takes files separated by commas (golden_candidates.resolve).
+_LIST = ("apps/api/adelia/enrichment/candidates/lote_2026_11_06/seguridad.json,"
+         "apps/api/adelia/enrichment/candidates/lote_2026_11_06/neonatal.json")
+
+
+def test_a_list_of_candidate_files_reaches_the_load_and_the_explanation_whole(tmp_path):
+    proc, docker = _server_gate(tmp_path, args=("--candidates", _LIST, "--explain", _IDS))
+    assert proc.returncode == 0, proc.stdout + proc.stderr
+    assert docker[_index(docker, " run ")].rstrip().endswith(
+        f"golden_gate.sh --candidates {_LIST} --explain {_IDS}")
+    proc, calls = _container_gate(tmp_path, args=("--candidates", _LIST, "--explain", _IDS))
+    assert proc.returncode == 0, proc.stdout + proc.stderr
+    assert calls[_index(calls, "golden_candidates.py load")].rstrip().endswith(f"load {_LIST}")
+    explains = [c for c in calls if "preview_golden_candidates.py" in c and "--explain" in c]
+    assert explains and all(f"--origins {_LIST}" in c for c in explains)
+
+
+def test_inside_the_container_explain_alone_explains_the_corpus_as_it_is(tmp_path):
+    proc, calls = _container_gate(tmp_path, args=("--explain", "A16"))
+    assert proc.returncode == 0, proc.stdout + proc.stderr
+    explains = [c for c in calls if "preview_golden_candidates.py" in c and "--explain" in c]
+    assert len(explains) == 1 and "--ids A16" in explains[0]
+    assert not [c for c in calls if "golden_candidates.py load" in c]
+    assert "golden_candidates.py explain --without golden_explain.sin_candidatos.json" in calls[-1]
+    assert "--with golden_explain.con" not in calls[-1]
+
+
+def test_inside_the_container_a_failed_explain_never_changes_the_verdict(tmp_path):
+    proc, calls = _container_gate(tmp_path, args=("--explain", "A16"), pytest_rc=1)
+    assert proc.returncode == 1, proc.stdout
+
+
+@pytest.mark.parametrize("bad", [("--explain",), ("--explain", "A1;ls")])
+def test_inside_the_container_bad_ids_are_refused_before_migrating(tmp_path, bad):
+    proc, calls = _container_gate(tmp_path, args=bad)
+    assert proc.returncode == 2 and calls == []

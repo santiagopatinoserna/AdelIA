@@ -231,3 +231,131 @@ def check_the_loader_reads_it(path: Path, monkeypatch) -> None:
     assert added == len(data["sources"])
     assert n_chunks == sum(len(s["chunks"]) for s in data["sources"])
     assert seen["origin"] == path.name and seen["tier"] == "evidence"
+
+
+# ---------------------------------------------------------------------------
+# Sources translated from other languages (candidates of 2026-11-06)
+#
+# Six research agents brought pages in German, Dutch, the Nordic languages,
+# English, French, Italian, Portuguese, Polish, Arabic, Japanese, Korean and
+# Spanish, each summarised in Spanish. Three things the domain files above
+# never needed to say become rules here.
+# ---------------------------------------------------------------------------
+
+#: Where candidate files live: nothing at boot reads this directory
+#: (adelia.main globs data/evidence_*.json only).
+CANDIDATES_DIR = DATA_DIR.parent / "candidates"
+BOOT_GLOB = "evidence_*.json"
+
+#: ISO 639-1 code of the page a source was read in. `language` stays "es":
+#: it is the language of the chunks, and the loader copies it to
+#: evidence_chunks.language, which picks the full-text configuration
+#: (migration 0021). An English page summarised in Spanish and stored as "en"
+#: would be stemmed as English and the lexical half of retrieval would miss it.
+ORIGINAL_LANGUAGE = re.compile(r"[a-z]{2}")
+
+#: Emergency numbers, advice lines and services of other health systems. A
+#: mother in Spain or France who reads "llama al 1177" or "pide cita en el
+#: consultatiebureau" is told to call a number that does not answer her or to
+#: go to a service that does not exist where she lives; the source's urgency is
+#: written in words instead ("llama a emergencias", "consulta el mismo día").
+#: Wider than test_evidence_files.FOREIGN_EMERGENCY_NUMBER (111, 999, 911),
+#: which every corpus file already passes. Spain's and France's own numbers
+#: (112, 061, 15, 114) are not here.
+FOREIGN_SERVICE = re.compile(
+    r"(?<!\d)(?<!\d[.,])(?<!\d )(?:000|144|113|192|811|1177|116 ?117|80[08] ?24 ?24 ?24)"
+    r"(?!\d|[.,]\d)(?! \d{3}\b)|"
+    r"\bSNS ?24\b|\bNHS 111\b|Healthline|Info-Santé|helsestasjon|legevakt|huisartsenpost|"
+    r"consultatiebureau|Eltern-Kind-Pass|barnavårdscentral|\bBVC\b|health visitor",
+    re.IGNORECASE,
+)
+
+
+def check_original_language(data: dict) -> None:
+    """Chunks in Spanish, the page's own language kept beside them."""
+    for s in data["sources"]:
+        label = _label(s)
+        assert s["language"] == "es", f"{label}: chunks are Spanish, language must be 'es'"
+        original = s.get("original_language") or ""
+        assert ORIGINAL_LANGUAGE.fullmatch(original), f"{label}: original_language {original!r}"
+        # The chunks are our paraphrase, so `license` says how we use the page
+        # (fair_use_snippet, like every source in data/); a page that is itself
+        # in the public domain keeps that fact here instead of in `license`.
+        assert s.get("original_license") in (None, "public_domain"), label
+
+
+#: The languages of the titles a card may show (2026-11-07). The corpus is
+#: Spanish with English and French titles in data/; the first server run of
+#: the 2026-11-06 candidates put "pludselig uventet spædbarnsdød" and
+#: "krybbedød" on cards a mother in Spain would read.
+READABLE_TITLE_LANGUAGES = frozenset({"es", "en", "fr"})
+#: Letters and scripts no Spanish title has: Nordic, German, Polish,
+#: Portuguese and Hungarian letters, and anything past Latin (Arabic, CJK,
+#: Hangul). The organisation in the final parentheses keeps its own name.
+NOT_SPANISH = re.compile(r"[^\u0000-ɏ -⁯]|[åæøßłąęśźżćńőűãõäöç]", re.IGNORECASE)
+
+
+def _title_body(title: str) -> str:
+    return re.sub(r"\s*\([^()]*\)\s*$", "", title)
+
+
+def check_title_in_a_language_she_reads(data: dict) -> None:
+    """The card title is Spanish unless the page was Spanish, English or French.
+
+    The page's own title is kept, untouched, in `original_title` (the loader
+    ignores it, like `original_language`), and the chunks open with the title
+    the card shows, never with the original one."""
+    for s in data["sources"]:
+        label = _label(s)
+        original = s.get("original_title")
+        if s.get("original_language") in READABLE_TITLE_LANGUAGES:
+            assert original is None, f"{label}: original_title only for a translated title"
+            continue
+        assert isinstance(original, str) and original.strip(), f"{label}: no original_title"
+        assert original != s["title"], f"{label}: the title is still the original one"
+        hit = NOT_SPANISH.search(_title_body(s["title"]))
+        assert not hit, f"{label}: {hit.group(0)!r} is not in a Spanish title"
+        for i, chunk in enumerate(s["chunks"]):
+            assert not chunk.startswith(_title_body(original)), (
+                f"{_label(s, i)} still opens with the original title"
+            )
+
+
+def check_no_foreign_service(data: dict) -> None:
+    """What the chunk tells a parent, after «Tema:». The attribution before it
+    names the publisher (1177 Vårdguiden, SNS 24), as every chunk names its
+    source, and is not an instruction to call anyone."""
+    for source, i, chunk in chunks(data):
+        hit = FOREIGN_SERVICE.search(chunk.split("Tema:", 1)[-1])
+        assert not hit, f"{_label(source, i)} sends a parent to {hit.group(0)!r}"
+
+
+def _document_url(url: str) -> str:
+    """The URL two copies of one page share: no scheme, no www, no trailing slash."""
+    url = re.sub(r"^https?://(www\.)?", "", url.strip().lower())
+    return re.sub(r"[#].*$", "", url).rstrip("/")
+
+
+def _document_title(title: str) -> str:
+    """The title without the trailing "(Publisher)" most corpus titles carry."""
+    return " ".join(re.findall(r"\w+", re.sub(r"\s*\([^()]*\)\s*$", "", title).casefold()))
+
+
+def check_disjoint_documents(path: Path, others: list[Path]) -> None:
+    """No page another file already holds, under any spelling of its URL, and no
+    organization with the same document twice (same title, another URL)."""
+    mine = load(path)["sources"]
+    for other in others:
+        if other.resolve() == path.resolve():
+            continue
+        theirs = load(other)["sources"]
+        urls = {_document_url(s["url"]) for s in theirs}
+        docs = {(s["organization"], _document_title(s["title"])) for s in theirs}
+        titles = {s["title"] for s in theirs}
+        for s in mine:
+            label = f"{_label(s)} ({other.name})"
+            assert s["title"] not in titles, f"{label}: same title"
+            assert _document_url(s["url"]) not in urls, f"{label}: same page"
+            assert (s["organization"], _document_title(s["title"])) not in docs, (
+                f"{label}: same organization and title"
+            )

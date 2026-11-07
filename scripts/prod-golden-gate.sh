@@ -27,6 +27,17 @@
 #   bash scripts/prod-golden-gate.sh --with-model         # or GOLDEN_WITH_MODEL=1
 #   bash scripts/prod-golden-gate.sh --candidates 'apps/api/adelia/enrichment/candidates/*.json'
 #                                    # or GOLDEN_CANDIDATE_GLOB=...; always without a model
+#   bash scripts/prod-golden-gate.sh --candidates '...' --explain A1,A5,B6
+#   bash scripts/prod-golden-gate.sh --candidates "$LOTE/seguridad.json,$LOTE/neonatal.json"
+#                                    # a subset: files or globs separated by commas, so a
+#                                    # domain that keeps failing does not hold the others back
+#                                    # or GOLDEN_EXPLAIN=...: those questions' nearest
+#                                    # sources, distance and file, without and with
+#
+# --explain (2026-11-07): the first run of the 2026-11-06 candidates said which
+# questions broke, not which sources broke them, and each run is a trip to
+# this server. It is a diagnostic, always without a model, and never changes
+# the verdict.
 #
 # Why a scratch copy and not the live database: migrations run when the new
 # container boots (apps/api/Dockerfile CMD), and new corpus files are loaded
@@ -55,17 +66,30 @@ say() { printf 'golden gate: %s\n' "$*"; }
 
 WITH_MODEL="${GOLDEN_WITH_MODEL:-0}"
 CANDIDATES="${GOLDEN_CANDIDATE_GLOB:-}"
+EXPLAIN="${GOLDEN_EXPLAIN:-}"
 while [[ $# -gt 0 ]]; do
   case "$1" in
     --with-model) WITH_MODEL=1 ;;
     --candidates)
       CANDIDATES="${2:-}"
-      [[ -n "${CANDIDATES}" ]] || { say "NOT RUN: --candidates needs a glob"; exit 2; }
+      [[ -n "${CANDIDATES}" ]] || {
+        say "NOT RUN: --candidates needs a glob or files separated by commas"; exit 2; }
       shift ;;
-    *) say "NOT RUN: unknown argument $1 (known: --with-model, --candidates GLOB)"; exit 2 ;;
+    --explain)
+      EXPLAIN="${2:-}"
+      [[ -n "${EXPLAIN}" ]] || { say "NOT RUN: --explain needs question ids, e.g. A1,A5,B6"; exit 2; }
+      shift ;;
+    *) say "NOT RUN: unknown argument $1" \
+         "(known: --with-model, --candidates GLOB[,FILE...], --explain IDS)"
+       exit 2 ;;
   esac
   shift
 done
+# Question ids only: the list travels into the container as one argument.
+if [[ -n "${EXPLAIN}" && ! "${EXPLAIN}" =~ ^[ABC][0-9]+(,[ABC][0-9]+)*$ ]]; then
+  say "NOT RUN: --explain takes question ids separated by commas, e.g. A1,A5,B6"
+  exit 2
+fi
 case "${WITH_MODEL}" in
   0|1) ;;
   *) say "NOT RUN: GOLDEN_WITH_MODEL=${WITH_MODEL} (0 or 1)"; exit 2 ;;
@@ -84,6 +108,7 @@ else
   MODE="sin modelo (ni una llamada a Anthropic; --with-model o GOLDEN_WITH_MODEL=1 para la pasada completa)"
 fi
 [[ -n "${CANDIDATES}" ]] && GATE_ARGS+=(--candidates "${CANDIDATES}")
+[[ -n "${EXPLAIN}" ]] && GATE_ARGS+=(--explain "${EXPLAIN}")
 
 # Run inside the postgres container, with the scratch name in its env. The
 # guard makes it impossible to drop or overwrite the live database even if

@@ -1,0 +1,1230 @@
+{
+  "_meta": {
+    "topic": "Candidatas del dominio desarrollo_0_24m (0-24 meses), fuentes oficiales de muchos países leídas en su idioma y resumidas en español.",
+    "compiled": "2026-11-06",
+    "method": "Seis investigadores de Claude Code leyeron cada página con WebFetch y la pasaron por un subagente verificador (~/dev/adelia-night/research/corpus-*, verify.json). Al integrarlas se quitaron las fuentes cuyos términos prohíben adaptar, traducir o el uso comercial, los calendarios de vacunas de otros países y los duplicados con data/ y entre lotes; los teléfonos y servicios de otros sistemas de salud se reescribieron en palabras con el nivel de urgencia de la fuente, y cada fragmento sobre alarmas, urgencias, fiebre, respiración, convulsiones, deshidratación, ictericia o sepsis se volvió a comprobar contra el texto de la página descargado con curl. Idiomas del original: inglés 18, francés 10, español 9, italiano 8, neerlandés 3, portugués 2, árabe 1, danés 1, noruego 1, polaco 1. Detalle en docs/corpus/CANDIDATOS_2026_11_06.md.",
+    "caveat": "Los fragmentos son paráfrasis breves en español, no traducciones literales ni citas; `language` es el idioma del fragmento (es) y `original_language` el de la página. Cada fragmento conserva las cifras, edades y el nivel de urgencia de su propia fuente, que pueden diferir entre países. No es consejo médico.",
+    "purpose": "Candidato: no lo carga el arranque. Se mide con scripts/golden_gate.sh --candidates antes de pasar a data/ como evidence_desarrollo_0_24m_2026_11.json."
+  },
+  "sources": [
+    {
+      "source_type": "reference",
+      "title": "La dentición",
+      "original_title": "التسنين",
+      "organization": "Ministerio de Salud de Arabia Saudí (MOH)",
+      "publication_year": 2025,
+      "url": "https://www.moh.gov.sa/HealthAwareness/EducationalContent/BabyHealth/Pages/009.aspx",
+      "specialties": [
+        "pediatrics",
+        "general_medicine"
+      ],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "original_language": "ar",
+      "topics": [
+        "denticion",
+        "cuando_consultar"
+      ],
+      "chunks": [
+        "La dentición (Ministerio de Salud de Arabia Saudí, actualizado en 2025). Tema: cuándo salen los dientes y qué síntomas da. Hallazgo: la mayoría de los niños empiezan a echar dientes entre los 6 y los 12 meses, con grandes diferencias; salen primero los incisivos inferiores, y los de la mandíbula inferior suelen preceder a los de la superior. A los 3 años hay unos 20 dientes de leche. Los síntomas son molestias, llanto frecuente, dificultad para dormir, menos apetito, más baba y un ligero aumento de temperatura. Se alivian masajeando suavemente las encías con el dedo, tras lavarse las manos, o con un mordedor de goma o plástico, y se evitan los productos que se aplican en las encías, como los geles anestésicos, por sus efectos adversos graves. (fuente en árabe)",
+        "La dentición (Ministerio de Salud de Arabia Saudí, actualizado en 2025). Tema: higiene bucal y prevención de caries. Hallazgo: antes de que salgan los dientes se limpian las encías con un paño limpio; después, con cepillo suave y pasta dentífrica, en cantidad similar a un grano de arroz. No se debe dejar al bebé tumbado con el biberón o la comida ni con el biberón en la boca mucho rato. Se le enseña a beber de un vaso normal a los 12-15 meses, se reducen los alimentos pegajosos y azucarados, no se aconseja zumo antes de los 6 meses y entre los 6 y los 12 meses se diluye a la mitad con agua. Se recomienda una visita al dentista antes del primer año. (fuente en árabe)",
+        "La dentición (Ministerio de Salud de Arabia Saudí, actualizado en 2025). Tema: cuándo consultar durante la dentición. Hallazgo: hay que acudir al dentista si a los 18 meses no ha salido ningún diente. Si la temperatura sube a 38 °C o más, se debe consultar al médico de inmediato, y si la dentición coincide con fiebre, vómitos o diarrea también hay que consultar al médico, para saber si tiene algún problema de salud que necesite tratamiento. (fuente en árabe)"
+      ]
+    },
+    {
+      "source_type": "reference",
+      "title": "Los primeros dientes del niño (dientes de leche) (Sundhed.dk)",
+      "original_title": "Barnets første tænder (mælketænderne) (Sundhed.dk)",
+      "organization": "Sundhed.dk, Patienthåndbogen",
+      "publication_year": 2026,
+      "url": "https://www.sundhed.dk/borger/patienthaandbogen/boern/om-boern/boerns-udvikling/barnets-foerste-taender/",
+      "specialties": [
+        "pediatrics",
+        "general_medicine"
+      ],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "original_language": "da",
+      "topics": [
+        "denticion"
+      ],
+      "chunks": [
+        "Los primeros dientes del niño (dientes de leche) (Sundhed.dk, Patienthåndbogen, 2026). Tema: cuándo salen los dientes de leche y en qué orden. Hallazgo: los primeros dientes de leche suelen aparecer entre los 6 y los 8 meses, y la mayoría de los niños tiene los 20 dientes de leche (10 arriba y 10 abajo) a los 2 años y medio-3 años. El orden es incisivos inferiores, incisivos superiores, primeros molares, caninos y segundos molares. La página subraya que la fiebre por encima de 38 grados no se debe a la salida de los dientes.",
+        "Los primeros dientes del niño (dientes de leche) (Sundhed.dk, Patienthåndbogen, 2026). Tema: síntomas de la dentición y consejos. Hallazgo: con la salida de los dientes hay picor en las encías y el bebé quiere llevarse cosas a la boca para calmar el picor; algunos niños se ponen inquietos y pueden tener una ligera subida de temperatura. Se recomienda un mordedor de goma dura o plástico, un cepillo pequeño y blando desde el primer diente, y enseñarle a beber agua en lugar de zumo o refrescos. Se deben evitar los objetos con bordes afilados; no hace falta darle zumo ni refrescos cuando tiene sed, conviene limitar los dulces y las bebidas azucaradas, y no se le debe acostar con un biberón de leche o zumo. Después del año, el chupete o el dedo deben usarse solo para consolarse y para dormirse; si el niño deja el chupete hacia los 3 años, los dientes suelen corregirse solos."
+      ]
+    },
+    {
+      "source_type": "reference",
+      "title": "Crawling Styles (HealthyChildren.org, AAP)",
+      "organization": "American Academy of Pediatrics",
+      "publication_year": 2021,
+      "url": "https://www.healthychildren.org/English/ages-stages/baby/Pages/Crawling-Styles.aspx",
+      "specialties": [
+        "pediatrics",
+        "general_medicine"
+      ],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "original_language": "en",
+      "topics": [
+        "hitos_motores"
+      ],
+      "chunks": [
+        "Crawling Styles (HealthyChildren.org, American Academy of Pediatrics, 2021). Tema: formas de gatear. Hallazgo: no todos los bebés gatean de la manera clásica. La página describe el gateo clásico a cuatro patas, moviendo a la vez un brazo y la rodilla contraria; el gateo de oso, con codos y rodillas estiradas y apoyo en manos y pies; el gateo de comando, arrastrando la barriga; arrastrarse sentado sobre el trasero ayudándose de los brazos; el gateo de cangrejo, hacia atrás o de lado con las manos; y rodar de un sitio a otro. Se presentan como distintas formas de moverse y no como problemas.",
+        "Crawling Styles (HealthyChildren.org, American Academy of Pediatrics, 2021). Tema: base del gateo y cuándo consultar. Hallazgo: el tiempo boca abajo es la base del gateo, y gatear y el juego en el suelo son importantes para el desarrollo; pronto el bebé se pondrá de pie y caminará. La página no da una edad concreta para empezar a gatear ni señales de alarma, y remite a las páginas de movimiento de 4 a 7 y de 8 a 12 meses y a una página sobre posibles retrasos del desarrollo físico. La información de la página no sustituye la atención ni el consejo del pediatra."
+      ]
+    },
+    {
+      "source_type": "reference",
+      "title": "Movement Milestones in Babies 8 to 12 Months Old (HealthyChildren.org, AAP)",
+      "organization": "American Academy of Pediatrics",
+      "publication_year": 2021,
+      "url": "https://www.healthychildren.org/English/ages-stages/baby/Pages/Movement-8-to-12-Months.aspx",
+      "specialties": [
+        "pediatrics",
+        "general_medicine"
+      ],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "original_language": "en",
+      "topics": [
+        "hitos_motores"
+      ],
+      "chunks": [
+        "Movement Milestones in Babies 8 to 12 Months Old (HealthyChildren.org, American Academy of Pediatrics, 2021). Tema: hitos de movimiento de los 8 a los 12 meses. Hallazgo: hacia los 8 meses la mayoría se sienta sin apoyo, aunque puede caerse y suele frenarse con los brazos. El gateo suele empezar entre los 7 y los 10 meses, a menudo balanceándose primero a cuatro patas o yendo hacia atrás; algunos nunca gatean y se arrastran sentados o sobre la barriga, y usar los brazos y las piernas de forma desigual es motivo de consulta. Se ponen de pie agarrándose a todo, y la mayoría da los primeros pasos solos hacia el primer cumpleaños, aunque antes o después también es normal; al principio caminan con los pies separados y tambaleándose.",
+        "Movement Milestones in Babies 8 to 12 Months Old (HealthyChildren.org, American Academy of Pediatrics, 2021). Tema: seguridad y cuándo consultar. Hallazgo: nunca se deja al bebé solo ni un instante en el cambiador, la cama u otra superficie elevada, y se cambia el pañal en el suelo o en la cama. Se retiran del suelo objetos pequeños como trozos de globo, pilas de botón y monedas, se ponen barreras firmes arriba y abajo de las escaleras, se eligen muebles sin bordes afilados y con peso suficiente o anclados y se evitan los andadores, que la AAP desaconseja con firmeza, mejor un centro de actividades fijo o un juguete de empuje con peso. Se elige calzado cerrado, flexible y antideslizante, y se revisa la talla cada mes. Si no se sienta solo a los 9 meses o no se mueve con normalidad, se comenta al pediatra."
+      ]
+    },
+    {
+      "source_type": "reference",
+      "title": "0 to 6 months - Helping your child get back to sleep (HSE)",
+      "organization": "Health Service Executive (HSE)",
+      "publication_year": 2024,
+      "url": "https://www2.hse.ie/babies-children/sleep/child-back-to-sleep-0-6-months/",
+      "specialties": [
+        "pediatrics",
+        "general_medicine"
+      ],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "original_language": "en",
+      "topics": [
+        "sueno_horas"
+      ],
+      "chunks": [
+        "0 to 6 months - Helping your child get back to sleep (HSE, 2024). Tema: despertares nocturnos en los primeros 6 meses. Hallazgo: despertarse de noche es habitual en bebés y niños pequeños. Los recién nacidos aún no distinguen el día de la noche y pueden despertarse varias veces; antes de los 6 meses pueden hacerlo para comer, y las tomas nocturnas pueden retirarse cuando ya comen sólidos del todo, algo que puede empezar hacia los 6 meses. Los patrones de sueño empiezan a formarse hacia los 3 meses, y despertarse brevemente es normal entre los 3 y los 6 meses. El llanto es comunicación: puede tener sueño, hambre, el pañal sucio o echar de menos que lo mezan.",
+        "0 to 6 months - Helping your child get back to sleep (HSE, 2024). Tema: qué hacer cuando se despierta. Hallazgo: se intenta no dejar llorar al bebé más de unos minutos, se le coge y se le calma hablándole en voz baja (hablar alto puede desvelarlo), se le da de comer si tiene hambre, se usa una luz de noche tenue, se evitan la luz azul y las pantallas brillantes en el dormitorio, no se cambia el pañal salvo que esté sucio o muy mojado y se le vuelve a acostar somnoliento pero despierto. Estas técnicas sirven con bebés algo mayores; con los recién nacidos no funcionan, pues son demasiado pequeños para rutinas estrictas. Siempre se acuesta boca arriba."
+      ]
+    },
+    {
+      "source_type": "reference",
+      "title": "Child's sleep needs at 6 months to 2 years (HSE)",
+      "organization": "Health Service Executive (HSE)",
+      "publication_year": 2026,
+      "url": "https://www2.hse.ie/babies-children/sleep/childs-sleep-needs-6-months-2-years/",
+      "specialties": [
+        "pediatrics",
+        "general_medicine"
+      ],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "original_language": "en",
+      "topics": [
+        "sueno_horas"
+      ],
+      "chunks": [
+        "Child's sleep needs at 6 months to 2 years (HSE, 2026). Tema: horas de sueño por edad. Hallazgo: hacia los 6 meses el bebé duerme de 10 a 11 horas por la noche y hace 3 siestas de 1 a 2 horas (la tercera puede ser más corta); hacia los 9 meses, de 10 a 12 horas de noche y 2 siestas de 1 a 2 horas; hacia el año, igual; hacia los 18 meses, de 11 a 12 horas de noche y una siesta a mediodía de 1 a 2 horas; hacia los 2 años, de 11 a 12 horas de noche y una siesta de 1 a 2 horas. Desde unos 9 meses y a los 2 años se evitan las siestas después de las 15:30 para que acostarse entre las 19 y las 21 horas sea fácil.",
+        "Child's sleep needs at 6 months to 2 years (HSE, 2026). Tema: tomas nocturnas y consejos. Hallazgo: hacia los 9 meses no hacen falta tomas nocturnas cuando el bebé ya come sólidos del todo, aunque si se amamanta pueden continuar. Se mantiene una hora de acostarse constante, se apagan las pantallas y la televisión una hora antes, se cepillan los dientes y se ofrece algo de hidratos de carbono como pan, arroz o cereales y leche en la cena, y se evitan el juego intenso, las comidas copiosas y los dulces justo antes de dormir. Se le acuesta somnoliento pero despierto, con una luz tenue amarilla o roja fuera de su vista, y la puerta abierta para que oiga los sonidos de casa. Un juguete de consuelo solo se ofrece desde los 12 meses, limpio y que no suponga un peligro mientras duerme, y no se ponen juguetes con música o luces (tampoco móviles de cuna) donde duerme."
+      ]
+    },
+    {
+      "source_type": "reference",
+      "title": "Naps for babies and toddlers (HSE)",
+      "organization": "Health Service Executive (HSE)",
+      "publication_year": 2026,
+      "url": "https://www2.hse.ie/babies-children/sleep/naps-babies-and-toddlers/",
+      "specialties": [
+        "pediatrics",
+        "general_medicine"
+      ],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "original_language": "en",
+      "topics": [
+        "sueno_horas"
+      ],
+      "chunks": [
+        "Naps for babies and toddlers (HSE, 2026). Tema: cuántas siestas por edad. Hallazgo: las siestas favorecen el crecimiento, el desarrollo y la salud, y los niños suelen seguir durmiéndolas hasta los 3 años. Los bebés duermen en total de 3 a 4 horas de siesta al día. Hasta los 3 meses pasan 1 a 2 horas entre siestas; a los 2 meses hay unas 4 siestas al día; de los 3 a los 6 meses, unas 2 a 2,5 horas entre siestas; de los 6 a los 9 meses se reducen a 2 al día; hacia los 12 a 15 meses suele quedar una sola siesta a mediodía. A partir de los 3 años se van retirando.",
+        "Naps for babies and toddlers (HSE, 2026). Tema: consejos para las siestas. Hallazgo: los bebés mayores de 9 meses no deben dormir después de las 15:30 para que la hora de acostarse no se retrase. Ayudan una rutina diaria constante, usar la cama solo para dormir, una habitación oscura, quitar zapatos y ropa de abrigo para que no pase calor, un cuento en voz calmada y dejar que el niño se despierte solo, ya que suele estar de mejor humor. Después de los 12 meses puede ofrecerse una manta o un juguete de consuelo. El mejor sitio para la siesta es su propia cama, aunque algunos duermen en el coche o el cochecito."
+      ]
+    },
+    {
+      "source_type": "reference",
+      "title": "Newborn's sleep needs at 0 to 3 months (HSE)",
+      "organization": "Health Service Executive (HSE)",
+      "publication_year": 2026,
+      "url": "https://www2.hse.ie/babies-children/sleep/newborns/",
+      "specialties": [
+        "pediatrics",
+        "general_medicine",
+        "neonatology"
+      ],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "original_language": "en",
+      "topics": [
+        "sueno_horas"
+      ],
+      "chunks": [
+        "Newborn's sleep needs at 0 to 3 months (HSE, 2026). Tema: cuánto duerme un recién nacido. Hallazgo: hasta los 3 meses los bebés necesitan unas 9 a 18 horas de sueño, con un promedio de unas 14. Algunos duermen mucho tiempo seguido y otros en ratos cortos, desde unos minutos hasta unas horas. Aún no distinguen el día de la noche y les afecta más el hambre; suelen despertarse para comer, durmiendo de 1 a 3 horas entre tomas y estando despiertos de 1 a 2 horas entre sueños. Un patrón día y noche suele tardar unos meses en asentarse, y las rutinas antes de acostarse (pijama, baño, cuentos o canciones) pueden empezar hacia los 3 meses.",
+        "Newborn's sleep needs at 0 to 3 months (HSE, 2026). Tema: sueño seguro, consejos y cuándo consultar. Hallazgo: el lugar más seguro es una cuna en la misma habitación que los padres, siempre boca arriba con los pies tocando el final de la cuna; nunca boca abajo, lo que aumenta el riesgo de muerte súbita; se le hace tiempo boca abajo cuando está despierto, y para prevenir la cabeza plana se procura que unas veces mire a la izquierda y otras a la derecha cuando está boca arriba. Se le deja en la cuna somnoliento pero despierto, en un cuarto oscuro y tranquilo; mantener despierto al bebé de día no mejora su sueño nocturno. Se consulta al médico o a la enfermera de pediatría, sin urgencia, si tiene ictericia y está muy adormilado o si preocupa que no duerma lo adecuado."
+      ]
+    },
+    {
+      "source_type": "reference",
+      "title": "Developmental Hip Dysplasia (KidsHealth New Zealand)",
+      "organization": "KidsHealth (Paediatric Society of New Zealand)",
+      "publication_year": 2025,
+      "url": "https://www.kidshealth.org.nz/developmental-hip-dysplasia",
+      "specialties": [
+        "pediatrics",
+        "general_medicine"
+      ],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "original_language": "en",
+      "topics": [
+        "revisiones",
+        "hitos_motores"
+      ],
+      "chunks": [
+        "Developmental Hip Dysplasia (KidsHealth New Zealand, 2025). Tema: qué es la displasia del desarrollo de la cadera y cómo se reconoce. Hallazgo: es una condición en la que la articulación de la cadera del bebé no se desarrolla bien: la cabeza del fémur puede no encajar en la cavidad y salirse con facilidad. Suele estar presente al nacer, aunque puede aparecer en la lactancia o la infancia, y afecta a una o a las dos caderas. Es más frecuente en niñas, con antecedentes familiares, en el primer hijo, en presentación de nalgas y con poco líquido amniótico. Los signos son una pierna que parece más corta, pliegues desiguales en muslos o glúteos, menos movimiento en una pierna, un chasquido al cambiar el pañal o vestir al bebé y cojera al empezar a andar; muchos niños no tienen signos evidentes.",
+        "Developmental Hip Dysplasia (KidsHealth New Zealand, 2025). Tema: detección y tratamiento. Hallazgo: las caderas se revisan en la exploración del recién nacido y de nuevo varias veces en los primeros meses con movimientos suaves; si se sospecha, se pide una ecografía de caderas, y en mayores de 6 meses una radiografía. A los bebés de más riesgo se les puede ofrecer una ecografía hacia las 6 semanas. En los bebés pequeños diagnosticados se usa un arnés o férula para mantener la cadera en buena posición, y los casos más graves o diagnosticados más tarde pueden necesitar cirugía. Con tratamiento temprano, la mayoría tiene un desarrollo normal de la cadera; sin tratar o diagnosticada tarde, es más difícil de tratar."
+      ]
+    },
+    {
+      "source_type": "reference",
+      "title": "Baby teething symptoms (NHS)",
+      "organization": "NHS (National Health Service, Reino Unido)",
+      "publication_year": 2026,
+      "url": "https://www.nhs.uk/baby/babys-development/teething/baby-teething-symptoms/",
+      "specialties": [
+        "pediatrics",
+        "general_medicine"
+      ],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "original_language": "en",
+      "topics": [
+        "denticion"
+      ],
+      "chunks": [
+        "Baby teething symptoms (NHS, 2026). Tema: cuándo salen los dientes y en qué orden. Hallazgo: la mayoría de los bebés empieza a echar los dientes hacia los 6 meses, algunos antes de los 4 meses, otros después de los 12, y algunos nacen con algún diente. Los incisivos centrales salen hacia los 6 meses, los laterales hacia los 8, los primeros molares hacia los 12, los caninos hacia los 18 y los segundos molares hacia los 24 meses. Los dientes de abajo suelen salir antes que los de arriba que les corresponden. La mayoría de los niños tiene todos los dientes de leche entre los 2 y los 3 años.",
+        "Baby teething symptoms (NHS, 2026). Tema: síntomas y cuándo pedir consejo. Hallazgo: algunos bebés no tienen dolor o solo molestias leves de unos días. Los signos posibles son encía roja y dolorida, una temperatura algo elevada pero por debajo de 38 °C, una mejilla enrojecida, erupción en la cara, frotarse la oreja, babear más, morder y masticar mucho, estar más irritable y dormir mal. Según el NHS no hay pruebas de que la dentición cause diarrea. Si los síntomas preocupan, se pide consejo médico o se contacta con el pediatra, y se consultan las páginas sobre fiebre y sobre cuándo buscar ayuda urgente en menores de 5 años."
+      ]
+    },
+    {
+      "source_type": "reference",
+      "title": "Help your baby learn to talk (NHS)",
+      "organization": "NHS (National Health Service, Reino Unido)",
+      "publication_year": 2023,
+      "url": "https://www.nhs.uk/baby/babys-development/play-and-learning/help-your-baby-learn-to-talk/",
+      "specialties": [
+        "pediatrics",
+        "general_medicine"
+      ],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "original_language": "en",
+      "topics": [
+        "lenguaje"
+      ],
+      "chunks": [
+        "Help your baby learn to talk (NHS, 2023). Tema: cómo estimular el habla de los 0 a los 12 meses. Hallazgo: la página da sobre todo actividades por edad. De 0 a 6 meses, mirar al bebé cara a cara mientras se le habla, contar lo que se hace al cuidarlo, cantar e imitar sus sonidos para enseñarle a turnarse. De 6 a 12 meses, nombrar las cosas que ambos ven, mirar libros y hablar de las imágenes, limitar el chupete a las horas de sueño (con la idea de dejarlo hacia los 12 meses) y jugar a cu-cu.",
+        "Help your baby learn to talk (NHS, 2023). Tema: de los 12 meses a los 3 años y cuándo pedir ayuda. Hallazgo: de 12 a 18 meses, si dice mal una palabra, se repite la versión correcta sin regañarle, se ofrecen opciones y se cantan canciones con gestos; de 18 a 24 meses, se repiten las palabras clave, se dan instrucciones sencillas, se le pide señalar partes del cuerpo y se limita la televisión; de 2 a 3 años, se responde con frases un poco más largas y se le da tiempo para contestar. Se puede hablar en el idioma que resulte natural, y crecer con más de uno puede beneficiar. Ante dudas sobre el habla o el lenguaje, se consulta al médico o la enfermera pediátrica, que pueden derivar a logopedia."
+      ]
+    },
+    {
+      "source_type": "reference",
+      "title": "Helping your baby to sleep (NHS)",
+      "organization": "NHS (National Health Service, Reino Unido)",
+      "publication_year": 2025,
+      "url": "https://www.nhs.uk/baby/caring-for-a-newborn/helping-your-baby-to-sleep/",
+      "specialties": [
+        "pediatrics",
+        "general_medicine",
+        "neonatology"
+      ],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "original_language": "en",
+      "topics": [
+        "sueno_horas"
+      ],
+      "chunks": [
+        "Helping your baby to sleep (NHS, 2025). Tema: cómo duermen los recién nacidos y seguridad. Hallazgo: los recién nacidos duermen más tiempo del que están despiertos, unas 18 horas al día en total, y se despiertan por la noche para comer; el calor o el frío excesivos también los desvelan. La madre puede intentar dormir cuando duerme el bebé. Durante al menos los primeros 6 meses, el bebé debe dormir en la misma habitación que sus padres, de día y de noche, lo que puede reducir el riesgo de muerte súbita del lactante. Si se usa un portabebés de tela, hay que usarlo con seguridad.",
+        "Helping your baby to sleep (NHS, 2025). Tema: horas de sueño por edad. Hallazgo: según el NHS, incluyendo las siestas, el recién nacido duerme unas 18 horas; entre los 3 y los 6 meses hay menos tomas nocturnas y algunos bebés duermen de 5 a 8 horas seguidas por la noche o más, aunque no todos; entre los 6 y los 12 meses algunos ya no necesitan tomas nocturnas y algunos duermen unas 15 horas, sobre todo de noche, aunque los dientes o el hambre pueden despertarlos; a partir de los 12 meses, unas 12 a 15 horas; a los 2 años, unas 12 a 14 horas. Los patrones cambian con los estirones, la dentición y las enfermedades.",
+        "Helping your baby to sleep (NHS, 2025). Tema: diferenciar día y noche y rutina de sueño. Hallazgo: se enseña al bebé desde el principio la diferencia entre el día y la noche: de día se abren las cortinas, se juega y no se evita el ruido normal; de noche se mantienen luces bajas y voz tranquila, se le acuesta tras alimentarlo y cambiarlo, solo se le cambia cuando hace falta y no se juega. Una rutina sencilla puede incluir baño, ropa de dormir y pañal limpio, un cuento, luz tenue, un abrazo y una nana. Si los problemas de sueño persisten o se quiere asesoramiento para establecer una rutina, se habla con la enfermera pediátrica de referencia."
+      ]
+    },
+    {
+      "source_type": "reference",
+      "title": "How to keep your baby or toddler active (NHS)",
+      "organization": "NHS (National Health Service, Reino Unido)",
+      "publication_year": 2023,
+      "url": "https://www.nhs.uk/baby/babys-development/play-and-learning/keep-baby-or-toddler-active/",
+      "specialties": [
+        "pediatrics",
+        "general_medicine"
+      ],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "original_language": "en",
+      "topics": [
+        "hitos_motores"
+      ],
+      "chunks": [
+        "How to keep your baby or toddler active (NHS, 2023). Tema: actividad física y tiempo boca abajo. Hallazgo: los niños que ya andan deben estar activos al menos 180 minutos (3 horas) al día repartidos a lo largo del día; para los bebés no se da una cifra y se recomienda patalear boca arriba, alcanzar y agarrar, gatear cuando empiecen (con suelo seguro) y jugar al aire libre. El tiempo boca abajo puede empezar desde el nacimiento tumbando al bebé sobre el pecho de un adulto totalmente despierto, con sesiones cortas que se alargan poco a poco y después en el suelo; si le cuesta levantar la cabeza, una toalla enrollada bajo las axilas ayuda. Solo se hace cuando el bebé está despierto, alerta y vigilado.",
+        "How to keep your baby or toddler active (NHS, 2023). Tema: tiempo sentado, andadores y pantallas. Hallazgo: los periodos largos frente a la televisión o una tableta no son buenos para los niños pequeños. Los andadores, las hamacas saltadoras y los asientos no se usan más de 20 minutos seguidos, y los andadores y las hamacas, si se usan mucho, pueden retrasar el andar. Mucho tiempo en hamacas reclinadas o sentado con apoyos puede retrasar que se siente solo, y tampoco es bueno pasar mucho tiempo atado en el carrito, la silla del coche o la trona. En viajes largos en coche se hacen paradas y se saca al niño de su asiento."
+      ]
+    },
+    {
+      "source_type": "reference",
+      "title": "Leg and foot problems in children (NHS)",
+      "organization": "NHS (National Health Service, Reino Unido)",
+      "publication_year": 2026,
+      "url": "https://www.nhs.uk/baby/health/leg-and-foot-problems-in-children/",
+      "specialties": [
+        "pediatrics",
+        "general_medicine"
+      ],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "original_language": "en",
+      "topics": [
+        "hitos_motores"
+      ],
+      "chunks": [
+        "Leg and foot problems in children (NHS, 2026). Tema: lo habitual en piernas y pies de los primeros pasos. Hallazgo: los niños que empiezan a andar suelen separar los pies y abrir los brazos para equilibrarse, y la mayoría de los problemas leves de los pies se corrigen solos. Antes de los 18 meses es muy común un pequeño espacio entre las rodillas y los tobillos al estar de pie (piernas arqueadas). Caminar de puntillas es frecuente en niños de 3 años o menos. Los pies planos, si se forma arco al ponerse de puntillas, no suelen necesitar tratamiento y se resuelven hacia los 6 años. Los pies hacia dentro o hacia fuera suelen corregirse con el crecimiento.",
+        "Leg and foot problems in children (NHS, 2026). Tema: primeros zapatos y cuándo consultar. Hallazgo: en menores de 5 años los pies crecen muy deprisa y los huesos de los dedos del pie son blandos al nacer, de modo que zapatos o calcetines apretados pueden impedir que crezcan rectos. No hacen falta zapatos propiamente dichos hasta que el niño anda solo; al principio pueden reservarse para el exterior. Deben ser de la talla correcta (si el talón se sale al ponerse de puntillas, son grandes), con cordones, hebillas o velcro, de materiales naturales y con calcetines de algodón. Hay que consultar al médico o a la enfermera pediátrica si el espacio entre las piernas arqueadas es marcado o no se corrige, o ante cualquier preocupación por que camine de puntillas, algo habitual hasta los 3 años."
+      ]
+    },
+    {
+      "source_type": "reference",
+      "title": "Separation anxiety (NHS)",
+      "organization": "NHS (National Health Service, Reino Unido)",
+      "publication_year": 2026,
+      "url": "https://www.nhs.uk/baby/babys-development/behaviour/separation-anxiety/",
+      "specialties": [
+        "pediatrics",
+        "general_medicine"
+      ],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "original_language": "en",
+      "topics": [
+        "desarrollo_social"
+      ],
+      "chunks": [
+        "Separation anxiety (NHS, 2026). Tema: cuándo aparece y es normal. Hallazgo: la ansiedad por separación y el miedo a los desconocidos son frecuentes entre los 6 meses y los 3 años, pueden durar más o reaparecer en momentos de estrés y son una parte normal del desarrollo de la que los niños suelen salir. Para ayudar, se juega al cu-cu para mostrar que siempre se vuelve, se tranquiliza al bebé con la voz aunque no vea a su madre, se le deja seguirla cuando ya se mueve y es seguro, y se practican separaciones cortas con alguien conocido que se alargan poco a poco.",
+        "Separation anxiety (NHS, 2026). Tema: consejos prácticos y cuándo consultar. Hallazgo: con los niños algo mayores se habla antes de lo que harán juntos al reencontrarse; se deja cerca un objeto de consuelo, como una bufanda con olor a mamá o su juguete favorito; y se dice adiós con alegría y seguridad, porque los bebés notan la tensión de sus padres. Conviene no sentirse culpable: a menudo refleja un vínculo fuerte y aprender a manejarlo favorece su independencia. Es importante que la ansiedad no le impida relacionarse y aprender en la guardería, ni a la madre ir a trabajar; se habla con la enfermera pediátrica si el malestar es intenso, dura mucho tras la despedida o continúa más de unas semanas."
+      ]
+    },
+    {
+      "source_type": "reference",
+      "title": "Sleep and young children (NHS)",
+      "organization": "NHS (National Health Service, Reino Unido)",
+      "publication_year": 2023,
+      "url": "https://www.nhs.uk/baby/health/sleep-and-young-children/",
+      "specialties": [
+        "pediatrics",
+        "general_medicine"
+      ],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "original_language": "en",
+      "topics": [
+        "sueno_horas"
+      ],
+      "chunks": [
+        "Sleep and young children (NHS, 2023). Tema: rutina para acostar a un niño pequeño. Hallazgo: muchos niños pequeños tardan en dormirse y se despiertan por la noche, lo que para algunas familias puede no ser un problema, y cada niño es distinto. El NHS propone elegir una hora de acostarse, empezar una rutina de relajación unos 30 minutos antes del momento en que suele dormirse, adelantándola 5 a 10 minutos cada semana (15 si se acuesta muy tarde) hasta llegar a la hora deseada, limitar el rato juntos al acostarse (por ejemplo, un cuento y buenas noches) y, si se levanta, devolverlo a la cama con el mínimo alboroto. Hay que ser constante y esperar que la rutina tarde varias noches.",
+        "Sleep and young children (NHS, 2023). Tema: consejos para menores de 5 años y cuándo pedir ayuda. Hallazgo: la página aconseja una rutina predecible a la misma hora cada noche, una luz tenue o de pasillo si tiene miedo a la oscuridad, mantener ordenadores, tabletas y móviles lejos entre 30 y 60 minutos antes de acostarse porque la luz de las pantallas puede alterar el sueño, y evitar siestas largas por la tarde. Si el niño se despierta de noche, hay que mantener un trato aburrido y las luces apagadas. Para problemas persistentes, se recomienda hablar con la enfermera pediátrica o el profesional de salud de referencia, que puede derivar a una clínica del sueño infantil si existe."
+      ]
+    },
+    {
+      "source_type": "reference",
+      "title": "Temper tantrums (NHS)",
+      "organization": "NHS (National Health Service, Reino Unido)",
+      "publication_year": 2022,
+      "url": "https://www.nhs.uk/baby/babys-development/behaviour/temper-tantrums/",
+      "specialties": [
+        "pediatrics",
+        "general_medicine"
+      ],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "original_language": "en",
+      "topics": [
+        "desarrollo_social"
+      ],
+      "chunks": [
+        "Temper tantrums (NHS, 2022). Tema: por qué aparecen las rabietas y a qué edad. Hallazgo: las rabietas suelen empezar hacia los 18 meses y son muy habituales en niños pequeños; son menos probables cuando el niño habla más y a partir de los 4 años son mucho menos frecuentes. Surgen porque el niño quiere expresarse y no puede, y la frustración sale en forma de rabieta; también por cansancio o hambre, frustración o celos, o por necesidad de tiempo, atención y cariño.",
+        "Temper tantrums (NHS, 2022). Tema: cómo responder y qué evitar. Hallazgo: se averigua qué las desencadenó, se acepta que el niño está enfadado y se nombran sus sentimientos, se le distrae pronto con algo interesante, se mantiene la calma y se espera a que pase. En casa se puede pasar a otra habitación un rato tras comprobar que no puede hacerse daño; en la compra se hacen visitas cortas y se le implica. Si está más disgustado que enfadado y se mantiene la calma, puede abrazarse con firmeza hasta que pase. Se evita perder los nervios, gritar, ceder para acabar con la rabieta, sobornar con dulces y pegar, morder o patear a su vez. Si preocupa seriamente el comportamiento, se habla con la enfermera pediátrica o el médico."
+      ]
+    },
+    {
+      "source_type": "reference",
+      "title": "Tips for helping your teething baby (NHS)",
+      "organization": "NHS (National Health Service, Reino Unido)",
+      "publication_year": 2025,
+      "url": "https://www.nhs.uk/baby/babys-development/teething/tips-for-helping-your-teething-baby/",
+      "specialties": [
+        "pediatrics",
+        "general_medicine"
+      ],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "original_language": "en",
+      "topics": [
+        "denticion"
+      ],
+      "chunks": [
+        "Tips for helping your teething baby (NHS, 2025). Tema: qué puede aliviar la dentición. Hallazgo: la dentición puede ser molesta y cada bebé es distinto, así que puede hacer falta probar varias cosas. Los mordedores dan algo seguro que morder y pueden aliviar; algunos pueden enfriarse en la nevera siguiendo las instrucciones del fabricante. Si el bebé tiene 6 meses o más y ya ha empezado la alimentación complementaria, la fruta y verdura cruda y la fruta blanda como el melón pueden calmar las encías. Ayudan el consuelo y el juego como distracción y frotar suavemente las encías con un dedo limpio. Si aumenta la baba, se seca con suavidad la cara del bebé para evitar rojeces.",
+        "Tips for helping your teething baby (NHS, 2025). Tema: qué evitar en la dentición. Hallazgo: nunca se debe congelar un mordedor, porque podría dañar las encías del bebé, ni atárselo al cuello, por el riesgo de atragantamiento. Los geles para la dentición no se recomiendan como primera opción por falta de pruebas de que funcionen, y solo deben usarse los diseñados para niños pequeños; los productos homeopáticos para la dentición no se recomiendan, y algunos sin licencia anunciados en internet se han asociado a efectos graves. También hay que evitar los bizcochos para morder, que casi todos llevan azúcar, y los alimentos azucarados, que pueden causar caries aunque haya pocos dientes. Siempre se vigila al bebé mientras come por si se atraganta."
+      ]
+    },
+    {
+      "source_type": "reference",
+      "title": "Your baby's weight and height (NHS)",
+      "organization": "NHS (National Health Service, Reino Unido)",
+      "publication_year": 2023,
+      "url": "https://www.nhs.uk/baby/babys-development/height-weight-and-reviews/baby-height-and-weight/",
+      "specialties": [
+        "pediatrics",
+        "general_medicine"
+      ],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "original_language": "en",
+      "topics": [
+        "crecimiento"
+      ],
+      "chunks": [
+        "Your baby's weight and height (NHS, 2023). Tema: con qué frecuencia se pesa al bebé. Hallazgo: durante las 2 primeras semanas se pesa para comprobar que recupera el peso del nacimiento, y la mayoría lo ha recuperado a las 3 semanas. Después el NHS indica pesarlo como máximo una vez al mes hasta los 6 meses, una vez cada 2 meses entre los 6 y los 12 meses y una vez cada 3 meses pasado el año; solo se pesa más a menudo si la familia lo pide o hay dudas sobre la salud o el crecimiento. Perder algo de peso en los primeros días es normal. Un aumento de peso constante es una señal de que el bebé está sano y come bien; gana peso más deprisa en los primeros 6 meses y luego el ritmo se frena.",
+        "Your baby's weight and height (NHS, 2023). Tema: curvas de crecimiento y cuándo consultar. Hallazgo: el crecimiento se registra en curvas de percentiles en el carné de salud infantil, con gráficas distintas para niños y niñas y que reflejan el patrón de bebés amamantados, con fórmula o con alimentación mixta. Las medidas pueden subir o bajar un canal de percentil; cruzar dos canales es menos habitual y se comenta con la enfermera pediátrica. Si el bebé está enfermo, la ganancia de peso puede frenarse y suele normalizarse en 2 a 3 semanas. Se consulta si hay mucha pérdida de peso o no recupera el peso del nacimiento a las 3 semanas, o ante dudas sobre el crecimiento."
+      ]
+    },
+    {
+      "source_type": "reference",
+      "title": "Tummy Time for a Healthy Baby (Safe to Sleep, NICHD)",
+      "organization": "NICHD",
+      "publication_year": null,
+      "undated_reason": "La página de Safe to Sleep (NICHD) no muestra fecha de publicación ni de revisión; las únicas fechas son las de acceso de sus citas (2018 y 2024); consultada el 2026-11-06.",
+      "url": "https://safetosleep.nichd.nih.gov/reduce-risk/tummy-time",
+      "specialties": [
+        "pediatrics",
+        "general_medicine"
+      ],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "original_language": "en",
+      "topics": [
+        "hitos_motores"
+      ],
+      "chunks": [
+        "Tummy Time for a Healthy Baby (Safe to Sleep, NICHD). Tema: para qué sirve el tiempo boca abajo y cuánto hacer. Hallazgo: es poner al bebé boca abajo mientras está despierto y alguien lo vigila. Fortalece los músculos del cuello, los hombros y los brazos para sentarse, gatear y andar, mejora la motricidad y ayuda a prevenir zonas planas en la parte posterior de la cabeza. La mayoría de los bebés puede empezar uno o dos días después de nacer, con dos o tres sesiones cortas de 3 a 5 minutos al día; hacia los 2 meses, los pediatras recomiendan 15 a 30 minutos en total al día.",
+        "Tummy Time for a Healthy Baby (Safe to Sleep, NICHD). Tema: consejos prácticos y seguridad. Hallazgo: se extiende una manta en una zona despejada del suelo, se puede poner una toalla enrollada bajo los brazos, se prueba tras un cambio de pañal o una siesta, se coloca un juguete a su alcance y una persona se sienta delante para animarle. Para prevenir zonas planas, además se coge al bebé en brazos erguido cuando está despierto, se limita el tiempo en sillas de coche, hamacas, columpios y portabebés donde la cabeza se apoya, se alterna la dirección de los pies en la cuna de una semana a otra y se cambia la cuna de sitio cada pocas semanas. Según la página, el tiempo boca abajo no reduce directamente el riesgo de muerte súbita y solo se hace despierto y vigilado."
+      ],
+      "original_license": "public_domain"
+    },
+    {
+      "source_type": "reference",
+      "title": "Creciendo juntos y saludables",
+      "organization": "Consejería de Sanidad de la Comunidad de Madrid",
+      "publication_year": 2026,
+      "url": "https://www.comunidad.madrid/salud/creciendo-juntos-saludables",
+      "specialties": [
+        "pediatrics",
+        "general_medicine"
+      ],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "original_language": "es",
+      "topics": [
+        "revisiones",
+        "hitos_motores"
+      ],
+      "chunks": [
+        "Creciendo juntos y saludables (Comunidad de Madrid, 2026). Tema: cuidados del primer mes. Hallazgo: se pide cita en el centro de salud entre las 48 y las 72 horas tras el alta y, en todo caso, antes de acabar la primera semana. La lactancia es a demanda, con unas 10-12 tomas los primeros días; conviene evitar chupetes y tetinas hasta que esté bien instaurada. El bebé pierde peso los primeros días y empieza a recuperarlo desde la segunda semana. El baño es breve, con agua a unos 36 ºC; los oídos se limpian con toalla, sin bastoncillos, y el ombligo se mantiene limpio y seco. Duerme boca arriba hasta los 6 meses, salvo indicación médica, y no debe haber humo de tabaco.",
+        "Creciendo juntos y saludables (Comunidad de Madrid, 2026). Tema: cuidados de 1 a 6 meses. Hallazgo: los brotes de crecimiento, en los que pide mamar más a menudo, se solucionan dándole el pecho con más frecuencia durante 1 o 2 días. El ritmo de deposiciones puede bajar e incluso pasar algún tiempo sin ninguna; si mama bien y la última fue blanda, no hay motivo de preocupación. Para dormir: habitación ventilada a unos 20-22 ºC, sin abrigar en exceso y sin colchones blandos, almohadones, cojines ni colgantes al cuello; el chupete se puede ofrecer para dormir durante el primer año. Hay que consultar con pediatría o enfermería ante cualquier duda o si se observa asimetría de la cabeza.",
+        "Creciendo juntos y saludables (Comunidad de Madrid, 2026). Tema: cuidados de 6 a 12 meses. Hallazgo: la leche materna sigue siendo la principal fuente nutritiva, con al menos 4 tomas de pecho al día, y no se da leche de vaca antes de los 12 meses; los alimentos nuevos se introducen poco a poco, con varios días entre uno y otro, sin sal ni azúcar y evitando la miel fresca antes del año. Si aún no se desplaza, conviene que pase al menos 30 minutos al día boca abajo, despierto y acompañado, y evitar que pase mucho tiempo seguido sentado o sujeto en sillas, carritos o balancines. Con las pantallas, lo mejor es evitarlas por completo, porque no hay un tiempo seguro. Hay que tener precaución con el sol en las horas centrales del día (de 12 a 16 h) para prevenir quemaduras, y los primeros dientes se limpian con una gasa húmeda.",
+        "Creciendo juntos y saludables (Comunidad de Madrid, 2026). Tema: cuidados de 12 a 24 meses. Hallazgo: hacia el año empieza a caminar y hacia los 15-18 meses sube y baja escaleras con ayuda; las rabietas hacia los 2 años son normales y se afrontan con calma, sin ceder. Se recomiendan 5-6 comidas al día sin picoteo, respetar su apetito sin forzarle, medio litro de leche o derivados, al menos 3-5 raciones de fruta y verdura y poca sal, y se evitan la bollería, los zumos envasados y los refrescos. Debe tener al menos 3 horas de actividad física al día, no más de 1 hora seguida en actividades sedentarias y ninguna pantalla."
+      ]
+    },
+    {
+      "source_type": "guideline",
+      "title": "Guía de práctica clínica basada en la evidencia para la promoción del crecimiento, detección temprana y enfoque inicial de alteraciones del crecimiento en niños menores de 10 años y la promoción del desarrollo, detección temprana y enfoque inicial de las alteraciones del desarrollo en niños menores de 5 años en Colombia. Para padres y cuidadores",
+      "organization": "Ministerio de Salud y Protección Social (Colombia)",
+      "publication_year": 2014,
+      "url": "https://www.minsalud.gov.co/sites/rid/Lists/BibliotecaDigital/RIDE/DE/CA/gpc-alteraciones-crecimiento-ninos-menores-10-Anos.pdf",
+      "specialties": [
+        "pediatrics",
+        "general_medicine"
+      ],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "original_language": "es",
+      "topics": [
+        "crecimiento",
+        "revisiones",
+        "hitos_motores",
+        "signos_alarma"
+      ],
+      "chunks": [
+        "Guía de práctica clínica para el crecimiento y el desarrollo de los niños, versión para padres (MinSalud de Colombia, 2014). Tema: pruebas de audición y vista en el bebé. Hallazgo: a todo recién nacido se le valora la audición pasadas las 24 horas de vida o antes de salir del hospital, con emisiones otoacústicas o potenciales evocados. Si el resultado es normal no necesita más exámenes hasta los 3 años; si es anormal se deriva a un especialista; y si un menor de 3 años no se la hizo al nacer, hay que hacérsela. Los ojos se examinan por completo desde el nacimiento y en los controles posteriores. Si la familia nota que el niño oye o ve mal, debe decírselo al médico o a la enfermera del control.",
+        "Guía de práctica clínica para el crecimiento y el desarrollo de los niños, versión para padres (MinSalud de Colombia, 2014). Tema: hitos del desarrollo en los primeros dos años. Hallazgo: a los 2 meses localiza un ruido girando la cabeza y los ojos; hacia los 4 meses balbucea, levanta la cabeza boca abajo y se sienta con apoyo; a los 6 meses alcanza un juguete y rueda en ambos sentidos; a los 9 meses gatea y se vuelve hacia la voz; entre los 9 y 13 meses se sostiene de pie un momento y dice mamá o papá de forma específica; a los 12 meses dice una palabra distinta de mamá y papá; entre los 11 meses y medio y los 14 meses da algunos pasos; a los 18 meses se alimenta con cuchara, pasa las páginas de los libros y sigue órdenes simples; entre los 14 y los 24 meses combina dos palabras.",
+        "Guía de práctica clínica, para padres (MinSalud de Colombia, 2014). Tema: signos de alarma del desarrollo que hay que avisar al profesional. Hallazgo: a los 3 meses desvía los ojos de forma persistente o no sostiene derecha la cabeza; a los 6 meses mantiene las manos cerradas en puño, el cuello ladeado, no es capaz de dar botes, tiene postura asimétrica persistente o su tono muscular es muy flojo o muy rígido la mayor parte del tiempo; entre los 9 y 12 meses no se sienta sin apoyo; a los 12 meses no balbucea ni señala; entre los 15 y 18 meses no se pone de pie, no coge con pinza, no hace vocalizaciones espontáneas, no dice dos palabras con significado sueltas o una de sus manos tiene una postura anormal; a los 2 años no dice palabras reconocibles, no camina o tiene temblor o problemas de movimiento y coordinación. También hay que avisar de cualquier pérdida de habilidades."
+      ]
+    },
+    {
+      "source_type": "reference",
+      "title": "Rotavirus (Ministerio de Sanidad)",
+      "organization": "Ministerio de Sanidad (España)",
+      "publication_year": 2025,
+      "url": "https://www.sanidad.gob.es/areas/promocionPrevencion/vacunaciones/vacunas/ciudadanos/rotavirus.htm",
+      "specialties": [
+        "pediatrics",
+        "general_medicine"
+      ],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "original_language": "es",
+      "topics": [
+        "vacunas"
+      ],
+      "chunks": [
+        "Rotavirus (Ministerio de Sanidad, 2025). Tema: vacuna frente al rotavirus en lactantes. Hallazgo: las vacunas autorizadas en España contienen virus atenuados (debilitados en laboratorio) que no provocan la enfermedad en personas sanas pero estimulan la producción de anticuerpos, y se administran por vía oral. Se recomienda en lactantes, a partir de las 6 semanas de vida y según la pauta autorizada de cada vacuna; en situaciones de riesgo también se recomienda en prematuros nacidos entre las semanas 25-27 (según la vacuna) y 32 de gestación, siempre que estén clínicamente estables y sin contraindicaciones.",
+        "Rotavirus (Ministerio de Sanidad, 2025). Tema: seguridad y contraindicaciones de la vacuna. Hallazgo: según el Ministerio son vacunas muy seguras y las reacciones adversas son poco frecuentes: molestias digestivas como diarrea o vómitos, fiebre o irritabilidad. No deben recibirla los niños con hipersensibilidad al principio activo o a algún componente, los que tienen una malformación congénita no corregida del tubo digestivo, antecedente de invaginación intestinal, o inmunodeficiencia combinada grave o sospecha de tener inmunodeficiencia. La página remite a los calendarios de vacunación y a las recomendaciones del Consejo Interterritorial del Sistema Nacional de Salud."
+      ]
+    },
+    {
+      "source_type": "reference",
+      "title": "Tosferina (Ministerio de Sanidad)",
+      "organization": "Ministerio de Sanidad (España)",
+      "publication_year": null,
+      "undated_reason": "La página de Vacunas para ciudadanos no muestra fecha de publicación ni de actualización; consulta 2026-11-06",
+      "url": "https://www.sanidad.gob.es/areas/promocionPrevencion/vacunaciones/vacunas/ciudadanos/tosferina.htm",
+      "specialties": [
+        "pediatrics",
+        "general_medicine"
+      ],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "original_language": "es",
+      "topics": [
+        "vacunas"
+      ],
+      "chunks": [
+        "Tosferina (Ministerio de Sanidad). Tema: cuándo se vacuna frente a la tosferina para proteger al bebé. Hallazgo: la vacuna es inactivada y acelular, contiene fragmentos de la bacteria y no puede producir la enfermedad. Se pone a la madre en el embarazo, a partir de la semana 27 de gestación y preferiblemente en la 27 o la 28, y también protege frente a difteria y tétanos; al bebé se le pone a los 2, 4 y 11 meses. Según la vacuna utilizada, protege además frente a tétanos, difteria, polio, Haemophilus influenzae tipo b y hepatitis B.",
+        "Tosferina (Ministerio de Sanidad). Tema: efectos de la vacuna frente a la tosferina. Hallazgo: el Ministerio afirma que las vacunas frente a la tosferina son muy seguras. Las reacciones adversas más frecuentes son locales, en el lugar de la inyección: dolor, enrojecimiento e hinchazón; también pueden aparecer somnolencia o irritabilidad. La página remite a los calendarios de vacunación, a los prospectos y fichas técnicas de la Agencia Española de Medicamentos y Productos Sanitarios (AEMPS) y a los datos de vigilancia de la tosferina del Instituto de Salud Carlos III. No indica cuándo consultar."
+      ]
+    },
+    {
+      "source_type": "reference",
+      "title": "Preguntas frecuentes sobre vacunación",
+      "organization": "Organización Panamericana de la Salud (OPS)",
+      "publication_year": null,
+      "undated_reason": "la página no muestra fecha de publicación ni actualización (consultada 2026-11-06)",
+      "url": "https://www.paho.org/es/temas/inmunizacion/preguntas-frecuentes-sobre-vacunacion",
+      "specialties": [
+        "pediatrics",
+        "general_medicine"
+      ],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "original_language": "es",
+      "topics": [
+        "vacunas",
+        "cuando_consultar"
+      ],
+      "chunks": [
+        "Preguntas frecuentes sobre vacunación (OPS). Tema: vacunar a un niño que está enfermo. Hallazgo: con una enfermedad leve, con o sin fiebre, se puede vacunar. Si la enfermedad es moderada o grave, hay que tener precaución: la vacunación se pospone y se vacuna lo antes posible en cuanto el niño se recupere. La OPS señala que algunos posibles efectos son dolor en el lugar de la inyección, fiebre leve, malestar o erupción cutánea, breves y no graves, y que no se han identificado efectos secundarios a largo plazo, y sus efectos se vigilan de forma continua.",
+        "Preguntas frecuentes sobre vacunación (OPS). Tema: seguridad de poner varias vacunas a la vez y de completar la pauta. Hallazgo: recibir varias vacunas el mismo día no tiene ningún efecto negativo en las defensas del bebé, supone menos visitas y más oportunidades de recibir a tiempo las inyecciones recomendadas; las vacunas combinadas reducen además el número de pinchazos. La OPS indica que no hay evidencia de relación entre la vacuna DTP y la muerte súbita infantil ni entre las vacunas y el autismo. La protección total empieza unos días después de vacunar y la máxima se logra al completar la serie y los refuerzos en los plazos indicados. La lactancia es compatible con la vacunación de la madre."
+      ]
+    },
+    {
+      "source_type": "guideline",
+      "title": "Desarrollo: ¿Qué esperamos durante el primer año de vida?",
+      "organization": "Sociedad Argentina de Pediatría (SAP)",
+      "publication_year": null,
+      "undated_reason": "Página divulgativa de Familia y Comunidad de la SAP sin fecha de publicación visible (solo copyright 1997-2026 del sitio); consultada el 2026-11-06. Autoría: Comité de Crecimiento y Desarrollo de la SAP; cita la guía de seguimiento del desarrollo de Arch Argent Pediatr 2017.",
+      "url": "https://www.sap.org.ar/familia-y-comunidad/detalle/desarrollo-que-esperamos-durante-el-primer-ano-de-vida",
+      "specialties": [
+        "pediatrics",
+        "general_medicine"
+      ],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "original_language": "es",
+      "topics": [
+        "hitos_motores",
+        "signos_alarma",
+        "desarrollo_social"
+      ],
+      "chunks": [
+        "Desarrollo: ¿Qué esperamos durante el primer año de vida? (Comité de Crecimiento y Desarrollo, SAP, Argentina). Tema: hitos y señales de alerta de 0 a 6 meses. Hallazgo: de 0 a 3 meses el bebé fija la mirada en el cuidador y lo sigue, vocaliza, sonríe en respuesta y hacia el final sostiene la cabeza; son señales de alerta no sostener la cabeza al final del trimestre, no fijar la mirada tras el primer mes, no tener sonrisa social al final del trimestre, vocalizaciones monótonas o irritabilidad constante. De 4 a 6 meses mantiene la cabeza alineada, boca abajo se apoya en los antebrazos, intenta agarrar objetos grandes, rueda y se sienta con apoyo; preocupa que a los 6 meses no se apoye boca abajo, no ruede o no se siente con apoyo, y la falta de vocalizaciones recíprocas o de prensión voluntaria.",
+        "Desarrollo: ¿Qué esperamos durante el primer año de vida? (Comité de Crecimiento y Desarrollo, SAP, Argentina). Tema: hitos y señales de alerta de 7 a 12 meses. Hallazgo: de 7 a 9 meses se sienta sin apoyo, pasa objetos de una mano a otra, silabea y puede mostrar angustia ante extraños; son señales de alerta la sedestación inestable, no pasar objetos entre las manos, no silabear o no mostrar angustia de separación. De 9 a 12 meses gatea o se desplaza, se pone de pie agarrado, coge objetos pequeños con la pinza, responde a su nombre, entiende el «no» y silabea con entonación; preocupa que no se desplace ni se mueva con apoyo, no responda a su nombre, no busque objetos escondidos o evite la mirada.",
+        "Desarrollo: ¿Qué esperamos durante el primer año de vida? (Comité de Crecimiento y Desarrollo, SAP, Argentina). Tema: signos de alarma a cualquier edad. Hallazgo: la sociedad enumera como signos de alarma a cualquier edad la pérdida o el retroceso de habilidades ya adquiridas, las asimetrías posturales, el tono muscular muy flojo o muy rígido, los rituales o movimientos repetitivos, la indiferencia excesiva hacia el entorno, la baja tolerancia a la frustración y las conductas de aislamiento o de agresión hacia otros o hacia sí mismo. Recuerda que los controles de salud son el momento oportuno para que el pediatra vigile el desarrollo y detecte estas señales a tiempo."
+      ]
+    },
+    {
+      "source_type": "guideline",
+      "title": "Desarrollo: ¿Qué esperamos entre 1 a 3 años?",
+      "organization": "Sociedad Argentina de Pediatría (SAP)",
+      "publication_year": null,
+      "undated_reason": "Página divulgativa de Familia y Comunidad de la SAP sin fecha de publicación visible (solo copyright 1997-2026 del sitio); consultada el 2026-11-06. Referencia principal: guía del Comité de Crecimiento y Desarrollo de la SAP (Arch Argent Pediatr 2017). Solo se usan los tramos hasta los 24 meses.",
+      "url": "https://www.sap.org.ar/familia-y-comunidad/detalle/desarrollo-que-esperamos-entre-1-a-3-anos",
+      "specialties": [
+        "pediatrics",
+        "general_medicine"
+      ],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "original_language": "es",
+      "topics": [
+        "hitos_motores",
+        "lenguaje",
+        "signos_alarma"
+      ],
+      "chunks": [
+        "Desarrollo: ¿Qué esperamos entre 1 a 3 años? (SAP, Argentina). Tema: hitos y señales de alerta de 13 a 17 meses. Hallazgo: la mayoría camina sola, apila cubos, pasa las hojas gruesas de un libro, usa un cubierto para comer, señala con el índice, dice sus primeras palabras con sentido como «mamá» o «papá», entiende más de lo que dice y sigue órdenes sencillas. Son señales de alerta no caminar solo después de los 15 meses, usar siempre la misma mano, no señalar a los 18 meses, no entender órdenes simples, no hacer juego de imitación, no usar palabras con intención de comunicar, no lograr atención conjunta o tener movimientos repetitivos como el balanceo.",
+        "Desarrollo: ¿Qué esperamos entre 1 a 3 años? (SAP, Argentina). Tema: hitos y señales de alerta de 18 a 24 meses. Hallazgo: el niño camina con más seguridad, se agacha a recoger objetos, patea una pelota, apila 3 o 4 piezas, garabatea con un crayón, dice varias palabras y empieza a unirlas en frases cortas; hacia los 2 años señala partes del cuerpo y juega junto a otros niños, cada uno a lo suyo. Preocupa que no diga «mamá» o «papá» de forma específica, no garabatee, no patee la pelota a los 24 meses, no use palabras-frase o prefiera estar solo. La pérdida de habilidades ya adquiridas es un signo de alarma a cualquier edad."
+      ]
+    },
+    {
+      "source_type": "reference",
+      "title": "Reflujo gastroesofágico del lactante",
+      "organization": "Sociedad Española de Gastroenterología, Hepatología y Nutrición Pediátrica (SEGHNP)",
+      "publication_year": 2020,
+      "url": "https://www.seghnp.org/familias/reflujo-gastroesofagico-del-lactante",
+      "specialties": [
+        "pediatrics",
+        "general_medicine"
+      ],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "original_language": "es",
+      "topics": [
+        "vacunas"
+      ],
+      "chunks": [
+        "Reflujo gastroesofágico del lactante (SEGHNP, 2020). Tema: qué es el reflujo del bebé y cuándo no es enfermedad. Hallazgo: el reflujo es el paso sin esfuerzo del contenido del estómago al esófago; es normal en todas las personas y aparece hasta en el 40 % de los lactantes sanos. Solo se habla de enfermedad por reflujo cuando hay daño o complicaciones. La evolución habitual es la curación espontánea.",
+        "Reflujo gastroesofágico del lactante (SEGHNP, 2020). Tema: qué hacer ante el reflujo fisiológico. Hallazgo: se recomienda mantener la lactancia materna, porque pasar a fórmula no aporta beneficio. Espesar las tomas reduce las regurgitaciones visibles, no el número total de episodios; con lactancia artificial pueden usarse fórmulas antirregurgitación, que no curan el reflujo, y las leches hidrolizadas no sirven para el reflujo fisiológico. Hay que evitar la postura semisentada, porque aumenta los episodios de reflujo; la mejor postura es tumbar al bebé boca arriba. Habitualmente no hace falta tratamiento con fármacos, porque no hay evidencia de que mejoren el reflujo fisiológico, el llanto ni la irritabilidad.",
+        "Reflujo gastroesofágico del lactante (SEGHNP, 2020). Tema: complicaciones de la enfermedad por reflujo y a quién consultar. Hallazgo: la página señala como posibles complicaciones de la enfermedad por reflujo la escasa ganancia de peso, la esofagitis con dolor y ardor, el sangrado digestivo, la dificultad o el dolor al tragar, los síntomas respiratorios (laringitis, crisis de asma, neumonías recurrentes) y las posturas anormales. En la mayoría de los casos bastan los síntomas para el diagnóstico; las pruebas se reservan para casos dudosos o con sospecha de complicaciones. Recomienda consultar cada caso concreto con el pediatra de Atención Primaria, que valorará si hace falta derivar al gastroenterólogo pediátrico."
+      ]
+    },
+    {
+      "source_type": "reference",
+      "title": "La etapa de lactante",
+      "organization": "Sociedad Española de Pediatría Extrahospitalaria y Atención Primaria (SEPEAP)",
+      "publication_year": 2021,
+      "url": "https://sepeap.org/la-etapa-de-lactante/",
+      "specialties": [
+        "pediatrics",
+        "general_medicine"
+      ],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "original_language": "es",
+      "topics": [
+        "hitos_motores",
+        "crecimiento",
+        "lenguaje",
+        "desarrollo_social"
+      ],
+      "chunks": [
+        "La etapa de lactante (SEPEAP, 2021). Tema: crecimiento y hitos motores del lactante (de 28 días a 2 años). Hallazgo: en el primer año triplica su peso y crece unos 25 cm, y en el segundo entre 10 y 12 cm. Control de la cabeza hacia los 3 meses; se sienta con apoyo a los 6 y sin apoyo a los 8; se desplaza solo (gateo, arrastre) a los 8 o 9 meses; da sus primeros pasos hacia los 12 meses; camina sin ayuda y salta con los dos pies hacia los 18 meses y sube y baja escaleras sin alternar los pies a los 2 años. Usa la pinza con pulgar e índice hacia los 10 meses. La página recuerda que cada niño sigue su ritmo y los hitos son orientativos.",
+        "La etapa de lactante (SEPEAP, 2021). Tema: visión, audición, lenguaje y desarrollo social. Hallazgo: el recién nacido se calma con la voz materna y se sobresalta con ruidos fuertes; a las 6 semanas responde a la voz de la madre sin verla, mantiene contacto visual y aparece la sonrisa social; al mes sigue un objeto con la mirada. Hacia los 3 o 4 meses emite gorjeos, a los 7 u 8 meses bisílabos inespecíficos, a los 12 o 13 meses usa «papá» y «mamá» con sentido y entiende «no», y a los 18 meses dice unas 10 palabras. Hacia los 8 meses aparece la ansiedad de separación, y a los 18 a 24 meses el juego simbólico. Con la movilidad necesita supervisión constante."
+      ]
+    },
+    {
+      "source_type": "reference",
+      "title": "Mon enfant fait ses dents (HUG, Mon enfant est malade)",
+      "organization": "Hôpitaux universitaires de Genève (HUG)",
+      "publication_year": null,
+      "undated_reason": "la página no muestra fecha de publicación ni de actualización (consultada el 2026-11-06)",
+      "url": "https://www.monenfantestmalade.ch/fiches/dents",
+      "specialties": [
+        "pediatrics",
+        "general_medicine"
+      ],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "original_language": "fr",
+      "topics": [
+        "denticion"
+      ],
+      "chunks": [
+        "Mon enfant fait ses dents (HUG). Tema: cómo es la salida de los dientes. Hallazgo: los primeros dientes de leche aparecen en general hacia los tres meses, primero los incisivos y luego los premolares, los caninos y por último los molares, hacia los dos años; la edad de erupción varía mucho de un niño a otro, y hacia los dos años y medio deberían estar presentes unos veinte. Durante este periodo el niño babea mucho y busca frotar las encías contra algo; puede tener una fiebre ligera, heces blandas con la zona del pañal irritada y estar algo gruñón. La molestia varía mucho: algunos no muestran cambios y otros tienen las encías inflamadas y dolorosas. La ficha señala que estos meses coinciden con muchos episodios de resfriado, tos o diarrea, de los que se culpa a la dentición aunque se deben a infecciones víricas banales.",
+        "Mon enfant fait ses dents (HUG). Tema: precauciones y consejos. Hallazgo: si el niño tiene una fiebre importante, hay que buscar su causa real en lugar de atribuirla a los dientes. Nunca se debe poner al cuello un collar «analgésico» de dentición, por el riesgo de estrangulamiento. Para aliviar se pueden masajear las encías con frío, por ejemplo con un mordedor guardado en la nevera. Algunos bebés se chupan el dedo con mucho gusto, pero el hábito no debe prolongarse demasiado porque puede deformar las mandíbulas y cambiar la posición de los dientes; se aconseja dejarlo antes de que lleguen los dientes definitivos. Si se usa el chupete como recurso, se elige uno de forma fisiológica, y no se debe mojar nunca en miel ni en azúcar.",
+        "Mon enfant fait ses dents (HUG). Tema: prevención de caries y cuándo consultar. Hallazgo: nunca dar líquidos azucarados (jarabes, zumos de fruta) en el biberón; por la noche, si el bebé necesita beber para volver a dormirse, solo agua; durante el día, la leche se ofrece en las comidas y no se deja el biberón en la boca entre ellas. La ficha indica que el contacto prolongado del azúcar con los dientes provoca muchas caries. No detalla criterios de consulta ni niveles de urgencia para la salida de los dientes: solo que una fiebre importante debe llevar a buscar su causa real."
+      ]
+    },
+    {
+      "source_type": "reference",
+      "title": "Dents de l'enfant (ONE)",
+      "organization": "ONE (Office de la Naissance et de l'Enfance, Belgique)",
+      "publication_year": null,
+      "undated_reason": "Página de la sección Familles de one.be sin fecha de actualización visible; consultada el 2026-11-06.",
+      "url": "https://www.one.be/familles/0-12/dents-de-lenfant",
+      "specialties": [
+        "pediatrics",
+        "general_medicine"
+      ],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "original_language": "fr",
+      "topics": [
+        "denticion"
+      ],
+      "chunks": [
+        "Dents de l'enfant (ONE, Office de la Naissance et de l'Enfance). Tema: salida de los dientes y molestias de la dentición. Hallazgo: cada niño se desarrolla a su ritmo y una salida más tardía no significa necesariamente un problema. Hacia los 6 meses suelen aparecer los primeros dientes de leche, y puede aumentar la salivación y la necesidad de mordisquear los objetos que se lleva a la boca; entre los 6 y los 30 meses salen todos, primero los incisivos centrales y por último los molares. La salida puede dejar las encías sensibles y causar una molestia pasajera; para aliviarla se puede ofrecer un anillo de dentición o masajear con suavidad las encías con un dedo limpio. Si hay fiebre o diarrea, se vigila al bebé y se consulta a un profesional de salud si es necesario. La página no da nivel de urgencia ni teléfonos.",
+        "Dents de l'enfant (ONE, Office de la Naissance et de l'Enfance). Tema: cepillado de los dientes. Hallazgo: se cepillan los dientes dos veces al día, mañana y noche, con un cepillo suave adaptado a la edad, de cabeza pequeña y mango antideslizante, que se cambia cuando las cerdas se deforman, en general cada 3 meses. Con un bebé, lo más sencillo es sentarlo en el regazo o en el cambiador para ver los dientes de arriba y de abajo, y se cepillan las caras externa, interna y superior. Se recomienda acompañar el cepillado al menos hasta los 8 años.",
+        "Dents de l'enfant (ONE, Office de la Naissance et de l'Enfance). Tema: prevención de caries. Hallazgo: Para prevenir caries: agua como bebida a lo largo del día; leche y bebidas azucaradas en momentos concretos y no en tomas prolongadas o frecuentes; nunca poner miel, mermelada u otros productos azucarados en el chupete; limitar el picoteo y los dulces, y si se da un dulce, mejor al final de una comida que entre horas, porque la saliva ayuda entonces a neutralizar la acidez. Los dientes de leche también cuentan: intervienen en la alimentación, el habla y el espacio que dejan a los dientes definitivos.",
+        "Dents de l'enfant (ONE, Office de la Naissance et de l'Enfance). Tema: visitas al dentista. Hallazgo: la página recomienda una primera visita hacia los 2 años y después dos visitas preventivas al año. Si hay dudas (caries, mala salida de un diente) o tras un golpe en los dientes, es posible y recomendable consultar antes de los 2 años."
+      ]
+    },
+    {
+      "source_type": "reference",
+      "title": "Du lange au petit pot (ONE)",
+      "organization": "ONE (Office de la Naissance et de l'Enfance, Belgique)",
+      "publication_year": null,
+      "undated_reason": "Página de la sección Familles de one.be sin fecha de actualización visible; consultada el 2026-11-06.",
+      "url": "https://www.one.be/familles/1-3/du-lange-au-petit-pot",
+      "specialties": [
+        "pediatrics",
+        "general_medicine"
+      ],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "original_language": "fr",
+      "topics": [
+        "desarrollo_social"
+      ],
+      "chunks": [
+        "Du lange au petit pot (ONE, Office de la Naissance et de l'Enfance). Tema: cuándo está listo y cómo acompañarlo. Hallazgo: el paso del pañal al orinal es una etapa importante hacia la autonomía, y cada niño progresa a su ritmo; los primeros intentos pueden ser difíciles y los pequeños accidentes forman parte del camino, de modo que se le anima, se le tranquiliza y se le explica que son normales. Signos que pueden indicar que empieza a reconocer la necesidad de hacer pis o caca y a controlar mejor su cuerpo: avisa de que el pañal está mojado, ya no quiere llevar pañal, el pañal se mantiene seco más tiempo, siente curiosidad cuando usted va al baño, expresa más sus necesidades y deseos o intenta desvestirse y vestirse solo. Estos signos suelen aparecer poco a poco y no significan forzosamente que esté listo de inmediato.",
+        "Du lange au petit pot (ONE, Office de la Naissance et de l'Enfance). Tema: preparar el entorno. Hallazgo: se aconseja un entorno sencillo, cómodo y tranquilizador: ropa fácil de quitar y poner (evitando los bodis), ayudarle a mantenerse estable en el orinal o en un reductor de inodoro, poner el orinal en un lugar accesible, preservar su intimidad, familiarizarlo poco a poco con el espacio del baño y enseñarle desde el principio a limpiarse con papel higiénico y a lavarse las manos con jabón; al tirar de la cadena, tranquilizarlo, porque ver desaparecer sus heces puede impresionar a algunos niños.",
+        "Du lange au petit pot (ONE, Office de la Naissance et de l'Enfance). Tema: siesta y noche. Hallazgo: Si el pañal queda seco varias veces seguidas al despertar de la siesta, se le puede preguntar si cree que aún lo necesita para dormir, y lo mismo vale para la noche si se despierta seco varias mañanas. Para ayudarlo: proponerle hacer pis antes de dormir, poner el orinal cerca de su cama, asegurar un desplazamiento seguro con iluminación adecuada y proteger el colchón con un empapador. Pueden ocurrir accidentes, y se pide paciencia. Para dudas sobre el desarrollo, la página propone hablarlo en las revisiones del niño sano; no da edad ni nivel de urgencia."
+      ]
+    },
+    {
+      "source_type": "reference",
+      "title": "Développement du langage (ONE)",
+      "organization": "ONE (Office de la Naissance et de l'Enfance, Belgique)",
+      "publication_year": null,
+      "undated_reason": "Página de la sección Familles de one.be sin fecha de actualización visible; consultada el 2026-11-06.",
+      "url": "https://www.one.be/familles/1-3/developpement-du-langage",
+      "specialties": [
+        "pediatrics",
+        "general_medicine"
+      ],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "original_language": "fr",
+      "topics": [
+        "lenguaje",
+        "cuando_consultar"
+      ],
+      "chunks": [
+        "Développement du langage (ONE, Office de la Naissance et de l'Enfance). Tema: hitos orientativos del lenguaje. Hallazgo: el lenguaje se desarrolla desde el nacimiento en los intercambios cotidianos; antes de hablar el bebé comunica con la mirada, los gestos, la mímica, los sonidos, el llanto y las sonrisas. Cada niño avanza a su ritmo: unos hablan antes y otros más tarde. Como referencia, a los 6-7 meses balbucea; a los 8 meses usa «papá» y «mamá» sin referirse a nadie en concreto; a los 9 meses comprende «no»; a los 12 meses dice 1 o 2 palabras; a los 18 meses, entre 7 y 20; a los 24 meses unas 50 y asocia 2 palabras; y a los 36 meses asocia 3. No hace falta ningún ejercicio complejo: el baño, las comidas, el vestido, un paseo, un trayecto en coche, un juego o un cuento son ocasiones suficientes.",
+        "Développement du langage (ONE, Office de la Naissance et de l'Enfance). Tema: cómo acompañar al niño al hablar. Hallazgo: el adulto es un modelo; se aconseja hablar con claridad, con palabras variadas pero adaptadas a la edad, reformular lo que dice el niño, completar sus frases y dejarle tiempo para responder, sin corregir sin cesar. Se puede describir lo que uno hace o lo que hace el niño, nombrar las emociones, proponer opciones y crear rutinas (el mismo libro, la misma canción); conviene ponerse a su altura, mirarlo y esperar su respuesta, aunque tarde en llegar, y no multiplicar las preguntas.",
+        "Développement du langage (ONE, Office de la Naissance et de l'Enfance). Tema: qué evitar. Hallazgo: A evitar: dejar el chupete en la boca cuando quiere hablar, usar con demasiada frecuencia un lenguaje de bebé, corregir cada error de forma insistente, encadenar preguntas, hablar por él demasiado pronto, sobreestimularlo y dejar que las pantallas sustituyan los intercambios con el adulto, ya que no reemplazan una verdadera interacción.",
+        "Développement du langage (ONE, Office de la Naissance et de l'Enfance). Tema: cuándo consultar. Hallazgo: la página indica que se puede pedir consejo si el niño no parece reaccionar a los sonidos o a la voz, no intenta comunicarse (mirada, gestos, sonidos), no comprende consignas sencillas para su edad, habla muy poco en comparación con niños de su edad, pierde palabras que ya usaba, parece frustrado por no hacerse entender o cuesta entenderle de forma persistente. Se puede hablar con un profesional de salud, el médico o la enfermera de pediatría, o comentarlo en las revisiones del niño sano; una opinión permite hacer balance, tranquilizar u orientar hacia un apoyo si hace falta. La página no precisa ningún nivel de urgencia ni plazo para consultar."
+      ]
+    },
+    {
+      "source_type": "reference",
+      "title": "Grandir avec des repères (ONE)",
+      "organization": "ONE (Office de la Naissance et de l'Enfance, Belgique)",
+      "publication_year": null,
+      "undated_reason": "Página de la sección Familles de one.be sin fecha de actualización visible; consultada el 2026-11-06.",
+      "url": "https://www.one.be/familles/0-12/grandir-avec-des-reperes",
+      "specialties": [
+        "pediatrics",
+        "general_medicine"
+      ],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "original_language": "fr",
+      "topics": [
+        "sueno_horas",
+        "desarrollo_social"
+      ],
+      "chunks": [
+        "Grandir avec des repères (ONE, Office de la Naissance et de l'Enfance). Tema: cuándo y cómo empezar a decir «no». Hallazgo: En los primeros meses no se trata de decir que no: la seguridad interior y la confianza del bebé se construyen respondiendo con rapidez a sus llamadas; poco a poco los padres pueden introducir plazos razonables, que son los primeros «no»: el bebé se vuelve capaz de soportar pequeñas esperas, y conviene acompañarlos de palabras sencillas.",
+        "Grandir avec des repères (ONE, Office de la Naissance et de l'Enfance). Tema: rutinas y exploración hacia los 10 meses. Hallazgo: el bebé necesita continuidad y regularidad: instaurar un ritmo día y noche y un ritual (leer un cuento, cantar una canción de cuna, repetir las mismas palabras, decir adiós) para acabar el día con calma y seguridad, lo que prepara al sueño. Hacia los 10 meses el niño empieza a percibirse como distinto de los demás, explora más y necesita volver con regularidad junto a sus padres para tranquilizarse; también puede mostrarse inquieto ante personas poco familiares. La página recomienda vigilar su seguridad y enseñarle las reglas que lo protegen. No da signos de alarma ni niveles de urgencia."
+      ]
+    },
+    {
+      "source_type": "reference",
+      "title": "Liberté de mouvement (ONE)",
+      "organization": "ONE (Office de la Naissance et de l'Enfance, Belgique)",
+      "publication_year": null,
+      "undated_reason": "Página de la sección Familles de one.be sin fecha de actualización visible; consultada el 2026-11-06.",
+      "url": "https://www.one.be/familles/1-3/liberte-de-mouvement",
+      "specialties": [
+        "pediatrics",
+        "general_medicine"
+      ],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "original_language": "fr",
+      "topics": [
+        "hitos_motores"
+      ],
+      "chunks": [
+        "Liberté de mouvement (ONE, Office de la Naissance et de l'Enfance). Tema: qué es y para qué sirve. Hallazgo: consiste en dejar que el bebé mueva todo el cuerpo con libertad y espontaneidad, en posturas que puede adoptar y abandonar solo; cada niño avanza a su ritmo y lo importante es que tenga tiempo para experimentar y repetir sus gestos. Según la página ayuda a descubrir su cuerpo, desarrollar los músculos, ganar confianza y autonomía, evitar ciertas tensiones musculares y contribuir a prevenir la plagiocefalia.",
+        "Liberté de mouvement (ONE, Office de la Naissance et de l'Enfance). Tema: postura boca arriba y espacio. Hallazgo: Despierto, tumbado boca arriba puede mover libremente cabeza, brazos y piernas, y un tapiz adaptado favorece la estabilidad; la mejor postura es la que el bebé puede adoptar por sí mismo desde la posición boca arriba. Se propone un espacio seguro, amplio y despejado, ropa blanda y cómoda y algunos objetos ligeros que pueda coger solo, y se le deja llevarse manos y objetos a la boca. Los momentos de cambio, cuidados, comida o juego son ocasiones de explorar.",
+        "Liberté de mouvement (ONE, Office de la Naissance et de l'Enfance). Tema: boca abajo y etapas del desarrollo. Hallazgo: la postura boca abajo puede proponerse en ciertos cuidados o juegos, únicamente cuando el bebé está despierto, relajado y en interacción con el adulto; si hace muecas, muestra tensión o llora, es señal de incomodidad y hay que adaptar el momento. Las etapas habituales (darse la vuelta, rodar, reptar, gatear, sentarse solo, ponerse de pie y andar) incluyen avances, pausas y a veces pasos atrás, que forman parte de la evolución normal.",
+        "Liberté de mouvement (ONE, Office de la Naissance et de l'Enfance). Tema: elegir el material. Hallazgo: Lo ideal es ofrecer momentos en el suelo sobre un tapiz adaptado; se desaconseja el material que limita los movimientos o coloca al niño en una postura que aún no domina. Antes de usar un objeto, la página propone preguntarse si el niño puede adoptar y abandonar la postura solo, si puede mover la cabeza y todo el cuerpo, si algo lo bloquea, cuánto tiempo estará en él, si está seguro y si puede coger un objeto y jugar. Ante dudas sobre el desarrollo o la motricidad, se puede acudir a la enfermera de pediatría o al médico o pediatra; no da niveles de urgencia."
+      ]
+    },
+    {
+      "source_type": "reference",
+      "title": "Sommeil (ONE)",
+      "organization": "ONE (Office de la Naissance et de l'Enfance, Belgique)",
+      "publication_year": null,
+      "undated_reason": "Página de la sección Familles de one.be sin fecha de actualización visible; consultada el 2026-11-06.",
+      "url": "https://www.one.be/familles/0-12/sommeil",
+      "specialties": [
+        "pediatrics",
+        "general_medicine"
+      ],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "original_language": "fr",
+      "topics": [
+        "sueno_horas"
+      ],
+      "chunks": [
+        "Sommeil (ONE, Office de la Naissance et de l'Enfance). Tema: cuánto necesita dormir un niño y cómo saber si duerme bastante. Hallazgo: la página da como orientación de 16 a 19 horas por cada 24 en el bebé y unas 15 horas al año, y recuerda que las necesidades varían de un niño a otro. Para conocer las de su hijo, los padres pueden dejarlo dormir hasta que se despierte solo durante unos días y proponerle después con regularidad un tiempo de sueño cercano a su ritmo natural. Un niño que duerme lo suficiente suele estar bien durante el día, se despierta descansado, juega y explora con gusto y no está siempre irritable. Si duerme mucho pero sigue cansado, puede fallar la calidad del sueño (nariz tapada, despertares frecuentes, dolores, pesadillas) y la página aconseja hablarlo con el médico.",
+        "Sommeil (ONE, Office de la Naissance et de l'Enfance). Tema: preparar la hora de acostarse, dormirse solo y siestas. Hallazgo: las señales de cansancio (llanto, bostezos, mirada que se aparta, agitación inusual) indican que hay que ir frenando el ritmo. El ritual de la noche no tiene que ser perfecto sino previsible y tranquilizador: los mismos gestos, en el mismo orden y a la misma hora. El niño puede necesitar a sus padres para acostumbrarse a la noche, sentirse seguro o superar el miedo a separarse de ellos; la autonomía para dormirse en su cama se construye con el tiempo, sin presión, y el peluche o un objeto familiar ayudan. La siesta es útil, y si no duerme, un rato tranquilo también le sienta bien."
+      ]
+    },
+    {
+      "source_type": "reference",
+      "title": "Suivi médical de votre enfant (ONE)",
+      "organization": "ONE (Office de la Naissance et de l'Enfance, Belgique)",
+      "publication_year": null,
+      "undated_reason": "Página de la sección Familles de one.be sin fecha de actualización visible; consultada el 2026-11-06.",
+      "url": "https://www.one.be/familles/0-12/suivi-medical-de-votre-enfant",
+      "specialties": [
+        "pediatrics",
+        "general_medicine"
+      ],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "original_language": "fr",
+      "topics": [
+        "revisiones",
+        "cuando_consultar"
+      ],
+      "chunks": [
+        "Suivi médical de votre enfant (ONE, Office de la Naissance et de l'Enfance). Tema: quién puede seguir la salud del niño. Hallazgo: el seguimiento permite vigilar la salud global del niño, seguir su desarrollo, responder a las preguntas de los padres y, si hace falta, orientarlos hacia otros profesionales. Pueden encargarse el médico de cabecera o el pediatra, ambos desde el nacimiento, y según las necesidades otros profesionales (dentista, fisioterapeuta, osteópata, matrona, la salud escolar y el equipo de orientación escolar).",
+        "Suivi médical de votre enfant (ONE, Office de la Naissance et de l'Enfance). Tema: diferencia entre las revisiones del niño sano y la atención curativa. Hallazgo: las revisiones preventivas del niño sano no sustituyen el seguimiento curativo: ante una enfermedad, un síntoma preocupante o la necesidad de un tratamiento, hay que contactar con el profesional de salud que sigue al niño. La página no da criterios de urgencia ni teléfonos de urgencia.",
+        "Suivi médical de votre enfant (ONE, Office de la Naissance et de l'Enfance). Tema: preparar la cita. Hallazgo: Para preparar la cita se aconseja anotar las preguntas con antelación (en la cartilla de salud, en el móvil o en papel; todas las preguntas son importantes, incluso las que parezcan sencillas o ingenuas), preguntar al profesional cómo contactarlo entre citas y explicar al niño adónde se va, cómo será la visita y quién lo recibirá. Conviene llevar la cartilla de salud o el expediente médico, un biberón, un peluche, un juego o un libro, pañales y una mantita. La cartilla reúne la información de salud del niño y facilita la relación entre los padres y los distintos profesionales que acompañan al niño."
+      ]
+    },
+    {
+      "source_type": "reference",
+      "title": "Écrans (ONE)",
+      "organization": "ONE (Office de la Naissance et de l'Enfance, Belgique)",
+      "publication_year": 2026,
+      "url": "https://www.one.be/familles/0-12/ecrans",
+      "specialties": [
+        "pediatrics",
+        "general_medicine"
+      ],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "original_language": "fr",
+      "topics": [
+        "lenguaje",
+        "sueno_horas"
+      ],
+      "chunks": [
+        "Écrans (ONE, Office de la Naissance et de l'Enfance, 2026). Tema: cómo acompañar al niño ante las pantallas y efecto en el lenguaje. Hallazgo: la página no presenta las pantallas solo como un problema, sino que invita a pensar su lugar: observar qué pantallas están a su alcance, cuánto tiempo ocupan y cómo las usan los propios padres (los niños observan mucho a los adultos), variar las actividades del día, comentar con el niño lo que ve y fijar un marco adaptado a la edad y a cada familia, en el que el niño puede participar en algunas normas. Según la página, los programas vistos en pantalla no tienen efecto beneficioso sobre el aprendizaje del lenguaje del bebé: un bebé no aprende palabras nuevas mirando una pantalla, aunque esté pensada para niños pequeños, y nada sustituye la interacción con las personas (canciones, cuentos, conversación).",
+        "Écrans (ONE, Office de la Naissance et de l'Enfance, 2026). Tema: sueño, vista y actividad al aire libre. Hallazgo: las pantallas antes de acostarse pueden perjudicar la cantidad y la calidad del sueño, por lo que se aconseja apagarlas 1 hora antes de dormirse y proponer un momento tranquilo (una canción, un cuento, un abrazo o una charla tranquila). Para la vista se recomiendan pausas regulares cada 20 minutos, una luminosidad bien ajustada y una distancia de al menos 30 cm entre los ojos del niño y la pantalla; sin estas precauciones puede aumentar el riesgo de miopía. La página pide un uso moderado, sobre todo de las pantallas pequeñas como móviles y tabletas, y para prevenir la miopía aconseja pasar al aire libre una media de 2 horas al día desde muy pequeño. Un uso prolongado también puede favorecer el exceso de peso, por ser sedentario y ir a veces con picoteo."
+      ]
+    },
+    {
+      "source_type": "reference",
+      "title": "Éveil des sens (ONE)",
+      "organization": "ONE (Office de la Naissance et de l'Enfance, Belgique)",
+      "publication_year": 2026,
+      "url": "https://www.one.be/familles/0-12/eveil-des-sens",
+      "specialties": [
+        "pediatrics",
+        "general_medicine"
+      ],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "original_language": "fr",
+      "topics": [
+        "desarrollo_social"
+      ],
+      "chunks": [
+        "Éveil des sens (ONE, Office de la Naissance et de l'Enfance, 2026). Tema: tacto y oído del bebé. Hallazgo: el bebé descubre el mundo con los sentidos, y el portabebés, el baño, las comidas, el cambio y el balanceo son ocasiones de vínculo. Necesita una «envoltura» de calor y protección y el piel con piel puede ayudarlo a adaptarse; el masaje puede relajar, pero no a todos los bebés, así que hay que observar sus reacciones. Reconoce la voz de su madre desde el primer día de vida y prefiere un ambiente sonoro natural al silencio completo; los sonidos y la música demasiado fuertes pueden agredirlo.",
+        "Éveil des sens (ONE, Office de la Naissance et de l'Enfance, 2026). Tema: cuidado de los oídos, cribado auditivo, gusto y olfato. Hallazgo: Para limpiar las orejas se pasa una manopla por la entrada del conducto, y los bastoncillos de algodón se evitan porque pueden dañarlo. El cribado auditivo es importante en los primeros días de vida y puede hacerse en la maternidad. Desde las primeras horas prefiere el sabor dulce y rechaza el amargo; la leche materna toma el sabor de lo que come la madre. Un objeto con el olor de la madre puede tranquilizarlo, y se evitan los perfumes que alteran esas referencias.",
+        "Éveil des sens (ONE, Office de la Naissance et de l'Enfance, 2026). Tema: vista, estímulos y cribado visual. Hallazgo: al nacer el bebé ve sobre todo de cerca, a unos 25 a 30 cm; le gusta el rostro de sus padres, sobre todo los ojos, y le atraen los contrastes de blanco y negro. La página recomienda no multiplicar los estímulos y señala que las pantallas, aunque capten su atención, no contribuyen a su buen desarrollo. Algunos trastornos de la vista pueden aparecer pronto, y cuanto antes se detectan y tratan, más posibilidades hay de corregirlos antes de los 6 años. Para dudas sobre la vista, el oído, la alimentación o el desarrollo se puede hablar con el médico, con un profesional de salud o en las revisiones del niño sano; la página no define niveles de urgencia ni da teléfonos."
+      ]
+    },
+    {
+      "source_type": "reference",
+      "title": "Contraindicaciones y precauciones de la vacunación",
+      "original_title": "Controindicazioni e precauzioni alla vaccinazione",
+      "organization": "Istituto Superiore di Sanità (ISS), EpiCentro",
+      "publication_year": 2019,
+      "url": "https://www.epicentro.iss.it/vaccini/VacciniControindicazioniPrecauzioni",
+      "specialties": [
+        "pediatrics",
+        "infectious_disease"
+      ],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "original_language": "it",
+      "topics": [
+        "vacunas"
+      ],
+      "chunks": [
+        "Contraindicaciones y precauciones de la vacunación (Istituto Superiore di Sanità (ISS), EpiCentro, 2019). Tema: qué comprueba el personal sanitario antes de vacunar. Hallazgo: antes de poner una vacuna, el personal debe verificar si hay contraindicaciones o precauciones, para lo cual basta con hacer unas preguntas sencillas y precisas usando una ficha estandarizada de antecedentes. No es necesario medir la temperatura ni hacer una exploración médica, salvo que la persona parezca enferma o cuente que tiene una enfermedad en curso: en ese caso conviene valorar si se vacuna de todos modos. Tampoco se exigen análisis ni pruebas diagnósticas de rutina antes de vacunar. (fuente en italiano)",
+        "Contraindicaciones y precauciones de la vacunación (Istituto Superiore di Sanità (ISS), EpiCentro, 2019). Tema: falsas contraindicaciones. Hallazgo: la página advierte de que algunos síntomas o situaciones se tratan por error como contraindicaciones verdaderas aunque no impidan vacunar, y que estos errores hacen perder oportunidades de vacunación. La página fue actualizada por última vez el 19 de septiembre de 2019. (fuente en italiano)"
+      ]
+    },
+    {
+      "source_type": "reference",
+      "title": "Las reacciones adversas a la vacunación y los riesgos de las enfermedades infecciosas prevenibles",
+      "original_title": "Le reazioni avverse alla vaccinazione e i rischi delle malattie infettive prevenibili",
+      "organization": "Istituto Superiore di Sanità (ISS), EpiCentro",
+      "publication_year": 2021,
+      "url": "https://www.epicentro.iss.it/vaccini/ReazioniAvverse",
+      "specialties": [
+        "pediatrics",
+        "infectious_disease"
+      ],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "original_language": "it",
+      "topics": [
+        "vacunas"
+      ],
+      "chunks": [
+        "Las reacciones adversas a la vacunación y los riesgos de las enfermedades infecciosas prevenibles (Istituto Superiore di Sanità (ISS), EpiCentro, 2021). Tema: seguridad de las vacunas y cómo se vigilan. Hallazgo: la página, actualizada en octubre de 2021, explica que las vacunas se dan a personas sanas, a menudo niños, y por eso se les exige un nivel de seguridad más alto que a los medicamentos para enfermos. Pasan por varias fases de evaluación antes de autorizarse y después se controla la fabricación y se vigilan las reacciones notificadas para detectar las raras. Distingue entre reacción adversa, con relación causal demostrable, y evento adverso, que puede no estar causado por la vacuna: que algo ocurra después no prueba que sea por ella. (fuente en italiano)",
+        "Las reacciones adversas a la vacunación y los riesgos de las enfermedades infecciosas prevenibles (Istituto Superiore di Sanità (ISS), EpiCentro, 2021). Tema: qué reacciones son habituales y cuándo aparecen. Hallazgo: la mayoría son leves: dolor, hinchazón y enrojecimiento en el sitio de la inyección, y fiebre o malestar general. Suelen aparecer en uno o dos días, pasan rápido y no suponen peligro. La excepción es la triple vírica y la tetravírica, en las que la fiebre u otros síntomas, como el exantema, pueden aparecer entre 5 y 12 días después. Las reacciones graves son muy raras; la mayoría suelen resolverse solas y no dejan consecuencias a largo plazo; la anafilaxia puede ser mortal, pero es tratable si se diagnostica correctamente y a tiempo. No vacunar supone aceptar riesgos mayores, porque las complicaciones de las enfermedades son mucho más frecuentes. (fuente en italiano)"
+      ]
+    },
+    {
+      "source_type": "reference",
+      "title": "Vacuna contra el rotavirus: reacciones adversas y riesgos de las enfermedades",
+      "original_title": "Vaccino contro i Rotavirus: reazioni avverse e rischi correlati alle malattie",
+      "organization": "Istituto Superiore di Sanità (ISS), EpiCentro",
+      "publication_year": 2019,
+      "url": "https://www.epicentro.iss.it/vaccini/ReazioniAvverseRotavirus",
+      "specialties": [
+        "pediatrics",
+        "infectious_disease"
+      ],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "original_language": "it",
+      "topics": [
+        "vacunas"
+      ],
+      "chunks": [
+        "Vacuna contra el rotavirus: reacciones adversas y riesgos de las enfermedades (Istituto Superiore di Sanità (ISS), EpiCentro, 2019). Tema: reacciones habituales de la vacuna del rotavirus. Hallazgo: la vacuna está indicada desde las 6 semanas de vida para prevenir la gastroenteritis por rotavirus. La mayoría de los bebés no tiene reacciones y las que aparecen suelen ser leves y pasan en pocos días. Según la ficha técnica, con una de las dos vacunas autorizadas son muy frecuentes la diarrea, los vómitos y la fiebre, y con la otra son frecuentes la diarrea y la irritabilidad. (fuente en italiano)",
+        "Vacuna contra el rotavirus: reacciones adversas y riesgos de las enfermedades (Istituto Superiore di Sanità (ISS), EpiCentro, 2019). Tema: invaginación intestinal tras la vacuna. Hallazgo: estudios observacionales de varios países muestran que las vacunas del rotavirus aumentan el riesgo de invaginación intestinal, sobre todo en los 7 días siguientes a la vacunación. Se observaron hasta 6 casos adicionales por 100.000 niños, frente a una incidencia de fondo de 25 a 101 casos por 100.000 menores de un año al año. Hay evidencia limitada de que el aumento del riesgo es menor tras la segunda administración de la vacuna. (fuente en italiano)",
+        "Vacuna contra el rotavirus: reacciones adversas y riesgos de las enfermedades (Istituto Superiore di Sanità (ISS), EpiCentro, 2019). Tema: qué riesgo tiene la gastroenteritis por rotavirus. Hallazgo: en niños pequeños puede causar una diarrea grave con deshidratación que requiere ingreso en el hospital. Los síntomas incluyen vómitos, diarrea acuosa que puede durar alrededor de una semana y fiebre leve o moderada (37,9 °C o más). En recién nacidos, la diarrea puede causar una deshidratación grave que avanza con rapidez y puede ser mortal sin un tratamiento de soporte adecuado. Entre las complicaciones figuran la deshidratación grave, el desequilibrio de electrolitos, la acidosis metabólica y la invaginación intestinal. (fuente en italiano)"
+      ]
+    },
+    {
+      "source_type": "reference",
+      "title": "Vacuna hexavalente: reacciones adversas y riesgos de las enfermedades",
+      "original_title": "Vaccino esavalente: reazioni avverse e rischi correlati alle malattie",
+      "organization": "Istituto Superiore di Sanità (ISS), EpiCentro",
+      "publication_year": 2018,
+      "url": "https://www.epicentro.iss.it/vaccini/ReazioniAvverseEsavalente",
+      "specialties": [
+        "pediatrics",
+        "infectious_disease"
+      ],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "original_language": "it",
+      "topics": [
+        "vacunas"
+      ],
+      "chunks": [
+        "Vacuna hexavalente: reacciones adversas y riesgos de las enfermedades (Istituto Superiore di Sanità (ISS), EpiCentro, 2018). Tema: reacciones habituales tras la vacuna hexavalente. Hallazgo: la mayoría de los vacunados no tiene reacciones, y cuando las hay suelen ser leves y se resuelven solas en pocos días; las graves son raras. Con datos de la OMS, se citan somnolencia (42,7%), falta de apetito (21,7%), vómitos (12,6%), dolor moderado o intenso en el punto de inyección (14-29%), fiebre de 37,8 a 39 °C (2,8-20,8%), enrojecimiento (3,3-31,4%), hinchazón (4,2-20,1%) e irritabilidad moderada o intensa (4,7-12,4%). El llanto inconsolable aparece en el 0,2%. (fuente en italiano)",
+        "Vacuna hexavalente: reacciones adversas y riesgos de las enfermedades (Istituto Superiore di Sanità (ISS), EpiCentro, 2018). Tema: reacciones raras tras la hexavalente. Hallazgo: según la página, el episodio hipotónico-hiporreactivo es raro (14-62 por 100.000), las convulsiones son muy raras (0,5 por 100.000) y la anafilaxia es muy rara (1-6 por millón). Se subraya que contraer una de estas enfermedades es mucho más peligroso para el niño que vacunarse. (fuente en italiano)",
+        "Vacuna hexavalente: reacciones adversas y riesgos de las enfermedades (Istituto Superiore di Sanità (ISS), EpiCentro, 2018). Tema: riesgos de las enfermedades que previene la hexavalente. Hallazgo: con datos de los CDC y la OMS, la tos ferina causa convulsiones en el 1,1%, neumonía en el 23% y fallecimiento en el 1%; la infección por Hib deja daño neurológico en el 15-30% y tiene una letalidad del 5%, y puede provocar meningitis, neumonía o epiglotitis. La hepatitis B se cronifica en el 80-90% de los casos si se contrae en el primer año de vida. La difteria tiene una letalidad del 5-10% de los casos y el tétanos, del 10-20% con tratamiento. (fuente en italiano)"
+      ]
+    },
+    {
+      "source_type": "reference",
+      "title": "Vacuna neumocócica conjugada (PCV): reacciones adversas y riesgos de las enfermedades",
+      "original_title": "Vaccino pneumococcico coniugato (PCV): reazioni avverse e rischi correlati alle malattie",
+      "organization": "Istituto Superiore di Sanità (ISS), EpiCentro",
+      "publication_year": 2018,
+      "url": "https://www.epicentro.iss.it/vaccini/ReazioniAvversePCV",
+      "specialties": [
+        "pediatrics",
+        "infectious_disease"
+      ],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "original_language": "it",
+      "topics": [
+        "vacunas"
+      ],
+      "chunks": [
+        "Vacuna neumocócica conjugada (PCV): reacciones adversas y riesgos de las enfermedades (Istituto Superiore di Sanità (ISS), EpiCentro, 2018). Tema: para qué sirve la vacuna conjugada del neumococo y qué reacciones da. Hallazgo: en niños se indica desde las 6 semanas de vida para prevenir la enfermedad invasiva, la neumonía y la otitis media aguda causadas por el neumococo. Con datos de la OMS, la reacción en el punto de inyección es muy frecuente, mientras que la fiebre por encima de 39 ºC es poco frecuente (menos del 1%). La mayoría de las personas no tiene reacciones y, cuando aparecen, suelen ser leves y pasar solas en pocos días; vacunarse es mucho más seguro que contraer la enfermedad. (fuente en italiano)",
+        "Vacuna neumocócica conjugada (PCV): reacciones adversas y riesgos de las enfermedades (Istituto Superiore di Sanità (ISS), EpiCentro, 2018). Tema: riesgos de la enfermedad neumocócica. Hallazgo: con datos de los CDC y la OMS, entre las complicaciones de la enfermedad invasiva por neumococo figuran la pérdida de audición, la septicemia, la artritis séptica, la osteomielitis, la neumonía y la meningitis. La letalidad de la meningitis neumocócica es del 12%, y el 40% de quienes sobreviven a una meningitis queda con secuelas neurológicas. (fuente en italiano)"
+      ]
+    },
+    {
+      "source_type": "reference",
+      "title": "Lactancia y frecuencia de las tomas",
+      "original_title": "Allattamento e frequenza delle poppate",
+      "organization": "Ospedale Pediatrico Bambino Gesù",
+      "publication_year": 2025,
+      "url": "https://www.ospedalebambinogesu.it/allattamento-e-frequenza-delle-poppate-96686/",
+      "specialties": [
+        "pediatrics",
+        "nutrition",
+        "neonatology"
+      ],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "original_language": "it",
+      "topics": [
+        "sueno_horas",
+        "crecimiento"
+      ],
+      "chunks": [
+        "Lactancia y frecuencia de las tomas (Ospedale Pediatrico Bambino Gesù, 2025). Tema: cuántas tomas de pecho al día. Hallazgo: se aconseja dar el pecho a demanda, cuando el bebé lo pide y durante el tiempo que quiera, lo que la página llama la regla de oro. Las tomas son frecuentes desde el principio por el pequeño tamaño del estómago, normalmente entre 8 y 12 al día, repartidas por igual entre el día y la noche. No hay reglas rígidas y la frecuencia y la duración varían mucho de un bebé a otro. Cuanto más succiona, más se estimula la producción de leche (fuente en italiano).",
+        "Lactancia y frecuencia de las tomas (Ospedale Pediatrico Bambino Gesù, 2025). Tema: primeros días y señales de que toma suficiente leche. Hallazgo: en los primeros 3-5 días la leche no es abundante, pero sí especialmente valiosa por su composición; la subida de la leche ocurre entre el segundo y el cuarto día. Se aconseja controlar si toma lo bastante contando los pañales mojados de orina a lo largo del día: al menos 6 al día indican una cantidad adecuada. El peso puede controlarse una vez por semana, pero la página precisa que pasadas las primeras etapas de la vida ya no hace falta. Con buen crecimiento, la lactancia es exclusiva los primeros 6 meses y no se empieza la alimentación complementaria antes (fuente en italiano)."
+      ]
+    },
+    {
+      "source_type": "reference",
+      "title": "De 1 a 3 meses: cómo se mueve",
+      "original_title": "Da 1 a 3 mesi: come si muove",
+      "organization": "Ospedale Pediatrico Bambino Gesù",
+      "publication_year": 2024,
+      "url": "https://www.ospedalebambinogesu.it/da-1-a-3-mesi-come-si-muove-80020/",
+      "specialties": [
+        "pediatrics",
+        "neonatology"
+      ],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "original_language": "it",
+      "topics": [
+        "hitos_motores",
+        "signos_alarma"
+      ],
+      "chunks": [
+        "De 1 a 3 meses: cómo se mueve (Ospedale Pediatrico Bambino Gesù, 2024). Tema: hitos motores entre el primer y el tercer mes. Hallazgo: cada bebé tiene su ritmo y las habilidades aparecen poco a poco. Al mes mantiene aún la postura fetal con los puños cerrados. A los 2 meses, sentado, la cabeza vacila pero la aguanta unos instantes y, boca abajo, la levanta hasta 45° y se apoya en los antebrazos. A los 3 meses, boca abajo, extiende la cabeza de 45° a 90°, sentado la mantiene erguida, se mira las manos, abre y cierra los dedos y se las lleva a la boca. Los reflejos arcaicos van desapareciendo (fuente en italiano).",
+        "De 1 a 3 meses: cómo se mueve (Ospedale Pediatrico Bambino Gesù, 2024). Tema: seguridad, tiempo boca abajo y señales de alerta a los 3 meses. Hallazgo: nunca se debe dejar al bebé sin vigilancia en el cambiador, la cama u otras superficies altas porque puede rodar. El tiempo boca abajo estando despierto refuerza cuello, brazos y hombros y se hace siempre con un adulto presente. A los 3 meses conviene consultar al pediatra si no consigue abrir y cerrar las manos, agarrar objetos, sostener la cabeza o levantar cabeza y pecho boca abajo. Un retraso no implica necesariamente un problema, por ejemplo los prematuros deben recuperar el crecimiento intrauterino que les falta (fuente en italiano)."
+      ]
+    },
+    {
+      "source_type": "reference",
+      "title": "La tos ferina es una amenaza seria, alerta de la Sociedad Italiana de Pediatría",
+      "original_title": "La pertosse è una minaccia seria, allarme della Società Italiana di Pediatria",
+      "organization": "Società Italiana di Pediatria (SIP)",
+      "publication_year": 2024,
+      "url": "https://sip.it/2024/05/23/la-pertosse-e-una-minaccia-seria-allarme-della-societa-italiana-di-pediatria/",
+      "specialties": [
+        "pediatrics",
+        "infectious_disease",
+        "neonatology"
+      ],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "original_language": "it",
+      "topics": [
+        "vacunas",
+        "signos_alarma"
+      ],
+      "chunks": [
+        "La tos ferina es una amenaza seria, alerta de la Sociedad Italiana de Pediatría (Società Italiana di Pediatria (SIP), 2024). Tema: aumento de la tos ferina en lactantes pequeños en Italia. Hallazgo: de enero a mayo de 2024 se registraron 110 casos hospitalizados en condiciones graves, más de 15 lactantes ingresaron en cuidados intensivos y tres recién nacidos fallecieron. Los casos afectan sobre todo a recién nacidos y lactantes no vacunados menores de 4 meses. La tos ferina es muy contagiosa y peligrosa sobre todo en los recién nacidos y en los primeros meses de vida, cuando el riesgo de complicaciones y muerte es mayor; en esa franja de edad la mortalidad está entre el 1% y el 1,5%. (fuente en italiano)",
+        "La tos ferina es una amenaza seria, alerta de la Sociedad Italiana de Pediatría (Società Italiana di Pediatria (SIP), 2024). Tema: vacunación contra la tos ferina para proteger al bebé. Hallazgo: la SIP recomienda que la mujer se vacune durante el segundo y tercer trimestre del embarazo, porque así protege al recién nacido, demasiado pequeño para vacunarse; la vacuna es muy segura y eficaz. El 95% de las madres de los bebés ingresados no estaba vacunada y el 80% no había recibido información sobre esa vacuna. (fuente en italiano)"
+      ]
+    },
+    {
+      "source_type": "reference",
+      "title": "Crecer juntos en un sueño sano (Kind en Gezin)",
+      "original_title": "Samen groeien in gezond slapen (Kind en Gezin)",
+      "organization": "Kind en Gezin (Agentschap Opgroeien)",
+      "publication_year": null,
+      "undated_reason": "Página de kindengezin.be sin fecha de publicación ni de revisión visible; consultada el 2026-11-06",
+      "url": "https://www.kindengezin.be/nl/thema/slapen/samen-groeien-gezond-slapen",
+      "specialties": [
+        "pediatrics"
+      ],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "original_language": "nl",
+      "topics": [
+        "sueno_horas"
+      ],
+      "chunks": [
+        "Crecer juntos en un sueño sano (Kind en Gezin, Agentschap Opgroeien). Tema: cómo evoluciona el sueño en los primeros años. Hallazgo: el sueño cambia mucho y cada niño duerme de forma distinta. Los recién nacidos se despiertan a menudo por hambre y necesitan ayuda para volver a calmarse; hacia los 6 meses los bebés son progresivamente más capaces de calmarse solos. Hitos como sentarse, gatear o andar, la ansiedad de separación, las molestias físicas y las pesadillas pueden alterar el sueño, igual que la dentición, los estirones, el exceso de cansancio y las tensiones.",
+        "Crecer juntos en un sueño sano (Kind en Gezin, Agentschap Opgroeien). Tema: rutinas y ayuda para dormirse. Hallazgo: un ritmo diario flexible da previsibilidad y un ritual para ir a la cama da seguridad al niño. Ayudan las asociaciones de sueño, como un saco de dormir conocido, música, chupete, un paño de apego o luz tenue. Los padres ayudan a calmarse con ritmo, cercanía, voz y un entorno tranquilo, adaptando el consuelo a cada niño, y se puede acostar al niño tranquilo y somnoliento, pero no del todo dormido, para que practique dormirse solo, respetando su ritmo. Los hábitos pueden cambiarse paso a paso, reduciendo poco a poco la presencia física. La página anima a los padres a descansar, repartir cuidados y dormir cuando duerme el bebé."
+      ]
+    },
+    {
+      "source_type": "reference",
+      "title": "¿Cuánta leche materna necesita mi bebé?",
+      "original_title": "Hoeveel borstvoeding heeft mijn baby nodig?",
+      "organization": "Stichting Voedingscentrum Nederland (Voedingscentrum)",
+      "publication_year": null,
+      "undated_reason": "La página no muestra fecha de publicación ni de actualización; consultada el 2026-11-06",
+      "url": "https://www.voedingscentrum.nl/nl/zwanger-en-kind/borstvoeding-en-flesvoeding/borstvoeding-geven/hoeveel-borstvoeding-heeft-mijn-baby-nodig-.aspx",
+      "specialties": [
+        "pediatrics",
+        "neonatology"
+      ],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "original_language": "nl",
+      "topics": [
+        "crecimiento",
+        "sueno_horas"
+      ],
+      "chunks": [
+        "¿Cuánta leche materna necesita mi bebé? (Voedingscentrum). Tema: frecuencia de las tomas y señales de que el bebé come suficiente. Hallazgo: no hay horario fijo y se da el pecho a demanda. En los primeros días son al menos 8 a 12 tomas en 24 horas, en las primeras semanas unas 10, y hacia los 6 meses unas 6 al día. Como señales de que toma bastante, la página cita en las primeras semanas unos 6 pañales mojados y entre 2 y 5 con caca en 24 horas, y después unos 6 mojados al día, buen crecimiento y un bebé alerta. Un bebé amamantado puede hacer caca solo una vez cada 2 semanas y es normal.",
+        "¿Cuánta leche materna necesita mi bebé? (Voedingscentrum). Tema: peso, tomas en racimo y días de más demanda. Hallazgo: perder algo de peso tras el nacimiento es normal y la mayoría de los bebés recupera el peso al nacer en unas 2 semanas; en los primeros 6 meses ganan alrededor de 150 gramos por semana y en las revisiones del niño sano se sigue su curva de crecimiento. Las tomas en racimo, seguidas en uno o dos momentos del día, son normales y no se deben cortar con un horario. Hacia los 10 días, las 6 semanas y los 3 meses hay días de más demanda, que suelen asentarse en unos 2 días. Si hay dudas de que beba lo bastante, la página aconseja consultar con su pediatra o con la enfermera de pediatría."
+      ]
+    },
+    {
+      "source_type": "reference",
+      "title": "¿Cuánto conviene que se mueva y duerma un bebé? (Gezond Leven)",
+      "original_title": "Hoeveel beweegt en slaapt een baby best? (Gezond Leven)",
+      "organization": "Vlaams Instituut Gezond Leven vzw",
+      "publication_year": null,
+      "undated_reason": "Página de gezondleven.be sin fecha de publicación ni de actualización (solo copyright 2026 en el pie); consultada el 2026-11-06",
+      "url": "https://www.gezondleven.be/themas/beweging-sedentair-gedrag/beweegadvies-volgens-leeftijd/hoeveel-beweegt-en-slaapt-een-baby-best",
+      "specialties": [
+        "pediatrics"
+      ],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "original_language": "nl",
+      "topics": [
+        "sueno_horas",
+        "hitos_motores"
+      ],
+      "chunks": [
+        "¿Cuánto conviene que se mueva y duerma un bebé? (Vlaams Instituut Gezond Leven, Gezond Leven). Tema: horas de sueño de un bebé según su edad. Hallazgo: la página recomienda para los bebés de 0 a 3 meses dormir entre 14 y 17 horas al día, y para los de 4 a 11 meses entre 12 y 16 horas al día, contando las siestas. Las recomendaciones también sirven para bebés con una discapacidad; se anima al niño a moverse todo lo posible dentro de sus capacidades, y los padres de niños con una enfermedad pueden pedir consejo adicional a su pediatra o al especialista.",
+        "¿Cuánto conviene que se mueva y duerma un bebé? (Vlaams Instituut Gezond Leven, Gezond Leven). Tema: movimiento, boca abajo y estar quieto. Hallazgo: los bebés que aún no gatean pasan al menos 30 minutos al día boca abajo, repartidos a lo largo del día, y juegan también en el suelo. Se varía la postura al comer, jugar y llevarlos en brazos. Un bebé no debe permanecer inmóvil más de una hora seguida, por ejemplo en un cochecito o una trona, ni mucho tiempo en la misma postura, sentado o tumbado. Muchas actividades sentadas, como leerle o contarle cuentos, hacer manualidades o música, son buenas para su desarrollo.",
+        "¿Cuánto conviene que se mueva y duerma un bebé? (Vlaams Instituut Gezond Leven, Gezond Leven). Tema: pantallas en bebés menores de 1 año. Hallazgo: la página desaconseja que los bebés vean la televisión y también desaconseja que miren otras pantallas durante periodos largos. No da una cifra concreta de minutos de pantalla, y para dudas sobre el desarrollo remite a la enfermera de pediatría."
+      ]
+    },
+    {
+      "source_type": "reference",
+      "title": "El sueño de los niños de 0 a 2 años (Helsenorge)",
+      "original_title": "Søvn hos barn 0-2 år (Helsenorge)",
+      "organization": "Helsenorge.no (Helsedirektoratet)",
+      "publication_year": 2025,
+      "url": "https://www.helsenorge.no/barn/sovn-hos-barn/",
+      "specialties": [
+        "pediatrics",
+        "general_medicine"
+      ],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "original_language": "no",
+      "topics": [
+        "sueno_horas"
+      ],
+      "chunks": [
+        "El sueño de los niños de 0 a 2 años (Helsenorge, Helsedirektoratet, 2025). Tema: cuántas horas duerme un bebé. Hallazgo: según la página, los recién nacidos (0-3 meses) duermen típicamente 14-17 horas al día (11-19 se considera normal). De 3 a 6 meses y de 6 a 12 meses lo habitual son 12-15 horas (10-18 es normal), y hacia el año 11-14 horas (10-16 es normal), edad en la que la mayoría pasa de dos siestas diurnas a una. La mayoría de los recién nacidos que toman leche materna maman al menos 8-12 veces en 24 horas, en los primeros meses los periodos despiertos a menudo duran solo 30-60 minutos y los ciclos de sueño del bebé son de unos 45-60 minutos.",
+        "El sueño de los niños de 0 a 2 años (Helsenorge, Helsedirektoratet, 2025). Tema: despertares nocturnos y cuándo pedir ayuda. Hallazgo: a los 6 meses unos 2 de cada 3 bebés se despiertan por la noche, y a los 9 meses cerca de la mitad duerme desde la medianoche hasta las cinco de la mañana. La mayoría de los niños se despierta al menos una vez cada noche hasta los 3 años aproximadamente. La página aconseja hablar con la enfermera de pediatría o con su pediatra si preocupa que el propio progenitor o el bebé duerman demasiado poco, y si hay grandes dificultades con el sueño, averiguar con su consejo si el bebé tiene dolor, alguna enfermedad u otra causa de fondo.",
+        "El sueño de los niños de 0 a 2 años (Helsenorge, Helsedirektoratet, 2025). Tema: sueño seguro del bebé. Hallazgo: lo más seguro es que el bebé duerma en su propia cama y siempre boca arriba. Hay que evitar tapar el carrito o el lugar donde duerme con mantas u otros objetos que dificulten la ventilación. Los bebés deben compartir habitación con los padres al menos 6 meses. Quien decida dormir con el bebé no debe hacerlo si el bebé nació prematuro, si fuma o usa snus, o si está bajo los efectos del alcohol, otras drogas o medicamentos sedantes, y nunca debe dormir con él en un sillón o un sofá. Si se duerme junto al bebé, se recomienda una cama de los padres ancha con colchón firme y plano, un edredón infantil pequeño y ligero para el bebé, evitar que pueda rodar fuera de la cama o caer en una rendija, y no dejar en la cama objetos blandos como almohadas o peluches."
+      ]
+    },
+    {
+      "source_type": "reference",
+      "title": "¿Qué hacer si el niño tiene fiebre después de una vacuna?",
+      "original_title": "Jak postępować jeżeli po szczepieniu dziecka pojawi się gorączka?",
+      "organization": "Szczepienia.Info, Narodowy Instytut Zdrowia Publicznego PZH - PIB",
+      "publication_year": 2022,
+      "url": "https://szczepienia.pzh.gov.pl/faq/jak-postepowac-jezeli-po-szczepieniu-dziecka-pojawi-sie-goraczka/",
+      "specialties": [
+        "pediatrics",
+        "infectious_disease"
+      ],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "original_language": "pl",
+      "topics": [
+        "vacunas",
+        "cuando_consultar"
+      ],
+      "chunks": [
+        "¿Qué hacer si el niño tiene fiebre después de una vacuna? (Szczepienia.Info, PZH, actualizado en 2022). Tema: reacciones habituales después de vacunar. Hallazgo: en la mayoría de los niños no aparecen síntomas preocupantes. En algunos, en los 2-3 días siguientes pueden aparecer enrojecimiento, ligera hinchazón o sensibilidad en el punto de inyección, que suelen desaparecer solos. La fiebre es frecuente: puede aparecer en las 24 horas posteriores y se resuelve sola en 2-3 días; tras las vacunas de sarampión, paperas, rubéola y varicela puede aparecer excepcionalmente 1-2 semanas después. El niño puede estar irritable, apático, comer menos o estar muy dormido durante 1-3 días. (fuente en polaco)",
+        "¿Qué hacer si el niño tiene fiebre después de una vacuna? (Szczepienia.Info, PZH, actualizado en 2022). Tema: cuándo consultar con el médico por fiebre tras una vacuna. Hallazgo: hay que contactar con el médico si la fiebre alta dura más de 3 días o si aparece más de 2-3 días después de la vacuna, para averiguar la causa de la fiebre. La fuente menciona fármacos para la fiebre a partir de 38 °C y que el médico decide su uso y la pauta según el peso, pero no se recogen aquí pautas. (fuente en polaco)"
+      ]
+    },
+    {
+      "source_type": "guideline",
+      "title": "Programa Nacional de Salud Infantil y Juvenil",
+      "original_title": "Programa Nacional de Saúde Infantil e Juvenil",
+      "organization": "Direção-Geral da Saúde (DGS, Portugal)",
+      "publication_year": 2013,
+      "url": "https://www.dgs.pt/directrizes-da-dgs/normas-e-circulares-normativas/norma-n-0102013-de-31052013-jpg.aspx",
+      "specialties": [
+        "pediatrics",
+        "general_medicine"
+      ],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "original_language": "pt",
+      "topics": [
+        "revisiones",
+        "signos_alarma",
+        "hitos_motores"
+      ],
+      "chunks": [
+        "Programa Nacional de Salud Infantil y Juvenil (Direção-Geral da Saúde, Norma n.º 010/2013, 2013). Tema: qué se vigila en las revisiones del niño sano. Hallazgo: en cada consulta se valoran las preocupaciones de los padres, las enfermedades intercurrentes, la alimentación, el crecimiento y desarrollo con las curvas de la OMS y el cumplimiento del calendario vacunal. En el primer año se presta especial atención al estado emocional de la madre, por el riesgo de depresión posparto, o del cuidador principal, derivando pronto los casos detectados. (fuente en portugués)",
+        "Programa Nacional de Salud Infantil y Juvenil (Direção-Geral da Saúde, Norma n.º 010/2013, 2013). Tema: consejos del primer año sobre alimentación, sueño, cólicos y síntomas de alarma. Hallazgo: se promueve la lactancia exclusiva hasta los 6 meses y solo después la alimentación complementaria; con fórmula, la diversificación se hace entre los 4 y los 6 meses y la fórmula sigue hasta los 12 meses. Se acuesta al bebé boca arriba por la muerte súbita y desde los 4 meses se favorece la autorregulación al dormirse. Se habla de cólicos, estreñimiento y accidentes, y de los síntomas que justifican acudir a los servicios de salud: rechazo de alimento, quejido, ictericia generalizada, postración, fiebre o color grisáceo, entre otros. En cada consulta se valora la exposición al humo del tabaco en casa o en el coche. (fuente en portugués)",
+        "Programa Nacional de Salud Infantil y Juvenil (Direção-Geral da Saúde, Norma n.º 010/2013, 2013). Tema: señales de alerta en el desarrollo del primer año. Hallazgo: se citan como signos de alerta, al mes, no intentar controlar la cabeza sentado y no fijar la cara humana; a los 2 meses, un bebé inconsolable o apático sin momentos de comunicación; a los 4 meses, no seguir un objeto con los ojos y tener siempre las manos cerradas; a los 6 meses, no mirar ni coger objetos, no reaccionar a sonidos, no vocalizar o tener asimetrías; y a los 9 meses, no mantener el equilibrio sentado, no llevar objetos a la boca, no reaccionar a sonidos o no buscar preferentemente la cercanía del cuidador principal. En la primera consulta, la falta de interés por el bebé, la desesperación o las ideas de suicidio de quien lo cuida son señal de alerta. (fuente en portugués)",
+        "Programa Nacional de Salud Infantil y Juvenil (Direção-Geral da Saúde, Norma n.º 010/2013, 2013). Tema: consejos y señales de alerta de los 12 a los 24 meses. Hallazgo: a los 12 meses se explica la anorexia fisiológica del segundo año de vida y el cepillado de dientes dos veces al día; desde los 15 meses se aconseja restringir alimentos azucarados, fritos, zumos y grasas. A los 18 meses se trata el destete del biberón y de la leche al dormirse y, a los 2 años, el del chupete. Se consideran signos de alerta a los 12 meses no coger juguetes o hacerlo solo con una mano, no jugar y no responder a la voz; a los 18 meses no ponerse de pie, no hacer pinza fina ni vocalizar espontáneamente; y a los 2 años no andar, no entender lo que se dice o no pronunciar palabras inteligibles. (fuente en portugués)"
+      ]
+    },
+    {
+      "source_type": "reference",
+      "title": "Higiene del sueño: actualización de 2021",
+      "original_title": "Higiene do Sono – Atualização 2021",
+      "organization": "Sociedade Brasileira de Pediatria (SBP)",
+      "publication_year": 2021,
+      "url": "https://www.sbp.com.br/fileadmin/user_upload/23196c-DC_Higiene_do_Sono_-_Atualizacao_2021.pdf",
+      "specialties": [
+        "pediatrics"
+      ],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "original_language": "pt",
+      "topics": [
+        "sueno_horas"
+      ],
+      "chunks": [
+        "Higiene del sueño: actualización de 2021 (Sociedade Brasileira de Pediatria, 2021). Tema: cuánto duerme un lactente y cómo madura su sueño. Hallazgo: este documento científico de la SBP (nº 5, noviembre de 2021) recoge que a los 4-12 meses se recomiendan 12 a 16 horas de sueño en 24 horas, con las siestas incluidas, y de 1 a 2 años, 11 a 14 horas. El recién nacido no diferencia día y noche y tiene ciclos de sueño de 40-50 minutos con varios episodios breves. Hacia los 2-3 meses madura el ritmo circadiano y el sueño nocturno se va consolidando; entre los 6 y 9 meses la mayoría empieza a dormir toda la noche con dos o tres siestas, y a los 12 meses suelen empezar a dormir hacia las 20 horas. (fuente en portugués)",
+        "Higiene del sueño: actualización de 2021 (Sociedade Brasileira de Pediatria, 2021). Tema: rutina y ambiente para dormir. Hallazgo: la higiene del sueño es el conjunto de hábitos, rituales y condiciones del entorno que facilitan dormir; la constancia de la rutina da seguridad al niño. Se recomienda regularidad de horarios, un ritual breve (hasta 30 minutos) y agradable, como baño, masaje y actividades tranquilas, un ambiente con temperatura, luz y silencio adecuados, y animar al niño a dormirse en su propia cama o cuna. Conviene evitar las pantallas al menos 1 hora antes de la hora habitual de dormir. (fuente en portugués)",
+        "Higiene del sueño: actualización de 2021 (Sociedade Brasileira de Pediatria, 2021). Tema: el sueño del bebé y el bienestar de la familia. Hallazgo: los problemas de sueño del lactante se asocian a consecuencias adversas para las madres, como fatiga y depresión posparto, y el sueño del niño debe considerarse en el contexto de la familia. Existe una relación entre el estrés de los padres y los problemas de sueño de los hijos pequeños, y por eso se destaca la importancia de una buena higiene del sueño y de conocer el nivel de estrés y ansiedad de los padres. La cama o cuna y la temperatura de la habitación deben valorarse de forma individual. (fuente en portugués)"
+      ]
+    }
+  ]
+}

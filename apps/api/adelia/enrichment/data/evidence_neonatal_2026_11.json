@@ -1,0 +1,840 @@
+{
+  "_meta": {
+    "topic": "Candidatas del dominio neonatal (0-24 meses), fuentes oficiales de muchos países leídas en su idioma y resumidas en español.",
+    "compiled": "2026-11-06",
+    "method": "Seis investigadores de Claude Code leyeron cada página con WebFetch y la pasaron por un subagente verificador (~/dev/adelia-night/research/corpus-*, verify.json). Al integrarlas se quitaron las fuentes cuyos términos prohíben adaptar, traducir o el uso comercial, los calendarios de vacunas de otros países y los duplicados con data/ y entre lotes; los teléfonos y servicios de otros sistemas de salud se reescribieron en palabras con el nivel de urgencia de la fuente, y cada fragmento sobre alarmas, urgencias, fiebre, respiración, convulsiones, deshidratación, ictericia o sepsis se volvió a comprobar contra el texto de la página descargado con curl. Idiomas del original: español 13, portugués 7, italiano 5, inglés 3, francés 2, árabe 1, alemán 1, neerlandés 1, noruego 1, sueco 1. Detalle en docs/corpus/CANDIDATOS_2026_11_06.md.",
+    "caveat": "Los fragmentos son paráfrasis breves en español, no traducciones literales ni citas; `language` es el idioma del fragmento (es) y `original_language` el de la página. Cada fragmento conserva las cifras, edades y el nivel de urgencia de su propia fuente, que pueden diferir entre países. No es consejo médico.",
+    "purpose": "Candidato: no lo carga el arranque. Se mide con scripts/golden_gate.sh --candidates antes de pasar a data/ como evidence_neonatal_2026_11.json."
+  },
+  "sources": [
+    {
+      "source_type": "reference",
+      "title": "La ictericia del recién nacido",
+      "original_title": "صَفَارُ المواليد",
+      "organization": "Ministerio de Salud de Arabia Saudí (MOH)",
+      "publication_year": 2025,
+      "url": "https://www.moh.gov.sa/HealthAwareness/EducationalContent/BabyHealth/Pages/Neonatal-Jaundice.aspx",
+      "specialties": [
+        "pediatrics",
+        "neonatology"
+      ],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "original_language": "ar",
+      "topics": [
+        "ictericia_neonatal",
+        "signos_alarma",
+        "cuando_consultar"
+      ],
+      "chunks": [
+        "La ictericia del recién nacido (Ministerio de Salud de Arabia Saudí, actualizado en 2025). Tema: cuándo es normal la ictericia del recién nacido. Hallazgo: se debe a la acumulación de bilirrubina en la sangre y pone amarillos la piel y los ojos. La ictericia fisiológica aparece en la mayoría de los recién nacidos entre los días 2 y 4 y suele desaparecer en unas 2 semanas. Empieza por la cara y baja al pecho, abdomen, brazos y piernas; en bebés de piel oscura puede costar verla. La que aparece en las primeras 24 horas de vida, o el color amarillo en las palmas de las manos y las plantas de los pies, es una urgencia médica. (fuente en árabe)",
+        "La ictericia del recién nacido (Ministerio de Salud de Arabia Saudí, actualizado en 2025). Tema: factores de riesgo y señales para consultar. Hallazgo: aumentan el riesgo la piel oscura, antecedentes familiares de enfermedades de la sangre, un hermano con ictericia, mala alimentación los primeros días, nacer antes de las 37 semanas, hematomas del parto y distinto grupo sanguíneo entre madre y bebé. Hay que consultar si cuesta despertarlo o no duerme nada, si la ictericia aparece en las primeras 24 horas, si tiene fiebre, rechaza las tomas, tiene pocos pañales mojados (se esperan 4-6 pañales bien mojados en 24 horas y 3-4 deposiciones diarias hacia el cuarto día), llora con tono agudo, dobla hacia atrás la cabeza o el cuello y los talones con el cuerpo arqueado, o tiene el cuerpo rígido. (fuente en árabe)",
+        "La ictericia del recién nacido (Ministerio de Salud de Arabia Saudí, actualizado en 2025). Tema: tratamiento y prevención. Hallazgo: normalmente mejora sin tratamiento hacia las 2 semanas de vida; los casos más intensos pueden necesitar fototerapia y, si son graves, un cambio de sangre. La página aclara que no se aconseja poner al bebé al sol como método seguro para tratarla. Como prevención recomienda amamantar de 8 a 12 veces al día los primeros días, acudir a los análisis posteriores al parto y vigilar con cuidado al bebé durante los 5 primeros días. Si la bilirrubina llega a niveles dañinos y no se trata, puede causar daño cerebral, parálisis cerebral, pérdida de audición y problemas de visión. (fuente en árabe)"
+      ]
+    },
+    {
+      "source_type": "reference",
+      "title": "Ictericia del recién nacido (ictericia neonatal) (Kinder- und Jugendärzte im Netz)",
+      "original_title": "Neugeborenen-Gelbsucht (Neugeborenen-Ikterus) (Kinder- und Jugendärzte im Netz)",
+      "organization": "Berufsverband der Kinder- und Jugendärzt*innen (BVKJ, Kinder- und Jugendärzte im Netz)",
+      "publication_year": 2018,
+      "url": "https://www.kinderaerzte-im-netz.de/krankheiten/neugeborenen-gelbsucht-neugeborenen-ikterus/",
+      "specialties": [
+        "pediatrics",
+        "neonatology"
+      ],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "original_language": "de",
+      "topics": [
+        "ictericia_neonatal"
+      ],
+      "chunks": [
+        "Ictericia del recién nacido (ictericia neonatal) (Kinder- und Jugendärzte im Netz, BVKJ, 2018). Tema: qué es la ictericia del recién nacido y cuánto dura. Hallazgo: más de la mitad de los recién nacidos sanos la presenta; la piel y el blanco de los ojos se ponen amarillos. No es una infección sino un trastorno pasajero de adaptación del hígado en los primeros días de vida. Suele empezar el día 2 o 3 de vida, alcanza el máximo hacia el día 5 y desaparece en unos 10 a 14 días. En los prematuros aparece antes, es más intensa y dura más.",
+        "Ictericia del recién nacido (ictericia neonatal) (Kinder- und Jugendärzte im Netz, BVKJ, 2018). Tema: causa, riesgos y tratamiento. Hallazgo: tras el nacimiento se destruyen los glóbulos rojos que sobran y el hígado del recién nacido aún no procesa con rapidez la bilirrubina resultante, que se acumula en piel y ojos; un análisis de sangre mide su nivel. Normalmente es benigna, pero si la bilirrubina no se controla con regularidad y no se actúa cuando está alta, puede causar daño cerebral grave e incluso la muerte. Cuando el nivel es alto, el tratamiento es la fototerapia con luz azul (con los ojos del bebé cubiertos) y, en casos raros y graves, un recambio de sangre."
+      ]
+    },
+    {
+      "source_type": "guideline",
+      "title": "11 Common Conditions in Newborns (HealthyChildren.org, AAP)",
+      "organization": "American Academy of Pediatrics",
+      "publication_year": 2021,
+      "url": "https://www.healthychildren.org/English/ages-stages/baby/Pages/Common-Conditions-in-Newborns.aspx",
+      "specialties": [
+        "pediatrics",
+        "general_medicine",
+        "neonatology"
+      ],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "original_language": "en",
+      "topics": [
+        "primeras_semanas",
+        "signos_alarma",
+        "cuando_consultar",
+        "cordon_umbilical"
+      ],
+      "chunks": [
+        "11 Common Conditions in Newborns (HealthyChildren.org, American Academy of Pediatrics, 2021). Tema: barriga, color azulado, deposiciones y tos en las primeras semanas. Hallazgo: el vientre del bebé suele sobresalir y debe estar blando entre tomas; se llama al pediatra si está hinchado y duro y, además, lleva más de uno o dos días sin deposición o vomita. Las manos y los pies algo azulados con frío son normales, pero un color azul persistente indica que el corazón o los pulmones no funcionan bien y exige atención médica inmediata. Si no hay meconio en las primeras 48 horas hay que valorarlo, y cualquier signo de sangre en las heces se comenta al pediatra. Toser o atragantarse al comer muy deprisa es normal; si es persistente o el bebé tiene arcadas a menudo en las tomas, se consulta.",
+        "11 Common Conditions in Newborns (HealthyChildren.org, American Academy of Pediatrics, 2021). Tema: llanto, ictericia, sueño y respiración. Hallazgo: todos los recién nacidos lloran, y no se malcría con atención; se llama al pediatra si el llanto suena inusual (gritos de dolor) o dura mucho. La ictericia leve es frecuente y más en lactantes amamantados, sobre todo si no maman bien: se amamanta al menos de 8 a 12 veces al día, y se llama si aumenta de repente en casa, pues la bilirrubina alta sin tratar puede dañar el cerebro. Los recién nacidos duermen casi todo el tiempo, pero se llama si rara vez está alerta, no se despierta solo para comer o está demasiado cansado para comer, sobre todo si cambia de golpe. Se avisa de inmediato ante respiración rápida (más de 60 por minuto), hundimiento entre las costillas, aleteo nasal, quejido o color azul persistente.",
+        "11 Common Conditions in Newborns (HealthyChildren.org, American Academy of Pediatrics, 2021). Tema: cordón umbilical y hernia umbilical. Hallazgo: unas pocas manchas de sangre en el pañal cuando cae el muñón son normales, pero si el cordón sangra de forma activa se llama al médico de inmediato. También se consulta al médico si hay secreción amarillenta y maloliente, piel enrojecida en la base o llanto al tocarlo. Un granuloma (masa rojiza que supura líquido amarillento) suele resolverse en una semana. La hernia umbilical no es grave y suele cerrarse sola en los primeros 12 a 18 meses, aunque en algunos bebés tarda más; a partir de los 3 a 5 años, si no se ha cerrado, puede hacer falta cirugía. No se pone cinta ni una moneda sobre el ombligo."
+      ]
+    },
+    {
+      "source_type": "guideline",
+      "title": "Newborn Breastfeeding Basics (CDC)",
+      "organization": "CDC",
+      "publication_year": 2024,
+      "url": "https://www.cdc.gov/infant-toddler-nutrition/breastfeeding/newborn-basics.html",
+      "specialties": [
+        "pediatrics",
+        "general_medicine",
+        "neonatology"
+      ],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "original_language": "en",
+      "topics": [
+        "primeras_semanas",
+        "deposiciones_recien_nacido",
+        "perdida_peso_inicial"
+      ],
+      "chunks": [
+        "Newborn Breastfeeding Basics (CDC, 2024). Tema: cuántas tomas y cómo saber que come suficiente. Hallazgo: una señal de que mama bien es hacerlo de 8 a 12 veces en 24 horas, y menos de 8 tomas al día la mayoría de los días puede indicar que no obtiene suficiente. Para crear una producción plena, el bebé puede querer comer cada 1 a 3 horas, también de noche. Un buen agarre significa boca muy abierta sobre la areola, labios hacia fuera, barbilla contra el pecho, y deglución regular; un mal agarre, si solo chupa el pezón, los labios se curvan hacia dentro, duele, hay grietas o sangrado, el pezón queda aplastado o el bebé se suelta una y otra vez.",
+        "Newborn Breastfeeding Basics (CDC, 2024). Tema: pañales, peso y cuándo pedir ayuda. Hallazgo: como mínimo, el primer día hay 1 pañal mojado y 1 deposición; el segundo, 2 y 3; el tercero, 5 y 3; el cuarto y hasta el séptimo día, 6 y 3. En la primera semana las heces pasan de negras o verde oscuro a amarillas. Es normal perder algo de peso la primera semana y se espera haber recuperado el peso del nacimiento entre los días 10 y 14; seguir perdiendo peso después del día 5 es una señal de alerta. Son avisos tener menos de 3 deposiciones y 6 pañales mojados al quinto día, irritabilidad tras las tomas, dificultad para mantener el agarre o piel algo amarilla. Si preocupa su salud o su alimentación, se habla con su profesional de salud de inmediato."
+      ],
+      "original_license": "public_domain"
+    },
+    {
+      "source_type": "reference",
+      "title": "Newborn Appearance Questions (Seattle Children's)",
+      "organization": "Seattle Children's Hospital",
+      "publication_year": 2025,
+      "url": "https://www.seattlechildrens.org/conditions/a-z/newborn-appearance-questions/",
+      "specialties": [
+        "pediatrics",
+        "neonatology"
+      ],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "original_language": "en",
+      "topics": [
+        "primeras_semanas",
+        "cuando_consultar"
+      ],
+      "chunks": [
+        "Newborn Appearance Questions (Seattle Children's Hospital, EE. UU., 2025). Tema: pechos hinchados del recién nacido, por qué pasa y cuánto dura. Hallazgo: es frecuente que en la primera semana de vida se hinchen los pechitos, tanto en niñas como en niños, por los estrógenos de la madre que pasaron por la placenta; la zona del pezón siempre se nota firme. Por los pezones pueden salir unas gotitas de líquido lechoso, algo normal que puede durar unas semanas. La hinchazón suele durar de 2 a 4 semanas y, en los bebés que toman el pecho, algo de hinchazón puede durar hasta 6 meses. (fuente en inglés)",
+        "Newborn Appearance Questions (Seattle Children's Hospital, EE. UU., 2025). Tema: no exprimir y cuándo consultar por los pechitos hinchados. Hallazgo: nunca hay que apretar ni masajear el pecho ni el pezón del bebé, porque puede causar una infección grave. Hay que llamar al médico o buscar atención ya si el pecho hinchado está rojo o le duele al tocarlo, y avisar al médico si aparece enrojecimiento, alguna raya roja o dolor al tocarlo. Además, cualquier fiebre en un bebé menor de 12 semanas exige llamar al médico o acudir ya, sin darle nada para la fiebre antes de que lo vean. (fuente en inglés)"
+      ]
+    },
+    {
+      "source_type": "guideline",
+      "title": "Cuidados importantes del recién nacido(a)",
+      "organization": "Chile Crece Contigo (Gobierno de Chile)",
+      "publication_year": 2016,
+      "url": "https://www.crececontigo.gob.cl/wp-content/uploads/2016/04/Cartilla-Cuidados-importantes-del-RN.pdf",
+      "specialties": [
+        "pediatrics",
+        "general_medicine"
+      ],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "original_language": "es",
+      "topics": [
+        "signos_alarma",
+        "cuando_consultar",
+        "cordon_umbilical"
+      ],
+      "chunks": [
+        "Cuidados importantes del recién nacido(a) (Chile Crece Contigo, Chile, 2016). Tema: signos de alarma del recién nacido. Hallazgo: la cartilla pide consultar de inmediato en el centro de salud, en el servicio de urgencia o en la urgencia pediátrica ante problemas con la lactancia, rechazo de la toma o que tome menos cantidad de la habitual, pérdida importante de peso (debe recuperar el peso al nacer a los 15 días), ictericia, temblores de cualquier parte del cuerpo y desviación de los ojos, palidez inexplicable, tos, ombligo con la base enrojecida o con mal olor, diarrea o cambio de las deposiciones, temperatura axilar de más de 37,5 grados o menos de 36, o dificultad respiratoria (respira muy rápido, deja de respirar más de 15 a 20 segundos, cara enrojecida o labios azulados).",
+        "Cuidados importantes del recién nacido(a) (Chile Crece Contigo, Chile, 2016). Tema: agarre al pecho, cordón y primer baño. Hallazgo: para amamantar se juntan «barriga con barriga» y se alinean oreja, hombro y cadera del bebé, sin su brazo atrapado entre ambos cuerpos; el agarre correcto mete en la boca el pezón y buena parte de la areola, y si es correcto la succión no duele. Para soltarlo se mete un dedo por la comisura de los labios. El cordón se cae solo entre los 7 y los 14 días; si huele mal o enrojece, se consulta. El primer baño se da de 3 a 5 días después de caer el cordón, sin dejar nunca al bebé solo en el agua. Se acude al control de salud antes del séptimo día de vida."
+      ]
+    },
+    {
+      "source_type": "reference",
+      "title": "Detección precoz de enfermedades en el recién nacido",
+      "organization": "Consejería de Sanidad de la Comunidad de Madrid",
+      "publication_year": 2026,
+      "url": "https://www.comunidad.madrid/salud/deteccion-precoz-enfermedades-recien-nacido",
+      "specialties": [
+        "pediatrics",
+        "general_medicine"
+      ],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "original_language": "es",
+      "topics": [
+        "prueba_talon",
+        "cribado_auditivo"
+      ],
+      "chunks": [
+        "Detección precoz de enfermedades en el recién nacido (Comunidad de Madrid, 2026). Tema: prueba del talón. Hallazgo: se hace entre las 24 y las 72 horas de vida y siempre antes del alta de la maternidad; si el alta es antes de las 24 horas, se toma una segunda muestra antes de las 72 horas en el Hospital Materno-Infantil Gregorio Marañón. Desde el 3 de junio de 2026 el programa criba 35 enfermedades. Si el resultado es normal, llega por SMS o correo; si piden una nueva muestra no significa que el bebé tenga una enfermedad, solo que hay que repetir el análisis; si hay sospecha, llaman por teléfono y es muy importante acudir cuanto antes. Los datos de contacto que se dan en la maternidad deben ser correctos.",
+        "Detección precoz de enfermedades en el recién nacido (Comunidad de Madrid, 2026). Tema: prueba de audición del recién nacido. Hallazgo: es indolora, se hace con el bebé tranquilo o dormido, después de las primeras 24 horas y antes del alta, siempre antes del primer mes. Los problemas de audición afectan a unos 5 de cada 1.000 recién nacidos. Si no pasa la prueba, se pide cita en otorrinolaringología lo antes posible y en todo caso antes de los 3 meses. Si hay factores de riesgo (por ejemplo, sordera en la familia, ciertas infecciones o medicamentos durante el embarazo o tras el nacimiento, algunos síndromes o problemas en el parto), hay que avisar al personal sanitario de la maternidad, porque es recomendable que un otorrinolaringólogo valore al bebé aunque haya pasado la prueba.",
+        "Detección precoz de enfermedades en el recién nacido (Comunidad de Madrid, 2026). Tema: detección de cardiopatías congénitas críticas. Hallazgo: una prueba indolora mide el oxígeno en sangre con un sensor en la mano derecha y en un pie, en la maternidad entre las 6 y las 24 horas de vida y antes del alta, si el bebé tiene al menos 34 semanas, no tiene síntomas y no está ingresado en una unidad neonatal. Detecta malformaciones del corazón que pueden requerir cirugía en los primeros 28 días (2 a 3 de cada 1.000 nacidos vivos). Un resultado positivo no significa necesariamente que haya enfermedad: el pediatra lo evalúa de inmediato y pide pruebas como una ecocardiografía. Además, para todos los recién nacidos, la página indica pedir cita en el centro de salud para que un profesional sanitario valore al bebé entre las 48 y las 72 horas tras el alta hospitalaria.",
+        "Detección precoz de enfermedades en el recién nacido (Comunidad de Madrid, 2026). Tema: hitos de audición y lenguaje de 0 a 24 meses. Hallazgo: de 0 a 9 meses se sobresalta con ruidos fuertes, se tranquiliza con la voz de la madre, gira la cabeza hacia los ruidos hacia los 4-6 meses y balbucea hacia los 4-7 meses; de 9 a 12 meses presta atención a su nombre e imita sonidos y gestos; de 12 a 18 meses sigue órdenes sencillas, busca con la mirada lo que se nombra y dice algunas palabras; de 18 a 24 meses entiende más de 50 palabras, usa entre 10 y 50 y empieza a formar frases de dos o más palabras."
+      ]
+    },
+    {
+      "source_type": "reference",
+      "title": "Lactancia materna (Comunidad de Madrid)",
+      "organization": "Consejería de Sanidad de la Comunidad de Madrid",
+      "publication_year": 2026,
+      "url": "https://www.comunidad.madrid/servicios/salud/lactancia-materna",
+      "specialties": [
+        "pediatrics",
+        "general_medicine"
+      ],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "original_language": "es",
+      "topics": [
+        "signos_alarma",
+        "primeras_semanas",
+        "deposiciones_recien_nacido"
+      ],
+      "chunks": [
+        "Lactancia materna (Comunidad de Madrid, 2026). Tema: primeras horas de vida, piel con piel y signos de alarma del recién nacido. Hallazgo: el bebé se adapta mejor a la vida fuera del útero en contacto piel con piel con su madre, y no conviene interrumpirlo salvo que sea estrictamente necesario. Durante ese contacto hay que avisar al personal si los labios están azulados o pálidos (en las primeras horas, manos y pies azulados no tienen importancia), si le cuesta respirar o hace ruidos como quejidos, o si está blando como un muñeco de trapo o tembloroso. Se recomienda amamantar en la primera hora de vida.",
+        "Lactancia materna (Comunidad de Madrid, 2026). Tema: cómo saber si el bebé toma suficiente leche. Hallazgo: se ofrece el pecho a demanda, al menos 8 veces al día. Pañales mojados: 1-2 en los días 1 y 2, entre 5 y 8 del día 2 al 6, y unos 5-6 desde el día 6 en adelante. Deposiciones: meconio verdinegro al principio, al menos 3 verdosas entre los días 2 y 6 y al menos 3 amarillo mostaza hasta las 6 semanas; pasada esa edad algunos bebés hacen menos, pero más voluminosas y blandas. Además, el bebé tiene buen color, piel firme y está activo y alerta. El peso lo controla el pediatra; pesarlo a menudo en la farmacia puede inducir a error.",
+        "Lactancia materna (Comunidad de Madrid, 2026). Tema: agarre correcto y mitos frecuentes. Hallazgo: un buen agarre es boca muy abierta, labios hacia fuera, pezón y buena parte de la areola dentro, y nariz y barbilla pegadas al pecho; amamantar no debe doler. No hay que dar el pecho cada tres horas ni diez minutos por mama: se ofrece a demanda y la duración varía de un bebé a otro. Tampoco hay que lavar los pechos antes y después de cada toma (basta la ducha diaria) ni comer y beber por dos, y ningún alimento o bebida aumenta la cantidad de leche. El alcohol es perjudicial para el bebé. No se recomienda dar otras bebidas durante los primeros 6 meses ni el chupete hasta que la lactancia esté bien establecida.",
+        "Lactancia materna (Comunidad de Madrid, 2026). Tema: calostro y señales de hambre. Hallazgo: el calostro, denso y amarillento, se produce en los primeros 3-4 días en poca cantidad, pero basta porque el estómago del recién nacido es muy pequeño, parecido a una canica; según la AEP, la mayoría de los bebés sanos nacidos a término no necesitan suplementos. El hambre se manifiesta por fases: señales tempranas («tengo hambre»), intermedias («tengo mucha hambre») y tardías («cálmame y después amamántame»), en las que primero hay que calmar al bebé y luego ofrecerle el pecho. Señales de hambre del recién nacido: se agita, se estira, llora, abre la boca, se mueve más o de forma agitada, mueve la cabeza buscando el pecho, se lleva la mano a la boca o se pone colorado."
+      ]
+    },
+    {
+      "source_type": "reference",
+      "title": "La prueba del talón. Programa de cribado neonatal en Cataluña",
+      "organization": "Departamento de Salud de la Generalitat de Cataluña",
+      "publication_year": 2024,
+      "url": "https://scientiasalut.gencat.cat/bitstream/handle/11351/9342.2/prova-talo-programa-cribratge-neonatal-catalunya-2024-ca-cas.pdf?sequence=31&isAllowed=y",
+      "specialties": [
+        "pediatrics",
+        "general_medicine"
+      ],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "original_language": "es",
+      "topics": [
+        "prueba_talon"
+      ],
+      "chunks": [
+        "La prueba del talón. Programa de cribado neonatal en Cataluña (Generalitat de Cataluña, 2024). Tema: qué es y cómo se hace la prueba del talón. Hallazgo: forma parte del Programa de cribado neonatal, que se ofrece a todos los bebés nacidos en Cataluña y no es obligatorio. Se hace un pinchazo superficial en el talón y la sangre se recoge en un papel absorbente que se envía al laboratorio; la muestra se extrae entre las 24 y las 72 horas del nacimiento, normalmente en la maternidad, y puede dar pequeñas molestias que se pueden aliviar, por ejemplo, poniendo al bebé al pecho. Se estudian 26 enfermedades en las que una actuación rápida cambia el pronóstico, y cada año se detectan más de 180 casos.",
+        "La prueba del talón. Programa de cribado neonatal en Cataluña (Generalitat de Cataluña, 2024). Tema: resultados y segunda muestra. Hallazgo: la mayoría de las veces el resultado es normal y llega al domicilio que la familia haya facilitado. Si sale alterado, se ponen en contacto con la familia, por lo que es importante que los datos que se dan en la maternidad sean correctos. A veces se pide una segunda muestra, lo que no significa que el bebé tenga la enfermedad, sino que hay que completar el análisis; se notifica por correo postal o por teléfono. Si se cambia de domicilio o pasa un mes sin recibir el resultado, hay que llamar al laboratorio de cribado neonatal (932 275 669). Si se confirma una enfermedad, una unidad clínica de referencia informa a la familia e inicia el tratamiento cuanto antes."
+      ]
+    },
+    {
+      "source_type": "guideline",
+      "title": "Guías de salud infantil. De 0-6 meses",
+      "organization": "Departamento de Salud del Gobierno Vasco",
+      "publication_year": 2017,
+      "url": "https://www.euskadi.eus/contenidos/informacion/salud_infancia_/es_def/adjuntos/Guias%20de%20salud%20infantil%20(de%206-6%20meses).pdf",
+      "specialties": [
+        "pediatrics",
+        "general_medicine"
+      ],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "original_language": "es",
+      "topics": [
+        "signos_alarma",
+        "cordon_umbilical",
+        "primeras_semanas"
+      ],
+      "chunks": [
+        "Guías de salud infantil. De 0-6 meses (Gobierno Vasco, 2017). Tema: cuidados de la madre tras el parto. Hallazgo: durante el puerperio el útero recupera su tamaño y es normal notar molestias; el sangrado pasa de rojo oscuro a blanco amarillento y, si huele mal o aparece fiebre, hay que acudir a tocoginecología o a la matrona. Si hubo episiotomía, la tirantez es normal y los puntos tardan un par de semanas en caerse; se lava la zona dos o tres veces al día con agua templada y se pide a la matrona que valore la herida. Es normal tener sentimientos contradictorios por el cansancio y los cambios hormonales; conviene hablarlo y pedir ayuda. La lactancia no es un método anticonceptivo.",
+        "Guías de salud infantil. De 0-6 meses (Gobierno Vasco, 2017). Tema: lactancia materna y molestias en los pechos. Hallazgo: se ofrece el pecho cuando lo pide; los intervalos son irregulares al principio y hacia la sexta semana se regularizan. Es normal que el bebé pierda peso la primera semana. Durante los primeros días puede notarse una ligera molestia en los pezones al inicio de la toma, pero el dolor durante toda la toma suele indicar que el bebé está mal colocado. Si aparece una zona enrojecida y dolorosa en la mama, a veces con unas décimas de fiebre, hay que acudir al centro de salud, porque puede ser el inicio de una mastitis. Ante grietas se corrige la postura, se ofrece el pecho más a menudo y no se lavan los pezones antes ni después de la toma.",
+        "Guías de salud infantil. De 0-6 meses (Gobierno Vasco, 2017). Tema: sueño seguro y dónde dormir. Hallazgo: al menos durante los 6 primeros meses el bebé duerme siempre boca arriba, sin colchones blandos o de lana, almohadones, cojines, peluches ni colgantes al cuello, y sin exposición al humo de tabaco; se desaconseja compartir cama si el padre o la madre fuman o han bebido alcohol. La habitación debe estar idealmente a 20-22 ºC y el bebé no debe ir muy abrigado. La cuna debe estar homologada, con barrotes separados entre 4,5 y 6,5 cm, costados de al menos 60 cm y colchón duro; el capazo solo sirve mientras no se dé la vuelta, hasta los 4 o 5 meses. El sueño activo, con muecas y quejidos, es normal.",
+        "Guías de salud infantil. De 0-6 meses (Gobierno Vasco, 2017). Tema: fiebre y otros motivos para consultar en los primeros meses. Hallazgo: se considera fiebre a partir de 38 ºC; de 0 a 6 meses todo proceso febril debe ser visto o consultado, y si el bebé tiene menos de 4 meses es una situación que hay que consultar de urgencia. También hay que consultar si el ombligo está siempre húmedo, desprende líquido o huele mal, si el ojo está rojo por dentro, si los vómitos son fuertes y abundantes o si las heces tienen sangre o son blancas. Las dudas pueden resolverse por teléfono en el Consejo Sanitario del País Vasco (Araba 945 203 020, Bizkaia 944 203 020, Gipuzkoa 943 203 020)."
+      ]
+    },
+    {
+      "source_type": "reference",
+      "title": "Displasia broncopulmonar. Guía para padres",
+      "organization": "Grupo GEIDIS y Fundación IMAS (guía alojada por SENeo)",
+      "publication_year": 2021,
+      "url": "https://www.seneo.es/images/site/familias/2021_Guia_Displasia_Broncopulmonar.pdf",
+      "specialties": [
+        "pediatrics",
+        "general_medicine"
+      ],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "original_language": "es",
+      "topics": [
+        "prematuros",
+        "signos_alarma"
+      ],
+      "chunks": [
+        "Displasia broncopulmonar. Guía para padres (Grupo GEIDIS y Fundación IMAS, guía alojada por SENeo, 2021). Tema: protección del bebé prematuro con enfermedad respiratoria frente al VRS y otros virus. Hallazgo: el VRS es muy contagioso, es la causa más común de bronquiolitis y neumonía en bebés, y puede ser grave en menores de 2 años, prematuros y niños con problemas respiratorios crónicos o del corazón. La guía aconseja lavarse las manos con agua y jabón durante 20 segundos antes de tocar al bebé, limitar las visitas, evitar el contacto cercano con personas resfriadas, con fiebre o con mocos y no compartir con ellas vasos, tazas ni cubiertos, limpiar juguetes y superficies, fomentar la lactancia materna y retrasar todo lo posible la guardería, limitando el contacto con otros niños sobre todo en otoño, invierno y primavera. Nadie debe fumar en la casa, cerca del bebé ni en el coche.",
+        "Displasia broncopulmonar. Guía para padres (Grupo GEIDIS y Fundación IMAS, guía alojada por SENeo, 2021). Tema: signos de que un catarro por VRS se complica en bronquiolitis. Hallazgo: los primeros síntomas se parecen a un resfriado (tos, mocos, fiebre, menos apetito) y algunos menores de 2 años pueden empeorar a los 2 o 3 días. Son signos de bronquiolitis respirar más deprisa de lo habitual sin fiebre, hacer sobreesfuerzo (sacar mucho la tripa, hundirse la piel entre las costillas, quejido o silbidos), tos persistente, cansancio o somnolencia extremos y crecientes, piel pálida o azulada (puede empezar alrededor de los labios o en las uñas) y dificultad para comer, regurgitaciones excesivas o vómitos en las tomas. Con cualquiera de ellos la guía indica acudir al pediatra o a un centro de urgencias pediátricas.",
+        "Displasia broncopulmonar. Guía para padres (Grupo GEIDIS y Fundación IMAS, guía alojada por SENeo, 2021). Tema: signos de alarma respiratorios en el bebé prematuro y qué hacer. Hallazgo: se consideran signos de alarma la respiración rápida persistente, la dificultad para respirar con hundimiento del tórax, las pausas respiratorias, los cambios de color en la cara o los labios, la tos con o sin mocos, el rechazo continuado de las tomas o el cansancio al comer, los vómitos y regurgitaciones abundantes y el quejido respiratorio. Estornudos, hipo, regurgitaciones ocasionales y congestión nasal no suelen ser graves. Si hay algún signo de alarma y no se dispone de pulsioxímetro ni de oxígeno en casa, la guía indica acudir a urgencias o llamar a emergencias (112); si el bebé no responde, no respira o tiene mala coloración, hay que estimularlo y, si sigue sin responder, iniciar la reanimación."
+      ]
+    },
+    {
+      "source_type": "reference",
+      "title": "Guía usuarias: Cuidados del recién nacido",
+      "organization": "Hospital Universitari i Politècnic La Fe (Valencia)",
+      "publication_year": null,
+      "undated_reason": "El PDF no trae fecha en ninguna página; solo los metadatos de una imagen incrustada indican 2010, que no es del documento. Fecha de consulta 2026-11-06.",
+      "url": "https://lafe.san.gva.es/documents/d/lafe/guia-cuidados-recien-nacido_g30",
+      "specialties": [
+        "pediatrics",
+        "neonatology"
+      ],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "original_language": "es",
+      "topics": [
+        "primeras_semanas",
+        "cordon_umbilical"
+      ],
+      "chunks": [
+        "Guía usuarias: Cuidados del recién nacido (Hospital La Fe). Tema: rasgos normales del recién nacido en las primeras semanas. Hallazgo: la ictericia es frecuente los primeros días y se consulta al pediatra si el amarillo se intensifica en casa; la descamación de la piel es habitual la primera semana; las deposiciones varían de 6 o más al día a una cada 2 o 3 días, y pasan de negras y pegajosas (meconio) a verdosas con grumos y luego amarillas y semilíquidas. Los pechos algo abultados en niños y niñas son normales y se resuelven solos con el tiempo; una pequeña menstruación en algunas niñas también es normal y no debe alarmar.",
+        "Guía usuarias: Cuidados del recién nacido (Hospital La Fe). Tema: entorno, sueño y consejos generales para los primeros meses. Hallazgo: manos siempre limpias al tocar al bebé; que duerma en la habitación de los padres durante los primeros meses, boca arriba en la cuna y sin almohada; habitación tranquila y aireada con unos 22 grados de día y alrededor de 18 de noche; no fumar en casa ni fuera en presencia del bebé; evitar el contacto con personas con catarro o gripe. El llanto no siempre es hambre, también puede ser calor, frío, dolor o sueño, y conviene atenderlo pronto. En general no se aconseja el chupete al bebé amamantado el primer mes. Si la madre está muy cansada, nerviosa o triste, lo mejor es pedir ayuda.",
+        "Guía usuarias: Cuidados del recién nacido (Hospital La Fe). Tema: baño, ombligo, seguridad y paseos. Hallazgo: el baño puede ser cada 2 o 3 días o a diario si hace falta, comprobando la temperatura con el codo. El ombligo se limpia con agua y jabón dos veces al día, se seca bien con gasa, no se cubre con el pañal ni se usa faja, y si huele mal o supura se consulta al pediatra. Nunca dejar al bebé solo en casa ni sobre una mesa o cama sin barandilla; en el coche usar silla homologada a contramarcha, y nunca en el asiento con airbag activo. Desde que llegan a casa pueden salir de paseo a diario, evitando el sol en verano."
+      ]
+    },
+    {
+      "source_type": "guideline",
+      "title": "Guía de práctica clínica del recién nacido sano. Para padres y cuidadores",
+      "organization": "Ministerio de Salud y Protección Social (Colombia)",
+      "publication_year": 2013,
+      "url": "https://www.minsalud.gov.co/sites/rid/Lists/BibliotecaDigital/RIDE/INEC/IETS/GPC_Ptes_RNSano.pdf",
+      "specialties": [
+        "pediatrics",
+        "neonatology",
+        "general_medicine"
+      ],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "original_language": "es",
+      "topics": [
+        "ictericia_neonatal",
+        "cordon_umbilical",
+        "primeras_semanas"
+      ],
+      "chunks": [
+        "Guía de práctica clínica del recién nacido sano, versión para padres (MinSalud de Colombia, 2013). Tema: lactancia del recién nacido y frecuencia de las tomas. Hallazgo: la guía colombiana recomienda alimentar al recién nacido con leche materna, de forma exclusiva durante los primeros seis meses, y mantenerla después de introducir otros alimentos hasta el segundo año o más si la madre lo desea. Se ofrece el pecho cada vez que el bebé lo pida, de día y de noche, idealmente cada 2 a 4 horas y unos 10 a 15 minutos por pecho, con 8 a 12 tomas al día. No hay una postura perfecta: cada madre y cada bebé encuentran la suya, con la espalda apoyada y los hombros relajados.",
+        "Guía de práctica clínica del recién nacido sano, versión para padres (MinSalud de Colombia, 2013). Tema: antecedentes de alergia en la familia y uso del chupete. Hallazgo: en recién nacidos a término con antecedentes familiares de alergia se recomienda igualmente la leche materna, y la guía no aconseja fórmulas especiales hidrolizadas ni leche de soja para prevenir alergias. Tampoco recomienda el chupete de forma rutinaria: si el bebé está inquieto se intenta calmarlo con caricias, arrullos o el pecho, y solo si sigue molesto y tras completar dos semanas de lactancia materna puede ofrecerse con cautela, sin que se vuelva un hábito. Antes del alta, la madre debe recibir y entender la técnica de amamantamiento.",
+        "Guía de práctica clínica del recién nacido sano, versión para padres (MinSalud de Colombia, 2013). Tema: ictericia del recién nacido. Hallazgo: la ictericia es la coloración amarilla de la piel por exceso de bilirrubina. La guía pide a los padres estar atentos a cualquier cambio de color de la piel y, si lo notan, que un médico valore al bebé de inmediato. Recomienda no exponerlo al sol directo como prevención ni como tratamiento: la ictericia importante necesita tratamiento específico y el sol no basta, y la ictericia fisiológica no necesita tratamiento y el sol directo puede causar quemaduras, irritación y deshidratación.",
+        "Guía de práctica clínica del recién nacido sano, versión para padres (MinSalud de Colombia, 2013). Tema: cuidados en casa tras el alta y primera revisión. Hallazgo: el alta de madre y bebé se recomienda pasadas 24 horas del parto si se cumplen criterios clínicos de bienestar. El ombligo tarda de 1 a 3 semanas en caer y se mantiene limpio, seco y fuera del pañal. El recién nacido duerme boca arriba, con la cabeza descubierta, sobre una superficie plana y firme, y lejos del humo de tabaco. La consulta de control la hace un médico a las 72 horas del nacimiento y revisa ictericia, deshidratación y la técnica de lactancia."
+      ]
+    },
+    {
+      "source_type": "guideline",
+      "title": "Guía de Práctica Clínica sobre lactancia materna",
+      "organization": "Ministerio de Sanidad (España)",
+      "publication_year": 2017,
+      "url": "https://redets.sanidad.gob.es/documentos/GPCLactancia_Osteba.pdf",
+      "specialties": [
+        "pediatrics",
+        "general_medicine"
+      ],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "original_language": "es",
+      "topics": [
+        "perdida_peso_inicial",
+        "deposiciones_recien_nacido",
+        "primeras_semanas",
+        "cuando_consultar"
+      ],
+      "chunks": [
+        "Guía de Práctica Clínica sobre lactancia materna (GPC del SNS, Ministerio de Sanidad y Gobierno Vasco, 2017). Tema: señales de que el recién nacido se alimenta bien. Hallazgo: un bebé que mama bien hace al menos 8 tomas en 24 horas, sin ayunos de más de seis horas, agarra bien, se oye tragar y suelta el pecho relajado cuando está saciado. Entre los días 7 y 28 debe haber seis o más micciones claras al día y de cinco a diez o más deposiciones amarillas. Las micciones escasas, rojizas o de color amarillo intenso después del tercer día pueden indicar ingesta insuficiente y riesgo de deshidratación; la falta de deposiciones puede indicar que el bebé no recibe suficientes calorías.",
+        "Guía de Práctica Clínica sobre lactancia materna (GPC del SNS, Ministerio de Sanidad y Gobierno Vasco, 2017). Tema: pérdida y ganancia de peso del recién nacido amamantado. Hallazgo: la pérdida de peso es variable en la primera semana. Perder más de un 7 % en los primeros cuatro días indica que hay que evaluar la lactancia y apoyar a la madre hasta que el aumento de peso sea satisfactorio, sin suplementar de forma sistemática con fórmula. El peso al nacer debería recuperarse en unas dos semanas y, a partir del cuarto día, la ganancia media es de unos 20 a 35 gramos al día.",
+        "Guía de Práctica Clínica sobre lactancia materna (GPC del SNS, Ministerio de Sanidad y Gobierno Vasco, 2017). Tema: sospecha de mastitis. Hallazgo: se sospecha infección de la mama si hay inflamación o hinchazón, calor y dolor en el pecho, con malestar general, fiebre de más de 38,5 ºC, escalofríos y dolor de cabeza. Si los síntomas son leves, se sugiere mantener la lactancia y extraer la leche que quede tras las tomas durante 24 horas y después valorar la evolución; si no mejora, se sugiere añadir tratamiento médico. Si se sospecha mastitis infecciosa (fiebre, escalofríos, dolor de cabeza, náuseas o vómitos), debe valorarse empezar pronto el tratamiento médico sin dejar de amamantar. El calor antes de la toma y el frío entre tomas pueden ayudar, y se aconseja reposo y beber más líquidos. Se debe hacer una revaluación a las 48-72 horas.",
+        "Guía de Práctica Clínica sobre lactancia materna (GPC del SNS, Ministerio de Sanidad y Gobierno Vasco, 2017). Tema: ingurgitación mamaria y dolor en el pezón. Hallazgo: ante un pecho ingurgitado se sugiere antes de la toma una ducha caliente o compresas calientes, masaje y extracción manual para facilitar la salida de la leche y el agarre del bebé, además de aumentar la frecuencia de las tomas, descansar y hacer piel con piel. Si hay dolor o grietas en el pezón, hay que identificar la causa y apoyar a la madre hasta conseguir una postura y un agarre adecuados."
+      ]
+    },
+    {
+      "source_type": "reference",
+      "title": "Campaña de los 28 días - Salud del recién nacido",
+      "organization": "Organización Panamericana de la Salud (OPS)",
+      "publication_year": null,
+      "undated_reason": "la página no muestra fecha de publicación; los archivos enlazados parecen de 2022 (consultada 2026-11-06)",
+      "url": "https://www.paho.org/es/campanas/campana-28-dias-salud-recien-nacido",
+      "specialties": [
+        "pediatrics",
+        "general_medicine"
+      ],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "original_language": "es",
+      "topics": [
+        "primeras_semanas",
+        "cordon_umbilical"
+      ],
+      "chunks": [
+        "Campaña de los 28 días - Salud del recién nacido (OPS). Tema: cuidados del bebé en las primeras horas y días. Hallazgo: la campaña pide contacto piel con piel con la madre tras el nacimiento, sin interrumpirlo hasta que acabe la toma de calostro, y retrasar el primer baño, en lo posible, 24 horas. El cordón umbilical debe mantenerse limpio y seco, sin aplicar sustancias ni objetos, y no se ponen productos ni perfumes en la piel. Hay que evitar las corrientes de aire y vestirlo con prendas adecuadas a la temperatura ambiente, sumando una o dos más que las que usaría un adulto, además de un gorro. Las manos y los pies fríos son habituales en un recién nacido sano y no significan que tenga frío.",
+        "Campaña de los 28 días - Salud del recién nacido (OPS). Tema: lactancia, vacuna al nacer y controles posnatales. Hallazgo: se recomienda iniciar la lactancia en la primera hora respetando las señales del bebé y ofrecer solo leche materna, sin otros líquidos, alimentos ni biberones, salvo indicación médica. La OPS aconseja un primer control en las primeras 24 horas y al menos tres más: al día 3 (entre las 48 y 72 horas), entre los días 7 y 14, y a las 6 semanas; en ellos se pueden resolver las dudas de los primeros días en casa.",
+        "Campaña de los 28 días - Salud del recién nacido (OPS). Tema: controles y signos del cordón en el primer mes. Hallazgo: en los controles ambulatorios el equipo de salud revisa la coloración amarillenta de la piel, el aumento de peso y la evolución del cordón umbilical, por lo que es prioritario acudir a la cita acordada con el equipo de salud, que sirve también para resolver dudas. Si al cambiar el pañal se nota humedad, olor o enrojecimiento en la piel del ombligo, hay que hacer una consulta."
+      ]
+    },
+    {
+      "source_type": "reference",
+      "title": "La OMS insta a ofrecer atención de calidad a las mujeres y los recién nacidos en las primeras semanas cruciales después del parto",
+      "organization": "Organización Panamericana de la Salud (OPS)",
+      "publication_year": 2022,
+      "url": "https://www.paho.org/es/noticias/30-3-2022-oms-insta-ofrecer-atencion-calidad-mujeres-recien-nacidos-primeras-semanas",
+      "specialties": [
+        "pediatrics",
+        "general_medicine"
+      ],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "original_language": "es",
+      "topics": [
+        "primeras_semanas"
+      ],
+      "chunks": [
+        "La OMS insta a ofrecer atención de calidad a las mujeres y los recién nacidos (OPS, 2022). Tema: calendario de controles tras el parto. Hallazgo: las directrices posnatales de la OMS piden permanecer al menos 24 horas en el centro de salud tras el parto y un mínimo de tres controles adicionales en las seis primeras semanas: entre las 48 y 72 horas, entre el día 7 y el 14, y durante la sexta semana. Si el parto fue en casa, la primera consulta debe hacerse a más tardar 24 horas después. Cuando es posible se recomiendan visitas a domicilio, y quien tenga riesgos puede necesitar más consultas.",
+        "La OMS insta a ofrecer atención de calidad a las mujeres y los recién nacidos (OPS, 2022). Tema: qué incluyen los controles posnatales para el bebé y la madre. Hallazgo: se recomienda examinar al recién nacido para detectar problemas de ojos y de oído, vacunarlo al nacer y asesorar sobre lactancia materna exclusiva. Para la madre se propone tratar problemas frecuentes como el dolor perineal y la congestión mamaria, y hacer cribado de depresión y ansiedad posparto con derivación si hace falta. La pareja debe participar en los controles. Más de tres de cada diez mujeres y bebés no reciben atención posnatal en los primeros días."
+      ]
+    },
+    {
+      "source_type": "reference",
+      "title": "Libro de Instrucciones del Recién Nacido. Objetivo: sobrevivir el primer mes",
+      "organization": "Sociedad Española de Pediatría Extrahospitalaria y Atención Primaria (SEPEAP)",
+      "publication_year": 2021,
+      "url": "https://sepeap.org/libro-de-instrucciones-del-recien-nacido-objetivo-sobrevivir-el-primer-mes/",
+      "specialties": [
+        "pediatrics",
+        "general_medicine"
+      ],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "original_language": "es",
+      "topics": [
+        "primeras_semanas",
+        "signos_alarma",
+        "deposiciones_recien_nacido"
+      ],
+      "chunks": [
+        "Libro de Instrucciones del Recién Nacido (SEPEAP, 2021). Tema: ambiente, ropa, sueño y baño del recién nacido. Hallazgo: la casa debe estar bien ventilada, libre de tabaco y a 19 a 21 grados, sin silencio absoluto. La ropa, cómoda y de fibras naturales, se lava con jabón neutro y sin suavizante, y no hay que abrigar en exceso. Para dormir: boca arriba, sobre colchón firme, sin almohada, sin cintas, cadenas ni imperdibles en la cuna y con el chupete suelto si lo usa. Se puede bañar desde el primer día con el agua a 34 a 38 grados, secando bien pliegues, genitales, orejas (sin bastoncillos) y ombligo. Los pendientes, a partir del mes de vida.",
+        "Libro de Instrucciones del Recién Nacido (SEPEAP, 2021). Tema: deposiciones y orina del recién nacido. Hallazgo: el meconio (negro o verdoso oscuro, muy pringoso) sale en las primeras 24 a 48 horas y las deposiciones definitivas hacia el 5.º o 6.º día. Con lactancia materna son más pastosas, en cada toma o cada 3 a 4 días; con fórmula, más compactas, menos numerosas y de color ocre pálido. La primera micción suele ser en las primeras 24 horas y después unas 5 a 8 al día; las manchas anaranjadas de los primeros días son cristales de urato y son normales. Las deposiciones pueden ser de cualquier color salvo rojas, blancas o negras; si tienen moco sin que coincida con un catarro, hay que consultar al pediatra.",
+        "Libro de Instrucciones del Recién Nacido (SEPEAP, 2021). Tema: signos de alarma en el recién nacido. Hallazgo: son motivo de alarma la ausencia total de llanto en los primeros días o un llanto continuo con gran irritabilidad pese a cubrir sus necesidades; las regurgitaciones cuando no gana peso adecuadamente, está muy irritable y estira mucho el cuello hacia atrás; los estornudos si se acompañan de mucha mucosidad, tos, fiebre o dificultad para respirar; y las pausas respiratorias (apneas) prolongadas o acompañadas de color azulado de la boca.",
+        "Libro de Instrucciones del Recién Nacido (SEPEAP, 2021). Tema: cosas del recién nacido que se consideran normales. Hallazgo: la página enumera como normales las regurgitaciones, la piel que descama, los estornudos sin catarro, las manos y los pies fríos o azulados, la mancha mongólica, el hipo, el temblor de mentón, las frecuencias cardiaca y respiratoria más altas que las de un adulto, los ruidos al dormir, la respiración irregular con alguna pausa (apnea), siempre que no sea prolongada ni se acompañe de color azulado de la boca, las tomas nocturnas frecuentes y el cansancio de los padres en el primer mes."
+      ]
+    },
+    {
+      "source_type": "reference",
+      "title": "Nacimientos prematuros",
+      "organization": "World Health Organization (WHO)",
+      "publication_year": 2023,
+      "url": "https://www.who.int/es/news-room/fact-sheets/detail/preterm-birth",
+      "specialties": [
+        "pediatrics",
+        "general_medicine"
+      ],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "original_language": "es",
+      "topics": [
+        "prematuros"
+      ],
+      "chunks": [
+        "Nacimientos prematuros (OMS, 2023). Tema: qué es un nacimiento prematuro y qué tan frecuente es. Hallazgo: se considera prematuro el bebé que nace antes de completar 37 semanas de gestación. En 2020 nacieron unos 13,4 millones de niños prematuros en el mundo, y la tasa oscila entre el 4 % y el 16 % según el país. Las complicaciones del parto prematuro son la principal causa de muerte en menores de cinco años, y tres cuartas partes de esas muertes podrían evitarse con intervenciones costoeficaces.",
+        "Nacimientos prematuros (OMS, 2023). Tema: cuidados que recomienda la OMS para el bebé prematuro. Hallazgo: la OMS recomienda el método madre canguro (contacto piel con piel) justo después del nacimiento y el inicio temprano de la lactancia. Madre y recién nacido deben permanecer juntos desde el nacimiento, salvo que el bebé esté gravemente enfermo. También se proponen educación, asesoramiento, apoyo entre iguales y visitas a domicilio de profesionales capacitados para las familias."
+      ]
+    },
+    {
+      "source_type": "reference",
+      "title": "Mon enfant a la jaunisse (HUG, Mon enfant est malade)",
+      "organization": "Hôpitaux universitaires de Genève (HUG)",
+      "publication_year": null,
+      "undated_reason": "la página no muestra fecha de publicación ni de actualización (consultada el 2026-11-06)",
+      "url": "https://www.monenfantestmalade.ch/fiches/jaunisse",
+      "specialties": [
+        "pediatrics",
+        "general_medicine"
+      ],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "original_language": "fr",
+      "topics": [
+        "ictericia_neonatal",
+        "cuando_consultar"
+      ],
+      "chunks": [
+        "Mon enfant a la jaunisse (HUG). Tema: qué es la ictericia del recién nacido. Hallazgo: la piel y el blanco de los ojos del bebé se colorean poco a poco de amarillo por un pigmento, la bilirrubina. Suele aparecer hacia el segundo o tercer día de vida y desaparecer tras unos diez días; es frecuente y en general benigna, pero hay que vigilar la bilirrubina porque, si es demasiado alta, puede ser tóxica para el cerebro. Lo más habitual es la ictericia fisiológica, porque el hígado del recién nacido aún no es lo bastante maduro; más raramente se debe a una incompatibilidad de sangre entre madre y bebé o a una infección. Si se debe a una enfermedad del hígado, las heces se vuelven pálidas o blancas, la orina oscura, y dura más de 10 días.",
+        "Mon enfant a la jaunisse (HUG). Tema: valoración y tratamiento. Hallazgo: la bilirrubina se estima primero con una lámpara de destellos sobre la piel y, si el valor parece demasiado alto, se mide con una muestra de sangre del talón. Si es demasiado alta, el bebé recibe fototerapia, un tratamiento con luz azul sobre la piel: se le acuesta en un colchón especial, desvestido, el mayor tiempo posible bajo la luz (puede cogerse en brazos para alimentarlo), con vigilancia estrecha de su temperatura y buena hidratación. Si da el pecho, la ficha aconseja ponerlo al pecho lo más a menudo posible, entre 8 y 12 veces al día, lo que favorece la producción de leche, la hidratación y la eliminación de la bilirrubina.",
+        "Mon enfant a la jaunisse (HUG). Tema: cuándo consultar al pediatra. Hallazgo: consultar inmediatamente si el recién nacido preocupa, parece enfermo, tiene fiebre, está somnoliento, muy flácido o muy rígido, o tiene un llanto que se ha vuelto agudo; la ficha indica que la somnolencia, la flacidez, la rigidez o el llanto agudo pueden ser signos de intoxicación por bilirrubina. Consultar en las 24 horas siguientes si está amarillo, si la orina se oscurece y mancha los pañales, si las heces se decoloran hasta volverse blancas o si la ictericia dura más de 10 días; estos tres últimos signos pueden deberse a una enfermedad del hígado que requiere atención rápida y a veces cirugía."
+      ]
+    },
+    {
+      "source_type": "reference",
+      "title": "Dépistages néonatals (ONE)",
+      "organization": "ONE (Office de la Naissance et de l'Enfance, Belgique)",
+      "publication_year": null,
+      "undated_reason": "Página de la sección Familles de one.be sin fecha de actualización visible; consultada el 2026-11-06.",
+      "url": "https://www.one.be/familles/0-12/depistages-neonatals",
+      "specialties": [
+        "pediatrics",
+        "general_medicine"
+      ],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "original_language": "fr",
+      "topics": [
+        "prueba_talon",
+        "cribado_auditivo"
+      ],
+      "chunks": [
+        "Dépistages néonatals (ONE, Office de la Naissance et de l'Enfance). Tema: cribado de anomalías congénitas en el recién nacido. Hallazgo: desde los primeros días un bebé puede beneficiarse de cribados destinados a detectar pronto ciertos trastornos de salud para poder actuar con rapidez si hace falta. El cribado de anomalías congénitas se hace entre el segundo y el cuarto día de vida con una pequeña muestra de sangre recogida en un papel secante, en la maternidad o en casa por una matrona. Según la página, sin atención precoz algunas de estas anomalías pueden causar la muerte, discapacidad intelectual u otros trastornos permanentes.",
+        "Dépistages néonatals (ONE, Office de la Naissance et de l'Enfance). Tema: cribado auditivo y vigilancia posterior. Hallazgo: el cribado auditivo puede hacerse desde el segundo día de vida. Los trastornos de la audición afectan a unos 4 niños de cada 1000 y a menudo no hay antecedentes familiares; detectarlos pronto permite poner en marcha medidas para preservar y desarrollar al máximo las capacidades del niño. Un resultado satisfactorio al nacer no garantiza que no aparezca más tarde un déficit, por lo que se recomienda seguir atento a la audición del niño y a su buena adquisición del lenguaje."
+      ]
+    },
+    {
+      "source_type": "reference",
+      "title": "Cordón umbilical: cómo cuidarlo bien (qué hacer y qué no hacer)",
+      "original_title": "Cordone ombelicale: la corretta gestione (cosa fare e cosa non fare)",
+      "organization": "Ospedale Pediatrico Bambino Gesù",
+      "publication_year": 2023,
+      "url": "https://www.ospedalebambinogesu.it/cordone-ombelicale-la-corretta-gestione-cosa-fare-e-cosa-non-fare--90424/",
+      "specialties": [
+        "pediatrics",
+        "neonatology"
+      ],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "original_language": "it",
+      "topics": [
+        "cordon_umbilical",
+        "primeras_semanas",
+        "cuando_consultar"
+      ],
+      "chunks": [
+        "Cordón umbilical: cómo cuidarlo bien (Ospedale Pediatrico Bambino Gesù, 2023). Tema: evolución normal del muñón umbilical. Hallazgo: tras cortar el cordón queda un muñón de 3-5 cm que no hay que tirar ni quitar; con el tiempo se seca y cambia de color hasta el gris o el negro, y cae solo en unos 7-14 días. Pequeñas trazas de sangre costrosa o un ligero sangrado al desprenderse son normales. El cordón no tiene terminaciones nerviosas, por lo que el corte no duele (fuente en italiano).",
+        "Cordón umbilical: cómo cuidarlo bien (Ospedale Pediatrico Bambino Gesù, 2023). Tema: higiene del muñón. Hallazgo: hay que lavarse las manos antes de tocarlo y lavar al bebé con agua corriente o esponja, sin sumergirlo en el baño. Se mantiene limpio y seco, con una gasa estéril seca, sin aplicar sustancias y sin comprimirlo: se dobla hacia abajo la parte delantera del pañal y se viste con ropa suave, dejándolo al aire cuando la temperatura lo permita. Si la higiene está garantizada, basta con limpiar con agua y no se necesitan desinfectantes: el alcohol, aconsejado antes, retrasa la momificación, puede irritar la piel y no reduce el riesgo de infección (fuente en italiano).",
+        "Cordón umbilical: cómo cuidarlo bien (Ospedale Pediatrico Bambino Gesù, 2023). Tema: cuándo consultar por el ombligo. Hallazgo: signos de onfalitis, una infección del ombligo que puede ser grave, son enrojecimiento, hinchazón, dolor al tacto, fiebre, somnolencia y secreción purulenta maloliente; en caso de sospecha hay que consultar enseguida al pediatra. También se consulta si el sangrado es continuo y abundante o si el muñón no se ha caído pasadas 3-4 semanas del nacimiento. Poner una moneda sobre el ombligo para prevenir la hernia es un mito y está desaconsejado porque el metal puede causar infecciones o alergia (fuente en italiano)."
+      ]
+    },
+    {
+      "source_type": "reference",
+      "title": "De 0 a 30 días: cuándo pedir consejo al pediatra. Las señales de alarma que no hay que subestimar",
+      "original_title": "Da 0 a 30 giorni: quando chiedere consiglio al pediatra. I Campanelli d'allarme da non sottovalutare",
+      "organization": "Ospedale Pediatrico Bambino Gesù",
+      "publication_year": 2025,
+      "url": "https://www.ospedalebambinogesu.it/da-0-a-30-giorni-quando-chiedere-consiglio-al-pediatra-i-campanelli-d-allarme-89858/",
+      "specialties": [
+        "pediatrics",
+        "neonatology"
+      ],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "original_language": "it",
+      "topics": [
+        "primeras_semanas",
+        "signos_alarma",
+        "cuando_consultar"
+      ],
+      "chunks": [
+        "De 0 a 30 días: cuándo pedir consejo al pediatra (Ospedale Pediatrico Bambino Gesù, 2025). Tema: señales de alarma en el primer mes, urgencia alta. Hallazgo: la fiebre debe valorarse con mucho cuidado y hay que contactar con el pediatra enseguida, sin esperar, para que vea al bebé cuanto antes. Si el recién nacido muestra anomalías o dificultad para respirar, debe verlo un médico el mismo día. Si deja de respirar durante unos segundos y no es lo que ocurre normalmente durante el llanto (apnea), hay que aclarar la causa sin demora (fuente en italiano).",
+        "De 0 a 30 días: cuándo pedir consejo al pediatra (Ospedale Pediatrico Bambino Gesù, 2025). Tema: vómitos, diarrea, golpes en la cabeza y peso en el primer mes. Hallazgo: el vómito se valora con atención, sobre todo si se repite, y se distingue de la regurgitación, bastante frecuente, que son pequeñas cantidades de leche justo después de la toma. La diarrea son heces líquidas y distintas de las que hacía hasta ahora, sobre todo si son abundantes o se repiten muchas veces; las normales con leche materna son blandas, semilíquidas y de color amarillo dorado. Tras una caída o un golpe en la cabeza no hay que subestimar la somnolencia, el vómito ni las heridas o hundimientos en el cráneo. El peso puede crecer de forma irregular pero siempre progresiva; si no, hay que buscar la causa (fuente en italiano)."
+      ]
+    },
+    {
+      "source_type": "reference",
+      "title": "Ictericia del recién nacido: fisiológica y por leche materna",
+      "original_title": "Ittero del neonato: fisiologico e da latte materno",
+      "organization": "Ospedale Pediatrico Bambino Gesù",
+      "publication_year": 2023,
+      "url": "https://www.ospedalebambinogesu.it/ittero-del-neonato-fisiologico-e-da-latte-materno-111474/",
+      "specialties": [
+        "pediatrics",
+        "neonatology",
+        "gastroenterology"
+      ],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "original_language": "it",
+      "topics": [
+        "ictericia_neonatal"
+      ],
+      "chunks": [
+        "Ictericia del recién nacido: fisiológica y por leche materna (Ospedale Pediatrico Bambino Gesù, 2023). Tema: ictericia fisiológica del recién nacido. Hallazgo: es el color amarillento de piel y escleras por exceso de bilirrubina; se ve primero en la cara y luego en tronco, brazos y piernas. La ictericia fisiológica afecta a un 60% de los nacidos a término y a un 80% de los prematuros, aparece pasadas las primeras 24 horas (normalmente el día 2-3), no sube rápido y dura como máximo 10 días en los nacidos a término y 15 en los prematuros. Se debe al gran volumen de bilirrubina que hay que eliminar y a la inmadurez del hígado (fuente en italiano).",
+        "Ictericia del recién nacido: fisiológica y por leche materna (Ospedale Pediatrico Bambino Gesù, 2023). Tema: ictericia por leche materna. Hallazgo: aparece a partir del día 4-5 en bebés sanos que crecen bien y toman pecho; suele resolverse en 3-4 semanas, aunque a veces dura más, hasta las 12 semanas de vida. En ella no se debe interrumpir de ningún modo la lactancia. Para confirmarla se descartan anemia (palidez) y enfermedad del hígado (hígado o bazo aumentados, heces decoloradas, orina oscura que mancha el pañal). La página avisa de que una atresia de vías biliares u otra enfermedad hepática grave puede confundirse con ella, con graves retrasos en el diagnóstico (fuente en italiano).",
+        "Ictericia del recién nacido: fisiológica y por leche materna (Ospedale Pediatrico Bambino Gesù, 2023). Tema: ictericia patológica y tratamiento. Hallazgo: se llama así a la que no cumple los criterios de la fisiológica; también la de leche materna debe estudiarse activamente si pasa de 10 días en el nacido a término o de 15 en el prematuro. La forma más importante es la debida a incompatibilidad Rh o AB0 entre madre y bebé. Si la bilirrubina indirecta llega a niveles muy altos puede depositarse en el cerebro y causar efectos neurológicos. El primer tratamiento es la fototerapia; la exanguinotransfusión se reserva a casos seleccionados si esta no basta (fuente en italiano)."
+      ]
+    },
+    {
+      "source_type": "reference",
+      "title": "El recién nacido prematuro",
+      "original_title": "Neonato pretermine",
+      "organization": "Ospedale Pediatrico Bambino Gesù",
+      "publication_year": 2023,
+      "url": "https://www.ospedalebambinogesu.it/neonato-pretermine-80529/",
+      "specialties": [
+        "pediatrics",
+        "neonatology"
+      ],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "original_language": "it",
+      "topics": [
+        "prematuros"
+      ],
+      "chunks": [
+        "El recién nacido prematuro (Ospedale Pediatrico Bambino Gesù, 2023). Tema: definición y clasificación del recién nacido prematuro. Hallazgo: es el que nace antes de las 37 semanas de edad gestacional. Según el peso se distingue bajo peso (menos de 2,5 kg), muy bajo peso (menos de 1,5 kg) y peso extremadamente bajo (menos de 1 kg). Los prematuros tienen piel fina, manos y pies fríos, ictericia frecuente y más prolongada, y pierden más peso tras el nacimiento, con recuperación más lenta. La mayoría no tiene grandes problemas, que son más frecuentes en los de peso muy o extremadamente bajo (fuente en italiano).",
+        "El recién nacido prematuro (Ospedale Pediatrico Bambino Gesù, 2023). Tema: alimentación y presencia de los padres en el prematuro. Hallazgo: en el muy prematuro la alimentación es difícil y habitualmente se le da leche materna o del banco de leche humana donada mediante una sonda en el estómago, y puede necesitar un suplemento (fortificación) para crecer bien. Las caricias, los abrazos y los masajes, además de escuchar la voz y el silencio, se han convertido en parte esencial del tratamiento, y la presencia de la madre y del padre se considera indispensable para la salud del bebé y para su crecimiento físico y psíquico (fuente en italiano)."
+      ]
+    },
+    {
+      "source_type": "reference",
+      "title": "Día mundial de la prematuridad, 17 de noviembre de 2022",
+      "original_title": "GIORNATA MONDIALE DELLA PREMATURITÀ – 17 novembre 2022",
+      "organization": "Società Italiana di Neonatologia (SIN)",
+      "publication_year": 2022,
+      "url": "https://www.sin-neonatologia.it/giornata-mondiale-della-prematurita-17-novembre-2022/",
+      "specialties": [
+        "pediatrics",
+        "neonatology"
+      ],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "original_language": "it",
+      "topics": [
+        "prematuros"
+      ],
+      "chunks": [
+        "Día mundial de la prematuridad (Società Italiana di Neonatologia (SIN), 2022). Tema: qué es la prematuridad y por qué importa el contacto con los padres. Hallazgo: en Italia nacen unos 30.000 prematuros al año; se llama prematuro al bebé que nace antes de tiempo, con órganos como pulmones, cerebro, intestino y corazón aún inmaduros, más cuanto antes nace. La SIN pide que los padres puedan estar con el bebé las 24 horas y defiende el contacto piel con piel (cuidado canguro), que ayuda a la termorregulación, estabiliza la respiración y reduce las apneas y el estrés, además de favorecer la lactancia, incluida la exclusiva, al alta. (fuente en italiano)",
+        "Día mundial de la prematuridad (Società Italiana di Neonatologia (SIN), 2022). Tema: alta de la UCI neonatal y seguimiento del prematuro. Hallazgo: el alta es un momento de alegría pero también de miedo para los padres, que pierden el apoyo que recibían en el hospital; la SIN propone implicarlos activamente desde el ingreso, de modo que adquieran competencias y conocimientos técnicos, bienestar emocional y confianza en el cuidado de su bebé, con neonatólogo, enfermería, fisioterapeuta, psicólogo y logopeda; además, destaca el papel del pediatra de atención primaria en el apoyo a la familia. El nuevo manual de la SIN sobre el seguimiento (follow-up) de los nacidos antes de la semana 32 abarca los primeros seis años de vida y busca detectar pronto anomalías del desarrollo e iniciar intervenciones tempranas personalizadas. (fuente en italiano)"
+      ]
+    },
+    {
+      "source_type": "reference",
+      "title": "Prueba de audición (Kind en Gezin)",
+      "original_title": "Gehoortest (Kind en Gezin)",
+      "organization": "Kind en Gezin (Agentschap Opgroeien)",
+      "publication_year": null,
+      "undated_reason": "Página de kindengezin.be sin fecha de publicación ni de revisión visible; consultada el 2026-11-06",
+      "url": "https://www.kindengezin.be/nl/kind-en-gezin-diensten/contactmomenten/gehoortest",
+      "specialties": [
+        "pediatrics",
+        "neonatology",
+        "otolaryngology"
+      ],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "original_language": "nl",
+      "topics": [
+        "cribado_auditivo"
+      ],
+      "chunks": [
+        "Prueba de audición (Kind en Gezin, Agentschap Opgroeien). Tema: cribado auditivo del recién nacido. Hallazgo: se colocan casquetes en ambos oídos con pequeños altavoces que emiten sonidos y electrodos en la cabeza que registran la actividad cerebral. Dura unos minutos y la página la describe como segura, indolora y fiable.",
+        "Prueba de audición (Kind en Gezin, Agentschap Opgroeien). Tema: cómo preparar al bebé para la prueba de audición. Hallazgo: antes de la prueba no se usa aceite en el baño ni loción o pomada sobre el bebé, se le pone ropa holgada evitando que pase calor, se le da de comer antes y se lleva, si hace falta, leche de repuesto y chupete. Conviene que el bebé esté tranquilo o dormido, y una sillita de coche portátil facilita la prueba.",
+        "Prueba de audición (Kind en Gezin, Agentschap Opgroeien). Tema: resultados de la prueba de audición. Hallazgo: si el resultado es favorable, el bebé oye con normalidad en ese momento. Si el resultado indica derivación (refer), puede haber una pérdida auditiva, y como una causa frecuente y temporal es el líquido tras el tímpano, se programa un control a los pocos días y se aconseja lavar la nariz del bebé. Si el control vuelve a indicar derivación, se envía a un centro especializado en problemas de audición en niños muy pequeños. La prueba no detecta una pérdida que aparezca más tarde, y el lenguaje se vigila en las revisiones del niño sano."
+      ]
+    },
+    {
+      "source_type": "reference",
+      "title": "Ictericia en recién nacidos (Helsenorge)",
+      "original_title": "Gulsott hos nyfødte (Helsenorge)",
+      "organization": "Helsenorge.no (Helsedirektoratet)",
+      "publication_year": 2023,
+      "url": "https://www.helsenorge.no/sykdom/barn/gulsott-hos-nyfodte/",
+      "specialties": [
+        "pediatrics",
+        "neonatology"
+      ],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "original_language": "no",
+      "topics": [
+        "ictericia_neonatal",
+        "cuando_consultar"
+      ],
+      "chunks": [
+        "Ictericia en recién nacidos (Helsenorge, Helsedirektoratet, 2023). Tema: frecuencia y aspecto de la ictericia del recién nacido. Hallazgo: la ictericia afecta a unos 70 de cada 100 recién nacidos y a unos 80 de cada 100 prematuros. Suele aparecer unos días después del nacimiento y en la mayoría de los bebés desaparece sola en una o dos semanas. Se nota un tono amarillento en la piel, en el blanco de los ojos y en el interior de la boca. En niños de piel oscura es más difícil de valorar, por eso los médicos miran también los ojos y la boca, y el hospital puede medir la bilirrubina a través de la piel.",
+        "Ictericia en recién nacidos (Helsenorge, Helsedirektoratet, 2023). Tema: signos de ictericia grave y cuándo consultar. Hallazgo: en la ictericia grave el bebé come menos de lo normal, está menos despierto y cuesta despertarlo, llora más fuerte de lo habitual o está flácido. Si la ictericia empeora tras volver a casa, hay que acudir al médico. Ante sospecha de ictericia con mal estado general, se debe contactar con un médico de inmediato. La página pide a los padres estar atentos a los cambios en la ictericia y en el comportamiento y acudir a los controles regulares con el médico o con la enfermera de pediatría. No da teléfonos.",
+        "Ictericia en recién nacidos (Helsenorge, Helsedirektoratet, 2023). Tema: tratamiento de la ictericia neonatal. Hallazgo: la mayoría de los bebés no necesita tratamiento, solo asegurar un buen equilibrio de líquidos y que la lactancia se adapte a las necesidades del bebé. Si la bilirrubina es alta o va en aumento se recomienda fototerapia con luz azul o azul verdosa, que para la mayoría dura uno o dos días, con los ojos tapados; entre sus posibles efectos están el exceso de calor, la deshidratación, una erupción o un tono moreno. La transfusión de recambio es rara. Una bilirrubina muy alta puede dañar el cerebro, pero hoy es muy infrecuente."
+      ]
+    },
+    {
+      "source_type": "reference",
+      "title": "Guía para padres (SNS 24)",
+      "original_title": "Guia para pais",
+      "organization": "Serviço Nacional de Saúde (SNS 24)",
+      "publication_year": null,
+      "undated_reason": "La página de SNS 24 no muestra fecha de publicación ni de actualización; cita como fuente a la DGS (proyecto RISCAR, vía SPMS).",
+      "url": "https://www.sns24.gov.pt/pt/tema/prevencao-e-cuidados-de-saude/guia-para-pais/",
+      "specialties": [
+        "pediatrics",
+        "neonatology"
+      ],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "original_language": "pt",
+      "topics": [
+        "primeras_semanas",
+        "ictericia_neonatal",
+        "signos_alarma"
+      ],
+      "chunks": [
+        "Guía para padres (Serviço Nacional de Saúde, SNS 24, sin fecha). Tema: cambios normales de las primeras semanas, cólicos e ictericia. Hallazgo: el bebé pierde peso los primeros días y recupera el de nacimiento hacia el décimo día; el hipo es frecuente y la regurgitación común. Los cólicos del primer trimestre empiezan después de la tercera semana y pueden durar hasta el tercer o cuarto mes, con llanto intenso, intermitente e inconsolable sin causa aparente; pueden ayudar llevarlo en brazos boca abajo con leve presión en el abdomen, masajear la tripa en el sentido de las agujas del reloj y flexionarle las piernas sobre la barriga. La ictericia no suele ser grave, pero si tras el alta la piel se pone muy amarilla y llega a las piernas hay que contactar con el médico. (fuente en portugués)",
+        "Guía para padres (Serviço Nacional de Saúde, SNS 24, sin fecha). Tema: signos de alerta del bebé y atragantamiento. Hallazgo: se debe acudir al médico o a urgencias si el bebé tiene una temperatura superior a 38 ºC, postración, quejidos o irritabilidad, rechazo de la alimentación, vómitos o heces líquidas o con sangre, convulsiones, manchas como picaduras de alfiler que no desaparecen al presionar o moretones súbitos que empeoran, o palidez acentuada con tono grisáceo. Si el bebé no parece estar bien, no hay que dudar en acudir al médico o a urgencias. Si un atragantamiento no se resuelve enseguida hay que llamar al 112, y si el bebé queda inconsciente puede hacer falta iniciar el soporte vital básico. (fuente en portugués)",
+        "Guía para padres (Serviço Nacional de Saúde, SNS 24, sin fecha). Tema: leche suficiente y bienestar de la madre tras el parto. Hallazgo: los primeros 2-4 días la leche es calostro, suficiente; el bebé recibe bastante si suelta el pecho solo, gana peso, orina más de 6 veces en 24 horas y el pecho queda blando al final de la toma; si mama, no se le da agua hasta que tome otros alimentos, salvo calor excesivo, fiebre o diarrea. Es normal que la madre esté algo cansada las primeras semanas; si se siente triste o incapaz de cuidar del bebé, no debe culparse (puede deberse a cambios hormonales) y conviene hablarlo con el médico o la enfermera. Debe contactar con su médico, urgencias o una línea de consejo sanitario ante fiebre, aumento marcado del sangrado, dolor intenso o signos de inflamación en las mamas, dolor abdominal intenso súbito o dolor perineal que empeora. (fuente en portugués)",
+        "Guía para padres (Serviço Nacional de Saúde, SNS 24, sin fecha). Tema: baño, sueño seguro y viaje en coche. Hallazgo: el baño puede ser diario o en días alternos, evitando hacerlo justo después de la toma, con la habitación entre 22 y 25 ºC y el agua a 36,5-37 ºC (primero la fría y luego la caliente); se lava primero cara y cabeza, luego el cuerpo y al final la zona del pañal, se seca sin frotar y los oídos se limpian sin bastoncillos. Para dormir se acuesta siempre boca arriba en su cuna, con colchón firme y adaptado al tamaño de la cuna, sin almohada ni juguetes, lazos o cintas, con los pies al fondo y la habitación a unos 20 ºC. En el coche, silla homologada a contramarcha hasta los 3-4 años, mejor atrás y nunca con airbag frontal activo. (fuente en portugués)"
+      ]
+    },
+    {
+      "source_type": "reference",
+      "title": "El niño prematuro: sus particularidades y el papel de la familia",
+      "original_title": "A criança prematura: suas peculiaridades e o papel da família",
+      "organization": "Sociedade Brasileira de Pediatria (SBP)",
+      "publication_year": 2023,
+      "url": "https://www.sbp.com.br/pediatria-para-familias/primeira-infancia/a-crianca-prematura-suas-peculiaridades-e-o-papel-da-familia/",
+      "specialties": [
+        "pediatrics",
+        "neonatology"
+      ],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "original_language": "pt",
+      "topics": [
+        "prematuros"
+      ],
+      "chunks": [
+        "El niño prematuro: sus particularidades y el papel de la familia (Sociedade Brasileira de Pediatria, 2023). Tema: edad corregida del prematuro. Hallazgo: durante los dos primeros años el desarrollo debe evaluarse por la edad corregida y no por la cronológica, y hay que informar de ello a los padres. La edad cronológica se cuenta desde el nacimiento y la corregida resta lo que faltó para el término. Un bebé es a término desde las 37 semanas, pero la edad gestacional de referencia es 40 semanas. Ejemplo: un bebé nacido a las 32 semanas, es decir, 8 semanas (dos meses) antes de las 40 semanas previstas, tiene a los 3 meses de edad cronológica 1 mes de edad corregida. (fuente en portugués)",
+        "El niño prematuro: sus particularidades y el papel de la familia (Sociedade Brasileira de Pediatria, 2023). Tema: comportamiento del prematuro en el primer mes en casa. Hallazgo: con frecuencia pasa menos tiempo despierto, cuando está despierto está menos alerta y responde menos, es menos activo y alterna con periodos de agitación, tiene ciclos de sueño y vigilia más cortos, se despierta agitado con más frecuencia por la noche, tiene hipotonía de los músculos del cuello y necesita mamar a intervalos más cortos. Puede tardar más que un bebé a término en sostener la cabeza, sentarse sin apoyo y caminar. (fuente en portugués)",
+        "El niño prematuro: sus particularidades y el papel de la familia (Sociedade Brasileira de Pediatria, 2023). Tema: cuidados en casa tras el alta del prematuro. Hallazgo: lavarse las manos antes y después de atender al bebé, priorizar la lactancia, acudir a las citas de seguimiento, acostarlo a dormir boca arriba en su cuna, seguir el calendario de vacunas, evitar multitudes y espacios cerrados, evitar a personas con tos, estornudos, mocos o fiebre, no fumar en casa, cambiar el pañal cada vez que haya pis o caca y bañarlo con jabón neutro. El apego interactivo y sensible de los padres es un estímulo protector fundamental. (fuente en portugués)"
+      ]
+    },
+    {
+      "source_type": "reference",
+      "title": "Método canguro: atención humanizada al recién nacido de bajo peso",
+      "original_title": "Método Canguru: atenção humanizada ao recém-nascido de baixo peso",
+      "organization": "Sociedade Brasileira de Pediatria (SBP)",
+      "publication_year": 2018,
+      "url": "https://www.sbp.com.br/pediatria-para-familias/primeira-infancia/metodo-canguru-atencao-humanizada-ao-recem-nascido-de-baixo-peso/",
+      "specialties": [
+        "pediatrics",
+        "neonatology"
+      ],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "original_language": "pt",
+      "topics": [
+        "prematuros"
+      ],
+      "chunks": [
+        "Método canguro: atención humanizada al recién nacido de bajo peso (Sociedade Brasileira de Pediatria, 2018). Tema: qué es el método canguro y su primera etapa. Hallazgo: es un modelo de cuidado humanizado del recién nacido prematuro y su familia en la unidad neonatal. La posición canguro es el contacto piel con piel, en vertical, sobre el pecho de la madre o el padre. En la primera etapa los padres tienen acceso libre a la unidad, se les anima a tocar al bebé y a colocarlo en posición canguro, y se reducen los estímulos nocivos como ruido, luz y olores. Se orienta a la madre a extraerse leche junto a la incubadora. La fuente indica que el contacto piel con piel se asocia a mayor volumen de leche y lactancia más prolongada. (fuente en portugués)",
+        "Método canguro: atención humanizada al recién nacido de bajo peso (Sociedade Brasileira de Pediatria, 2018). Tema: beneficios del método canguro. Hallazgo: la fuente enumera que favorece el vínculo madre-hijo, reduce el tiempo de separación, estimula la lactancia, apoya un mejor desarrollo neuroconductual y psicoafectivo del recién nacido de bajo peso, aporta estimulación sensorial adecuada, reduce el estrés y el dolor y aumenta la competencia y la confianza de los padres en el cuidado de su hijo. (fuente en portugués)"
+      ]
+    },
+    {
+      "source_type": "reference",
+      "title": "El primer día de vida del recién nacido y su familia",
+      "original_title": "O primeiro dia de vida do recém-nascido e família",
+      "organization": "Sociedade Brasileira de Pediatria (SBP)",
+      "publication_year": 2022,
+      "url": "https://www.sbp.com.br/pediatria-para-familias/primeira-infancia/o-primeiro-dia-de-vida-do-recem-nascido-e-familia/",
+      "specialties": [
+        "pediatrics",
+        "neonatology"
+      ],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "original_language": "pt",
+      "topics": [
+        "primeras_semanas"
+      ],
+      "chunks": [
+        "El primer día de vida del recién nacido y su familia (Sociedade Brasileira de Pediatria, 2022). Tema: contacto piel con piel al nacer. Hallazgo: si el recién nacido se mueve y respira al nacer, el lugar más seguro y sano es el contacto piel con piel con la madre durante una hora, sea cual sea el tipo de parto; también los prematuros si su estado lo permite. Ayuda a colonizar al bebé con bacterias del hogar, prevenir la hipotermia, iniciar la lactancia en la primera hora y reforzar el vínculo. Si la madre no puede, puede hacerlo el padre. Pesar, medir y vacunar no deben retrasar ni impedir este vínculo. (fuente en portugués)",
+        "El primer día de vida del recién nacido y su familia (Sociedade Brasileira de Pediatria, 2022). Tema: colirio, vitamina K y exploración en el primer día. Hallazgo: ni el colirio ni la vitamina K deben darse antes del contacto piel con piel, pero ambos tienen que administrarse en las primeras 2 horas de vida. El colirio previene la oftalmía neonatal, que puede dejar cicatrices y ceguera; la vitamina K previene hemorragias, incluida la intracraneal, desde los primeros días hasta los 6 meses. Tras la primera hora, y antes de pasar al alojamiento conjunto, el pediatra hace una exploración completa para detectar malformaciones. (fuente en portugués)",
+        "El primer día de vida del recién nacido y su familia (Sociedade Brasileira de Pediatria, 2022). Tema: poca leche el primer día y visitas. Hallazgo: no tener leche el primer día es frecuente y normal. Los recién nacidos sanos a término y sin factores de riesgo tienen reservas suficientes y no necesitan controles de glucosa, leche de banco ni fórmula. El primer líquido es el calostro, amarillento y suficiente; si hay dudas, se pone al bebé al pecho con frecuencia para estimular la producción. Las visitas de familiares cercanos pueden hacerse breves tras la primera semana, sin enfermedad vírica y con lavado de manos. (fuente en portugués)"
+      ]
+    },
+    {
+      "source_type": "reference",
+      "title": "La prueba auditiva del recién nacido",
+      "original_title": "Teste da orelhinha",
+      "organization": "Sociedade Brasileira de Pediatria (SBP)",
+      "publication_year": 2018,
+      "url": "https://www.sbp.com.br/pediatria-para-familias/primeira-infancia/teste-da-orelhinha/",
+      "specialties": [
+        "pediatrics",
+        "neonatology"
+      ],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "original_language": "pt",
+      "topics": [
+        "cribado_auditivo"
+      ],
+      "chunks": [
+        "La prueba auditiva del recién nacido (Sociedade Brasileira de Pediatria, 2018). Tema: cómo es el cribado auditivo neonatal. Hallazgo: se llama también triagem auditiva neonatal o prueba de emisiones otoacústicas evocadas. Se emite un estímulo sonoro y una sonda delicada colocada en el oído capta su retorno. La fuente la describe como rápida, segura e indolora. Se hace en el hospital con el bebé dormido, a partir de las 48 horas de vida, y dura de 5 a 10 minutos. (fuente en portugués)",
+        "La prueba auditiva del recién nacido (Sociedade Brasileira de Pediatria, 2018). Tema: por qué es importante y qué pasa si hay sospecha de alteración. Hallazgo: la audición es uno de los sentidos más importantes para el desarrollo del niño y el lenguaje se desarrolla a través de ella; cualquier pérdida de capacidad auditiva, aunque sea pequeña, impide al niño recibir la información sonora necesaria para hablar. Si se sospecha una alteración, se deriva al bebé a una evaluación completa otológica y audiológica. La fuente indica que todos los bebés deben hacerla y que conviene confirmar con el pediatra que se realizará. (fuente en portugués)"
+      ]
+    },
+    {
+      "source_type": "guideline",
+      "title": "Cuidados generales del recién nacido sano",
+      "original_title": "Cuidados Gerais ao Recém-Nascido Saudável",
+      "organization": "Sociedade Portuguesa de Neonatologia (SPN)",
+      "publication_year": 2023,
+      "url": "https://www.spneonatologia.pt/media/eirdv1x1/cuidados-gerais-ao-rn-sauda-vel.pdf",
+      "specialties": [
+        "pediatrics",
+        "neonatology"
+      ],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "original_language": "pt",
+      "topics": [
+        "primeras_semanas",
+        "cordon_umbilical"
+      ],
+      "chunks": [
+        "Cuidados generales del recién nacido sano (Sociedade Portuguesa de Neonatologia, 2023). Tema: primera hora de vida y alimentación del recién nacido sano. Hallazgo: el consenso recomienda pinzar el cordón umbilical después del primer minuto y poner al bebé sano en contacto piel con piel con la madre durante la primera hora, y, si ella no puede (por su estado de salud o por cesárea), el piel con piel con el padre justo tras el nacimiento ha mostrado beneficio para ambos. Se amamanta en la primera hora si esa es la opción de la madre, a demanda ante los primeros signos de hambre (girar la cabeza, abrir la boca, chuparse las manos), entre 8 y 12 veces en 24 horas. Con fórmula también es a demanda y sin pasar más de 4 horas entre tomas, y las madres que eligen el biberón no deben sentir culpa inducida por los profesionales y reciben el mismo apoyo que las que amamantan. (fuente en portugués)",
+        "Cuidados generales del recién nacido sano (Sociedade Portuguesa de Neonatologia, 2023). Tema: cuidado del cordón y vitamina K. Hallazgo: si el cordón se cortó en condiciones de asepsia no se recomiendan antisépticos: basta dejarlo limpio y seco hasta que caiga y, en el baño, lavarlo con agua y jabón neutro y secarlo. Todos los recién nacidos de más de 1500 gramos deben recibir una inyección de vitamina K en el músculo en las primeras 6 horas de vida para prevenir la enfermedad hemorrágica, que reduce en un 98 % las formas clásica y tardía de esa enfermedad. (fuente en portugués)",
+        "Cuidados generales del recién nacido sano (Sociedade Portuguesa de Neonatologia, 2023). Tema: cribados neonatales antes del alta. Hallazgo: el cribado auditivo universal se hace al nacer o, como máximo, antes de los 30 días, y si se confirma una pérdida auditiva la intervención debe empezar como muy tarde a los 6 meses. A todos los recién nacidos se les explora el reflejo rojo de ambos ojos, idealmente el día del alta si esta es hasta el séptimo día de vida, y un reflejo blanco, muy disminuido o asimétrico, o con manchas oscuras, es motivo de derivación a oftalmología. Tras las primeras 24 horas y antes del alta se mide la saturación de oxígeno con pulsioxímetro para detectar cardiopatías congénitas graves. (fuente en portugués)",
+        "Cuidados generales del recién nacido sano (Sociedade Portuguesa de Neonatologia, 2023). Tema: pérdida de peso, ictericia, alta y transporte en coche. Hallazgo: es esperable que el recién nacido amamantado pierda peso los primeros días, y una pérdida de más del 10 % del peso al nacer exige más vigilancia por riesgo de deshidratación e ictericia. Antes del alta se evalúa el riesgo de ictericia grave, mayor si nació antes de las 38 semanas, tuvo ictericia visible en las primeras 24 horas o toma solo pecho, y se informa a los padres de palabra y por escrito. Se enseña a vigilar ictericia, fiebre, atragantamiento, rechazo de la toma e irritabilidad, y a las 48-72 horas del alta debe revisarse en atención primaria. El viaje a casa se hace con silla homologada a contramarcha, mejor atrás y nunca en un asiento con airbag frontal activo. (fuente en portugués)"
+      ]
+    },
+    {
+      "source_type": "reference",
+      "title": "Vitamina K en el recién nacido",
+      "original_title": "Vitamina K no recém-nascido",
+      "organization": "Sociedade Portuguesa de Pediatria (SPP)",
+      "publication_year": 2026,
+      "url": "https://criancaefamilia.spp.pt/primeiro-ano-de-vida/vitamina-k-no-recem-nascido/",
+      "specialties": [
+        "pediatrics",
+        "neonatology"
+      ],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "original_language": "pt",
+      "topics": [
+        "primeras_semanas",
+        "signos_alarma"
+      ],
+      "chunks": [
+        "Vitamina K en el recién nacido (Sociedade Portuguesa de Pediatria, Portal Criança e Família, 2026). Tema: por qué se pone vitamina K al recién nacido. Hallazgo: la página, publicada en febrero de 2026 con texto de diciembre de 2025, explica que los recién nacidos tienen poca vitamina K porque pasa poca por la placenta y la leche materna aporta poca, así que todos tienen más riesgo de sangrado. Sin la inyección el riesgo de sangrado grave es unas 8 veces mayor, persiste hasta los 6 meses y puede afectar al cerebro y llegar a ser mortal. Se recomienda que todos los recién nacidos reciban la inyección de vitamina K, que reduce el riesgo en cerca del 98 %; la vía oral no se recomienda. (fuente en portugués)",
+        "Vitamina K en el recién nacido (Sociedade Portuguesa de Pediatria, Portal Criança e Família, 2026). Tema: bebés de mayor riesgo y signos de sangrado. Hallazgo: tienen más riesgo los bebés con lactancia exclusiva, los prematuros (nacidos antes de las 37 semanas), los nacidos con ventosa o fórceps, los que van a ser operados, los hijos de madres con ciertos fármacos y los que tienen enfermedades de la sangre o del hígado. Son signos de sangrado los moretones fáciles, sobre todo en cara y cabeza, el sangrado por la nariz o el cordón, la piel o las encías muy pálidas, los ojos amarillos pasadas 2 semanas, la sangre en las heces, las heces negras o el vómito con sangre, y la irritabilidad, las convulsiones, la somnolencia excesiva o los vómitos repetidos. Rechazar la inyección es un derecho de los padres, tras la información de los profesionales. (fuente en portugués)"
+      ]
+    },
+    {
+      "source_type": "reference",
+      "title": "Ictericia en recién nacidos (1177)",
+      "original_title": "Gulsot hos nyfödda (1177)",
+      "organization": "1177 Vårdguiden (Inera)",
+      "publication_year": 2026,
+      "url": "https://www.1177.se/barn--gravid/vanliga-besvar-och-sjukdomar-hos-barn/vanliga-sjukdomar-och-besvar-hos-barn-0-1-ar/gulsot-hos-nyfodda/",
+      "specialties": [
+        "pediatrics",
+        "neonatology"
+      ],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "original_language": "sv",
+      "topics": [
+        "ictericia_neonatal"
+      ],
+      "chunks": [
+        "Ictericia en recién nacidos (1177 Vårdguiden, 2026). Tema: cuándo aparece la ictericia del recién nacido y cuánto dura. Hallazgo: suele notarse 2 o 3 días después del nacimiento, suele ser leve y en la mayoría de los bebés desaparece sola en un par de semanas. Se debe a la bilirrubina, un pigmento amarillo que se forma al destruirse glóbulos rojos y que el hígado del recién nacido tarda unos días en procesar. Si dura hasta las 2 o 3 semanas de vida se hace un análisis de sangre aunque el bebé esté bien. La ictericia por leche materna aparece hacia las 2 a 6 semanas, suele resolverse sola y no obliga a dejar de amamantar.",
+        "Ictericia en recién nacidos (1177 Vårdguiden, 2026). Tema: cuándo consultar. Hallazgo: se consulta con su pediatra o la enfermera de pediatría si la piel y el blanco de los ojos se ven amarillos, algo más fácil de ver con luz del día; en pieles oscuras se miran las palmas, las plantas de los pies y el interior de la boca. Se acude con urgencia a la consulta sin cita si además el bebé está aletargado y no come lo suficiente, o a urgencias del hospital si esa consulta está cerrada. En casa, los primeros días, conviene que mame o tome el biberón a menudo, de 8 a 12 veces al día, porque la bilirrubina se elimina por la orina y las heces.",
+        "Ictericia en recién nacidos (1177 Vårdguiden, 2026). Tema: valoración y tratamiento. Hallazgo: la bilirrubina se mide primero con un aparato sobre la piel y, si sale alta, con análisis de sangre. La mayoría de los casos no necesita tratamiento. Si los valores son demasiado altos se usa fototerapia (luz), con una lámpara especial o una manta de luz que permite sostener y alimentar al bebé; con la lámpara se le protegen los ojos. Puede darse en el servicio de pediatría del hospital, en la maternidad o, a veces, en casa si el bebé está bien en lo demás. Muy raramente hace falta una exanguinotransfusión."
+      ]
+    }
+  ]
+}

@@ -2,10 +2,13 @@
 
     # inside the api-golden container, on the scratch copy (golden_gate.sh does this)
     python scripts/golden_candidates.py load "apps/api/adelia/enrichment/candidates/*.json"
+    python scripts/golden_candidates.py load "$LOTE/seguridad.json,$LOTE/neonatal.json"
     python scripts/golden_candidates.py compare --without golden_report.sin_candidatos.json \\
         --with golden_report.con_candidatos.json \\
         --preview-without golden_preview.sin_candidatos.json \\
         --preview-with golden_preview.con_candidatos.json
+    python scripts/golden_candidates.py explain --without golden_explain.sin_candidatos.json \\
+        --with golden_explain.con_candidatos.json
 
 Why. On 2026-11-06 several agents started gathering hundreds of new sources in
 many languages, summarised in Spanish in the shape of
@@ -33,6 +36,13 @@ question got worse and recall@4 with the candidates still clears its bar; 1:
 one did, or it does not; 2: a run did not measure, or was not the run without
 a model, so there is nothing to compare.
 
+`explain` (2026-11-07) reads the --explain previews of the questions the
+operator named (golden_gate.sh --explain IDS) and prints them side by side:
+each nearest source with its distance, under the cut or not, expected or not,
+new with the candidates or not, and its file. The first server run of the
+2026-11-06 candidates said which questions broke, not which sources broke
+them; this is the run that says it. It always exits 0: a diagnostic.
+
 Without a model a group B question has three outcomes: refused by code (red
 flag, age scope, nothing under the cut), "reaches the model" (cards under
 the cut, a refusal only the model can write) or answered by code (a bug).
@@ -50,7 +60,7 @@ import sys
 from dataclasses import dataclass
 from pathlib import Path
 
-from adelia.clinical.golden import RECALL_AT_4_MIN
+from adelia.clinical.golden import RECALL_AT_4_MIN, source_matches
 from adelia.config import settings
 from adelia.enrichment import evidence_loader
 
@@ -72,19 +82,33 @@ class CandidateError(Exception):
 # --- which files ------------------------------------------------------------------
 
 
-def resolve(pattern: str, *, api_dir: Path = API_DIR) -> list[Path]:
-    """The files `pattern` names, sorted, from the repo root or from apps/api."""
-    p = pattern.strip()
-    if not p:
-        raise CandidateError("GOLDEN_CANDIDATE_GLOB está vacío")
+def _under_api(item: str, api_dir: Path) -> str:
     for prefix in _REPO_PREFIXES:
-        if p.startswith(prefix):
-            p = p[len(prefix):]
+        if item.startswith(prefix):
+            item = item[len(prefix):]
             break
-    full = p if os.path.isabs(p) else str(api_dir / p)
-    files = sorted(Path(f) for f in glob.glob(full) if Path(f).is_file())
-    if not files:
-        raise CandidateError(f"ningún fichero coincide con {pattern!r} (buscado en {full})")
+    return item if os.path.isabs(item) else str(api_dir / item)
+
+
+def resolve(pattern: str, *, api_dir: Path = API_DIR) -> list[Path]:
+    """The files `pattern` names, sorted, from the repo root or from apps/api.
+
+    `pattern` is a glob or (2026-11-07) several, separated by commas, each a
+    glob or a file: the second server run of the 2026-11-06 batch was broken by
+    a few files out of twelve, and a domain that keeps failing must not hold
+    the others back. Every item has to name at least one file, so a typo in a
+    list is an error rather than one domain fewer measured."""
+    items = [i.strip() for i in pattern.split(",") if i.strip()]
+    if not items:
+        raise CandidateError("GOLDEN_CANDIDATE_GLOB está vacío")
+    found: set[Path] = set()
+    for item in items:
+        full = _under_api(item, api_dir)
+        files = [Path(f) for f in glob.glob(full) if Path(f).is_file()]
+        if not files:
+            raise CandidateError(f"ningún fichero coincide con {item!r} (buscado en {full})")
+        found.update(files)
+    files = sorted(found)
     data_dir = (api_dir / "adelia" / "enrichment" / "data").resolve()
     in_data = [f.name for f in files if f.resolve().parent == data_dir]
     if in_data:
@@ -280,6 +304,89 @@ def compare(
     return "\n".join(lines), status
 
 
+# --- explain: named questions, source by source --------------------------------------
+
+#: The gate reads the top four cards (golden.TOP_K): a source pushed below
+#: them is a source lost.
+_TOP = 4
+
+
+def _explain_block(v: dict, *, before: dict | None) -> list[str]:
+    cut = {c.get("title") for c in v.get("cards") or []}
+    origins = v.get("origins") or {}
+    known = {n[0] for n in (before or {}).get("nearest") or []}
+    rows = []
+    for title, distance in v.get("nearest") or []:
+        marks = ["bajo el corte" if title in cut else "fuera del corte"]
+        if v.get("group") == "A" and source_matches(v.get("expect_source") or "", title):
+            marks.append("esperada")
+        if before is not None and title not in known:
+            marks.append("nueva")
+        where = origins.get(title, "sin fichero (crawler u otra carga)")
+        rows.append(f"    {distance:.4f} {', '.join(marks)}: {title[:90]} [{where}]")
+    if v.get("guard"):
+        rows.append(f"    el guard la para ({v['guard']}), sin búsqueda")
+    return rows or ["    (ninguna fuente)"]
+
+
+def explain(without: list[dict], with_: list[dict] | None) -> str:
+    """Each named question's nearest sources, without and (if given) with the candidates."""
+    after = {v["id"]: v for v in with_ or []}
+    lines = ["Explicación sin modelo: fuentes más cercanas, una por fuente, con su fichero"]
+    for v in without:
+        w = after.get(v["id"])
+        head = f"\n[{v['id']}] ({v.get('group')}) {v.get('question', '')}"
+        if v.get("group") == "A":
+            head += f"\n  espera: {v.get('expect_source')}"
+        lines.append(head)
+        n_sin = len(v.get("cards") or [])
+        if w is None:
+            lines.append(f"  tarjetas bajo el corte: {n_sin or 'ninguna'}")
+            lines += ["  sin candidatos", *_explain_block(v, before=None), *_query_blocks(v, None)]
+            continue
+        n_con = len(w.get("cards") or [])
+        lines.append(f"  tarjetas bajo el corte: {n_sin or 'ninguna'} sin; {n_con or 'ninguna'} con")
+        lines += ["  sin candidatos", *_explain_block(v, before=None)]
+        lines += ["  con candidatos", *_explain_block(w, before=v)]
+        top_after = {n[0] for n in (w.get("nearest") or [])[:_TOP]}
+        gone = [n[0] for n in (v.get("nearest") or [])[:_TOP] if n[0] not in top_after]
+        lines.append(f"  sale con los candidatos: {_ids(gone)}")
+        lines += _query_blocks(v, w)
+    return "\n".join(lines)
+
+
+def _query_blocks(v: dict, w: dict | None) -> list[str]:
+    """Each search of the graph and the gate (preview --explain, 2026-11-07), without and with.
+
+    The merged nearest list above hid where A21 was lost: the lexicon found the
+    tear-duct sources, the gate's own search (one recorded vector) found the
+    crying ones first. A block per search, with its own newcomers and losses."""
+    before = {b.get("name"): b for b in v.get("queries") or []}
+    origins = {**(v.get("origins") or {}), **((w or {}).get("origins") or {})}
+    lines: list[str] = []
+    for b in (w if w is not None else v).get("queries") or []:
+        name = b.get("name")
+        old = before.get(name) or {}
+        lines.append(f"  consulta {name} (corte {b.get('cut', 0):.2f})"
+                     + (f": {b['note']}" if b.get("note") else ""))
+        if not b.get("top") and not old.get("top"):
+            continue
+        runs = (("sin candidatos", old, None), ("con candidatos", b, old)) if w is not None \
+            else (("sin candidatos", b, None),)
+        for label, block, ref in runs:
+            view = {"group": v.get("group"), "expect_source": v.get("expect_source"),
+                    "cards": [{"title": t} for t in block.get("cards") or ()],
+                    "nearest": block.get("top") or [], "origins": origins}
+            prior = None if ref is None else {"nearest": ref.get("top") or []}
+            lines += [f"    {label}", *("  " + r for r in _explain_block(view, before=prior))]
+        if w is None:
+            continue
+        top_after = {n[0] for n in (b.get("top") or [])[:_TOP]}
+        gone = [n[0] for n in (old.get("top") or [])[:_TOP] if n[0] not in top_after]
+        lines.append(f"    sale con los candidatos: {_ids(gone)}")
+    return lines
+
+
 # --- the command line ---------------------------------------------------------------
 
 
@@ -319,16 +426,24 @@ def main(argv: list[str] | None = None) -> int:
     )
     sub = parser.add_subparsers(dest="command", required=True)
     load = sub.add_parser("load", help="load the candidate files into the scratch copy")
-    load.add_argument("glob", help="e.g. apps/api/adelia/enrichment/candidates/*.json")
+    load.add_argument("glob", help="e.g. apps/api/adelia/enrichment/candidates/*.json, or "
+                      "several globs or files separated by commas")
     cmp_ = sub.add_parser("compare", help="compare the gate runs without and with them")
     cmp_.add_argument("--without", required=True)
     cmp_.add_argument("--with", dest="with_", required=True)
     cmp_.add_argument("--preview-without")
     cmp_.add_argument("--preview-with")
+    exp = sub.add_parser("explain", help="named questions source by source, without and with")
+    exp.add_argument("--without", required=True)
+    exp.add_argument("--with", dest="with_")
     args = parser.parse_args(argv)
     try:
         if args.command == "load":
             return asyncio.run(_load_cli(args.glob))
+        if args.command == "explain":
+            # A diagnostic: it prints, and never decides the gate.
+            print(explain(_read_json(args.without), _read_json(args.with_)))
+            return 0
         text, status = compare(
             _read_json(args.without), _read_json(args.with_),
             _read_json(args.preview_without), _read_json(args.preview_with),

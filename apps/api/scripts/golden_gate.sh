@@ -24,12 +24,20 @@
 # and no call to Anthropic at all. --with-model is the full pass on the
 # production provider (about 40 generations and the routing calls).
 #
-# --candidates GLOB (always without a model): after that run, the CANDIDATES
-# questions are previewed, the candidate files are loaded into this scratch
+# --candidates GLOB (always without a model; since 2026-11-07 also several globs
+# or files separated by commas, to measure a domain apart): after that run, the
+# CANDIDATES questions are previewed, the candidate files are loaded into this scratch
 # copy (scripts/golden_candidates.py, never the live database, never boot),
 # and the set and the preview run again; then both are compared. The exit
 # status is still the verdict on the release as it would serve, without the
 # candidates; the comparison is printed for whoever decides what enters data/.
+#
+# --explain IDS (2026-11-07, always without a model): the named questions, e.g.
+# A1,A5,B6, previewed with --explain after the set (and again after the
+# candidates load): their nearest sources with distance, the cut and the file
+# each comes from, then side by side (golden_candidates.py explain). The first
+# server run of the 2026-11-06 candidates said which questions broke but not
+# which sources broke them. A diagnostic: it never changes the exit status.
 #
 # Exit status, read by prod-golden-gate.sh and deploy-prod.sh:
 #   0  the gate passed
@@ -50,14 +58,23 @@ say() { printf 'golden: %s\n' "$*"; }
 
 WITH_MODEL=0
 CANDIDATES=""
+EXPLAIN=""
 while [[ $# -gt 0 ]]; do
   case "$1" in
     --with-model) WITH_MODEL=1 ;;
     --candidates)
       CANDIDATES="${2:-}"
-      [[ -n "${CANDIDATES}" ]] || { say "--candidates needs a glob"; exit 2; }
+      [[ -n "${CANDIDATES}" ]] || {
+        say "--candidates needs a glob or files separated by commas"; exit 2; }
       shift ;;
-    *) say "unknown argument: $1 (known: --with-model, --candidates GLOB)"; exit 2 ;;
+    --explain)
+      EXPLAIN="${2:-}"
+      # Question ids only (A1,A5,B6): anything else is a typo, or worse.
+      [[ "${EXPLAIN}" =~ ^[ABC][0-9]+(,[ABC][0-9]+)*$ ]] || {
+        say "--explain needs question ids separated by commas, e.g. A1,A5,B6"; exit 2; }
+      shift ;;
+    *) say "unknown argument: $1 (known: --with-model, --candidates GLOB[,FILE...], --explain IDS)"
+       exit 2 ;;
   esac
   shift
 done
@@ -85,7 +102,8 @@ case "${POSTGRES_DB:-}" in
 esac
 
 # Last run's files, so a run that writes nothing is never read as this one.
-rm -f "${REPORT}" golden_report.*_candidatos.json golden_preview.*_candidatos.json
+rm -f "${REPORT}" golden_report.*_candidatos.json golden_preview.*_candidatos.json \
+  golden_explain.*_candidatos.json
 
 say "alembic upgrade head on ${POSTGRES_DB}"
 if ! .venv/bin/alembic upgrade head; then
@@ -93,9 +111,13 @@ if ! .venv/bin/alembic upgrade head; then
   exit 2
 fi
 
+# A file the load could not finish (a 429 that outlasted every retry) is a
+# corpus smaller than the one about to boot: measuring it would pass a release
+# nobody measured, so it is a gate that did not run (2026-11-07).
 say "loading the corpus this release boots with (load_startup_corpora)"
 if ! "${PY}" -c '
 import asyncio
+import sys
 
 from adelia.db import engine
 from adelia.main import load_startup_corpora
@@ -103,14 +125,16 @@ from adelia.main import load_startup_corpora
 
 async def _load():
     try:
-        await load_startup_corpora()
+        return await load_startup_corpora()
     finally:
         await engine.dispose()
 
 
-asyncio.run(_load())
+failed = asyncio.run(_load())
+if failed:
+    sys.exit("corpus files not loaded whole: " + ", ".join(failed))
 '; then
-  say "the startup corpus load crashed"
+  say "the startup corpus load crashed or did not finish"
   exit 2
 fi
 
@@ -152,6 +176,26 @@ preview() {
   fi
 }
 
+# --explain: the named questions, source by source, into $1. Never fatal.
+explain_run() {
+  [[ -n "${EXPLAIN}" ]] || return 0
+  local -a origins=()
+  [[ -n "${CANDIDATES}" ]] && origins=(--origins "${CANDIDATES}")
+  say "explicación de ${EXPLAIN} ($1)"
+  PYTHONPATH=. "${PY}" scripts/preview_golden_candidates.py --no-model --ids "${EXPLAIN}" \
+    --explain ${origins[@]+"${origins[@]}"} --json "$1" \
+    || [[ -f "$1" ]] || say "explicación no medida ($1)"
+}
+
+# $1 "with": the candidates were loaded and explained too. A file that a
+# failed explanation never wrote is said by golden_candidates.py, not fatal.
+explain_side_by_side() {
+  [[ -n "${EXPLAIN}" ]] || return 0
+  local -a args=(--without golden_explain.sin_candidatos.json)
+  [[ "${1:-}" == "with" ]] && args+=(--with golden_explain.con_candidatos.json)
+  PYTHONPATH=. "${PY}" scripts/golden_candidates.py explain "${args[@]}" || true
+}
+
 say "golden set (groups A, B and C), ${MODE}"
 run_set
 rc=$?
@@ -159,12 +203,14 @@ print_report "${REPORT}"
 verdict "${rc}" "${REPORT}"
 status=$?
 
-if [[ -z "${CANDIDATES}" ]]; then
-  exit "${status}"
-fi
 if [[ "${status}" -eq 2 ]]; then
-  say "candidatos: not measured, the run without them did not measure either"
+  [[ -n "${CANDIDATES}" ]] && say "candidatos: not measured, the run without them did not measure either"
   exit 2
+fi
+if [[ -z "${CANDIDATES}" ]]; then
+  explain_run golden_explain.sin_candidatos.json
+  explain_side_by_side
+  exit "${status}"
 fi
 
 WITHOUT=golden_report.sin_candidatos.json
@@ -172,6 +218,7 @@ WITH=golden_report.con_candidatos.json
 cp "${REPORT}" "${WITHOUT}"
 say "candidatos: ${CANDIDATES}; preview of the CANDIDATES questions without them"
 preview golden_preview.sin_candidatos.json
+explain_run golden_explain.sin_candidatos.json
 say "candidatos: loading them into ${POSTGRES_DB} (the scratch copy; never the live database)"
 if PYTHONPATH=. "${PY}" scripts/golden_candidates.py load "${CANDIDATES}"; then
   say "golden set again, with the candidates, ${MODE}"
@@ -182,12 +229,14 @@ if PYTHONPATH=. "${PY}" scripts/golden_candidates.py load "${CANDIDATES}"; then
   print_report "${REPORT}"
   [[ -f "${REPORT}" ]] && mv "${REPORT}" "${WITH}"
   preview golden_preview.con_candidatos.json
+  explain_run golden_explain.con_candidatos.json
   compare_args=(--without "${WITHOUT}" --with "${WITH}")
   if [[ -f golden_preview.sin_candidatos.json && -f golden_preview.con_candidatos.json ]]; then
     compare_args+=(--preview-without golden_preview.sin_candidatos.json
                    --preview-with golden_preview.con_candidatos.json)
   fi
   PYTHONPATH=. "${PY}" scripts/golden_candidates.py compare "${compare_args[@]}"
+  explain_side_by_side with
 else
   say "candidatos: NO SE PUDIERON CARGAR; the verdict below is the release's, without them"
 fi

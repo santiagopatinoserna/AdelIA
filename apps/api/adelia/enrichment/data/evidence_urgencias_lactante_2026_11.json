@@ -1,0 +1,150 @@
+{
+  "_meta": {
+    "topic": "Candidatas del dominio urgencias_lactante (0-24 meses), fuentes oficiales de muchos países leídas en su idioma y resumidas en español.",
+    "compiled": "2026-11-06",
+    "method": "Seis investigadores de Claude Code leyeron cada página con WebFetch y la pasaron por un subagente verificador (~/dev/adelia-night/research/corpus-*, verify.json). Al integrarlas se quitaron las fuentes cuyos términos prohíben adaptar, traducir o el uso comercial, los calendarios de vacunas de otros países y los duplicados con data/ y entre lotes; los teléfonos y servicios de otros sistemas de salud se reescribieron en palabras con el nivel de urgencia de la fuente, y cada fragmento sobre alarmas, urgencias, fiebre, respiración, convulsiones, deshidratación, ictericia o sepsis se volvió a comprobar contra el texto de la página descargado con curl. Idiomas del original: inglés 5, neerlandés 1. Detalle en docs/corpus/CANDIDATOS_2026_11_06.md.",
+    "caveat": "Los fragmentos son paráfrasis breves en español, no traducciones literales ni citas; `language` es el idioma del fragmento (es) y `original_language` el de la página. Cada fragmento conserva las cifras, edades y el nivel de urgencia de su propia fuente, que pueden diferir entre países. No es consejo médico.",
+    "purpose": "Candidato: no lo carga el arranque. Se mide con scripts/golden_gate.sh --candidates antes de pasar a data/ como evidence_urgencias_lactante_2026_11.json."
+  },
+  "sources": [
+    {
+      "source_type": "reference",
+      "title": "AHA, AAP Update CPR Guidelines To Help Save Young Lives (HealthyChildren, AAP)",
+      "organization": "American Academy of Pediatrics",
+      "publication_year": 2025,
+      "url": "https://www.healthychildren.org/English/news/Pages/AHA-and-AAP-release-update-CPR-guidelines-to-help-save-young-lives.aspx",
+      "specialties": [
+        "pediatrics",
+        "emergency_medicine"
+      ],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "original_language": "en",
+      "topics": [
+        "primeros_auxilios",
+        "rcp_lactante"
+      ],
+      "chunks": [
+        "AHA, AAP Update CPR Guidelines To Help Save Young Lives (HealthyChildren.org, American Academy of Pediatrics, 2025). Tema: qué hacer si el bebé se atraganta y no puede respirar según las guías AHA y AAP de 2025. Hallazgo: para un atragantamiento grave por cuerpo extraño en un lactante, las nuevas guías recomiendan ciclos repetidos de 5 golpes en la espalda alternados con 5 compresiones en el pecho, y no recomiendan las compresiones abdominales en los lactantes. En los niños, el atragantamiento grave se trata con ciclos repetidos de 5 golpes en la espalda alternados con 5 compresiones abdominales, cuando antes solo se indicaban las abdominales. Las guías insisten en reconocer pronto la parada cardiaca, avisar enseguida a emergencias (112) y hacer una RCP de calidad empezando por las compresiones en el pecho. (Fuente en inglés)",
+        "AHA, AAP Update CPR Guidelines To Help Save Young Lives (HealthyChildren.org, American Academy of Pediatrics, 2025). Tema: cómo se hacen las compresiones en la RCP del bebé tras el cambio de 2025. Hallazgo: las guías de 2025 de la American Heart Association y la AAP, publicadas en Circulation y Pediatrics, recomiendan dos técnicas para las compresiones torácicas en el lactante: con una sola mano o con los dos pulgares mientras las manos rodean el tórax. Si quien reanima no consigue rodear el pecho con las manos, debe comprimir con el talón de una mano. Se ha retirado la técnica de los dos dedos sobre el esternón porque no lograba la profundidad adecuada. Las guías sirven de referencia tanto para personas sin formación sanitaria como para profesionales. (Fuente en inglés)"
+      ]
+    },
+    {
+      "source_type": "guideline",
+      "title": "Babies and children - when to go to an emergency department (HSE)",
+      "organization": "Health Service Executive (HSE)",
+      "publication_year": 2023,
+      "url": "https://www2.hse.ie/babies-children/first-aid/when-to-go-to-an-emergency-department/",
+      "specialties": [
+        "pediatrics",
+        "general_medicine",
+        "emergency_medicine"
+      ],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "original_language": "en",
+      "topics": [
+        "signos_alarma",
+        "cuando_consultar"
+      ],
+      "chunks": [
+        "Babies and children - when to go to an emergency department (HSE, 2023). Tema: cuándo ir a urgencias pediátricas. Hallazgo: el HSE indica acudir al servicio de urgencias pediátricas más cercano si el niño cuesta despertarlo, está muy adormilado o no reconoce a sus padres; respira de forma anormal, más rápida o más lenta de lo habitual, o con quejido; tiene fiebre con dolor de cabeza intenso o rigidez de cuello; ha sufrido un golpe en la cabeza y vomita más de una vez; tiene una quemadura o escaldadura grande o cualquiera en manos, cara o genitales; o tiene una lesión en el ojo.",
+        "Babies and children - when to go to an emergency department (HSE, 2023). Tema: otros motivos de urgencia. Hallazgo: también se acude a las urgencias pediátricas más cercanas si el niño tiene fiebre persistente o se nota inusualmente frío o flácido, un llanto inusual o agudo, tos ronca con respiración ruidosa o sibilancias, sibilancias con imposibilidad de hablar, si ha tragado medicación, veneno o un producto químico, ha sufrido una mordedura de animal (salvo una herida muy leve) o una descarga eléctrica, o tiene algo metido en los ojos, los oídos o la nariz. Si es posible, se lleva al niño a un hospital con urgencias pediátricas, que tiene más experiencia con niños."
+      ]
+    },
+    {
+      "source_type": "reference",
+      "title": "How to give CPR (mouth to mouth) to a baby or child (HSE)",
+      "organization": "Health Service Executive (HSE)",
+      "publication_year": 2026,
+      "url": "https://www2.hse.ie/babies-children/first-aid/how-to-give-cpr/",
+      "specialties": [
+        "pediatrics",
+        "emergency_medicine"
+      ],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "original_language": "en",
+      "topics": [
+        "rcp_lactante",
+        "primeros_auxilios"
+      ],
+      "chunks": [
+        "How to give CPR (mouth to mouth) to a baby or child (HSE, servicio público de salud de Irlanda, 2026). Tema: mi bebé no respira o no responde, ¿cuándo llamo y cómo empiezo? Hallazgo: si un bebé menor de 1 año deja de respirar o no responde, llama enseguida a emergencias (112), pide una ambulancia, da la dirección exacta y no cuelgues: la operadora te guiará. Si hay alguien más, que vaya a buscar un desfibrilador (DEA). Pon una mano en la frente e inclina la cabeza para que la nariz apunte hacia arriba, eleva el mentón, cubre con tu boca su boca y su nariz y sopla de forma constante durante alrededor de 1 segundo, hasta que el pecho suba; déjalo bajar y repite 4 veces más. Si ves algún objeto en la boca o la nariz, intenta sacarlo. (Fuente en inglés)",
+        "How to give CPR (mouth to mouth) to a baby or child (HSE, servicio público de salud de Irlanda, 2026). Tema: cómo se hacen las compresiones en la RCP del bebé. Hallazgo: en el bebé menor de 1 año, coloca dos dedos en el centro del pecho y hunde un tercio de la profundidad del tórax, soltando después; el ritmo es algo más rápido que una vez por segundo: «empuja fuerte, empuja rápido». Mejor sobre una superficie firme y quitando la ropa que estorbe. Haz 30 compresiones y después 2 respiraciones, y repite el ciclo hasta que el bebé empiece a recuperarse, llegue la ayuda o se use el DEA. (Fuente en inglés)"
+      ]
+    },
+    {
+      "source_type": "guideline",
+      "title": "How to resuscitate a child (NHS)",
+      "organization": "NHS (National Health Service, Reino Unido)",
+      "publication_year": 2026,
+      "url": "https://www.nhs.uk/baby/first-aid-and-safety/first-aid/how-to-resuscitate-a-child/",
+      "specialties": [
+        "pediatrics",
+        "general_medicine",
+        "emergency_medicine"
+      ],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "original_language": "en",
+      "topics": [
+        "rcp_lactante",
+        "signos_alarma"
+      ],
+      "chunks": [
+        "How to resuscitate a child (NHS, 2026). Tema: cuándo hace falta reanimar y primeros pasos en un bebé. Hallazgo: si un bebé o niño no responde y no respira con normalidad, hay que llamar a emergencias y empezar la reanimación de inmediato. Se comprueba la respuesta con un toque suave en el brazo y preguntando en voz alta, y se mira, escucha y siente la respiración durante no más de 10 segundos; las boqueadas no se consideran respiración normal. En un bebé menor de 1 año se hace segura la zona, se le pone boca arriba con la cabeza en posición neutra y se eleva el mentón con la punta de los dedos, sin presionar los tejidos blandos.",
+        "How to resuscitate a child (NHS, 2026). Tema: respiraciones de rescate y compresiones en un bebé. Hallazgo: si no respira o lo hace de forma irregular, se retira cualquier obstáculo visible que sea fácil de sacar y se dan 5 respiraciones de rescate iniciales, cubriendo con la boca la boca y la nariz del bebé y soplando de forma continua durante 1 segundo hasta que el pecho se eleve. Si no hay signos de vida, se empiezan las compresiones con la punta de 2 dedos sobre el esternón, un dedo por encima de donde se unen las costillas inferiores, hundiendo unos 4 cm (un tercio del pecho), a un ritmo de 100 a 120 por minuto y con una pauta de 30 compresiones y 2 respiraciones.",
+        "How to resuscitate a child (NHS, 2026). Tema: si se está solo, cuándo parar y niños mayores. Hallazgo: si se está solo con un bebé que no responde, se hace reanimación durante aproximadamente 1 minuto antes de llamar a emergencias; al llamar, dan instrucciones por teléfono. Si no se logran respiraciones eficaces, se hacen hasta 5 intentos y después se pasa a compresiones con respiraciones. Se continúa hasta que el bebé muestre signos de vida (respiración normal, tos o movimiento) o llegue ayuda cualificada; si vuelven los signos de vida, se coloca en posición de recuperación. En mayores de 1 año se comprime unos 5 cm con el talón de una mano sobre el tercio inferior del esternón."
+      ]
+    },
+    {
+      "source_type": "guideline",
+      "title": "Paediatric Life Support (basic and advanced) (Resuscitation Council UK, 2025 Resuscitation Guidelines)",
+      "organization": "Resuscitation Council UK",
+      "publication_year": 2025,
+      "url": "https://www.resus.org.uk/professional-library/2025-resuscitation-guidelines/paediatric-basic-life-support-guidelines",
+      "specialties": [
+        "pediatrics",
+        "emergency_medicine"
+      ],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "original_language": "en",
+      "topics": [
+        "primeros_auxilios",
+        "rcp_lactante"
+      ],
+      "chunks": [
+        "Paediatric Life Support (Resuscitation Council UK, guías 2025). Tema: cómo reconocer que el bebé se ha atragantado. Hallazgo: hay que sospechar un atragantamiento por un cuerpo extraño si el bebé o el niño pequeño no puede llorar en voz alta, o el niño mayor no puede hablar, sobre todo mientras se alimenta, come o juega sin vigilancia. Se debe llamar o pedir a alguien que llame a emergencias (112) cuanto antes, y como muy tarde cuando pierda el conocimiento. Al niño mayor se le anima a toser; los golpes en la espalda empiezan cuando no puede toser o la tos se vuelve ineficaz. Hay que parar en cuanto haya señales de que se ha desatascado: tos, respiración ruidosa o llanto. (Fuente en inglés)",
+        "Paediatric Life Support (Resuscitation Council UK, guías 2025). Tema: golpes en la espalda y compresiones torácicas en el lactante consciente. Hallazgo: se pone al bebé boca abajo sobre el antebrazo, con el antebrazo apoyado en la pierna y la cabeza más baja que el tórax, y se da un golpe seco entre los omóplatos, hasta 5 veces. Si no sale, se le gira boca arriba sobre las rodillas y se hacen compresiones torácicas con la técnica de los dos pulgares abrazando el tórax, como en las compresiones de la RCP pero más secas, hasta 5 veces. Si sigue consciente, se alternan hasta 5 golpes en la espalda con hasta 5 compresiones torácicas. En los niños mayores de 1 año se usan compresiones abdominales en lugar de torácicas. (Fuente en inglés)",
+        "Paediatric Life Support (Resuscitation Council UK, guías 2025). Tema: no meter el dedo en la boca y qué hacer si el bebé atragantado pierde el conocimiento. Hallazgo: no se debe barrer la boca a ciegas con el dedo para sacar el objeto; solo se admite un único barrido si el objeto se ve claramente. Si el bebé se queda inconsciente, hay que pedir ayuda y llamar a emergencias (112) si no se ha hecho ya, y empezar la RCP enseguida con 5 respiraciones de rescate. Sobre los dispositivos de succión que se venden para desatascar la vía aérea, el Resuscitation Council UK y el European Resuscitation Council no pueden pronunciarse ni a favor ni en contra, porque no hay pruebas suficientes. (Fuente en inglés)",
+        "Paediatric Life Support (Resuscitation Council UK, guías 2025). Tema: RCP del lactante por un testigo. Hallazgo: se comprueba si el bebé responde estimulándolo con la voz y el tacto, sin causarle dolor, y se llama enseguida a emergencias (112), con el altavoz del móvil, siguiendo sus instrucciones. Se abre la vía aérea inclinando la cabeza y elevando el mentón, se buscan signos de vida durante no más de 10 segundos y se dan 5 respiraciones iniciales soplando en boca y nariz durante aproximadamente 1 segundo, lo suficiente para que el pecho se eleve de forma visible. Las compresiones se hacen con los dos pulgares abrazando el tórax sobre la mitad inferior del esternón, a 100 a 120 por minuto, hundiendo al menos un tercio del pecho y dejándolo volver. Relación 15:2 si se tiene formación en RCP pediátrica; si no, 30:2. (Fuente en inglés)"
+      ]
+    },
+    {
+      "source_type": "reference",
+      "title": "Tu bebé está enfermo (GroeiGids)",
+      "original_title": "Je baby is ziek (GroeiGids)",
+      "organization": "GroeiGids (GGD- en CJG-organisaties, Jeugdgezondheidszorg)",
+      "publication_year": null,
+      "undated_reason": "La página no muestra fecha de publicación ni de actualización; consultada el 2026-11-06",
+      "url": "https://groeigids.nl/baby/je-baby-is-ziek/8414",
+      "specialties": [
+        "pediatrics",
+        "general_medicine"
+      ],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "original_language": "nl",
+      "topics": [
+        "cuando_consultar",
+        "signos_alarma"
+      ],
+      "chunks": [
+        "Tu bebé está enfermo (GroeiGids). Tema: cómo reconocer que un bebé está enfermo. Hallazgo: la página cita como señales que el bebé está más decaído o llorón, o duerme menos o más de lo normal. Como cuidados, aconseja ofrecerle de beber a menudo, porque probablemente hará tomas más cortas, y comprobar con regularidad si tiene fiebre. Los vómitos o la diarrea que no ceden aparecen entre los motivos para llamar al pediatra.",
+        "Tu bebé está enfermo (GroeiGids). Tema: cuándo llamar al médico de cabecera. Hallazgo: se llama si estás muy preocupada o si el bebé tiene menos de 3 meses y más de 38 grados, si tiene más de 3 meses y más de 38 grados durante 5 días, si bebe menos de la mitad de lo normal, si vomita sin parar o tiene diarrea persistente, o si empeora rápidamente. Se llama de inmediato ante estas señales de alarma: ningún pañal mojado en medio día, adormilamiento, dificultad para respirar, aspecto gris o llanto inconsolable, manchas que no desaparecen al presionarlas con un vaso, o quejidos. La página indica que estas son señales de alarma de meningitis."
+      ]
+    }
+  ]
+}

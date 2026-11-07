@@ -1,0 +1,881 @@
+{
+  "_meta": {
+    "topic": "Candidatas del dominio alimentacion_bebes (0-24 meses), fuentes oficiales de muchos países leídas en su idioma y resumidas en español.",
+    "compiled": "2026-11-06",
+    "method": "Seis investigadores de Claude Code leyeron cada página con WebFetch y la pasaron por un subagente verificador (~/dev/adelia-night/research/corpus-*, verify.json). Al integrarlas se quitaron las fuentes cuyos términos prohíben adaptar, traducir o el uso comercial, los calendarios de vacunas de otros países y los duplicados con data/ y entre lotes; los teléfonos y servicios de otros sistemas de salud se reescribieron en palabras con el nivel de urgencia de la fuente, y cada fragmento sobre alarmas, urgencias, fiebre, respiración, convulsiones, deshidratación, ictericia o sepsis se volvió a comprobar contra el texto de la página descargado con curl. Idiomas del original: español 36, inglés 29, italiano 12, portugués 10, alemán 8, francés 8, neerlandés 6, polaco 4, noruego 3, sueco 2, árabe 1, finés 1. Detalle en docs/corpus/CANDIDATOS_2026_11_06.md.",
+    "caveat": "Los fragmentos son paráfrasis breves en español, no traducciones literales ni citas; `language` es el idioma del fragmento (es) y `original_language` el de la página. Cada fragmento conserva las cifras, edades y el nivel de urgencia de su propia fuente, que pueden diferir entre países. No es consejo médico.",
+    "purpose": "Candidato: no lo carga el arranque. Se mide con scripts/golden_gate.sh --candidates antes de pasar a data/ como evidence_alimentacion_bebes_2026_11.json."
+  },
+  "sources": [
+    {
+      "source_type": "guideline",
+      "title": "Recomendaciones para preparar con higiene la leche infantil en polvo (BfR)",
+      "original_title": "Empfehlungen zur hygienischen Zubereitung pulverförmiger Säuglingsnahrung (BfR)",
+      "organization": "Bundesinstitut für Risikobewertung (BfR)",
+      "publication_year": 2022,
+      "url": "https://www.bfr.bund.de/cm/343/empfehlungen-zur-hygienischen-zubereitung-pulverfoermiger-saeuglingsnahrung.pdf",
+      "specialties": [
+        "pediatrics",
+        "nutrition"
+      ],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "original_language": "de",
+      "topics": [
+        "biberon_formula"
+      ],
+      "chunks": [
+        "Recomendaciones para preparar con higiene la leche infantil en polvo (BfR, 2022). Tema: higiene del biberón con leche de fórmula en polvo. Hallazgo: el BfR (agencia federal alemana de evaluación de riesgos) recomienda preparar la leche en polvo justo antes de la toma, enfriarla a temperatura de beber lo antes posible (máximo 15 minutos) y dársela al bebé en un plazo de dos horas. Los restos deben tirarse. Hay que evitar que la leche preparada pase mucho tiempo (más de dos horas) a más de 5 °C, ya sea hasta la toma o al enfriarla y volver a calentarla.",
+        "Recomendaciones para preparar con higiene la leche infantil en polvo (BfR, 2022). Tema: agua y temperatura para mezclar el polvo. Hallazgo: para los bebés de los primeros meses el BfR recomienda usar agua potable previamente hervida, y no recomienda los filtros estériles como alternativa. Para disolver el polvo en un bebé sano nacido a término considera suficientes temperaturas del agua de unos 20 °C a 50 °C, siguiendo siempre las indicaciones del fabricante. Antes de dar el biberón hay que poner un poco de leche en la cara interna de la muñeca: no debe notarse tibia ni caliente, y no probar la leche con la propia boca para no transmitir gérmenes al bebé.",
+        "Recomendaciones para preparar con higiene la leche infantil en polvo (BfR, 2022). Tema: limpieza de utensilios y bebés de riesgo. Hallazgo: antes de preparar la leche hay que lavarse las manos con agua corriente tibia y jabón, y limpiar a fondo biberones, cucharas y tetinas con agua caliente y detergente. Como seguridad adicional se pueden hervir al menos dos minutos o usar un esterilizador, y para los bebés de los primeros meses el BfR considera necesario esterilizarlos además hirviéndolos. Las infecciones por Cronobacter son muy raras pero graves (por ejemplo, meningitis) y afectan sobre todo a bebés con menos de 2,5 kg al nacer o con defensas bajas; en los prematuros y en los bebés con defensas bajas el médico debe dar una pauta de alimentación individual."
+      ]
+    },
+    {
+      "source_type": "reference",
+      "title": "Infografía: alimentos para lactantes (BfR)",
+      "original_title": "Infografik: Säuglingsnahrung (BfR)",
+      "organization": "Bundesinstitut für Risikobewertung (BfR)",
+      "publication_year": 2025,
+      "url": "https://www.bfr.bund.de/veroeffentlichung/infografik-saeuglingsnahrung/",
+      "specialties": [
+        "pediatrics",
+        "nutrition"
+      ],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "original_language": "de",
+      "topics": [
+        "biberon_formula"
+      ],
+      "chunks": [
+        "Infografía: alimentos para lactantes (BfR, 2025). Tema: pasos para preparar y dar un biberón de fórmula en casa. Hallazgo: la infografía del BfR, publicada en enero de 2025, indica usar agua estéril embotellada o agua hervida, y que la leche preparada puede estar como máximo 1 hora a temperatura ambiente. La temperatura de toma es de 37 °C, y se recomienda la prueba de la muñeca para comprobarla. La leche debe consumirse en una hora como máximo y todos los restos se desechan.",
+        "Infografía: alimentos para lactantes (BfR, 2025). Tema: biberones fuera de casa y conservación en hospitales. Hallazgo: para salir de casa, la infografía propone llevar el polvo ya medido en el biberón y el agua caliente en un termo, y mezclar solo cuando haga falta, llevando después la leche a la temperatura de toma de 37 °C. La conservación de biberones preparados de antemano solo se contempla en entornos profesionales como un hospital: la leche se enfría en 30 minutos hasta menos de 5 °C y se guarda como máximo 24 horas. En el hogar el máximo sigue siendo 1 hora a temperatura ambiente."
+      ]
+    },
+    {
+      "source_type": "guideline",
+      "title": "Preparación de la leche para lactantes (Recomendaciones sobre la alimentación del lactante, Gesund ins Leben)",
+      "original_title": "Zubereitung der Säuglingsmilchnahrung (Handlungsempfehlungen Säuglingsernährung, Gesund ins Leben)",
+      "organization": "Netzwerk Gesund ins Leben (Bundesanstalt für Landwirtschaft und Ernährung, BLE)",
+      "publication_year": 2016,
+      "url": "https://www.gesund-ins-leben.de/fuer-fachkreise/bestens-unterstuetzt-durchs-1-lebensjahr/handlungsempfehlungen/saeuglingsmilchnahrung/zubereitung-der-saeuglingsmilchnahrung/",
+      "specialties": [
+        "pediatrics",
+        "nutrition"
+      ],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "original_language": "de",
+      "topics": [
+        "biberon_formula"
+      ],
+      "chunks": [
+        "Preparación de la leche para lactantes (Handlungsempfehlungen Säuglingsernährung, Gesund ins Leben, 2016). Tema: higiene al preparar el biberón de fórmula. Hallazgo: la leche debe prepararse siempre recién hecha antes de cada toma, y lo que sobre debe desecharse, sin guardarla ni recalentarla para la toma siguiente, porque las bacterias se multiplican con la temperatura y el tiempo. Antes de prepararla hay que lavarse las manos con agua corriente tibia y jabón y no manipular alimentos crudos cerca. Se limpian a fondo todos los utensilios.",
+        "Preparación de la leche para lactantes (Handlungsempfehlungen Säuglingsernährung, Gesund ins Leben, 2016). Tema: agua y temperatura para el biberón. Hallazgo: al mezclar la fórmula el agua debe estar tibia, como máximo a 40 °C, para evitar quemaduras; si se hierve el agua del grifo en las primeras semanas o meses de vida del bebé, debe enfriarse a 30-40 °C. Se usa agua fresca del grifo dejándola correr hasta que salga fría, nunca de tuberías de plomo. El agua de pozo solo si un laboratorio acreditado ha confirmado su calidad, y si hay dudas se usa agua envasada sin gas apta para preparar alimentos infantiles. Se desaconsejan los filtros de agua, porque pueden aumentar el riesgo de gérmenes y la concentración de contaminantes, y no debe usarse el agua caliente del grifo, porque sobre todo los calentadores de agua son problemáticos para la higiene."
+      ]
+    },
+    {
+      "source_type": "guideline",
+      "title": "Cow's Milk and Milk Alternatives (CDC)",
+      "organization": "CDC",
+      "publication_year": 2026,
+      "url": "https://www.cdc.gov/infant-toddler-nutrition/foods-and-drinks/cows-milk-and-milk-alternatives.html",
+      "specialties": [
+        "pediatrics",
+        "general_medicine",
+        "gastroenterology"
+      ],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "original_language": "en",
+      "topics": [
+        "bebidas",
+        "alimentacion_12_24m"
+      ],
+      "chunks": [
+        "Cow's Milk and Milk Alternatives (CDC, 2026). Tema: cuándo y qué leche dar. Hallazgo: los niños pueden empezar con leche entera de vaca a los 12 meses, no antes, porque antes puede causar sangrado intestinal, tiene demasiadas proteínas y minerales para los riñones del bebé y no tiene los nutrientes adecuados. Se elige leche entera de vaca pasteurizada, sin edulcorar ni aromatizar y enriquecida con vitamina D, porque los niños pequeños necesitan grasa para crecer; si hay aumento excesivo de peso o antecedentes familiares de obesidad, colesterol alto o enfermedad cardiovascular, se pregunta al médico qué tipo dar. La leche aromatizada y las alternativas azucaradas llevan azúcares añadidos que no necesitan.",
+        "Cow's Milk and Milk Alternatives (CDC, 2026). Tema: cuánto lácteo y alternativas vegetales. Hallazgo: entre los 12 y los 23 meses se necesitan unas 2 raciones de lácteos al día (leche de vaca, yogur entero, queso o alternativas lácteas enriquecidas). La leche no sustituye a la comida: demasiada puede quitar hambre para otros alimentos y, según algunos expertos, dificultar la absorción del hierro. Las bebidas vegetales (soja, avena, arroz, coco, anacardo, almendra) deben ser sin sabor ni azúcar y enriquecidas con vitamina D y calcio, y no se dan antes de los 12 meses; se comenta el producto concreto con el médico o la enfermera. No se debe dar nunca leche cruda o sin pasteurizar de vaca, cabra u oveja: puede transportar gérmenes que enferman gravemente al niño y ser potencialmente mortales."
+      ],
+      "original_license": "public_domain"
+    },
+    {
+      "source_type": "guideline",
+      "title": "Foods and Drinks to Avoid or Limit (CDC)",
+      "organization": "CDC",
+      "publication_year": 2026,
+      "url": "https://www.cdc.gov/infant-toddler-nutrition/foods-and-drinks/foods-and-drinks-to-avoid-or-limit.html",
+      "specialties": [
+        "pediatrics",
+        "general_medicine",
+        "gastroenterology"
+      ],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "original_language": "en",
+      "topics": [
+        "alimentacion_complementaria",
+        "alimentacion_12_24m",
+        "bebidas"
+      ],
+      "chunks": [
+        "Foods and Drinks to Avoid or Limit (CDC, 2026). Tema: alimentos que se evitan o limitan desde los 6 meses. Hallazgo: no se da miel antes de los 12 meses, ni en la comida, el agua, la fórmula o el chupete, porque puede causar botulismo, una forma grave de intoxicación alimentaria. Los lactantes y niños pequeños no deben tomar azúcares añadidos (como magdalenas, yogures aromatizados y galletas) y se evitan los alimentos con mucha sal, como algunos enlatados, embutidos, fiambres, salchichas y algunos platos congelados o snacks. Se evitan los pescados con mucho mercurio (caballa gigante, marlín, reloj anaranjado, tiburón, pez espada, blanquillo del Golfo y atún ojo grande). También se evitan los zumos, la leche, el yogur y los quesos sin pasteurizar, que pueden llevar bacterias que causan diarrea grave.",
+        "Foods and Drinks to Avoid or Limit (CDC, 2026). Tema: bebidas que se evitan o limitan. Hallazgo: los niños menores de 24 meses no deben tomar refrescos, bebidas deportivas, leche aromatizada, agua aromatizada con azúcar ni bebidas de zumo con azúcar añadido; lo mejor es agua, leche sin aromatizar ni edulcorar, leche sin lactosa y bebidas lácteas alternativas sin azúcar y enriquecidas. La leche de vaca antes de los 12 meses puede causar sangrado intestinal, y su proteína y minerales son demasiado altos para los riñones del bebé. Antes de los 12 meses no se da zumo de frutas ni de verduras, y después del año no es necesario; mejor la fruta entera. Los menores de 24 meses evitan las bebidas con cafeína (refrescos, té, café), sin que se haya establecido un límite seguro."
+      ],
+      "original_license": "public_domain"
+    },
+    {
+      "source_type": "reference",
+      "title": "How Much and How Often To Feed (Infant and Toddler Nutrition, CDC)",
+      "organization": "CDC",
+      "publication_year": 2025,
+      "url": "https://www.cdc.gov/infant-toddler-nutrition/foods-and-drinks/how-much-and-how-often-to-feed.html",
+      "specialties": [
+        "pediatrics",
+        "general_medicine"
+      ],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "original_language": "en",
+      "topics": [
+        "alimentacion_complementaria",
+        "alimentacion_12_24m",
+        "inapetencia"
+      ],
+      "chunks": [
+        "How Much and How Often To Feed (Infant and Toddler Nutrition, CDC, 2025). Tema: cuánto y cuántas veces comer entre los 6 y los 12 meses. Hallazgo: la leche materna o la fórmula siguen siendo la principal fuente de nutrición y los sólidos van ocupando poco a poco una parte mayor de la dieta. Se empieza con raciones muy pequeñas y se ofrece algo de comer o beber cada 2 a 3 horas, es decir, 5 o 6 veces al día, lo que supone unas 3 comidas y 2 a 3 tentempiés. Los horarios regulares de comida y de tentempié ayudan a crear una rutina, y se evita dejar que el niño coma o beba de forma continua durante el día.",
+        "How Much and How Often To Feed (Infant and Toddler Nutrition, CDC, 2025). Tema: a partir de los 12 meses. Hallazgo: la ingesta varía de un día a otro, lo que se considera normal. El crecimiento se frena hacia los 12 meses, y el niño puede comer muy poco durante un par de días, pero a lo largo de una semana debe obtener todos los alimentos y nutrientes que necesita. Si preocupa cuánto o con qué frecuencia come, se habla con el médico o la enfermera del niño. La página no da instrucciones de urgencia."
+      ],
+      "original_license": "public_domain"
+    },
+    {
+      "source_type": "reference",
+      "title": "Tips for Mealtime Routines (CDC)",
+      "organization": "CDC",
+      "publication_year": 2026,
+      "url": "https://www.cdc.gov/infant-toddler-nutrition/mealtime/index.html",
+      "specialties": [
+        "pediatrics",
+        "general_medicine"
+      ],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "original_language": "en",
+      "topics": [
+        "alimentacion_complementaria",
+        "alimentacion_12_24m",
+        "inapetencia"
+      ],
+      "chunks": [
+        "Tips for Mealtime Routines (CDC, 2026). Tema: rutina y seguridad en las comidas de 6 a 24 meses. Hallazgo: a esta edad los niños pueden hacer unas 3 comidas y 2 a 3 tentempiés al día. Se les lavan las manos antes de comer y se sientan en una trona o elevador con las correas puestas y vigilados en todo momento. Se orienta al niño hacia la familia y se evita que la televisión, los vídeos, los móviles o las mascotas le distraigan de comer; la comida puede durar de 10 a 15 minutos o lo que el niño mantenga la atención. La Academia Americana de Pediatría recomienda evitar las pantallas hasta los 18 meses, salvo videollamadas con familia o amigos.",
+        "Tips for Mealtime Routines (CDC, 2026). Tema: dejar que el niño decida cuánto come. Hallazgo: los bebés pueden empezar con cuchara o con los dedos, y se usan platos irrompibles y vasos sin bordes cortantes. Comer juntos enseña a comer y habilidades sociales; los padres ofrecen alimentos sanos y dan ejemplo. Es el niño quien decide cuánto come: no tiene que terminar el plato ni el vaso, y se observan sus señales de hambre y saciedad. Es normal que la ingesta varíe de un día a otro. Si preocupa cuánto o cuán poco come el niño, se habla con su médico o su enfermera."
+      ],
+      "original_license": "public_domain"
+    },
+    {
+      "source_type": "reference",
+      "title": "Tips to Help Your Picky Eater (CDC)",
+      "organization": "CDC",
+      "publication_year": 2026,
+      "url": "https://www.cdc.gov/nutrition/features/help-picky-eater.html",
+      "specialties": [
+        "pediatrics",
+        "general_medicine"
+      ],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "original_language": "en",
+      "topics": [
+        "inapetencia",
+        "alimentacion_12_24m",
+        "texturas"
+      ],
+      "chunks": [
+        "Tips to Help Your Picky Eater (CDC, 2026). Tema: cómo ayudar a un niño que come poco o rechaza alimentos. Hallazgo: un niño pequeño puede necesitar de 8 a 10 exposiciones a un alimento antes de querer probarlo, y algunos hay que probarlos muchas veces antes de que gusten. Ayuda que los padres coman primero ese alimento para mostrar que les gusta, ofrecer a elegir entre varios, servir el alimento nuevo junto a otros que ya le gustan, esperar un par de días antes de volver a ofrecerlo y ofrecer variedad de texturas (colado, machacado o con grumos, picado fino). Tocar y oler la comida durante las comidas también favorece que la pruebe.",
+        "Tips to Help Your Picky Eater (CDC, 2026). Tema: bebidas, participación y qué es normal. Hallazgo: se sirve agua en lugar de bebidas azucaradas, se deja que el niño participe en lavar, ordenar y preparar los alimentos y se prepara la misma fruta o verdura de distintas formas. Preferir pocos alimentos o no querer que se toquen en el plato se describe como normal y suele desaparecer hacia los 5 años. Los alimentos se ofrecen con el tamaño, la consistencia y la forma adecuados a la edad del niño para ayudar a evitar atragantamientos. La página no da indicaciones de urgencia."
+      ],
+      "original_license": "public_domain"
+    },
+    {
+      "source_type": "paper",
+      "title": "What is known about the benefits of immediate or early skin-to-skin contact for mothers and babies? (Cochrane plain language summary)",
+      "organization": "Cochrane",
+      "publication_year": 2025,
+      "url": "https://www.cochrane.org/evidence/CD003519_early-skin-skin-contact-mothers-and-their-healthy-newborn-infants",
+      "specialties": [
+        "pediatrics",
+        "neonatology",
+        "general_medicine"
+      ],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "original_language": "en",
+      "topics": [
+        "lactancia_tecnica",
+        "lactancia"
+      ],
+      "chunks": [
+        "What is known about the benefits of immediate or early skin-to-skin contact for mothers and babies? (Cochrane, 2025). Tema: qué es el contacto piel con piel y qué estudios se revisaron. Hallazgo: esta revisión Cochrane (publicada en octubre de 2025, con evidencia hasta marzo de 2024; actualiza la revisión anterior) define el contacto piel con piel como colocar al recién nacido desnudo y seco sobre el pecho desnudo de la madre, idealmente desde el nacimiento y hasta después de la primera toma, frente a la atención habitual de envolverlo o vestirlo, ponerlo en una cuna o bajo un calentador. Incluye 69 estudios con 7.290 parejas madre-bebé; la mayoría comparó el contacto inmediato (en los primeros 10 minutos) con la atención hospitalaria habitual en recién nacidos sanos a término; 15 estudios incluyeron cesáreas y 10 prematuros tardíos (de 34 a menos de 37 semanas).",
+        "What is known about the benefits of immediate or early skin-to-skin contact for mothers and babies? (Cochrane, 2025). Tema: limitaciones de la evidencia. Hallazgo: la confianza es moderada en la mayoría de los resultados y menor para la respiración, la frecuencia cardiaca y la salida de la placenta. Las descripciones del contacto piel con piel y de la atención habitual variaron entre estudios, las madres y el personal sabían qué grupo recibía cada atención, lo que puede sesgar los resultados, y muchos estudios eran pequeños (menos de 100 madres y recién nacidos). La revisión pide registrar los posibles daños en futuras investigaciones."
+      ]
+    },
+    {
+      "source_type": "guideline",
+      "title": "Breastfeeding: positioning and attachment (NHS)",
+      "organization": "NHS (National Health Service, Reino Unido)",
+      "publication_year": 2026,
+      "url": "https://www.nhs.uk/baby/breastfeeding-and-bottle-feeding/breastfeeding/positioning-and-attachment/",
+      "specialties": [
+        "pediatrics",
+        "general_medicine",
+        "neonatology"
+      ],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "original_language": "en",
+      "topics": [
+        "lactancia",
+        "lactancia_tecnica"
+      ],
+      "chunks": [
+        "Breastfeeding: positioning and attachment (NHS, 2026). Tema: cómo colocar al bebé al pecho. Hallazgo: sea cual sea la postura, la madre debe estar cómoda (con cojines si hace falta), con la cabeza y el cuerpo del bebé en línea recta, el bebé pegado a ella mirando al pecho y con la cabeza algo inclinada hacia atrás. Es la madre quien acerca al bebé al pecho y lo deja agarrarse, en lugar de empujar el pecho hacia su boca; la nariz queda a la altura del pezón y no se sujeta la parte posterior de la cabeza. El NHS añade que nunca se debe dar el pecho con el bebé dentro de un fular o portabebés.",
+        "Breastfeeding: positioning and attachment (NHS, 2026). Tema: señales de buen agarre y de toma eficaz. Hallazgo: el bebé necesita abarcar una buena bocanada de pecho. Hay buen agarre si la barbilla toca primero el pecho con la cabeza hacia atrás, la boca está muy abierta, la nariz libre y se ve más areola por encima del labio superior que por debajo del inferior; las mejillas se ven llenas y redondas. Una toma eficaz empieza con chupadas rápidas y sigue con otras más largas, con deglución audible; el bebé queda tranquilo, suelta el pecho solo, gana peso y, pasados los primeros días, moja al menos 6 pañales al día. Las heces pasan de negras y espesas a blandas, amarillas o color mostaza hacia el tercer día.",
+        "Breastfeeding: positioning and attachment (NHS, 2026). Tema: cuándo buscar ayuda. Hallazgo: si hay dudas o preocupaciones, se habla con la matrona, la enfermera pediátrica o una asesora de lactancia. Debe consultarse si el bebé no gana peso y está inquieto durante o después de las tomas, y la página remite a los consejos sobre pezones doloridos y otros problemas habituales. Si el bebé es prematuro o está en una unidad neonatal, es probable que animen a la madre a probar el método canguro (contacto piel con piel) cuando el bebé esté lo bastante bien, porque ayuda al vínculo y a la producción de leche."
+      ]
+    },
+    {
+      "source_type": "reference",
+      "title": "Children's food: safety and hygiene (NHS)",
+      "organization": "NHS (National Health Service, Reino Unido)",
+      "publication_year": 2026,
+      "url": "https://www.nhs.uk/baby/weaning-and-feeding/childrens-food-safety-and-hygiene/",
+      "specialties": [
+        "pediatrics",
+        "general_medicine",
+        "gastroenterology"
+      ],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "original_language": "en",
+      "topics": [
+        "seguridad_alimentaria",
+        "alimentacion_complementaria"
+      ],
+      "chunks": [
+        "Children's food: safety and hygiene (NHS, 2026). Tema: higiene al preparar la comida del bebé. Hallazgo: los bebés y niños pequeños son especialmente vulnerables a las bacterias que causan intoxicación alimentaria. El NHS pide lavarse las manos antes de preparar comida y tras tocar carne cruda, pollo, pescado, marisco, verduras crudas y huevos, y comprobar que las manos del niño están limpias antes de comer. Los cuencos y cucharas se lavan con agua caliente y jabón, la carne y los huevos crudos se guardan separados de otros alimentos y las mascotas se mantienen lejos. Las frutas y verduras se lavan bajo el grifo, y el marisco solo se da bien cocinado. No se guarda ni reutiliza la comida que sobra en el plato del niño.",
+        "Children's food: safety and hygiene (NHS, 2026). Tema: conservar y recalentar. Hallazgo: la comida se enfría lo antes posible, idealmente en 1 a 2 horas, y se guarda en nevera o congelador; en la nevera debe consumirse en 2 días. El arroz se enfría en 1 hora y se consume en 24 horas, y nunca se recalienta más de una vez. No se mete comida caliente directamente en la nevera. Los alimentos congelados se descongelan en la nevera durante la noche o con la función de descongelar del microondas, y los descongelados en la nevera se consumen en 24 horas. Al recalentar, el plato debe humear por dentro y luego enfriarse antes de ofrecerlo; en el microondas se remueve y se comprueba la temperatura. Hay que quedarse siempre con el niño mientras come por si se atraganta."
+      ]
+    },
+    {
+      "source_type": "reference",
+      "title": "Drinks and cups for babies and young children (NHS)",
+      "organization": "NHS (National Health Service, Reino Unido)",
+      "publication_year": 2022,
+      "url": "https://www.nhs.uk/baby/weaning-and-feeding/drinks-and-cups-for-babies-and-young-children/",
+      "specialties": [
+        "pediatrics",
+        "general_medicine"
+      ],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "original_language": "en",
+      "topics": [
+        "bebidas",
+        "alimentacion_12_24m"
+      ],
+      "chunks": [
+        "Drinks and cups for babies and young children (NHS, Reino Unido, 2022). Tema: leche de vaca y bebidas vegetales (avena, soja, almendra) a partir del año. Hallazgo: la leche de vaca puede usarse para cocinar o mezclarse con la comida hacia los 6 meses, pero no debe ser la bebida principal hasta los 12 meses. Al año, la leche de vaca entera o semidesnatada pasteurizada ya puede ser su bebida principal; la desnatada y la del 1 % no se recomiendan como bebida principal antes de los 5 años porque no aportan suficientes calorías. Desde el año, las bebidas de soja, avena o almendra sin azúcar y enriquecidas con calcio pueden darse como parte de una dieta equilibrada. Si el niño tiene alergia o intolerancia a la leche, hay que hablar con la enfermera de pediatría o el pediatra sobre la alternativa adecuada (fuente en inglés).",
+        "Drinks and cups for babies and young children (NHS, Reino Unido, 2022). Tema: por qué no dar bebida de arroz y si hacen falta leches de crecimiento. Hallazgo: los menores de 5 años no deben tomar bebida de arroz en lugar de leche materna, leche de fórmula o leche de vaca, porque puede contener demasiado arsénico; el arroz absorbe más arsénico que otros cereales, aunque los niños pueden seguir comiendo arroz. Si el niño ya ha tomado bebida de arroz no hay un riesgo inmediato, pero se aconseja cambiar a otra leche. La leche de cabra u oveja pasteurizada puede ser la bebida principal desde el año. A partir de los 12 meses no hacen falta leches de fórmula de ningún tipo: ni de continuación, ni de crecimiento, ni las llamadas leches para niños pequeños (fuente en inglés)."
+      ]
+    },
+    {
+      "source_type": "guideline",
+      "title": "Foods to avoid giving babies and young children (NHS)",
+      "organization": "NHS (National Health Service, Reino Unido)",
+      "publication_year": 2026,
+      "url": "https://www.nhs.uk/baby/weaning-and-feeding/foods-to-avoid-giving-babies-and-young-children/",
+      "specialties": [
+        "pediatrics",
+        "general_medicine",
+        "gastroenterology"
+      ],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "original_language": "en",
+      "topics": [
+        "alimentacion_12_24m"
+      ],
+      "chunks": [
+        "Foods to avoid giving babies and young children (NHS, 2026). Tema: sal, azúcar y edulcorantes. Hallazgo: los bebés no deben tomar mucha sal porque daña los riñones, así que no se añade sal a la comida ni al agua de cocción ni se usan cubitos de caldo, y se evitan embutidos, patatas fritas saladas, platos precocinados y comida para llevar. Los menores de 5 años deben evitar los alimentos y bebidas con azúcar añadido o edulcorantes, incluidos el azúcar natural de la miel, el sirope, el zumo y los batidos, también para prevenir caries; la fruta entera sí está bien. No se debe dar miel a menores de 1 año, porque puede contener bacterias cuyas toxinas causan botulismo infantil, una enfermedad muy grave.",
+        "Foods to avoid giving babies and young children (NHS, 2026). Tema: otras bebidas y alimentos de riesgo. Hallazgo: los niños menores de 5 años no deben tomar bebidas de arroz como sustituto de la leche materna, la fórmula o la leche de vaca después del año, porque pueden contener demasiado arsénico; si ya las tomó, no hay riesgo inmediato, pero conviene cambiar de bebida. Hasta los 7 años se evitan los granizados por el glicerol, que puede dar dolor de cabeza, náuseas y, en cantidades altas, mareo, azúcar baja en sangre, confusión y desmayo. Tampoco se da marisco crudo o poco cocinado, por el riesgo de intoxicación alimentaria, ni cubitos de gelatina sin disolver, que pueden atragantar. Se evitan el tiburón, el pez espada y el marlín en menores de 16 años por el mercurio."
+      ]
+    },
+    {
+      "source_type": "guideline",
+      "title": "Sore or cracked nipples when breastfeeding (NHS)",
+      "organization": "NHS (National Health Service, Reino Unido)",
+      "publication_year": 2026,
+      "url": "https://www.nhs.uk/baby/breastfeeding-and-bottle-feeding/breastfeeding-problems/sore-nipples/",
+      "specialties": [
+        "pediatrics",
+        "general_medicine",
+        "gynecology"
+      ],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "original_language": "en",
+      "topics": [
+        "lactancia",
+        "problemas_lactancia",
+        "lactancia_tecnica"
+      ],
+      "chunks": [
+        "Sore or cracked nipples when breastfeeding (NHS, 2026). Tema: causas y qué ayuda. Hallazgo: los pezones doloridos suelen deberse a que el bebé no está bien colocado ni agarrado, de modo que el pezón queda hacia delante de la boca y se aprieta contra el paladar duro; son signos de mal agarre un pezón aplastado, en cuña o blanco tras la toma y un bebé inquieto después. El NHS aconseja buscar ayuda pronto con una matrona, enfermera pediátrica o asesora de lactancia que observe una toma, seguir amamantando si es posible (o extraer a mano), cambiar los discos de lactancia en cada toma (mejor sin plástico) y llevar un sujetador sin aros.",
+        "Sore or cracked nipples when breastfeeding (NHS, 2026). Tema: qué evitar y cuándo consultar. Hallazgo: es importante no dejar de amamantar y no esperar para pedir ayuda si hay grietas o sangrado, porque aumenta el riesgo de infección; también se desaconsejan los protectores y pezoneras, que pueden afectar al agarre, y los sujetadores con aros. Para las grietas se puede aplicar un poco de leche materna extraída tras las tomas. Se debe pedir ayuda si algún pezón duele en cada toma, si empieza a agrietarse o sangrar, o si el dolor continúa aunque el bebé esté bien colocado, porque puede haber otro problema como una infección. La página no marca una urgencia formal: pide ayuda lo antes posible."
+      ]
+    },
+    {
+      "source_type": "reference",
+      "title": "What to feed young children (NHS)",
+      "organization": "NHS (National Health Service, Reino Unido)",
+      "publication_year": 2023,
+      "url": "https://www.nhs.uk/baby/weaning-and-feeding/what-to-feed-young-children/",
+      "specialties": [
+        "pediatrics",
+        "general_medicine",
+        "gastroenterology"
+      ],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "original_language": "en",
+      "topics": [
+        "alimentacion_12_24m",
+        "bebidas",
+        "alimentacion_complementaria"
+      ],
+      "chunks": [
+        "What to feed young children (NHS, 2023). Tema: grupos de alimentos, lácteos y proteínas. Hallazgo: se introducen frutas y verduras variadas desde los 6 meses (frescas, congeladas, enlatadas o secas, con las pasas dentro de las comidas y no como tentempié). No se recomienda que los menores de 2 años coman solo cereales integrales, porque llenan antes de que consigan los nutrientes. Desde el año, la leche entera, de cabra o de oveja pasteurizada puede ser la bebida principal, y se recomiendan lácteos enteros hasta los 2 años. De proteínas, al menos 2 raciones al día de origen vegetal (legumbres, tofu) o 1 de origen animal (carne, pescado, huevo), y al menos 1 ración semanal de pescado azul. Los frutos secos enteros no se dan a menores de 5 años.",
+        "What to feed young children (NHS, 2023). Tema: grasa, hierro, azúcar y sal. Hallazgo: los niños pequeños, sobre todo menores de 2 años, necesitan grasa para tener energía. El hierro de la carne y el pescado se absorbe mejor que el de los vegetales; quienes no comen carne ni pescado necesitan muchos otros alimentos con hierro (cereales fortificados, verduras de hoja verde, legumbres) porque tienen más riesgo de anemia por falta de hierro, que puede afectar al desarrollo físico y mental. El azúcar añadido se limita al mínimo, y se ofrece solo con las comidas y no antes de dormir. Los refrescos no se dan a niños pequeños. No hace falta añadir sal a la comida infantil, y conviene limitar los alimentos salados y mirar las etiquetas."
+      ]
+    },
+    {
+      "source_type": "reference",
+      "title": "Young children and food: common questions (NHS)",
+      "organization": "NHS (National Health Service, Reino Unido)",
+      "publication_year": 2026,
+      "url": "https://www.nhs.uk/baby/weaning-and-feeding/young-children-and-food-common-questions/",
+      "specialties": [
+        "pediatrics",
+        "general_medicine"
+      ],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "original_language": "en",
+      "topics": [
+        "alimentacion_12_24m",
+        "bebidas"
+      ],
+      "chunks": [
+        "Young children and food: common questions (NHS, 2026). Tema: tentempiés saludables y comida para la guardería. Hallazgo: el NHS propone como tentempié palitos de verdura cruda (pepino, zanahoria) solos o con hummus, una pieza de fruta, yogur natural sin azúcar con plátano, tostada con queso para untar o hummus, o cereales sin azúcar con leche pasteurizada entera o semidesnatada. A los menores de 1 año no se les deben dar tentempiés. Para la fiambrera de la guardería sugiere bocadillos con atún o salmón en lata, hummus, queso o huevo, palitos de verdura, fruta en trozos pequeños (uvas sin pepitas cortadas por la mitad a lo largo) y agua o leche pasteurizada entera o semidesnatada en vaso a prueba de derrames. Si no hay nevera, se usa una caja isotérmica con acumulador de frío, y se informa de cualquier alergia alimentaria.",
+        "Young children and food: common questions (NHS, 2026). Tema: fibra y bebidas azucaradas. Hallazgo: la fibra es importante, pero los alimentos muy ricos en fibra (pan y pasta integrales, arroz integral, cereales de grano entero) llenan estómagos pequeños, de modo que el niño puede sentirse lleno antes de tomar suficientes calorías y nutrientes; no se dan solo alimentos integrales antes de los 2 años ni solo alimentos ricos en fibra antes de los 5; la cantidad de alimentos integrales se aumenta poco a poco a partir de los 6 meses aproximadamente. Si el niño solo quiere bebidas azucaradas, que aumentan el riesgo de caries, se diluyen poco a poco con agua o se cambia a una versión con menos azúcar antes de pasar a alternativas más saludables. El agua y la leche pasteurizada son las mejores bebidas."
+      ]
+    },
+    {
+      "source_type": "reference",
+      "title": "Bebidas recomendadas para niños de 0 a 5 años (HealthyChildren, AAP)",
+      "organization": "American Academy of Pediatrics",
+      "publication_year": 2023,
+      "url": "https://www.healthychildren.org/Spanish/healthy-living/nutrition/Paginas/recommended-drinks-for-young-children-ages-0-5.aspx",
+      "specialties": [
+        "pediatrics"
+      ],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "original_language": "es",
+      "topics": [
+        "bebidas",
+        "alimentacion_12_24m"
+      ],
+      "chunks": [
+        "Bebidas recomendadas para niños (HealthyChildren, AAP, 2023; guía para menores de 5 años). Tema: qué leche debe tomar un niño de 12 a 24 meses y si sirven las bebidas vegetales. Hallazgo: a partir de los 12 meses se puede empezar a dar leche de vaca; entre los 12 y los 24 meses se recomienda la entera y, desde los 2 años, la desnatada o baja en grasa. A algunos niños les cuesta tomar leche de vaca porque tienen alergia a los lácteos o intolerancia a la leche, pero la mayoría de las bebidas vegetales no tienen un valor nutricional equivalente al de la leche de vaca y pueden carecer de nutrientes importantes, como proteína, vitamina D y calcio. Por eso no se recomiendan en lugar de la leche de vaca. La excepción es la bebida de soja, que equivale nutricionalmente a la leche de vaca y es una alternativa aceptable.",
+        "Bebidas recomendadas para niños (HealthyChildren, AAP, 2023; guía para menores de 5 años). Tema: leches de crecimiento, agua y zumos en los niños pequeños. Hallazgo: las leches para niños pequeños (de crecimiento o de transición) se anuncian como el siguiente paso tras la leche materna o de fórmula, pero la AAP las considera innecesarias. En la mayoría de los niños no aportan ninguna ventaja nutricional frente a una dieta equilibrada con leche materna o de vaca, son más caras y llevan azúcares añadidos que le llenan el estómago y pueden quitarle el hambre para alimentos más sanos. Las mejores bebidas son el agua y la leche sola. El zumo de fruta es muy dulce y no tiene la fibra de la fruta entera, así que siempre es mejor ofrecer la fruta. Los menores de 1 año no deben tomar zumo, y cuando el niño ya lo ha probado puede costar mucho limitarlo o que prefiera el agua."
+      ]
+    },
+    {
+      "source_type": "reference",
+      "title": "Mi niño no come (EnFamilia, AEP)",
+      "organization": "Asociación Española de Pediatría",
+      "publication_year": null,
+      "undated_reason": "Página divulgativa de EnFamilia sin fecha de publicación visible; consultada el 2026-11-06.",
+      "url": "https://www.aeped.es/enfamilia/salud-en-familia/mi-nino-no-come",
+      "specialties": [
+        "pediatrics"
+      ],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "original_language": "es",
+      "topics": [
+        "inapetencia",
+        "alimentacion_12_24m"
+      ],
+      "chunks": [
+        "Mi niño no come (EnFamilia, AEP). Tema: por qué los niños pequeños comen poco y de forma irregular. Hallazgo: el apetito de los niños pequeños es muy variable y es frecuente que coman poca cantidad y de forma irregular. En el primer año el crecimiento es muy rápido (el peso del nacimiento se duplica hacia los 5 meses, se triplica al año y se cuadruplica a los 2 años), pero a partir de los 2 años crecen más despacio y necesitan menos comida. Además, a esa edad tienen mucha autonomía, les interesa más lo que les rodea que estar sentados a la mesa y sus gustos cambian: pueden dejar de comer durante un tiempo alimentos que antes tomaban. Hay temporadas en que tienen más apetito y otras en que «no comen nada»; respetar esas fases, en lugar de intentar que coman más de lo que quieren, ayuda a prevenir el sobrepeso.",
+        "Mi niño no come (EnFamilia, AEP). Tema: cómo plantear la hora de la comida cuando no quiere comer. Hallazgo: el apetito de la mayoría de los niños basta para cubrir sus necesidades, así que no hay que preocuparse ni mostrar preocupación por la cantidad. Los padres eligen alimentos variados y sanos, pero la cantidad la decide el niño: mejor ponerle poco en el plato y dejar que pida más. Ayudan una rutina de horarios y normas sencillas en la mesa, dejarle comer solo aunque se manche y ofrecerle poco a poco alimentos nuevos animándole a probarlos. Si no quiere probar algo, no hace falta cambiarle el plato ni preguntarle qué otra cosa quiere. Comer distraído con la televisión o mientras se le entretiene hace que no aprenda a regular lo que come.",
+        "Mi niño no come (EnFamilia, AEP). Tema: qué evitar cuando el niño no quiere comer. Hallazgo: la AEP desaconseja usar trucos para que coma (fuerza, amenazas, castigos o sobornos), perseguirle por la casa con la cuchara o entretenerle con la tele. Si no quiere comer, se le puede dejar tranquilamente sin comida hasta la siguiente comida, sin reñirle ni castigarle. No hay que insistir en un alimento concreto: mejor animarle a probarlo o dejarlo en la mesa para que lo coja él. Cuidado con los lácteos: hay niños que solo quieren leche o derivados; con medio litro al día de leche o derivados es suficiente y, si toma mucho más, dejará de probar otros alimentos. A los niños que comen despacio no hay que meterles prisa: se fija un tiempo, se les explica y al terminar se retira el plato con calma."
+      ]
+    },
+    {
+      "source_type": "reference",
+      "title": "Técnicas de Lactancia Materna (Comité de Lactancia Materna, AEP)",
+      "organization": "Asociación Española de Pediatría",
+      "publication_year": null,
+      "undated_reason": "La página no muestra fecha de publicación ni de actualización (consulta 2026-11-06)",
+      "url": "https://lactanciamaterna.aeped.es/tecnicas-de-lactancia-materna/",
+      "specialties": [
+        "pediatrics",
+        "general_medicine"
+      ],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "original_language": "es",
+      "topics": [
+        "lactancia"
+      ],
+      "chunks": [
+        "Técnicas de Lactancia Materna (Comité de Lactancia Materna de la AEP). Tema: cómo es un buen agarre. Hallazgo: una buena técnica mantiene la producción de leche y evita grietas y dolor. No hay una única postura correcta: lo importante es que la madre esté cómoda, que el bebé esté frente a ella y pegado a su cuerpo y que abarque gran parte de la areola. Señales de buen agarre: el mentón toca el pecho, la boca está muy abierta, los labios hacia fuera y las mejillas redondeadas al succionar. Con un buen agarre la lactancia no debe doler.",
+        "Técnicas de Lactancia Materna (Comité de Lactancia Materna de la AEP). Tema: posturas para dar el pecho. Hallazgo: la página describe la posición de caballito (útil en grietas, reflujo importante, prematuros o labio leporino), la de balón de rugby (adecuada con gemelos y prematuros, sujetando cuello y hombros y no la cabeza), la de crianza biológica (la madre recostada y el bebé boca abajo piel con piel, especialmente útil los primeros días y si hay problemas de agarre), la acostada (cómoda para las tomas nocturnas) y la sentada tipo cuna."
+      ]
+    },
+    {
+      "source_type": "paper",
+      "title": "¿Qué beneficios tiene el contacto piel con piel en las primeras horas del recién nacido?",
+      "organization": "Cochrane",
+      "publication_year": 2025,
+      "url": "https://es.cochrane.org/en/divulgacion/cochrane-responde/contacto-piel-con-piel",
+      "specialties": [
+        "pediatrics",
+        "general_medicine"
+      ],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "original_language": "es",
+      "topics": [
+        "lactancia",
+        "lactancia_tecnica"
+      ],
+      "chunks": [
+        "¿Qué beneficios tiene el contacto piel con piel en las primeras horas del recién nacido? (Cochrane, 2025). Tema: contacto piel con piel y lactancia. Hallazgo: la revisión actualizada resume 69 ensayos con 7290 parejas de madre e hijo y compara el contacto piel con piel inmediato o temprano con la atención habitual del hospital en recién nacidos sanos. El contacto temprano probablemente ayuda a que las madres den el pecho de forma exclusiva hasta un mes después y entre las 6 semanas y los 6 meses.",
+        "¿Qué beneficios tiene el contacto piel con piel en las primeras horas del recién nacido? (Cochrane, 2025). Tema: efectos del piel con piel sobre el bebé. Hallazgo: el contacto piel con piel temprano probablemente ayuda a mantener la temperatura del cuerpo y a aumentar la glucosa en sangre del recién nacido, y podría ayudar a estabilizar su respiración y su frecuencia cardíaca. Los autores señalan que falta información sobre posibles efectos perjudiciales."
+      ]
+    },
+    {
+      "source_type": "reference",
+      "title": "Alimentación infantil (Comunidad de Madrid)",
+      "organization": "Consejería de Sanidad de la Comunidad de Madrid",
+      "publication_year": 2026,
+      "url": "https://www.comunidad.madrid/servicios/salud/alimentacion-infantil",
+      "specialties": [
+        "pediatrics",
+        "general_medicine"
+      ],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "original_language": "es",
+      "topics": [
+        "alimentacion_12_24m"
+      ],
+      "chunks": [
+        "Alimentación infantil (Comunidad de Madrid, 2026). Tema: alimentos que se deben evitar. Hallazgo: se evita la miel hasta el año por riesgo de botulismo, y no se añade sal antes del primer año ni azúcar, edulcorantes o bebidas azucaradas; tampoco se dan ultraprocesados ni embutidos. Se evitan los pescados con mucho mercurio y la borraja no se da hasta los 3 años; las espinacas y acelgas, no más de 45 g al día el primer año, y la leche de vaca se puede ofrecer a partir de los 12 meses a niños que no tomen leche materna. Por riesgo de atragantamiento se evitan los alimentos duros, pequeños o con formas que puedan obstruir la vía aérea, como aceitunas, uvas enteras, cerezas, tomate cherry, trozos grandes de zanahoria o manzana crudas, salchichas en rodajas y caramelos, y nunca se deja al bebé solo mientras come.",
+        "Alimentación infantil (Comunidad de Madrid, 2026). Tema: comidas de 1 a 3 años. Hallazgo: se recomiendan 5-6 comidas al día con horarios regulares, compartiendo algunas con el resto de la familia, en un ambiente tranquilo, sin televisión ni juguetes. La ingesta varía mucho de una comida a otra, pero en niños sanos es estable a lo largo de la semana, así que no se le obliga a comer ni a terminar el plato, ni se felicita al niño que come bien, y la comida no se usa como premio o castigo. Se evita el picoteo de galletas o golosinas, los líquidos se pasan cuanto antes al vaso o taza y se evita el biberón. La mayoría usa la cuchara a partir de los 12 meses y deja de derramar entre los 15 y 18 meses; entre los 12 y 24 meses ya deberían estar incorporados todos los alimentos."
+      ]
+    },
+    {
+      "source_type": "reference",
+      "title": "Cómo preparar biberones (Comunidad de Madrid)",
+      "organization": "Consejería de Sanidad de la Comunidad de Madrid",
+      "publication_year": 2026,
+      "url": "https://www.comunidad.madrid/servicios/salud/preparar-biberones",
+      "specialties": [
+        "pediatrics",
+        "general_medicine"
+      ],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "original_language": "es",
+      "topics": [
+        "biberon_formula"
+      ],
+      "chunks": [
+        "Cómo preparar biberones (Comunidad de Madrid, 2026). Tema: agua y limpieza para el biberón de leche en polvo. Hallazgo: se hierve agua potable y se mezcla cuando está al menos a 70 ºC, temperatura que destruye las bacterias que puede tener el polvo; no se debe dejar enfriar más de 30 minutos antes de mezclar. Ni el agua del grifo ni la embotellada son estériles (salvo que la etiqueta de la embotellada indique que lo es), por eso se hierven; si se usa embotellada, la etiqueta debe indicar que es apta para preparar alimentos infantiles. Antes de empezar hay que lavarse las manos, lavar con agua caliente y jabón tetinas, roscas y tapas, y esterilizar el material con un esterilizador o hirviéndolo en un cazo tapado.",
+        "Cómo preparar biberones (Comunidad de Madrid, 2026). Tema: preparar, enfriar, guardar y recalentar el biberón. Hallazgo: se añade la cantidad exacta de polvo que indica la etiqueta, se agita suavemente y se enfría rápido bajo el grifo; la temperatura se comprueba en la muñeca y debe ser tibia, no caliente. Lo que sobre tras la toma se desecha en un máximo de 2 horas. Lo más higiénico es preparar cada toma en el momento; si se adelanta, se guarda en el frigorífico a menos de 5 ºC un máximo de 24 horas y se recalienta como mucho 15 minutos en agua caliente. Nunca se usa el microondas, porque calienta de forma desigual y puede quemar la boca del bebé.",
+        "Cómo preparar biberones (Comunidad de Madrid, 2026). Tema: bebés de mayor riesgo y viajes. Hallazgo: todos los lactantes están expuestos, pero corren más riesgo los recién nacidos y los menores de 2 meses, sobre todo los prematuros, los de bajo peso al nacer y los inmunodeprimidos, porque el polvo no es estéril y bacterias como Cronobacter y Salmonella pueden sobrevivir mucho tiempo en él. Con agua por debajo de 70 ºC no se inactiva Cronobacter, y en estos grupos debe evitarse preparar el biberón con agua a temperatura ambiente y darlo enseguida. Hay que lavarse las manos tras cambiar pañales. Para viajar, el biberón enfriado se lleva en una bolsa fría con hielo y se usa en 2 horas como máximo; si el viaje dura más de 2 horas, se llevan raciones de polvo en recipientes limpios, esterilizados y tapados, y se prepara cada toma en el momento."
+      ]
+    },
+    {
+      "source_type": "guideline",
+      "title": "Guía de lactancia para madres y padres. El camino natural",
+      "organization": "Consejería de Sanidad de la Junta de Castilla y León",
+      "publication_year": 2026,
+      "url": "https://www.saludcastillayleon.es/es/protege-salud/salud-materno-infantil/lactancia-materna/guia-lactancia-madres-padres-edicion-2026.ficheros/3429953-Guia_Lactancia_edici%C3%B3n_2026.pdf",
+      "specialties": [
+        "pediatrics",
+        "general_medicine"
+      ],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "original_language": "es",
+      "topics": [
+        "lactancia",
+        "problemas_lactancia"
+      ],
+      "chunks": [
+        "Guía de lactancia para madres y padres. El camino natural (Junta de Castilla y León, 2026). Tema: ingurgitación y grietas. Hallazgo: la ingurgitación (pechos hinchados, doloridos y calientes, con dificultad del bebé para agarrar) suele aparecer con la subida de la leche; ayudan un baño caliente o compresas tibias antes de la toma, frío local entre tomas si hay dolor y, si el bebé no se agarra, la técnica de presión inversa suavizante o consultar con una persona experta. Las grietas suelen deberse a mala posición o frenillo corto: duele al empezar la toma y a veces sangran; se previenen con buena técnica y sin lavar los pezones antes ni después de la toma (basta la ducha diaria). Hay que consultar con un profesional experto para corregir el agarre; las pezoneras de silicona no han demostrado ser eficaces.",
+        "Guía de lactancia para madres y padres. El camino natural (Junta de Castilla y León, 2026). Tema: mastitis y sensación de poca leche. Hallazgo: la mastitis cursa con dolor, calor y enrojecimiento de una parte del pecho, no siempre con fiebre; no siempre es infecciosa y puede deberse a una toma ineficaz. Si empieza, lo importante es seguir con la lactancia, incluso con más tomas o con sacaleches; ayudan el frío entre tomas, cambiar de postura, el contacto piel con piel y el calor antes de la toma. Si no se resuelve, hay malestar, fiebre o más dolor, hay que consultar con un profesional; nunca se recomienda suprimir la lactancia, porque el vaciado correcto evita el absceso. La mayoría de las mujeres puede producir la leche que su bebé necesita; ayuda no limitar el número ni la duración de las tomas, colocar bien al bebé al pecho, no ofrecer un solo pecho por toma y evitar el estrés.",
+        "Guía de lactancia para madres y padres. El camino natural (Junta de Castilla y León, 2026). Tema: crisis de lactancia por edades. Hallazgo: forman parte de la normalidad y no significan que falte leche. En torno a las 3 semanas el bebé pide comer a menudo, las tomas se alargan y regurgita mucho; si en las dos primeras semanas recuperó el peso del nacimiento y hace cada día varias deposiciones amarillo mostaza, se puede estar tranquila. Al mes y medio dura cerca de una semana, con tomas frecuentes e intranquilas. A los 3 meses mama menos tiempo, se distrae, engorda menos y sus deposiciones pueden disminuir, y no se le debe forzar. Al año come menos pero pide más pecho. En la huelga de lactancia el bebé rechaza el pecho de repente, suele durar unos días y no es un rechazo a la madre; si se sospecha enfermedad, se pide cita con pediatría."
+      ]
+    },
+    {
+      "source_type": "guideline",
+      "title": "Consumo de bebidas saludables en la primera infancia: leches vegetales (Healthy Drinks, Healthy Kids)",
+      "organization": "Healthy Eating Research (AND, AAP, AAPD y AHA)",
+      "publication_year": 2019,
+      "url": "https://healthydrinkshealthykids.org/app/uploads/2019/09/HDHK_One-Pager_Plant-Based-Non-Dairy-Milks_es.pdf",
+      "specialties": [
+        "pediatrics"
+      ],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "original_language": "es",
+      "topics": [
+        "bebidas",
+        "alimentacion_12_24m"
+      ],
+      "chunks": [
+        "Consumo de bebidas saludables en la primera infancia: leches vegetales (Healthy Eating Research, consenso AAP, AND, AAPD y AHA, 2019). Tema: por qué las bebidas vegetales no sustituyen a la leche de vaca de 12 a 24 meses. Hallazgo: las bebidas vegetales (de arroz, frutos secos o semillas como la almendra, coco, avena, guisante o mezclas) no son nutricionalmente equivalentes a la leche de vaca, su contenido varía mucho y muchas llevan azúcares añadidos. De 0 a 12 meses no se recomiendan (solo leche materna o fórmula), y de 12 a 24 meses no se recomiendan en lugar de la leche de vaca: solo cuando hay una indicación médica, como alergia o intolerancia, o por preferencias dietéticas, como en una familia vegana. Salvo la bebida de soja enriquecida, no son sustitutos adecuados de la leche de vaca.",
+        "Consumo de bebidas saludables en la primera infancia: leches vegetales (Healthy Eating Research, consenso AAP, AND, AAPD y AHA, 2019). Tema: qué hacer si la familia quiere o necesita usar una bebida vegetal. Hallazgo: algunas llevan calcio y vitamina D añadidos, pero las cantidades cambian según el tipo y la marca, y el cuerpo podría no absorberlos tan bien como los de la leche de vaca. Las versiones sin azúcar y enriquecidas pueden ser una buena opción si el niño es intolerante a la lactosa o alérgico a la leche de vaca, o si la familia no toma productos animales, pero la decisión debe tomarse con el pediatra o un dietista-nutricionista, para asegurarse de que la dieta aporta suficiente proteína, calcio y vitamina D. Antes del año hay que evitarlas porque desplazan los nutrientes de la leche materna o de la fórmula."
+      ]
+    },
+    {
+      "source_type": "guideline",
+      "title": "Guía de Lactancia Materna",
+      "organization": "Instituto de Salud Pública y Laboral de Navarra (Gobierno de Navarra)",
+      "publication_year": null,
+      "undated_reason": "El PDF no indica un año de publicación de la guía: muestra 'Autoría actualización 2018' (reproduce la guía del Govern de les Illes Balears) y depósito legal NA 1657-2026, por lo que no se puede fijar un año con seguridad; consulta 2026-11-06",
+      "url": "https://portalsalud.navarra.es/documents/11746728/11746847/Guia+Lactancia+Materna+cas.pdf/ae158b9c-a34b-08c2-4b46-eafeea16ede3?t=1753865014714",
+      "specialties": [
+        "pediatrics",
+        "general_medicine"
+      ],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "original_language": "es",
+      "topics": [
+        "lactancia",
+        "problemas_lactancia"
+      ],
+      "chunks": [
+        "Guía de Lactancia Materna (Gobierno de Navarra). Tema: ingurgitación y grietas. Hallazgo: la subida de la leche (entre el 3.º y el 5.º día) puede causar pechos hinchados y duros, pezones aplanados y a veces décimas de fiebre; se previene con tomas frecuentes desde el principio y buen agarre, y ayudan el calor húmedo antes de la toma y el frío entre tomas. En las grietas, el dolor al iniciar la succión debería ceder antes de un minuto y, aunque sangren, se puede continuar con la lactancia; es normal ver restos de sangre en las regurgitaciones o restos negros (sangre digerida) en la caca del bebé.",
+        "Guía de Lactancia Materna (Gobierno de Navarra). Tema: mastitis. Hallazgo: si hay dolor, inflamación o enrojecimiento en el pecho, o malestar general, puede ser una mastitis no infecciosa, que suele resolverse en pocas horas con tomas más frecuentes, buenas posturas, frío y calor. Si además hay fiebre o no mejora, puede ser una mastitis infecciosa: hay que hacer reposo y consultar con el médico. En ningún caso se debe suprimir la lactancia.",
+        "Guía de Lactancia Materna (Gobierno de Navarra). Tema: preguntas frecuentes sobre tomas y producción de leche. Hallazgo: las tomas pueden ser irregulares y no hay que mirar el reloj ni dar 10 minutos de cada pecho; las primeras semanas conviene un mínimo de 8 tomas diarias; si un recién nacido hace menos, no engorda lo necesario o pierde peso, es aconsejable estimularle y despertarle (no siempre hace falta en un bebé sano que crece bien). Es normal que quiera mamar por la noche. La leche del principio de la toma es más acuosa para calmar la sed y luego aumenta la grasa. Para aumentar la producción sirve la lactancia intensiva durante uno o dos días, a demanda y sin reloj. Los bebés menores de seis meses no necesitan nada más, ni leche artificial, ni agua, ni infusiones, ni zumos, y la cantidad de glándula mamaria es igual en todas las mujeres, sea cual sea el tamaño del pecho."
+      ]
+    },
+    {
+      "source_type": "reference",
+      "title": "Claves sobre la alergia al huevo en los más pequeños (SEICAP)",
+      "organization": "Sociedad Española de Inmunología Clínica, Alergología y Asma Pediátrica (SEICAP)",
+      "publication_year": 2022,
+      "url": "https://seicap.es/claves-sobre-la-alergia-al-huevo-en-los-mas-pequenos/",
+      "specialties": [
+        "pediatrics",
+        "allergy"
+      ],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "original_language": "es",
+      "topics": [
+        "alergenos"
+      ],
+      "chunks": [
+        "Claves sobre la alergia al huevo en los más pequeños (SEICAP, 2022). Tema: cómo introducir el huevo y por qué no retrasarlo. Hallazgo: la mayoría de las reacciones al huevo aparecen cuando el niño empieza a comer tortilla o huevo poco hecho. Se aconseja introducir primero el huevo cocido, que suele tolerarse bien; siguiendo a la guía europea EAACI, el huevo debe darse bien cocido, no crudo ni pasteurizado, como parte de la alimentación complementaria. Se recomienda a partir de los seis meses, y retrasar su introducción no tiene ningún beneficio para prevenir la alergia. Si aparecen síntomas, hay que consultar con un pediatra alergólogo, y solo se retira de la dieta la forma de huevo que causó la reacción: si tolera el huevo cocido pero no la tortilla, solo se evita la tortilla.",
+        "Claves sobre la alergia al huevo en los más pequeños (SEICAP, 2022). Tema: síntomas de alergia al huevo en el bebé y evolución. Hallazgo: los síntomas suelen aparecer enseguida, desde pocos minutos hasta las dos primeras horas tras comer huevo. Lo más frecuente es la piel: enrojecimiento alrededor de la boca y ronchas (urticaria) en la cara o por todo el cuerpo. También puede dar pitos, tos o dificultad para respirar, mocos, ojos rojos, vómitos, náuseas o diarrea; si se afectan más de dos órganos se considera anafilaxia. Con menos frecuencia, unas dos horas después aparecen vómitos repetidos con el bebé pálido, decaído y adormilado. Muchos niños superan la alergia al huevo con el tiempo: aproximadamente la mitad la superan hacia los 5 años y tres de cada cuatro hacia los 7 a 9 años."
+      ]
+    },
+    {
+      "source_type": "reference",
+      "title": "La introducción temprana de alimentos ayuda a prevenir la alergia alimentaria (SEICAP)",
+      "organization": "Sociedad Española de Inmunología Clínica, Alergología y Asma Pediátrica (SEICAP)",
+      "publication_year": 2025,
+      "url": "https://seicap.es/la-introduccion-temprana-de-alimentos-ayuda-a-prevenir-la-alergia-alimentaria/",
+      "specialties": [
+        "pediatrics",
+        "allergy"
+      ],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "original_language": "es",
+      "topics": [
+        "alergenos",
+        "alimentacion_complementaria"
+      ],
+      "chunks": [
+        "La introducción temprana de alimentos ayuda a prevenir la alergia alimentaria (SEICAP, 2025). Tema: a qué edad dar cacahuete, frutos secos y huevo al bebé. Hallazgo: la SEICAP recomienda introducir pronto el cacahuete, los frutos secos y el huevo, a partir de los 4 a 6 meses y sin retrasar la alimentación complementaria. El beneficio se demostró primero en bebés con eccema grave o alergia al huevo, y las guías más recientes extienden esta pauta a todos los lactantes. Los alimentos deben prepararse de forma adaptada a la edad del niño, y el huevo siempre bien cocinado, evitando el huevo crudo o poco cuajado.",
+        "La introducción temprana de alimentos ayuda a prevenir la alergia alimentaria (SEICAP, 2025). Tema: mantener el alimento en la dieta y la leche en lactancia artificial o mixta. Hallazgo: cuando el bebé ya tolera un alimento alergénico, conviene que lo siga tomando, idealmente varias veces por semana; si la familia no va a consumirlo de forma habitual, es preferible no introducirlo antes que ofrecerlo de forma irregular. Para prevenir la alergia a la proteína de leche de vaca no se recomiendan las fórmulas parcial o extensamente hidrolizadas; si el bebé toma biberón (lactancia artificial o mixta), se aconseja una fórmula estándar de leche de vaca tomada a diario y con regularidad, sin darla solo de vez en cuando. Se recomienda la lactancia materna y, si un bebé amamantado necesita suplemento, conviene valorar alternativas que eviten el uso intermitente de fórmula estándar."
+      ]
+    },
+    {
+      "source_type": "reference",
+      "title": "¿Sabías que ofrecer el pecho durante una vacuna puede reducir el dolor del bebé?",
+      "organization": "Sociedad Española de Pediatría Extrahospitalaria y Atención Primaria (SEPEAP)",
+      "publication_year": 2026,
+      "url": "https://sepeap.org/sabias-que-ofrecer-el-pecho-durante-una-vacuna-puede-reducir-el-dolor-del-bebe/",
+      "specialties": [
+        "pediatrics",
+        "general_medicine"
+      ],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "original_language": "es",
+      "topics": [
+        "lactancia"
+      ],
+      "chunks": [
+        "¿Sabías que ofrecer el pecho durante una vacuna puede reducir el dolor del bebé? (SEPEAP, 2026). Tema: tetanalgesia o dar el pecho durante vacunas, extracciones y pinchazos. Hallazgo: la autora la presenta como una de las medidas sin fármacos con más respaldo científico en pediatría: reduce el llanto y las expresiones de dolor, atenúa el aumento de la frecuencia cardiaca, ayuda al bebé a calmarse antes y aumenta la satisfacción materna; las familias sienten que participan activamente en el bienestar de su bebé.",
+        "¿Sabías que ofrecer el pecho durante una vacuna puede reducir el dolor del bebé? (SEPEAP, 2026). Tema: seguridad y cómo pedir tetanalgesia en la consulta. Hallazgo: la evidencia no muestra más riesgo de aspiración ni dificultades técnicas, y no interfiere con la eficacia de las vacunas. El efecto se atribuye a la suma de succión, contacto piel con piel, contención, calor, olor y voz de la madre y sustancias calmantes de la leche. Se avisa al profesional de que se quiere dar el pecho, se pone al bebé al pecho unos segundos antes del pinchazo y se continúa durante el procedimiento y después."
+      ]
+    },
+    {
+      "source_type": "reference",
+      "title": "De 8 mois à 3 ans : des repas équilibrés et bien répartis (ameli.fr)",
+      "organization": "Assurance Maladie (ameli.fr)",
+      "publication_year": 2025,
+      "url": "https://www.ameli.fr/assure/sante/themes/alimentation-0-3-ans/repas-equilibres-repartis",
+      "specialties": [
+        "pediatrics"
+      ],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "original_language": "fr",
+      "topics": [
+        "inapetencia",
+        "alimentacion_12_24m",
+        "bebidas"
+      ],
+      "chunks": [
+        "De 8 mois à 3 ans : des repas équilibrés et bien répartis (ameli.fr, Assurance Maladie, 2025). Tema: si el niño come poco en una comida o rechaza un alimento. Hallazgo: la Assurance Maladie aconseja no forzar al niño si come menos en una comida, porque sabe regularse y comer según su apetito; el equilibrio se valora en el conjunto del día. Si rechaza un alimento, no hay que forzarle, reñirle ni castigarle, sino volver a ofrecérselo otro día, sin desanimarse, hasta que lo acepte e incluso le guste, y sin compensar el rechazo con otro alimento, un postre más abundante o comida entre horas. La neofobia (rechazo de alimentos nuevos), frecuente a partir de los 18 meses y que puede durar hasta los 6 años, es una fase normal y pasajera (fuente en francés).",
+        "De 8 mois à 3 ans : des repas équilibrés et bien répartis (ameli.fr, Assurance Maladie, 2025). Tema: ritmo de comidas, leche y bebidas de 1 a 3 años. Hallazgo: se recomiendan cuatro comidas al día (desayuno, comida, merienda y cena) y evitar ofrecerle comida entre horas aunque haya comido poco en la comida anterior, porque picar favorece el sobrepeso. Pasado el año y hasta los 3 años, se le puede dar una leche de crecimiento (leche para niños de corta edad), además de lácteos pasteurizados como yogur, queso fresco o queso; los postres lácteos tipo natillas o flan cuentan como dulces. El agua es la única bebida necesaria; los zumos no son imprescindibles y conviene evitar refrescos y siropes. Una alimentación vegana puede causar carencias (vitamina B12, hierro, calcio) y el niño pequeño necesita un seguimiento médico especial (fuente en francés)."
+      ]
+    },
+    {
+      "source_type": "reference",
+      "title": "La diversification alimentaire (ameli.fr)",
+      "organization": "Assurance Maladie (ameli.fr)",
+      "publication_year": 2024,
+      "url": "https://www.ameli.fr/assure/sante/themes/alimentation/alimentation-0-3-ans/debut-diversification-alimentaire",
+      "specialties": [
+        "pediatrics",
+        "general_medicine"
+      ],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "original_language": "fr",
+      "topics": [
+        "alergenos",
+        "alimentacion_complementaria",
+        "cuando_solidos"
+      ],
+      "chunks": [
+        "La diversification alimentaire (ameli.fr, Assurance Maladie, Francia, 2024). Tema: cuándo empezar la diversificación y cuándo dar los alérgenos principales. Hallazgo: en un bebé sano, la diversificación empieza como pronto con 4 meses cumplidos y como tarde a los 6 meses; no se aconseja empezar antes de los 4 meses ni retrasarla más allá de los 6, tampoco en bebés con riesgo de alergia. Una vez empezada la diversificación, los lácteos, el huevo y el cacahuete se introducen sin tardar, tenga o no el bebé riesgo de alergia: los bebés con riesgo de alergia siguen el mismo calendario que los demás. Las dudas se pueden plantear al médico de cabecera o al pediatra en la revisión del bebé (fuente en francés).",
+        "La diversification alimentaire (ameli.fr, Assurance Maladie, Francia, 2024). Tema: huevo, gluten y orden de los alimentos al empezar. Hallazgo: a esta edad el huevo se da siempre duro (bien cocido) y en pequeña cantidad. La carne, el pescado o el huevo se dan una sola vez al día, como alternativas entre sí. El gluten puede introducirse a partir del quinto mes en pequeñas cantidades que se aumentan poco a poco hasta el año, y darlo pronto no cambia el riesgo de enfermedad celíaca. No hay un orden concreto para introducir los distintos grupos de alimentos: pueden introducirse a la vez, ofreciendo cada día alimentos diferentes. Dale de comer con una cuchara blanda que pueda chupar, para evitar que se atragante (fuente en francés)."
+      ]
+    },
+    {
+      "source_type": "reference",
+      "title": "Alimentation de 1 à 3 ans (ONE)",
+      "organization": "ONE (Office de la Naissance et de l'Enfance, Belgique)",
+      "publication_year": null,
+      "undated_reason": "Página de la sección Familles de one.be sin fecha de actualización visible; consultada el 2026-11-06.",
+      "url": "https://www.one.be/familles/1-3/alimentation-de-1-a-3-ans",
+      "specialties": [
+        "pediatrics",
+        "general_medicine"
+      ],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "original_language": "fr",
+      "topics": [
+        "alimentacion_12_24m",
+        "texturas",
+        "biberon_retirada"
+      ],
+      "chunks": [
+        "Alimentation de 1 à 3 ans (ONE, Office de la Naissance et de l'Enfance). Tema: comer como los mayores. Hallazgo: entre 1 y 3 años las necesidades cambian con la edad, el desarrollo y el apetito; el niño descubre alimentos, aprende a comer solo y afirma sus gustos. No se trata de que cada comida sea perfecta, sino de ofrecer con regularidad una alimentación variada, adaptada a su edad y su ritmo, y disfrutar de esta aventura culinaria. Participando en las comidas familiares aunque empiece a comer como el resto de la familia, sigue teniendo necesidades nutricionales específicas; las féculas cobran importancia y son la base de cada comida, y la leche sola ya no basta para las comidas de la mañana y la noche.",
+        "Alimentation de 1 à 3 ans (ONE, Office de la Naissance et de l'Enfance). Tema: la leche después del año. Hallazgo: Entre los 12 y los 18 meses se aconseja seguir con leche materna o de continuación, y el biberón puede sustituirse poco a poco por una taza o un vaso, de modo que la leche pase a ser un alimento más de la comida. A partir de los 18 meses se puede ofrecer una leche de crecimiento, mejor sin azúcar añadido ni aroma; si no, una leche de vaca entera puede convenir, porque los niños pequeños aún necesitan mucha grasa.",
+        "Alimentation de 1 à 3 ans (ONE, Office de la Naissance et de l'Enfance). Tema: pautas prácticas para las comidas. Hallazgo: se proponen comidas en la mesa a horas regulares, con los alimentos separados en el plato y en trozos pequeños, respetando el apetito del niño, y se le anima a comer solo con una cuchara o dejándole coger algunos alimentos con los dedos.",
+        "Alimentation de 1 à 3 ans (ONE, Office de la Naissance et de l'Enfance). Tema: frecuencias por grupos de alimentos. Hallazgo: Como referencia: féculas (pan, patatas, pasta, arroz, sémola, cereales, legumbres) en cada comida, con legumbres varias veces por semana; verduras y/o fruta en cada comida; lácteos enteros pasteurizados 2 a 3 veces al día; carne, ave, pescado o huevo, de los que bastan entre 15 y 30 g, como máximo una vez al día y no necesariamente todos los días; pescado 1 a 2 veces por semana, uno de ellos graso; un poco de materia grasa en cada comida; y agua a lo largo del día, la mejor bebida para calmar la sed. Los zumos de fruta y la leche se consideran alimentos."
+      ]
+    },
+    {
+      "source_type": "reference",
+      "title": "Vitamina D: cuándo hace falta",
+      "original_title": "Vitamina D: quando serve",
+      "organization": "Azienda Ospedaliero Universitaria Meyer IRCCS",
+      "publication_year": 2026,
+      "url": "https://www.meyer.it/index.php/newsletter/febbraio-2026/5546-vitamina-d-quando-serve",
+      "specialties": [
+        "pediatrics",
+        "nutrition",
+        "neonatology"
+      ],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "original_language": "it",
+      "topics": [
+        "alimentacion_complementaria",
+        "lactancia"
+      ],
+      "chunks": [
+        "Vitamina D: cuándo hace falta (Azienda Ospedaliero Universitaria Meyer IRCCS, 2026). Tema: suplemento de vitamina D en el primer año. Hallazgo: según las guías nacionales e internacionales, la suplementación se prescribe en los primeros 12 meses de vida, porque ni la leche materna ni la artificial cubren por sí solas la necesidad diaria, sobre todo si la lactancia se prolonga sin iniciar bien la alimentación complementaria. Después del primer año se indica solo en niños de riesgo, como los que tienen enfermedades intestinales crónicas, sobrepeso u obesidad o dietas vegetarianas o veganas (fuente en italiano).",
+        "Vitamina D: cuándo hace falta (Azienda Ospedaliero Universitaria Meyer IRCCS, 2026). Tema: por qué importa la vitamina D en los primeros años. Hallazgo: su carencia grave en los dos primeros años puede causar raquitismo, es decir, una mineralización insuficiente del hueso en crecimiento con deformidades del esqueleto, aunque hoy es raro. En nuestro clima la carencia suele dar síntomas más leves, como debilidad muscular y un mayor riesgo de fracturas por una clara disminución de la densidad ósea. El artículo no da pautas de cantidad (fuente en italiano)."
+      ]
+    },
+    {
+      "source_type": "reference",
+      "title": "De 8 a 12 meses: cómo crece",
+      "original_title": "Da 8 a 12 mesi: come cresce",
+      "organization": "Ospedale Pediatrico Bambino Gesù",
+      "publication_year": 2024,
+      "url": "https://www.ospedalebambinogesu.it/da-8-a-12-mesi-come-cresce-80034/",
+      "specialties": [
+        "pediatrics",
+        "neonatology",
+        "nutrition"
+      ],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "original_language": "it",
+      "topics": [
+        "alimentacion_complementaria",
+        "biberon_retirada"
+      ],
+      "chunks": [
+        "De 8 a 12 meses: cómo crece (Ospedale Pediatrico Bambino Gesù, 2024). Tema: ritmo de crecimiento entre los 8 y los 12 meses. Hallazgo: el ritmo se frena un poco y el bebé gana unos 70-100 gramos a la semana, hasta triplicar el peso del nacimiento en su primer cumpleaños; las niñas pesan de media 200-250 gramos menos que los niños. Basta con pesarlo una sola vez al mes. Son frecuentes periodos de varias semanas en que crece poco o nada, son normales y la recuperación suele ser rápida. La talla aumenta unos 2 cm al mes hasta los 9-10 meses y luego 1 cm al mes hasta el año; el perímetro craneal llega a unos 46 cm al año (fuente en italiano).",
+        "De 8 a 12 meses: cómo crece (Ospedale Pediatrico Bambino Gesù, 2024). Tema: alimentación y autonomía al final del primer año. Hallazgo: el bebé debe empezar a comer más alimentos de mesa, variando los platos según los de los padres, y es útil que manipule la comida y coma solo con las manos aunque se ensucie. También debe ser capaz de usar una taza; la mayoría de los pediatras aconseja pasar del biberón a la taza entre los 12 y los 18 meses (fuente en italiano)."
+      ]
+    },
+    {
+      "source_type": "reference",
+      "title": "Vitaminas extra (Kind en Gezin)",
+      "original_title": "Extra vitamines (Kind en Gezin)",
+      "organization": "Kind en Gezin (Agentschap Opgroeien)",
+      "publication_year": null,
+      "undated_reason": "Página de kindengezin.be sin fecha de publicación ni de revisión visible; consultada el 2026-11-06",
+      "url": "https://www.kindengezin.be/nl/thema/gezondheid-en-vaccinatie/extra-vitamines",
+      "specialties": [
+        "pediatrics",
+        "neonatology"
+      ],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "original_language": "nl",
+      "topics": [
+        "suplementos"
+      ],
+      "chunks": [
+        "Vitaminas extra (Kind en Gezin, Agentschap Opgroeien). Tema: suplemento de vitamina D en bebés y niños pequeños. Hallazgo: la página recomienda un suplemento de vitamina D para todos los niños, no solo los de riesgo, desde el nacimiento hasta los 6 años, a diario y durante todo el año. No distingue entre bebés con lactancia materna y con biberón: la leche materna contiene de forma natural poca vitamina D, y la cantidad añadida a la leche de fórmula suele ser insuficiente. Los niños con factores de riesgo, como la piel oscura, pueden necesitar una pauta distinta y seguirla más tiempo, algo que se comenta con el médico que los atiende.",
+        "Vitaminas extra (Kind en Gezin, Agentschap Opgroeien). Tema: hierro en bebés sanos. Hallazgo: la página indica que los bebés sanos nacidos a término no necesitan un suplemento de hierro y que este incluso puede ser perjudicial. Explica que el hierro llega de la leche materna o de fórmula durante los primeros 6 meses y de la comida sólida a partir de los 6 meses. Este consejo sobre el hierro se refiere solo a bebés sanos nacidos a término, y la página no menciona a los bebés prematuros."
+      ]
+    },
+    {
+      "source_type": "reference",
+      "title": "¿Qué es mejor no darle a tu bebé?",
+      "original_title": "Wat kun je beter niet geven aan je baby?",
+      "organization": "Stichting Voedingscentrum Nederland (Voedingscentrum)",
+      "publication_year": null,
+      "undated_reason": "La página no muestra fecha de publicación ni de actualización; consultada el 2026-11-06",
+      "url": "https://www.voedingscentrum.nl/nl/zwanger-en-kind/eerste-hapjes/wat-kun-je-beter-niet-geven-aan-je-kindje-.aspx",
+      "specialties": [
+        "pediatrics",
+        "nutrition"
+      ],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "original_language": "nl",
+      "topics": [
+        "alimentacion_complementaria",
+        "seguridad_alimentaria"
+      ],
+      "chunks": [
+        "¿Qué es mejor no darle a tu bebé? (Voedingscentrum). Tema: alimentos de riesgo microbiológico y la leche de vaca. Hallazgo: la página desaconseja la miel antes del año, porque puede estar contaminada con una bacteria que puede poner muy enfermos a los niños de hasta 1 año, y la leche de vaca hasta los 12 meses (demasiada proteína y sal para los riñones; la base debe ser la leche materna o de fórmula). También desaconseja entre los 4 meses y el año la carne cruda o poco hecha, el pescado crudo o el ahumado envasado, como el sushi o el salmón ahumado, el marisco crudo y el huevo crudo o los alimentos que lo llevan, como la mayonesa casera, por las bacterias dañinas.",
+        "¿Qué es mejor no darle a tu bebé? (Voedingscentrum). Tema: sal, hígado, quesos, dulces y bebidas azucaradas. Hallazgo: la página desaconseja añadir sal y dar platos preparados con sal añadida, porque los riñones de los pequeños no la manejan bien. Desaconseja el hígado, el paté y el embutido de hígado porque tienen mucha vitamina A, que en exceso puede dar dolor de cabeza, náuseas, mareo y cansancio. También desaconseja los quesos de leche cruda, porque pueden llevar bacterias; los quesos duros, en lonchas o para untar, por la grasa saturada y la sal; los postres dulces infantiles; las bebidas azucaradas, como zumos, refrescos o limonadas. Desaconseja también dar al bebé infusiones de canela, hinojo o anís, que pueden contener toxinas vegetales, y que la madre lactante tome infusiones de lactancia con esas plantas."
+      ]
+    },
+    {
+      "source_type": "reference",
+      "title": "Alimentación de los niños de 1 a 3 años",
+      "original_title": "Żywienie dzieci w wieku 1-3 lat",
+      "organization": "Narodowe Centrum Edukacji Żywieniowej (NCEŻ), Narodowy Instytut Zdrowia Publicznego PZH - PIB",
+      "publication_year": 2018,
+      "url": "https://ncez.pzh.gov.pl/dzieci-i-mlodziez/zywienie-dzieci-w-wieku-1-3-lat/",
+      "specialties": [
+        "pediatrics",
+        "nutrition"
+      ],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "original_language": "pl",
+      "topics": [
+        "alimentacion_12_24m",
+        "bebidas",
+        "biberon_retirada",
+        "texturas"
+      ],
+      "chunks": [
+        "Alimentación de los niños de 1 a 3 años (NCEŻ, Instituto Nacional de Salud Pública PZH, 2018). Tema: comidas al final del primer año y después. Hallazgo: tras el noveno mes, los bebés que toman pecho necesitan 3-4 comidas complementarias y 1-2 tentempiés que coman solos; los alimentados con leche artificial, 4-5 comidas y 1-2 tentempiés. La dieta debe ser variada (verduras, frutas, cereales, carne magra, pescado azul, huevos, lácteos, legumbres y aceites vegetales), cocinada al vapor, hervida, estofada o al horno en lugar de frita, con especias y hierbas naturales en cantidades razonables, y con agua de baja mineralización como bebida básica. (fuente en polaco)",
+        "Alimentación de los niños de 1 a 3 años (NCEŻ, Instituto Nacional de Salud Pública PZH, 2018). Tema: leche de vaca, biberón y qué limitar. Hallazgo: a partir de los 12 meses la leche de vaca ya entra en su dieta, sin abusar de ella y entera, nunca desnatada ni semidesnatada; las leches de crecimiento tipo Junior no son necesarias. Conviene evitar el exceso de sal y azúcar, los productos ultraprocesados y los tentempiés salados o dulces, y, a partir de los 12 meses, el niño ya no debería beber de biberón con tetina sino de un vaso abierto. El artículo recuerda que hasta los 24 meses se desarrolla la capacidad de morder, por lo que hay que favorecerla, y que el crecimiento se vigila en curvas de percentiles. (fuente en polaco)"
+      ]
+    },
+    {
+      "source_type": "reference",
+      "title": "Período crítico de la lactancia",
+      "original_title": "Período Crítico da lactação",
+      "organization": "Sociedade Brasileira de Pediatria (SBP)",
+      "publication_year": 2024,
+      "url": "https://www.sbp.com.br/pediatria-para-familias/aleitamento-materno/periodo-critico-da-lactacao",
+      "specialties": [
+        "pediatrics",
+        "nutrition"
+      ],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "original_language": "pt",
+      "topics": [
+        "lactancia",
+        "problemas_lactancia"
+      ],
+      "chunks": [
+        "Período crítico de la lactancia (Sociedade Brasileira de Pediatria, 2024). Tema: crisis transitoria de la lactancia (brote de crecimiento). Hallazgo: son momentos en que el bebé pide el pecho mucho más a menudo y la madre puede pensar que tiene poca leche. Por ejemplo, bebés que mamaban cada 2 a 3 horas pasan de un día para otro a querer mamar cada 1 a 2 horas. Es más frecuente en los primeros meses: el 75% ocurre en las primeras 12 semanas y el 23% entre las semanas 13 y 24. En el 98% de los casos dura menos de una semana, con una media de 3 días. La fuente resume el mensaje como «creció y quiere más». (fuente en portugués)",
+        "Período crítico de la lactancia (Sociedade Brasileira de Pediatria, 2024). Tema: señales y qué hacer en la crisis de lactancia. Hallazgo: en el bebé, inquietud entre tomas, peticiones frecuentes, quedarse dormido en la toma, despertares nocturnos, irritabilidad y soltar el pecho; en la madre, pechos blandos y vacíos y reflejo de eyección disminuido o ausente. Hay que amamantar siempre que el bebé quiera, quizá 12 a 15 o más veces al día, y en 2 a 7 días vuelve a 8 a 12 tomas diarias. No se deben ofrecer otros líquidos ni alimentos y es importante resistir la tentación de dar leche de fórmula, porque reduce el estímulo del pecho y la producción de leche. La madre debe pedir ayuda con las demás tareas de casa y confiar en su capacidad de amamantar. (fuente en portugués)"
+      ]
+    },
+    {
+      "source_type": "guideline",
+      "title": "Guía para las madres que amamantan",
+      "organization": "Ministerio de Sanidad (España)",
+      "publication_year": 2017,
+      "url": "https://www.sanidad.gob.es/organizacion/sns/planCalidadSNS/docs/GPCLactancia_mujeres_Osteba-1.pdf",
+      "specialties": [
+        "pediatrics",
+        "general_medicine"
+      ],
+      "license": "fair_use_snippet",
+      "language": "es",
+      "original_language": "es",
+      "topics": [
+        "lactancia"
+      ],
+      "chunks": [
+        "Guía para las madres que amamantan (Ministerio de Sanidad y Osteba, 2017). Tema: ingurgitación, dolor, grietas y mastitis. Hallazgo: la ingurgitación aparece a los 2-3 días del parto con pechos tensos, hinchados y calientes, y se previene ofreciendo el pecho con frecuencia; ayudan el calor local antes de la toma y el frío entre tomas. Un dolor intenso o persistente no es normal y hay que consultarlo, igual que las grietas, que suelen deberse a un problema de agarre. Ante dolor y enrojecimiento en una zona del pecho, con o sin fiebre, puede ser mastitis: se continúa con la lactancia con más tomas y, si no hay clara mejoría en 12 o 24 horas o hay fiebre, malestar general, escalofríos o dolores musculares, es necesaria una valoración médica. Nunca está indicado suspender la lactancia.",
+        "Guía para las madres que amamantan (Ministerio de Sanidad y Osteba, 2017). Tema: brotes de crecimiento, poca leche y suplementos. Hallazgo: los brotes de crecimiento hacen que el bebé pida el pecho mucho más; si durante dos o tres días se ofrece el pecho con más frecuencia, aumenta la producción y las tomas vuelven a regularse; si no es así, se consulta. El llanto o el miedo a no tener leche no justifican dar suplementos de forma rutinaria: es el pediatra quien decide tras ver una toma. Casi siempre la poca leche se debe a tomas poco frecuentes o cortas, un solo pecho por toma o mal agarre, y los suplementos solos no la resuelven y pueden acabar en destete. Si en los primeros días el bebé está muy adormilado, conviene despertarlo para que haga al menos 8 tomas al día."
+      ]
+    }
+  ]
+}

@@ -14,6 +14,7 @@ import json
 import logging
 from pathlib import Path
 
+import httpx
 from sqlalchemy import func, select
 
 from mistralai.client.errors import MistralError
@@ -41,6 +42,17 @@ def _is_retryable(exc: Exception) -> bool:
     except Exception:  # noqa: BLE001 — some SDK errors cannot be stringified
         return False
     return any(f"Status {s}" in msg or f"status {s}" in msg for s in RETRYABLE_STATUS)
+
+
+def is_transient(exc: BaseException) -> bool:
+    """An error that waiting can fix: Mistral's 429 and 5xx, or the network.
+
+    adelia.main tries a file that stopped on one of these again later in the
+    same boot; a broken file or a missing key would fail the same way again.
+    """
+    if isinstance(exc, MistralError):
+        return _is_retryable(exc)
+    return isinstance(exc, (httpx.TransportError, OSError, TimeoutError))
 
 
 async def embed_with_retry(texts: list[str]) -> list[list[float]]:
@@ -224,17 +236,31 @@ async def load_sources(sources: list[dict], origin: str, *, tier: str = "evidenc
     on every source created here; a source dict may carry its own `tier`,
     which wins, so one list can never be loaded under the wrong label by
     forgetting the argument.
+
+    No session is open while Mistral is called (2026-11-07). Boot runs this
+    beside the server now (adelia/main.py), so it shares the pool with the
+    mothers' requests, and one embedding call can wait 77 s on a 429
+    (EMBED_RETRY_DELAYS): the titles are read in one short session, and each
+    source is written and committed in its own, after its embeddings exist.
+    Only the named fields below reach the table; anything else a file carries
+    (topics, undated_reason, original_language, original_title,
+    original_license) is dropped here.
     """
     async with AsyncSessionLocal() as session:
         existing = await session.execute(select(EvidenceSource.title))
         existing_titles = {row[0] for row in existing.all()}
 
-        sources_added = 0
-        chunks_added = 0
-        for src_data in sources:
-            if src_data["title"] in existing_titles:
-                continue
-            chunks_text = list(src_data.get("chunks", []))
+    sources_added = 0
+    chunks_added = 0
+    for src_data in sources:
+        if src_data["title"] in existing_titles:
+            continue
+        chunks_text = list(src_data.get("chunks", []))
+        # Embed BEFORE writing the source: if embedding ultimately fails the
+        # source is not left behind without chunks (idempotency is by title,
+        # so a half-loaded source would never get its chunks).
+        embeddings = await embed_with_retry(chunks_text) if chunks_text else []
+        async with AsyncSessionLocal() as session:
             source = EvidenceSource(
                 source_type=src_data["source_type"],
                 title=src_data["title"],
@@ -246,13 +272,8 @@ async def load_sources(sources: list[dict], origin: str, *, tier: str = "evidenc
                 language=src_data.get("language", "en"),
                 tier=src_data.get("tier", tier),
             )
-            # Embed BEFORE adding the source: if embedding ultimately fails the
-            # source is not left behind without chunks (idempotency is by
-            # title, so a half-loaded source would never get its chunks).
-            embeddings = await embed_with_retry(chunks_text) if chunks_text else []
             session.add(source)
             await session.flush()
-            sources_added += 1
             for idx, (text_chunk, emb) in enumerate(zip(chunks_text, embeddings, strict=True)):
                 session.add(EvidenceChunk(
                     source_id=source.id,
@@ -262,15 +283,16 @@ async def load_sources(sources: list[dict], origin: str, *, tier: str = "evidenc
                     embedding=emb,
                     language=source.language,  # see load_seed_if_empty
                 ))
-                chunks_added += 1
             # Commit per source: progress survives a later failure and the
-            # next boot resumes from where it stopped.
+            # next boot (or the next pass of this one) resumes from there.
             await session.commit()
-            existing_titles.add(src_data["title"])
-            if SOURCE_PACING_S:
-                await asyncio.sleep(SOURCE_PACING_S)
-        logger.info("evidence file %s: +%d sources, +%d chunks", origin, sources_added, chunks_added)
-        return sources_added, chunks_added
+        sources_added += 1
+        chunks_added += len(chunks_text)
+        existing_titles.add(src_data["title"])
+        if SOURCE_PACING_S:
+            await asyncio.sleep(SOURCE_PACING_S)
+    logger.info("evidence file %s: +%d sources, +%d chunks", origin, sources_added, chunks_added)
+    return sources_added, chunks_added
 
 
 def main() -> None:
