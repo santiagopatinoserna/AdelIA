@@ -342,3 +342,53 @@ async def test_with_no_name_the_guard_asks_the_connection_which_database_it_is(
     monkeypatch.setattr(gc.evidence_loader, "load_sources", _never)
     with pytest.raises(gc.CandidateError, match="_golden_gate"):
         await gc.load_candidates([_file(tmp_path, "evidence_a.json", [_source("X")])])
+
+
+# --- explain: the same questions, without and with the candidates (2026-11-07) ----
+
+
+def _explained(qid: str, group: str, nearest, cards=(), origins=None, expect=None) -> dict:
+    return {"id": qid, "group": group, "question": f"pregunta {qid}", "expect_source": expect,
+            "passed": True, "guard": None,
+            "cards": [{"title": t, "distance": d} for t, d in cards],
+            "nearest": [list(n) for n in nearest], "origins": origins or {}}
+
+
+def test_explain_puts_both_runs_side_by_side_and_names_the_newcomers():
+    without = [_explained("A5", "A", [("Sueño seguro (AEP)", 0.10), ("SMSL (AEP)", 0.11)],
+                          cards=[("Sueño seguro (AEP)", 0.10)], expect="sueño",
+                          origins={"Sueño seguro (AEP)": "data/evidence_respiratorio_sueno.json"})]
+    with_ = [_explained("A5", "A", [("Krybbedød (Helsenorge)", 0.08), ("Sueño seguro (AEP)", 0.10)],
+                        cards=[("Krybbedød (Helsenorge)", 0.08)], expect="sueño",
+                        origins={"Krybbedød (Helsenorge)": "candidato respiratorio_sueno.json",
+                                 "Sueño seguro (AEP)": "data/evidence_respiratorio_sueno.json"})]
+    text = gc.explain(without, with_)
+    assert "[A5]" in text and "sueño" in text
+    sin, con = text.split("con candidatos")[0], text.split("con candidatos")[1]
+    assert "Sueño seguro (AEP)" in sin and "0.1000" in sin
+    new = next(x for x in con.splitlines() if "Krybbedød" in x)
+    assert "nueva" in new and "candidato respiratorio_sueno.json" in new and "bajo el corte" in new
+    assert "sale con los candidatos: SMSL (AEP)" in text
+
+
+def test_explain_of_a_b_names_the_cards_that_fell_under_the_cut():
+    without = [_explained("B6", "B", [("Alergia a la leche de vaca (AEP)", 0.1901)])]
+    with_ = [_explained("B6", "B", [("Food allergies (NHS)", 0.185)],
+                        cards=[("Food allergies (NHS)", 0.185)],
+                        origins={"Food allergies (NHS)": "candidato alimentacion_bebes.json"})]
+    text = gc.explain(without, with_)
+    assert "B6" in text and "tarjetas bajo el corte: ninguna sin; 1 con" in text
+
+
+def test_explain_with_one_run_only_prints_that_run():
+    text = gc.explain([_explained("A16", "A", [("Pas à pas (SPF)", 0.18)], expect="Pas à pas")],
+                      None)
+    assert "[A16]" in text and "con candidatos" not in text
+
+
+def test_the_cli_explain_reads_the_previews_and_never_fails_the_gate(tmp_path, capsys):
+    a = tmp_path / "sin.json"
+    a.write_text(json.dumps([_explained("A1", "A", [("X", 0.1)])]), encoding="utf-8")
+    assert gc.main(["explain", "--without", str(a)]) == 0
+    assert "[A1]" in capsys.readouterr().out
+    assert gc.main(["explain", "--without", str(tmp_path / "no.json")]) == 2

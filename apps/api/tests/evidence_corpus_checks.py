@@ -284,6 +284,43 @@ def check_original_language(data: dict) -> None:
         assert s.get("original_license") in (None, "public_domain"), label
 
 
+#: The languages of the titles a card may show (2026-11-07). The corpus is
+#: Spanish with English and French titles in data/; the first server run of
+#: the 2026-11-06 candidates put "pludselig uventet spædbarnsdød" and
+#: "krybbedød" on cards a mother in Spain would read.
+READABLE_TITLE_LANGUAGES = frozenset({"es", "en", "fr"})
+#: Letters and scripts no Spanish title has: Nordic, German, Polish,
+#: Portuguese and Hungarian letters, and anything past Latin (Arabic, CJK,
+#: Hangul). The organisation in the final parentheses keeps its own name.
+NOT_SPANISH = re.compile(r"[^\u0000-ɏ -⁯]|[åæøßłąęśźżćńőűãõäöç]", re.IGNORECASE)
+
+
+def _title_body(title: str) -> str:
+    return re.sub(r"\s*\([^()]*\)\s*$", "", title)
+
+
+def check_title_in_a_language_she_reads(data: dict) -> None:
+    """The card title is Spanish unless the page was Spanish, English or French.
+
+    The page's own title is kept, untouched, in `original_title` (the loader
+    ignores it, like `original_language`), and the chunks open with the title
+    the card shows, never with the original one."""
+    for s in data["sources"]:
+        label = _label(s)
+        original = s.get("original_title")
+        if s.get("original_language") in READABLE_TITLE_LANGUAGES:
+            assert original is None, f"{label}: original_title only for a translated title"
+            continue
+        assert isinstance(original, str) and original.strip(), f"{label}: no original_title"
+        assert original != s["title"], f"{label}: the title is still the original one"
+        hit = NOT_SPANISH.search(_title_body(s["title"]))
+        assert not hit, f"{label}: {hit.group(0)!r} is not in a Spanish title"
+        for i, chunk in enumerate(s["chunks"]):
+            assert not chunk.startswith(_title_body(original)), (
+                f"{_label(s, i)} still opens with the original title"
+            )
+
+
 def check_no_foreign_service(data: dict) -> None:
     """What the chunk tells a parent, after «Tema:». The attribution before it
     names the publisher (1177 Vårdguiden, SNS 24), as every chunk names its

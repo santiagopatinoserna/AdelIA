@@ -33,6 +33,7 @@ URL or of a document under another title spelling.
 from __future__ import annotations
 
 import fnmatch
+import re
 import importlib.util
 import sys
 from pathlib import Path
@@ -49,10 +50,13 @@ GENERIC = ("signos_alarma", "cuando_consultar")
 #: domain -> (sources in the file, its topic vocabulary, the sub-topics that
 #: hold at least two sources). The counts are pinned: a source added to or
 #: dropped from a file without a measurement is a drift, like a golden
-#: question changed silently.
+#: question changed silently. 2026-11-07: the gap rule (below) took feeding
+#: from 120 to 38 and respiratory and sleep from 77 to 46, and B6 took one
+#: cow's-milk allergy source out of digestive and skin (55 to 54), after the
+#: server run that measured them (docs/corpus/CANDIDATOS_2026_11_06.md, 16).
 DOMAINS: dict[str, tuple[int, tuple[str, ...], tuple[str, ...]]] = {
     "alimentacion_bebes": (
-        120,
+        38,
         (
             "lactancia", "lactancia_tecnica", "problemas_lactancia",
             "extraccion_conservacion_leche", "destete", "biberon_retirada", "biberon_formula",
@@ -61,11 +65,9 @@ DOMAINS: dict[str, tuple[int, tuple[str, ...], tuple[str, ...]]] = {
             "seguridad_alimentaria", "inapetencia",
         ),
         (
-            "lactancia", "lactancia_tecnica", "problemas_lactancia",
-            "extraccion_conservacion_leche", "destete", "biberon_retirada", "biberon_formula",
-            "alimentacion_complementaria", "cuando_solidos", "senales_listo", "texturas",
-            "alergenos", "alimentacion_12_24m", "bebidas", "seguridad_alimentaria",
-            "inapetencia",
+            "lactancia", "lactancia_tecnica", "problemas_lactancia", "biberon_retirada",
+            "biberon_formula", "alimentacion_complementaria", "texturas", "alergenos",
+            "alimentacion_12_24m", "bebidas", "seguridad_alimentaria", "inapetencia",
         ),
     ),
     "desarrollo_0_24m": (
@@ -80,7 +82,7 @@ DOMAINS: dict[str, tuple[int, tuple[str, ...], tuple[str, ...]]] = {
         ),
     ),
     "digestivo_piel": (
-        55,
+        54,
         (
             "colico", "llanto", "estrenimiento", "heces", "diarrea", "deshidratacion", "vomitos",
             "aplv", "dermatitis_atopica", "costra_lactea", "dermatitis_panal", "ictericia",
@@ -142,7 +144,7 @@ DOMAINS: dict[str, tuple[int, tuple[str, ...], tuple[str, ...]]] = {
         ),
     ),
     "respiratorio_sueno": (
-        77,
+        46,
         (
             "resfriado_mocos", "lavados_nasales", "tos", "bronquiolitis", "laringitis",
             "sibilancias", "otitis", "respiracion_normal", "pausas_brue",
@@ -150,8 +152,7 @@ DOMAINS: dict[str, tuple[int, tuple[str, ...], tuple[str, ...]]] = {
         ),
         (
             "resfriado_mocos", "lavados_nasales", "tos", "bronquiolitis", "sibilancias",
-            "otitis", "respiracion_normal", "pausas_brue", "muerte_subita_sueno_seguro",
-            "colecho", "chupete",
+            "otitis", "respiracion_normal", "muerte_subita_sueno_seguro",
         ),
     ),
     "salud_madre_familia": (
@@ -386,3 +387,170 @@ def test_the_same_page_under_another_spelling_of_its_url_is_a_duplicate(tmp_path
                  encoding="utf-8")
     with pytest.raises(AssertionError, match="same page"):
         checks.check_disjoint_documents(a, [b])
+
+
+# --- titles a mother reads (2026-11-07) --------------------------------------------
+#
+# The first server run of this batch put «pludselig uventet spædbarnsdød
+# (sundhed.dk)» and «krybbedød (SIDS)» on the cards of a Spanish question. A
+# source read in a language other than Spanish, English or French shows its
+# title translated into Spanish (the real title, translated, nothing added) and
+# keeps the page's own in `original_title`, which the loader ignores.
+
+
+@pytest.mark.parametrize("domain", NAMES)
+def test_every_title_is_in_a_language_she_reads(domain):
+    checks.check_title_in_a_language_she_reads(_data(domain))
+
+
+@pytest.mark.parametrize(("title", "extra"), [
+    ("Krybbedød (SIDS) (Helsenorge)", {"original_title": "Krybbedød (SIDS) (Helsenorge)"}),
+    ("Muerte en la cuna (Helsenorge)", {}),
+    ("النوم الآمن للرضيع", {"original_title": "النوم الآمن للرضيع"}),
+    ("Muerte en la cuna (Helsenorge)", {"original_title": "Krybbedød (Helsenorge)",
+                                        "chunks": ["Krybbedød (Helsenorge, 2024). Tema: x."]}),
+])
+def test_a_title_she_cannot_read_is_refused(title, extra):
+    src = {"title": title, "original_language": "no",
+           "chunks": [f"{title} (Helsenorge, 2024). Tema: x."], **extra}
+    with pytest.raises(AssertionError):
+        checks.check_title_in_a_language_she_reads({"sources": [src]})
+
+
+def test_a_translated_title_keeps_the_publisher_s_own_name():
+    """Kind en Gezin, Sundhed.dk and Kinder- und Jugendärzte im Netz are names, as NHS is."""
+    checks.check_title_in_a_language_she_reads({"sources": [{
+        "title": "Ictericia del recién nacido (Kinder- und Jugendärzte im Netz)",
+        "original_title": "Neugeborenen-Gelbsucht (Kinder- und Jugendärzte im Netz)",
+        "original_language": "de",
+        "chunks": ["Ictericia del recién nacido (BVKJ, 2018). Tema: x."]}]})
+    with pytest.raises(AssertionError):
+        checks.check_title_in_a_language_she_reads({"sources": [{
+            "title": "Sudden infant death (NHS)", "original_title": "Sudden infant death (NHS)",
+            "original_language": "en", "chunks": ["x"]}]})
+
+
+# --- the gap rule (2026-11-07) -----------------------------------------------------
+#
+# The same server run: recall@4 of group A fell from 0.97 to 0.86. A1, A5, A13
+# and A37 lost their source to candidates that say again, often in another
+# language, what data/ already says well about breastfeeding (141 data/
+# sources mention it), complementary feeding (55) and safe sleep (40). On those
+# three themes a candidate is worth only what data/ lacks:
+#
+#   1. A fragment of a candidate tagged with one of COVERED_TOPICS enters only
+#      if its theme (what it says after «Tema:») is a gap: a sub-theme in GAPS,
+#      which no fragment of data/ has as its theme. In a source tagged only
+#      with those topics every fragment is on a covered theme; in a source that
+#      also has another topic, the fragments whose theme is COVERED_THEME are.
+#   2. A source left with fewer than two fragments goes (the batch's rule: two
+#      to four fragments).
+#   3. A gap stops being one when three candidates fill it: GAP_CAP sources at
+#      most, first those of the two countries AdelIA serves, then those read in
+#      Spanish, English or French.
+#
+# Applied on 2026-11-07 (docs/corpus/CANDIDATOS_2026_11_06.md, 16): 113 of the
+# 455 sources went, every safe-sleep one among them.
+
+COVERED_TOPICS = frozenset({
+    "lactancia", "alimentacion_complementaria", "cuando_solidos", "senales_listo", "texturas",
+    "alergenos", "muerte_subita_sueno_seguro", "colecho", "chupete",
+})
+COVERED_THEME = re.compile(
+    r"lactancia|leche materna|leche de la madre|amamant|dar el pecho|\bal pecho\b|el pecho\b|"
+    r"calostro|tomas?\b.{0,20}pecho|leche extra[ií]da|extraer (la )?leche|"
+    r"extracci[oó]n (manual )?de (la )?leche|sacaleches|conserva\w* (y \w+ )?(de )?la leche|"
+    r"congelar (la )?leche|"
+    r"alimentaci[oó]n complementaria|s[oó]lidos|papillas?|pur[eé]s|texturas?|diversificaci|"
+    r"primeros (alimentos|bocados)|\bblw\b|empezar (con|a comer)|introducir (los |otros )?alimentos|"
+    r"alimentos complementarios|otros alimentos|"
+    r"alimentaci[oó]n (de|entre|desde|a partir de) (los )?(4|6) |"
+    r"muerte s[uú]bita|sueño seguro|colecho|compartir (la )?cama|chupete|boca arriba|"
+    r"asfixia (durante|en) el sueño|dormir (seguro|boca)|superficie para dormir|"
+    r"postura (para|al) dormir|cama propia|misma cama"
+)
+GAPS = {
+    "problemas del pecho": r"grieta|mastitis|ingurgitaci|pez[oó]n|dolor (de pecho|al amamantar|en el "
+                           r"pecho)|pechos? hinchados?|conductos? (de leche )?obstruidos?.{0,5}(y|o) "
+                           r"mastitis",
+    "agarre y posturas": r"agarre|posturas? (para dar el pecho|de lactancia)|colocar al beb[eé] al "
+                         r"pecho",
+    "crisis de lactancia": r"crisis (transitoria )?de (la )?lactancia|crisis de los 3 meses|baches? de "
+                           r"lactancia|brotes? de crecimiento",
+    "tetanalgesia": r"tetanalgesia|pecho durante",
+    "colapso posnatal": r"colapso",
+    "muerte súbita en la guardería": r"muerte s[uú]bita en la guarder",
+    "lactancia del prematuro": r"(pecho|lactancia|leche|extraer|mamar).{0,60}(prematur|ingresad)|"
+                               r"(prematur|ingresad).{0,60}(pecho|lactancia|leche|mamar)",
+    "alérgenos pronto": r"cacahuete|man[ií]\b|al[eé]rgenos|alerg[eé]nicos|huevo|"
+                        r"mantener\w* (el alimento |los al[eé]rgenos |el cacahuete )?en la dieta",
+    "piel con piel": r"piel con piel",
+    "contraindicaciones": r"contraindica",
+    "monitores": r"monitor",
+    "vitamina D": r"vitamina d",
+}
+GAP_CAP = 3
+
+
+def _theme(chunk: str) -> str:
+    m = re.search(r"Tema: (.*?)\. Hallazgo", chunk) or re.search(r"Tema: ([^.]*)\.", chunk)
+    return (m.group(1) if m else "").lower()
+
+
+def _gaps_of(chunk: str) -> list[str]:
+    return [g for g, p in GAPS.items() if re.search(p, _theme(chunk))]
+
+
+def _repeats_a_covered_theme(source: dict) -> list[int]:
+    """The fragments of `source` the rule keeps out."""
+    own = set(source.get("topics") or ()) - set(GENERIC)
+    if not own & COVERED_TOPICS:
+        return []
+    pure = own <= COVERED_TOPICS
+    return [i for i, c in enumerate(source["chunks"])
+            if not _gaps_of(c) and (pure or COVERED_THEME.search(_theme(c)))]
+
+
+def _batch_names() -> set[str]:
+    return {path_of(d).name for d in DOMAINS}
+
+
+@pytest.mark.parametrize("gap", sorted(GAPS))
+def test_every_gap_is_a_theme_no_fragment_of_data_has(gap):
+    files = [p for p in sorted(checks.DATA_DIR.glob(checks.BOOT_GLOB))
+             if p.name not in _batch_names()]
+    found = [s["title"] for p in files for s in checks.load(p)["sources"]
+             for c in s["chunks"] if re.search(GAPS[gap], _theme(c))]
+    assert not found, f"data/ already covers «{gap}»: {found[:3]}"
+
+
+@pytest.mark.parametrize("domain", NAMES)
+def test_a_candidate_on_a_covered_theme_brings_only_what_data_lacks(domain):
+    for s in _data(domain)["sources"]:
+        out = _repeats_a_covered_theme(s)
+        assert not out, f"{s['title'][:50]}: fragments {out} repeat a theme data/ covers"
+
+
+def test_no_gap_is_filled_by_more_than_three_candidates():
+    filled: dict[str, list[str]] = {g: [] for g in GAPS}
+    for d in NAMES:
+        for s in _data(d)["sources"]:
+            if not set(s.get("topics") or ()) & COVERED_TOPICS:
+                continue
+            for g in {g for c in s["chunks"] for g in _gaps_of(c)}:
+                filled[g].append(s["title"])
+    over = {g: t for g, t in filled.items() if len(t) > GAP_CAP}
+    assert not over, over
+
+
+@pytest.mark.parametrize(("topics", "themes", "kept"), [
+    (["lactancia"], ["duración de la lactancia", "beneficios para la madre"], False),
+    (["lactancia"], ["mastitis", "grietas en el pezón"], True),
+    (["muerte_subita_sueno_seguro", "chupete"], ["postura para dormir", "cuándo consultar"], False),
+    (["lactancia", "extraccion_conservacion_leche"], ["duración de la lactancia materna",
+                                                      "cómo congelar la leche extraída"], False),
+    (["fiebre"], ["lactancia y fiebre", "cuándo consultar"], True),
+])
+def test_the_gap_rule_bites(topics, themes, kept):
+    src = {"topics": topics, "chunks": [f"X (Y, 2024). Tema: {t}. Hallazgo: z." for t in themes]}
+    assert (not _repeats_a_covered_theme(src)) is kept

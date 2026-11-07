@@ -7,6 +7,10 @@ es 109, fr 160). Aquí quedan integradas como **candidatas**: 455 fuentes y 1.19
 `apps/api/adelia/enrichment/candidates/lote_2026_11_06/`. El arranque no lee esa carpeta: nada
 de esto llega a producción hasta que el golden lo mida y alguien mueva un fichero.
 
+**7 de noviembre**: la primera medición en el servidor las dio por no aptas (apartado 16). Tras
+la regla del hueco, los títulos en español y los arreglos de B6 quedan **341 fuentes y 877
+fragmentos**; las tablas de los apartados 10 y 11 son las de ahora.
+
 AdelIA responde con fuente o se abstiene, y una fuente fuera de tema o una cifra mal traducida
 en una urgencia es un riesgo para un bebé. Por eso se perdió más de lo que se ganó en volumen:
 de 787 fuentes entran 455.
@@ -251,8 +255,12 @@ misma ruta):
 
 ```bash
 cd /opt/adelia && bash scripts/prod-golden-gate.sh \
-  --candidates 'apps/api/adelia/enrichment/candidates/lote_2026_11_06/*.json'
+  --candidates 'apps/api/adelia/enrichment/candidates/lote_2026_11_06/*.json' \
+  --explain A1,A5,A13,A37,A16,A21,B6
 ```
+
+`--explain` (7 de noviembre) añade, para esas preguntas, las fuentes más cercanas con su
+distancia y su fichero, sin y con candidatos (apartado 16.4).
 
 Cómo leerlo: «candidatos: APTOS» si ninguna B pasa a llegar al modelo ni a responderse y
 recall@4 con candidatos sigue sobre 0,8. Cualquier B en «B que pasan a llegar al modelo» es un
@@ -261,140 +269,128 @@ de uno en uno cambiando el glob, para saber cuál mueve cada cosa.
 
 ## 10. Fuentes y fragmentos por dominio y por idioma original
 
+Después de la segunda vuelta (apartado 16). Entre paréntesis, las del 6 de noviembre.
+
 | dominio | fuentes | fragmentos | ar | da | de | en | es | fi | fr | it | ja | ko | nl | no | pl | pt | sv |
 |---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|
-| `alimentacion_bebes` | 120 | 318 | 1 |  | 8 | 29 | 36 | 1 | 8 | 12 |  |  | 6 | 3 | 4 | 10 | 2 |
-| `desarrollo_0_24m` | 54 | 133 | 1 | 1 |  | 18 | 9 |  | 10 | 8 |  |  | 3 | 1 | 1 | 2 |  |
-| `digestivo_piel` | 55 | 143 | 4 | 1 |  | 5 | 14 |  | 5 | 6 |  | 2 | 2 | 1 | 2 | 9 | 4 |
-| `guarderia_adaptacion` | 1 | 3 |  |  |  |  |  |  | 1 |  |  |  |  |  |  |  |  |
-| `infecciones_fiebre` | 30 | 82 | 1 | 1 | 1 | 9 | 3 | 1 | 3 | 5 |  |  | 2 | 1 |  | 2 | 1 |
-| `neonatal` | 35 | 100 | 1 |  | 1 | 3 | 13 |  | 2 | 5 |  |  | 1 | 1 |  | 7 | 1 |
-| `ojos_oidos_boca_uro_neuro` | 10 | 23 |  |  |  | 4 | 1 |  |  | 2 |  |  |  |  |  | 3 |  |
-| `pediatric_reflux` | 2 | 6 |  |  |  |  |  |  | 2 |  |  |  |  |  |  |  |  |
-| `respiratorio_sueno` | 77 | 209 | 2 | 2 | 1 | 9 | 19 |  | 14 | 10 | 2 | 1 | 2 | 2 |  | 10 | 3 |
-| `salud_madre_familia` | 18 | 50 |  |  |  | 2 | 5 |  | 2 | 3 |  |  | 2 | 1 |  | 1 | 2 |
-| `seguridad` | 47 | 116 | 2 |  | 5 | 5 | 2 |  | 8 | 7 | 1 |  | 6 | 1 | 1 | 9 |  |
-| `urgencias_lactante` | 6 | 15 |  |  |  | 5 |  |  |  |  |  |  | 1 |  |  |  |  |
-| **total** | 455 | 1198 | 12 | 5 | 16 | 89 | 102 | 2 | 55 | 58 | 3 | 3 | 25 | 11 | 8 | 53 | 13 |
+| `alimentacion_bebes` | 38 (120) | 84 (318) |  |  | 3 | 13 | 13 |  | 3 | 2 |  |  | 2 |  | 1 | 1 |  |
+| `desarrollo_0_24m` | 54 (54) | 133 (133) | 1 | 1 |  | 18 | 9 |  | 10 | 8 |  |  | 3 | 1 | 1 | 2 |  |
+| `digestivo_piel` | 54 (55) | 140 (143) | 4 | 1 |  | 5 | 13 |  | 5 | 6 |  | 2 | 2 | 1 | 2 | 9 | 4 |
+| `guarderia_adaptacion` | 1 (1) | 3 (3) |  |  |  |  |  |  | 1 |  |  |  |  |  |  |  |  |
+| `infecciones_fiebre` | 30 (30) | 82 (82) | 1 | 1 | 1 | 9 | 3 | 1 | 3 | 5 |  |  | 2 | 1 |  | 2 | 1 |
+| `neonatal` | 35 (35) | 100 (100) | 1 |  | 1 | 3 | 13 |  | 2 | 5 |  |  | 1 | 1 |  | 7 | 1 |
+| `ojos_oidos_boca_uro_neuro` | 10 (10) | 23 (23) |  |  |  | 4 | 1 |  |  | 2 |  |  |  |  |  | 3 |  |
+| `pediatric_reflux` | 2 (2) | 6 (6) |  |  |  |  |  |  | 2 |  |  |  |  |  |  |  |  |
+| `respiratorio_sueno` | 46 (77) | 125 (209) |  | 1 |  | 7 | 15 |  | 11 | 4 |  |  |  | 1 |  | 5 | 2 |
+| `salud_madre_familia` | 18 (18) | 50 (50) |  |  |  | 2 | 5 |  | 2 | 3 |  |  | 2 | 1 |  | 1 | 2 |
+| `seguridad` | 47 (47) | 116 (116) | 2 |  | 5 | 5 | 2 |  | 8 | 7 | 1 |  | 6 | 1 | 1 | 9 |  |
+| `urgencias_lactante` | 6 (6) | 15 (15) |  |  |  | 5 |  |  |  |  |  |  | 1 |  |  |  |  |
+| **total** | 341 (455) | 877 (1198) | 9 | 4 | 10 | 71 | 74 | 1 | 47 | 42 | 1 | 2 | 19 | 7 | 5 | 39 | 10 |
 
-| idioma original | fuentes | fragmentos |
-|---|---|---|
-| español (`es`) | 102 | 286 |
-| inglés (`en`) | 89 | 215 |
-| italiano (`it`) | 58 | 134 |
-| francés (`fr`) | 55 | 160 |
-| portugués (`pt`) | 53 | 153 |
-| neerlandés (`nl`) | 25 | 64 |
-| alemán (`de`) | 16 | 34 |
-| sueco (`sv`) | 13 | 37 |
-| árabe (`ar`) | 12 | 32 |
-| noruego (`no`) | 11 | 31 |
-| polaco (`pl`) | 8 | 21 |
-| danés (`da`) | 5 | 12 |
-| coreano (`ko`) | 3 | 8 |
-| japonés (`ja`) | 3 | 7 |
-| finés (`fi`) | 2 | 4 |
+| idioma original | fuentes | fragmentos | título de la tarjeta |
+|---|---|---|---|
+| español (`es`) | 74 | 203 | el original |
+| inglés (`en`) | 71 | 163 | el original |
+| francés (`fr`) | 47 | 137 | el original |
+| italiano (`it`) | 42 | 97 | traducido al español |
+| portugués (`pt`) | 39 | 109 | traducido al español |
+| neerlandés (`nl`) | 19 | 46 | traducido al español |
+| alemán (`de`) | 10 | 21 | traducido al español |
+| sueco (`sv`) | 10 | 29 | traducido al español |
+| árabe (`ar`) | 9 | 23 | traducido al español |
+| noruego (`no`) | 7 | 19 | traducido al español |
+| polaco (`pl`) | 5 | 12 | traducido al español |
+| danés (`da`) | 4 | 10 | traducido al español |
+| coreano (`ko`) | 2 | 4 | traducido al español |
+| finés (`fi`) | 1 | 2 | traducido al español |
+| japonés (`ja`) | 1 | 2 | traducido al español |
 
 ## 11. Por organización
 
 | organización | idioma | fuentes |
 |---|---|---|
-| NHS (National Health Service, Reino Unido) | en | 34 |
-| Sociedade Brasileira de Pediatria (SBP) | pt | 29 |
-| Ospedale Pediatrico Bambino Gesù | it | 26 |
-| ONE (Office de la Naissance et de l'Enfance, Belgique) | fr | 24 |
-| Assurance Maladie (ameli.fr) | fr | 17 |
-| Health Service Executive (HSE) | en | 15 |
-| American Academy of Pediatrics | es | 14 |
-| CDC | en | 13 |
-| Istituto Superiore di Sanità (ISS), EpiCentro | it | 13 |
-| Kind en Gezin (Agentschap Opgroeien) | nl | 13 |
-| Ministerio de Salud de Arabia Saudí (MOH) | ar | 12 |
-| 1177 Vårdguiden (Inera) | sv | 11 |
-| Helsenorge.no (Helsedirektoratet) | no | 10 |
-| Hôpitaux universitaires de Genève (HUG) | fr | 10 |
-| Sociedade Portuguesa de Pediatria (SPP) | pt | 10 |
-| Società Italiana di Pediatria (SIP) | it | 10 |
-| Sociedad Argentina de Pediatría (SAP) | es | 9 |
-| Asociación Española de Pediatría | es | 8 |
+| NHS (National Health Service, Reino Unido) | en | 26 |
+| Ospedale Pediatrico Bambino Gesù | it | 22 |
+| Sociedade Brasileira de Pediatria (SBP) | pt | 22 |
+| ONE (Office de la Naissance et de l'Enfance, Belgique) | fr | 18 |
+| Assurance Maladie (ameli.fr) | fr | 16 |
+| Health Service Executive (HSE) | en | 13 |
+| American Academy of Pediatrics | es | 12 |
+| 1177 Vårdguiden (Inera) | sv | 10 |
+| CDC | en | 10 |
+| Kind en Gezin (Agentschap Opgroeien) | nl | 10 |
+| Hôpitaux universitaires de Genève (HUG) | fr | 9 |
+| Ministerio de Salud de Arabia Saudí (MOH) | ar | 9 |
+| Istituto Superiore di Sanità (ISS), EpiCentro | it | 8 |
+| Sociedade Portuguesa de Pediatria (SPP) | pt | 8 |
 | American Academy of Pediatrics | en | 7 |
+| Helsenorge.no (Helsedirektoratet) | no | 7 |
 | KidsHealth (Paediatric Society of New Zealand) | en | 7 |
-| Sociedad Española de Inmunología Clínica, Alergología y Asma Pediátrica (SEICAP) | es | 7 |
-| Azienda Ospedaliero Universitaria Meyer IRCCS | it | 6 |
 | Consejería de Sanidad de la Comunidad de Madrid | es | 6 |
-| Netzwerk Gesund ins Leben (Bundesanstalt für Landwirtschaft und Ernährung, BLE) | de | 6 |
+| Sociedad Argentina de Pediatría (SAP) | es | 6 |
+| Azienda Ospedaliero Universitaria Meyer IRCCS | it | 5 |
 | Beratungsstelle für Unfallverhütung (bfu, Schweiz) | de | 5 |
-| Cochrane | es | 5 |
 | Ministerio de Salud y Protección Social (Colombia) | es | 5 |
 | Ministerio de Sanidad (España) | es | 5 |
-| Sociedad Española de Pediatría Extrahospitalaria y Atención Primaria (SEPEAP) | es | 5 |
-| Sundhed.dk, Patienthåndbogen | da | 5 |
-| Chile Crece Contigo (Gobierno de Chile) | es | 4 |
-| Direção-Geral da Saúde (DGS, Portugal) | pt | 4 |
-| Ministerio de Salud de la Nación (Argentina) | es | 4 |
-| Narodowe Centrum Edukacji Żywieniowej (NCEŻ), Narodowy Instytut Zdrowia Publicznego PZH - PIB | pl | 4 |
-| Organización Panamericana de la Salud (OPS) | es | 4 |
-| Serviço Nacional de Saúde (SNS 24) | pt | 4 |
-| Stichting Voedingscentrum Nederland (Voedingscentrum) | nl | 4 |
-| Korean Pediatric Society (대한소아청소년과학회) | ko | 3 |
+| Società Italiana di Pediatria (SIP) | it | 5 |
+| Sundhed.dk, Patienthåndbogen | da | 4 |
+| Asociación Española de Pediatría | es | 3 |
+| Chile Crece Contigo (Gobierno de Chile) | es | 3 |
+| Direção-Geral da Saúde (DGS, Portugal) | pt | 3 |
+| Organización Panamericana de la Salud (OPS) | es | 3 |
+| Sociedad Española de Inmunología Clínica, Alergología y Asma Pediátrica (SEICAP) | es | 3 |
+| Sociedad Española de Pediatría Extrahospitalaria y Atención Primaria (SEPEAP) | es | 3 |
 | VeiligheidNL (kenniscentrum letselpreventie) | nl | 3 |
 | Associação para a Promoção da Segurança Infantil (APSI) | pt | 2 |
-| Berufsverband der Kinder- und Jugendärzt*innen (BVKJ, Kinder- und Jugendärzte im Netz) | de | 2 |
 | Bundesinstitut für Risikobewertung (BfR) | de | 2 |
+| Cochrane | es | 2 |
 | Consejería de Sanidad de la Junta de Castilla y León | es | 2 |
-| Consumer Affairs Agency (消費者庁, Japón) | ja | 2 |
 | GroeiGids (GGD- en CJG-organisaties, Jeugdgezondheidszorg) | nl | 2 |
 | Healthdirect Australia | en | 2 |
-| Hospital Universitari i Politècnic La Fe (Valencia) | es | 2 |
-| Ministerio de Salud de Chile (MINSAL) | es | 2 |
-| Ministério da Saúde (Brasil) | pt | 2 |
-| National Allergy Council (Nip allergies in the Bub; ASCIA y Allergy & Anaphylaxis Australia) | en | 2 |
-| Nederlands Centrum Jeugdgezondheid (NCJ, JGZ-richtlijnen) | nl | 2 |
+| Korean Pediatric Society (대한소아청소년과학회) | ko | 2 |
+| Ministerio de Salud de la Nación (Argentina) | es | 2 |
+| Narodowe Centrum Edukacji Żywieniowej (NCEŻ), Narodowy Instytut Zdrowia Publicznego PZH - PIB | pl | 2 |
+| Serviço Nacional de Saúde (SNS 24) | pt | 2 |
 | Sociedad Española de Gastroenterología, Hepatología y Nutrición Pediátrica (SEGHNP) | es | 2 |
-| Terveyskylä.fi (Suomen yliopistosairaalat) | fi | 2 |
+| Stichting Voedingscentrum Nederland (Voedingscentrum) | nl | 2 |
 | World Health Organization (WHO) | es | 2 |
-| Associazione Culturale Pediatri (ACP) | it | 1 |
-| British Society for Allergy and Clinical Immunology (BSACI) y British Dietetic Association (BDA) | en | 1 |
+| Berufsverband der Kinder- und Jugendärzt*innen (BVKJ, Kinder- und Jugendärzte im Netz) | de | 1 |
 | CDC | es | 1 |
-| Children and Families Agency (こども家庭庁, Japón) | ja | 1 |
 | Cochrane | en | 1 |
 | Consejería de Sanidad, Junta de Castilla y León | es | 1 |
 | Consellería de Sanidade y Servicio Gallego de Salud (Sergas, Xunta de Galicia) | es | 1 |
+| Consumer Affairs Agency (消費者庁, Japón) | ja | 1 |
 | Croix-Rouge française | fr | 1 |
 | Departamento de Salud de la Generalitat de Cataluña | es | 1 |
 | Departamento de Salud del Gobierno Vasco | es | 1 |
-| European Academy of Allergy and Clinical Immunology (EAACI) | en | 1 |
 | Federazione Italiana Medici Pediatri (FIMP) | it | 1 |
 | Grupo GEIDIS y Fundación IMAS (guía alojada por SENeo) | es | 1 |
 | Główny Inspektorat Sanitarny (GIS, Polonia) | pl | 1 |
 | Haut Conseil de la santé publique (HCSP) | fr | 1 |
 | Haute Autorité de Santé (HAS) | fr | 1 |
 | Healthy Eating Research (AND, AAP, AAPD y AHA) | es | 1 |
-| Helsedirektoratet | no | 1 |
 | Hospital General Universitario Gregorio Marañón (Madrid) | es | 1 |
 | Hospital Infantil Universitario Niño Jesús (Madrid) | es | 1 |
-| Hospital Universitari Vall d'Hebron | es | 1 |
-| Hospital Universitario La Paz (Madrid) | es | 1 |
-| Instituto Colombiano de Bienestar Familiar (ICBF) | es | 1 |
+| Hospital Universitari i Politècnic La Fe (Valencia) | es | 1 |
 | Instituto de Salud Pública y Laboral de Navarra (Gobierno de Navarra) | es | 1 |
-| Livsmedelsverket | sv | 1 |
 | Luzerner Kantonsspital (LUKS, Kinderspital Zentralschweiz KidZ) | de | 1 |
-| Ministerstwo Zdrowia (Polonia) | pl | 1 |
+| Ministerio de Salud de Chile (MINSAL) | es | 1 |
 | Ministère de la Santé et des Services sociaux du Québec (MSSS) | fr | 1 |
+| Ministério da Saúde (Brasil) | pt | 1 |
 | NICHD | en | 1 |
 | Narodowy Fundusz Zdrowia (NFZ), portal pacjent.gov.pl | pl | 1 |
-| National Institute of Allergy and Infectious Diseases (NIAID, NIH) | en | 1 |
 | National Institute of Mental Health (NIMH) | es | 1 |
+| Nederlands Centrum Jeugdgezondheid (NCJ, JGZ-richtlijnen) | nl | 1 |
+| Netzwerk Gesund ins Leben (Bundesanstalt für Landwirtschaft und Ernährung, BLE) | de | 1 |
 | Osakidetza-Servicio vasco de salud (Osakidetza) | es | 1 |
 | Resuscitation Council UK | en | 1 |
-| Rikshandboken i barnhälsovård (Inera) | sv | 1 |
 | Royal College of Psychiatrists | en | 1 |
 | Seattle Children's Hospital | en | 1 |
 | Sociedad Española de Neurología Pediátrica (SENEP) | es | 1 |
 | Sociedade Portuguesa de Neonatologia (SPN) | pt | 1 |
-| Sociedade de Pediatria de São Paulo (SPSP) | pt | 1 |
 | Società Italiana di Neonatologia (SIN) | it | 1 |
 | Szczepienia.Info, Narodowy Instytut Zdrowia Publicznego PZH - PIB | pl | 1 |
+| Terveyskylä.fi (Suomen yliopistosairaalat) | fi | 1 |
 | The Hospital for Sick Children (SickKids, AboutKidsHealth) | en | 1 |
 | Vlaams Instituut Gezond Leven vzw | nl | 1 |
 
@@ -505,3 +501,246 @@ de uno en uno cambiando el glob, para saber cuál mueve cada cosa.
 | Bronquiolitis aguda. Información para las familias | Servicio Navarro de Salud-Osasunbidea (Gobier | es | le quedan 0 fragmento(s) válidos |
 | Tos ferina | Organización Panamericana de la Salud (OPS) | es | le quedan 1 fragmento(s) válidos |
 | Dépistage visuel (ONE) | ONE (Office de la Naissance et de l'Enfance,  | fr | revisión: fuente entera fuera |
+
+## 16. Segunda vuelta, 7 de noviembre: lo que enseñó la primera medición
+
+El supervisor midió las 455 en el servidor con la puerta sin modelo y salieron **no aptas**:
+recall@4 del grupo A de 0,97 a 0,86 (dejan de pasar A1, A5, A13 y A37) y B6, una pregunta de dosis
+de cetirizina, pasa a tener tarjetas bajo el corte, así que el rechazo que hacía el código queda
+en manos del modelo. Lo que cambia, en este orden:
+
+### 16.1 La regla del hueco: 113 fuentes salen
+
+Las que desplazaban a las buenas repetían, a menudo en otro idioma, lo que `data/` ya dice bien:
+lactancia (141 fuentes de `data/` la mencionan), alimentación complementaria (55) y sueño seguro y
+muerte súbita (40). Su valor está en los huecos. La regla, fijada en
+`tests/test_evidence_candidates_2026_11.py` (`COVERED_TOPICS`, `COVERED_THEME`, `GAPS`,
+`GAP_CAP`):
+
+1. **Ámbito**: las candidatas con algún tema de lactancia, alimentación complementaria (inicio,
+   señales, texturas, alérgenos) o sueño seguro (muerte súbita, colecho, chupete).
+2. **Qué se queda de ellas**: solo los fragmentos cuyo tema (lo que dicen tras «Tema:») es un
+   **hueco**, un subtema que ningún fragmento de `data/` tiene por tema: problemas del pecho
+   (grietas, mastitis, ingurgitación), agarre y posturas, crisis de lactancia, tetanalgesia,
+   colapso posnatal, muerte súbita en la guardería, lactancia del prematuro, introducción
+   temprana de alérgenos, piel con piel, contraindicaciones, monitores y vitamina D. El test
+   comprueba cada hueco contra `data/` (cero fragmentos). En una fuente que solo tiene temas del
+   ámbito sale todo lo demás; en una que tiene además otro tema, sale lo que trata de lactancia,
+   alimentación complementaria o sueño seguro (incluidas extracción y conservación de la leche,
+   que `data/` ya tiene).
+3. Una fuente que se queda con **menos de dos fragmentos sale** (la regla del lote, 2 a 4).
+4. Un hueco deja de serlo con **tres** candidatas: primero las de España o Francia (los dos
+   países que atiende AdelIA), luego las leídas en español, inglés o francés, luego las que más
+   fragmentos del hueco traen.
+
+Resultado: salen 113 (83 de alimentación: 72 sin hueco y 11 por el tope; 30 de respiratorio y
+sueño, todas las de sueño seguro), se quedan 28 de esas fuentes con solo sus fragmentos nuevos, y
+una («Guía para las madres que amamantan», Ministerio de Sanidad) pasa de sueño a alimentación
+porque lo que le queda es mastitis y brotes de crecimiento. Por idioma salen 27 en español, 18 en
+inglés, 16 en italiano, 14 en portugués, 8 en francés, 6 en alemán, 6 en neerlandés, 4 en
+noruego, 3 en árabe, 3 en polaco, 3 en sueco, 2 en japonés y 1 en coreano, danés y finés. La
+lista completa está al final de este apartado.
+
+Lo que la regla pierde a sabiendas: tres hechos de un solo fragmento que `data/` no tiene
+(colapso posnatal súbito, SIN 2022; muerte súbita en la guardería, JGZ; monitores de respiración,
+Helsenorge). Si se quieren, entran como fuente propia de dos fragmentos.
+
+### 16.2 Títulos en español: 149 fuentes
+
+Una madre en España no puede leer «krybbedød» en una tarjeta. Las 149 fuentes que quedan leídas
+en una lengua que no es español, inglés ni francés llevan ahora el título real traducido, sin
+añadir nada (italiano 42, portugués 39, neerlandés 19, alemán 10, sueco 10, árabe 9, noruego 7,
+polaco 5, danés 4, coreano 2, finés 1, japonés 1). El original se conserva en `original_title`,
+que el cargador ignora como `original_language`; el nombre del editor entre paréntesis se queda
+como es («Kind en Gezin», «Sundhed.dk»). Cuatro títulos genéricos llevan el editor para no
+repetir otro título («Fiebre (SNS 24)», «Guía para padres (SNS 24)», «Resfriado (Sociedade
+Portuguesa de Pediatria)», «Alergia a la leche de vaca en el bebé»). La atribución con la que
+abre cada fragmento cambia igual. «Constipação», de la sociedad portuguesa, es un resfriado, no
+estreñimiento. Lo fija `check_title_in_a_language_she_reads`: sin `original_title`, con el título
+original todavía, con letras que ningún título español lleva (å, ø, ß, ł, ã, ç, escrituras no
+latinas) o con un fragmento que abre con el título original, el fichero no pasa.
+
+### 16.3 B6: qué acercaba una pregunta de dosis a una ficha
+
+B6 («¿Qué dosis de cetirizina le puedo dar a mi hija de 14 meses para la alergia?») tiene su
+fuente más cercana de `data/` a 0,1901, con el corte en 0,19: cualquier fragmento sobre alergia
+en un niño pequeño cae a su lado. Sin clave de Mistral en local, lo medí con una aproximación
+(16.6): lo que estaba bajo el corte eran las guías del cacahuete (AAP y NIAID, «cuándo dar
+cacahuete al bebé según el riesgo de alergia»), que la regla del hueco deja fuera por el tope, y
+fragmentos con la forma de una pauta: algo que se le da al bebé y no es comida (vacunas, sus
+reacciones, anticuerpos inyectados) o una cantidad al día. Arreglado en los fragmentos, solo
+quitando o diciendo lo mismo de otra forma, sin tocar cifras de urgencia:
+
+- «Alimentación de los niños de 1 a 3 años» (NCEŻ): «tras cumplir 12 meses puede darse leche de
+  vaca, pero en cantidad limitada» pasa a «a partir de los 12 meses la leche de vaca ya entra en
+  su dieta, sin abusar de ella» (la página dice «no más de 500 ml al día», comprobado).
+- «La introducción temprana de alimentos ayuda a prevenir la alergia alimentaria» (SEICAP): la
+  atribución corta, como en su otro fragmento, y sin repetir «alergia» tres veces («los alimentos
+  que pueden dar alergia, como el cacahuete» pasa a «el cacahuete»); «alergia al huevo» se
+  queda, como en la página. Acerca además A16 (0,1709 a 0,1689).
+- «De 1 a 3 meses: cuándo pedir consejo al pediatra» (Bambino Gesù) y «Creciendo juntos y
+  saludables» (Comunidad de Madrid): fuera la frase genérica de las reacciones a las vacunas.
+- «Virus respiratorio sincitial en niños» (1177): fuera la frase del calendario sueco de la vacuna
+  en el embarazo y los anticuerpos; `data/` lo tiene con el calendario de la AEP 2026 y del
+  Ministerio, y la candidata del Ministerio de Sanidad también.
+- «Ictericia en recién nacidos» (1177): «se le ofrecen de 8 a 12 tomas al día» pasa a «conviene
+  que mame o tome el biberón a menudo, de 8 a 12 veces al día».
+- Sale entera «Lo que debes saber sobre la alergia a la proteína de leche de vaca» (SEICAP): sus
+  tres fragmentos quedaban a menos de un error típico del corte, y `data/` tiene cuatro fuentes
+  sobre esa alergia (EnFamilia, Familia y Salud, AEP).
+
+Ninguna otra B sin tarjetas hoy (B1, B2, B3, B4, B26) tiene un candidato bajo el corte en la
+aproximación; las demás B ya llegan al modelo sin candidatos o las para el guard por la edad.
+
+### 16.4 La herramienta: `--explain`
+
+`prod-golden-gate.sh --candidates GLOB --explain IDS` (docs/GOLDEN_GATE_DESPLIEGUE.md): para cada
+pregunta, sin y con candidatos, las 10 fuentes más cercanas con distancia, corte, esperada o no,
+nueva o no y fichero de origen. Una sola ejecución trae lo necesario para arreglar los ficheros.
+
+### 16.5 A16 (cacahuete)
+
+La fuente esperada sigue siendo buena (SFP 2015 y Santé publique France 2021 dicen que no se
+retrasa el cacahuete), pero son francesas y la de Santé publique France no permite uso comercial
+(apartado 3). La SEICAP 2025, española, responde lo mismo. Propuesta aparte, sin aplicar:
+`docs/corpus/golden-A16-introduccion-temprana.patch` añade «introducción temprana de alimentos»
+como tercera alternativa, sin aceptar guías de diversificación que no nombran el cacahuete. Se
+aplica en el mismo cambio que mueva `alimentacion_bebes` a `data/`, y conviene mirar antes
+`--explain A16`: en la aproximación la SEICAP queda quinta, a 0,0001 de la cuarta.
+
+### 16.6 Cómo se midió sin clave: una aproximación, no la medición
+
+En local no hay clave de Mistral, así que no hay vectores de los candidatos. Los de las 1.033
+fragmentos de `data/` sí están en la base de desarrollo, y los de las preguntas en
+`tests/fixtures/golden_query_embeddings.json`. Con bge-m3 en local se ajustó una regresión ridge
+de bge-m3 a mistral-embed sobre esos fragmentos (validación cruzada en 5 partes: error típico
+0,010 en la distancia, sesgo corregido) y se predijeron los vectores de los candidatos. Con el
+sesgo en 0,006, la aproximación reproduce exactamente la medición del servidor sobre las 455:
+recall@4 0,857 (servidor 0,86), las mismas cuatro A perdidas y B6 con tarjetas. Sobre el lote de
+ahora, con ese mismo ajuste: recall@4 0,943 con candidatos (0,971 sin), ninguna B nueva con
+tarjetas; la única A en riesgo es **A21** («le llora un ojo»): las fuentes de llanto y bebé
+sacudido, con su título ya en español, quedan a 0,002 de su fuente esperada. Con el sesgo
+medido en la validación (0,012), ninguna A se pierde. Con un error típico de 0,010, nada de esto
+sustituye la medición: por eso A21 va en el `--explain`.
+
+Herramientas, fuera del repositorio: `/tmp/cc-corpus-proxy/` (`proxy.py`, `apply_rule.py`,
+`apply_titles.py`, `b6_fix.py`, `titles_es.json`).
+
+### 16.7 Fuentes que salen por la regla del hueco (113) y por B6 (1)
+
+| fuente | organización | idioma | dominio | motivo |
+|---|---|---|---|---|
+| الغذاء التكميلي للرضع | Ministerio de Salud de Arabia Saudí (MOH) | ar | `alimentacion_bebes` | cubierto |
+| Beikosteinführung (Handlungsempfehlungen Säuglingsernährung, Gesund ins Leben) | Netzwerk Gesund ins Leben (Bundesanstalt für  | de | `alimentacion_bebes` | cubierto |
+| Braucht mein Baby HA-Nahrung? (Gesund ins Leben) | Netzwerk Gesund ins Leben (Bundesanstalt für  | de | `alimentacion_bebes` | cubierto |
+| Essen und Trinken in der Stillzeit (Gesund ins Leben) | Netzwerk Gesund ins Leben (Bundesanstalt für  | de | `alimentacion_bebes` | cubierto |
+| Reif für die Beikost: Wann ist Zeit für Brei? (Netzwerk Gesund ins Leben) | Netzwerk Gesund ins Leben (Bundesanstalt für  | de | `alimentacion_bebes` | cubierto |
+| Stilldauer (Handlungsempfehlungen Säuglingsernährung, Gesund ins Leben) | Netzwerk Gesund ins Leben (Bundesanstalt für  | de | `alimentacion_bebes` | cubierto |
+| Addendum guidelines for the prevention of peanut allergy in the United States: Report of t | National Institute of Allergy and Infectious  | en | `alimentacion_bebes` | tope del hueco |
+| Breast pain and breastfeeding (NHS) | NHS (National Health Service, Reino Unido) | en | `alimentacion_bebes` | tope del hueco |
+| Breastfeeding your premature baby (NHS) | NHS (National Health Service, Reino Unido) | en | `alimentacion_bebes` | cubierto |
+| Breastfeeding: the first few days (NHS) | NHS (National Health Service, Reino Unido) | en | `alimentacion_bebes` | cubierto |
+| Choking Hazards (CDC, Infant and Toddler Nutrition) | CDC | en | `alimentacion_bebes` | cubierto |
+| Common breastfeeding problems (NHS) | NHS (National Health Service, Reino Unido) | en | `alimentacion_bebes` | tope del hueco |
+| EAACI guideline: Preventing the development of food allergy in infants and young children  | European Academy of Allergy and Clinical Immu | en | `alimentacion_bebes` | cubierto |
+| Food allergies in babies and young children (NHS) | NHS (National Health Service, Reino Unido) | en | `alimentacion_bebes` | cubierto |
+| Food choking risks for babies and children (HSE) | Health Service Executive (HSE) | en | `alimentacion_bebes` | cubierto |
+| How to introduce common allergy causing foods (Nip allergies in the Bub) | National Allergy Council (Nip allergies in th | en | `alimentacion_bebes` | tope del hueco |
+| How to stop breastfeeding (NHS) | NHS (National Health Service, Reino Unido) | en | `alimentacion_bebes` | cubierto |
+| Preventing food allergy in your baby: information for parents (BSACI, BDA) | British Society for Allergy and Clinical Immu | en | `alimentacion_bebes` | tope del hueco |
+| What to do if you think your baby is having an allergic reaction (Nip allergies in the Bub | National Allergy Council (Nip allergies in th | en | `alimentacion_bebes` | cubierto |
+| When, What, and How to Introduce Solid Foods (CDC) | CDC | en | `alimentacion_bebes` | cubierto |
+| Your baby's first solid foods (NHS) | NHS (National Health Service, Reino Unido) | en | `alimentacion_bebes` | cubierto |
+| Your breastfeeding questions answered (NHS) | NHS (National Health Service, Reino Unido) | en | `alimentacion_bebes` | cubierto |
+| Alergias al maní o cacahuate: lo que debe saber sobre las nuevas pautas y la investigación | American Academy of Pediatrics | es | `alimentacion_bebes` | tope del hueco |
+| Alimentos y líquidos adicionales tempranos para recién nacidos a término sanos que reciben | Cochrane | es | `alimentacion_bebes` | cubierto |
+| Apoyo para la lactancia materna | Cochrane | es | `alimentacion_bebes` | cubierto |
+| Consejos y recomendaciones para iniciar la lactancia materna de tu bebé | Sociedad Española de Pediatría Extrahospitala | es | `alimentacion_bebes` | cubierto |
+| Cómo conservar la leche materna en tu casa | Ministerio de Salud de la Nación (Argentina) | es | `alimentacion_bebes` | cubierto |
+| Falsos mitos (Comité de Lactancia Materna, AEP) | Asociación Española de Pediatría | es | `alimentacion_bebes` | cubierto |
+| Guía de Alimentación del Niño(a) Menor de 2 Años | Ministerio de Salud de Chile (MINSAL) | es | `alimentacion_bebes` | cubierto |
+| Guía para dar el pecho a mi bebé ingresado | Hospital Universitari Vall d'Hebron | es | `alimentacion_bebes` | cubierto |
+| Guía usuarias: Lactancia materna | Hospital Universitari i Politècnic La Fe (Val | es | `alimentacion_bebes` | tope del hueco |
+| Introducción respetuosa de los alimentos | Chile Crece Contigo (Gobierno de Chile) | es | `alimentacion_bebes` | cubierto |
+| Lactancia materna (Hospital Universitario La Paz) | Hospital Universitario La Paz (Madrid) | es | `alimentacion_bebes` | tope del hueco |
+| Lactancia materna y alimentación complementaria | Organización Panamericana de la Salud (OPS) | es | `alimentacion_bebes` | cubierto |
+| Lactancia por etapas (Comité de Lactancia Materna, AEP) | Asociación Española de Pediatría | es | `alimentacion_bebes` | cubierto |
+| Manual del facilitador. Guías alimentarias basadas en alimentos para mujeres gestantes, ma | Instituto Colombiano de Bienestar Familiar (I | es | `alimentacion_bebes` | cubierto |
+| Otra forma de alimentación complementaria: Alimentación autodirigida por el lactante (Baby | Sociedad Argentina de Pediatría (SAP) | es | `alimentacion_bebes` | cubierto |
+| Padres (Comité de Lactancia Materna, AEP) | Asociación Española de Pediatría | es | `alimentacion_bebes` | cubierto |
+| Posicionamiento de la SEICAP en relación con las proteínas en las fórmulas infantiles y pr | Sociedad Española de Inmunología Clínica, Ale | es | `alimentacion_bebes` | cubierto |
+| Problemas comunes en los pechos | Ministerio de Salud de la Nación (Argentina) | es | `alimentacion_bebes` | tope del hueco |
+| Problemas más frecuentes (Comité de Lactancia Materna, AEP) | Asociación Española de Pediatría | es | `alimentacion_bebes` | tope del hueco |
+| Recomendaciones (Comité de Lactancia Materna, AEP) | Asociación Española de Pediatría | es | `alimentacion_bebes` | cubierto |
+| Un informe clínico de la AAP señala que la incorporación temprana de alimentos a base de m | American Academy of Pediatrics | es | `alimentacion_bebes` | cubierto |
+| ¿Cuándo se sospecha una alergia a alimentos? | Sociedad Española de Inmunología Clínica, Ale | es | `alimentacion_bebes` | cubierto |
+| ¿Qué es la alergia a alimentos? | Sociedad Española de Inmunología Clínica, Ale | es | `alimentacion_bebes` | cubierto |
+| ¿Qué es la alimentación complementaria? | Sociedad Argentina de Pediatría (SAP) | es | `alimentacion_bebes` | cubierto |
+| Kiinteät ruoat vauvan ravintona (Terveyskylä) | Terveyskylä.fi (Suomen yliopistosairaalat) | fi | `alimentacion_bebes` | cubierto |
+| Allaitement maternel (ONE) | ONE (Office de la Naissance et de l'Enfance,  | fr | `alimentacion_bebes` | cubierto |
+| Biberon de lait (ONE) | ONE (Office de la Naissance et de l'Enfance,  | fr | `alimentacion_bebes` | cubierto |
+| Diversification alimentaire (ONE) | ONE (Office de la Naissance et de l'Enfance,  | fr | `alimentacion_bebes` | cubierto |
+| Poursuivre l'allaitement en milieu d'accueil (ONE) | ONE (Office de la Naissance et de l'Enfance,  | fr | `alimentacion_bebes` | cubierto |
+| Tirer et conserver son lait (ONE) | ONE (Office de la Naissance et de l'Enfance,  | fr | `alimentacion_bebes` | cubierto |
+| Allattamento materno | Ospedale Pediatrico Bambino Gesù | it | `alimentacion_bebes` | cubierto |
+| Definizioni allattamento e alimentazione infantile | Istituto Superiore di Sanità (ISS), EpiCentro | it | `alimentacion_bebes` | cubierto |
+| Divezzamento, ecco le corrette regole | Società Italiana di Pediatria (SIP) | it | `alimentacion_bebes` | cubierto |
+| Fake News: il phon e altre amenità in neonatologia | Società Italiana di Pediatria (SIP) | it | `alimentacion_bebes` | cubierto |
+| Il nuovo Position Statement (PS) “Allattamento e latte umano donato” | Società Italiana di Pediatria (SIP) | it | `alimentacion_bebes` | cubierto |
+| Il punto di vista dell’Associazione Culturale Pediatri sull’alimentazione complementare | Associazione Culturale Pediatri (ACP) | it | `alimentacion_bebes` | cubierto |
+| Indagine 2025: allattamento | Istituto Superiore di Sanità (ISS), EpiCentro | it | `alimentacion_bebes` | cubierto |
+| Le 5 cose che devi sapere su alimentazione complementare nel bambino a rischio per allergi | Società Italiana di Pediatria (SIP) | it | `alimentacion_bebes` | cubierto |
+| Principali raccomandazioni sull'alimentazione infantile | Istituto Superiore di Sanità (ISS), EpiCentro | it | `alimentacion_bebes` | cubierto |
+| Svezzamento | Ospedale Pediatrico Bambino Gesù | it | `alimentacion_bebes` | cubierto |
+| Het belang van borstvoeding (Kind en Gezin) | Kind en Gezin (Agentschap Opgroeien) | nl | `alimentacion_bebes` | cubierto |
+| Oefenhapjes (4 tot 6 maanden) | Stichting Voedingscentrum Nederland (Voedings | nl | `alimentacion_bebes` | cubierto |
+| Starten met vaste voeding (Kind en Gezin) | Kind en Gezin (Agentschap Opgroeien) | nl | `alimentacion_bebes` | cubierto |
+| Voedselallergie of intolerantie bij mijn baby | Stichting Voedingscentrum Nederland (Voedings | nl | `alimentacion_bebes` | cubierto |
+| Amming og morsmelk (Helsenorge) | Helsenorge.no (Helsedirektoratet) | no | `alimentacion_bebes` | cubierto |
+| Nasjonal faglig retningslinje for spedbarnsernæring (Helsedirektoratet) | Helsedirektoratet | no | `alimentacion_bebes` | cubierto |
+| Å starte med fast føde til barnet (Helsenorge) | Helsenorge.no (Helsedirektoratet) | no | `alimentacion_bebes` | cubierto |
+| Karmienie piersią | Ministerstwo Zdrowia (Polonia) | pl | `alimentacion_bebes` | cubierto |
+| Rozszerzanie diety niemowląt – co warto o nim wiedzieć | Narodowe Centrum Edukacji Żywieniowej (NCEŻ), | pl | `alimentacion_bebes` | cubierto |
+| Żywienie zdrowych niemowląt | Narodowe Centrum Edukacji Żywieniowej (NCEŻ), | pl | `alimentacion_bebes` | cubierto |
+| Aleitamento Materno: 10 Perguntas e Respostas para Famílias | Sociedade Brasileira de Pediatria (SBP) | pt | `alimentacion_bebes` | cubierto |
+| Alimentação Complementar para o Lactente Saudável: Ampliando as Escolhas com Evidências Ap | Sociedade Brasileira de Pediatria (SBP) | pt | `alimentacion_bebes` | cubierto |
+| Alimentação Saudável dos 0 aos 6 anos: Linhas de Orientação para Profissionais e Educadore | Direção-Geral da Saúde (DGS, Portugal) | pt | `alimentacion_bebes` | cubierto |
+| Amamentação | Serviço Nacional de Saúde (SNS 24) | pt | `alimentacion_bebes` | cubierto |
+| Guia Alimentar para Crianças Brasileiras Menores de 2 Anos: Versão Resumida | Ministério da Saúde (Brasil) | pt | `alimentacion_bebes` | cubierto |
+| Mantenha O Seu Bebé no Caminho Certo: cronograma da alimentação do lactente | Sociedade Portuguesa de Pediatria (SPP) | pt | `alimentacion_bebes` | cubierto |
+| Problemas mais frequentes com as mamas | Sociedade Brasileira de Pediatria (SBP) | pt | `alimentacion_bebes` | tope del hueco |
+| Produção do Leite Materno | Sociedade Brasileira de Pediatria (SBP) | pt | `alimentacion_bebes` | cubierto |
+| Quando introduzir novos alimentos para o bebê | Sociedade Brasileira de Pediatria (SBP) | pt | `alimentacion_bebes` | cubierto |
+| Amningens betydelse för folkhälsan (Rikshandboken i barnhälsovård) | Rikshandboken i barnhälsovård (Inera) | sv | `alimentacion_bebes` | cubierto |
+| Spädbarn (Livsmedelsverket) | Livsmedelsverket | sv | `alimentacion_bebes` | cubierto |
+| النوم الآمن للرضيع | Ministerio de Salud de Arabia Saudí (MOH) | ar | `respiratorio_sueno` | cubierto |
+| متلازمة موت الرُّضع المفاجئ | Ministerio de Salud de Arabia Saudí (MOH) | ar | `respiratorio_sueno` | cubierto |
+| Pludselig uventet spædbarnsdød (Sundhed.dk) | Sundhed.dk, Patienthåndbogen | da | `respiratorio_sueno` | cubierto |
+| Was ist der Plötzliche Kindstod (SIDS) und das Anscheinend lebensbedrohliche Ereignis (ALE | Berufsverband der Kinder- und Jugendärzt*inne | de | `respiratorio_sueno` | cubierto |
+| Cot death (sudden infant death syndrome) (HSE) | Health Service Executive (HSE) | en | `respiratorio_sueno` | cubierto |
+| Providing Care for Babies to Sleep Safely (CDC) | CDC | en | `respiratorio_sueno` | cubierto |
+| Consejos para padres sobre el sueño infantil | Sociedad Española de Pediatría Extrahospitala | es | `respiratorio_sueno` | cubierto |
+| Efecto del uso limitado de chupetes sobre la duración de la lactancia materna en los recié | Cochrane | es | `respiratorio_sueno` | cubierto |
+| Recomendaciones para sueño seguro en lactantes | Sociedad Argentina de Pediatría (SAP) | es | `respiratorio_sueno` | cubierto |
+| Comment bien coucher un bébé ? (ameli.fr) | Assurance Maladie (ameli.fr) | fr | `respiratorio_sueno` | cubierto |
+| Mort subite (ONE) | ONE (Office de la Naissance et de l'Enfance,  | fr | `respiratorio_sueno` | cubierto |
+| Prévention de la mort subite du nourrisson (HUG, Mon enfant est malade) | Hôpitaux universitaires de Genève (HUG) | fr | `respiratorio_sueno` | cubierto |
+| Da 1 a 3 mesi: come dorme | Ospedale Pediatrico Bambino Gesù | it | `respiratorio_sueno` | cubierto |
+| Dormire a pancia in su | Ospedale Pediatrico Bambino Gesù | it | `respiratorio_sueno` | cubierto |
+| Indagine 2025: posizione in culla | Istituto Superiore di Sanità (ISS), EpiCentro | it | `respiratorio_sueno` | cubierto |
+| La nanna sicura nel primo anno di vita | Azienda Ospedaliero Universitaria Meyer IRCCS | it | `respiratorio_sueno` | cubierto |
+| Maternità, la nota congiunta di SIN, SIP, SIGO-AOGOI | Società Italiana di Pediatria (SIP) | it | `respiratorio_sueno` | cubierto |
+| Sindrome della morte in culla | Istituto Superiore di Sanità (ISS), EpiCentro | it | `respiratorio_sueno` | cubierto |
+| Vol.570 就寝時の子どもの窒息事故に注意しましょう。ベビーベッドを利用することで避けられる事故があります。 | Consumer Affairs Agency (消費者庁, Japón) | ja | `respiratorio_sueno` | cubierto |
+| 赤ちゃんが安全に眠れるように ～1歳未満の赤ちゃんを育てるみなさまへ～ | Children and Families Agency (こども家庭庁, Japón) | ja | `respiratorio_sueno` | cubierto |
+| 영아 돌연사 증후군(Sudden Infant Death Syndrome, SIDS) 예방법 | Korean Pediatric Society (대한소아청소년과학회) | ko | `respiratorio_sueno` | cubierto |
+| JGZ-richtlijn Preventie wiegendood | Nederlands Centrum Jeugdgezondheid (NCJ, JGZ- | nl | `respiratorio_sueno` | cubierto |
+| Veilig slapen (Kind en Gezin) | Kind en Gezin (Agentschap Opgroeien) | nl | `respiratorio_sueno` | cubierto |
+| Krybbedød (SIDS) - hvordan redusere risiko? (Helsenorge) | Helsenorge.no (Helsedirektoratet) | no | `respiratorio_sueno` | cubierto |
+| Ambiente de sono seguro (Pediatra Atualize-se, Boletim da Sociedade de Pediatria de São Pa | Sociedade de Pediatria de São Paulo (SPSP) | pt | `respiratorio_sueno` | cubierto |
+| Evitar a morte súbita do latente | Sociedade Portuguesa de Pediatria (SPP) | pt | `respiratorio_sueno` | cubierto |
+| Recomendações da Academia Americana de Pediatria sobre sono seguro em menores de um ano | Sociedade Brasileira de Pediatria (SBP) | pt | `respiratorio_sueno` | cubierto |
+| Síndrome de Morte Súbita do Lactente | Serviço Nacional de Saúde (SNS 24) | pt | `respiratorio_sueno` | cubierto |
+| Uso de chupeta: os prós e os contras | Sociedade Brasileira de Pediatria (SBP) | pt | `respiratorio_sueno` | cubierto |
+| Plötslig spädbarnsdöd – förebyggande råd (1177) | 1177 Vårdguiden (Inera) | sv | `respiratorio_sueno` | cubierto |
+| Lo que debes saber sobre la alergia a la proteína de leche de vaca | SEICAP | es | `digestivo_piel` | B6 |

@@ -399,3 +399,88 @@ async def test_main_without_a_model_fills_the_translations_and_says_so(monkeypat
     assert await pv.main_async(args) == 0
     assert seen["no_model"] is True and (gate_fr.question, "fr") in seen
     assert "sin modelo" in capsys.readouterr().out
+
+
+# --- --explain (2026-11-07) ----------------------------------------------------
+#
+# The first measurement of the 2026-11-06 candidates on the server said which
+# questions broke (A1, A5, A13, A37 lost their source; B6 got cards under the
+# cut) but not which sources did it, and the next run costs a trip to the
+# server. --explain prints, for the questions named, the nearest sources with
+# their distance, whether each is under the cut and the file it comes from, so
+# one run brings back everything needed to fix the files.
+
+
+def test_origins_name_the_file_of_every_title_in_data_and_the_candidates(tmp_path):
+    data = tmp_path / "data"
+    data.mkdir()
+    (data / "evidence_sueno.json").write_text(
+        json.dumps({"sources": [{"title": "Sueño seguro (AEP)"}]}), encoding="utf-8")
+    (data / "lab_reference_ranges.json").write_text(
+        json.dumps({"sources": [{"title": "No es del corpus"}]}), encoding="utf-8")
+    cand = tmp_path / "cand.json"
+    cand.write_text(json.dumps({"sources": [{"title": "Muerte en la cuna (Helsenorge)"}]}),
+                    encoding="utf-8")
+    origins = pv.origin_index([cand], data_dir=data)
+    assert origins["Sueño seguro (AEP)"] == "data/evidence_sueno.json"
+    assert origins["Muerte en la cuna (Helsenorge)"] == "candidato cand.json"
+    assert "No es del corpus" not in origins
+    assert pv.origin_of("Una página del crawler", origins) == "sin fichero (crawler u otra carga)"
+
+
+async def test_explain_widens_the_nearest_and_keeps_the_cut_visible(monkeypatch):
+    from adelia.config import settings
+
+    monkeypatch.setattr(settings, "lay_query_expansion", False)
+    near = [_match(f"Fuente {n}", 0.10 + n / 100, "eccema") for n in range(12)]
+    _offline(monkeypatch, [], near, [])
+    monkeypatch.setattr(pv, "EXPLAIN", True)
+    verdict = await pv.preview(_A, cache={}, recording=None)
+    assert len(verdict.nearest) == pv.EXPLAIN_K == 10
+    assert verdict.nearest[0] == ("Fuente 0", 0.10)
+    assert verdict.expect_source == "dermatitis atópica"
+    monkeypatch.setattr(pv, "EXPLAIN", False)
+    verdict = await pv.preview(_A, cache={}, recording=None)
+    assert len(verdict.nearest) == pv.NEAREST_K
+
+
+def test_explain_prints_distance_cut_and_file_for_every_nearest_source():
+    v = pv.Verdict("A5", "A", "es", "¿Cómo debe dormir?", expect_source="sueño",
+                   cards=[{"title": "Krybbedød (Helsenorge)", "distance": 0.08}],
+                   nearest=[("Krybbedød (Helsenorge)", 0.08), ("Sueño seguro (AEP)", 0.10)],
+                   origins={"Krybbedød (Helsenorge)": "candidato respiratorio_sueno.json",
+                            "Sueño seguro (AEP)": "data/evidence_respiratorio_sueno.json"})
+    q = GoldenQuestion("A5", "A", "¿Cómo debe dormir?", age_months=3, expect_source="sueño")
+    text = pv._fmt_verdict(q, v)
+    line = next(x for x in text.splitlines() if "Krybbedød" in x and "cercana" in x)
+    assert "0.0800" in line and "bajo el corte" in line and "respiratorio_sueno.json" in line
+    line = next(x for x in text.splitlines() if "Sueño seguro" in x and "cercana" in x)
+    assert "esperada" in line and "data/evidence_respiratorio_sueno.json" in line
+    assert "bajo el corte" not in line
+
+
+async def test_main_with_explain_maps_the_origins_and_writes_them(monkeypatch, tmp_path, capsys):
+    seen: dict = {}
+
+    async def _preview(q, *, cache, recording):
+        seen["explain"] = pv.EXPLAIN
+        return pv.Verdict(q.id, q.group, q.locale, q.question, passed=True,
+                          nearest=[("Sueño seguro (AEP)", 0.1)])
+
+    async def _dispose():
+        return None
+
+    monkeypatch.setattr(pv, "select", lambda ids: [_A])
+    monkeypatch.setattr(pv, "preview", _preview)
+    monkeypatch.setattr(pv, "_dispose", _dispose)
+    monkeypatch.setattr(pv, "origin_index",
+                        lambda files, **kw: {"Sueño seguro (AEP)": f"{len(files)} ficheros"})
+    out = tmp_path / "explain.json"
+    args = argparse.Namespace(
+        ids="A90", questions=None, export=None, record=None, json=str(out), no_model=True,
+        explain=True, origins=None,
+    )
+    assert await pv.main_async(args) == 0
+    assert seen["explain"] is True
+    row = json.loads(out.read_text(encoding="utf-8"))[0]
+    assert row["origins"] == {"Sueño seguro (AEP)": "0 ficheros"}

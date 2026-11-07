@@ -1,0 +1,66 @@
+Propuesta, cambio aparte (no aplicado): A16 acepta también la guía de introducción temprana de
+alérgenos de la SEICAP.
+
+Por qué. A16 («¿Puedo darle cacahuete a mi bebé de 8 meses?») no pasa ni sin candidatos ni con
+ellos. Sus dos fuentes esperadas siguen siendo buenas: SFP 2015 y Santé publique France 2021
+dicen que no se retrasan los alimentos más alergénicos, cacahuete incluido. Pero son francesas y
+la pregunta es española, y Santé publique France es una de las tres fuentes de data/ cuya
+licencia no permite uso comercial (CANDIDATOS_2026_11_06.md, apartado 3): si sale de data/, A16
+se queda con una sola. Entre las candidatas hay una fuente española que responde exactamente lo
+mismo: «La introducción temprana de alimentos ayuda a prevenir la alergia alimentaria» (SEICAP,
+2025), fragmento 0: a qué edad dar cacahuete, frutos secos y huevo; fragmento 1: mantenerlos en
+la dieta.
+
+No rebaja lo que se exige: la alternativa nombra una guía cuyo tema es el cacahuete, como las dos
+de antes, y sigue sin valer una guía de diversificación que no lo nombra (la del PNNS 2022, la de
+mpedia). No se añade «alergia» ni «diversification» sueltas por eso.
+
+Aplicar en el MISMO cambio que mueva alimentacion_bebes.json a data/
+(evidence_alimentacion_bebes_2026_11.json), nunca antes: hasta entonces la fuente no está en
+producción y la alternativa no puede casar con nada. Antes de aplicarlo, mirar en la explicación
+del servidor (--explain A16) si la SEICAP entra en las cuatro tarjetas: en la aproximación local
+(bge-m3 proyectado al espacio de mistral-embed, no la medición real) queda quinta, a 0,0001 de la
+cuarta.
+
+    git apply docs/corpus/golden-A16-introduccion-temprana.patch
+
+Mensaje de commit propuesto:
+
+    test(golden): accept the SEICAP early allergen guide for A16
+
+    A16 asks whether a baby of 8 months can have peanut. Its two expected
+    sources are French (SFP 2015, Santé publique France 2021) and the
+    second one's licence forbids commercial use. The SEICAP guide of 2025,
+    now in data/, answers the same question for a mother in Spain: when to
+    give peanut, nuts and egg, and keeping them in the diet. It is accepted
+    as a third alternative; a weaning guide that never names peanut still
+    does not count.
+
+diff --git a/apps/api/adelia/clinical/golden.py b/apps/api/adelia/clinical/golden.py
+index ce17806..145c351 100644
+--- a/apps/api/adelia/clinical/golden.py
++++ b/apps/api/adelia/clinical/golden.py
+@@ -279,7 +279,8 @@ GOLDEN_SET: tuple[GoldenQuestion, ...] = (
+     GoldenQuestion(
+         "A16", "A",
+         "¿Puedo darle cacahuete a mi bebé de 8 meses?",
+-        age_months=8, expect_source="évolution des concepts|Pas à pas",
++        age_months=8,
++        expect_source="évolution des concepts|Pas à pas|introducción temprana de alimentos",
+         rationale=(
+             "Medido en la demo pública el 14-oct-2026: cuatro citas y ninguna sobre cacahuete "
+             "ni alérgenos (alimentación saludable general, lactancia en la guardería, una guía "
+@@ -294,7 +295,12 @@ GOLDEN_SET: tuple[GoldenQuestion, ...] = (
+             "diversificación en el corpus (la del PNNS 2022, sin una palabra de cacahuete) que "
+             "habrían dado por buena una respuesta que no responde a la pregunta. El título y "
+             "no el texto porque en SFP 2015 la palabra cae pasado el carácter 280, el único "
+-            "trozo del fragmento que llega al informe."
++            "trozo del fragmento que llega al informe. "
++            "2026-11-07: se acepta también «La introducción temprana de alimentos ayuda a "
++            "prevenir la alergia alimentaria» (SEICAP, 2025), que responde lo mismo para una "
++            "madre en España: a qué edad dar cacahuete, frutos secos y huevo, y mantenerlos en la "
++            "dieta. La regla no baja: sigue sin valer una guía de diversificación que no nombra "
++            "el cacahuete."
+         ),
+     ),
+     # A17 and A18 were B5 and B10 until 2026-11-03. They were near misses

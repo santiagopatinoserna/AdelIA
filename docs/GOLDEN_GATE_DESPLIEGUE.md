@@ -84,7 +84,7 @@ Tres scripts, uno por máquina:
 | Dónde | Script | Qué hace |
 |---|---|---|
 | Mac | `scripts/deploy-prod.sh` | Grupo C en local (no necesita clave ni base de datos, falla rápido). Tras el rsync, si el despliegue incluye `api`, llama por ssh al gate del servidor y solo con un 0 hace `up -d`. Lee `GOLDEN_WITH_MODEL` (0 o 1; otro valor para el despliegue) y `GOLDEN_CANDIDATE_GLOB`, y se los pasa al servidor como `--with-model` y `--candidates`. |
-| Servidor | `scripts/prod-golden-gate.sh` | Construye la imagen nueva y su etapa `golden`, copia el corpus de producción a una base de datos efímera, ejecuta el golden en un contenedor desechable de la imagen nueva y borra la copia. Acepta `--with-model` y `--candidates GLOB` (o las mismas variables) para lanzarlo a mano. |
+| Servidor | `scripts/prod-golden-gate.sh` | Construye la imagen nueva y su etapa `golden`, copia el corpus de producción a una base de datos efímera, ejecuta el golden en un contenedor desechable de la imagen nueva y borra la copia. Acepta `--with-model`, `--candidates GLOB` y `--explain IDS` (o las mismas variables, y `GOLDEN_EXPLAIN`) para lanzarlo a mano. |
 | Contenedor | `apps/api/scripts/golden_gate.sh` | Migra la copia a la cabeza nueva, carga el corpus de la versión nueva como lo haría el arranque y ejecuta `tests/test_rag_golden.py` con `ADELIA_GOLDEN_DEPLOY=1` y, salvo `--with-model`, `ADELIA_GOLDEN_MODEL_FREE=1`. |
 
 Orden en el servidor:
@@ -234,6 +234,29 @@ siguiente arranque; uno en otra carpeta no lo carga nada (`main.load_startup_cor
 La previsualización sin modelo busca cada pregunta fr/en con la traducción grabada en el
 fichero de vectores; las `CANDIDATES` fr/en no tienen grabación, así que se buscan como están
 escritas y el veredicto lo dice («sin traducir»): para ellas el resultado es pesimista.
+
+### Explicar preguntas concretas (`--explain`, 7 de noviembre de 2026)
+
+La primera medición de los candidatos del 6 de noviembre dijo qué preguntas se rompían (A1, A5,
+A13, A37 y B6) pero no qué fuentes las rompían, y cada pasada más es un viaje al servidor. Con
+`--explain IDS` la misma ejecución lo dice:
+
+```bash
+cd /opt/adelia && bash scripts/prod-golden-gate.sh \
+  --candidates 'apps/api/adelia/enrichment/candidates/lote_2026_11_06/*.json' \
+  --explain A1,A5,A13,A37,A16,A21,B6
+```
+
+(o `GOLDEN_EXPLAIN=A1,B6`). Solo admite ids de pregunta separados por comas; otra cosa se
+niega antes de construir nada. Tras el golden sin candidatos, y otra vez tras cargarlos,
+`preview_golden_candidates.py --no-model --ids IDS --explain` escribe
+`golden_explain.sin_candidatos.json` y `golden_explain.con_candidatos.json`: para cada pregunta,
+las 10 fuentes más cercanas (una por fuente, sin corte), con su distancia, si está bajo el corte
+de producción, si es la esperada (grupo A) y el fichero del que sale (`data/<fichero>`,
+`candidato <fichero>` o «sin fichero», el crawler). Al final `golden_candidates.py explain` las
+pone una al lado de la otra: cuántas tarjetas hay bajo el corte sin y con, qué fuentes son
+nuevas y cuáles salen de las cuatro primeras. Es un diagnóstico, sin modelo, y nunca cambia el
+código de salida. Sin `--candidates`, explica el corpus tal como está.
 
 ## Añadir preguntas sin parar el despliegue (candidatas, 6 de noviembre de 2026)
 

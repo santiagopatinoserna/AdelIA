@@ -59,6 +59,15 @@ with the translation recorded in tests/fixtures/golden_query_embeddings.json
 is none, as she wrote it, and the verdict says "sin traducir": production
 would have translated it, so such a verdict is pessimistic for that question.
 
+--explain (2026-11-07): the first server run of the 2026-11-06 candidates said
+that A1, A5, A13 and A37 lost their source and that B6 got cards under the cut,
+but not which sources did it, and every further run is a trip to the server.
+With --explain the nearest EXPLAIN_K sources of each question are printed and
+written to --json with their distance, whether they are under the cut, whether
+they are the expected source, and the file each comes from: data/ or one of
+the files --origins GLOB names (the candidates golden_gate.sh loads). Nothing
+else changes, the verdict included.
+
 Exit status: 0 when every group A question found its source with clean cards
 and no group B question fell under the cut; 1 when one did not; 2 when the
 run could not measure (no embedding key, provider down), as golden_gate.sh
@@ -69,6 +78,7 @@ from __future__ import annotations
 import argparse
 import asyncio
 import dataclasses
+import glob
 import json
 import sys
 from dataclasses import asdict, dataclass, field
@@ -102,6 +112,14 @@ from adelia.enrichment.profile_service import ProfileFacts
 PAUSE_SECONDS = 2.0
 #: Sources shown with no cut-off, per question.
 NEAREST_K = 4
+#: --explain: enough sources to see the expected one pushed down the list.
+EXPLAIN_K = 10
+EXPLAIN = False
+#: The corpus files production boots with (main.load_startup_corpora).
+_DATA_DIR = Path(__file__).resolve().parents[1] / "adelia" / "enrichment" / "data"
+_BOOT_GLOB = "evidence_*.json"
+_API_DIR = Path(__file__).resolve().parents[1]
+_NO_FILE = "sin fichero (crawler u otra carga)"
 #: "No cut-off": cosine distance never reaches 2.
 _UNCUT = 2.0
 #: --no-model: never translate with a model (see the module docstring).
@@ -136,6 +154,10 @@ class Verdict:
     passed: bool = False
     #: --no-model and no recorded translation: searched as she wrote it.
     untranslated: bool = False
+    #: Group A: the substring(s) the gate looks for in the card titles.
+    expect_source: str | None = None
+    #: --explain: title -> the file it comes from, for the cards and the nearest.
+    origins: dict[str, str] = field(default_factory=dict)
 
 
 # --- which questions ------------------------------------------------------------
@@ -202,16 +224,59 @@ async def _read_only(session) -> None:
 
 async def _nearest(vectors: list[list[float]]) -> list[tuple[str, float]]:
     """The nearest sources with no cut-off, over every text searched (diagnostic only)."""
+    k = EXPLAIN_K if EXPLAIN else NEAREST_K
     found = []
     for vector in vectors:
         async with AsyncSessionLocal() as session:
             await _read_only(session)
             found.append(await retrieve_evidence(
-                session, query_embedding=vector, specialties=["pediatrics"], top_k=NEAREST_K,
+                session, query_embedding=vector, specialties=["pediatrics"], top_k=k,
                 max_distance=_UNCUT, relative_margin=None,
             ))
-    merged = merge_by_best_distance(found, top_k=NEAREST_K, relative_margin=None)
+    merged = merge_by_best_distance(found, top_k=k, relative_margin=None)
     return [(m.source_title, round(m.distance, 4)) for m in merged]
+
+
+# --- --explain: which file each source comes from -----------------------------------
+
+
+def origin_index(files: list[Path], *, data_dir: Path = _DATA_DIR) -> dict[str, str]:
+    """Title -> "data/<file>" for the boot files and "candidato <file>" for `files`.
+
+    Titles are unique across these files (tests/evidence_corpus_checks.py), and
+    the loader is idempotent by title, so the title is what names the file a
+    card came from. A title in neither is the crawler's or another loader's."""
+    out: dict[str, str] = {}
+    for label, paths in (
+        ("data/", sorted(data_dir.glob(_BOOT_GLOB))), ("candidato ", list(files)),
+    ):
+        for path in paths:
+            try:
+                sources = json.loads(path.read_text(encoding="utf-8")).get("sources") or []
+            except (OSError, ValueError, AttributeError):
+                continue
+            for src in sources:
+                title = (src or {}).get("title") if isinstance(src, dict) else None
+                if title:
+                    out.setdefault(title, f"{label}{path.name}")
+    return out
+
+
+def origin_of(title: str, origins: dict[str, str]) -> str:
+    return origins.get(title, _NO_FILE)
+
+
+def _origin_files(pattern: str | None) -> list[Path]:
+    """The files --origins names, from the repo root or from apps/api, as the loader reads them."""
+    if not pattern:
+        return []
+    p = pattern.strip()
+    for prefix in ("./apps/api/", "apps/api/"):
+        if p.startswith(prefix):
+            p = p[len(prefix):]
+            break
+    full = p if Path(p).is_absolute() else str(_API_DIR / p)
+    return sorted(Path(f) for f in glob.glob(full) if Path(f).is_file())
 
 
 async def _translate(text: str, locale: str, cache: dict) -> str:
@@ -306,7 +371,7 @@ async def preview(q: GoldenQuestion, *, cache: dict, recording: dict | None) -> 
         },
         deps,
     )
-    verdict = Verdict(q.id, q.group, q.locale, q.question)
+    verdict = Verdict(q.id, q.group, q.locale, q.question, expect_source=q.expect_source)
     key = (q.question, q.locale)
     verdict.untranslated = key in _UNTRANSLATED and cache.get(key) == q.question
     if out.get("kind") == "red_flag":
@@ -343,8 +408,16 @@ def _fmt_verdict(q: GoldenQuestion, v: Verdict) -> str:
         lines.append(f"  tarjeta {c['distance']:.4f} {c['title']:.90}")
     if not v.guard and not v.cards:
         lines.append("  tarjeta (ninguna bajo el corte)")
+    under = {c.get("title") for c in v.cards}
     for title, distance in v.nearest:
-        lines.append(f"  cercana {distance:.4f} {title:.90}")
+        if not v.origins:
+            lines.append(f"  cercana {distance:.4f} {title:.90}")
+            continue
+        marks = ["bajo el corte" if title in under else "fuera del corte"]
+        if q.group == "A" and source_matches(q.expect_source or "", title):
+            marks.append("esperada")
+        lines.append(f"  cercana {distance:.4f} {', '.join(marks)}: {title:.90} "
+                     f"[{origin_of(title, v.origins)}]")
     for d in v.defects:
         lines.append(f"  defecto: {d}")
     verdict = "PASA" if v.passed else "FALLA"
@@ -387,8 +460,10 @@ async def main_async(args) -> int:
         export(qs, args.export)
         print(f"{len(qs)} preguntas exportadas a {args.export}")
         return 0
-    global NO_MODEL
+    global NO_MODEL, EXPLAIN
     NO_MODEL = bool(getattr(args, "no_model", False))
+    EXPLAIN = bool(getattr(args, "explain", False))
+    origins = origin_index(_origin_files(getattr(args, "origins", None))) if EXPLAIN else {}
     print(
         f"golden preview: {len(qs)} preguntas; corte {settings.evidence_max_distance:.2f}, "
         f"margen {settings.evidence_relative_margin:.2f}, "
@@ -411,6 +486,9 @@ async def main_async(args) -> int:
                 # No key, or the provider down: nothing was measured.
                 print(f"\n[{q.id}] NO MEDIDA: {exc}. Nada se ha medido como pasa o falla.")
                 return 2
+            if EXPLAIN:
+                titles = [t for t, _ in v.nearest] + [c.get("title") for c in v.cards]
+                v.origins = {t: origin_of(t, origins) for t in titles if t}
             verdicts.append(v)
             print(_fmt_verdict(q, v))
     finally:
@@ -442,6 +520,13 @@ def main() -> None:
     parser.add_argument(
         "--no-model", action="store_true",
         help="no model call at all: recorded translations, or the question as written",
+    )
+    parser.add_argument(
+        "--explain", action="store_true",
+        help=f"the {EXPLAIN_K} nearest sources per question, with the cut and their file",
+    )
+    parser.add_argument(
+        "--origins", help="with --explain: the candidate files whose titles to name (a glob)",
     )
     sys.exit(asyncio.run(main_async(parser.parse_args())))
 

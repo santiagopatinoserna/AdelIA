@@ -6,6 +6,8 @@
         --with golden_report.con_candidatos.json \\
         --preview-without golden_preview.sin_candidatos.json \\
         --preview-with golden_preview.con_candidatos.json
+    python scripts/golden_candidates.py explain --without golden_explain.sin_candidatos.json \\
+        --with golden_explain.con_candidatos.json
 
 Why. On 2026-11-06 several agents started gathering hundreds of new sources in
 many languages, summarised in Spanish in the shape of
@@ -33,6 +35,13 @@ question got worse and recall@4 with the candidates still clears its bar; 1:
 one did, or it does not; 2: a run did not measure, or was not the run without
 a model, so there is nothing to compare.
 
+`explain` (2026-11-07) reads the --explain previews of the questions the
+operator named (golden_gate.sh --explain IDS) and prints them side by side:
+each nearest source with its distance, under the cut or not, expected or not,
+new with the candidates or not, and its file. The first server run of the
+2026-11-06 candidates said which questions broke, not which sources broke
+them; this is the run that says it. It always exits 0: a diagnostic.
+
 Without a model a group B question has three outcomes: refused by code (red
 flag, age scope, nothing under the cut), "reaches the model" (cards under
 the cut, a refusal only the model can write) or answered by code (a bug).
@@ -50,7 +59,7 @@ import sys
 from dataclasses import dataclass
 from pathlib import Path
 
-from adelia.clinical.golden import RECALL_AT_4_MIN
+from adelia.clinical.golden import RECALL_AT_4_MIN, source_matches
 from adelia.config import settings
 from adelia.enrichment import evidence_loader
 
@@ -280,6 +289,56 @@ def compare(
     return "\n".join(lines), status
 
 
+# --- explain: named questions, source by source --------------------------------------
+
+#: The gate reads the top four cards (golden.TOP_K): a source pushed below
+#: them is a source lost.
+_TOP = 4
+
+
+def _explain_block(v: dict, *, before: dict | None) -> list[str]:
+    cut = {c.get("title") for c in v.get("cards") or []}
+    origins = v.get("origins") or {}
+    known = {n[0] for n in (before or {}).get("nearest") or []}
+    rows = []
+    for title, distance in v.get("nearest") or []:
+        marks = ["bajo el corte" if title in cut else "fuera del corte"]
+        if v.get("group") == "A" and source_matches(v.get("expect_source") or "", title):
+            marks.append("esperada")
+        if before is not None and title not in known:
+            marks.append("nueva")
+        where = origins.get(title, "sin fichero (crawler u otra carga)")
+        rows.append(f"    {distance:.4f} {', '.join(marks)}: {title[:90]} [{where}]")
+    if v.get("guard"):
+        rows.append(f"    el guard la para ({v['guard']}), sin búsqueda")
+    return rows or ["    (ninguna fuente)"]
+
+
+def explain(without: list[dict], with_: list[dict] | None) -> str:
+    """Each named question's nearest sources, without and (if given) with the candidates."""
+    after = {v["id"]: v for v in with_ or []}
+    lines = ["Explicación sin modelo: fuentes más cercanas, una por fuente, con su fichero"]
+    for v in without:
+        w = after.get(v["id"])
+        head = f"\n[{v['id']}] ({v.get('group')}) {v.get('question', '')}"
+        if v.get("group") == "A":
+            head += f"\n  espera: {v.get('expect_source')}"
+        lines.append(head)
+        n_sin = len(v.get("cards") or [])
+        if w is None:
+            lines.append(f"  tarjetas bajo el corte: {n_sin or 'ninguna'}")
+            lines += ["  sin candidatos", *_explain_block(v, before=None)]
+            continue
+        n_con = len(w.get("cards") or [])
+        lines.append(f"  tarjetas bajo el corte: {n_sin or 'ninguna'} sin; {n_con or 'ninguna'} con")
+        lines += ["  sin candidatos", *_explain_block(v, before=None)]
+        lines += ["  con candidatos", *_explain_block(w, before=v)]
+        top_after = {n[0] for n in (w.get("nearest") or [])[:_TOP]}
+        gone = [n[0] for n in (v.get("nearest") or [])[:_TOP] if n[0] not in top_after]
+        lines.append(f"  sale con los candidatos: {_ids(gone)}")
+    return "\n".join(lines)
+
+
 # --- the command line ---------------------------------------------------------------
 
 
@@ -325,10 +384,17 @@ def main(argv: list[str] | None = None) -> int:
     cmp_.add_argument("--with", dest="with_", required=True)
     cmp_.add_argument("--preview-without")
     cmp_.add_argument("--preview-with")
+    exp = sub.add_parser("explain", help="named questions source by source, without and with")
+    exp.add_argument("--without", required=True)
+    exp.add_argument("--with", dest="with_")
     args = parser.parse_args(argv)
     try:
         if args.command == "load":
             return asyncio.run(_load_cli(args.glob))
+        if args.command == "explain":
+            # A diagnostic: it prints, and never decides the gate.
+            print(explain(_read_json(args.without), _read_json(args.with_)))
+            return 0
         text, status = compare(
             _read_json(args.without), _read_json(args.with_),
             _read_json(args.preview_without), _read_json(args.preview_with),

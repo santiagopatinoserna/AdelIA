@@ -9,74 +9,8 @@
   "sources": [
     {
       "source_type": "reference",
-      "title": "النوم الآمن للرضيع",
-      "organization": "Ministerio de Salud de Arabia Saudí (MOH)",
-      "publication_year": 2026,
-      "url": "https://www.moh.gov.sa/HealthAwareness/EducationalContent/BabyHealth/Pages/012.aspx",
-      "specialties": [
-        "pediatrics",
-        "neonatology"
-      ],
-      "license": "fair_use_snippet",
-      "language": "es",
-      "original_language": "ar",
-      "topics": [
-        "muerte_subita_sueno_seguro",
-        "colecho"
-      ],
-      "chunks": [
-        "النوم الآمن للرضيع (Ministerio de Salud de Arabia Saudí, actualizado en 2026). Tema: postura y superficie para dormir. Hallazgo: la página, que cita a la Academia Americana de Pediatría, indica que el bebé debe dormir boca arriba hasta cumplir 1 año, sobre una superficie plana y bastante firme, que no se mueva con facilidad durante el sueño. La cuna no debe tener mantas, almohadas ni peluches sobre los que el bebé pueda rodar, lo que podría bloquear el paso del aire, y nada debe cubrirle la cara, la cabeza o el cuello ni sobrecalentarlo. Si preocupa que pase frío, puede usarse ropa de dormir que lo abrigue. Si se le envuelve, la envoltura no debe estar demasiado apretada ni limitar la respiración o el movimiento de las caderas. (fuente en árabe)",
-        "النوم الآمن للرضيع (Ministerio de Salud de Arabia Saudí, actualizado en 2026). Tema: cama propia y colecho. Hallazgo: se recomienda que el bebé tenga su propia cama, que puede ir junto a la de los padres, lo que según la página reduce un 50% el riesgo de muerte súbita; se le lleva a la cama de los padres solo para dar el pecho y se le devuelve a la suya. Compartir cama no se recomienda con ningún bebé y nunca debe hacerse si tiene menos de 4 meses, nació prematuro o con bajo peso, uno o ambos padres fuman (aunque no sea en el dormitorio), la madre fuma o ha tomado medicación que le dificulte despertar, la superficie es blanda (cama de agua, colchón viejo, sillón) o hay almohadas o mantas en la cama del bebé. (fuente en árabe)",
-        "النوم الآمن للرضيع (Ministerio de Salud de Arabia Saudí, actualizado en 2026). Tema: otras medidas para proteger al bebé durante el sueño. Hallazgo: ninguno de los padres debe fumar durante el embarazo ni después del parto, y hay que mantener al bebé lejos de fumadores. La lactancia materna exclusiva durante los 6 primeros meses protege frente a la muerte súbita. También se aconseja cumplir el calendario de vacunas y las revisiones, quitar de la cuna juguetes y objetos que puedan asfixiar, y no colgar nada de los lados. (fuente en árabe)"
-      ]
-    },
-    {
-      "source_type": "reference",
-      "title": "متلازمة موت الرُّضع المفاجئ",
-      "organization": "Ministerio de Salud de Arabia Saudí (MOH)",
-      "publication_year": 2025,
-      "url": "https://www.moh.gov.sa/HealthAwareness/EducationalContent/BabyHealth/Pages/010.aspx",
-      "specialties": [
-        "pediatrics",
-        "neonatology"
-      ],
-      "license": "fair_use_snippet",
-      "language": "es",
-      "original_language": "ar",
-      "topics": [
-        "muerte_subita_sueno_seguro",
-        "colecho"
-      ],
-      "chunks": [
-        "متلازمة موت الرُّضع المفاجئ (Ministerio de Salud de Arabia Saudí, actualizado en 2025). Tema: qué es y quién tiene más riesgo. Hallazgo: es la muerte repentina e inexplicada de un niño menor de 1 año que sigue sin causa tras una investigación completa con autopsia, examen del lugar y revisión de la historia clínica. Se cree que el bebé tiene una vulnerabilidad de base (por ejemplo genética o alteraciones cerebrales ocultas) y que un factor del entorno la desencadena. Los bebés son más vulnerables entre el 2.º y el 4.º mes de vida, el riesgo es mayor si están expuestos al humo del tabaco, y muchos de los fallecidos habían tenido una infección poco antes. Fumar, consumir drogas o alcohol durante el embarazo aumenta el riesgo. (fuente en árabe)",
-        "متلازمة موت الرُّضع المفاجئ (Ministerio de Salud de Arabia Saudí, actualizado en 2025). Tema: factores del sueño que aumentan el riesgo. Hallazgo: dormir boca abajo o de lado dificulta más la respiración que dormir boca arriba. Los colchones y la ropa de cama blandos y las camas de agua pueden hacer que el bebé se deslice bajo las mantas y se obstruya su respiración. El riesgo sube si el bebé duerme en la misma cama con padres, hermanos o mascotas, y también si se le abriga en exceso durante el sueño. (fuente en árabe)",
-        "متلازمة موت الرُّضع المفاجئ (Ministerio de Salud de Arabia Saudí, actualizado en 2025). Tema: prevención después del parto. Hallazgo: se acuesta al bebé boca arriba; se prefiere que duerma en la habitación de la madre pero en una cama separada hasta los 6 meses; se le abriga lo justo, sin exceso, se le mantiene lejos del humo del tabaco y se usa un colchón firme con sábana ajustada y sin almohadas blandas. Despierto y con un adulto vigilando puede ponerse boca abajo, lo que fortalece el cuello y evita que se aplane la cabeza. La lactancia reduce el riesgo y se aconseja mantenerla hasta los 6 meses o más. (fuente en árabe)"
-      ]
-    },
-    {
-      "source_type": "reference",
-      "title": "Pludselig uventet spædbarnsdød (Sundhed.dk)",
-      "organization": "Sundhed.dk, Patienthåndbogen",
-      "publication_year": 2023,
-      "url": "https://www.sundhed.dk/borger/patienthaandbogen/boern/sygdomme/oevrige-sygdomme/pludselig-uventet-spaedbarnsdoed/",
-      "specialties": [
-        "pediatrics",
-        "general_medicine"
-      ],
-      "license": "fair_use_snippet",
-      "language": "es",
-      "original_language": "da",
-      "topics": [
-        "muerte_subita_sueno_seguro"
-      ],
-      "chunks": [
-        "Pludselig uventet spædbarnsdød (Sundhed.dk, Patienthåndbogen, 2023). Tema: qué es la muerte súbita del lactante y sus factores de riesgo. Hallazgo: es la muerte repentina e inesperada de un niño menor de un año sin causa tras la investigación. Ocurre sobre todo entre los 2 y los 4 meses, el 90 % de los casos antes de los 6 meses, más en niños que en niñas y sobre todo en los meses de invierno. En Dinamarca morían más de 100 niños al año en los años ochenta y 7 en 2010. Como factores de riesgo la página cita dormir boca abajo (el mayor), dormir en la cama de los padres, el tabaquismo durante y después del embarazo, hijos de madres menores de 20 años, gemelos, prematuridad y bajo peso al nacer.",
-        "Pludselig uventet spædbarnsdød (Sundhed.dk, Patienthåndbogen, 2023). Tema: cómo reducir el riesgo. Hallazgo: poner al bebé a dormir boca arriba y no boca abajo. Debe dormir en la habitación de los padres pero nunca en su cama, ni en sillones ni sofás, con un colchón firme. La habitación debe estar a unos 18-20 °C, sin abrigar demasiado al bebé ni cubrirle la cabeza. La lactancia materna reduce el riesgo, el chupete puede ayudar una vez establecida la lactancia, y no se debe fumar durante ni después del embarazo ni exponer al bebé al humo. Los monitores de respiración no han demostrado prevenir la muerte súbita. Dormir boca arriba puede aplanar la cabeza, pero eso no debe impedir hacerlo."
-      ]
-    },
-    {
-      "source_type": "reference",
-      "title": "RS-virus (Sundhed.dk)",
+      "title": "Virus respiratorio sincitial (Sundhed.dk)",
+      "original_title": "RS-virus (Sundhed.dk)",
       "organization": "Sundhed.dk, Patienthåndbogen",
       "publication_year": 2024,
       "url": "https://www.sundhed.dk/borger/patienthaandbogen/boern/sygdomme/infektioner/rs-virus/",
@@ -92,31 +26,9 @@
         "cuando_consultar"
       ],
       "chunks": [
-        "RS-virus (Sundhed.dk, Patienthåndbogen, 2024). Tema: frecuencia y evolución de la infección por virus respiratorio sincitial en niños pequeños. Hallazgo: es la causa más frecuente de infección respiratoria que requiere ingreso en niños pequeños; a los 2 años casi todos la han pasado al menos una vez. Aproximadamente el 3 % de los niños daneses ingresa al menos una vez en los dos primeros años de vida. Se presenta cada año en invierno. Sobre todo en los menores de 6 meses puede aparecer infección de vías bajas con dificultad para respirar, y los menores de 3 meses, los prematuros y los niños con enfermedad cardiaca, pulmonar u otra enfermedad crónica son grupos de riesgo de curso grave. La mayoría mejora en 3-5 días, aunque los síntomas pueden durar 2-3 semanas.",
-        "RS-virus (Sundhed.dk, Patienthåndbogen, 2024). Tema: cuándo ver a un médico por virus respiratorio sincitial. Hallazgo: la página indica que el niño debe ser visto por un médico si respira con dificultad, con respiración rápida, sibilancias o hundimiento del pecho al respirar, si no quiere comer, tiene las mucosas secas, no orina u orina muy poco, o parece agotado. Otros signos de alarma citados son flacidez y coloración azulada de la piel. En menores de 6 meses destaca la respiración rápida, con pitidos o silbidos. La página no da teléfonos ni indica cuándo llamar al 112.",
-        "RS-virus (Sundhed.dk, Patienthåndbogen, 2024). Tema: prevención en el hogar y vacunación de la embarazada. Hallazgo: se aconseja coger al niño en brazos durante los accesos de tos, evitar el humo del tabaco, ventilar varias veces al día y cuidar la higiene de manos. Los menores de 3 meses pueden protegerse evitando el contacto con otros niños, algo imposible si hay hermanos, y la asistencia a una guardería aumenta el riesgo. Según la página, vacunar a la embarazada frente a este virus reduce el riesgo de infección grave de vías bajas en el bebé en cerca de un 70 % durante los primeros 6 meses."
-      ]
-    },
-    {
-      "source_type": "reference",
-      "title": "Was ist der Plötzliche Kindstod (SIDS) und das Anscheinend lebensbedrohliche Ereignis (ALE)? (Kinder- und Jugendärzte im Netz)",
-      "organization": "Berufsverband der Kinder- und Jugendärzt*innen (BVKJ, Kinder- und Jugendärzte im Netz)",
-      "publication_year": 2017,
-      "url": "https://www.kinderaerzte-im-netz.de/krankheiten/ploetzlicher-kindstod-anscheinend-lebensbedrohliches-ereignis/was-ist-der-ploetzliche-kindstod-sids-und-das-anscheinend-lebensbedrohliche-ereignis-ale/",
-      "specialties": [
-        "pediatrics",
-        "neonatology"
-      ],
-      "license": "fair_use_snippet",
-      "language": "es",
-      "original_language": "de",
-      "topics": [
-        "muerte_subita_sueno_seguro",
-        "pausas_brue"
-      ],
-      "chunks": [
-        "Was ist der Plötzliche Kindstod (SIDS) und das Anscheinend lebensbedrohliche Ereignis (ALE)? (Kinder- und Jugendärzte im Netz, BVKJ, 2017). Tema: qué es la muerte súbita del lactante. Hallazgo: es la muerte súbita e inesperada de un bebé antes de cumplir un año (365 días) cuya causa, por lo general, no se puede aclarar, o no con certeza, ni siquiera tras una investigación exhaustiva. Suele ocurrir de noche, durante el sueño, y afecta más a niños que a niñas. La página indica que en 2014 hubo unos 120 casos, un 80 % menos que en el año 2000.",
-        "Was ist der Plötzliche Kindstod (SIDS) und das Anscheinend lebensbedrohliche Ereignis (ALE)? (Kinder- und Jugendärzte im Netz, BVKJ, 2017). Tema: episodio aparentemente letal (ALE). Hallazgo: es un episodio agudo e inesperado en el que el bebé deja de respirar o respira muy débilmente, la piel se pone pálida o azulada y los músculos se vuelven flácidos, a veces con arcadas y signos de asfixia. Puede ocurrir dormido o despierto, y con estímulo a tiempo el bebé puede recuperarse, aunque a veces hace falta reanimación. Afecta a entre 6 y 40 de cada 10.000 nacidos vivos y alrededor del 10 % de los bebés tiene un segundo episodio en los días o semanas siguientes."
+        "Virus respiratorio sincitial (Sundhed.dk, Patienthåndbogen, 2024). Tema: frecuencia y evolución de la infección por virus respiratorio sincitial en niños pequeños. Hallazgo: es la causa más frecuente de infección respiratoria que requiere ingreso en niños pequeños; a los 2 años casi todos la han pasado al menos una vez. Aproximadamente el 3 % de los niños daneses ingresa al menos una vez en los dos primeros años de vida. Se presenta cada año en invierno. Sobre todo en los menores de 6 meses puede aparecer infección de vías bajas con dificultad para respirar, y los menores de 3 meses, los prematuros y los niños con enfermedad cardiaca, pulmonar u otra enfermedad crónica son grupos de riesgo de curso grave. La mayoría mejora en 3-5 días, aunque los síntomas pueden durar 2-3 semanas.",
+        "Virus respiratorio sincitial (Sundhed.dk, Patienthåndbogen, 2024). Tema: cuándo ver a un médico por virus respiratorio sincitial. Hallazgo: la página indica que el niño debe ser visto por un médico si respira con dificultad, con respiración rápida, sibilancias o hundimiento del pecho al respirar, si no quiere comer, tiene las mucosas secas, no orina u orina muy poco, o parece agotado. Otros signos de alarma citados son flacidez y coloración azulada de la piel. En menores de 6 meses destaca la respiración rápida, con pitidos o silbidos. La página no da teléfonos ni indica cuándo llamar al 112.",
+        "Virus respiratorio sincitial (Sundhed.dk, Patienthåndbogen, 2024). Tema: prevención en el hogar y vacunación de la embarazada. Hallazgo: se aconseja coger al niño en brazos durante los accesos de tos, evitar el humo del tabaco, ventilar varias veces al día y cuidar la higiene de manos. Los menores de 3 meses pueden protegerse evitando el contacto con otros niños, algo imposible si hay hermanos, y la asistencia a una guardería aumenta el riesgo. Según la página, vacunar a la embarazada frente a este virus reduce el riesgo de infección grave de vías bajas en el bebé en cerca de un 70 % durante los primeros 6 meses."
       ]
     },
     {
@@ -145,30 +57,6 @@
       "original_license": "public_domain"
     },
     {
-      "source_type": "guideline",
-      "title": "Providing Care for Babies to Sleep Safely (CDC)",
-      "organization": "CDC",
-      "publication_year": 2024,
-      "url": "https://www.cdc.gov/sudden-infant-death/sleep-safely/index.html",
-      "specialties": [
-        "pediatrics",
-        "general_medicine",
-        "neonatology"
-      ],
-      "license": "fair_use_snippet",
-      "language": "es",
-      "original_language": "en",
-      "topics": [
-        "muerte_subita_sueno_seguro",
-        "chupete"
-      ],
-      "chunks": [
-        "Providing Care for Babies to Sleep Safely (CDC, 2024). Tema: recomendaciones de sueño seguro para reducir las muertes súbitas del lactante. Hallazgo: los CDC respaldan las recomendaciones de 2022 de la Academia Americana de Pediatría para reducir la muerte súbita del lactante y la asfixia accidental. Se acuesta al bebé boca arriba para todos los sueños, siestas y noche, sobre una superficie firme y plana, no inclinada, como el colchón de una cuna homologada con sábana ajustada. La cuna o el capazo se colocan en la misma habitación donde duermen los padres, idealmente hasta que el bebé tenga al menos 6 meses.",
-        "Providing Care for Babies to Sleep Safely (CDC, 2024). Tema: ropa de cama, calor, chupete, lactancia y humo. Hallazgo: se mantienen fuera de la zona de sueño las mantas, almohadas, protectores de cuna y peluches; no se cubre la cabeza del bebé ni se deja que pase demasiado calor (señales: sudor o pecho caliente). Se ofrece un chupete para las siestas y la noche, y si se amamanta puede esperarse a que la lactancia esté bien establecida. Se recomienda la leche materna. No se fuma ni se consume nicotina durante el embarazo, no se fuma ni se permite fumar cerca del bebé, y no se bebe alcohol ni se usan drogas durante el embarazo. También se mantienen al día las revisiones del niño sano y las vacunas."
-      ],
-      "original_license": "public_domain"
-    },
-    {
       "source_type": "reference",
       "title": "RSV in Infants and Young Children (CDC)",
       "organization": "CDC",
@@ -192,31 +80,6 @@
         "RSV in Infants and Young Children (CDC, 2026). Tema: gravedad del VRS en lactantes y quién tiene más riesgo. Hallazgo: el VRS puede causar bronquiolitis (inflamación de las vías pequeñas del pulmón) o neumonía. Cada año ingresan por VRS 2 o 3 de cada 100 bebés menores de 3 meses; en el hospital pueden necesitar oxígeno, sueros por vena o ventilación mecánica (una máquina que les ayuda a respirar), y la mayoría vuelve a casa en pocos días. El riesgo es mayor cuanto más pequeño es el bebé, y también en los nacidos prematuros, los que tienen enfermedad pulmonar crónica o cardiopatía congénita, defensas bajas, fibrosis quística grave o enfermedades neuromusculares, sobre todo si les cuesta tragar o expulsar los mocos. La mayoría de los niños ha pasado el VRS antes de los 2 años. (fuente en inglés)"
       ],
       "original_license": "public_domain"
-    },
-    {
-      "source_type": "guideline",
-      "title": "Cot death (sudden infant death syndrome) (HSE)",
-      "organization": "Health Service Executive (HSE)",
-      "publication_year": 2022,
-      "url": "https://www2.hse.ie/conditions/cot-death/",
-      "specialties": [
-        "pediatrics",
-        "general_medicine",
-        "neonatology"
-      ],
-      "license": "fair_use_snippet",
-      "language": "es",
-      "original_language": "en",
-      "topics": [
-        "muerte_subita_sueno_seguro",
-        "colecho",
-        "chupete"
-      ],
-      "chunks": [
-        "Cot death (sudden infant death syndrome) (HSE, 2022). Tema: a quién afecta y factores de riesgo. Hallazgo: la muerte súbita es una de las principales causas de muerte en bebés de 4 semanas a 12 meses, con mayor frecuencia entre los 2 y los 4 meses. Puede ocurrir en la cuna, el cochecito, la cama, la silla del coche o la hamaca. Dormir boca abajo aumenta el riesgo, y de lado no es seguro porque pueden girar boca abajo. El riesgo es mayor en prematuros o de bajo peso, con colecho, con tabaquismo (en el embarazo o cerca del bebé), durmiendo en otra habitación, durmiendo con el bebé en un sofá o sillón (aumenta mucho), en dispositivos de sentado como sillas de coche o portabebés y con sobrecalentamiento.",
-        "Cot death (sudden infant death syndrome) (HSE, 2022). Tema: recomendaciones de sueño seguro. Hallazgo: se acuesta al bebé boca arriba para todos los sueños, con los pies en el extremo de la cuna, la cabeza descubierta y sin abrigarlo en exceso, con mantas o saco sin mangas sujetos sin pasar de los hombros. La cuna va en la habitación de los padres al menos los primeros 6 meses, con un colchón firme, plano y ajustado, sin almohadas, cojines, nidos, cuñas, protectores, juguetes ni edredones. La habitación se mantiene entre 16 y 20 grados con termómetro, no se acuesta cerca de radiadores o del sol, y la lactancia reduce el riesgo.",
-        "Cot death (sudden infant death syndrome) (HSE, 2022). Tema: colecho, humo, chupete y urgencia. Hallazgo: se evita el colecho en los primeros 3 meses, sobre todo en prematuros o de bajo peso, y nunca tras beber alcohol o tomar drogas o medicinas que adormecen, ni si algún progenitor fuma. Nadie debe fumar en casa, en el coche ni cerca del bebé. Ofrecer un chupete al inicio del sueño puede reducir el riesgo, sin forzarlo y esperando a que la lactancia esté establecida; no se sujeta con cadenas o clips por riesgo de atragantamiento. Se llama a emergencias si el niño no responde o cuesta despertarlo; si está muy enfermo pero responde, se contacta con el médico o el servicio de guardia."
-      ]
     },
     {
       "source_type": "guideline",
@@ -485,27 +348,6 @@
       ]
     },
     {
-      "source_type": "paper",
-      "title": "Efecto del uso limitado de chupetes sobre la duración de la lactancia materna en los recién nacidos a término",
-      "organization": "Cochrane",
-      "publication_year": 2016,
-      "url": "https://cochrane.org/es/CD007202/PREG_efecto-del-uso-limitado-de-chupetes-sobre-la-duracion-de-la-lactancia-materna-en-los-recien-nacidos",
-      "specialties": [
-        "pediatrics",
-        "general_medicine"
-      ],
-      "license": "fair_use_snippet",
-      "language": "es",
-      "original_language": "es",
-      "topics": [
-        "chupete"
-      ],
-      "chunks": [
-        "Efecto del uso limitado de chupetes sobre la duración de la lactancia materna en los recién nacidos a término (Cochrane, 2016). Tema: chupete y lactancia. Hallazgo: la revisión analizó dos ensayos con 1302 recién nacidos sanos a término que tomaban pecho. Ofrecer chupete desde el parto o una vez establecida la lactancia no cambió de forma significativa la lactancia exclusiva a los 3 meses (RR 1,01) ni a los 4 meses (RR 1,01), ni la lactancia parcial. La certeza de la evidencia es moderada.",
-        "Efecto del uso limitado de chupetes sobre la duración de la lactancia materna en los recién nacidos a término (Cochrane, 2016). Tema: lo que la revisión no pudo responder. Hallazgo: no hubo datos utilizables sobre dificultades de lactancia, satisfacción de la madre, llanto del bebé, otitis media ni maloclusión dental, así que aún no se sabe bien si el chupete tiene efectos negativos en el bebé o en la madre. Además, los resultados solo valen para la duración de la lactancia hasta los cuatro meses en madres motivadas para amamantar."
-      ]
-    },
-    {
       "source_type": "reference",
       "title": "Hoja de recomendaciones para padres: Episodio aparentemente letal (ALTE)",
       "organization": "Hospital General Universitario Gregorio Marañón (Madrid)",
@@ -631,31 +473,6 @@
     },
     {
       "source_type": "guideline",
-      "title": "Guía para las madres que amamantan",
-      "organization": "Ministerio de Sanidad (España)",
-      "publication_year": 2017,
-      "url": "https://www.sanidad.gob.es/organizacion/sns/planCalidadSNS/docs/GPCLactancia_mujeres_Osteba-1.pdf",
-      "specialties": [
-        "pediatrics",
-        "general_medicine"
-      ],
-      "license": "fair_use_snippet",
-      "language": "es",
-      "original_language": "es",
-      "topics": [
-        "colecho",
-        "chupete",
-        "muerte_subita_sueno_seguro"
-      ],
-      "chunks": [
-        "Guía para las madres que amamantan (Ministerio de Sanidad y Osteba, 2017). Tema: cómo saber si el bebé toma suficiente leche. Hallazgo: toma suficiente si tiene color sonrosado, piel tersa, está tranquilo y relajado tras la toma, hace al menos ocho tomas al día, moja pañales, hace varias deposiciones y su peso evoluciona bien. Las tomas no tienen que ser cada tres horas: lo importante es llegar a ocho al día sin pausas de más de cinco o seis horas; si la pausa se alarga, hay que intentar despertarlo (el piel con piel ayuda). El estómago del recién nacido es del tamaño de una cereza al nacer y de una nuez a los tres días, por eso necesita mamar con frecuencia. Conviene que el bebé sea reconocido en el centro de salud en las primeras 48-72 horas tras el alta hospitalaria.",
-        "Guía para las madres que amamantan (Ministerio de Sanidad y Osteba, 2017). Tema: dormir con el bebé y chupete. Hallazgo: compartir cama es seguro solo si el bebé nació a término sin problemas graves, mama en exclusiva y a demanda, ni el padre ni la madre fuman, beben alcohol, consumen drogas o medicamentos que den sueño profundo ni tienen obesidad mórbida, ambos saben que está en la cama, este duerme boca arriba (boca abajo o de lado aumenta el riesgo de muerte súbita) con ropa ligera y la cabeza descubierta, la habitación no supera los 20 ºC, el colchón es firme, sin edredones pesados ni peluches, y no hay huecos donde pueda caerse o quedar atrapado. Es peligroso dormir con el bebé en brazos en un sofá o una silla, dejarlo solo en una cama o sofá, o compartir cama con hermanos, otras personas o animales. En las primeras 4 semanas el chupete puede dificultar la lactancia.",
-        "Guía para las madres que amamantan (Ministerio de Sanidad y Osteba, 2017). Tema: ingurgitación, dolor, grietas y mastitis. Hallazgo: la ingurgitación aparece a los 2-3 días del parto con pechos tensos, hinchados y calientes, y se previene ofreciendo el pecho con frecuencia; ayudan el calor local antes de la toma y el frío entre tomas. Un dolor intenso o persistente no es normal y hay que consultarlo, igual que las grietas, que suelen deberse a un problema de agarre. Ante dolor y enrojecimiento en una zona del pecho, con o sin fiebre, puede ser mastitis: se continúa con la lactancia con más tomas y, si no hay clara mejoría en 12 o 24 horas o hay fiebre, malestar general, escalofríos o dolores musculares, es necesaria una valoración médica. Nunca está indicado suspender la lactancia.",
-        "Guía para las madres que amamantan (Ministerio de Sanidad y Osteba, 2017). Tema: brotes de crecimiento, poca leche y suplementos. Hallazgo: los brotes de crecimiento hacen que el bebé pida el pecho mucho más; si durante dos o tres días se ofrece el pecho con más frecuencia, aumenta la producción y las tomas vuelven a regularse; si no es así, se consulta. El llanto o el miedo a no tener leche no justifican dar suplementos de forma rutinaria: es el pediatra quien decide tras ver una toma. Casi siempre la poca leche se debe a tomas poco frecuentes o cortas, un solo pecho por toma o mal agarre, y los suplementos solos no la resuelven y pueden acabar en destete. Si en los primeros días el bebé está muy adormilado, conviene despertarlo para que haga al menos 8 tomas al día."
-      ]
-    },
-    {
-      "source_type": "guideline",
       "title": "Inmunización pasiva frente a virus respiratorio sincitial para la temporada 2025-2026: preguntas y respuestas ciudadanos",
       "organization": "Ministerio de Sanidad (España)",
       "publication_year": 2025,
@@ -723,55 +540,6 @@
         "Otitis Media (Grupo de Trabajo de ORL Pediátrica, SAP, Argentina). Tema: frecuencia y síntomas de la otitis media aguda. Hallazgo: cerca del 80 % de los niños tiene al menos un episodio antes de los 3 años y la edad de mayor frecuencia es de los 6 a los 24 meses; suele aparecer tras un resfriado y se favorece porque la trompa de Eustaquio del lactante es corta, horizontal y blanda. Se manifiesta con dolor de oído (peor al acostarse), fiebre que puede llegar a 38-39,5 grados, irritabilidad y llanto persistente, tirarse o frotarse la oreja, mal dormir y, en bebés, rechazo de la toma por el dolor al succionar.",
         "Otitis Media (Grupo de Trabajo de ORL Pediátrica, SAP, Argentina). Tema: cuándo acudir a urgencias y cuándo pedir cita. Hallazgo: se acude de inmediato a urgencias si el niño tiene menos de 3 a 6 meses con sospecha de infección o fiebre de más de 38 grados; si hay enrojecimiento, hinchazón o dolor detrás de la oreja con el pabellón desplazado hacia delante; si sale secreción amarillenta, verdosa o con sangre por el oído; o si hay síntomas neurológicos o un decaimiento intenso: dolor de cabeza muy fuerte, vómitos repetidos, somnolencia extrema o irritabilidad que no se calma ni con analgésicos. Ante la sospecha de otitis, hay que llevar al niño al pediatra en las primeras 24 a 48 horas para que revise el tímpano. No se deben poner conos de papel de periódico, aceite caliente ni otros remedios caseros en el oído.",
         "Otitis Media (Grupo de Trabajo de ORL Pediátrica, SAP, Argentina). Tema: cuándo derivar al otorrino y por qué importa la audición. Hallazgo: el líquido acumulado tras la infección provoca una pérdida auditiva temporal que puede afectar al desarrollo del habla, el lenguaje y el aprendizaje. Se pide consulta programada con otorrinolaringología si hay otitis de repetición (3 o más infecciones en 6 meses o 4 episodios en un año) o si hay una pérdida de audición prolongada: el niño no oye bien, no responde a los sonidos o tiene retraso del habla semanas después de curada la infección. En los mayores de 6 meses sin señales de alarma, el dolor y la fiebre pueden manejarse al principio en casa, con consulta médica posterior."
-      ]
-    },
-    {
-      "source_type": "guideline",
-      "title": "Recomendaciones para sueño seguro en lactantes",
-      "organization": "Sociedad Argentina de Pediatría (SAP)",
-      "publication_year": null,
-      "undated_reason": "Página divulgativa de Familia y Comunidad de la SAP sin fecha de publicación visible (solo copyright 1997-2026 del sitio); consultada el 2026-11-06. La primera referencia es Grad, Rossato y Taire, Arch Argent Pediatr 2023;121(6).",
-      "url": "https://www.sap.org.ar/familia-y-comunidad/detalle/recomendaciones-para-sueno-seguro-en-lactantes",
-      "specialties": [
-        "pediatrics",
-        "general_medicine"
-      ],
-      "license": "fair_use_snippet",
-      "language": "es",
-      "original_language": "es",
-      "topics": [
-        "muerte_subita_sueno_seguro",
-        "colecho",
-        "chupete"
-      ],
-      "chunks": [
-        "Recomendaciones para sueño seguro en lactantes (SAP, Argentina). Tema: posición, superficie y lugar para dormir. Hallazgo: la muerte súbita no se puede prevenir, pero sí se puede reducir el riesgo de que ocurra. El bebé duerme boca arriba, en una cuna con colchón firme y plano sin huecos laterales; no se recomienda de lado porque puede rodar boca abajo. Se aconseja compartir la habitación con quien lo cuida, sin compartir la cama, al menos los primeros 6 meses. Dormir boca arriba no causa aspiración si regurgita o vomita, porque la vía aérea queda por encima de la digestiva. El humo de tabaco en cualquier lugar de la vivienda genera un riesgo alto.",
-        "Recomendaciones para sueño seguro en lactantes (SAP, Argentina). Tema: colecho y qué evitar. Hallazgo: se desaconseja el colecho si la capacidad de alerta de quien cuida está disminuida (cansancio, alcohol, sedantes u otras drogas, tabaco), porque el riesgo se multiplica por más de 10; también si la madre fumó en el embarazo, con superficies blandas o colchones hundidos, almohadas o ropa de cama pesada, padres con obesidad, otros niños o mascotas. Si un adulto se duerme dando el pecho, es menos peligroso en su cama que en un sofá, aunque no es recomendable. La cuna no lleva almohadas, nidos de contención, protectores laterales, peluches, ropa suelta, colchas ni edredones; las sábanas o mantas llegan como mucho a la altura de las axilas, sin gorro en ambientes templados. No se recomienda el fajado ni dormir en sillas de auto o cuñas.",
-        "Recomendaciones para sueño seguro en lactantes (SAP, Argentina). Tema: lactancia, chupete y medidas de la cuna. Hallazgo: la lactancia materna reduce el riesgo, y si hay dificultades conviene pedir asesoramiento. El chupete también lo reduce y puede ofrecerse cuando la lactancia ya está bien establecida, sin que perjudique el amamantamiento. Las barandas de la cuna deben medir al menos 60 cm y no ser parcialmente plegables, y si hay barrotes, la separación debe ser mayor de 4,5 cm y menor de 6 cm. La SAP pide que profesionales sanitarios, medios y fabricantes de productos para bebés difundan estas recomendaciones."
-      ]
-    },
-    {
-      "source_type": "reference",
-      "title": "Consejos para padres sobre el sueño infantil",
-      "organization": "Sociedad Española de Pediatría Extrahospitalaria y Atención Primaria (SEPEAP)",
-      "publication_year": 2021,
-      "url": "https://sepeap.org/consejos-para-padres-sobre-el-sueno-infantil/",
-      "specialties": [
-        "pediatrics",
-        "general_medicine"
-      ],
-      "license": "fair_use_snippet",
-      "language": "es",
-      "original_language": "es",
-      "topics": [
-        "muerte_subita_sueno_seguro",
-        "colecho"
-      ],
-      "chunks": [
-        "Consejos para padres sobre el sueño infantil (SEPEAP, 2021). Tema: sueño del bebé menor de 2 meses. Hallazgo: después de comer el bebé pasa por un sueño activo, en el que parece inquieto, que es normal, no hay que interrumpir y suele durar 30 a 40 minutos. Puede dormirse en brazos o piel con piel, y dormirse al pecho o con biberón a esta edad no interfiere en el desarrollo posterior del sueño. Hasta los 6 meses no hay que «enseñar» a dormir, solo respetar sus horarios; desde el inicio conviene marcar el contraste entre día (luz) y noche (oscuridad). El chupete puede usarse cuando la lactancia está establecida.",
-        "Consejos para padres sobre el sueño infantil (SEPEAP, 2021). Tema: colecho y muerte súbita. Hallazgo: la decisión corresponde a los padres, pero un lactante menor de 6 meses que duerme boca arriba en su cuna cerca de la cama de los padres reduce el riesgo de muerte súbita en más de un 50 %, y la lactancia materna también protege. No se recomienda el colecho en menores de 3 meses, prematuros o de bajo peso, si los padres consumen tabaco, alcohol, drogas o sedantes, con agotamiento extremo como el del posparto, en superficies blandas o sofás, o si se comparte cama con otras personas o niños.",
-        "Consejos para padres sobre el sueño infantil (SEPEAP, 2021). Tema: sueño de 2 a 12 meses. Hallazgo: de 2 a 6 meses no hay que despertar al bebé para darle de comer; si se inquieta, se puede esperar 5 minutos porque llanto no es siempre hambre. De 6 a 12 meses se aconseja una rutina previa al sueño fija (baño, pijama, canción) y acostarlo somnoliento pero despierto. Un niño sano de esta edad normalmente ya no necesita tomas nocturnas, y en los primeros 8 meses es normal que se despierte de 1 a 3 veces; se le consuela sin darle de comer, sin encender la luz y sin sacarlo de la cuna.",
-        "Consejos para padres sobre el sueño infantil (SEPEAP, 2021). Tema: sueño de 12 a 24 meses y cuándo consultar. Hallazgo: se mantiene la rutina previa al sueño en un dormitorio tranquilo, oscuro y con temperatura confortable, con horarios regulares y sin siestas muy largas o tardías. Se evita la actividad física intensa 1 o 2 horas antes de acostarlo, y también las pantallas; además conviene evitar alimentos como el chocolate y bebidas como las colas, el café o el té. Se recomienda consultar al pediatra si, pasado el año, se despierta y necesita la presencia de los padres de 3 a 5 veces por noche más de 3 noches a la semana, si tarda más de 30 minutos en dormirse, si ronca habitualmente sin estar resfriado o si le cuesta levantarse por las mañanas."
       ]
     },
     {
@@ -846,30 +614,6 @@
         "Bronchiolite : que faire ? (Assurance Maladie, ameli.fr, 2026). Tema: cuándo llamar al 15 o al 112 si un bebé con bronquiolitis respira mal. Hallazgo: hay que llamar sin demora al 15 (SAMU) o al 112 si el bebé tiene menos de 2 meses, nació antes de las 36 semanas, tiene una enfermedad cardiaca, respiratoria o de las defensas, o una discapacidad que le impide toser; si toma menos de la mitad de sus biberones en 3 tomas seguidas o no consigue mamar; si vomita todo lo que toma y puede deshidratarse; si duerme todo el rato y está flojo, o llora raro, está agitado y no se duerme; si está pálido, se queja o se le azulan los labios y los dedos; o si le cuesta cada vez más respirar: respira rápido y corto o irregular y lento, hace pausas, se le mueven las aletas de la nariz (aleteo nasal) o se le hunde la piel entre las costillas y por encima de las clavículas (tiraje). (fuente en francés)",
         "Bronchiolite : que faire ? (Assurance Maladie, ameli.fr, 2026). Tema: cuándo basta con ir al médico en el día. Hallazgo: si el bebé tiene más de 2 meses, síntomas de bronquiolitis pero buen estado general y sigue comiendo, ameli pide consultar con su médico en el mismo día: la consulta es imprescindible y la bronquiolitis no se trata por cuenta propia. Hay que volver a consultar, también en el mismo día, si los síntomas empeoran o si, al cabo de unos días, la fiebre sube y las secreciones se vuelven espesas, amarillas o verdosas, porque puede haber una sobreinfección. Conviene vigilar sobre todo los 2 o 3 primeros días, ya que suele empeorar antes de mejorar; la tos suele durar de 8 a 10 días y a veces varias semanas. (fuente en francés)",
         "Bronchiolite : que faire ? (Assurance Maladie, ameli.fr, 2026). Tema: qué hacer en casa con un bebé con bronquiolitis y muchos mocos. Hallazgo: hay que despejarle la nariz con lavados nasales antes de las tomas y tantas veces como haga falta, sobre todo antes de los 6 meses, cuando el bebé aún no respira por la boca. Despierto, mantenerlo bien incorporado; para dormir, boca arriba como siempre. Evitar el humo de tabaco, que agrava la enfermedad. Ofrecer agua a menudo, repartir las tomas en cantidades pequeñas si está cansado y seguir con su leche habitual; si toma pecho y está demasiado cansado para mamar, sacarse la leche. Ventilar la habitación sin pasar de 19 °C. No se deben dar medicamentos para la tos (antitusivos) ni para fluidificar los mocos (mucolíticos): están contraindicados en el niño pequeño y aumentan el riesgo de ingreso. (fuente en francés)"
-      ]
-    },
-    {
-      "source_type": "reference",
-      "title": "Comment bien coucher un bébé ? (ameli.fr)",
-      "organization": "Assurance Maladie (ameli.fr)",
-      "publication_year": 2024,
-      "url": "https://www.ameli.fr/assure/sante/bons-gestes/bebe/coucher-bebe",
-      "specialties": [
-        "pediatrics",
-        "general_medicine"
-      ],
-      "license": "fair_use_snippet",
-      "language": "es",
-      "original_language": "fr",
-      "topics": [
-        "muerte_subita_sueno_seguro",
-        "colecho",
-        "chupete"
-      ],
-      "chunks": [
-        "Comment bien coucher un bébé ? (Assurance Maladie, 2024). Tema: postura y cama. Hallazgo: acostar al niño boca arriba redujo un 75 % la tasa de muerte inesperada del lactante entre 1991 y 1997. Debe dormir en su propia cama desde el nacimiento; las camas de adultos, sillones, sofás y pufs se desaconsejan incluso para una siesta corta. Boca arriba y a plano, de noche y en todas las siestas; boca abajo es el principal factor de riesgo y de lado es inestable. Se desaconsejan los dispositivos que lo sujetan boca arriba, como toalla enrollada, cojín, cuña o sujetacabezas o reductor de cama. Cuando sepa darse la vuelta solo, no hay que obligarlo a quedarse boca arriba.",
-        "Comment bien coucher un bébé ? (Assurance Maladie, 2024). Tema: prevenir la cabeza plana. Hallazgo: la plagiocefalia es un aplanamiento de la parte posterior del cráneo, no es peligrosa para el cerebro y desaparece con el crecimiento. Para limitarla: alternar la posición de la cabeza mientras está despierto, ponerlo boca abajo sobre una manta de juegos con vigilancia permanente, hablarle desde el lado contrario al que gira la cabeza, limitar el tiempo en hamaca, baby-relax o portabebés de coche (cosy) y reservar la silla de coche para los trayectos, cambiar con regularidad el sentido de acostarlo en la cuna y llevarlo en brazos o en fular con la nariz y la boca libres. Si el cuello se mueve menos (tortícolis), hay que hablarlo con el médico.",
-        "Comment bien coucher un bébé ? (Assurance Maladie, 2024). Tema: cama, ropa y ambiente. Hallazgo: colchón firme, con la mención de conformidad y sin huecos, y sábana bajera adaptada; no se admiten almohadas, edredones, pieles de cordero, peluches grandes ni protectores de cuna. Abrigarlo con un saco o pijama ajustado, sin acumular capas; la nuca no debe estar húmeda. Habitación a 18 a 20 °C, ventilada a diario y sin tabaco. Compartir la habitación, en cama aparte, se recomienda durante los seis primeros meses o algo más; no hay que dormirse con el bebé en brazos ni en un sofá o sillón. Nunca dar medicamentos para dormir ni sacudirlo, aunque usted esté al límite por su llanto."
       ]
     },
     {
@@ -1066,30 +810,6 @@
     },
     {
       "source_type": "reference",
-      "title": "Prévention de la mort subite du nourrisson (HUG, Mon enfant est malade)",
-      "organization": "Hôpitaux universitaires de Genève (HUG)",
-      "publication_year": null,
-      "undated_reason": "la página no muestra fecha de publicación ni de actualización (consultada el 2026-11-06)",
-      "url": "https://www.monenfantestmalade.ch/fiches/mort-subite-du-nourrisson",
-      "specialties": [
-        "pediatrics",
-        "general_medicine"
-      ],
-      "license": "fair_use_snippet",
-      "language": "es",
-      "original_language": "fr",
-      "topics": [
-        "muerte_subita_sueno_seguro",
-        "chupete",
-        "colecho"
-      ],
-      "chunks": [
-        "Prévention de la mort subite du nourrisson (HUG). Tema: qué es y cómo prevenirla. Hallazgo: la muerte súbita del lactante es el fallecimiento repentino e inesperado de un bebé de menos de un año durante el sueño; la causa exacta sigue siendo a menudo desconocida y podría estar ligada a una parada de la respiración en un bebé cuyo centro de control respiratorio aún no está suficientemente desarrollado. Según la ficha, el número de muertes ha disminuido en la última década gracias a las prácticas de prevención. Primera recomendación: acostar al bebé boca arriba, ni boca abajo ni de lado, para evitar que hunda la cara en el colchón. Segunda: usar una cama apropiada (moisés, cuna de barrotes o cuna plegable) con un colchón firme y de las dimensiones de la cama.",
-        "Prévention de la mort subite du nourrisson (HUG). Tema: resto de recomendaciones. Hallazgo: evitar antes de los 6 meses cojines, edredones, mantas, protectores de cuna y peluches; si el bebé tiene frío, se puede usar un saco de dormir con aberturas para los brazos o un mono. Se puede ofrecer un chupete para ayudarle a dormirse, si se desea. No fumar en la habitación ni en la casa, ni siquiera con la ventana abierta. Mantener la habitación entre 18 y 20 °C. Dormir en la misma habitación que el bebé es beneficioso, sobre todo los primeros meses, pero no se debe compartir la cama. Cuando está despierto se le puede poner boca abajo para reforzar la musculatura de la nuca. La ficha no da signos de alarma ni niveles de urgencia."
-      ]
-    },
-    {
-      "source_type": "reference",
       "title": "Apprendre à se moucher (ONE)",
       "organization": "ONE (Office de la Naissance et de l'Enfance, Belgique)",
       "publication_year": null,
@@ -1114,96 +834,8 @@
     },
     {
       "source_type": "reference",
-      "title": "Mort subite (ONE)",
-      "organization": "ONE (Office de la Naissance et de l'Enfance, Belgique)",
-      "publication_year": null,
-      "undated_reason": "Página de la sección Familles de one.be sin fecha de actualización visible; consultada el 2026-11-06.",
-      "url": "https://www.one.be/familles/0-12/mort-subite",
-      "specialties": [
-        "pediatrics",
-        "general_medicine"
-      ],
-      "license": "fair_use_snippet",
-      "language": "es",
-      "original_language": "fr",
-      "topics": [
-        "muerte_subita_sueno_seguro",
-        "signos_alarma"
-      ],
-      "chunks": [
-        "Mort subite (ONE, Office de la Naissance et de l'Enfance). Tema: qué es la muerte súbita del lactante y cómo preparar un sueño seguro. Hallazgo: es el fallecimiento repentino e inesperado de un bebé que parecía sano, la mayoría de las veces durante el sueño; el riesgo es máximo entre los 2 y los 6 meses, pero las medidas de prevención se recomiendan durante todo el primer año. La página pide un ambiente sin humo durante el embarazo y después, acostar siempre al bebé boca arriba, mantener si es posible la habitación entre 18 y 20 °C (si hace más calor, abrigarlo menos), colchón firme y adaptado al tamaño de la cuna, barrotes separados menos de 6,5 cm, sin almohada, saco de dormir mejor que manta, nada alrededor del cuello y en la cuna como mucho un pequeño muñeco de apego. Los animales no deben acceder a la cuna, porque si se acercan a su cara hay riesgo de asfixia.",
-        "Mort subite (ONE, Office de la Naissance et de l'Enfance). Tema: signos de alarma y cuándo consultar. Hallazgo: la página indica consultar a un médico sin demora si el bebé presenta, sin motivo aparente, uno o varios de estos signos: temperatura rectal superior a 38 °C o inferior a 36 °C; un cambio reciente de comportamiento (está más tranquilo o más agitado de lo habitual, gime dormido o despierto, vomita o rechaza alimentarse); dificultad para respirar; sudoración abundante durante el sueño hasta mojar la ropa; labios o manos que se vuelven azulados sin que parezca tener frío; o una palidez inusual."
-      ]
-    },
-    {
-      "source_type": "reference",
-      "title": "La nanna sicura nel primo anno di vita",
-      "organization": "Azienda Ospedaliero Universitaria Meyer IRCCS",
-      "publication_year": 2024,
-      "url": "https://www.meyer.it/index.php/newsletter/agosto-2024/5201-la-nanna-sicura-nel-primo-anno-di-vita",
-      "specialties": [
-        "pediatrics",
-        "neonatology"
-      ],
-      "license": "fair_use_snippet",
-      "language": "es",
-      "original_language": "it",
-      "topics": [
-        "muerte_subita_sueno_seguro",
-        "colecho",
-        "chupete"
-      ],
-      "chunks": [
-        "La nanna sicura nel primo anno di vita (Azienda Ospedaliero Universitaria Meyer IRCCS, 2024). Tema: por qué el sueño del lactante necesita reglas. Hallazgo: durante el sueño del recién nacido y del lactante la respiración y el sueño aún están madurando, y un evento respiratorio como una apnea no siempre va acompañado de un despertar rápido; en casos raros puede causar la muerte. Si la causa queda sin explicar se habla de síndrome de muerte súbita del lactante. Existen además otras situaciones que pueden causar asfixia. Seguir las reglas de sueño seguro reduce de forma notable el riesgo de ambos (fuente en italiano).",
-        "La nanna sicura nel primo anno di vita (Azienda Ospedaliero Universitaria Meyer IRCCS, 2024). Tema: recomendaciones de sueño seguro. Hallazgo: acostar siempre al bebé boca arriba, porque boca abajo y de lado no son posiciones seguras; usar superficies rígidas y estables para dormir; no dormir en la misma cama que el bebé, siendo preferible tener la cuna en la habitación de los padres; mantener la cuna libre de objetos blandos y protectores; evitar el humo de tabaco en el embarazo y tras el parto; ofrecer el chupete a la hora de la siesta y de dormir; evitar el sobrecalentamiento por ropa pesada o ambiente muy caliente; y dar el pecho (fuente en italiano)."
-      ]
-    },
-    {
-      "source_type": "reference",
-      "title": "Indagine 2025: posizione in culla",
-      "organization": "Istituto Superiore di Sanità (ISS), EpiCentro",
-      "publication_year": 2026,
-      "url": "https://www.epicentro.iss.it/sorveglianza02anni/indagine-2025-posizione-culla",
-      "specialties": [
-        "pediatrics"
-      ],
-      "license": "fair_use_snippet",
-      "language": "es",
-      "original_language": "it",
-      "topics": [
-        "muerte_subita_sueno_seguro"
-      ],
-      "chunks": [
-        "Indagine 2025: posizione in culla (Istituto Superiore di Sanità (ISS), EpiCentro, 2026). Tema: cuándo y cuánto ocurre la muerte súbita en el primer año. Hallazgo: según la página, creada en mayo de 2026, alrededor del 50% de las muertes súbitas e inesperadas del primer año de vida se asocian, por exclusión, a la muerte súbita del lactante. El 90-95% de las muertes asociadas al sueño ocurre antes de los 6 meses, con un pico entre los 2 y los 4 meses. En Italia la incidencia es de 0,5 por 1.000 nacidos vivos. (fuente en italiano)",
-        "Indagine 2025: posizione in culla (Istituto Superiore di Sanità (ISS), EpiCentro, 2026). Tema: postura para dormir. Hallazgo: la página indica que, de las conductas que previenen las muertes asociadas al sueño, la más eficaz es que el bebé empiece a dormir boca arriba. Tranquiliza a los padres: dormir boca arriba no aumenta el riesgo de asfixia por aspiración si el bebé regurgita o tiene reflujo gastroesofágico. Una vez que el bebé ha aprendido a darse la vuelta por sí solo, de boca arriba a boca abajo y al revés, no hace falta volver a ponerlo boca arriba si se gira solo mientras duerme. En la encuesta de 2025, el 70,1% de las madres de las regiones participantes declaró acostar boca arriba a su hijo de 4-5 meses (66,7% en 2022), el 16,7% de lado y el 8,2% boca abajo. (fuente en italiano)"
-      ]
-    },
-    {
-      "source_type": "reference",
-      "title": "Sindrome della morte in culla",
-      "organization": "Istituto Superiore di Sanità (ISS), EpiCentro",
-      "publication_year": null,
-      "undated_reason": "Página de EpiCentro sin fecha de creación ni de actualización visible; la noticia más reciente listada es del 14/12/2023 y las referencias epidemiológicas son anteriores.",
-      "url": "https://www.epicentro.iss.it/sids/",
-      "specialties": [
-        "pediatrics"
-      ],
-      "license": "fair_use_snippet",
-      "language": "es",
-      "original_language": "it",
-      "topics": [
-        "muerte_subita_sueno_seguro",
-        "colecho"
-      ],
-      "chunks": [
-        "Sindrome della morte in culla (Istituto Superiore di Sanità (ISS), EpiCentro, sin fecha). Tema: qué es la muerte súbita del lactante. Hallazgo: la página la describe como la muerte súbita que afecta a lactantes de entre un mes y un año y que solo se diagnostica por exclusión, cuando la autopsia y la investigación descartan otras causas, como malformaciones o actos intencionados. No se ha establecido una causa médica única; se propone un modelo de triple riesgo: una vulnerabilidad de base, cambios en la regulación del sueño, la respiración, el pulso o la temperatura en los primeros meses y factores externos desencadenantes. (fuente en italiano)",
-        "Sindrome della morte in culla (Istituto Superiore di Sanità (ISS), EpiCentro, sin fecha). Tema: factores de riesgo de la muerte súbita. Hallazgo: se citan dormir boca abajo, los colchones blandos, las almohadas y los edredones, la exposición al humo del tabaco antes y después del nacimiento (según los CDC, fumar en el embarazo triplica el riesgo y el humo pasivo en los primeros meses lo duplica), la edad materna muy joven, la falta de atención antes y después del parto, el nacimiento prematuro o el bajo peso y las infecciones respiratorias. Los estudios no han encontrado relación entre las vacunas y la muerte súbita. (fuente en italiano)",
-        "Sindrome della morte in culla (Istituto Superiore di Sanità (ISS), EpiCentro, sin fecha). Tema: cómo reducir el riesgo. Hallazgo: la página aconseja acostar al bebé boca arriba, no fumar durante el embarazo ni después del parto, sujetar bien las mantas para que no tapen la cara ni la cabeza y evitar almohadas blandas y objetos que puedan asfixiar. Señala que la lactancia materna en los primeros 6 meses y las vacunas al día reducen el riesgo, que la habitación debe tener una temperatura confortable, ni demasiado caliente ni demasiado fría, y buena ventilación, y que conviene limitar compartir la cama, porque en algunos casos hubo asfixia por un progenitor durante el sueño. (fuente en italiano)"
-      ]
-    },
-    {
-      "source_type": "reference",
-      "title": "Bronchiolite: sintomi, diagnosi, trattamento",
+      "title": "Bronquiolitis: síntomas, diagnóstico y tratamiento",
+      "original_title": "Bronchiolite: sintomi, diagnosi, trattamento",
       "organization": "Ospedale Pediatrico Bambino Gesù",
       "publication_year": 2025,
       "url": "https://www.ospedalebambinogesu.it/bronchiolite-sintomi-diagnosi-trattamento-79960/",
@@ -1221,58 +853,16 @@
         "signos_alarma"
       ],
       "chunks": [
-        "Bronchiolite: sintomi, diagnosi, trattamento (Ospedale Pediatrico Bambino Gesù, 2025). Tema: qué es la bronquiolitis y qué bebés tienen más riesgo. Hallazgo: es una infección viral aguda de las vías respiratorias que afecta sobre todo a menores de un año, en especial en los primeros seis meses, y es más frecuente entre noviembre y marzo. La causa más habitual es el virus respiratorio sincitial. Aumentan el riesgo de una bronquiolitis grave la prematuridad, tener menos de 12 semanas, las cardiopatías congénitas, las anomalías congénitas de las vías respiratorias, la displasia broncopulmonar, la fibrosis quística y las inmunodeficiencias (fuente en italiano).",
-        "Bronchiolite: sintomi, diagnosi, trattamento (Ospedale Pediatrico Bambino Gesù, 2025). Tema: síntomas y evolución de la bronquiolitis. Hallazgo: suele empezar con febrícula y mocos, y después pueden aparecer una tos insistente que empeora poco a poco y dificultad para respirar, con respiración más rápida y hundimiento de la piel en la base del cuello y entre las costillas al respirar. En la mayoría de los casos es benigna y se cura sola en unos 7-12 días. En prematuros o en bebés de menos de seis semanas hay más riesgo de apnea, es decir, pausas respiratorias prolongadas. Una saturación de oxígeno inferior al 92-94% indica gravedad y posible ingreso (fuente en italiano).",
-        "Bronchiolite: sintomi, diagnosi, trattamento (Ospedale Pediatrico Bambino Gesù, 2025). Tema: manejo en casa y cuándo ingresar. Hallazgo: el bebé sin dificultad respiratoria, con saturación superior al 94% en aire ambiente y que puede alimentarse, puede seguirse en casa con su pediatra: lavados nasales, aspiración de secreciones y tomas pequeñas y frecuentes. Los antibióticos no se recomiendan de rutina y los corticoides por vía oral no han demostrado un beneficio significativo. Si el bebé se oxigena mal o rechaza el alimento, debe valorarlo el pediatra de urgencias, que decidirá si ingresa; pesan a favor del ingreso la prematuridad, tener menos de dos meses, las enfermedades crónicas o que los padres no puedan atenderlo en casa (fuente en italiano).",
-        "Bronchiolite: sintomi, diagnosi, trattamento (Ospedale Pediatrico Bambino Gesù, 2025). Tema: prevención de la bronquiolitis. Hallazgo: las medidas principales son evitar el contacto de los bebés con personas enfermas, lavarse las manos, favorecer la lactancia materna, mantener una buena hidratación, hacer lavados nasales con suero y no fumar en casa. Existen además anticuerpos monoclonales contra el virus: uno se reserva a los bebés más frágiles (prematuros o con enfermedad pulmonar crónica o cardiopatía congénita) y otro, en una sola inyección, protege unos cinco meses; la indicación depende de la edad y de los factores de riesgo (fuente en italiano)."
+        "Bronquiolitis: síntomas, diagnóstico y tratamiento (Ospedale Pediatrico Bambino Gesù, 2025). Tema: qué es la bronquiolitis y qué bebés tienen más riesgo. Hallazgo: es una infección viral aguda de las vías respiratorias que afecta sobre todo a menores de un año, en especial en los primeros seis meses, y es más frecuente entre noviembre y marzo. La causa más habitual es el virus respiratorio sincitial. Aumentan el riesgo de una bronquiolitis grave la prematuridad, tener menos de 12 semanas, las cardiopatías congénitas, las anomalías congénitas de las vías respiratorias, la displasia broncopulmonar, la fibrosis quística y las inmunodeficiencias (fuente en italiano).",
+        "Bronquiolitis: síntomas, diagnóstico y tratamiento (Ospedale Pediatrico Bambino Gesù, 2025). Tema: síntomas y evolución de la bronquiolitis. Hallazgo: suele empezar con febrícula y mocos, y después pueden aparecer una tos insistente que empeora poco a poco y dificultad para respirar, con respiración más rápida y hundimiento de la piel en la base del cuello y entre las costillas al respirar. En la mayoría de los casos es benigna y se cura sola en unos 7-12 días. En prematuros o en bebés de menos de seis semanas hay más riesgo de apnea, es decir, pausas respiratorias prolongadas. Una saturación de oxígeno inferior al 92-94% indica gravedad y posible ingreso (fuente en italiano).",
+        "Bronquiolitis: síntomas, diagnóstico y tratamiento (Ospedale Pediatrico Bambino Gesù, 2025). Tema: manejo en casa y cuándo ingresar. Hallazgo: el bebé sin dificultad respiratoria, con saturación superior al 94% en aire ambiente y que puede alimentarse, puede seguirse en casa con su pediatra: lavados nasales, aspiración de secreciones y tomas pequeñas y frecuentes. Los antibióticos no se recomiendan de rutina y los corticoides por vía oral no han demostrado un beneficio significativo. Si el bebé se oxigena mal o rechaza el alimento, debe valorarlo el pediatra de urgencias, que decidirá si ingresa; pesan a favor del ingreso la prematuridad, tener menos de dos meses, las enfermedades crónicas o que los padres no puedan atenderlo en casa (fuente en italiano).",
+        "Bronquiolitis: síntomas, diagnóstico y tratamiento (Ospedale Pediatrico Bambino Gesù, 2025). Tema: prevención de la bronquiolitis. Hallazgo: las medidas principales son evitar el contacto de los bebés con personas enfermas, lavarse las manos, favorecer la lactancia materna, mantener una buena hidratación, hacer lavados nasales con suero y no fumar en casa. Existen además anticuerpos monoclonales contra el virus: uno se reserva a los bebés más frágiles (prematuros o con enfermedad pulmonar crónica o cardiopatía congénita) y otro, en una sola inyección, protege unos cinco meses; la indicación depende de la edad y de los factores de riesgo (fuente en italiano)."
       ]
     },
     {
       "source_type": "reference",
-      "title": "Da 1 a 3 mesi: come dorme",
-      "organization": "Ospedale Pediatrico Bambino Gesù",
-      "publication_year": 2024,
-      "url": "https://www.ospedalebambinogesu.it/da-1-a-3-mesi-come-dorme-80018/",
-      "specialties": [
-        "pediatrics",
-        "neonatology"
-      ],
-      "license": "fair_use_snippet",
-      "language": "es",
-      "original_language": "it",
-      "topics": [
-        "muerte_subita_sueno_seguro",
-        "chupete"
-      ],
-      "chunks": [
-        "Da 1 a 3 mesi: come dorme (Ospedale Pediatrico Bambino Gesù, 2024). Tema: sueño seguro entre 1 y 3 meses. Hallazgo: a esta edad el sueño dura normalmente entre 15 y 20 horas al día. Acostarlo boca arriba es la mejor forma de prevenir la muerte en la cuna. Se puede poner la cuna portátil en la habitación de los padres, pero no se aconseja que el bebé duerma en la cama con ellos, porque eso aumenta el riesgo de muerte súbita y de otras muertes ligadas al sueño. La cuna debe tener un colchón firme con sábana bien ajustada, y peluches, almohadas, mantas, sábanas sueltas y edredones deben quedar lejos. Hay que evitar el sobrecalentamiento, vistiendo al bebé según la temperatura de la habitación (fuente en italiano).",
-        "Da 1 a 3 mesi: come dorme (Ospedale Pediatrico Bambino Gesù, 2024). Tema: rutinas, chupete y tomas nocturnas. Hallazgo: el llanto no siempre significa hambre, así que antes de dar pecho o biberón conviene intentar entender qué le incomoda. El chupete se admite sin forzarlo y, si toma pecho, es mejor esperar a que la lactancia esté bien instaurada (es decir, durante todo el primer mes). Un baño, un cuento o canciones pueden marcar el final del día, y es mejor acostarlo somnoliento pero despierto. En las tomas nocturnas se mantiene la actividad al mínimo, con luz baja y sin jugar ni hablar con el bebé. A algunos bebés les gusta que los envuelvan en una manta ligera, algo que puede hacerse hasta que empiezan a rodar (fuente en italiano)."
-      ]
-    },
-    {
-      "source_type": "reference",
-      "title": "Dormire a pancia in su",
-      "organization": "Ospedale Pediatrico Bambino Gesù",
-      "publication_year": 2023,
-      "url": "https://www.ospedalebambinogesu.it/dormire-a-pancia-in-su-80516/",
-      "specialties": [
-        "pediatrics",
-        "neonatology"
-      ],
-      "license": "fair_use_snippet",
-      "language": "es",
-      "original_language": "it",
-      "topics": [
-        "muerte_subita_sueno_seguro"
-      ],
-      "chunks": [
-        "Dormire a pancia in su (Ospedale Pediatrico Bambino Gesù, 2023). Tema: recomendaciones de sueño seguro frente a la muerte súbita. Hallazgo: se debe acostar al bebé boca arriba sobre un colchón firme y sin almohada, en su cuna y sin juguetes blandos. No hay que abrigarlo demasiado ni dejar que las sábanas le cubran la cabeza, y sus pies deben tocar el fondo de la cuna. No hay que tenerlo en una habitación demasiado caliente (la temperatura ideal es de 20-23 °C) ni cerca de fuentes directas de calor. También se recomienda la lactancia materna y no fumar ni exponer al bebé al humo, ni en el embarazo ni después (fuente en italiano).",
-        "Dormire a pancia in su (Ospedale Pediatrico Bambino Gesù, 2023). Tema: cifras y factores de riesgo de la muerte súbita del lactante. Hallazgo: afecta a cerca de 1 de cada 1.000 bebés y es más frecuente entre los 2 y los 4 meses. Tras generalizarse la posición boca arriba, las muertes bajaron hasta un 50-70%. Son factores de riesgo dormir boca abajo (de lado también es más peligroso que boca arriba), las infecciones respiratorias del invierno, el tabaco y el exceso de ropa o de temperatura. Dormir boca arriba no aumenta el riesgo de ahogarse con una regurgitación (fuente en italiano)."
-      ]
-    },
-    {
-      "source_type": "reference",
-      "title": "Otite media acuta purulenta",
+      "title": "Otitis media aguda purulenta",
+      "original_title": "Otite media acuta purulenta",
       "organization": "Ospedale Pediatrico Bambino Gesù",
       "publication_year": 2024,
       "url": "https://www.ospedalebambinogesu.it/otite-media-acuta-purulenta-89741/",
@@ -1288,13 +878,14 @@
         "cuando_consultar"
       ],
       "chunks": [
-        "Otite media acuta purulenta (Ospedale Pediatrico Bambino Gesù, 2024). Tema: qué es la otitis media aguda y por qué es frecuente en niños pequeños. Hallazgo: es una infección aguda del oído medio, de comienzo rápido y que suele seguir a un resfriado, más frecuente en invierno. Se favorece porque la trompa de Eustaquio funciona mal (en los niños es más corta, más ancha y menos inclinada que en el adulto) y porque el sistema inmunitario es inmaduro. Puede causar fiebre, dolor de oído, irritabilidad, llanto inconsolable, dificultad para dormir, tocarse las orejas y salida de pus, aunque a veces los síntomas son sutiles o faltan. No se contagia de persona a persona (fuente en italiano).",
-        "Otite media acuta purulenta (Ospedale Pediatrico Bambino Gesù, 2024). Tema: prevención y vida diaria con otitis. Hallazgo: se aconseja evitar el contacto con personas resfriadas, sobre todo en menores de un año; también ayudan lavar a menudo las manos y los juguetes, proteger al niño del humo del tabaco y dar el pecho al menos los primeros 6 meses. El diagnóstico lo hace el pediatra con el otoscopio. Si el tímpano se perfora, al salir el líquido el dolor suele desaparecer y la perforación suele cerrarse sola en pocas semanas, y hay que evitar que entre agua en el oído. Se desaconsejan los viajes en avión durante la otitis y se puede volver a la guardería o al colegio cuando la fiebre ha pasado por completo (fuente en italiano)."
+        "Otitis media aguda purulenta (Ospedale Pediatrico Bambino Gesù, 2024). Tema: qué es la otitis media aguda y por qué es frecuente en niños pequeños. Hallazgo: es una infección aguda del oído medio, de comienzo rápido y que suele seguir a un resfriado, más frecuente en invierno. Se favorece porque la trompa de Eustaquio funciona mal (en los niños es más corta, más ancha y menos inclinada que en el adulto) y porque el sistema inmunitario es inmaduro. Puede causar fiebre, dolor de oído, irritabilidad, llanto inconsolable, dificultad para dormir, tocarse las orejas y salida de pus, aunque a veces los síntomas son sutiles o faltan. No se contagia de persona a persona (fuente en italiano).",
+        "Otitis media aguda purulenta (Ospedale Pediatrico Bambino Gesù, 2024). Tema: prevención y vida diaria con otitis. Hallazgo: se aconseja evitar el contacto con personas resfriadas, sobre todo en menores de un año; también ayudan lavar a menudo las manos y los juguetes, proteger al niño del humo del tabaco y dar el pecho al menos los primeros 6 meses. El diagnóstico lo hace el pediatra con el otoscopio. Si el tímpano se perfora, al salir el líquido el dolor suele desaparecer y la perforación suele cerrarse sola en pocas semanas, y hay que evitar que entre agua en el oído. Se desaconsejan los viajes en avión durante la otitis y se puede volver a la guardería o al colegio cuando la fiebre ha pasado por completo (fuente en italiano)."
       ]
     },
     {
       "source_type": "reference",
-      "title": "Raffreddore",
+      "title": "Resfriado",
+      "original_title": "Raffreddore",
       "organization": "Ospedale Pediatrico Bambino Gesù",
       "publication_year": 2025,
       "url": "https://www.ospedalebambinogesu.it/raffreddore-89944/",
@@ -1312,36 +903,14 @@
         "bronquiolitis"
       ],
       "chunks": [
-        "Raffreddore (Ospedale Pediatrico Bambino Gesù, 2025). Tema: el resfriado en recién nacidos y lactantes. Hallazgo: el resfriado lo causan virus (más de 200 distintos), dura unos 3-4 días y es muy contagioso pero poco grave. Cursa con nariz tapada, mocos claros o amarillentos, tos, estornudos y febrícula. Si se extiende a los senos paranasales y a los oídos, puede complicarse con sinusitis u otitis. En recién nacidos y lactantes requiere más atención porque algunos virus pueden llegar a los bronquios y causar bronquiolitis. En menores de 6 meses es importante vigilar la alimentación y la aparición de tos insistente o dificultad para respirar (fuente en italiano).",
-        "Raffreddore (Ospedale Pediatrico Bambino Gesù, 2025). Tema: cuidados y cuándo consultar. Hallazgo: se cura solo, de modo que el tratamiento es sintomático. Mientras el niño no sepa sonarse, son útiles los lavados nasales con suero fisiológico con jeringa sin aguja o dispositivos de farmacia. Los antibióticos no se recomiendan porque la enfermedad es vírica. Se aconseja seguir con la lactancia, hidratar bien y dejar descansar. Conviene consultar al pediatra si aparecen fiebre o tos, y para recién nacidos y lactantes siempre es aconsejable una visita; a los más pequeños puede hacer falta ingreso porque las secreciones dificultan comer y oxigenarse. Lavarse las manos es la medida preventiva más importante (fuente en italiano)."
+        "Resfriado (Ospedale Pediatrico Bambino Gesù, 2025). Tema: el resfriado en recién nacidos y lactantes. Hallazgo: el resfriado lo causan virus (más de 200 distintos), dura unos 3-4 días y es muy contagioso pero poco grave. Cursa con nariz tapada, mocos claros o amarillentos, tos, estornudos y febrícula. Si se extiende a los senos paranasales y a los oídos, puede complicarse con sinusitis u otitis. En recién nacidos y lactantes requiere más atención porque algunos virus pueden llegar a los bronquios y causar bronquiolitis. En menores de 6 meses es importante vigilar la alimentación y la aparición de tos insistente o dificultad para respirar (fuente en italiano).",
+        "Resfriado (Ospedale Pediatrico Bambino Gesù, 2025). Tema: cuidados y cuándo consultar. Hallazgo: se cura solo, de modo que el tratamiento es sintomático. Mientras el niño no sepa sonarse, son útiles los lavados nasales con suero fisiológico con jeringa sin aguja o dispositivos de farmacia. Los antibióticos no se recomiendan porque la enfermedad es vírica. Se aconseja seguir con la lactancia, hidratar bien y dejar descansar. Conviene consultar al pediatra si aparecen fiebre o tos, y para recién nacidos y lactantes siempre es aconsejable una visita; a los más pequeños puede hacer falta ingreso porque las secreciones dificultan comer y oxigenarse. Lavarse las manos es la medida preventiva más importante (fuente en italiano)."
       ]
     },
     {
       "source_type": "reference",
-      "title": "Maternità, la nota congiunta di SIN, SIP, SIGO-AOGOI",
-      "organization": "Società Italiana di Pediatria (SIP)",
-      "publication_year": 2023,
-      "url": "https://sip.it/2023/01/25/maternita-la-nota-congiunta-di-sin-sip-sigo-aogoi/",
-      "specialties": [
-        "pediatrics",
-        "neonatology",
-        "obstetrics"
-      ],
-      "license": "fair_use_snippet",
-      "language": "es",
-      "original_language": "it",
-      "topics": [
-        "muerte_subita_sueno_seguro",
-        "colecho"
-      ],
-      "chunks": [
-        "Maternità, la nota congiunta di SIN, SIP, SIGO-AOGOI (Società Italiana di Pediatria (SIP), 2023). Tema: dormir en la misma cama (colecho) con un recién nacido. Hallazgo: la nota conjunta de las sociedades de neonatología, pediatría y ginecología explica que compartir cama una madre despierta y un recién nacido sano colocado en una posición segura es algo natural, pero que actualmente las sociedades científicas recomiendan evitarlo por considerarse no seguro. Se sugiere volver a dejar al bebé en su propia cuna al terminar la toma, sobre todo si no hay otros cuidadores presentes (familiares o personal sanitario). La cautela no se limita al hospital y abarca todos los primeros 6 meses de vida. (fuente en italiano)",
-        "Maternità, la nota congiunta di SIN, SIP, SIGO-AOGOI (Società Italiana di Pediatria (SIP), 2023). Tema: colapso posnatal súbito y alojamiento conjunto. Hallazgo: este colapso es un evento muy raro (unos 8 casos por cada 100.000 recién nacidos) que ocurre en la primera semana de vida, a veces por enfermedades no diagnosticadas y más a menudo en bebés aparentemente sanos; la prevención se basa en eliminar, en la medida de lo posible, los factores de riesgo asociados. El alojamiento conjunto de madre y bebé es el modelo actual de las maternidades y debe ir con apoyo práctico y psicológico. Si madre y bebé se quedan dormidos juntos de forma espontánea, algo que se considera inevitable, no hay que dramatizarlo, pero sí reforzar la información a las familias sobre el sueño seguro. (fuente en italiano)"
-      ]
-    },
-    {
-      "source_type": "reference",
-      "title": "Virus respiratorio sinciziale e bronchiolite, tutto quello che i genitori devono sapere",
+      "title": "Virus respiratorio sincitial y bronquiolitis: todo lo que los padres deben saber",
+      "original_title": "Virus respiratorio sinciziale e bronchiolite, tutto quello che i genitori devono sapere",
       "organization": "Società Italiana di Pediatria (SIP)",
       "publication_year": 2021,
       "url": "https://sip.it/2021/11/19/virus-respiratorio-sinciziale-e-bronchiolite-tutto-cio-che-i-genitori-devono-sapere/",
@@ -1360,131 +929,14 @@
         "lavados_nasales"
       ],
       "chunks": [
-        "Virus respiratorio sinciziale e bronchiolite, tutto quello che i genitori devono sapere (Società Italiana di Pediatria (SIP), 2021). Tema: cómo proteger al bebé de la bronquiolitis. Hallazgo: la leche materna aporta anticuerpos y reduce el riesgo de infección grave y de ingreso. Conviene lavarse las manos con agua y jabón o gel antes de tocar al bebé, ponerse mascarilla si se tiene catarro y no besarlo, mantenerlo lejos de personas con resfriado (también niños), limpiar superficies y juguetes que toca y no fumar en casa. En prematuros o con cardiopatía o enfermedad pulmonar, hay que preguntar al pediatra si procede una protección con anticuerpos monoclonales. (fuente en italiano)",
-        "Virus respiratorio sinciziale e bronchiolite, tutto quello che i genitori devono sapere (Società Italiana di Pediatria (SIP), 2021). Tema: cuidados de la bronquiolitis. Hallazgo: no hay tratamientos eficaces para la bronquiolitis; en el hospital se dan cuidados de apoyo para mantener una buena hidratación y oxígeno si hace falta. En casa ayudan los lavados nasales con suero salino y la aspiración de secreciones, sobre todo antes de las tomas, ofreciendo líquidos a sorbos y comidas pequeñas y frecuentes. Los broncodilatadores, los corticoides y los antibióticos no están indicados de rutina; los antibióticos, en particular, no deben usarse porque la causa es un virus y las sobreinfecciones bacterianas son raras. (fuente en italiano)"
+        "Virus respiratorio sincitial y bronquiolitis: todo lo que los padres deben saber (Società Italiana di Pediatria (SIP), 2021). Tema: cómo proteger al bebé de la bronquiolitis. Hallazgo: la leche materna aporta anticuerpos y reduce el riesgo de infección grave y de ingreso. Conviene lavarse las manos con agua y jabón o gel antes de tocar al bebé, ponerse mascarilla si se tiene catarro y no besarlo, mantenerlo lejos de personas con resfriado (también niños), limpiar superficies y juguetes que toca y no fumar en casa. En prematuros o con cardiopatía o enfermedad pulmonar, hay que preguntar al pediatra si procede una protección con anticuerpos monoclonales. (fuente en italiano)",
+        "Virus respiratorio sincitial y bronquiolitis: todo lo que los padres deben saber (Società Italiana di Pediatria (SIP), 2021). Tema: cuidados de la bronquiolitis. Hallazgo: no hay tratamientos eficaces para la bronquiolitis; en el hospital se dan cuidados de apoyo para mantener una buena hidratación y oxígeno si hace falta. En casa ayudan los lavados nasales con suero salino y la aspiración de secreciones, sobre todo antes de las tomas, ofreciendo líquidos a sorbos y comidas pequeñas y frecuentes. Los broncodilatadores, los corticoides y los antibióticos no están indicados de rutina; los antibióticos, en particular, no deben usarse porque la causa es un virus y las sobreinfecciones bacterianas son raras. (fuente en italiano)"
       ]
     },
     {
       "source_type": "reference",
-      "title": "赤ちゃんが安全に眠れるように ～1歳未満の赤ちゃんを育てるみなさまへ～",
-      "organization": "Children and Families Agency (こども家庭庁, Japón)",
-      "publication_year": null,
-      "undated_reason": "la página no muestra fecha de publicación; cita cifras de 2025 y es la versión vigente",
-      "url": "https://www.cfa.go.jp/policies/boshihoken/kenkou/sids",
-      "specialties": [
-        "pediatrics",
-        "neonatology"
-      ],
-      "license": "fair_use_snippet",
-      "language": "es",
-      "original_language": "ja",
-      "topics": [
-        "muerte_subita_sueno_seguro",
-        "colecho"
-      ],
-      "chunks": [
-        "赤ちゃんが安全に眠れるように ～1歳未満の赤ちゃんを育てるみなさまへ～ (Children and Families Agency, sin fecha). Tema: cuatro medidas para reducir el riesgo de muerte súbita del lactante. Hallazgo: la página indica que en 2025 murieron 59 bebés por esta causa en Japón, la 4.ª causa de muerte en el primer año, y que no hay una prevención establecida. Se recomienda: acostar al bebé boca arriba hasta el año, salvo indicación médica; dar el pecho en la medida de lo posible; que ningún adulto que trate con el bebé fume, y que durante el embarazo la madre no fume ni respire humo ajeno; y no abrigarlo en exceso (si el pecho está sudado, ajustar la ropa o la temperatura). (fuente en japonés)",
-        "赤ちゃんが安全に眠れるように ～1歳未満の赤ちゃんを育てるみなさまへ～ (Children and Families Agency, sin fecha). Tema: cinco medidas para reducir la asfixia durante el sueño. Hallazgo: usar colchón firme y sin inclinación, sin cojines blandos; no usar edredón hasta el año, regulando la temperatura con ropa de abrigo tipo saco o con la climatización; no dejar peluches, toallas ni cables en la cuna; dormir en la misma habitación de los adultos pero en una cuna propia; y elegir cunas y barandillas que cumplan las normas de seguridad del país, leyendo la edad y las instrucciones de uso. (fuente en japonés)",
-        "赤ちゃんが安全に眠れるように ～1歳未満の赤ちゃんを育てるみなさまへ～ (Children and Families Agency, sin fecha). Tema: riesgos de compartir cama y a quién consultar. Hallazgo: dormir pegado a un adulto puede provocar que el cuerpo del adulto cubra la boca o la nariz del bebé. El riesgo es especialmente alto si quien duerme con él ha tomado fármacos que dan somnolencia o bajan la atención, si ha bebido alcohol o si el bebé nació prematuro o con bajo peso. Ante dudas con la lactancia, se puede consultar en un hospital con apoyo a la lactancia o en el centro de salud. (fuente en japonés)"
-      ]
-    },
-    {
-      "source_type": "reference",
-      "title": "Vol.570 就寝時の子どもの窒息事故に注意しましょう。ベビーベッドを利用することで避けられる事故があります。",
-      "organization": "Consumer Affairs Agency (消費者庁, Japón)",
-      "publication_year": 2021,
-      "url": "https://www.caa.go.jp/policies/policy/consumer_safety/child/project_001/mail/20211028/",
-      "specialties": [
-        "pediatrics",
-        "emergency_medicine"
-      ],
-      "license": "fair_use_snippet",
-      "language": "es",
-      "original_language": "ja",
-      "topics": [
-        "muerte_subita_sueno_seguro",
-        "colecho"
-      ],
-      "chunks": [
-        "Vol.570 就寝時の子どもの窒息事故に注意しましょう。ベビーベッドを利用することで避けられる事故があります。 (Consumer Affairs Agency, 2021). Tema: asfixia durante el sueño en menores de 5 años en Japón. Hallazgo: según el boletín, con datos de 2020, hubo 93 muertes por accidente no vial en menores de 5 años, 63 de ellas por asfixia, y cerca del 90 % de estas en niños de 1 año o menos. Entre las causas de muerte de bebés de 0 años, los accidentes fueron la 5.ª y la muerte súbita la 3.ª. Los casos remitidos por hospitales incluyen un bebé de 5 meses acostado en la colchoneta viscoelástica que usaba habitualmente y que se dio la vuelta por primera vez y quedó boca abajo, y un bebé de 0 meses sobre el que quedó un adulto que dormía a su lado. (fuente en japonés)",
-        "Vol.570 就寝時の子どもの窒息事故に注意しましょう。ベビーベッドを利用することで避けられる事故があります。 (Consumer Affairs Agency, 2021). Tema: medidas para dormir con seguridad. Hallazgo: se recomienda un colchón firme en el que no se hunda la cara, acostar al bebé en una cuna siempre que sea posible, boca arriba hasta el año, usar un edredón ligero que el bebé pueda apartar y no colocar cerca de su cara objetos que puedan tapar la nariz y la boca o rodear el cuello. La cuna puede evitar también otros accidentes como las caídas, siempre que se respete la edad indicada y se sigan las instrucciones. (fuente en japonés)"
-      ]
-    },
-    {
-      "source_type": "reference",
-      "title": "영아 돌연사 증후군(Sudden Infant Death Syndrome, SIDS) 예방법",
-      "organization": "Korean Pediatric Society (대한소아청소년과학회)",
-      "publication_year": null,
-      "undated_reason": "la página (sección de información para padres) no muestra fecha de publicación ni de actualización",
-      "url": "https://www.pediatrics.or.kr/bbs/index.html?code=infantcare&number=8810&mode=view",
-      "specialties": [
-        "pediatrics",
-        "neonatology"
-      ],
-      "license": "fair_use_snippet",
-      "language": "es",
-      "original_language": "ko",
-      "topics": [
-        "muerte_subita_sueno_seguro",
-        "colecho",
-        "chupete"
-      ],
-      "chunks": [
-        "영아 돌연사 증후군(Sudden Infant Death Syndrome, SIDS) 예방법 (Korean Pediatric Society, sin fecha). Tema: qué es el síndrome de muerte súbita del lactante y cuándo es más frecuente. Hallazgo: se define como la muerte inesperada y repentina de un bebé menor de 1 año, y ocurre sobre todo entre los 2 y los 4 meses de vida. La página aclara que los padres sí pueden hacer cosas concretas para proteger a su bebé mientras duerme, y que la medida más importante es la postura al dormir. (fuente en coreano)",
-        "영아 돌연사 증후군(Sudden Infant Death Syndrome, SIDS) 예방법 (Korean Pediatric Society, sin fecha). Tema: postura y superficie de sueño del bebé menor de 1 año. Hallazgo: hay que acostarlo siempre boca arriba, también en las siestas. Si se duerme en la silla del coche, el cochecito o el portabebés, conviene pasarlo cuanto antes a una cuna de superficie firme. El envoltorio de tela no debe apretar y se deja de usar cuando empieza a darse la vuelta. Se evitan almohadas, colchas, edredones, pieles de oveja, protectores de cuna y juguetes sueltos, y los posicionadores de sueño o colchones especiales no han demostrado reducir el riesgo. (fuente en coreano)",
-        "영아 돌연사 증후군(Sudden Infant Death Syndrome, SIDS) 예방법 (Korean Pediatric Society, sin fecha). Tema: dónde duerme el bebé y cómo se le da el pecho por la noche. Hallazgo: se recomienda que duerma en la misma habitación que los padres, pero en una cama aparte, cerca de los padres y sin compartir la manta, al menos hasta los 6 meses y mejor hasta el año, lo que según la página puede reducir el riesgo hasta un 50 %. Dormir en la cama de los adultos supone riesgo de muerte súbita y de asfixia. Dar el pecho en la cama es más seguro que en un sofá o sillón, retirando almohadas, mantas y otra ropa de cama blanda por si alguien se queda dormido durante la toma. (fuente en coreano)",
-        "영아 돌연사 증후군(Sudden Infant Death Syndrome, SIDS) 예방법 (Korean Pediatric Society, sin fecha). Tema: lactancia, humo de tabaco y chupete como factores relacionados con la muerte súbita. Hallazgo: se aconseja la lactancia materna activa durante unos 6 meses y, al empezar los sólidos, mantenerla al menos hasta los 12 meses. Si la madre fumó en el embarazo o los padres fuman tras el parto, el riesgo se multiplica por más de 2. El chupete durante el sueño puede ayudar, pero se ofrece a partir del mes de vida, cuando la lactancia ya está establecida, y no hace falta volver a ponerlo si se cae dormido. (fuente en coreano)"
-      ]
-    },
-    {
-      "source_type": "reference",
-      "title": "Veilig slapen (Kind en Gezin)",
-      "organization": "Kind en Gezin (Agentschap Opgroeien)",
-      "publication_year": null,
-      "undated_reason": "Página de kindengezin.be sin fecha de publicación ni de revisión visible; consultada el 2026-11-06",
-      "url": "https://www.kindengezin.be/nl/thema/slapen/veilig-slapen",
-      "specialties": [
-        "pediatrics",
-        "neonatology"
-      ],
-      "license": "fair_use_snippet",
-      "language": "es",
-      "original_language": "nl",
-      "topics": [
-        "muerte_subita_sueno_seguro"
-      ],
-      "chunks": [
-        "Veilig slapen (Kind en Gezin, Agentschap Opgroeien). Tema: los cinco consejos de sueño seguro. Hallazgo: se acuesta al bebé boca arriba, porque boca abajo y de lado no son posiciones seguras para dormir, y se cambia su postura cuando está despierto. Se elige una cama segura con colchón firme y un saco de dormir, y se permite un paño de apego (knuffeldoekje). El bebé duerme en la misma habitación que los padres pero no en la misma cama (compartir cuarto, no colecho): conviene observar, escuchar y sentir. Se ventila bien, se mantiene la habitación sin humo y se evita que el bebé pase demasiado calor, aunque la página no da una temperatura en grados.",
-        "Veilig slapen (Kind en Gezin, Agentschap Opgroeien). Tema: muerte súbita del lactante (wiegendood). Hallazgo: la página la describe como la muerte inesperada durante el sueño de un bebé que parecía sano, cuya causa exacta aún no se conoce. Los estudios indican que la lactancia materna y el chupete (fopspeen) reducen el riesgo de muerte inesperada durante el sueño. Una muerte inesperada también puede ser un accidente, por ejemplo si el bebé queda atrapado entre el colchón y la pared blanda de una cuna de viaje.",
-        "Veilig slapen (Kind en Gezin, Agentschap Opgroeien). Tema: cuándo es más importante el sueño seguro. Hallazgo: los bebés son más vulnerables durante los primeros seis meses, y aplicar todos los consejos sobre todo en ese periodo reduce mucho el riesgo. Algunos riesgos disminuyen a medida que el bebé se desarrolla, pero el sueño seguro sigue siendo importante en la etapa de bebé y de niño pequeño, con riesgos que cambian con la edad, como empezar a darse la vuelta, agarrar objetos o salir trepando de la cuna. Los cambios, como empezar en la guardería, pueden causar estrés, y se recomienda hacer la transición de forma gradual. Para dudas sobre cómo aplicar los consejos, la página remite a la enfermera de pediatría."
-      ]
-    },
-    {
-      "source_type": "guideline",
-      "title": "JGZ-richtlijn Preventie wiegendood",
-      "organization": "Nederlands Centrum Jeugdgezondheid (NCJ, JGZ-richtlijnen)",
-      "publication_year": 2017,
-      "url": "https://www.jgzrichtlijnen.nl/richtlijn/jgz-richtlijn-preventie-wiegendood/",
-      "specialties": [
-        "pediatrics",
-        "neonatology"
-      ],
-      "license": "fair_use_snippet",
-      "language": "es",
-      "original_language": "nl",
-      "topics": [
-        "muerte_subita_sueno_seguro"
-      ],
-      "chunks": [
-        "JGZ-richtlijn Preventie wiegendood (Nederlands Centrum Jeugdgezondheid, 2017). Tema: postura y lugar para dormir. Hallazgo: la guía pide acostar siempre al bebé boca arriba y no dejarlo nunca dormir boca abajo, que según el protocolo para guarderías multiplica por 4 o 5 el riesgo de muerte súbita respecto a la media. Siguiendo a la Academia Americana de Pediatría, la posición de lado también debe evitarse desde el nacimiento. Concluye que el lugar más seguro para un bebé menor de 4 meses es su propia cuna en el dormitorio de los padres, plazo que conviene alargar a 6 meses si los padres fuman. Dormir en la misma cama aumenta el riesgo, y dormir con él en un sofá o sillón supone un riesgo muy alto.",
-        "JGZ-richtlijn Preventie wiegendood (Nederlands Centrum Jeugdgezondheid, 2017). Tema: ropa de cama, colchón y temperatura. Hallazgo: la guía desaconseja el edredón, que aísla tanto como tres o cuatro mantas finas y provoca con facilidad estrés por calor. Un colchón blando aumenta el riesgo y los pufs no deben usarse para dormir. Recomienda una temperatura máxima de 18 grados en la habitación; para un bebé nacido a término no hace falta que esté más caldeada que la de un adulto. Envolver al bebé reduce la pérdida de calor y aumenta el riesgo de estrés térmico si se le cubre la cabeza, y hay que dejar de hacerlo de inmediato en cuanto el bebé intenta darse la vuelta.",
-        "JGZ-richtlijn Preventie wiegendood (Nederlands Centrum Jeugdgezondheid, 2017). Tema: chupete, lactancia, tabaco y vigilancia. Hallazgo: según la guía hay indicios sólidos de que el uso regular del chupete ayuda a prevenir la muerte súbita, siempre que el bebé esté acostumbrado y lo tenga también en su último sueño; con lactancia materna se aconseja aplazarlo durante el primer mes, y el protocolo para guarderías recomienda ir retirándolo a partir de los 10 meses. La lactancia se considera protectora, aunque no de forma unánime. El humo del tabaco, durante el embarazo y después, es un factor de riesgo importante, y la presencia de supervisión es un factor protector.",
-        "JGZ-richtlijn Preventie wiegendood (Nederlands Centrum Jeugdgezondheid, 2017). Tema: muerte súbita en la guardería. Hallazgo: la guía recoge datos de Estados Unidos según los cuales la muerte súbita aparecía en guarderías y en casas de cuidadoras (gastouders) más de dos veces más a menudo de lo esperado, y esos casos suponían entre el 15 y el 20 por ciento del total. El protocolo para guarderías pide no acostar nunca a un bebé boca abajo y señala que, en los bebés de 3 a 9 meses, el riesgo en la guardería es relativamente mayor que en casa. La propia página advierte de que está en revisión y de que parte de su contenido puede estar desactualizado."
-      ]
-    },
-    {
-      "source_type": "reference",
-      "title": "Bronkiolitt (Helsenorge)",
+      "title": "Bronquiolitis (Helsenorge)",
+      "original_title": "Bronkiolitt (Helsenorge)",
       "organization": "Helsenorge.no (Helsedirektoratet)",
       "publication_year": 2026,
       "url": "https://www.helsenorge.no/sykdom/lunger-og-luftveier/bronkiolitt-rs-virus/",
@@ -1500,35 +952,14 @@
         "cuando_consultar"
       ],
       "chunks": [
-        "Bronkiolitt (Helsenorge, Helsedirektoratet, 2026). Tema: qué es la bronquiolitis y cuánto dura. Hallazgo: afecta sobre todo a niños menores de dos años y la mayoría se contagia en invierno. Los síntomas son respiración pesada, tos y sibilancias en el pecho, un resfriado intenso con moqueo, fiebre ligera, estado general disminuido y flacidez. La mayoría de los niños se cura sola en 1-2 semanas con reposo y suficiente líquido, aunque algunos pueden tener problemas respiratorios más graves.",
-        "Bronkiolitt (Helsenorge, Helsedirektoratet, 2026). Tema: cuándo contactar con un médico por bronquiolitis. Hallazgo: la página dice que hay que contactar con un médico si hay preocupación por el niño, y hacerlo rápido si el niño hace mucho esfuerzo para coger aire, tiene el pecho congestionado o respira pesadamente. También hay que contactar con un médico si le cuesta comer o beber. La página no da teléfonos. Explica que algunos niños ingresan en el hospital, donde se vigila la respiración y se asegura líquido y nutrición, y que algunos reciben oxígeno extra o líquido por vía intravenosa."
+        "Bronquiolitis (Helsenorge, Helsedirektoratet, 2026). Tema: qué es la bronquiolitis y cuánto dura. Hallazgo: afecta sobre todo a niños menores de dos años y la mayoría se contagia en invierno. Los síntomas son respiración pesada, tos y sibilancias en el pecho, un resfriado intenso con moqueo, fiebre ligera, estado general disminuido y flacidez. La mayoría de los niños se cura sola en 1-2 semanas con reposo y suficiente líquido, aunque algunos pueden tener problemas respiratorios más graves.",
+        "Bronquiolitis (Helsenorge, Helsedirektoratet, 2026). Tema: cuándo contactar con un médico por bronquiolitis. Hallazgo: la página dice que hay que contactar con un médico si hay preocupación por el niño, y hacerlo rápido si el niño hace mucho esfuerzo para coger aire, tiene el pecho congestionado o respira pesadamente. También hay que contactar con un médico si le cuesta comer o beber. La página no da teléfonos. Explica que algunos niños ingresan en el hospital, donde se vigila la respiración y se asegura líquido y nutrición, y que algunos reciben oxígeno extra o líquido por vía intravenosa."
       ]
     },
     {
       "source_type": "reference",
-      "title": "Krybbedød (SIDS) - hvordan redusere risiko? (Helsenorge)",
-      "organization": "Helsenorge.no (Helsedirektoratet)",
-      "publication_year": 2022,
-      "url": "https://www.helsenorge.no/barn/krybbedod/",
-      "specialties": [
-        "pediatrics",
-        "general_medicine"
-      ],
-      "license": "fair_use_snippet",
-      "language": "es",
-      "original_language": "no",
-      "topics": [
-        "muerte_subita_sueno_seguro"
-      ],
-      "chunks": [
-        "Krybbedød (SIDS) - hvordan redusere risiko? (Helsenorge, Helsedirektoratet, 2022). Tema: qué es la muerte súbita del lactante y cuándo es más rara. Hallazgo: la página indica que es poco frecuente y que ocurre muy raramente cuando el bebé tiene más de seis meses. Hasta 25 de cada 100 casos podrían deberse al tabaquismo pasivo. En Noruega las muertes bajaron de 2,3 por 1000 lactantes antes de una campaña nacional a 0,6 por 1000 después. La página señala que no da síntomas ni señales de aviso previas.",
-        "Krybbedød (SIDS) - hvordan redusere risiko? (Helsenorge, Helsedirektoratet, 2022). Tema: medidas para reducir el riesgo de muerte súbita. Hallazgo: el bebé debe dormir boca arriba, no boca abajo ni de lado, y tener su propia cama en el dormitorio de los padres durante el primer medio año. Se mantienen fuera de la cama almohadas, peluches y otros objetos blandos, y no se le tapa la cabeza. Se aconseja evitar el humo cerca del bebé y durante el embarazo, dar el pecho si es posible, y seguir el calendario de vacunas. El chupete parece reducir el riesgo.",
-        "Krybbedød (SIDS) - hvordan redusere risiko? (Helsenorge, Helsedirektoratet, 2022). Tema: dormir con el bebé en la misma cama y monitores de respiración. Hallazgo: según la página, dormir con el bebé aumenta el riesgo, que probablemente puede reducirse si quien duerme con él no fuma ni usa snus, no está bajo los efectos de alcohol, drogas o medicamentos sedantes, y la cama es ancha con colchón firme. En ese caso el bebé debe tener su propio edredón infantil pequeño y ligero, sin almohada, y no debe dormir boca abajo sobre el pecho del adulto mientras este duerme. Las alarmas de respiración pueden recomendarse a algunos niños con enfermedades que afectan a la respiración. No hay garantía de que un monitor de respiración reduzca el riesgo de muerte súbita, y por eso los médicos no suelen recomendarlo."
-      ]
-    },
-    {
-      "source_type": "reference",
-      "title": "Bronquiolite: folheto informativo para pais e cuidadores",
+      "title": "Bronquiolitis: folleto informativo para padres y cuidadores",
+      "original_title": "Bronquiolite: folheto informativo para pais e cuidadores",
       "organization": "Direção-Geral da Saúde (DGS, Portugal)",
       "publication_year": 2012,
       "url": "https://www.dgs.pt/ficheiros-de-upload-3/norma_016_2012_anexo-iii-para-impressao-pdf.aspx",
@@ -1544,36 +975,15 @@
         "signos_alarma"
       ],
       "chunks": [
-        "Bronquiolite: folheto informativo para pais e cuidadores (Direção-Geral da Saúde, 2012). Tema: qué es la bronquiolitis y cómo prevenirla. Hallazgo: es una infección respiratoria aguda vírica de los dos primeros años de vida, con el virus sincitial respiratorio como principal responsable, más frecuente de noviembre a abril. Es muy contagiosa por las secreciones nasales, la tos y las manos, y los niños mayores y adultos pueden pasarla como un resfriado leve y contagiar. La medida más eficaz es lavarse las manos; también evitar lugares con mucha gente, no fumar ni dejar fumar donde está el bebé y amamantar, porque la lactancia reduce el riesgo de ingreso. (fuente en portugués)",
-        "Bronquiolite: folheto informativo para pais e cuidadores (Direção-Geral da Saúde, 2012). Tema: síntomas, evolución y bebés de mayor riesgo. Hallazgo: suele haber mocos y tos seca que empeora poco a poco, a veces respiración ruidosa con pitos, más esfuerzo respiratorio con cansancio y respiración muy rápida, dificultad para comer y beber, vómitos con la tos y fiebre habitualmente baja. En la mayoría de los casos se resuelve en un plazo de hasta 2 semanas y puede volver a la guardería si está cómodo, sin fiebre y comiendo bien. Tienen más riesgo de enfermedad grave los menores de 12 semanas, los prematuros y los niños con enfermedad pulmonar crónica, cardiaca, neurológica grave, inmunodeficiencia o síndrome de Down. (fuente en portugués)",
-        "Bronquiolite: folheto informativo para pais e cuidadores (Direção-Geral da Saúde, 2012). Tema: cuidados en casa y señales para consultar. Hallazgo: no hay tratamiento específico y los antibióticos no están indicados por ser vírica. En casa: dejarlo tranquilo, manipulándolo poco, fraccionar las tomas y mantenerlo incorporado después, limpiar la nariz, elevar algo el cabecero y vigilar la respiración. Hay que acudir a un servicio de salud o pedir consejo sanitario por teléfono si empeora la respiración (muy cansado, irritable o sin poder mamar), toma menos de la mitad de lo habitual en 2 o más tomas, vomita a menudo y en gran cantidad, rechaza la comida o los líquidos más de 4-6 horas o lleva el pañal seco más de 12 horas. Se llama al 112 si hay mucha dificultad para respirar o pausas, palidez o labios grisáceos o azulados, o somnolencia excesiva o postración. (fuente en portugués)"
+        "Bronquiolitis: folleto informativo para padres y cuidadores (Direção-Geral da Saúde, 2012). Tema: qué es la bronquiolitis y cómo prevenirla. Hallazgo: es una infección respiratoria aguda vírica de los dos primeros años de vida, con el virus sincitial respiratorio como principal responsable, más frecuente de noviembre a abril. Es muy contagiosa por las secreciones nasales, la tos y las manos, y los niños mayores y adultos pueden pasarla como un resfriado leve y contagiar. La medida más eficaz es lavarse las manos; también evitar lugares con mucha gente, no fumar ni dejar fumar donde está el bebé y amamantar, porque la lactancia reduce el riesgo de ingreso. (fuente en portugués)",
+        "Bronquiolitis: folleto informativo para padres y cuidadores (Direção-Geral da Saúde, 2012). Tema: síntomas, evolución y bebés de mayor riesgo. Hallazgo: suele haber mocos y tos seca que empeora poco a poco, a veces respiración ruidosa con pitos, más esfuerzo respiratorio con cansancio y respiración muy rápida, dificultad para comer y beber, vómitos con la tos y fiebre habitualmente baja. En la mayoría de los casos se resuelve en un plazo de hasta 2 semanas y puede volver a la guardería si está cómodo, sin fiebre y comiendo bien. Tienen más riesgo de enfermedad grave los menores de 12 semanas, los prematuros y los niños con enfermedad pulmonar crónica, cardiaca, neurológica grave, inmunodeficiencia o síndrome de Down. (fuente en portugués)",
+        "Bronquiolitis: folleto informativo para padres y cuidadores (Direção-Geral da Saúde, 2012). Tema: cuidados en casa y señales para consultar. Hallazgo: no hay tratamiento específico y los antibióticos no están indicados por ser vírica. En casa: dejarlo tranquilo, manipulándolo poco, fraccionar las tomas y mantenerlo incorporado después, limpiar la nariz, elevar algo el cabecero y vigilar la respiración. Hay que acudir a un servicio de salud o pedir consejo sanitario por teléfono si empeora la respiración (muy cansado, irritable o sin poder mamar), toma menos de la mitad de lo habitual en 2 o más tomas, vomita a menudo y en gran cantidad, rechaza la comida o los líquidos más de 4-6 horas o lleva el pañal seco más de 12 horas. Se llama al 112 si hay mucha dificultad para respirar o pausas, palidez o labios grisáceos o azulados, o somnolencia excesiva o postración. (fuente en portugués)"
       ]
     },
     {
       "source_type": "reference",
-      "title": "Síndrome de Morte Súbita do Lactente",
-      "organization": "Serviço Nacional de Saúde (SNS 24)",
-      "publication_year": null,
-      "undated_reason": "La página de SNS 24 no muestra fecha de publicación ni de actualización ni lista fuentes.",
-      "url": "https://www.sns24.gov.pt/tema/saude-da-crianca/sindrome-de-morte-subita-do-lactente/",
-      "specialties": [
-        "pediatrics"
-      ],
-      "license": "fair_use_snippet",
-      "language": "es",
-      "original_language": "pt",
-      "topics": [
-        "muerte_subita_sueno_seguro",
-        "chupete"
-      ],
-      "chunks": [
-        "Síndrome de Morte Súbita do Lactente (Serviço Nacional de Saúde, SNS 24, sin fecha). Tema: qué es la muerte súbita del lactente. Hallazgo: se define como la muerte repentina y sin explicación de un bebé, generalmente durante el sueño, en el primer año de vida. En los países desarrollados es una de las principales causas de muerte en ese periodo, sin contar el recién nacido. Las causas siguen siendo desconocidas y pueden intervenir varios factores, genéticos y ambientales. (fuente en portugués)",
-        "Síndrome de Morte Súbita do Lactente (Serviço Nacional de Saúde, SNS 24, sin fecha). Tema: medidas para reducir el riesgo durante el sueño. Hallazgo: acostar al bebé boca arriba, porque el riesgo aumenta mucho si duerme de lado o boca abajo; no cubrirlo por encima de la línea de los hombros, con la manta sujeta a los lados y los pies tocando el fondo de la cuna; no fumar ni permitir que se fume donde respira. Usar cuna propia con colchón firme y sin huecos, no abrigarlo en exceso, mantener la habitación entre 18 y 21 ºC y evitar almohadas, peluches y objetos sueltos. Si es posible, amamantar: la lactancia y el chupete se describen como factores protectores. (fuente en portugués)"
-      ]
-    },
-    {
-      "source_type": "reference",
-      "title": "Bronquiolite aguda",
+      "title": "Bronquiolitis aguda",
+      "original_title": "Bronquiolite aguda",
       "organization": "Sociedade Brasileira de Pediatria (SBP)",
       "publication_year": 2026,
       "url": "https://www.sbp.com.br/pediatria-para-familias/doencas/bronquiolite-aguda/",
@@ -1590,14 +1000,15 @@
         "cuando_consultar"
       ],
       "chunks": [
-        "Bronquiolite aguda (Sociedade Brasileira de Pediatria, 2026). Tema: qué es la bronquiolitis y cómo empieza. Hallazgo: es una infección vírica que afecta a la parte más delicada del pulmón de los bebés, los bronquiolos. El virus sincitial respiratorio es la causa principal, aunque también pueden causarla adenovirus, parainfluenza, gripe y rinovirus. Empieza como un resfriado, con nariz tapada, moco claro, tos, fiebre, rechazo de las tomas e irritabilidad. Tras uno o dos días puede haber más tos, dificultad para respirar, respiración rápida y sibilancias. (fuente en portugués)",
-        "Bronquiolite aguda (Sociedade Brasileira de Pediatria, 2026). Tema: signos de gravedad y cuándo consultar. Hallazgo: en los casos más graves puede haber somnolencia, quejido, cianosis (labios y extremidades azulados) y pausas respiratorias. En casos de tos persistente, dificultad para respirar, respiración rápida y somnolencia, el bebé debe ser valorado por un médico de inmediato. Tienen más riesgo de enfermedad grave y de ingreso, a veces en cuidados intensivos, los menores de un año, los prematuros, los niños con cardiopatía o enfermedad pulmonar crónica, con inmunodeficiencia o con bajo peso al nacer. (fuente en portugués)",
-        "Bronquiolite aguda (Sociedade Brasileira de Pediatria, 2026). Tema: manejo y prevención. Hallazgo: no hay tratamiento específico. La mayoría de los casos, sobre todo sin factores de riesgo, se resuelve sin medicamentos y los leves pueden seguirse en casa vigilando la fiebre y la respiración y manteniendo al bebé hidratado y bien alimentado. Los graves pueden necesitar oxígeno en el hospital. Para prevenir: evitar el contacto con personas resfriadas, lavarse las manos y usar alcohol al 70% antes de coger al bebé, evitar aglomeraciones, dar lactancia materna (exclusiva hasta los 6 meses), evitar el humo del tabaco y mantener las vacunas al día. (fuente en portugués)"
+        "Bronquiolitis aguda (Sociedade Brasileira de Pediatria, 2026). Tema: qué es la bronquiolitis y cómo empieza. Hallazgo: es una infección vírica que afecta a la parte más delicada del pulmón de los bebés, los bronquiolos. El virus sincitial respiratorio es la causa principal, aunque también pueden causarla adenovirus, parainfluenza, gripe y rinovirus. Empieza como un resfriado, con nariz tapada, moco claro, tos, fiebre, rechazo de las tomas e irritabilidad. Tras uno o dos días puede haber más tos, dificultad para respirar, respiración rápida y sibilancias. (fuente en portugués)",
+        "Bronquiolitis aguda (Sociedade Brasileira de Pediatria, 2026). Tema: signos de gravedad y cuándo consultar. Hallazgo: en los casos más graves puede haber somnolencia, quejido, cianosis (labios y extremidades azulados) y pausas respiratorias. En casos de tos persistente, dificultad para respirar, respiración rápida y somnolencia, el bebé debe ser valorado por un médico de inmediato. Tienen más riesgo de enfermedad grave y de ingreso, a veces en cuidados intensivos, los menores de un año, los prematuros, los niños con cardiopatía o enfermedad pulmonar crónica, con inmunodeficiencia o con bajo peso al nacer. (fuente en portugués)",
+        "Bronquiolitis aguda (Sociedade Brasileira de Pediatria, 2026). Tema: manejo y prevención. Hallazgo: no hay tratamiento específico. La mayoría de los casos, sobre todo sin factores de riesgo, se resuelve sin medicamentos y los leves pueden seguirse en casa vigilando la fiebre y la respiración y manteniendo al bebé hidratado y bien alimentado. Los graves pueden necesitar oxígeno en el hospital. Para prevenir: evitar el contacto con personas resfriadas, lavarse las manos y usar alcohol al 70% antes de coger al bebé, evitar aglomeraciones, dar lactancia materna (exclusiva hasta los 6 meses), evitar el humo del tabaco y mantener las vacunas al día. (fuente en portugués)"
       ]
     },
     {
       "source_type": "reference",
-      "title": "Otite Média",
+      "title": "Otitis media",
+      "original_title": "Otite Média",
       "organization": "Sociedade Brasileira de Pediatria (SBP)",
       "publication_year": 2023,
       "url": "https://www.sbp.com.br/pediatria-para-familias/doencas/otite-media/",
@@ -1613,60 +1024,15 @@
         "signos_alarma"
       ],
       "chunks": [
-        "Otite Média (Sociedade Brasileira de Pediatria, 2023). Tema: por qué la otitis media es tan frecuente en los más pequeños y cómo se diagnostica. Hallazgo: los menores de 2 años son el grupo más afectado, por un sistema inmune inmaduro, los resfriados frecuentes por la guardería y una trompa de Eustaquio más corta, horizontal y flácida, que deja pasar secreciones al oído medio. Los síntomas por sí solos no bastan: el niño que se lleva la mano al oído suele tener picor o sensación de presión, y el dolor de oído y la fiebre son inespecíficos. El diagnóstico se hace mirando el tímpano con otoscopio, y el signo más característico es el abombamiento del tímpano. (fuente en portugués)",
-        "Otite Média (Sociedade Brasileira de Pediatria, 2023). Tema: manejo de la otitis media aguda y criterios de tratamiento inmediato. Hallazgo: no siempre son necesarios los antibióticos, porque la mayoría de los niños, sobre todo con afectación de un solo oído y sin supuración, mejora sin ellos. Se justifica el tratamiento inmediato si hay abombamiento en menores de 6 meses, abombamiento con dolor importante y temperatura superior a 39 grados, abombamiento en ambos oídos en menores de 2 años, o secreción mucopurulenta de inicio agudo. En los demás casos puede esperarse 48 horas, y si los síntomas persisten pasado ese tiempo hay que volver a consulta. La curación se juzga por los síntomas, no por el tímpano. (fuente en portugués)",
-        "Otite Média (Sociedade Brasileira de Pediatria, 2023). Tema: prevención de otitis repetidas y mastoiditis. Hallazgo: la vacuna antineumocócica reduce infecciones, consultas y cirugías para colocar drenajes en el tímpano. También ayudan evitar el chupete o limitarlo a las horas de sueño y que las clases de guardería tengan menos de 10 niños, y es muy probable que evitar el humo del tabaco (sobre todo el de la madre) reduzca las otitis. La profilaxis con antibióticos ya no se recomienda. En la inmensa mayoría de los casos la otitis media no evoluciona a mastoiditis; sus signos son enrojecimiento y calor detrás de la oreja, hinchazón con pérdida del surco y pabellón auricular desplazado. (fuente en portugués)"
+        "Otitis media (Sociedade Brasileira de Pediatria, 2023). Tema: por qué la otitis media es tan frecuente en los más pequeños y cómo se diagnostica. Hallazgo: los menores de 2 años son el grupo más afectado, por un sistema inmune inmaduro, los resfriados frecuentes por la guardería y una trompa de Eustaquio más corta, horizontal y flácida, que deja pasar secreciones al oído medio. Los síntomas por sí solos no bastan: el niño que se lleva la mano al oído suele tener picor o sensación de presión, y el dolor de oído y la fiebre son inespecíficos. El diagnóstico se hace mirando el tímpano con otoscopio, y el signo más característico es el abombamiento del tímpano. (fuente en portugués)",
+        "Otitis media (Sociedade Brasileira de Pediatria, 2023). Tema: manejo de la otitis media aguda y criterios de tratamiento inmediato. Hallazgo: no siempre son necesarios los antibióticos, porque la mayoría de los niños, sobre todo con afectación de un solo oído y sin supuración, mejora sin ellos. Se justifica el tratamiento inmediato si hay abombamiento en menores de 6 meses, abombamiento con dolor importante y temperatura superior a 39 grados, abombamiento en ambos oídos en menores de 2 años, o secreción mucopurulenta de inicio agudo. En los demás casos puede esperarse 48 horas, y si los síntomas persisten pasado ese tiempo hay que volver a consulta. La curación se juzga por los síntomas, no por el tímpano. (fuente en portugués)",
+        "Otitis media (Sociedade Brasileira de Pediatria, 2023). Tema: prevención de otitis repetidas y mastoiditis. Hallazgo: la vacuna antineumocócica reduce infecciones, consultas y cirugías para colocar drenajes en el tímpano. También ayudan evitar el chupete o limitarlo a las horas de sueño y que las clases de guardería tengan menos de 10 niños, y es muy probable que evitar el humo del tabaco (sobre todo el de la madre) reduzca las otitis. La profilaxis con antibióticos ya no se recomienda. En la inmensa mayoría de los casos la otitis media no evoluciona a mastoiditis; sus signos son enrojecimiento y calor detrás de la oreja, hinchazón con pérdida del surco y pabellón auricular desplazado. (fuente en portugués)"
       ]
     },
     {
       "source_type": "reference",
-      "title": "Recomendações da Academia Americana de Pediatria sobre sono seguro em menores de um ano",
-      "organization": "Sociedade Brasileira de Pediatria (SBP)",
-      "publication_year": 2023,
-      "url": "https://www.sbp.com.br/fileadmin/user_upload/23990b-NotaAlerta-Recomend_AAP_SonoSeguro_1ano.pdf",
-      "specialties": [
-        "pediatrics",
-        "neonatology"
-      ],
-      "license": "fair_use_snippet",
-      "language": "es",
-      "original_language": "pt",
-      "topics": [
-        "muerte_subita_sueno_seguro",
-        "colecho"
-      ],
-      "chunks": [
-        "Recomendações da Academia Americana de Pediatria sobre sono seguro em menores de um ano (Sociedade Brasileira de Pediatria, 2023). Tema: postura y superficie para dormir. Hallazgo: esta nota de alerta (nº 56, marzo de 2023) resume la actualización de 2022 de la Academia Americana de Pediatría. El bebé debe dormir siempre boca arriba, también los prematuros y los que tienen reflujo; la postura de lado está contraindicada, y cuando aprenda a rodar no hace falta volverlo a girar. La superficie de la cuna debe ser rígida y no inclinada, con colchón ajustado y sin almohadas, cojines, rollos ni nidos. Las camas de adultos están contraindicadas en menores de un año y los asientos de coche no son lugar rutinario para dormir. (fuente en portugués)",
-        "Recomendações da Academia Americana de Pediatria sobre sono seguro em menores de um ano (Sociedade Brasileira de Pediatria, 2023). Tema: compartir habitación y cama. Hallazgo: la lactancia materna reduce el riesgo de muerte súbita. La cuna debe estar en la habitación de los padres, al alcance de la mano, al menos hasta los 6 meses y preferiblemente hasta los 12; compartir habitación sin compartir cama reduce el riesgo en un 50%. Los sofás y sillones son extremadamente peligrosos, así que las tomas nocturnas se hacen en la cama y se devuelve al bebé a la cuna al terminar. No se recomienda compartir cama en ninguna circunstancia: el riesgo es mayor con un adulto fumador o con alerta reducida por cansancio o sustancias, y en bebés a término menores de 4 meses. (fuente en portugués)",
-        "Recomendações da Academia Americana de Pediatria sobre sono seguro em menores de um ano (Sociedade Brasileira de Pediatria, 2023). Tema: ropa, temperatura y productos. Hallazgo: los objetos blandos sueltos en la cuna son la principal causa de sofocación; es preferible vestir al bebé por capas o con un saco de dormir que deje libres cabeza y brazos, y no usar protectores de cuna. Hay que evitar el exceso de ropa y cubrir la cabeza; son señales de sobrecalentamiento el sudor, la piel enrojecida o un bebé caliente al tacto. Se aconseja casa y coche sin humo, vacunar al bebé y no usar productos que digan prevenir la muerte súbita, porque ninguno ha demostrado hacerlo; tampoco monitores cardíacos. Se recomienda el tiempo boca abajo con supervisión, hasta 15-30 minutos hacia las siete semanas. (fuente en portugués)"
-      ]
-    },
-    {
-      "source_type": "reference",
-      "title": "Uso de chupeta: os prós e os contras",
-      "organization": "Sociedade Brasileira de Pediatria (SBP)",
-      "publication_year": 2023,
-      "url": "https://www.sbp.com.br/pediatria-para-familias/primeira-infancia/uso-de-chupeta-os-pros-e-os-contras/",
-      "specialties": [
-        "pediatrics",
-        "neonatology"
-      ],
-      "license": "fair_use_snippet",
-      "language": "es",
-      "original_language": "pt",
-      "topics": [
-        "chupete",
-        "otitis"
-      ],
-      "chunks": [
-        "Uso de chupeta: os prós e os contras (Sociedade Brasileira de Pediatria, 2023). Tema: chupete y lactancia. Hallazgo: la succión es un reflejo vital, y la lactancia materna ya cubre la necesidad básica de succión del bebé; con lactancia exclusiva se debe dar el pecho cuando el bebé lo pida. La sociedad recomienda que los padres conozcan los pros y contras del chupete y decidan con el pediatra. Los niños con chupete maman durante menos tiempo, puede haber confusión de pezón (el bebé llora, se agita, se echa hacia atrás y se aparta del pecho empujándolo), con lesiones en el pezón, menos tomas, menor ganancia de peso y, al final, menos producción de leche. (fuente en portugués)",
-        "Uso de chupeta: os prós e os contras (Sociedade Brasileira de Pediatria, 2023). Tema: otros inconvenientes del chupete. Hallazgo: se asocia a más otitis, porque no estimula bien el músculo responsable del funcionamiento de la trompa de Eustaquio, y a más candidiasis oral y aftas, porque puede albergar hongos y bacterias. También se citan más ruidos al respirar, vómitos, fiebre, diarrea y cólicos. Los bebés con chupete lloran y se quejan menos, por lo que comunican menos sus necesidades y reciben menos interacción y estimulación. Chupar el chupete usa músculos distintos de los de mamar, y la falta de actividad de estos puede causar problemas de masticación, habla, alineación de los dientes y respiración. (fuente en portugués)",
-        "Uso de chupeta: os prós e os contras (Sociedade Brasileira de Pediatria, 2023). Tema: posibles beneficios y cómo usarlo si se decide. Hallazgo: algunos expertos creen que reduce el riesgo de muerte súbita, pero la mayoría de los niños lo suelta al dormirse. En prematuros, estimular el desarrollo de la succión favorece la ganancia de peso y acorta la estancia en el hospital, y puede consolar en procedimientos dolorosos, aunque es preferible amamantar durante ellos si se puede. Si se elige, limitarlo al primer año de vida, ofrecerlo solo cuando la lactancia esté bien establecida (el bebé come bien, gana peso durante más de dos semanas y la madre no tiene grietas ni dolor) y reservarlo para momentos críticos. Es frecuente ofrecerlo en cuanto el bebé se queja o sin motivo, sin atender su necesidad real. (fuente en portugués)"
-      ]
-    },
-    {
-      "source_type": "reference",
-      "title": "Constipação",
+      "title": "Resfriado (Sociedade Portuguesa de Pediatria)",
+      "original_title": "Constipação",
       "organization": "Sociedade Portuguesa de Pediatria (SPP)",
       "publication_year": 2020,
       "url": "https://criancaefamilia.spp.pt/doencas-comuns-e-outros-problemas/constipacao/",
@@ -1683,37 +1049,15 @@
         "cuando_consultar"
       ],
       "chunks": [
-        "Constipação (Sociedade Portuguesa de Pediatria, Portal Criança e Família, 2020). Tema: qué es el resfriado en niños pequeños y cuánto dura. Hallazgo: es una infección vírica de las vías respiratorias altas que se resuelve sin tratamiento específico y es más común en otoño e invierno. Los menores de 6 años tienen con frecuencia entre 6 y 8 resfriados al año. Puede haber nariz tapada, mocos, al principio transparentes, que pueden volverse amarillentos con la evolución, dolor de garganta o de oídos, tos y fiebre. Dura de media entre 7 y 10 días y la tos puede persistir hasta 3 semanas. Lo causan más de 200 tipos de virus que se transmiten por secreciones, manos y objetos, y en los pequeños son más frecuentes por la guardería y por tener menos infecciones previas. (fuente en portugués)",
-        "Constipação (Sociedade Portuguesa de Pediatria, Portal Criança e Família, 2020). Tema: cuidados en casa y prevención del resfriado. Hallazgo: la medida más eficaz es el lavado nasal con suero fisiológico, varias veces al día, sobre todo antes de comer y de dormir. Hay que asegurar la hidratación y ofrecer comida equilibrada en pequeñas cantidades varias veces al día. Se deben evitar los antibióticos y los jarabes para la tos, que no se recomiendan y pueden ser perjudiciales. Para prevenir, lo más importante es lavarse las manos, enseñar a toser y estornudar sobre un pañuelo o el codo y no llevar a la escuela a niños con fiebre. (fuente en portugués)",
-        "Constipação (Sociedade Portuguesa de Pediatria, Portal Criança e Família, 2020). Tema: cuándo consultar y cuándo ir a urgencias. Hallazgo: se consulta sin urgencia si hay dificultad para comer o beber, fiebre de más de 4 días, dolor de garganta o de oídos de más de 1 semana o tos de más de 3 semanas. Se acude a urgencias si hay dolor en el pecho o dificultad respiratoria (respiración muy rápida, pausas respiratorias, hoyuelos en el pecho al respirar o quejido), un cambio importante del estado habitual como irritabilidad o postración, sobre todo sin fiebre, o fiebre con piel moteada, labios y uñas morados, sin importar los días de fiebre. (fuente en portugués)"
+        "Resfriado (Sociedade Portuguesa de Pediatria, Portal Criança e Família, 2020). Tema: qué es el resfriado en niños pequeños y cuánto dura. Hallazgo: es una infección vírica de las vías respiratorias altas que se resuelve sin tratamiento específico y es más común en otoño e invierno. Los menores de 6 años tienen con frecuencia entre 6 y 8 resfriados al año. Puede haber nariz tapada, mocos, al principio transparentes, que pueden volverse amarillentos con la evolución, dolor de garganta o de oídos, tos y fiebre. Dura de media entre 7 y 10 días y la tos puede persistir hasta 3 semanas. Lo causan más de 200 tipos de virus que se transmiten por secreciones, manos y objetos, y en los pequeños son más frecuentes por la guardería y por tener menos infecciones previas. (fuente en portugués)",
+        "Resfriado (Sociedade Portuguesa de Pediatria, Portal Criança e Família, 2020). Tema: cuidados en casa y prevención del resfriado. Hallazgo: la medida más eficaz es el lavado nasal con suero fisiológico, varias veces al día, sobre todo antes de comer y de dormir. Hay que asegurar la hidratación y ofrecer comida equilibrada en pequeñas cantidades varias veces al día. Se deben evitar los antibióticos y los jarabes para la tos, que no se recomiendan y pueden ser perjudiciales. Para prevenir, lo más importante es lavarse las manos, enseñar a toser y estornudar sobre un pañuelo o el codo y no llevar a la escuela a niños con fiebre. (fuente en portugués)",
+        "Resfriado (Sociedade Portuguesa de Pediatria, Portal Criança e Família, 2020). Tema: cuándo consultar y cuándo ir a urgencias. Hallazgo: se consulta sin urgencia si hay dificultad para comer o beber, fiebre de más de 4 días, dolor de garganta o de oídos de más de 1 semana o tos de más de 3 semanas. Se acude a urgencias si hay dolor en el pecho o dificultad respiratoria (respiración muy rápida, pausas respiratorias, hoyuelos en el pecho al respirar o quejido), un cambio importante del estado habitual como irritabilidad o postración, sobre todo sin fiebre, o fiebre con piel moteada, labios y uñas morados, sin importar los días de fiebre. (fuente en portugués)"
       ]
     },
     {
       "source_type": "reference",
-      "title": "Evitar a morte súbita do latente",
-      "organization": "Sociedade Portuguesa de Pediatria (SPP)",
-      "publication_year": 2025,
-      "url": "https://criancaefamilia.spp.pt/primeiro-ano-de-vida/evitar-a-morte-subita-do-latente/",
-      "specialties": [
-        "pediatrics"
-      ],
-      "license": "fair_use_snippet",
-      "language": "es",
-      "original_language": "pt",
-      "topics": [
-        "muerte_subita_sueno_seguro",
-        "colecho",
-        "chupete"
-      ],
-      "chunks": [
-        "Evitar a morte súbita do latente (Sociedade Portuguesa de Pediatria, Portal Criança e Família, 2025). Tema: qué es la muerte súbita del lactante y qué hacer en el embarazo. Hallazgo: es la muerte súbita de un bebé de menos de un año sin causa aparente, incluso tras hacer estudios. En países desarrollados es la principal causa de muerte entre 1 mes y 1 año y es más frecuente antes de los 6 meses. No se sabe exactamente por qué ocurre; se cree que se produce cuando coinciden varias circunstancias en un mismo bebé, en especial en los que tienen muchos factores de riesgo asociados, como la prematuridad o una enfermedad crónica. Antes del nacimiento se recomienda no fumar ni consumir alcohol o sustancias ilícitas en el embarazo y hacer una vigilancia prenatal adecuada. (fuente en portugués)",
-        "Evitar a morte súbita do latente (Sociedade Portuguesa de Pediatria, Portal Criança e Família, 2025). Tema: cómo organizar el sueño seguro del bebé. Hallazgo: colocarlo a dormir boca arriba (pasados los 6 meses la norma se mantiene, pero si se gira solo en la cuna puede quedarse en la postura que elija), en una cuna con colchón firme y plano. Debe dormir en la habitación de los padres al menos hasta los 6 meses, pero en cuna propia, sin compartir cama. No poner almohadas, peluches, mantitas o muñecos de apego ni protectores acolchados de barrotes por riesgo de asfixia, dejar la cabeza descubierta sin gorros, cintas ni lazos, y evitar el sobrecalentamiento con una habitación entre 18 °C y 21 °C. Si hace falta abrigo, una manta hasta la altura de los pezones o un saco de dormir de su talla. (fuente en portugués)",
-        "Evitar a morte súbita do latente (Sociedade Portuguesa de Pediatria, Portal Criança e Família, 2025). Tema: piel con piel, chupete, lactancia y humo. Hallazgo: se recomienda contacto piel con piel con la madre justo después del parto y amamantar; se puede usar chupete para dormir una vez que el bebé ha aprendido a mamar, sin atarlo a cordones ni a portachupetes. Los padres no deben fumar, ni siquiera lejos del bebé, porque las partículas quedan en la ropa y la piel, y tampoco se recomiendan el alcohol ni las sustancias ilícitas. (fuente en portugués)"
-      ]
-    },
-    {
-      "source_type": "reference",
-      "title": "Exposição ao Fumo Passivo em Idade Pediátrica: Riscos e Problemas",
+      "title": "Exposición al humo pasivo en la edad pediátrica: riesgos y problemas",
+      "original_title": "Exposição ao Fumo Passivo em Idade Pediátrica: Riscos e Problemas",
       "organization": "Sociedade Portuguesa de Pediatria (SPP)",
       "publication_year": null,
       "undated_reason": "El artículo del Portal Criança e Família no indica fecha propia; solo muestra noticias relacionadas de marzo de 2026.",
@@ -1731,36 +1075,14 @@
         "sibilancias"
       ],
       "chunks": [
-        "Exposição ao Fumo Passivo em Idade Pediátrica: Riscos e Problemas (Sociedade Portuguesa de Pediatria, Portal Criança e Família, sin fecha). Tema: por qué el humo del tabaco daña más a lactantes y niños pequeños. Hallazgo: respiran más deprisa que los adultos, tienen los sistemas respiratorio, cardiovascular e inmunitario en desarrollo y pasan más tiempo en espacios cerrados. Se asocia a más bronquiolitis, bronquitis, neumonía y otitis media recurrente, más crisis de asma, tos crónica y sibilancias. La exposición en el embarazo o tras el nacimiento aumenta el riesgo de muerte súbita del lactante, y en el embarazo puede provocar bajo peso al nacer. También interfiere en la formación de los alvéolos pulmonares. (fuente en portugués)",
-        "Exposição ao Fumo Passivo em Idade Pediátrica: Riscos e Problemas (Sociedade Portuguesa de Pediatria, Portal Criança e Família, sin fecha). Tema: humo de tercera mano, nuevas formas de nicotina y cómo proteger al niño. Hallazgo: las partículas tóxicas quedan en cortinas, muebles, ropa y piel y pueden inhalarse o ingerirse, sobre todo por bebés que se llevan objetos a la boca. La exposición a los cigarrillos electrónicos, el tabaco calentado y las bolsas de nicotina no es inocua, y las bolsas aumentan el riesgo de ingestión accidental e intoxicación en niños pequeños. Se recomienda no fumar ni usar otras formas de tabaco en casa ni en el coche, ni con las ventanas abiertas; la única forma realmente segura es que el niño viva y juegue en espacios totalmente libres de humo. Para dejar de fumar hay consultas específicas y líneas telefónicas de consejo sanitario. (fuente en portugués)"
+        "Exposición al humo pasivo en la edad pediátrica: riesgos y problemas (Sociedade Portuguesa de Pediatria, Portal Criança e Família, sin fecha). Tema: por qué el humo del tabaco daña más a lactantes y niños pequeños. Hallazgo: respiran más deprisa que los adultos, tienen los sistemas respiratorio, cardiovascular e inmunitario en desarrollo y pasan más tiempo en espacios cerrados. Se asocia a más bronquiolitis, bronquitis, neumonía y otitis media recurrente, más crisis de asma, tos crónica y sibilancias. La exposición en el embarazo o tras el nacimiento aumenta el riesgo de muerte súbita del lactante, y en el embarazo puede provocar bajo peso al nacer. También interfiere en la formación de los alvéolos pulmonares. (fuente en portugués)",
+        "Exposición al humo pasivo en la edad pediátrica: riesgos y problemas (Sociedade Portuguesa de Pediatria, Portal Criança e Família, sin fecha). Tema: humo de tercera mano, nuevas formas de nicotina y cómo proteger al niño. Hallazgo: las partículas tóxicas quedan en cortinas, muebles, ropa y piel y pueden inhalarse o ingerirse, sobre todo por bebés que se llevan objetos a la boca. La exposición a los cigarrillos electrónicos, el tabaco calentado y las bolsas de nicotina no es inocua, y las bolsas aumentan el riesgo de ingestión accidental e intoxicación en niños pequeños. Se recomienda no fumar ni usar otras formas de tabaco en casa ni en el coche, ni con las ventanas abiertas; la única forma realmente segura es que el niño viva y juegue en espacios totalmente libres de humo. Para dejar de fumar hay consultas específicas y líneas telefónicas de consejo sanitario. (fuente en portugués)"
       ]
     },
     {
       "source_type": "reference",
-      "title": "Ambiente de sono seguro (Pediatra Atualize-se, Boletim da Sociedade de Pediatria de São Paulo, ano 11, nº 1)",
-      "organization": "Sociedade de Pediatria de São Paulo (SPSP)",
-      "publication_year": 2026,
-      "url": "https://spsp.org.br/publicacao/AtualizeA11N1.pdf",
-      "specialties": [
-        "pediatrics",
-        "neonatology"
-      ],
-      "license": "fair_use_snippet",
-      "language": "es",
-      "original_language": "pt",
-      "topics": [
-        "muerte_subita_sueno_seguro",
-        "colecho"
-      ],
-      "chunks": [
-        "Ambiente de sono seguro (Sociedade de Pediatria de São Paulo, 2026). Tema: postura y superficie para el sueño seguro. Hallazgo: este artículo del boletín Pediatra Atualize-se (enero-febrero de 2026) indica que todos los bebés menores de un año deben dormir siempre boca arriba, de día y de noche, también los prematuros y los que tienen enfermedad por reflujo gastroesofágico. La superficie debe ser firme y plana, con colchón bien ajustado y sábana ceñida, y la cuna debe estar certificada, lo que garantiza que ha pasado pruebas de seguridad y calidad. Se evitan almohadas, mantas sueltas, protectores acolchados, cojines y juguetes, y los rollos de posición o cojines antirreflujo están contraindicados. Hay que retirar cables, cortinas y cordones, y las sillas de coche no sirven para el sueño rutinario. (fuente en portugués)",
-        "Ambiente de sono seguro (Sociedade de Pediatria de São Paulo, 2026). Tema: compartir habitación y cama. Hallazgo: se recomienda que el bebé comparta habitación con los padres al menos hasta los 6 meses de vida, idealmente hasta el año, pero en su propio espacio: una cuna certificada junto a la cama. Compartir cama, aunque sea común en la cultura, se asocia a más riesgo de muerte súbita, sobre todo en menores de 4 meses, prematuros o de bajo peso, hijos de padres fumadores o con consumo de alcohol o drogas, y en superficies no diseñadas para bebés. Los sofás y sillones son muy peligrosos y pueden multiplicar el riesgo de 22 a 67 veces. Los gemelos deben dormir separados. (fuente en portugués)",
-        "Ambiente de sono seguro (Sociedade de Pediatria de São Paulo, 2026). Tema: temperatura, lactancia, chupete y otras medidas. Hallazgo: el sobrecalentamiento es un factor de riesgo; la habitación debe estar entre 20 y 22 grados, con como máximo una capa extra de ropa respecto a un adulto, y mejor un saco de dormir que mantas sueltas. No se aconseja gorro dentro de casa salvo las primeras horas de vida o en la UCI neonatal. La lactancia materna tiene un efecto protector. El chupete al dormir, una vez establecida la lactancia, se asocia a menor riesgo; si se cae no hay que recolocarlo y no se fuerza a quien lo rechaza. Se evitan el humo del tabaco, el alcohol y las drogas, no hay pruebas científicas de que los monitores reduzcan el riesgo, y el tiempo boca abajo despierto y vigilado llega a 15-30 minutos al día desde las siete semanas. (fuente en portugués)"
-      ]
-    },
-    {
-      "source_type": "reference",
-      "title": "Hosta hos barn (1177)",
+      "title": "Tos en niños (1177)",
+      "original_title": "Hosta hos barn (1177)",
       "organization": "1177 Vårdguiden (Inera)",
       "publication_year": 2023,
       "url": "https://www.1177.se/barn--gravid/vanliga-besvar-och-sjukdomar-hos-barn/vanliga-sjukdomar-och-besvar-hos-barn-0-1-ar/hosta/",
@@ -1777,36 +1099,15 @@
         "cuando_consultar"
       ],
       "chunks": [
-        "Hosta hos barn (1177 Vårdguiden, 2023). Tema: cuándo consultar por tos en niños pequeños. Hallazgo: se llama de inmediato a emergencias si el niño tiene dificultad para respirar con labios azulados o si se le ha metido algo en las vías respiratorias. Se contacta de inmediato con el centro de salud o la consulta sin cita (y, si están cerrados, con urgencias) si el niño está muy enfermo (por ejemplo, no tiene fuerzas para comer), babea y le cuesta tragar la saliva, o tiene menos de 6 meses y se ahoga al toser.",
-        "Hosta hos barn (1177 Vårdguiden, 2023). Tema: señales que piden consulta en horas o días. Hallazgo: se contacta con el centro de salud o la consulta sin cita si la tos viene con fiebre más de cuatro días, si hay pitidos al respirar, o si se sospecha tos ferina y hay contacto cercano con un menor de 1 año o con una embarazada de más de 27 semanas. Si la tos dura más de cuatro semanas sin mejorar, se consulta al centro de salud, porque entonces suelen intervenir causas distintas de la infección, como el asma. Tras un resfriado la tos puede durar varias semanas.",
-        "Hosta hos barn (1177 Vårdguiden, 2023). Tema: cuidados en casa y lo que se desaconseja. Hallazgo: se recomienda beber mucho (los bebés que toman el pecho pueden mamar más a menudo) y elevar la cabecera de la cama en los niños que tosen de noche. La página desaconseja los medicamentos para suprimir la tos, que no se consideran buenos porque toser limpia las mucosidades, y señala que los de venta libre no tienen efecto demostrado y no se dan a menores de 2 años sin consultar. No se debe dar miel a menores de 1 año por el riesgo de esporas bacterianas. Se evita el humo de tabaco y de fuego cerca del niño."
+        "Tos en niños (1177 Vårdguiden, 2023). Tema: cuándo consultar por tos en niños pequeños. Hallazgo: se llama de inmediato a emergencias si el niño tiene dificultad para respirar con labios azulados o si se le ha metido algo en las vías respiratorias. Se contacta de inmediato con el centro de salud o la consulta sin cita (y, si están cerrados, con urgencias) si el niño está muy enfermo (por ejemplo, no tiene fuerzas para comer), babea y le cuesta tragar la saliva, o tiene menos de 6 meses y se ahoga al toser.",
+        "Tos en niños (1177 Vårdguiden, 2023). Tema: señales que piden consulta en horas o días. Hallazgo: se contacta con el centro de salud o la consulta sin cita si la tos viene con fiebre más de cuatro días, si hay pitidos al respirar, o si se sospecha tos ferina y hay contacto cercano con un menor de 1 año o con una embarazada de más de 27 semanas. Si la tos dura más de cuatro semanas sin mejorar, se consulta al centro de salud, porque entonces suelen intervenir causas distintas de la infección, como el asma. Tras un resfriado la tos puede durar varias semanas.",
+        "Tos en niños (1177 Vårdguiden, 2023). Tema: cuidados en casa y lo que se desaconseja. Hallazgo: se recomienda beber mucho (los bebés que toman el pecho pueden mamar más a menudo) y elevar la cabecera de la cama en los niños que tosen de noche. La página desaconseja los medicamentos para suprimir la tos, que no se consideran buenos porque toser limpia las mucosidades, y señala que los de venta libre no tienen efecto demostrado y no se dan a menores de 2 años sin consultar. No se debe dar miel a menores de 1 año por el riesgo de esporas bacterianas. Se evita el humo de tabaco y de fuego cerca del niño."
       ]
     },
     {
       "source_type": "reference",
-      "title": "Plötslig spädbarnsdöd – förebyggande råd (1177)",
-      "organization": "1177 Vårdguiden (Inera)",
-      "publication_year": 2026,
-      "url": "https://www.1177.se/barn--gravid/att-skota-ett-nyfott-barn/plotslig-spadbarnsdod--forebyggande-rad/",
-      "specialties": [
-        "pediatrics",
-        "neonatology"
-      ],
-      "license": "fair_use_snippet",
-      "language": "es",
-      "original_language": "sv",
-      "topics": [
-        "muerte_subita_sueno_seguro"
-      ],
-      "chunks": [
-        "Plötslig spädbarnsdöd – förebyggande råd (1177 Vårdguiden, 2026). Tema: posición y entorno para dormir. Hallazgo: la muerte súbita del lactante es muy rara en Suecia (alrededor de 1 de cada 6.000 bebés), suele darse antes de los 6 meses, durante el sueño y sin señales previas. La página aconseja acostar al bebé boca arriba (la posición de lado es menos segura, porque puede girarse boca abajo), mantener su cara libre de mantas y evitar un colchón demasiado blando. Se varía la posición de la cabeza y, cuando el bebé está despierto, se le pone boca abajo bajo vigilancia.",
-        "Plötslig spädbarnsdöd – förebyggande råd (1177 Vårdguiden, 2026). Tema: temperatura, tabaco y chupete. Hallazgo: el bebé debe ir abrigado pero sin exceso, según la temperatura de la habitación, porque el sobrecalentamiento aumenta el riesgo. La nicotina eleva el riesgo antes y después del parto y el humo ajeno también daña al bebé, por lo que todos los que lo rodean deberían dejar de fumar; quien da el pecho debe dejar también el snus. Dejarlo del todo es lo mejor, pero reducir ya ayuda. Un chupete a la hora de dormir puede disminuir el riesgo, aunque no se sabe del todo por qué.",
-        "Plötslig spädbarnsdöd – förebyggande råd (1177 Vårdguiden, 2026). Tema: compartir cama y lactancia. Hallazgo: en menores de 3 meses, lo más seguro es dormir en una cuna propia en la habitación de los padres; compartir cama aumenta el riesgo de que el bebé quede boca abajo o con la cara tapada, y el alcohol o los sedantes lo elevan aún más. Puede estar cerca durante la toma, pero para dormir se le acuesta boca arriba en su cuna. La lactancia materna reduce el riesgo. Si la preocupación por la muerte súbita se hace demasiado grande, se habla con la enfermera de pediatría o con su pediatra."
-      ]
-    },
-    {
-      "source_type": "reference",
-      "title": "RS-virus hos barn (1177)",
+      "title": "Virus respiratorio sincitial en niños (1177)",
+      "original_title": "RS-virus hos barn (1177)",
       "organization": "1177 Vårdguiden (Inera)",
       "publication_year": 2026,
       "url": "https://www.1177.se/barn--gravid/vanliga-besvar-och-sjukdomar-hos-barn/vanliga-sjukdomar-och-besvar-hos-barn-0-1-ar/rs-virus-hos-barn/",
@@ -1821,9 +1122,9 @@
         "bronquiolitis"
       ],
       "chunks": [
-        "RS-virus hos barn (1177 Vårdguiden, 2026). Tema: síntomas del virus respiratorio sincitial (VRS) en bebés. Hallazgo: empieza como un resfriado, con mocos espesos y fiebre. Puede haber dificultad para comer o beber, que cansa al bebé, y problemas respiratorios (sobre todo en menores de 3 meses): respiración rápida y superficial, sibilancias y hundimiento del pecho o del vientre al respirar. Las pausas respiratorias se dan sobre todo en menores de 2 meses o prematuros. El niño suele estar peor entre 4 y 6 días después de los primeros síntomas, y curarse del todo puede llevar unas semanas.",
-        "RS-virus hos barn (1177 Vårdguiden, 2026). Tema: quién corre más riesgo y cuándo pedir ayuda. Hallazgo: tienen más riesgo de enfermar gravemente los menores de 6 meses, los prematuros y los niños con enfermedad del corazón, del pulmón, del sistema nervioso o del sistema inmunitario. La página indica llamar de inmediato a emergencias si el niño tiene dificultad para respirar. Para otros síntomas se puede pedir consejo a su pediatra, y en menores de 6 meses se le consulta antes de darle ninguna medicación.",
-        "RS-virus hos barn (1177 Vårdguiden, 2026). Tema: cuidados en casa y prevención. Hallazgo: se recomienda suero salino nasal, sobre todo antes de comer o dormir, un aspirador nasal después del suero, elevar la cabecera, dar el pecho o ofrecer líquidos con más frecuencia y, si la congestión le impide mamar, probar con biberón y, mientras tanto, extraerse leche a mano o con sacaleches. También evitar el humo cerca del niño. Como prevención: la vacuna en el embarazo, entre las semanas 24 y 36 y como tarde 2 semanas antes del parto, protege al bebé hasta los 6 meses, y los anticuerpos que se ponen al bebé en el muslo dan una protección de unos 5 a 6 meses."
+        "Virus respiratorio sincitial en niños (1177 Vårdguiden, 2026). Tema: síntomas del virus respiratorio sincitial (VRS) en bebés. Hallazgo: empieza como un resfriado, con mocos espesos y fiebre. Puede haber dificultad para comer o beber, que cansa al bebé, y problemas respiratorios (sobre todo en menores de 3 meses): respiración rápida y superficial, sibilancias y hundimiento del pecho o del vientre al respirar. Las pausas respiratorias se dan sobre todo en menores de 2 meses o prematuros. El niño suele estar peor entre 4 y 6 días después de los primeros síntomas, y curarse del todo puede llevar unas semanas.",
+        "Virus respiratorio sincitial en niños (1177 Vårdguiden, 2026). Tema: quién corre más riesgo y cuándo pedir ayuda. Hallazgo: tienen más riesgo de enfermar gravemente los menores de 6 meses, los prematuros y los niños con enfermedad del corazón, del pulmón, del sistema nervioso o del sistema inmunitario. La página indica llamar de inmediato a emergencias si el niño tiene dificultad para respirar. Para otros síntomas se puede pedir consejo a su pediatra, y en menores de 6 meses se le consulta antes de darle ninguna medicación.",
+        "Virus respiratorio sincitial en niños (1177 Vårdguiden, 2026). Tema: cuidados en casa y prevención. Hallazgo: se recomienda suero salino nasal, sobre todo antes de comer o dormir, un aspirador nasal después del suero, elevar la cabecera, dar el pecho o ofrecer líquidos con más frecuencia y, si la congestión le impide mamar, probar con biberón y, mientras tanto, extraerse leche a mano o con sacaleches. También evitar el humo cerca del niño."
       ]
     }
   ]
