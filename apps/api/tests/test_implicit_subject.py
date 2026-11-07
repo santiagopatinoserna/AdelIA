@@ -217,10 +217,11 @@ def test_the_candidate_b_questions_that_get_the_second_search():
     assert got == _CANDIDATE_B_WITH_VARIANT
 
 
-#: Pierced ears, valerian drops and molluscum: none names the child. Candidates
-#: are not in the deploy gate yet, but a promotion would be (B18, lice at
-#: nursery, was promoted and is pinned with group B above).
-_CANDIDATE_B_WITH_VARIANT: list[str] = ["B19", "B23", "B24"]
+#: Valerian drops, grinding teeth, a sacral dimple and ringworm: none names the
+#: child. Candidates are not in the deploy gate yet, but a promotion would be
+#: (B18, lice at nursery, was promoted and is pinned with group B above). B19
+#: and B24 left the list on 2026-11-07, when they became A40 and A42.
+_CANDIDATE_B_WITH_VARIANT: list[str] = ["B23", "B28", "B29", "B30"]
 
 
 def test_the_group_a_questions_that_get_the_second_search():

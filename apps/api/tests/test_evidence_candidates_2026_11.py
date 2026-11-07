@@ -13,9 +13,9 @@ dehydration, jaundice or sepsis was checked again against the page text
 downloaded with curl, because the verifier agent had only seen WebFetch's
 summary of it.
 
-They live in adelia/enrichment/candidates/lote_2026_11_06/, which boot never
-reads, until the golden gate has measured them (scripts/golden_gate.sh
---candidates). The directory is its own so that the Europe PMC candidate
+They lived in adelia/enrichment/candidates/lote_2026_11_06/, which boot never
+reads, until the golden gate had measured them (scripts/golden_gate.sh
+--candidates). The directory was its own so that the Europe PMC candidate
 rules (verbatim CC BY abstracts in English, tests/test_harvest_europepmc.py)
 and these (Spanish paraphrases of pages in other languages) never apply to
 each other's files. Moving one into production is a single rename:
@@ -24,8 +24,11 @@ each other's files. Moving one into production is a single rename:
            adelia/enrichment/data/evidence_<domain>_2026_11.json
 
 and these tests follow it there, where tests/test_evidence_files.py also
-starts reading it. Each file passes now the same rules as the domain files
-in data/ (tests/evidence_corpus_checks.py), plus the three a translated
+starts reading it. On 2026-11-07, after the third server run passed them, the
+twelve moved together: this file is now their corpus test, the one each
+domain of data/ has, with the counts measured. Each file passes the same
+rules as the domain files in data/ (tests/evidence_corpus_checks.py), plus the
+three a translated
 source needs: the page's language kept apart from the chunks' language, no
 service of another health system, and no second copy of a page under another
 URL or of a document under another title spelling.
@@ -220,6 +223,19 @@ def test_the_batch_holds_one_file_per_domain_and_nothing_else():
     assert not on_disk & moved, "a domain is both a candidate and in data/"
     in_data = {p.stem.removeprefix("evidence_") for p in checks.DATA_DIR.glob(checks.BOOT_GLOB)}
     assert set(DOMAINS) <= in_data, "a domain that data/ does not have"
+
+
+def test_the_batch_the_server_passed_is_in_data_whole():
+    """The third server run (2026-11-07, 316 sources, no model, --explain) said
+    APTOS: recall@4 of group A 0.97 without and with them, no A lost, no new B
+    reaching the model, red flags 1.00 (docs/corpus/CANDIDATOS_2026_11_06.md,
+    18). It measured the twelve files together, so they go to data/ together:
+    one left behind would make production a corpus nobody measured."""
+    left = sorted(p.name for p in BATCH_DIR.glob("*.json"))
+    assert not left, f"measured with the rest, still a candidate: {left}"
+    promoted = [checks.load(checks.DATA_DIR / f"evidence_{d}_2026_11.json") for d in NAMES]
+    assert sum(len(d["sources"]) for d in promoted) == 316
+    assert sum(len(s["chunks"]) for d in promoted for s in d["sources"]) == 805
 
 
 @pytest.mark.parametrize("domain", NAMES)

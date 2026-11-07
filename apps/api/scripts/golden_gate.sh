@@ -111,9 +111,13 @@ if ! .venv/bin/alembic upgrade head; then
   exit 2
 fi
 
+# A file the load could not finish (a 429 that outlasted every retry) is a
+# corpus smaller than the one about to boot: measuring it would pass a release
+# nobody measured, so it is a gate that did not run (2026-11-07).
 say "loading the corpus this release boots with (load_startup_corpora)"
 if ! "${PY}" -c '
 import asyncio
+import sys
 
 from adelia.db import engine
 from adelia.main import load_startup_corpora
@@ -121,14 +125,16 @@ from adelia.main import load_startup_corpora
 
 async def _load():
     try:
-        await load_startup_corpora()
+        return await load_startup_corpora()
     finally:
         await engine.dispose()
 
 
-asyncio.run(_load())
+failed = asyncio.run(_load())
+if failed:
+    sys.exit("corpus files not loaded whole: " + ", ".join(failed))
 '; then
-  say "the startup corpus load crashed"
+  say "the startup corpus load crashed or did not finish"
   exit 2
 fi
 

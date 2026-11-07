@@ -7,6 +7,10 @@ es 109, fr 160). Aquí quedan integradas como **candidatas**: 455 fuentes y 1.19
 `apps/api/adelia/enrichment/candidates/lote_2026_11_06/`. El arranque no lee esa carpeta: nada
 de esto llega a producción hasta que el golden lo mida y alguien mueva un fichero.
 
+**Promovidas el 7 de noviembre** (apartado 18): la tercera medición en el servidor las dio por
+**aptas**, y los 12 ficheros están ya en `enrichment/data/evidence_<dominio>_2026_11.json`, con
+los dos cambios del examen aplicados. Lo que sigue cuenta cómo se llegó ahí.
+
 **7 de noviembre**: la primera medición en el servidor las dio por no aptas (apartado 16). Tras
 la regla del hueco, los títulos en español y los arreglos de B6 quedaron 341 fuentes y 877
 fragmentos. La segunda medición, con `--explain`, seguía en no aptas por A21 y B6 (apartado 17):
@@ -244,6 +248,8 @@ cambio que mueva esos ficheros a `data/` (detalle en el propio parche). No toca 
 Con el parche aplicado y los 12 ficheros movidos a `data/`, 851 tests de golden, candidatos,
 léxico y sujeto implícito pasan; falla solo `test_groups_a_and_b_meet_the_deploy_gate`, el
 fallo conocido del entorno local sin clave de Mistral.
+
+**Aplicado el 7 de noviembre**, con los ficheros ya en `data/` (apartado 18.2).
 
 Mientras tanto la comparación del gate no se confunde: en la previsualización de producción
 esas cuatro B ya no pasaban (tenían tarjetas bajo el corte), así que con las candidatas no
@@ -604,7 +610,8 @@ retrasa el cacahuete), pero son francesas y la de Santé publique France no perm
 `docs/corpus/golden-A16-introduccion-temprana.patch` añade «introducción temprana de alimentos»
 como tercera alternativa, sin aceptar guías de diversificación que no nombran el cacahuete. Se
 aplica en el mismo cambio que mueva `alimentacion_bebes` a `data/`, y conviene mirar antes
-`--explain A16`: en la aproximación la SEICAP queda quinta, a 0,0001 de la cuarta.
+`--explain A16`: en la aproximación la SEICAP queda quinta, a 0,0001 de la cuarta. **Aplicado el
+7 de noviembre** (apartado 18.2).
 
 ### 16.6 Cómo se midió sin clave: una aproximación, no la medición
 
@@ -939,3 +946,114 @@ Herramientas de esta vuelta, fuera del repositorio: `/tmp/cc-corpus-proxy2/` (`a
 | Síndrome del niño sacudido: conocer y prevenir | Sociedade Portuguesa de Pediatria (SPP) | pt | `salud_madre_familia` | llanto |
 | Cuando los niños pequeños lloran (1177) | 1177 Vårdguiden (Inera) | sv | `salud_madre_familia` | llanto |
 | Prevenir los accidentes típicos (Kind en Gezin) (fragmentos 3 a 2) | Kind en Gezin (Agentschap Opgroeien) | nl | `seguridad` | A16 |
+
+## 18. Promoción a producción, 7 de noviembre
+
+### 18.1 La tercera medición del servidor
+
+El supervisor midió las 316 fuentes y 805 fragmentos en el servidor, sin modelo y con
+`--explain`: **candidatos APTOS**. recall@4 del grupo A 0,97 sin candidatos y 0,97 con ellos,
+ninguna A perdida, ninguna B nueva que llegue al modelo, banderas rojas 1,00, y A39 pasa con
+ellos. B6 queda con la primera candidata a 0,1935 (corte 0,19). No habrá pasada con modelo:
+Santiago pidió no gastar tokens reales de Anthropic en pruebas, y probará a mano después del
+despliegue.
+
+### 18.2 Lo que pasó a `data/`
+
+Los 12 ficheros, con `git mv` y sin tocar un byte (renombres al 100 %): son los que se midieron.
+Nada de lo descartado en los apartados 12 a 17 vuelve.
+
+| fichero | fuentes | fragmentos |
+|---|---|---|
+| `evidence_alimentacion_bebes_2026_11.json` | 38 | 84 |
+| `evidence_desarrollo_0_24m_2026_11.json` | 54 | 132 |
+| `evidence_digestivo_piel_2026_11.json` | 38 | 95 |
+| `evidence_guarderia_adaptacion_2026_11.json` | 1 | 3 |
+| `evidence_infecciones_fiebre_2026_11.json` | 30 | 82 |
+| `evidence_neonatal_2026_11.json` | 35 | 99 |
+| `evidence_ojos_oidos_boca_uro_neuro_2026_11.json` | 10 | 23 |
+| `evidence_pediatric_reflux_2026_11.json` | 2 | 6 |
+| `evidence_respiratorio_sueno_2026_11.json` | 45 | 122 |
+| `evidence_salud_madre_familia_2026_11.json` | 10 | 29 |
+| `evidence_seguridad_2026_11.json` | 47 | 115 |
+| `evidence_urgencias_lactante_2026_11.json` | 6 | 15 |
+| **total** | **316** | **805** |
+
+`data/` pasa de 434 fuentes y 1.047 fragmentos (semilla incluida) a 750 y 1.852.
+`tests/test_evidence_candidates_2026_11.py` es ahora el test de corpus de estos 12 ficheros, el
+que tiene cada dominio, con el número de fuentes y los temas fijados por dominio; un test nuevo
+exige que estén los 12 en `data/`, ninguno en la carpeta de candidatos, y 316 fuentes con 805
+fragmentos. `test_evidence_files.py` los lee ya como a cualquier fichero de `data/`. Ningún
+otro test fijaba cifras del corpus.
+
+Los dos parches del examen están aplicados y retirados de `docs/corpus/`:
+
+- **A16** acepta también «introducción temprana de alimentos» (SEICAP 2025). A16 está en
+  `GOLDEN_SET`: una alternativa más solo puede convertir un fallo en acierto. Si la SEICAP entra
+  en sus cuatro tarjetas lo dice el bloque `gate` de `--explain A16`.
+- **B19, B21, B24 y B27 pasan a A40-A43**, y entran **B28** (bruxismo), **B29** (fosita sacra),
+  **B30** (tiña) y **B31** (kombucha, en francés). Comprobado contra lo que de verdad está en
+  `data/`: cada `expect_source` nombra títulos que existen (KidsDoc, AboutKidsHealth y
+  HealthyChildren para A40; Seattle Children's para A41; NHS, EnFamilia, HealthyChildren y CDC
+  para A42; CDC, NHS y dos de HealthyChildren para A43), cada fragmento de esas fuentes
+  contiene alguna palabra de su `every_citation_mentions`, y «bruxismo», «rechinar», «fosita»,
+  «sacro», «tiña», «tinea» y «kombucha» no aparecen en ningún fichero. Las ocho siguen en
+  `CANDIDATES`, fuera del veredicto del gate, hasta que se midan.
+
+### 18.3 El arranque con 805 fragmentos nuevos
+
+**Cómo era.** `lifespan` esperaba a `load_startup_corpora()` antes de que uvicorn abriera el
+puerto. Cada fuente nueva es una llamada a Mistral (sus 2 a 4 fragmentos van en un lote) seguida
+de 0,5 s de pausa (`SOURCE_PACING_S`): 316 llamadas y 158 s solo de pausas. Con 0,3 a 0,6 s por
+llamada, unos **4 a 6 minutos** sin ningún 429; es una estimación, no una medida: la cifra real
+está en los registros de la tercera medición del supervisor, que cargó estas mismas 316 fuentes
+con el mismo `load_sources` («evidence file …: +N sources» y «duración del gate»). Mientras
+tanto:
+
+- `/health` no contestaba. El healthcheck del contenedor (10 s, 5 reintentos, sin
+  `start_period`) lo marca *unhealthy* hacia los 50 s, y `web` espera a que `api` esté *healthy*:
+  `docker compose up -d --build api web` lo más probable es que acabe con «dependency failed to
+  start» y `deploy-prod.sh` se pare ahí por `set -e`, sin llegar a verificar.
+- Aunque pasara, la verificación da a `/healthz` 12 intentos cada 5 s (60 s): FAIL.
+- La API no atendía a nadie durante esos minutos.
+
+**Un 429 a mitad.** `embed_with_retry` reintenta 6 veces (2 + 5 + 10 + 20 + 40 = 77 s) y se
+rinde; el fichero se paraba en esa fuente. Lo ya hecho queda (commit por fuente, idempotente por
+título) y no hay fuentes a medias, pero el resto del fichero esperaba al siguiente arranque, que
+en producción es el siguiente despliegue. Y el gate, que llama a la misma función, medía un
+corpus más pequeño que el que iba a servir sin decirlo.
+
+**Lo que cambia** (`adelia/main.py`, `adelia/enrichment/evidence_loader.py`,
+`apps/api/scripts/golden_gate.sh`; tests en `test_startup_corpora.py` y
+`test_evidence_loader.py`):
+
+1. La carga va en una tarea al lado del servidor: `/health` y `/healthz` contestan en cuanto
+   termina la migración. Al apagar se cancela y se espera antes de `engine.dispose()`; la fuente
+   en curso no llega a hacer commit y el siguiente arranque la carga.
+2. Un fichero cortado por un error que se arregla esperando (429 o 5xx de Mistral, red) se
+   vuelve a intentar en el mismo arranque a los 60 s y a los 300 s, desde la fuente donde se
+   paró; el resto de esa pasada espera con él, para no pagar 77 s por fichero. Si Mistral
+   sigue limitando, se rinde a los 10 minutos más o menos, con un ERROR en el registro, y el
+   resto carga en el siguiente arranque. Un error que no se arregla esperando (fichero roto,
+   sin clave) no se reintenta.
+3. `load_startup_corpora` devuelve los ficheros que no terminaron, y `golden_gate.sh` sale con
+   2 («no pudo correr») si hay alguno: el despliegue se para antes de `up -d`, con la versión
+   anterior sirviendo.
+4. Ninguna sesión de base de datos queda abierta mientras se llama a Mistral (la carga comparte
+   ahora el pool con las peticiones de las madres).
+
+**Lo que no cambia.** Cuando la carga termina, la app responde con el mismo corpus que antes.
+Durante la carga responde con el corpus anterior más las fuentes nuevas que ya hicieron commit,
+enteras; las banderas rojas son código y no dependen del corpus. Las cifras públicas del corpus
+(`/clinical/corpus-stats`, caché de 300 s) pueden enseñar cifras parciales hasta 5 minutos
+después de acabar la carga. Los fragmentos nuevos se embeben dos veces por despliegue (en la
+copia del gate y en la base viva), como ya pasaba. Comprobado en local: uvicorn en el puerto 8109
+contesta `/health` y `/healthz` 200 a los 2 s y apaga limpio (sin clave de Mistral, así que la
+carga es inmediata; que no bloquea lo prueban los tests).
+
+### 18.4 Lo que queda
+
+- A39 pasa con los candidatos y sigue en `CANDIDATES`; pasarla a `GOLDEN_SET` pide grabar su
+  vector (`tests/record_golden_embeddings.py`, con la clave de Mistral del servidor).
+- A40-A43 y B28-B31 sin medir: la próxima pasada del gate en el servidor las previsualiza.
+- La pasada con modelo no se hará; Santiago prueba a mano tras el despliegue.

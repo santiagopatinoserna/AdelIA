@@ -113,6 +113,10 @@ Orden en el servidor:
   `adelia/main.py`). Contra la base viva, el golden mediría el corpus de la versión ANTERIOR,
   que es justo lo que no queremos con el crawler añadiendo fuentes. En la copia se cargan antes
   de medir. Coste: los fragmentos nuevos se embeben dos veces (en la copia y al arrancar).
+  Desde el 7 de noviembre de 2026 el arranque no espera a esa carga: va al lado del servidor,
+  y `/health` y `/healthz` contestan mientras tanto. El gate sí la espera, y si un fichero no
+  termina de cargarse (un 429 que dura más que todos los reintentos) el gate dice que no pudo
+  correr (salida 2) en lugar de medir un corpus más pequeño que el que va a servir.
 - El camino de respuesta del golden solo lee, pero la copia hace imposible que un test escriba
   en la base viva. `golden_gate.sh` se niega a migrar una base cuyo nombre no termine en
   `_golden_gate`, y el copiado se niega si el nombre efímero coincide con el vivo.
@@ -250,7 +254,8 @@ cd /opt/adelia && bash scripts/prod-golden-gate.sh \
   --explain A1,A5,A13,A16,A21,A37,B6
 ```
 
-(o `GOLDEN_EXPLAIN=A1,B6`). Solo admite ids de pregunta separados por comas; otra cosa se
+(o `GOLDEN_EXPLAIN=A1,B6`; ese lote pasó a `data/` el 7 de noviembre tras la tercera medición, y
+el ejemplo queda como forma de uso con otro lote). Solo admite ids de pregunta separados por comas; otra cosa se
 niega antes de construir nada. Tras el golden sin candidatos, y otra vez tras cargarlos,
 `preview_golden_candidates.py --no-model --ids IDS --explain` escribe
 `golden_explain.sin_candidatos.json` y `golden_explain.con_candidatos.json`: para cada pregunta,
@@ -290,14 +295,21 @@ alternativa de `expect_source` existe en el corpus.
 
 | | es | en | fr |
 |---|---|---|---|
-| A (A19 a A39) | 12 | 4 | 5 |
-| B (B18 a B27) | 8 | 1 | 1 |
+| A (A19 a A43) | 15 | 4 | 6 |
+| B (B18 a B31, sin B19, B21, B24 ni B27) | 8 | 1 | 1 |
 
 Las B: piojos (B18), agujeros de las orejas (B19), silla del coche a los 4 años (B20, la para el
 filtro de edad), pechos hinchados del recién nacido (B21), anticonceptivo en la lactancia (B22),
 adaptación más gotas de valeriana (B23, mixta), molusco contagioso (B24), pulsaciones de
 Ventolin (B25, dosis), lateralidad (B26), bebida de avena (B27). Si entran todas, las fuentes
 pediátricas sin pregunta A bajan de 337 a 257 de 426.
+
+Al entrar en `data/` las fuentes candidatas que las responden
+(`docs/corpus/CANDIDATOS_2026_11_06.md`), cuatro de esas B pasaron a A: B19 es A40 (pendientes,
+KidsDoc), B21 es A41 (pechitos hinchados, Seattle Children's), B24 es A42 (molusco: NHS,
+EnFamilia, HealthyChildren, CDC) y B27 es A43 (bebida de avena, CDC). En su sitio entraron
+cuatro B del mismo tema que siguen sin respuesta: bruxismo (B28), fosita sacra (B29), tiña (B30)
+y kombucha (B31, en francés). Las ocho siguen en `CANDIDATES` hasta medirse.
 
 ### Medidas en producción el 6 de noviembre de 2026
 

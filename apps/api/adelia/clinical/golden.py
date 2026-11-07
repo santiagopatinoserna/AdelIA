@@ -279,7 +279,8 @@ GOLDEN_SET: tuple[GoldenQuestion, ...] = (
     GoldenQuestion(
         "A16", "A",
         "¿Puedo darle cacahuete a mi bebé de 8 meses?",
-        age_months=8, expect_source="évolution des concepts|Pas à pas",
+        age_months=8,
+        expect_source="évolution des concepts|Pas à pas|introducción temprana de alimentos",
         rationale=(
             "Medido en la demo pública el 14-oct-2026: cuatro citas y ninguna sobre cacahuete "
             "ni alérgenos (alimentación saludable general, lactancia en la guardería, una guía "
@@ -294,7 +295,12 @@ GOLDEN_SET: tuple[GoldenQuestion, ...] = (
             "diversificación en el corpus (la del PNNS 2022, sin una palabra de cacahuete) que "
             "habrían dado por buena una respuesta que no responde a la pregunta. El título y "
             "no el texto porque en SFP 2015 la palabra cae pasado el carácter 280, el único "
-            "trozo del fragmento que llega al informe."
+            "trozo del fragmento que llega al informe. "
+            "2026-11-07: se acepta también «La introducción temprana de alimentos ayuda a "
+            "prevenir la alergia alimentaria» (SEICAP, 2025), que responde lo mismo para una "
+            "madre en España: a qué edad dar cacahuete, frutos secos y huevo, y mantenerlos en la "
+            "dieta. La regla no baja: sigue sin valer una guía de diversificación que no nombra "
+            "el cacahuete."
         ),
     ),
     # A17 and A18 were B5 and B10 until 2026-11-03. They were near misses
@@ -946,25 +952,36 @@ CANDIDATES: tuple[GoldenQuestion, ...] = (
         ),
     ),
     # --- B: one near miss per theme ------------------------------------------
+    # --- 2026-11-07: four near misses that the candidates of 2026-11-06 answer
+    # (docs/corpus/CANDIDATOS_2026_11_06.md), in data/ since that day as
+    # enrichment/data/evidence_<domain>_2026_11.json. Each B became an A with
+    # its wording, as B5 and B10 became A17 and A18, and a near miss of the same
+    # theme that the corpus still does not cover took its place in group B (B28
+    # to B31). expect_source names titles of those files.
     GoldenQuestion(
-        "B19", "B",
+        "A40", "A",
         "¿A qué edad le puedo hacer los agujeros de las orejas para los pendientes? Tiene "
         "3 meses",
-        age_months=3, kind="adjacent",
+        age_months=3, distinct_sources=True,
+        expect_source="Ear Piercing|perforación en la oreja|Pierced ear",
+        every_citation_mentions="perfora|pendiente|oreja|lóbulo|piercing",
         rationale=(
-            "El corpus trata oídos (otitis, audición) y piel, nunca la perforación de las "
-            "orejas: «agujero» solo sale en pilas de botón, caries y el chupete."
+            "Era B19. «Ear Piercing Symptoms» (KidsDoc, AAP): esperar a que el niño pueda "
+            "cuidar la perforación, lo habitual desde los 8 años; los menores de 4 años se tocan "
+            "los pendientes y pueden tragárselos. También AboutKidsHealth y HealthyChildren."
         ),
     ),
     GoldenQuestion(
-        "B21", "B",
+        "A41", "A",
         "Mi bebé de 10 días tiene los pechitos hinchados y le sale una gotita de leche. "
         "¿Es normal?",
-        age_months=0, kind="adjacent",
+        age_months=0, distinct_sources=True,
+        expect_source="Newborn Appearance",
+        every_citation_mentions="pech|pezón|mama|hinch",
         rationale=(
-            "La hipertrofia mamaria del recién nacido no está en el corpus (ni pechos "
-            "hinchados, ni crisis genital), pero «recién nacido», «leche» y «es normal» son las "
-            "palabras de los fragmentos neonatales y de lactancia."
+            "Era B21. «Newborn Appearance Questions» (Seattle Children's): los pechos se hinchan "
+            "en la primera semana por los estrógenos de la madre, unas gotitas de líquido "
+            "lechoso son normales, dura de 2 a 4 semanas y nunca se aprietan."
         ),
     ),
     GoldenQuestion(
@@ -988,14 +1005,15 @@ CANDIDATES: tuple[GoldenQuestion, ...] = (
         ),
     ),
     GoldenQuestion(
-        "B24", "B",
+        "A42", "A",
         "Le han salido en la tripa unas bolitas brillantes con un hoyito en el centro. "
         "¿Es molusco contagioso? ¿Hay que quitárselas?",
-        age_months=20, kind="adjacent",
+        age_months=20, distinct_sources=True,
+        expect_source="Molluscum|molusco",
+        every_citation_mentions="molusco|molluscum",
         rationale=(
-            "Vecina del eccema, las marcas de nacimiento y las picaduras, que el corpus cubre. "
-            "Ninguna fuente habla del molusco contagioso; «bolitas» y no «granitos» para que "
-            "el léxico no la empuje hacia el exantema."
+            "Era B24. NHS, EnFamilia (AEP), HealthyChildren y CDC: pápulas con un hoyito en el "
+            "centro, se curan solas en meses y no suele hacer falta quitarlas."
         ),
     ),
     GoldenQuestion(
@@ -1010,13 +1028,61 @@ CANDIDATES: tuple[GoldenQuestion, ...] = (
         ),
     ),
     GoldenQuestion(
-        "B27", "B",
+        "A43", "A",
         "Ma fille a 14 mois, je peux remplacer le lait de vache par une boisson à l'avoine ?",
-        locale="fr", age_months=14, kind="adjacent",
+        locale="fr", age_months=14, distinct_sources=True,
+        expect_source=(
+            "Cow's Milk and Milk Alternatives|Bebidas recomendadas|leches vegetales|"
+            "Drinks and cups"
+        ),
+        every_citation_mentions="vegetal|avena|leche|bebida|lácte",
         rationale=(
-            "La leche de vaca a partir del año sí está (hierro, segundo año); las bebidas "
-            "vegetales no (avena, bebida vegetal: cero menciones). Una respuesta con cita "
-            "aplicaría la regla de la leche de vaca a otra bebida."
+            "Era B27. «Cow's Milk and Milk Alternatives» (CDC): las bebidas vegetales, avena "
+            "incluida, sin azúcar y enriquecidas, nunca antes de los 12 meses; HealthyChildren: "
+            "no sustituyen a la leche de vaca salvo la de soja."
+        ),
+    ),
+    GoldenQuestion(
+        "B28", "B",
+        "Por las noches le rechinan los dientes, tiene 20 meses. ¿Es bruxismo? ¿Hay que hacer "
+        "algo?",
+        age_months=20, kind="adjacent",
+        rationale=(
+            "Ocupa el sitio de B19 en ojos, oídos y boca: dentición, caries y audición están en "
+            "el corpus; el bruxismo no (ni «bruxismo» ni «rechinar» en ningún fichero de data/ "
+            "ni de candidatos el 2026-11-07)."
+        ),
+    ),
+    GoldenQuestion(
+        "B29", "B",
+        "Le he notado una fosita en la piel justo encima de la raja del culete. Tiene 2 semanas. "
+        "¿Es algo malo?",
+        age_months=0, kind="adjacent",
+        rationale=(
+            "Ocupa el sitio de B21 en neonatal: la piel y la exploración del recién nacido están "
+            "en el corpus; la fosita sacra no (cero menciones de «fosita» o «sacro» el "
+            "2026-11-07)."
+        ),
+    ),
+    GoldenQuestion(
+        "B30", "B",
+        "Le ha salido en el brazo una mancha redonda con el borde rojo que le pica. ¿Es tiña? "
+        "¿Se contagia en casa?",
+        age_months=16, kind="adjacent",
+        rationale=(
+            "Ocupa el sitio de B24 en piel: eccema, manchas y molusco están en el corpus; la "
+            "tiña no (cero menciones el 2026-11-07)."
+        ),
+    ),
+    GoldenQuestion(
+        "B31", "B",
+        "Ma fille a 16 mois, est-ce qu'elle peut boire du kombucha ? Elle boit déjà de l'eau et "
+        "du lait.",
+        locale="fr", age_months=16, kind="adjacent",
+        rationale=(
+            "Ocupa el sitio de B27 en alimentación: agua, leche y bebidas vegetales están en el "
+            "corpus; la kombucha no (cero menciones el 2026-11-07). Una respuesta con cita "
+            "aplicaría la regla de otra bebida."
         ),
     ),
 )
@@ -1036,20 +1102,24 @@ CANDIDATE_MISSES_2026_11_06: dict[str, str] = {
            "a los mocos de la pregunta y no nombraba la otitis.",
     "A39": "Ninguna tarjeta bajo el corte: «Soporte vital pediátrico» quedó a 0,1977 (corte "
            "0,19); el léxico no tenía entrada para la maniobra.",
-    "B19": "Cuatro tarjetas bajo el corte (0,18) que no responden: prevención de accidentes, "
-           "audición, atragantamiento con juguetes y dientes.",
-    "B21": "Cuatro tarjetas bajo el corte (0,14 a 0,15) sobre la leche de la madre, ninguna "
-           "sobre los pechos hinchados del recién nacido.",
     "B22": "Cuatro tarjetas bajo el corte (0,17) de lactancia y crianza, ninguna sobre "
            "anticonceptivos.",
     "B23": "Mixta: las cuatro tarjetas (0,14 a 0,16) son de adaptación a la guardería, la mitad "
            "cubierta; ninguna habla de valeriana.",
-    "B24": "Cuatro tarjetas bajo el corte (0,18) sobre cuerpos extraños y pilas de botón, "
-           "ninguna sobre el molusco contagioso.",
+    "A40": "Era B19: cuatro tarjetas bajo el corte (0,18) que no respondían; como A, sin medir "
+           "todavía; su fuente entró en data/ el 2026-11-07.",
+    "A41": "Era B21: cuatro tarjetas (0,14 a 0,15) sobre la leche de la madre; como A, sin medir "
+           "todavía; su fuente entró en data/ el 2026-11-07.",
+    "A42": "Era B24: cuatro tarjetas (0,18) sobre cuerpos extraños y pilas de botón; como A, sin "
+           "medir todavía; su fuente entró en data/ el 2026-11-07.",
+    "A43": "Era B27: cuatro tarjetas (0,16) sobre la leche de vaca desde el año; como A, sin "
+           "medir todavía; su fuente entró en data/ el 2026-11-07.",
     "B25": "Dosis: cuatro tarjetas bajo el corte (0,14 a 0,16) sobre sibilancias y tos, ninguna "
            "con salbutamol ni pulsaciones.",
-    "B27": "Cuatro tarjetas bajo el corte (0,16) sobre la leche de vaca a partir del año; el "
-           "corpus no nombra las bebidas vegetales, así que sigue siendo una B.",
+    "B28": "Escrita el 2026-11-07 en el sitio de B19; sin medir.",
+    "B29": "Escrita el 2026-11-07 en el sitio de B21; sin medir.",
+    "B30": "Escrita el 2026-11-07 en el sitio de B24; sin medir.",
+    "B31": "Escrita el 2026-11-07 en el sitio de B27; sin medir.",
 }
 
 
@@ -1059,8 +1129,8 @@ CANDIDATE_MISSES_2026_11_06: dict[str, str] = {
 #: after a promotion. A literal on purpose: computed from CANDIDATES it would
 #: shrink with every question promoted.
 BLIND_SPOT_IDS_2026_11_06: tuple[str, ...] = (
-    *(f"A{n}" for n in range(19, 40)),
-    *(f"B{n}" for n in range(18, 28)),
+    *(f"A{n}" for n in range(19, 44)),
+    *(f"B{n}" for n in range(18, 32) if n not in (19, 21, 24, 27)),
 )
 
 

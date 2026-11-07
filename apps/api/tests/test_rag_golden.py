@@ -1309,10 +1309,12 @@ BLIND_THEMES = (
 #: Which theme each 2026-11-06 B question stands next to. A B question has no
 #: expect_source to read it from, so the table says it.
 NOV6_B_THEMES = {
-    "B18": "infecciones_fiebre", "B19": "ojos_oidos_boca_uro_neuro", "B20": "seguridad",
-    "B21": "neonatal", "B22": "salud_madre_familia", "B23": "guarderia_adaptacion",
-    "B24": "digestivo_piel", "B25": "respiratorio_sueno", "B26": "desarrollo_0_24m",
-    "B27": "alimentacion_bebes",
+    "B18": "infecciones_fiebre", "B20": "seguridad", "B22": "salud_madre_familia",
+    "B23": "guarderia_adaptacion", "B25": "respiratorio_sueno", "B26": "desarrollo_0_24m",
+    # 2026-11-07: B19, B21, B24 and B27 became A40 to A43 (the candidates of that
+    # night answer them); these four took their place, one per theme.
+    "B28": "ojos_oidos_boca_uro_neuro", "B29": "neonatal", "B30": "digestivo_piel",
+    "B31": "alimentacion_bebes",
 }
 
 #: The urgencias_lactante sources no question reaches, and the wording a
@@ -1351,7 +1353,7 @@ def test_every_2026_11_06_question_is_a_candidate_or_in_the_gate_never_both():
     assert len(candidate_ids) == len(set(candidate_ids))
     assert not gate_ids & set(candidate_ids)
     assert [q.id for q in NOV6] == list(BLIND_SPOT_IDS_2026_11_06)
-    assert len(NOV6) == 31
+    assert len(NOV6) == 35
 
 
 def test_a_candidate_is_outside_the_gate():
@@ -1367,7 +1369,7 @@ def test_the_2026_11_06_table_per_group_and_locale():
         for g in ("A", "B") for loc in LOCALES
     }
     assert table == {
-        ("A", "es"): 12, ("A", "en"): 4, ("A", "fr"): 5,
+        ("A", "es"): 15, ("A", "en"): 4, ("A", "fr"): 6,
         ("B", "es"): 8, ("B", "en"): 1, ("B", "fr"): 1,
     }
 
