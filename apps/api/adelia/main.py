@@ -9,6 +9,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
 
 from adelia import ratelimit
+from adelia.qa_traffic import QATrafficMiddleware
 from adelia.config import settings
 from adelia.db import engine
 from adelia.services import usage
@@ -358,6 +359,10 @@ async def request_logging(request: Request, call_next):
         request.method, request.url.path, response.status_code, elapsed * 1000,
     )
     return response
+
+# Test traffic (X-AdelIA-QA: 1) is served as usual and only left out of the
+# counters (adelia/qa_traffic.py).
+app.add_middleware(QATrafficMiddleware)
 
 app.add_middleware(
     CORSMiddleware,

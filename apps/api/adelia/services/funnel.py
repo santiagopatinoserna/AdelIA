@@ -36,6 +36,7 @@ from datetime import date, datetime, timedelta, timezone
 import sqlalchemy as sa
 from sqlalchemy.dialects.postgresql import insert as pg_insert
 
+from adelia import qa_traffic
 from adelia.db import AsyncSessionLocal
 from adelia.models import FunnelCounter, User
 from adelia.services import short_links
@@ -48,8 +49,15 @@ logger = logging.getLogger(__name__)
 # visitor), so the allowlist is the validation.
 COUNTED_EVENTS = ("visit", "start", "demo_ask")
 
+# The demo asks of test traffic (adelia/qa_traffic.py). Kept apart from
+# "demo_ask" so the funnel does not show them, and added back by the demo's
+# spending ceiling, which must count every ask whoever sends it.
+QA_DEMO_ASK = "demo_ask_qa"
+
 # Plus one per short link, from the closed table of services/short_links.
-WRITABLE_EVENTS = frozenset(COUNTED_EVENTS) | frozenset(short_links.EVENTS)
+WRITABLE_EVENTS = (
+    frozenset(COUNTED_EVENTS) | frozenset(short_links.EVENTS) | frozenset({QA_DEMO_ASK})
+)
 
 # Derived at read time, never written. Kept here so the API contract lists
 # the four columns of the funnel in one place.
@@ -81,7 +89,7 @@ def _utc_date(column):
     return sa.cast(sa.func.timezone("UTC", column), sa.Date)
 
 
-async def bump(event: str, *, day: date | None = None) -> int:
+async def bump(event: str, *, day: date | None = None, plus: tuple[str, ...] = ()) -> int:
     """Add 1 to today's counter for `event`; return the new value.
 
     Atomic upsert: concurrent visitors race on the same (day, event) row and
@@ -89,10 +97,13 @@ async def bump(event: str, *, day: date | None = None) -> int:
     modify-write in Python can lose a count.
 
     Returns the post-increment value so a caller can also use it as a daily
-    budget (routers/demo does exactly that with "demo_ask").
+    budget (routers/demo does exactly that with "demo_ask"). `plus` adds
+    today's values of other events to it, read after the increment in the same
+    transaction: the demo's ceiling is "demo_ask" plus its test traffic.
     """
-    if event not in WRITABLE_EVENTS:
-        raise ValueError(f"unknown funnel event: {event!r}")
+    for name in (event, *plus):
+        if name not in WRITABLE_EVENTS:
+            raise ValueError(f"unknown funnel event: {name!r}")
     today = day or utc_today()
     stmt = (
         pg_insert(FunnelCounter)
@@ -104,17 +115,25 @@ async def bump(event: str, *, day: date | None = None) -> int:
         .returning(FunnelCounter.count)
     )
     async with AsyncSessionLocal() as session:
-        value = await session.scalar(stmt)
+        value = int(await session.scalar(stmt) or 0)
+        if plus:
+            value += int(await session.scalar(
+                sa.select(sa.func.coalesce(sa.func.sum(FunnelCounter.count), 0))
+                .where(FunnelCounter.day == today, FunnelCounter.event.in_(plus))
+            ) or 0)
         await session.commit()
-    return int(value or 0)
+    return value
 
 
 async def bump_quietly(event: str) -> None:
     """`bump` that can never break the request it rides along with.
 
     A counter is not worth a 500 on a landing page or a failed demo answer,
-    so the exception is logged and swallowed.
+    so the exception is logged and swallowed. Test traffic is not counted at
+    all (adelia/qa_traffic.py).
     """
+    if qa_traffic.is_qa():
+        return
     try:
         await bump(event)
     except Exception:  # noqa: BLE001 — a missed count is not an incident
@@ -144,6 +163,7 @@ async def summary(days: int = 30, *, today: date | None = None) -> list[dict]:
                 sa.select(created_day.label("day"), sa.func.count().label("n"))
                 .where(created_day >= start)
                 .where(created_day <= end)
+                .where(qa_traffic.counted_user(User.email))
                 .group_by(created_day)
             )
         ).all()
@@ -154,6 +174,7 @@ async def summary(days: int = 30, *, today: date | None = None) -> list[dict]:
                 .where(User.onboarded_at.is_not(None))
                 .where(onboarded_day >= start)
                 .where(onboarded_day <= end)
+                .where(qa_traffic.counted_user(User.email))
                 .group_by(onboarded_day)
             )
         ).all()

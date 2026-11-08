@@ -36,6 +36,7 @@ test.beforeAll(async ({ browser }, testInfo) => {
     viewport: use.viewport,
     locale: use.locale,
     serviceWorkers: use.serviceWorkers,
+    extraHTTPHeaders: use.extraHTTPHeaders,
   });
   guard = await armModelGuard(context);
   page = await context.newPage();

@@ -1,10 +1,13 @@
 import { expect, test } from "@playwright/test";
+import { readFileSync, readdirSync } from "node:fs";
 import { join } from "node:path";
 
 import ciConfig from "../playwright.config";
+import smokeConfig from "../e2e-prod/playwright.config";
 import {
   ADMIN_READS,
   DEFAULT_BASE_URL,
+  QA_HEADERS,
   URGENT_QUESTIONS,
   adminFigures,
   boxesOverlap,
@@ -55,6 +58,26 @@ test("the URL, the browser channel and the run folder come from the environment"
 
 test("CI's e2e config never picks up the production suite", () => {
   expect(ciConfig.testDir).toBe("./e2e");
+});
+
+// Test traffic stays out of the numbers (apps/api/adelia/qa_traffic.py): every
+// request of a smoke run carries X-AdelIA-QA: 1, from the pages and from the
+// suite's own direct calls.
+test("every smoke request carries the test-traffic header", () => {
+  expect(QA_HEADERS).toEqual({ "X-AdelIA-QA": "1" });
+  expect(smokeConfig.use?.extraHTTPHeaders).toEqual(QA_HEADERS);
+});
+
+test("a context the suite opens itself keeps the test-traffic header", () => {
+  const dir = join(__dirname, "../e2e-prod");
+  const opened = readdirSync(dir)
+    .filter((f) => f.endsWith(".ts"))
+    .flatMap((f) => {
+      const text = readFileSync(join(dir, f), "utf8");
+      return [...text.matchAll(/\.newContext\(([^)]*)\)/g)].map((m) => ({ f, args: m[1] }));
+    });
+  expect(opened.length).toBeGreaterThan(0);
+  for (const { f, args } of opened) expect(args, f).toContain("extraHTTPHeaders");
 });
 
 test("only the two urgent questions may reach the agent, and nothing else that answers", () => {

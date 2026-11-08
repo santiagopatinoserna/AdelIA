@@ -1,13 +1,17 @@
 import { NextResponse } from "next/server";
 
+import { qaHeaders } from "@/lib/qa-traffic";
+
 // The public half of the funnel (audit 4.8). Deliberately NOT part of
 // /api/backend: that proxy attaches the session JWT and 401s without one, and
 // a visit counter must work for a visitor who has no account and must not
 // carry her identity when she does.
 //
-// Nothing of the incoming request is forwarded. No header, no cookie, no
-// body, no IP: the upstream call is a bare POST whose entire payload is the
-// event name, which is why the counter cannot describe anybody.
+// Nothing of the incoming request is forwarded. No cookie, no body, no IP,
+// and no header but the test-traffic marker (lib/qa-traffic.ts), which only
+// keeps a test run out of the count: the upstream call is a bare POST whose
+// entire payload is the event name, which is why the counter cannot describe
+// anybody.
 //
 // The path mirrors the API's own (/api/funnel/{event} -> /funnel/{event}) on
 // purpose. The repo's Caddyfile proxies /api/* to the API with the prefix
@@ -22,7 +26,7 @@ const API_URL =
 const EVENTS = new Set(["visit", "start"]);
 
 export async function POST(
-  _request: Request,
+  request: Request,
   ctx: { params: Promise<{ event: string }> },
 ) {
   const { event } = await ctx.params;
@@ -30,7 +34,11 @@ export async function POST(
     return new NextResponse(null, { status: 204 });
   }
   try {
-    await fetch(`${API_URL}/funnel/${event}`, { method: "POST", cache: "no-store" });
+    await fetch(`${API_URL}/funnel/${event}`, {
+      method: "POST",
+      headers: qaHeaders(request.headers),
+      cache: "no-store",
+    });
   } catch {
     // The API is down or slow. A missed count is not an incident, and the
     // page that called this is not waiting on the answer.

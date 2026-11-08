@@ -41,6 +41,7 @@ from sqlalchemy.dialects.postgresql import insert as pg_insert
 
 from adelia.agent.graph import LOCAL_TZ
 from adelia.agent.pediatrics import _calendar, resolve_country
+from adelia import qa_traffic
 from adelia.config import settings
 from adelia.db import AsyncSessionLocal
 from adelia.demo.fixture import DEFAULT_LOCALE, DEMO_LOCALES, demo_profile
@@ -81,7 +82,11 @@ _VACCINATED_UP_TO_MONTH = 4
 
 
 def guest_email(user_id: uuid.UUID) -> str:
-    return f"invitado-{user_id}@{GUEST_EMAIL_DOMAIN}"
+    """Her synthetic address. A guest created by test traffic gets the "qa-"
+    prefix, which is how the funnel leaves her out of signups and activations
+    (adelia/qa_traffic.py). Nothing else reads the address."""
+    prefix = qa_traffic.GUEST_EMAIL_PREFIX if qa_traffic.is_qa() else ""
+    return f"{prefix}invitado-{user_id}@{GUEST_EMAIL_DOMAIN}"
 
 
 def _sha256(text: str) -> str:

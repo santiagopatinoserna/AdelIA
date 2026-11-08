@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 
 import { auth } from "@/lib/auth";
+import { qaHeaders } from "@/lib/qa-traffic";
 
 // Same-origin proxy for browser → FastAPI calls. Attaches the backend JWT
 // from the Auth.js session so client components never handle the token.
@@ -57,6 +58,8 @@ async function proxy(request: NextRequest, path: string[]) {
   headers.set("Authorization", `Bearer ${token}`);
   const contentType = request.headers.get("content-type");
   if (contentType) headers.set("Content-Type", contentType);
+  // A test run's provider calls stay out of the usage counter (lib/qa-traffic.ts).
+  for (const [name, value] of Object.entries(qaHeaders(request.headers))) headers.set(name, value);
 
   const hasBody = request.method !== "GET" && request.method !== "HEAD";
   const body = hasBody ? await request.arrayBuffer() : undefined;

@@ -1,5 +1,7 @@
 import { NextResponse } from "next/server";
 
+import { qaHeaders } from "@/lib/qa-traffic";
+
 // The public demo's only write path (audit 4.6). Like /api/funnel and unlike
 // /api/backend, it attaches no session: the whole point of /demo is that it
 // works for someone who has no account, and a visitor's identity has no
@@ -43,7 +45,9 @@ export async function POST(request: Request) {
   try {
     const upstream = await fetch(`${API_URL}/demo/ask`, {
       method: "POST",
-      headers: { "Content-Type": "application/json" },
+      // The test-traffic marker keeps a test ask out of the funnel, never out
+      // of the daily budget (lib/qa-traffic.ts).
+      headers: { "Content-Type": "application/json", ...qaHeaders(request.headers) },
       body: JSON.stringify({
         question: question.trim(),
         locale: typeof locale === "string" ? locale : "es",
