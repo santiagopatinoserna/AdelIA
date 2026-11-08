@@ -47,6 +47,7 @@ from typing import Any, Iterator
 import sqlalchemy as sa
 from sqlalchemy.dialects.postgresql import insert as pg_insert
 
+from adelia import qa_traffic
 from adelia.db import AsyncSessionLocal
 from adelia.models import Briefing, ChatMessage, Document, UsageCounter, User
 from adelia.services.funnel import MAX_SUMMARY_DAYS, _utc_date, utc_today
@@ -275,8 +276,11 @@ def count(operation: str, provider: str, model: str | None, **counts: int) -> No
     read now, in the caller's context, and the write is a task of its own:
     the answer never waits for the database, and a failed or hung write is a
     warning in the log, never an error she sees. Only the operation and the
-    provider are logged, never the arguments.
+    provider are logged, never the arguments. Calls made for test traffic
+    (adelia/qa_traffic.py) are not counted.
     """
+    if qa_traffic.is_qa():
+        return
     coro = None
     try:
         if len(_live_pending()) >= MAX_PENDING:

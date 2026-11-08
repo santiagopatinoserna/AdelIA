@@ -30,6 +30,7 @@ from typing import Literal
 from fastapi import APIRouter, HTTPException, Query, status
 from pydantic import BaseModel, Field
 
+from adelia import qa_traffic
 from adelia.agent.corpus_query import corpus_query
 from adelia.agent.graph import GraphDeps, GraphUnavailable, run_graph
 from adelia.agent.route import log_route
@@ -203,9 +204,17 @@ async def _admit() -> None:
     Counted with the atomic upsert that returns the new value, so concurrent
     callers cannot both see "one under the limit". A counting failure must
     not open the tap: treat it as exhausted.
+
+    Test traffic (adelia/qa_traffic.py) is counted apart, so the funnel's
+    "demo_ask" stays the mothers' asks, and still spends the same ceiling:
+    the header must never be a way past it.
     """
+    if qa_traffic.is_qa():
+        event, others = funnel.QA_DEMO_ASK, ("demo_ask",)
+    else:
+        event, others = "demo_ask", (funnel.QA_DEMO_ASK,)
     try:
-        used = await funnel.bump("demo_ask")
+        used = await funnel.bump(event, plus=others)
     except Exception:  # noqa: BLE001
         logger.exception("demo: could not record the daily counter; refusing")
         raise HTTPException(

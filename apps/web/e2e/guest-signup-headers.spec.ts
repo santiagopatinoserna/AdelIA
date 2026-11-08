@@ -21,3 +21,13 @@ test("without Cloudflare in front nothing about the address is forwarded", () =>
   expect(guestSignupHeaders(incoming)).toEqual({ "Content-Type": "application/json" });
   expect(guestSignupHeaders(undefined)).toEqual({ "Content-Type": "application/json" });
 });
+
+test("a guest a test run opens is marked as test traffic, and only with the value 1", () => {
+  expect(guestSignupHeaders(new Headers({ "x-adelia-qa": "1" }))).toEqual({
+    "Content-Type": "application/json",
+    "X-AdelIA-QA": "1",
+  });
+  expect(guestSignupHeaders(new Headers({ "x-adelia-qa": "yes" }))).toEqual({
+    "Content-Type": "application/json",
+  });
+});

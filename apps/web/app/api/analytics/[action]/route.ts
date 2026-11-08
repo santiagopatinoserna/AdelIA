@@ -1,5 +1,7 @@
 import { NextResponse } from "next/server";
 
+import { qaHeaders } from "@/lib/qa-traffic";
+
 // The browser half of the consented journeys (lib/analytics.ts) posts here.
 // Like /api/funnel, deliberately NOT /api/backend: that proxy attaches the
 // session JWT, and a visitor's journey must never carry her account. Behind
@@ -11,7 +13,8 @@ import { NextResponse } from "next/server";
 // headers the API decides with: the user agent (bot filter and device class,
 // never stored), Sec-GPC (a refusal), and Cloudflare's client address and
 // country, which the API believes only where TRUST_CF_CONNECTING_IP says
-// Cloudflare is in front. No cookie, no Authorization.
+// Cloudflare is in front, and the test-traffic marker (lib/qa-traffic.ts).
+// No cookie, no Authorization.
 const API_URL =
   process.env.API_INTERNAL_URL ??
   process.env.NEXT_PUBLIC_API_URL ??
@@ -31,6 +34,7 @@ export async function POST(request: Request, ctx: { params: Promise<{ action: st
     const value = request.headers.get(name);
     if (value) headers.set(name, value);
   }
+  for (const [name, value] of Object.entries(qaHeaders(request.headers))) headers.set(name, value);
   try {
     const res = await fetch(`${API_URL}/analytics/${action}`, {
       method: "POST",

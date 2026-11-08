@@ -2,7 +2,7 @@ import { defineConfig } from "@playwright/test";
 import { homedir } from "node:os";
 import { join } from "node:path";
 
-import { smokeSettings } from "./kit";
+import { QA_HEADERS, smokeSettings } from "./kit";
 
 // Production smoke suite: what Hermes runs after a deploy instead of writing
 // Playwright scripts on the fly (Santiago, 2026-11-08). Not part of CI: the CI
@@ -40,6 +40,8 @@ export default defineConfig({
   use: {
     ...browser,
     baseURL: settings.baseURL,
+    // Test traffic: served as usual, left out of every count (kit.QA_HEADERS).
+    extraHTTPHeaders: { ...QA_HEADERS },
     viewport: { width: 390, height: 844 },
     locale: "es-ES",
     // The service worker would hide requests from the model guard (browser.ts).

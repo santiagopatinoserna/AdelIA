@@ -46,6 +46,14 @@ las invitadas que abrió con si se borraron. El proceso sale con 1 si algo falla
 
 ## Reglas
 
+- Toda petición lleva `X-AdelIA-QA: 1` (`QA_HEADERS` en `kit.ts`): la de las páginas por
+  `extraHTTPHeaders` en `playwright.config.ts` y en cada `newContext` que abre la suite, y la de sus
+  llamadas directas por el mismo contexto. Producción la atiende igual, pero no la cuenta en el
+  embudo anónimo (visitas, «Empezar», altas y activaciones de invitada), la analítica, los clics
+  de `/r/` ni el contador de uso de la API (`apps/api/adelia/qa_traffic.py`). **Cualquier prueba
+  contra producción, de esta suite o no, debe enviarla.** Es higiene de cifras, no seguridad: no
+  abre nada ni se salta ningún límite (el tope diario de la demo la sigue contando), y no se usa
+  para nada más.
 - Nunca hace responder a un modelo. Las únicas preguntas que envía están en
   `urgent-questions.json` y son banderas rojas, que el nodo `guard` responde en código
   (`apps/api/tests/test_prod_smoke_questions.py` lo comprueba en CI). Además, en el navegador,
@@ -54,7 +62,10 @@ las invitadas que abrió con si se borraron. El proceso sale con 1 si algo falla
 - Nunca hay dos invitadas abiertas a la vez, y se borran siempre: la de las comprobaciones 2 a 4
   y la de la 7, una detrás de otra (un solo worker). Si una comprobación falla antes de borrarla,
   `afterAll` la borra con `DELETE /users/me`, y solo si la sesión sigue siendo esa misma
-  invitada y la API dice que es invitada. Una invitada que quede sin borrar pone `ok: false`.
+  invitada y la API dice que es invitada. Una invitada que quede sin borrar pone `ok: false`; su
+  id está en `summary.json` (`guests`) y se borra a mano dentro del contenedor de la API, primero
+  en seco y luego con `--yes`:
+  `/app/.venv/bin/python scripts/erase_user.py --id <id> [--yes]`. Solo borra invitadas.
 - Nunca pulsa «Grabar» (mandaría audio a la transcripción) ni abre una pregunta de ejemplo.
 
 ## Añadir una comprobación

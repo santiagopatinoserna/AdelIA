@@ -42,6 +42,7 @@ from urllib.parse import urlsplit
 import sqlalchemy as sa
 from sqlalchemy.dialects.postgresql import insert as pg_insert
 
+from adelia import qa_traffic
 from adelia.auth import admin_emails
 from adelia.db import AsyncSessionLocal, engine
 from adelia.models import AnalyticsConsent, AnalyticsEvent, AnalyticsSession
@@ -304,7 +305,12 @@ async def record_consent(
 ) -> None:
     """Append the proof of an answer. A withdrawal that names the browser's
     visitor id also deletes what that browser sent under this consent: she
-    asked us to stop, and keeping her journey would serve nobody but us."""
+    asked us to stop, and keeping her journey would serve nobody but us.
+
+    Test traffic stores no proof (adelia/qa_traffic.py): nobody consented to
+    anything, and its answers would skew the banner's acceptance rate."""
+    if qa_traffic.is_qa():
+        return
     async with AsyncSessionLocal() as db:
         db.add(AnalyticsConsent(consent_id=consent_id, choice=choice, version=version,
                                 source=source))
@@ -323,8 +329,9 @@ async def ingest(
     now: datetime | None = None,
 ) -> int:
     """Store one batch if, and only if, it may be stored. Returns the number of
-    events written; every refusal is a quiet 0."""
-    if gpc or is_bot(user_agent):
+    events written; every refusal is a quiet 0. Test traffic is one of them
+    (adelia/qa_traffic.py)."""
+    if gpc or is_bot(user_agent) or qa_traffic.is_qa():
         return 0
     consent_id = _uuid(payload.get("consent_id"))
     visitor_id = _uuid(payload.get("visitor_id"))

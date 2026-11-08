@@ -9,6 +9,14 @@ import urgent from "./urgent-questions.json";
 
 export const DEFAULT_BASE_URL = "https://adelia.godi.ai";
 
+/**
+ * Sent with every request of a run, from the pages and from the suite's own
+ * calls: the API serves it as usual and leaves it out of the funnel, the
+ * analytics, the /r/ clicks and the usage counter (apps/api/adelia/qa_traffic.py,
+ * apps/web/lib/qa-traffic.ts). Any test against production must send it.
+ */
+export const QA_HEADERS: Readonly<Record<string, string>> = { "X-AdelIA-QA": "1" };
+
 /** Under the home folder, never a fixed /Users/... path: Hermes runs it too. */
 export const SHOTS_ROOT = "dev/adelia-design/shots/prod-smoke";
 

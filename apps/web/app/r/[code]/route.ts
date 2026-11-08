@@ -1,3 +1,4 @@
+import { qaHeaders } from "@/lib/qa-traffic";
 import { isLinkPreviewFetcher, looksLikeCode } from "@/lib/short-links";
 
 // /r/<code>: our own short links for the social networks (2026-11-08). The
@@ -6,7 +7,8 @@ import { isLinkPreviewFetcher, looksLikeCode } from "@/lib/short-links";
 // table (services/short_links.py): POST /funnel/link/<code> answers where the
 // code goes and counts the click, one integer per day and code; GET answers
 // without counting, for link previews. Nothing of the visitor's is forwarded:
-// no cookie, no address, no user agent. Outside [locale] and outside the
+// no cookie, no address, no user agent; only the test-traffic marker
+// (lib/qa-traffic.ts), so a test run's click is not counted. Outside [locale] and outside the
 // middleware (middleware.ts), so the code is read as typed.
 //
 // Always a 302 and never cached: a 301 would be remembered by the browser and
@@ -28,10 +30,11 @@ function redirect(location: string): Response {
   });
 }
 
-async function resolve(code: string, count: boolean): Promise<string | null> {
+async function resolve(code: string, count: boolean, incoming: Headers): Promise<string | null> {
   try {
     const res = await fetch(`${API_URL}/funnel/link/${encodeURIComponent(code)}`, {
       method: count ? "POST" : "GET",
+      headers: qaHeaders(incoming),
       cache: "no-store",
       signal: AbortSignal.timeout(API_TIMEOUT_MS),
     });
@@ -49,12 +52,12 @@ export async function GET(request: Request, ctx: { params: Promise<{ code: strin
   const { code } = await ctx.params;
   if (!looksLikeCode(code)) return redirect(LANDING);
   const count = !isLinkPreviewFetcher(request.headers.get("user-agent"));
-  return redirect((await resolve(code, count)) ?? LANDING);
+  return redirect((await resolve(code, count, request.headers)) ?? LANDING);
 }
 
 // A HEAD is a checker, never a person: same answer, nothing counted.
-export async function HEAD(_request: Request, ctx: { params: Promise<{ code: string }> }) {
+export async function HEAD(request: Request, ctx: { params: Promise<{ code: string }> }) {
   const { code } = await ctx.params;
   if (!looksLikeCode(code)) return redirect(LANDING);
-  return redirect((await resolve(code, false)) ?? LANDING);
+  return redirect((await resolve(code, false, request.headers)) ?? LANDING);
 }
