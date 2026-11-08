@@ -13,6 +13,7 @@ import httpx
 
 from adelia.config import settings
 from adelia.llm import anthropic_text, get_anthropic_client, uses_anthropic
+from adelia.services import usage
 
 MISTRAL_CHAT_URL = "https://api.mistral.ai/v1/chat/completions"
 
@@ -57,6 +58,9 @@ async def summarize_consultation(transcript: str) -> str:
         )
         resp.raise_for_status()
     payload = resp.json()
+    usage.count(
+        "summarize", "mistral", settings.mistral_chat_model, **usage.openai_style_tokens(payload)
+    )
     choices = payload.get("choices") or []
     if not choices:
         return ""
@@ -75,5 +79,8 @@ async def _summarize_anthropic(transcript: str) -> str:
         system=_SYSTEM,
         messages=[{"role": "user", "content": transcript[:12000]}],
         output_config={"effort": "low"},
+    )
+    usage.count(
+        "summarize", "anthropic", settings.anthropic_chat_model, **usage.anthropic_tokens(resp)
     )
     return anthropic_text(resp).strip()

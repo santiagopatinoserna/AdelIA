@@ -53,6 +53,11 @@ set -uo pipefail
 cd "$(dirname "$0")/.."
 PY=.venv/bin/python
 REPORT=golden_report.json
+# Every provider call of this process (corpus load, the set, the previews) is
+# counted as `golden`, never as use (services/usage, 2026-11-08). The counts
+# land in the scratch copy anyway; the label keeps a gate run against any
+# other database from passing for mothers' use.
+export ADELIA_USAGE_SURFACE=golden
 
 say() { printf 'golden: %s\n' "$*"; }
 

@@ -25,7 +25,7 @@ from adelia.db import AsyncSessionLocal, get_db
 from adelia.enrichment import profile_service
 from adelia.models import BlobTombstone, Chunk, ConsentEvent, Document, Entity, Profile
 from adelia.schemas import DocumentOut, ExtractedEntity, ExtractionReport, derive_status
-from adelia.services import briefing_repo
+from adelia.services import briefing_repo, usage
 from adelia.services.scope import Scope
 from adelia.storage import S3Storage
 from adelia.workers.chunker import ChunkConfig, chunk_hierarchical
@@ -327,6 +327,9 @@ async def requeue_stuck_documents(limit: int | None = None) -> list[uuid.UUID]:
     return [row[0] for row in rows]
 
 
+# Its own Task (upload, Telegram, boot reconciliation): OCR, extraction, summary
+# and embeddings of this document are counted as ingestion.
+@usage.in_surface("ingestion")
 async def process_document(document_id: uuid.UUID, mime_type: str, is_consulta: bool = False) -> None:
     # Cap concurrent pipelines: a burst of uploads queues here instead of
     # each grabbing a DB connection + Mistral call at once (pool/API

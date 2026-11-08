@@ -11,6 +11,7 @@ from fastapi.staticfiles import StaticFiles
 from adelia import ratelimit
 from adelia.config import settings
 from adelia.db import engine
+from adelia.services import usage
 from adelia.routers import (
     agent,
     billing,
@@ -103,6 +104,15 @@ STARTUP_RETRY_DELAYS: tuple[float, ...] = (60.0, 300.0)
 
 
 async def load_startup_corpora() -> list[str]:
+    """`_load_startup_corpora`, its provider calls counted as `corpus`: the
+    corpus embeddings at boot are the product's cost, not a mother's
+    (services/usage). A plain function, not a decorator, so its code object
+    stays in this file for tests/test_startup_corpora.py."""
+    with usage.surface("corpus"):
+        return await _load_startup_corpora()
+
+
+async def _load_startup_corpora() -> list[str]:
     """Load the clinical corpora, then the experience fixture, at boot.
 
     Clinical evidence: seed plus per-topic `enrichment/data/evidence_*.json`.
@@ -234,6 +244,9 @@ async def lifespan(app: FastAPI):
             await task
         except asyncio.CancelledError:
             pass
+    # Last, the usage counts the provider replies above scheduled, the corpus
+    # load's included (services/usage): one short upsert each.
+    await usage.drain()
     await engine.dispose()
 
 

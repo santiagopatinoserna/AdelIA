@@ -5,6 +5,7 @@ import httpx
 
 from adelia.config import settings
 from adelia.llm import anthropic_text, get_anthropic_client, uses_anthropic
+from adelia.services import usage
 
 logger = logging.getLogger(__name__)
 
@@ -79,6 +80,11 @@ async def extract_text_from_pdf(body: bytes, mime_type: str) -> str:
         data = response.json()
 
     pages = data.get("pages", [])
+    pages_processed = (data.get("usage_info") or {}).get("pages_processed")
+    usage.count(
+        "ocr", "mistral", settings.mistral_ocr_model,
+        pages=pages_processed if pages_processed is not None else len(pages),
+    )
     return "\n\n".join(page.get("markdown", "") for page in pages)
 
 
@@ -121,6 +127,7 @@ async def _ocr_anthropic(body: bytes, mime_type: str) -> str:
         output_config={"effort": "low"},
     ) as stream:
         final = await stream.get_final_message()
+    usage.count("ocr", "anthropic", settings.anthropic_ocr_model, **usage.anthropic_tokens(final))
     text = anthropic_text(final).strip()
     if final.stop_reason == "max_tokens":
         logger.warning("ocr: Claude transcript cut at max_tokens (%d chars kept)", len(text))

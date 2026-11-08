@@ -47,6 +47,7 @@ from adelia.demo.fixture import DEFAULT_LOCALE, DEMO_LOCALES, demo_profile
 from adelia.models import (
     Chunk, DemoSeedEmbedding, Document, Entity, GuestClaim, Observation, Profile, User,
 )
+from adelia.services import usage
 
 logger = logging.getLogger(__name__)
 
@@ -200,6 +201,7 @@ async def create_guest(locale: str = DEFAULT_LOCALE, *, today: date | None = Non
     )
 
 
+@usage.in_surface("guest")
 async def fill_seed_embeddings(user_id: uuid.UUID, missing: dict[str, str]) -> int:
     """Embed the texts the template lacks, store them once, give them to this guest.
 

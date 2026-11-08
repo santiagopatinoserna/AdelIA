@@ -42,7 +42,7 @@ from adelia.demo.fixture import (
 )
 from adelia.enrichment.evidence_retrieval import retrieve_evidence, retrieve_experience
 from adelia.enrichment.profile_service import ProfileFacts
-from adelia.services import funnel
+from adelia.services import funnel, usage
 from adelia.services.chat_orchestrator import generate_answer
 from adelia.workers.embed import embed_texts
 
@@ -89,6 +89,7 @@ async def get_demo_profile(locale: str = Query(DEFAULT_LOCALE)) -> dict:
 
 
 @router.post("/ask")
+@usage.in_surface("demo")
 async def ask_demo(payload: DemoQuestion) -> dict:
     """Answer one question about the demo baby, citing the real corpus.
 
