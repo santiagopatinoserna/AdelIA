@@ -960,6 +960,47 @@ html.kb-open .ad-agent-canvas {
   height: calc(100dvh - 3.5rem);
 }
 
+/* The analytics consent banner (components/analytics.tsx), on public pages
+   only. A small sheet on the bottom edge of a phone, a card in the corner of
+   a desktop. While it is open the banner writes its height to
+   --ad-consent-h and html gets .ad-consent-open: the page gains that much
+   room at the bottom, so its last line can scroll clear of the banner, and
+   the "new version" toast (sw-register) sits above it instead of under it. */
+.ad-consent {
+  position: fixed;
+  z-index: 40;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  padding: 0.75rem 1rem calc(0.75rem + env(safe-area-inset-bottom));
+  background: var(--color-surface);
+  border-top: 1px solid var(--color-line);
+  box-shadow: var(--shadow-lift);
+}
+html.ad-consent-open body {
+  padding-bottom: var(--ad-consent-h, 0px);
+}
+.ad-consent[hidden] {
+  display: none;
+}
+html.ad-consent-open .ad-update-toast {
+  bottom: calc(var(--ad-consent-h, 0px) + 0.75rem);
+}
+@media (min-width: 768px) {
+  .ad-consent {
+    left: 1rem;
+    right: auto;
+    bottom: 1rem;
+    max-width: 26rem;
+    padding: 1rem;
+    border: 1px solid var(--color-line);
+    border-radius: 1rem;
+  }
+  html.ad-consent-open .ad-update-toast {
+    bottom: calc(var(--ad-consent-h, 0px) + 2rem);
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after {
     animation-duration: 0.001ms !important;

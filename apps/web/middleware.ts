@@ -43,4 +43,7 @@ export default function middleware(request: NextRequest) {
   return response;
 }
 
-export const config = { matcher: ["/((?!api|_next|.*\\..*).*)"] };
+// /r/<code> (app/r/[code]/route.ts) stays outside the locale prefix: the
+// short links of the social networks are read as typed and redirect by
+// themselves.
+export const config = { matcher: ["/((?!api|_next|r/|.*\\..*).*)"] };

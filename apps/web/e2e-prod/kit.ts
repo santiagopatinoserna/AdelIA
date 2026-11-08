@@ -71,6 +71,61 @@ export function refuseModelTurn(body: unknown): string | null {
   return null;
 }
 
+// --- checks 6 and 7: the cookie banner and the admin page --------------------
+
+export type Box = { x: number; y: number; width: number; height: number };
+
+/** True when two boxes share any area; touching edges do not count. */
+export function boxesOverlap(a: Box, b: Box): boolean {
+  return a.x < b.x + b.width && b.x < a.x + a.width && a.y < b.y + b.height && b.y < a.y + a.height;
+}
+
+/** A batch of the consented journeys (lib/analytics.ts), not the consent proof. */
+export function isAnalyticsCollect(url: string): boolean {
+  return new URL(url).pathname === "/api/analytics/collect";
+}
+
+/**
+ * The fragments that appear in any of the bodies, raw, URL-encoded (either
+ * form of the space) or in another case. Check 6 types a question it never
+ * sends and asserts no analytics batch carries it.
+ */
+export function leakedFragments(bodies: string[], fragments: string[]): string[] {
+  const haystack = bodies.join("\n").toLowerCase();
+  return fragments.filter((f) =>
+    [f, encodeURIComponent(f), f.replace(/ /g, "+")].some((form) =>
+      haystack.includes(form.toLowerCase()),
+    ),
+  );
+}
+
+/** What only an admin may read: the visitor analytics and the API usage. */
+export const ADMIN_READS: readonly string[] = [
+  "/api/backend/analytics/access",
+  "/api/backend/analytics/summary",
+  "/api/backend/funnel/summary",
+  "/api/backend/funnel/usage",
+];
+
+// Top-level keys of those answers (services/analytics.summary,
+// routers/funnel). A refusal carries none of them.
+const ADMIN_KEYS = [
+  "totals", "daily", "funnel", "sources", "recent_sessions", "consent", "counters",
+  "rows", "links", "estimated_usd", "active_accounts", "unpriced",
+];
+
+/** The admin figures a response body carries, in the order of ADMIN_KEYS. */
+export function adminFigures(body: string): string[] {
+  let parsed: unknown;
+  try {
+    parsed = JSON.parse(body);
+  } catch {
+    return [];
+  }
+  if (!parsed || typeof parsed !== "object" || Array.isArray(parsed)) return [];
+  return ADMIN_KEYS.filter((k) => k in (parsed as Record<string, unknown>));
+}
+
 // --- Lucía's age and the example question ------------------------------------
 
 /** "Lucía · 5 meses" / "7 months" / "7 mois" / "20 días": whole months. */

@@ -5,6 +5,7 @@ import { signOut } from "next-auth/react";
 import { useLocale, useTranslations } from "next-intl";
 import { AlertTriangle, CreditCard, Download, LogOut } from "lucide-react";
 
+import { ConsentControl } from "@/components/analytics";
 import { ManageButton } from "@/components/billing-actions";
 import { InstallSettingsEntry } from "@/components/install-prompt";
 import { LocaleSwitcher } from "@/components/locale-switcher";
@@ -16,12 +17,17 @@ import { clearShowcaseHidden } from "@/lib/showcase-storage";
 export function AccountSettingsView({
   email,
   billing = null,
+  isAdmin = false,
 }: {
   email: string;
   billing?: BillingStatus | null;
+  /** On ADMIN_EMAILS: the visitor analytics link is drawn. */
+  isAdmin?: boolean;
 }) {
   const t = useTranslations("settings");
   const tg = useTranslations("guestSpace");
+  const tc = useTranslations("consent");
+  const ta = useTranslations("admin");
   const locale = useLocale();
   // A guest of the landing (2026-11-06) has no email to type, no
   // subscription and no way back in once signed out: she confirms the
@@ -151,6 +157,25 @@ export function AccountSettingsView({
           <LocaleSwitcher current={locale} variant="group" />
         </div>
       </section>
+
+      {/* Change or withdraw the measurement answer at any time (AEPD). */}
+      <section className="border-t border-line py-6" data-testid="settings-consent">
+        <h2 className="font-sans text-lg font-semibold text-ink">{tc("settingsTitle")}</h2>
+        <p className="mt-1.5 text-ink-soft">{tc("settingsBody")}</p>
+        <div className="mt-3">
+          <ConsentControl source="settings" />
+        </div>
+      </section>
+
+      {isAdmin && (
+        <section className="border-t border-line py-6" data-testid="settings-admin">
+          <h2 className="font-sans text-lg font-semibold text-ink">{ta("settingsLink")}</h2>
+          <p className="mt-1.5 text-ink-soft">{ta("settingsBody")}</p>
+          <Link href="/dashboard/admin" className="ad-btn ad-btn-ghost mt-3 px-4">
+            {ta("settingsLink")}
+          </Link>
+        </section>
+      )}
 
       {/* Permanent way to install the PWA: the browser's own prompt shows
           once and iOS never shows one, so Settings always offers the path. */}

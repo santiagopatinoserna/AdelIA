@@ -35,8 +35,14 @@ las invitadas que abrió con si se borraron. El proceso sale con 1 si algo falla
    conversación» devuelve el hilo.
 4. Limpieza: borra la invitada en Ajustes y `/dashboard` ya no deja entrar.
 5. `/healthz` y `/api/version` responden; las versiones van al detalle.
-6. Reservada: banner de cookies (`06-cookie-banner.spec.ts`).
-7. Reservada: página de administración de la analítica (`07-analytics-admin.spec.ts`).
+6. Banner de la analítica en la portada, a 390 px: aparece en es/en/fr, «Aceptar» y «Rechazar»
+   son el mismo botón, no tapa la caja de pregunta, el dictado, «Preguntar» ni el botón de grabar;
+   con «Rechazar» no sale ningún lote y se recuerda al recargar; con «Aceptar» salen lotes sin el
+   texto de la pregunta escrita (nunca enviada). Las dos llamadas de la analítica se contestan 204
+   dentro del navegador: producción no guarda ni la prueba del consentimiento ni los lotes.
+7. Administración: una visita sin sesión va a iniciar sesión y una invitada recibe 404 en
+   `/es/dashboard/admin`; ninguna de las dos obtiene cifras de `ADMIN_READS` (analítica y uso de
+   la API). La invitada sale del botón de grabar, como en la 2, y se borra al terminar.
 
 ## Reglas
 
@@ -45,7 +51,8 @@ las invitadas que abrió con si se borraron. El proceso sale con 1 si algo falla
   (`apps/api/tests/test_prod_smoke_questions.py` lo comprueba en CI). Además, en el navegador,
   `browser.ts` aborta todo POST a `/api/demo/ask`, `/api/chat`, `/api/agent` y
   `/api/backend/chat`, y todo turno del agente con otro mensaje, una aclaración o una tarjeta.
-- Una sola invitada por ejecución, y se borra siempre: si una comprobación falla antes de la 4,
+- Nunca hay dos invitadas abiertas a la vez, y se borran siempre: la de las comprobaciones 2 a 4
+  y la de la 7, una detrás de otra (un solo worker). Si una comprobación falla antes de borrarla,
   `afterAll` la borra con `DELETE /users/me`, y solo si la sesión sigue siendo esa misma
   invitada y la API dice que es invitada. Una invitada que quede sin borrar pone `ok: false`.
 - Nunca pulsa «Grabar» (mandaría audio a la transcripción) ni abre una pregunta de ejemplo.
@@ -55,5 +62,5 @@ las invitadas que abrió con si se borraron. El proceso sale con 1 si algo falla
 Un archivo `NN-nombre.spec.ts` en esta carpeta, con el título empezando por su número (`"6 ..."`
 o `"1.es ..."`): ese prefijo es el `id` del resumen. Usa `note()` para el detalle y `shot()` para
 las capturas (`browser.ts`). Si abre una página que pueda preguntar, arma antes
-`armModelGuard(context)`. Las comprobaciones 6 y 7 tienen ya su archivo con un `fixme`: se
-sustituye por la prueba real cuando su rama llegue a `main`.
+`armModelGuard(context)`. Las piezas puras (qué se puede enviar, qué cuenta como fuga o como cifra
+de administración) van en `kit.ts` y se fijan en CI en `e2e/prod-smoke-kit.spec.ts`.

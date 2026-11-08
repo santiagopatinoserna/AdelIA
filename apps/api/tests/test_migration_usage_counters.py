@@ -27,13 +27,22 @@ COLUMNS = {
 }
 
 
-def test_there_is_one_head_and_it_is_this_revision():
+def _alembic_words(*args: str) -> list[str]:
     out = subprocess.run(
-        [sys.executable, "-m", "alembic", "heads"], cwd=API_DIR, capture_output=True,
+        [sys.executable, "-m", "alembic", *args], cwd=API_DIR, capture_output=True,
         text=True, check=True,
     ).stdout.split()
+    return [w for w in out if w.startswith("00")]
 
-    assert [w for w in out if w.startswith("00")] == [REVISION]
+
+def test_there_is_one_head_and_this_revision_is_on_its_chain():
+    """One head, and this revision is on the chain that leads to it. It was the
+    head itself until 0027_analytics was chained behind it on 2026-11-08; the
+    exact head is pinned by the newest migration's test."""
+    heads = _alembic_words("heads")
+
+    assert len(heads) == 1
+    assert REVISION in _alembic_words("history", "-r", f"{REVISION}:{heads[0]}")
 
 
 async def _shape(database: str) -> dict:

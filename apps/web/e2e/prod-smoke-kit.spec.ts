@@ -3,11 +3,16 @@ import { join } from "node:path";
 
 import ciConfig from "../playwright.config";
 import {
+  ADMIN_READS,
   DEFAULT_BASE_URL,
   URGENT_QUESTIONS,
+  adminFigures,
+  boxesOverlap,
   checkId,
   foreignAges,
+  isAnalyticsCollect,
   isModelPath,
+  leakedFragments,
   monthsInGrowthMark,
   refuseModelTurn,
   smokeSettings,
@@ -164,3 +169,51 @@ test("a guest the suite created and could not erase fails the run, whatever the 
   expect(run.ok).toBe(false);
   expect(run.guests).toEqual([erased, left]);
 });
+
+// --- checks 6 and 7: the cookie banner and the admin page ---------------------
+
+test("the banner overlaps a control only when their boxes really cross", () => {
+  const banner = { x: 0, y: 700, width: 390, height: 144 };
+  expect(boxesOverlap(banner, { x: 20, y: 650, width: 100, height: 52 })).toBe(true);
+  expect(boxesOverlap(banner, { x: 20, y: 640, width: 100, height: 60 })).toBe(false);
+  expect(boxesOverlap(banner, { x: 20, y: 844, width: 100, height: 40 })).toBe(false);
+  expect(boxesOverlap(banner, { x: 0, y: 0, width: 390, height: 844 })).toBe(true);
+});
+
+test("a question leaks into an analytics batch raw, URL-encoded or in another case", () => {
+  const question = "Prueba de humo: no enviar";
+  const clean = JSON.stringify({ events: [{ type: "click", element: "landing-ask", path: "/es" }] });
+  expect(leakedFragments([clean], [question])).toEqual([]);
+  expect(leakedFragments([clean, `{"q":"${question}"}`], [question])).toEqual([question]);
+  expect(leakedFragments([encodeURIComponent(question)], [question])).toEqual([question]);
+  expect(leakedFragments([question.replace(/ /g, "+")], [question])).toEqual([question]);
+  expect(leakedFragments([question.toUpperCase()], [question])).toEqual([question]);
+});
+
+test("only the analytics batch endpoint is a collect request", () => {
+  expect(isAnalyticsCollect("https://adelia.godi.ai/api/analytics/collect")).toBe(true);
+  expect(isAnalyticsCollect("http://localhost:3110/api/analytics/collect?x=1")).toBe(true);
+  expect(isAnalyticsCollect("https://adelia.godi.ai/api/analytics/consent")).toBe(false);
+  expect(isAnalyticsCollect("https://adelia.godi.ai/api/funnel/visit")).toBe(false);
+});
+
+test("the admin reads are the analytics summary, its access probe and the API usage", () => {
+  expect(ADMIN_READS).toEqual([
+    "/api/backend/analytics/access",
+    "/api/backend/analytics/summary",
+    "/api/backend/funnel/summary",
+    "/api/backend/funnel/usage",
+  ]);
+});
+
+test("an admin body is recognised by its figures, a refusal is not", () => {
+  expect(adminFigures('{"detail":"Not Found"}')).toEqual([]);
+  expect(adminFigures("")).toEqual([]);
+  expect(adminFigures('{"days":30,"totals":{"visitors":3},"funnel":[]}')).toEqual(["totals", "funnel"]);
+  expect(adminFigures('{"rows":[],"links":[]}')).toEqual(["rows", "links"]);
+  expect(adminFigures('{"estimated_usd":1.2,"active_accounts":4}')).toEqual([
+    "estimated_usd",
+    "active_accounts",
+  ]);
+});
+

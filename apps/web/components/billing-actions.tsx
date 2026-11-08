@@ -4,6 +4,8 @@ import { useState } from "react";
 import { useTranslations } from "next-intl";
 import { Loader2, CreditCard, Settings2, AlertCircle } from "lucide-react";
 
+import { track } from "@/lib/analytics";
+
 // Hits the authed proxy (which signs with the session JWT server-side), then
 // hands off to Stripe's hosted page. We never touch card data ourselves.
 async function redirectToStripe(path: "checkout" | "portal") {
@@ -35,6 +37,8 @@ export function StartTrialButton({ label }: { label?: string } = {}) {
         onClick={async () => {
           setBusy(true);
           setErr(false);
+          // Funnel step before leaving for Stripe (no-op without consent).
+          track("trial_started", { now: true });
           try {
             await redirectToStripe("checkout");
           } catch {

@@ -337,11 +337,17 @@ class Settings(BaseSettings):
     document_requeue_limit: int = 50
 
     # ---- Funnel + public demo (audit 4.6, 4.7, 4.8) ----
-    # Who may read GET /funnel/summary. Empty (the default, and every
-    # self-hosted install) means nobody can: the endpoint answers 404 rather
-    # than 403 so it does not advertise that a set of numbers exists behind
-    # the right account. Compared case-insensitively against users.email.
+    # Who may read the numbers: /funnel/summary, /funnel/usage,
+    # /analytics/summary and the admin page. One rule (auth.admin_emails):
+    # ADMIN_EMAILS, comma-separated, plus OWNER_EMAIL, the older single
+    # address that a production .env may still set. Both empty by default,
+    # which means nobody: the repo is public and a self-hosted install must
+    # not start with someone else as its admin. Production gets Santiago's two
+    # addresses from infra/docker-compose.prod.yml (decision of 2026-11-07).
+    # Everyone else gets a 404, not a 403, so the endpoints do not advertise
+    # that a set of numbers exists behind the right account.
     owner_email: str = ""
+    admin_emails: str = ""
     # The card-free trial (audit 4.7) is granted by the code, not by Stripe:
     # an account that has never touched checkout is treated as trialing for
     # stripe_trial_days from users.created_at. Set to 0 to require checkout

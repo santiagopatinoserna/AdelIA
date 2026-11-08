@@ -110,9 +110,10 @@ UPDATED_MONTH = {"es": "noviembre", "en": "November", "fr": "novembre"}
 @pytest.mark.parametrize("locale", LOCALES)
 def test_the_policy_date_moves_with_the_policy(locale):
     # The Cloudflare declaration changed the policy on 2026-10-14, the
-    # Anthropic one on 2026-11-03 and the AI usage counter on 2026-11-08. A
-    # policy that changes under an older "last updated" date is itself a
-    # misstatement.
+    # Anthropic one on 2026-11-03, and on 2026-11-08 the AI usage counter, the
+    # consented visitor journeys with their cookies section and the clicks on
+    # our short links. A policy that changes under an older "last updated"
+    # date is itself a misstatement.
     updated = _catalog(locale)["privacy"]["updated"]
     assert re.search(r"\b8\b", updated) and "2026" in updated and UPDATED_MONTH[locale] in updated, (
         f"privacy.updated ({locale}) does not carry the 2026-11-08 change: {updated}"
@@ -195,3 +196,21 @@ def test_the_counters_section_declares_the_ai_usage_count(locale):
     for phrase in says:
         assert phrase in privacy["countersBody"], (locale, phrase)
     assert stale not in privacy["whereBody"], locale
+
+
+#: The clicks on our short links of the social networks (/r/<code>,
+#: services/short_links, 2026-11-08): counted like a visit, per code, and the
+#: counters section says so, and that the count says which post, not who.
+SHORT_LINKS = {
+    "es": ["adelia.godi.ai/r/", "qué publicación se abrió, no quién la abrió"],
+    "en": ["adelia.godi.ai/r/", "which post was opened, not who opened it"],
+    "fr": ["adelia.godi.ai/r/", "quelle publication a été ouverte, pas qui l’a ouverte"],
+}
+
+
+@pytest.mark.parametrize("locale", LOCALES)
+def test_the_counters_section_declares_the_short_link_clicks(locale):
+    body = _catalog(locale)["privacy"]["countersBody"]
+    for phrase in SHORT_LINKS[locale]:
+        assert phrase in body, (locale, phrase)
+

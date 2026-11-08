@@ -8,6 +8,7 @@ import { AnswerSources } from "@/components/answer-sources";
 import { AnswerContent, type AnswerCorpusStats } from "@/components/answer-content";
 import { useDictation } from "@/hooks/use-dictation";
 import type { DemoAnswerKind, DemoClarify, DemoIntent, EvidenceCitation } from "@/lib/chat-types";
+import { track } from "@/lib/analytics";
 import { keepLandingQuestion } from "@/lib/landing-question";
 
 const SPEECH_LANG: Record<string, string> = { es: "es-ES", en: "en-GB", fr: "fr-FR" };
@@ -39,7 +40,11 @@ async function openGuestSpace(locale: string, hasSession: boolean): Promise<bool
   if (hasSession) return true;
   try {
     const res = await signIn("guest", { redirect: false, locale });
-    return Boolean(res?.ok && !res.error);
+    const ok = Boolean(res?.ok && !res.error);
+    // A funnel step, sent before the navigation that follows (no-op without
+    // consent). Never the question: only that a space was opened.
+    if (ok) track("guest_created", { now: true });
+    return ok;
   } catch {
     return false;
   }
@@ -122,6 +127,7 @@ export function DemoAsk({ suggested, corpusStats, hasSession = false, consentNot
         window.location.assign(`/${locale}/dashboard?ask=${encodeURIComponent(key)}`);
         return;
       }
+      if (!clarification) track("question_sent");
       const res = await fetch("/api/demo/ask", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -135,6 +141,7 @@ export function DemoAsk({ suggested, corpusStats, hasSession = false, consentNot
         return;
       }
       setResult((await res.json()) as DemoAnswer);
+      track("answer_shown");
     } catch {
       setError(t("errorGeneric"));
     } finally {
@@ -227,6 +234,7 @@ export function DemoAsk({ suggested, corpusStats, hasSession = false, consentNot
           </p>
           <button
             type="submit"
+            data-track="landing-ask"
             disabled={busy || question.trim().length < 3}
             aria-busy={busy}
             className="ad-btn ad-btn-primary ad-btn-lg w-full sm:w-auto sm:min-w-36"
@@ -330,6 +338,7 @@ export function DemoAsk({ suggested, corpusStats, hasSession = false, consentNot
       {result && !busy && result.kind !== "clarify" && (
         <section
           data-testid="demo-answer"
+          data-track-private
           aria-labelledby="demo-answer-title"
           className="mt-6 border-t border-line pt-5"
         >
@@ -404,6 +413,7 @@ export function DemoAsk({ suggested, corpusStats, hasSession = false, consentNot
             <li key={suggestion} className="border-t border-line first:border-t-0">
               <button
                 type="button"
+                data-track={`landing-suggestion-${index + 1}`}
                 disabled={busy}
                 onClick={() => {
                   setQuestion(suggestion);

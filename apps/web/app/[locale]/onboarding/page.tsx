@@ -5,6 +5,7 @@ import { getTranslations } from "next-intl/server";
 import { auth } from "@/lib/auth";
 import { onboarding } from "@/lib/api-client";
 import { BabyOnboardingForm } from "@/components/baby-onboarding";
+import { TrackStep } from "@/components/analytics";
 
 export async function generateMetadata({
   params,
@@ -55,6 +56,9 @@ export default async function OnboardingPage({
 
   return (
     <main className="mx-auto flex min-h-[100dvh] max-w-lg flex-col justify-center px-6 py-10">
+      {/* Only a new account is asked about the baby: this screen is the
+          regular signup's funnel step (no-op without consent). */}
+      <TrackStep step="signup" />
       <h1 className="font-display text-2xl font-semibold tracking-tight text-ink">
         {t("title")}
       </h1>

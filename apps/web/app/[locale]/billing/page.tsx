@@ -7,6 +7,7 @@ import { Baby, Check, ShieldCheck, Sparkles } from "lucide-react";
 import { billingStatus } from "@/lib/api-client";
 import { formatInstant } from "@/lib/dates";
 import { Link } from "@/lib/navigation";
+import { TrackStep } from "@/components/analytics";
 import { StartTrialButton, ManageButton } from "@/components/billing-actions";
 
 export async function generateMetadata({
@@ -67,6 +68,7 @@ export default async function BillingPage({
           Adel<span className="text-accent-text">IA</span>
         </Link>
 
+        {checkout === "success" && <TrackStep step="payment" />}
         {checkout === "success" && (
           <p className="ad-card ad-rise mt-5 border-primary-tint-line bg-primary-tint/60 p-3 text-sm text-ink">
             {t("successNote")}

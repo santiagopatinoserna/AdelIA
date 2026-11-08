@@ -20,6 +20,11 @@ privacy design:
   and `users.onboarded_at` with a GROUP BY. Counting them a second time in
   `funnel_counters` would add a write, a drift risk and no information.
 
+The short links of the social networks (/r/<code>, services/short_links,
+2026-11-08) add one counted event per code, "link_g02" and so on: the same
+date, name and integer, so a click says which piece was opened and nothing
+about who opened it.
+
 This is aggregate from the first line: there is no raw event table to
 aggregate later, and no version of this module can answer "did SHE visit?".
 """
@@ -33,6 +38,7 @@ from sqlalchemy.dialects.postgresql import insert as pg_insert
 
 from adelia.db import AsyncSessionLocal
 from adelia.models import FunnelCounter, User
+from adelia.services import short_links
 
 logger = logging.getLogger(__name__)
 
@@ -41,6 +47,9 @@ logger = logging.getLogger(__name__)
 # 40 KB "event name" carrying whatever the caller wants to log about a
 # visitor), so the allowlist is the validation.
 COUNTED_EVENTS = ("visit", "start", "demo_ask")
+
+# Plus one per short link, from the closed table of services/short_links.
+WRITABLE_EVENTS = frozenset(COUNTED_EVENTS) | frozenset(short_links.EVENTS)
 
 # Derived at read time, never written. Kept here so the API contract lists
 # the four columns of the funnel in one place.
@@ -82,7 +91,7 @@ async def bump(event: str, *, day: date | None = None) -> int:
     Returns the post-increment value so a caller can also use it as a daily
     budget (routers/demo does exactly that with "demo_ask").
     """
-    if event not in COUNTED_EVENTS:
+    if event not in WRITABLE_EVENTS:
         raise ValueError(f"unknown funnel event: {event!r}")
     today = day or utc_today()
     stmt = (
@@ -170,3 +179,31 @@ async def summary(days: int = 30, *, today: date | None = None) -> list[dict]:
             }
         )
     return out
+
+
+async def link_clicks(days: int = 30, *, today: date | None = None) -> list[dict]:
+    """Every short link with its clicks over the last `days`, most first.
+
+    All the codes are listed, zeros included: a piece nobody opened is an
+    answer too, and a missing row would read as "not measured".
+    """
+    days = max(1, min(days, MAX_SUMMARY_DAYS))
+    end = today or utc_today()
+    start = end - timedelta(days=days - 1)
+    async with AsyncSessionLocal() as session:
+        rows = (
+            await session.execute(
+                sa.select(FunnelCounter.event, sa.func.sum(FunnelCounter.count))
+                .where(FunnelCounter.day >= start, FunnelCounter.day <= end)
+                .where(FunnelCounter.event.in_(short_links.EVENTS))
+                .group_by(FunnelCounter.event)
+            )
+        ).all()
+    clicks = {event: int(n or 0) for event, n in rows}
+    out = [
+        {"code": link.code, "source": link.source, "medium": link.medium,
+         "content": link.content, "clicks": clicks.get(short_links.event(link), 0)}
+        for link in short_links.LINKS.values()
+    ]
+    order = list(short_links.LINKS)
+    return sorted(out, key=lambda r: (-r["clicks"], order.index(r["code"])))

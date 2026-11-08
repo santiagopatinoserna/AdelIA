@@ -3,6 +3,7 @@ import { getLocale, getTranslations } from "next-intl/server";
 
 import { DemoAsk } from "@/components/demo-ask";
 import { DemoRecord } from "@/components/demo-record";
+import { TrackStep } from "@/components/analytics";
 import { FunnelVisit, StartLink } from "@/components/funnel";
 import { LocaleSwitcher } from "@/components/locale-switcher";
 import { auth } from "@/lib/auth";
@@ -121,6 +122,8 @@ export default async function HomePage() {
       {/* One aggregate counter per page view, no cookie and no identifier
           (audit 4.8, components/funnel.tsx). Renders nothing. */}
       <FunnelVisit />
+      {/* The consented journey's first step; nothing without consent. */}
+      <TrackStep step="landing_view" />
 
       <header className={styles.header}>
         <div className="flex items-center gap-2">
@@ -257,6 +260,10 @@ export default async function HomePage() {
             </Link>
             <Link href="/terminos" className="py-2 text-ink-soft hover:text-primary-text-hover">
               {t("home.footerTerms")}
+            </Link>
+            {/* Change or withdraw the measurement answer at any time (AEPD). */}
+            <Link href="/privacidad#cookies" className="py-2 text-ink-soft hover:text-primary-text-hover">
+              {t("consent.footerLink")}
             </Link>
             <a
               href={GITHUB_URL}

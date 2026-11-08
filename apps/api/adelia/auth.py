@@ -121,6 +121,31 @@ async def get_current_user_id(
 # lifted by paying, which is exactly what the status code means.
 # ---------------------------------------------------------------------------
 
+def admin_emails() -> set[str]:
+    """Who may read the numbers that describe the business: the funnel, the AI
+    usage (/funnel/*) and the visitor journeys (/analytics/*, /dashboard/admin).
+
+    One rule since 2026-11-08: ADMIN_EMAILS (comma-separated) plus OWNER_EMAIL,
+    the older single-address setting of audit 4.8 that a production .env may
+    still carry. Both default to empty in code, because the repo is public and a
+    self-hosted install must not start with someone else as its admin;
+    infra/docker-compose.prod.yml supplies Santiago's two addresses. Compared
+    case-insensitively against users.email.
+    """
+    raw = f"{settings.admin_emails or ''},{settings.owner_email or ''}"
+    return {e.strip().lower() for e in raw.split(",") if e.strip()}
+
+
+def is_admin(user: Any) -> bool:
+    """True for a signed-in account on admin_emails(). A guest never is: her
+    synthetic `.invalid` address cannot be on the list, and is_guest says so
+    before the address is even read. An empty list admits nobody."""
+    if user is None or getattr(user, "is_guest", False):
+        return False
+    email = (getattr(user, "email", "") or "").strip().lower()
+    return bool(email) and email in admin_emails()
+
+
 SUBSCRIPTION_REQUIRED_DETAIL = "Subscription required"
 
 

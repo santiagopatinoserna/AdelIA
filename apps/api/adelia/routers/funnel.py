@@ -9,6 +9,11 @@ happens. All it can do is add 1 to an integer.
 404, not 403, for everyone else: a 403 tells a stranger that the numbers exist
 and that some account can read them. `GET /funnel/usage` is the cost side of
 the same table of numbers (services/usage) behind the same gate.
+
+`/funnel/link/{code}` is the API half of the short links of the social
+networks (services/short_links, 2026-11-08): the web's /r/<code> asks where a
+code goes and the POST counts the click, like a visit. GET only answers,
+for link previews and checkers, which are not people.
 """
 from __future__ import annotations
 
@@ -16,9 +21,8 @@ from typing import Annotated, Any
 
 from fastapi import APIRouter, Depends, HTTPException, Response, status
 
-from adelia.auth import get_current_user
-from adelia.config import settings
-from adelia.services import funnel, usage
+from adelia.auth import get_current_user, is_admin
+from adelia.services import funnel, short_links, usage
 
 router = APIRouter(prefix="/funnel", tags=["funnel"])
 
@@ -42,11 +46,40 @@ async def record_event(event: str) -> Response:
     return Response(status_code=status.HTTP_204_NO_CONTENT)
 
 
+def _short_link(code: str) -> short_links.ShortLink:
+    link = short_links.resolve(code)
+    if link is None:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND)
+    return link
+
+
+@router.get("/link/{code}")
+async def resolve_link(code: str) -> dict[str, str]:
+    """Where /r/<code> goes, counting nothing. 404 for an unknown code."""
+    link = _short_link(code)
+    return {"code": link.code, "location": short_links.location(link)}
+
+
+@router.post("/link/{code}")
+async def follow_link(code: str) -> dict[str, str]:
+    """Where /r/<code> goes, and +1 to today's count of that code.
+
+    No body, no cookie, no identifier: the web calls this from its server
+    with nothing of the visitor's. An unknown code is a 404 and writes nothing,
+    so the table only ever holds the codes of services/short_links.
+    """
+    link = _short_link(code)
+    await funnel.bump_quietly(short_links.event(link))
+    return {"code": link.code, "location": short_links.location(link)}
+
+
 def _require_owner(user: Any) -> None:
-    """404 unless `user` is settings.owner_email. Unset owner: nobody passes."""
-    owner = (settings.owner_email or "").strip().lower()
-    email = (getattr(user, "email", "") or "").strip().lower()
-    if not owner or email != owner:
+    """404 unless `user` is an admin by auth.is_admin, the one rule shared
+    with /analytics since 2026-11-08 (ADMIN_EMAILS plus OWNER_EMAIL). Before,
+    this read OWNER_EMAIL alone and the analytics read ADMIN_EMAILS alone, so
+    the same person could see the visitors and not what they cost. Nobody
+    configured: nobody passes."""
+    if not is_admin(user):
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND)
 
 
@@ -57,8 +90,8 @@ async def funnel_summary(
 ) -> dict[str, Any]:
     """Visits, "Empezar" presses, signups and activations, one row per day.
 
-    Owner-only, by email against settings.owner_email. With OWNER_EMAIL unset
-    (the default, and every self-hosted install) nobody passes, which is the
+    Admin-only (auth.is_admin). With ADMIN_EMAILS and OWNER_EMAIL unset (the
+    code default, and every self-hosted install) nobody passes, which is the
     right default for a number that describes the business rather than the
     account asking.
     """
@@ -68,6 +101,7 @@ async def funnel_summary(
         "days": len(rows),
         "columns": ["visit", "start", "signup", "activation", "demo_ask"],
         "rows": rows,
+        "links": await funnel.link_clicks(days),
     }
 
 

@@ -35,7 +35,9 @@ export default async function SaveAccountPage({
 
   if (token) {
     const adopted = await adoptGuest(token).catch(() => false);
-    if (adopted) redirect(`/${locale}/dashboard`);
+    // `?cuenta=guardada` lets the panel count the funnel step (only with
+    // consent); the panel ignores it otherwise.
+    if (adopted) redirect(`/${locale}/dashboard?cuenta=guardada`);
     return (
       <main className="mx-auto max-w-lg px-5 py-10">
         <h1 className="text-title text-ink">{t("saveTitle")}</h1>

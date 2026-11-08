@@ -65,6 +65,12 @@ ROUTE_BUDGETS: list[tuple[str, str, int]] = [
     # under normal traffic is worse than no counter, because it under-reports
     # silently and exactly when the numbers matter.
     ("POST", "/funnel", 600),
+    # Consented journeys (services/analytics). A browser sends one batch every
+    # few seconds at most and one per page it leaves, so 120 a minute is far
+    # above a person and well below a script filling the table. The Next
+    # route (app/api/analytics) forwards CF-Connecting-IP, so behind
+    # Cloudflare the bucket is the visitor whichever proxy carries it.
+    ("POST", "/analytics/", 120),
 ]
 DEFAULT_BUDGET = 240  # everything else, per identity
 
