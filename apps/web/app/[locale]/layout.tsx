@@ -4,6 +4,7 @@ import { notFound } from "next/navigation";
 import type { Metadata, Viewport } from "next";
 import { Fraunces, Hanken_Grotesk } from "next/font/google";
 
+import { Analytics } from "@/components/analytics";
 import { ServiceWorkerRegister } from "@/components/sw-register";
 import { locales } from "@/lib/i18n";
 import { IOS_SPLASH } from "@/lib/ios-splash";
@@ -150,6 +151,9 @@ export default async function LocaleLayout({
           {children}
           {/* Inside the provider: it renders the translated "new version" notice. */}
           <ServiceWorkerRegister />
+          {/* The consent banner and, once she accepts, the journey tracker.
+              A sibling, not a provider: it never re-renders the pages. */}
+          <Analytics />
         </NextIntlClientProvider>
       </body>
     </html>

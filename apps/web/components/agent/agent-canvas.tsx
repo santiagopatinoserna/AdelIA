@@ -10,6 +10,7 @@ import { EvidenceCard } from "@/components/evidence-card";
 import { Database, BookMarked, Mic, RotateCcw, UserRoundCheck } from "lucide-react";
 import { CardRenderer, type CardActionHandler } from "./cards/card-renderer";
 import { AgentInput } from "./agent-input";
+import { track } from "@/lib/analytics";
 import { ProfileSwitcher } from "./profile-switcher";
 import { CapabilityShowcase } from "@/components/capability-showcase";
 import { GrowthMark, useGrowthMarkLabel } from "./growth-mark";
@@ -172,6 +173,10 @@ export function AgentCanvas({
             content: m.content.slice(0, HISTORY_MAX_CHARS_PER_MESSAGE),
           }))
       : undefined;
+    // Funnel steps (no-op without consent): that she asked, never what. A
+    // clarify press answers the question already counted.
+    const asking = Boolean(body.message) && display === undefined;
+    if (asking) track(messages.some((m) => m.role === "user") ? "follow_up" : "question_sent");
     if (body.message)
       setMessages((p) => [
         ...p,
@@ -196,6 +201,7 @@ export function AgentCanvas({
           turnCardIds.current.add(ev.card.id);
           setCards((p) => [ev.card, ...p.filter((c) => c.id !== ev.card.id)]);
         } else if (ev.type === "final") {
+          if (asking) track("answer_shown");
           setMessages((p) => { const n = [...p]; const last = n[n.length - 1];
             if (last?.role === "assistant")
               n[n.length - 1] = { ...last, citations: ev.citations, evidence_citations: ev.evidence_citations };

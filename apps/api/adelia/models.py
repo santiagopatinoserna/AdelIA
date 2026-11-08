@@ -554,7 +554,11 @@ class ConsentEvent(Base):
 
 
 class FunnelCounter(Base):
-    """One integer per (day, event). The whole analytics of the product.
+    """One integer per (day, event). Counts every visitor, consenting or not.
+
+    Since 2026-11-07 the consented journeys (AnalyticsSession, AnalyticsEvent)
+    sit on top of it; this table stays the count of everyone, with nothing
+    stored about anyone, and the demo's daily budget.
 
     Audit 4.8. /privacidad promises "no te rastreamos", so the funnel is
     measured the only way that promise allows: the server adds 1 to a counter
@@ -598,3 +602,95 @@ class DemoSeedEmbedding(Base):
     content_sha256 = Column(String(64), primary_key=True)
     embedding = Column(Vector(1024), nullable=False)
     created_at = Column(DateTime(timezone=True), server_default=func.now(), nullable=False)
+
+
+class AnalyticsConsent(Base):
+    """Proof of each answer to the analytics banner (migration 0026).
+
+    RGPD art. 7.1 asks the controller to be able to show that a visitor
+    consented. The proof is the choice, the version of the text she answered
+    and the date, under a random id her browser keeps with the choice, and
+    nothing else: no IP, no user agent, no account. Append-only: changing
+    her mind adds a row, so the latest row per `consent_id` is her current
+    answer and the older ones prove what held when. Deleted by
+    services.analytics.purge_expired after CONSENT_PROOF_RETENTION_DAYS.
+    """
+
+    __tablename__ = "analytics_consents"
+    id = Column(BigInteger, primary_key=True, autoincrement=True)
+    consent_id = Column(UUID(as_uuid=True), nullable=False)
+    choice = Column(String(12), nullable=False)
+    version = Column(String(16), nullable=False)
+    source = Column(String(12), nullable=False)
+    created_at = Column(DateTime(timezone=True), server_default=func.now(), nullable=False)
+
+    __table_args__ = (
+        CheckConstraint(
+            "choice IN ('accepted', 'rejected', 'withdrawn')", name="ck_analytics_consents_choice"
+        ),
+        Index("ix_analytics_consents_consent_created", "consent_id", "created_at"),
+        Index("ix_analytics_consents_created", "created_at"),
+    )
+
+
+class AnalyticsSession(Base):
+    """One visit of a consenting visitor (migration 0026, services/analytics).
+
+    `visitor_id` and `session_id` are random UUIDs her browser draws after she
+    accepts; neither is, nor can be joined to, a user or guest id, an email or
+    an IP. What a session knows about where she came from is decided by its
+    first batch and never overwritten: the referring domain (never the URL),
+    the UTM parameters of the post that brought her, the device class derived
+    from the user agent (which is not stored), the screen size, the language
+    and, where Cloudflare says so, the country.
+    """
+
+    __tablename__ = "analytics_sessions"
+    session_id = Column(UUID(as_uuid=True), primary_key=True)
+    visitor_id = Column(UUID(as_uuid=True), nullable=False, index=True)
+    consent_id = Column(UUID(as_uuid=True), nullable=False)
+    started_at = Column(DateTime(timezone=True), nullable=False, index=True)
+    last_seen_at = Column(DateTime(timezone=True), nullable=False, index=True)
+    landing_path = Column(String(160))
+    referrer_domain = Column(String(100))
+    utm_source = Column(String(100))
+    utm_medium = Column(String(100))
+    utm_campaign = Column(String(100))
+    utm_content = Column(String(100))
+    utm_term = Column(String(100))
+    device = Column(String(8))
+    screen_w = Column(Integer)
+    screen_h = Column(Integer)
+    lang = Column(String(16))
+    locale = Column(String(5))
+    country = Column(String(2))
+
+
+class AnalyticsEvent(Base):
+    """One step of a consenting visitor's journey (migration 0026).
+
+    Closed vocabulary on purpose: a type, a masked path, the stable name of
+    what was pressed, a scroll depth or a funnel step. There is no free text
+    column, so nothing she types can be stored here even by a client bug.
+    """
+
+    __tablename__ = "analytics_events"
+    id = Column(BigInteger, primary_key=True, autoincrement=True)
+    session_id = Column(
+        UUID(as_uuid=True),
+        ForeignKey("analytics_sessions.session_id", ondelete="CASCADE"),
+        nullable=False,
+    )
+    occurred_at = Column(DateTime(timezone=True), nullable=False, index=True)
+    type = Column(String(12), nullable=False)
+    path = Column(String(160), nullable=False)
+    element = Column(String(80))
+    depth = Column(Integer)
+    step = Column(String(24))
+
+    __table_args__ = (
+        CheckConstraint(
+            "type IN ('pageview', 'click', 'scroll', 'step')", name="ck_analytics_events_type"
+        ),
+        Index("ix_analytics_events_session_time", "session_id", "occurred_at"),
+    )

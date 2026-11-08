@@ -4,6 +4,7 @@ import { getTranslations } from "next-intl/server";
 import { Link } from "@/lib/navigation";
 import { ArrowLeft } from "lucide-react";
 
+import { ConsentControl } from "@/components/analytics";
 import { publicPageAlternates } from "@/lib/seo";
 
 // Server component (only translations + links): no client bundle for a
@@ -34,13 +35,18 @@ export default function PrivacyPage() {
     ["retentionTitle", "retentionBody"],
     ["recordingsTitle", "recordingsBody"],
     ["rightsTitle", "rightsBody"],
-    // Audit 4.8. The page promises "no te rastreamos", and the funnel the
+    // Audit 4.8. The page promised "no te rastreamos" (consented measurement
+    // since 2026-11-07, analyticsBody below), and the funnel the
     // product needed could easily have broken that promise. It does not, and
     // the only way a reader can know is if the page says exactly what is
     // counted: a date, an event name and an integer, no cookie, no IP, no
     // identifier. The section sits BEFORE "Lo que nunca hacemos" so it is
     // read as part of the tracking answer, not as a footnote to it.
     ["countersTitle", "countersBody"],
+    // Decision of 2026-11-07: the consented journey, right after the counters
+    // so the two ways we measure read side by side. DRAFT for Santiago's
+    // review (legal basis, the 13 months, the 3 years of proof).
+    ["analyticsTitle", "analyticsBody"],
     ["neverTitle", "neverBody"],
     ["contactTitle", "contactBody"],
   ] as const;
@@ -89,6 +95,17 @@ export default function PrivacyPage() {
               </p>
             </section>
           ))}
+          {/* The second layer of the banner ("Detalles") and the footer's
+              "Cookies" land here: what is stored, and the switch to change
+              or withdraw the answer at any time. */}
+          <section id="cookies" data-testid="privacy-cookies" className="ad-card scroll-mt-6 p-6">
+            <h2 className="font-display text-xl font-semibold text-ink">{t("cookiesTitle")}</h2>
+            <p className="mt-3 text-[15px] leading-relaxed text-ink">{t("cookiesBody")}</p>
+            <h3 className="mt-5 text-base font-semibold text-ink">{t("cookiesChoiceTitle")}</h3>
+            <div className="mt-2">
+              <ConsentControl source="privacy" />
+            </div>
+          </section>
           <section id="sin-cuenta" data-testid="privacy-guest" className="ad-card p-6">
             <h2 className="font-display text-xl font-semibold text-ink">{tg("privacyTitle")}</h2>
             <p className="mt-3 text-[15px] leading-relaxed text-ink">

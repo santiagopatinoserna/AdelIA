@@ -13,6 +13,7 @@ from adelia.config import settings
 from adelia.db import engine
 from adelia.routers import (
     agent,
+    analytics,
     billing,
     briefings,
     chat,
@@ -60,6 +61,36 @@ async def _periodic_tombstone_sweep() -> None:
             await sweep_blob_tombstones()
         except Exception:  # noqa: BLE001 — one bad tick must not kill the loop
             logger.exception("periodic blob tombstone sweep failed")
+
+
+#: Daily, like the retention it enforces: 13 months to the day is precise
+#: enough when the cut runs every 24 hours.
+ANALYTICS_PURGE_INTERVAL_S = 24 * 3600
+
+
+#: The boot purge is awaited before the app serves; this bounds it, so a slow
+#: database can delay a boot by seconds, never block it.
+ANALYTICS_BOOT_PURGE_TIMEOUT_S = 30.0
+
+
+async def _purge_analytics_once() -> None:
+    """Delete visitor journeys past 13 months and consent proofs past theirs."""
+    from adelia.services import analytics as analytics_service
+
+    try:
+        deleted = await analytics_service.purge_expired()
+        if any(deleted.values()):
+            logger.info("analytics retention purge: %s", deleted)
+    except Exception:  # noqa: BLE001 — one bad tick must not kill the loop
+        logger.exception("analytics retention purge failed")
+
+
+async def _periodic_analytics_purge() -> None:
+    """Daily after the boot purge: a server that restarts often purges on
+    boot (lifespan), one that never restarts purges anyway."""
+    while True:
+        await asyncio.sleep(ANALYTICS_PURGE_INTERVAL_S)
+        await _purge_analytics_once()
 
 
 def seconds_until_next_reminder(now, hour: int) -> float:
@@ -207,8 +238,17 @@ async def lifespan(app: FastAPI):
     # (web waits on it being healthy) and deploy-prod.sh's 60 s of /healthz
     # failed. Meanwhile retrieval reads the corpus loaded so far, which only
     # grows, one whole source at a time.
+    # Retention of the consented journeys (13 months), once before serving
+    # and then daily. Awaited, not raced beside the first requests: a purge
+    # holding a pooled connection while they arrive is the pool exhaustion
+    # this app already had once.
+    try:
+        await asyncio.wait_for(_purge_analytics_once(), ANALYTICS_BOOT_PURGE_TIMEOUT_S)
+    except asyncio.TimeoutError:
+        logger.warning("analytics retention purge at boot timed out; the daily loop retries")
     corpus_task = asyncio.create_task(load_startup_corpora())
     sweep_task = asyncio.create_task(_periodic_tombstone_sweep())
+    analytics_purge_task = asyncio.create_task(_periodic_analytics_purge())
     logger.info("periodic blob tombstone sweep scheduled every %ds", SWEEP_INTERVAL_S)
     reminder_task = None
     if settings.telegram_bot_token:
@@ -226,7 +266,7 @@ async def lifespan(app: FastAPI):
     await drain_erasure_sweeps()
     # And the embedding fills a guest's creation starts after its 201.
     await guest.drain_seed_tasks()
-    for task in (corpus_task, sweep_task, reminder_task):
+    for task in (corpus_task, sweep_task, analytics_purge_task, reminder_task):
         if task is None:
             continue
         task.cancel()
@@ -333,7 +373,9 @@ app.include_router(billing.router)
 app.include_router(agent.router)
 app.include_router(today.router)
 # Public, unauthenticated, and deliberately last so the list reads as
-# "everything above needs a session; these two do not" (audit 4.6, 4.8).
+# "everything above needs a session; these do not" (audit 4.6, 4.8). The
+# analytics reads are admin-only, but its writes are public like the funnel's.
 app.include_router(demo.router)
 app.include_router(guest.router)
 app.include_router(funnel.router)
+app.include_router(analytics.router)

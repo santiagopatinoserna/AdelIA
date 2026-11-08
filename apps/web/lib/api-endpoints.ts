@@ -96,6 +96,70 @@ export type BillingStatus = {
   is_guest?: boolean;
 };
 
+/** GET /analytics/summary (apps/api/adelia/services/analytics.summary). */
+export type AnalyticsSummary = {
+  days: number;
+  from: string;
+  to: string;
+  totals: { visitors: number; sessions: number; pageviews: number };
+  daily: { day: string; visitors: number; sessions: number; pageviews: number }[];
+  funnel: {
+    step: string;
+    visitors: number;
+    sessions: number;
+    rate_from_previous: number | null;
+    rate_from_first: number | null;
+  }[];
+  sources: {
+    referrers: { domain: string | null; sessions: number; visitors: number }[];
+    utm: {
+      source: string | null;
+      medium: string | null;
+      campaign: string | null;
+      content: string | null;
+      sessions: number;
+      visitors: number;
+      steps: Record<string, number>;
+      deepest: string | null;
+    }[];
+  };
+  clicks: { path: string; element: string | null; clicks: number }[];
+  recent_sessions: {
+    session: string;
+    started_at: string;
+    last_seen_at: string;
+    landing_path: string | null;
+    referrer_domain: string | null;
+    utm_source: string | null;
+    utm_medium: string | null;
+    utm_campaign: string | null;
+    utm_content: string | null;
+    device: string | null;
+    screen_w: number | null;
+    screen_h: number | null;
+    locale: string | null;
+    lang: string | null;
+    country: string | null;
+    events: {
+      at: string;
+      type: "pageview" | "click" | "scroll" | "step";
+      path: string;
+      element: string | null;
+      depth: number | null;
+      step: string | null;
+    }[];
+  }[];
+  consent: { accepted: number; rejected: number; withdrawn: number };
+  counters: {
+    day: string;
+    visit: number;
+    start: number;
+    signup: number;
+    activation: number;
+    demo_ask: number;
+  }[];
+};
+
 export function makeApi(fetcher: Fetcher) {
   return {
     /** `profileId` omitted is the default child, which is what the server render asks for. */
@@ -135,6 +199,20 @@ export function makeApi(fetcher: Fetcher) {
         body: JSON.stringify({ token }),
       });
       return res.ok;
+    },
+
+    /** Whether this account is on ADMIN_EMAILS (GET /analytics/access: 204 or 404). */
+    async analyticsAccess(): Promise<boolean> {
+      const res = await fetcher("/analytics/access");
+      return res.status === 204;
+    },
+
+    /** The visitor analytics, admins only; null for anyone else (404). */
+    async analyticsSummary(days: number): Promise<AnalyticsSummary | null> {
+      const res = await fetcher(`/analytics/summary?days=${days}`);
+      if (res.status === 404) return null;
+      if (!res.ok) throw new Error(`analyticsSummary: ${res.status}`);
+      return res.json();
     },
 
     async billingStatus(): Promise<BillingStatus> {

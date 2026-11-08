@@ -3,7 +3,7 @@ import { redirect } from "next/navigation";
 import { getTranslations } from "next-intl/server";
 
 import { AccountSettingsView } from "@/components/account-settings-view";
-import { billingStatus } from "@/lib/api-client";
+import { analyticsAccess, billingStatus } from "@/lib/api-client";
 import { auth } from "@/lib/auth";
 import type { BillingStatus } from "@/lib/api-endpoints";
 
@@ -35,12 +35,14 @@ export default async function SettingsPage({
   // also holds "export my data" and "delete my account" (GDPR art. 17 and
   // 20), and neither may depend on the billing API answering. A null status
   // renders the section with the honest "we could not read it" line.
-  let billing: BillingStatus | null = null;
-  try {
-    billing = await billingStatus();
-  } catch {
-    billing = null;
-  }
+  // The admin link (visitor analytics) only for ADMIN_EMAILS; the API is the
+  // one that decides, and any failure hides the link.
+  const [billing, isAdmin] = await Promise.all([
+    billingStatus().catch((): BillingStatus | null => null),
+    analyticsAccess().catch(() => false),
+  ]);
 
-  return <AccountSettingsView email={session.user?.email ?? ""} billing={billing} />;
+  return (
+    <AccountSettingsView email={session.user?.email ?? ""} billing={billing} isAdmin={isAdmin} />
+  );
 }

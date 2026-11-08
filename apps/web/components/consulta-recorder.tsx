@@ -4,6 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import { useLocale, useTranslations } from "next-intl";
 import { AlertCircle, CheckCircle2, Loader2, Mic, Square, XCircle } from "lucide-react";
 
+import { track } from "@/lib/analytics";
 import { Link } from "@/lib/navigation";
 import { useActiveProfile } from "@/lib/profile-context";
 import { useRecordingGuard } from "@/lib/recording-guard";
@@ -224,6 +225,8 @@ export function ConsultaRecorder() {
       startingRef.current = false;
       setStarting(false);
       setPhase("recording");
+      // Funnel step (no-op without consent): that a recording began, nothing of it.
+      track("recording_started");
     } catch {
       // Discard whatever got created (e.g. a MediaRecorder that already
       // started) and tear down tracks/timers/context so nothing keeps
@@ -242,6 +245,7 @@ export function ConsultaRecorder() {
   }
 
   function stop() {
+    if (recorderRef.current && recorderRef.current.state !== "inactive") track("recording_finished");
     recorderRef.current?.stop();
     setPhase("uploading");
   }

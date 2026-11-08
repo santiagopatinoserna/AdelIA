@@ -342,6 +342,12 @@ class Settings(BaseSettings):
     # than 403 so it does not advertise that a set of numbers exists behind
     # the right account. Compared case-insensitively against users.email.
     owner_email: str = ""
+    # Who may read the visitor analytics (GET /analytics/summary and the admin
+    # page), comma-separated, compared case-insensitively against users.email.
+    # Santiago's two addresses by default (decision of 2026-11-07); a
+    # self-hosted install sets ADMIN_EMAILS to its own, or to "" for nobody.
+    # Everyone else gets a 404, as for /funnel/summary.
+    admin_emails: str = "santiagopatinoserna@gmail.com,santiagopatinoserna@godi.ai"
     # The card-free trial (audit 4.7) is granted by the code, not by Stripe:
     # an account that has never touched checkout is treated as trialing for
     # stripe_trial_days from users.created_at. Set to 0 to require checkout

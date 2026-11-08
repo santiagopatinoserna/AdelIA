@@ -7,6 +7,10 @@ import { Link } from "@/lib/navigation";
 /**
  * The two client-side halves of the funnel (audit 4.8).
  *
+ * Kept beside the consented journeys of 2026-11-07 (lib/analytics.ts): those
+ * measure only who accepts the banner, these count everyone and store nothing
+ * that could describe a person, so they need no consent and no banner.
+ *
  * The product had no measurement at all, and the obvious way to add some is
  * the one thing /privacidad promises never to do ("no hay analítica ni
  * publicidad en AdelIA"). So this is not analytics: it POSTs to our own

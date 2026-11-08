@@ -2,18 +2,21 @@ import { getLocale, getTranslations } from "next-intl/server";
 import { auth } from "@/lib/auth";
 import { Link } from "@/lib/navigation";
 import { AgentCanvas } from "@/components/agent/agent-canvas";
+import { TrackStep } from "@/components/analytics";
 import { TodayFollowsChild, TodaySlot } from "@/components/today-follows-child";
 import { agentThread, billingStatus, today } from "@/lib/api-client";
 
 export default async function DashboardHome({
   searchParams,
 }: {
-  searchParams: Promise<{ ask?: string }>;
+  searchParams: Promise<{ ask?: string; cuenta?: string }>;
 }) {
   // `ask`: the key of the question she typed on the landing (components/
   // demo-ask). The text itself waits in this tab's sessionStorage, not in the
   // URL, so a health question never lands in a server log or the history bar.
-  const { ask } = await searchParams;
+  // `cuenta=guardada`: "Guardar mi cuenta" has just adopted her guest space
+  // (dashboard/guardar), a step of the consented funnel.
+  const { ask, cuenta } = await searchParams;
   const locale = await getLocale();
   const t = await getTranslations("agent");
   // The layout already redirects when there is no session; the id only
@@ -41,6 +44,7 @@ export default async function DashboardHome({
   // switcher again, unheard by every other surface.
   return (
       <div className="relative">
+        {cuenta === "guardada" && <TrackStep step="account_saved" />}
         <TodayFollowsChild initial={due} locale={locale}>
           <AgentCanvas
             locale={locale}

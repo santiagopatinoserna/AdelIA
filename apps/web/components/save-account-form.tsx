@@ -1,15 +1,21 @@
 "use client";
 
-import { useActionState } from "react";
+import { useActionState, useEffect } from "react";
 import { useTranslations } from "next-intl";
 
 import { sendSaveLink, type SaveState } from "@/app/[locale]/dashboard/guardar/actions";
+import { track } from "@/lib/analytics";
 
 export function SaveAccountForm({ locale }: { locale: string }) {
   const t = useTranslations("guestSpace");
   const [state, action, pending] = useActionState<SaveState, FormData>(sendSaveLink, {
     status: "idle",
   });
+  // Funnel step when the link has gone out (no-op without consent). Never
+  // the address she typed.
+  useEffect(() => {
+    if (state.status === "sent") track("save_requested");
+  }, [state.status]);
   if (state.status === "sent") {
     return <p data-testid="save-sent" role="status" className="mt-5 text-base text-ink">{t("saveSent")}</p>;
   }
