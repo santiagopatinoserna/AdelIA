@@ -275,8 +275,13 @@ test.describe("with consent", () => {
     const { cookie } = await seedUserAndSessionCookie(ADMIN_EMAIL);
     await context.clearCookies();
     await context.addCookies([cookie]);
+    // A short link of the social networks is counted without consent and
+    // listed on the same page (2026-11-08).
+    expect((await page.request.get("/r/g02", { maxRedirects: 0 })).status()).toBe(302);
     await page.goto("/es/dashboard/admin?days=7");
     await expect(page.getByTestId("admin-analytics")).toBeVisible();
+    await expect(page.getByTestId("admin-links")).toContainText("/r/g02");
+    await expect(page.getByTestId("admin-links")).toContainText("g02_fiebre3m");
     await expect(page.getByTestId("admin-funnel")).toContainText("Pregunta enviada");
     await expect(page.getByTestId("admin-sources")).toContainText(campaign);
     const recent = page.getByTestId("admin-recent").locator("details").filter({ hasText: campaign });

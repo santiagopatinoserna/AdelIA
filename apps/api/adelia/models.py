@@ -605,7 +605,7 @@ class DemoSeedEmbedding(Base):
 
 
 class AnalyticsConsent(Base):
-    """Proof of each answer to the analytics banner (migration 0026).
+    """Proof of each answer to the analytics banner (migration 0027).
 
     RGPD art. 7.1 asks the controller to be able to show that a visitor
     consented. The proof is the choice, the version of the text she answered
@@ -634,7 +634,7 @@ class AnalyticsConsent(Base):
 
 
 class AnalyticsSession(Base):
-    """One visit of a consenting visitor (migration 0026, services/analytics).
+    """One visit of a consenting visitor (migration 0027, services/analytics).
 
     `visitor_id` and `session_id` are random UUIDs her browser draws after she
     accepts; neither is, nor can be joined to, a user or guest id, an email or
@@ -667,7 +667,7 @@ class AnalyticsSession(Base):
 
 
 class AnalyticsEvent(Base):
-    """One step of a consenting visitor's journey (migration 0026).
+    """One step of a consenting visitor's journey (migration 0027).
 
     Closed vocabulary on purpose: a type, a masked path, the stable name of
     what was pressed, a scroll depth or a funnel step. There is no free text
@@ -694,3 +694,31 @@ class AnalyticsEvent(Base):
         ),
         Index("ix_analytics_events_session_time", "session_id", "occurred_at"),
     )
+
+
+class UsageCounter(Base):
+    """What the AI providers cost, summed per (day, surface, operation, provider, model).
+
+    Same promise as FunnelCounter: the labels describe the call, never the
+    person. `surface` is which part of the product made it (chat, agent,
+    guest, demo, ingestion, briefing, corpus, golden), `operation` is the step
+    (ocr, embed, chat...). There is no column for a user, a profile, a
+    document or a session, so this table can give the cost per active account
+    only as a mean (services/usage.summary divides by accounts derived from
+    rows we already keep), never per account. Cached input is apart from
+    input, the way Anthropic bills it, so one price per column fits every
+    provider (migration 0026).
+    """
+    __tablename__ = "usage_counters"
+    day = Column(Date, primary_key=True)
+    surface = Column(String(16), primary_key=True)
+    operation = Column(String(32), primary_key=True)
+    provider = Column(String(16), primary_key=True)
+    model = Column(String(128), primary_key=True)
+    calls = Column(BigInteger, nullable=False, server_default=text("0"))
+    input_tokens = Column(BigInteger, nullable=False, server_default=text("0"))
+    output_tokens = Column(BigInteger, nullable=False, server_default=text("0"))
+    cache_read_tokens = Column(BigInteger, nullable=False, server_default=text("0"))
+    cache_write_tokens = Column(BigInteger, nullable=False, server_default=text("0"))
+    pages = Column(BigInteger, nullable=False, server_default=text("0"))
+    audio_seconds = Column(BigInteger, nullable=False, server_default=text("0"))

@@ -42,7 +42,7 @@ from urllib.parse import urlsplit
 import sqlalchemy as sa
 from sqlalchemy.dialects.postgresql import insert as pg_insert
 
-from adelia.config import settings
+from adelia.auth import admin_emails
 from adelia.db import AsyncSessionLocal, engine
 from adelia.models import AnalyticsConsent, AnalyticsEvent, AnalyticsSession
 
@@ -122,17 +122,17 @@ def parse_admin_emails(raw: str | None) -> set[str]:
 
 
 def is_admin(email: str | None) -> bool:
-    """True when `email` is on ADMIN_EMAILS. A guest's synthetic `.invalid`
-    address can never be on it, and an empty list admits nobody."""
+    """True when `email` is an admin by the one rule of auth.admin_emails
+    (ADMIN_EMAILS plus OWNER_EMAIL). An empty list admits nobody."""
     value = (email or "").strip().lower()
-    return bool(value) and value in parse_admin_emails(settings.admin_emails)
+    return bool(value) and value in admin_emails()
 
 
 async def ensure_tables() -> None:
     """Create the three tables if they are missing, without touching
     alembic_version. For tests and the shared dev database only, where other
     branches stamp their own revisions; everywhere else `alembic upgrade head`
-    creates them (0026_analytics) and this finds them already there."""
+    creates them (0027_analytics) and this finds them already there."""
     async with engine.begin() as conn:
         await conn.run_sync(
             lambda c: AnalyticsSession.metadata.create_all(c, tables=list(ANALYTICS_TABLES))
@@ -501,6 +501,8 @@ async def summary(days: int = 30, *, today: date | None = None) -> dict[str, Any
         )).all()
 
     counters = await funnel.summary(days, today=end)
+    # The /r/<code> clicks of the social networks, counted for everyone.
+    links = await funnel.link_clicks(days, today=end)
 
     by_day_sessions = {d: (int(n), int(v)) for d, n, v in daily_sessions}
     by_day_views = {d: int(n) for d, n in daily_views}
@@ -580,4 +582,5 @@ async def summary(days: int = 30, *, today: date | None = None) -> dict[str, Any
         "recent_sessions": recent_sessions,
         "consent": consent,
         "counters": counters,
+        "links": links,
     }

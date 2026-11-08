@@ -5,6 +5,7 @@ import openai
 from openai import AsyncOpenAI
 
 from adelia.config import settings
+from adelia.services import usage
 
 MISTRAL_TRANSCRIBE_URL = "https://api.mistral.ai/v1/audio/transcriptions"
 
@@ -50,6 +51,17 @@ def _format_diarized(segments: list[dict]) -> str:
     return "\n\n".join(f"[Hablante {n}] {' '.join(parts)}" for n, parts in blocks)
 
 
+def _audio_seconds(payload: dict, segments: list) -> float:
+    """Seconds of audio billed: `usage.prompt_audio_seconds` when the reply has
+    it, else the end of the last segment, else 0 (a plain-text reply has neither)."""
+    billed = (payload.get("usage") or {}).get("prompt_audio_seconds")
+    if isinstance(billed, (int, float)):
+        return billed
+    ends = [s.get("end") for s in segments if isinstance(s, dict)]
+    ends = [e for e in ends if isinstance(e, (int, float))]
+    return max(ends) if ends else 0
+
+
 async def _transcribe_mistral(body: bytes, mime_type: str, *, diarize: bool) -> str:
     """Mistral Voxtral via La Plateforme REST (same httpx pattern as ocr.py).
 
@@ -79,6 +91,10 @@ async def _transcribe_mistral(body: bytes, mime_type: str, *, diarize: bool) -> 
         resp.raise_for_status()
     payload = resp.json()
     segments = payload.get("segments") or []
+    usage.count(
+        "transcribe", "mistral", settings.mistral_stt_model,
+        audio_seconds=_audio_seconds(payload, segments),
+    )
     # Real-API field is "speaker_id" ("speaker_1", …); keep "speaker" as a
     # defensive fallback in case the contract shifts back.
     if diarize and any(_speaker_of(s) is not None for s in segments):
@@ -141,6 +157,8 @@ async def _transcribe_openai(body: bytes, mime_type: str, *, diarize: bool = Fal
                 "o cambia STT_PROVIDER=mistral"
             ) from exc
         raise  # transient rate limit: let _with_retry retry it
+    # Calls only: response_format="text" returns the transcript and no duration.
+    usage.count("transcribe", "openai", settings.openai_stt_model)
     return response if isinstance(response, str) else str(response)
 
 

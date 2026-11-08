@@ -1,7 +1,10 @@
 """Consented visitor journeys: consent proofs, sessions, events.
 
-Revision ID: 0026_analytics
-Revises: 0025_guest_accounts
+Revision ID: 0027_analytics
+Revises: 0026_usage_counters
+
+Written as 0026_analytics on 2026-11-07 and renumbered behind main's
+0026_usage_counters when it was integrated on 2026-11-08, so there is one head.
 
 Decision of Santiago (2026-11-07): "guarda lo de quien nos visita, dónde hacen
 clic, todo". The full journey of each visitor who accepts the banner, kept in
@@ -27,8 +30,8 @@ from typing import Sequence, Union
 
 from alembic import op
 
-revision: str = "0026_analytics"
-down_revision: Union[str, None] = "0025_guest_accounts"
+revision: str = "0027_analytics"
+down_revision: Union[str, None] = "0026_usage_counters"
 branch_labels: Union[str, Sequence[str], None] = None
 depends_on: Union[str, Sequence[str], None] = None
 

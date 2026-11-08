@@ -1,0 +1,68 @@
+{
+  "read_on": "2026-11-08",
+  "currency": "USD",
+  "basis": "standard tier list prices: no batch, no priority, no regional surcharge",
+  "sources": {
+    "anthropic": "https://platform.claude.com/docs/en/about-claude/pricing",
+    "mistral": "https://docs.mistral.ai/inference/pricing",
+    "openai": "https://developers.openai.com/api/docs/pricing"
+  },
+  "prices": [
+    {
+      "provider": "anthropic", "model": "claude-sonnet-5",
+      "input": 2.0, "output": 10.0, "cache_read": 0.2, "cache_write": 2.5,
+      "quote": "Claude Sonnet 5 | $2 / MTok | $2.50 / MTok | $4 / MTok | $0.20 / MTok | $10 / MTok",
+      "note": "the 2/10 launch price is now the standard one; 1M context at standard price"
+    },
+    {
+      "provider": "anthropic", "model": "claude-opus-5-5",
+      "input": 4.0, "output": 20.0, "cache_read": 0.2, "cache_write": 5.0,
+      "quote": "Claude Opus 5.5 | $4 / MTok | $5 / MTok | $8 / MTok | $0.20 / MTok | $20 / MTok",
+      "note": ""
+    },
+    {
+      "provider": "anthropic", "model": "claude-haiku-5-5",
+      "input": 0.1, "output": 0.5, "cache_read": 0.01, "cache_write": 0.125,
+      "quote": "Claude Haiku 5.5, prompt up to 100k | $0.10 | $0.125 | $0.20 | $0.01 | $0.50",
+      "note": "prompt up to 100k tokens; above that 0.50 in, 2.50 out. Only the route classifier uses it, with a prompt of a few thousand tokens"
+    },
+    {
+      "provider": "mistral", "model": "mistral-small-latest",
+      "input": 0.15, "output": 0.6, "cache_read": 0.015,
+      "quote": "Mistral Small 4 | mistral-small-4-0-26-03 | $0.15 | $0.015 | $0.6",
+      "note": "alias of mistral-small-2603 (Mistral Small 4)"
+    },
+    {
+      "provider": "mistral", "model": "mistral-ocr-latest",
+      "per_page": 0.004,
+      "quote": "OCR 4.1 | ocr-4-1 | $4 | $0.4 | (per 1000 pages)",
+      "note": "alias of mistral-ocr-4-1 (OCR 4.1)"
+    },
+    {
+      "provider": "mistral", "model": "mistral-embed",
+      "input": 0.1, "cache_read": 0.01,
+      "quote": "Mistral Embed | mistral-embed-23-12 | $0.1 | $0.01",
+      "note": ""
+    },
+    {
+      "provider": "openai", "model": "gpt-5.1",
+      "input": 1.25, "output": 10.0, "cache_read": 0.125,
+      "quote": "gpt-5.1 | $1.25 | $10.00 | $0.125 (input, output, cached input)",
+      "note": "demo only; its chat stream reports no tokens, so only the route classifier's calls are priced"
+    }
+  ],
+  "unpriced": [
+    {
+      "provider": "mistral", "model": "mistral-medium-latest",
+      "reason": "alias of Mistral Medium 3.5 (mistral-medium-3-5-26-04), deprecated on 2026-10-31; it has no row on the official pricing page"
+    },
+    {
+      "provider": "mistral", "model": "voxtral-mini-latest",
+      "reason": "alias of voxtral-mini-2602, deprecated on 2026-10-31; it has no row on the official pricing page (Voxtral Mini Transcribe 3 is 0.0035 $/min, a different model)"
+    },
+    {
+      "provider": "openai", "model": "whisper-1",
+      "reason": "0.006 $/min on the pricing page, but the reply the code asks for (text) carries no duration, so only calls are counted"
+    }
+  ]
+}

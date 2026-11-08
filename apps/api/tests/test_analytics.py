@@ -15,8 +15,10 @@ What is under test, in order of importance:
 """
 from __future__ import annotations
 
+import re
 import uuid
 from datetime import datetime, timedelta, timezone
+from pathlib import Path
 
 import pytest
 import sqlalchemy as sa
@@ -131,9 +133,23 @@ def test_the_consent_proof_holds_version_date_and_choice_and_nothing_else():
     }
 
 
-def test_the_default_admin_list_is_santiagos_two_addresses():
-    defaults = analytics.parse_admin_emails(type(settings)().admin_emails)
-    assert {"santiagopatinoserna@gmail.com", "santiagopatinoserna@godi.ai"} <= defaults
+#: Santiago's two addresses (decision of 2026-11-07). They live in the
+#: production compose file, not in config.py: the repo is public and a
+#: self-hosted install must not start with someone else as its admin.
+SANTIAGO = {"santiagopatinoserna@gmail.com", "santiagopatinoserna@godi.ai"}
+PROD_COMPOSE = Path(__file__).resolve().parents[3] / "infra" / "docker-compose.prod.yml"
+
+
+def test_the_code_default_admin_list_is_empty():
+    assert type(settings).model_fields["admin_emails"].default == ""
+    assert type(settings).model_fields["owner_email"].default == ""
+
+
+def test_production_defaults_admin_emails_to_santiagos_two_addresses():
+    match = re.search(r"^\s*ADMIN_EMAILS: \$\{ADMIN_EMAILS:-([^}]*)\}\s*$",
+                      PROD_COMPOSE.read_text(encoding="utf-8"), re.M)
+    assert match, "infra/docker-compose.prod.yml does not pass ADMIN_EMAILS to the api"
+    assert analytics.parse_admin_emails(match.group(1)) == SANTIAGO
 
 
 # ---------------------------------------------------------------- consent gate
@@ -568,3 +584,41 @@ async def test_rate_limit_on_collect(client, monkeypatch):
     for _ in range(budget):
         assert (await client.post("/analytics/collect", json={})).status_code == 204
     assert (await client.post("/analytics/collect", json={})).status_code == 429
+
+
+async def test_owner_email_is_one_more_admin(client, monkeypatch):
+    """OWNER_EMAIL predates ADMIN_EMAILS (funnel, audit 4.8) and production may
+    still set it. One rule for every admin read: it joins the list."""
+    monkeypatch.setattr(settings, "auth_secret", "test-secret")
+    email = f"owner-{uuid.uuid4().hex[:8]}@godi.ai"
+    monkeypatch.setattr(settings, "admin_emails", "")
+    monkeypatch.setattr(settings, "owner_email", email.upper())
+    headers = await _user_headers(email)
+    assert (await client.get("/analytics/access", headers=headers)).status_code == 204
+    assert analytics.is_admin(email)
+    monkeypatch.setattr(settings, "owner_email", "")
+    assert (await client.get("/analytics/access", headers=headers)).status_code == 404
+
+
+
+async def test_the_admin_summary_carries_the_short_link_clicks(client, monkeypatch):
+    """The admin page shows which piece brought people: the /r/<code> clicks,
+    counted without consent (services/funnel), next to the journeys."""
+    from adelia.models import FunnelCounter
+    from adelia.services.funnel import utc_today
+
+    monkeypatch.setattr(settings, "auth_secret", "test-secret")
+    email = f"admin-{uuid.uuid4().hex[:8]}@godi.ai"
+    monkeypatch.setattr(settings, "admin_emails", email)
+    headers = await _user_headers(email)
+    async with AsyncSessionLocal() as db:
+        before = await db.scalar(sa.select(FunnelCounter.count).where(
+            FunnelCounter.day == utc_today(), FunnelCounter.event == "link_g07"))
+    await client.post("/funnel/link/g07")
+
+    body = (await client.get("/analytics/summary?days=1", headers=headers)).json()
+
+    links = {row["code"]: row for row in body["links"]}
+    assert set(links) >= {"ig", "tt", "yt", "fb", "g01", "g10"}
+    assert links["g07"]["clicks"] == (before or 0) + 1
+    assert links["g07"]["content"] == "g07_bronquiolitis"

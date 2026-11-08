@@ -101,6 +101,7 @@ from adelia.config import settings
 from adelia.services import chat_orchestrator as _chat
 from adelia.services.answer_contract import no_evidence_reply, red_flag_reply
 from adelia.services.chat_orchestrator import answer_question_streaming
+from adelia.services import usage
 
 REPORT_PATH = Path(__file__).resolve().parents[1] / "golden_report.json"
 EMBEDDINGS_FIXTURE = Path(__file__).parent / "fixtures" / "golden_query_embeddings.json"
@@ -577,7 +578,9 @@ async def _answer_all(
         async with limit:
             return await _answer(q, embeddings)
 
-    with _answering_path(embeddings, calls):
+    # Counted as `golden`, never as use, also when run outside golden_gate.sh
+    # (services/usage). The tasks copy this context when they are created.
+    with _answering_path(embeddings, calls), usage.surface("golden"):
         tasks = [asyncio.create_task(_bounded(q)) for q in qs]
         try:
             answers = list(await asyncio.gather(*tasks))

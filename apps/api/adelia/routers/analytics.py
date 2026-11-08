@@ -8,8 +8,9 @@ malformed body) is the same silent 204. services/analytics decides.
 
 `POST /analytics/consent` stores the proof of an answer to the banner.
 
-`GET /analytics/summary` and `GET /analytics/access` are for the emails on
-ADMIN_EMAILS and answer 404 to everyone else, signed in or not: a 403 or a 401
+`GET /analytics/summary` and `GET /analytics/access` are for the admins of
+auth.is_admin (ADMIN_EMAILS plus OWNER_EMAIL, the same rule as /funnel) and
+answer 404 to everyone else, signed in or not: a 403 or a 401
 would tell a stranger that the numbers exist.
 """
 from __future__ import annotations
@@ -21,7 +22,7 @@ from fastapi import APIRouter, Depends, HTTPException, Request, Response, status
 from fastapi.security import HTTPAuthorizationCredentials, HTTPBearer
 from pydantic import BaseModel, Field
 
-from adelia.auth import get_current_user
+from adelia.auth import get_current_user, is_admin
 from adelia.config import settings
 from adelia.services import analytics
 
@@ -33,14 +34,14 @@ _optional_bearer = HTTPBearer(auto_error=False)
 async def require_admin(
     credentials: Annotated[HTTPAuthorizationCredentials | None, Depends(_optional_bearer)],
 ) -> Any:
-    """The signed-in user if her email is on ADMIN_EMAILS, else a 404."""
+    """The signed-in user if she is an admin (auth.is_admin), else a 404."""
     if credentials is None:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND)
     try:
         user = await get_current_user(credentials)
     except HTTPException:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND)
-    if getattr(user, "is_guest", False) or not analytics.is_admin(getattr(user, "email", None)):
+    if not is_admin(user):
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND)
     return user
 

@@ -158,6 +158,8 @@ export type AnalyticsSummary = {
     activation: number;
     demo_ask: number;
   }[];
+  /** The /r/<code> clicks of the social networks, every code, most first. */
+  links: { code: string; source: string; medium: string; content: string; clicks: number }[];
 };
 
 export function makeApi(fetcher: Fetcher) {

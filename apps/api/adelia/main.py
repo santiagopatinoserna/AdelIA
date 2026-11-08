@@ -11,6 +11,7 @@ from fastapi.staticfiles import StaticFiles
 from adelia import ratelimit
 from adelia.config import settings
 from adelia.db import engine
+from adelia.services import usage
 from adelia.routers import (
     agent,
     analytics,
@@ -134,6 +135,15 @@ STARTUP_RETRY_DELAYS: tuple[float, ...] = (60.0, 300.0)
 
 
 async def load_startup_corpora() -> list[str]:
+    """`_load_startup_corpora`, its provider calls counted as `corpus`: the
+    corpus embeddings at boot are the product's cost, not a mother's
+    (services/usage). A plain function, not a decorator, so its code object
+    stays in this file for tests/test_startup_corpora.py."""
+    with usage.surface("corpus"):
+        return await _load_startup_corpora()
+
+
+async def _load_startup_corpora() -> list[str]:
     """Load the clinical corpora, then the experience fixture, at boot.
 
     Clinical evidence: seed plus per-topic `enrichment/data/evidence_*.json`.
@@ -231,13 +241,6 @@ async def lifespan(app: FastAPI):
             logger.warning("boot reconciliation requeued %d document(s)", len(requeued))
     except Exception:  # noqa: BLE001 — reconciliation must never block boot
         logger.exception("startup document reconciliation failed")
-    # Beside the server, not before it (2026-11-07). The 2026-11-06 batch is
-    # 316 sources, one Mistral call each with SOURCE_PACING_S between them:
-    # minutes. Awaited here, uvicorn did not bind its port until it ended, so
-    # /health refused, the container went unhealthy after 5 checks 10 s apart
-    # (web waits on it being healthy) and deploy-prod.sh's 60 s of /healthz
-    # failed. Meanwhile retrieval reads the corpus loaded so far, which only
-    # grows, one whole source at a time.
     # Retention of the consented journeys (13 months), once before serving
     # and then daily. Awaited, not raced beside the first requests: a purge
     # holding a pooled connection while they arrive is the pool exhaustion
@@ -246,6 +249,13 @@ async def lifespan(app: FastAPI):
         await asyncio.wait_for(_purge_analytics_once(), ANALYTICS_BOOT_PURGE_TIMEOUT_S)
     except asyncio.TimeoutError:
         logger.warning("analytics retention purge at boot timed out; the daily loop retries")
+    # Beside the server, not before it (2026-11-07). The 2026-11-06 batch is
+    # 316 sources, one Mistral call each with SOURCE_PACING_S between them:
+    # minutes. Awaited here, uvicorn did not bind its port until it ended, so
+    # /health refused, the container went unhealthy after 5 checks 10 s apart
+    # (web waits on it being healthy) and deploy-prod.sh's 60 s of /healthz
+    # failed. Meanwhile retrieval reads the corpus loaded so far, which only
+    # grows, one whole source at a time.
     corpus_task = asyncio.create_task(load_startup_corpora())
     sweep_task = asyncio.create_task(_periodic_tombstone_sweep())
     analytics_purge_task = asyncio.create_task(_periodic_analytics_purge())
@@ -274,6 +284,9 @@ async def lifespan(app: FastAPI):
             await task
         except asyncio.CancelledError:
             pass
+    # Last, the usage counts the provider replies above scheduled, the corpus
+    # load's included (services/usage): one short upsert each.
+    await usage.drain()
     await engine.dispose()
 
 

@@ -35,6 +35,7 @@ import json
 import logging
 
 from adelia.agent import route
+from adelia.services import usage
 
 logger = logging.getLogger(__name__)
 
@@ -81,9 +82,10 @@ async def corpus_query(
     if not source or not needs_translation(locale):
         return text
     try:
-        raw = await asyncio.wait_for(
-            route._complete_json(_SYSTEM_PROMPT, source, provider=provider), timeout=timeout_s
-        )
+        with usage.json_purpose("translate"):
+            raw = await asyncio.wait_for(
+                route._complete_json(_SYSTEM_PROMPT, source, provider=provider), timeout=timeout_s
+            )
     except asyncio.TimeoutError:
         logger.info("corpus_query: translation exceeded %.1fs, embedding the original", timeout_s)
         return text

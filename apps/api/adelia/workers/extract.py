@@ -9,6 +9,7 @@ from pydantic import ValidationError
 from adelia.config import settings
 from adelia.llm import anthropic_text, get_anthropic_client, get_mistral_client, uses_anthropic
 from adelia.schemas import ExtractedEntity, ExtractionReport
+from adelia.services import usage
 
 logger = logging.getLogger(__name__)
 
@@ -277,7 +278,7 @@ def _parse_reply(content: str) -> list | None:
 
 
 async def _complete(client, system_prompt: str, text: str, response_format: dict):
-    return await client.chat.complete_async(
+    response = await client.chat.complete_async(
         # Not a literal: extraction has its own setting so it can be pinned
         # separately from chat (docs/MODELOS.md). Default is unchanged.
         model=settings.mistral_extraction_model,
@@ -288,6 +289,11 @@ async def _complete(client, system_prompt: str, text: str, response_format: dict
         response_format=response_format,
         temperature=0.0,
     )
+    usage.count(
+        "extract", "mistral", settings.mistral_extraction_model,
+        **usage.openai_style_tokens(response),
+    )
+    return response
 
 
 async def _request_entities(client, system_prompt: str, text: str) -> tuple[str, list | None]:
@@ -340,6 +346,10 @@ async def _request_entities_anthropic(system_prompt: str, text: str) -> tuple[st
         system=system_prompt,
         messages=[{"role": "user", "content": f"Document:\n\n{text}"}],
         output_config={"effort": "medium"},
+    )
+    usage.count(
+        "extract", "anthropic", settings.anthropic_extraction_model,
+        **usage.anthropic_tokens(response),
     )
     return "json_object", _parse_reply(anthropic_text(response))
 

@@ -31,6 +31,7 @@ from adelia.llm import (
     get_mistral_client,
     uses_anthropic,
 )
+from adelia.services import usage
 
 logger = logging.getLogger(__name__)
 
@@ -370,6 +371,10 @@ async def _mistral_json(system: str, user: str) -> str:
         response_format={"type": "json_object"},
         temperature=0,
     )
+    usage.count(
+        usage.json_operation(), "mistral", settings.mistral_routing_model,
+        **usage.openai_style_tokens(resp),
+    )
     return content_text(resp.choices[0].message.content)
 
 
@@ -384,6 +389,10 @@ async def _openai_json(system: str, user: str) -> str:
         messages=[{"role": "system", "content": system}, {"role": "user", "content": user}],
         response_format={"type": "json_object"},
         temperature=0,
+    )
+    usage.count(
+        usage.json_operation(), "openai", settings.openai_chat_model,
+        **usage.openai_style_tokens(resp),
     )
     return resp.choices[0].message.content or ""
 
@@ -401,6 +410,10 @@ async def _anthropic_json(system: str, user: str) -> str:
         system=system,
         messages=[{"role": "user", "content": user}],
         output_config={"effort": "low"},
+    )
+    usage.count(
+        usage.json_operation(), "anthropic", settings.anthropic_routing_model,
+        **usage.anthropic_tokens(resp),
     )
     return anthropic_text(resp)
 

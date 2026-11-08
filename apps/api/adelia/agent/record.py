@@ -36,6 +36,7 @@ from adelia.agent import cards
 from adelia.clinical import red_flags
 from adelia.clinical.red_flags import normalize, temperature_in
 from adelia.models import OBSERVATION_KINDS
+from adelia.services import usage
 
 logger = logging.getLogger(__name__)
 
@@ -244,9 +245,10 @@ async def extract_record(
     if complete_json is None:
         from adelia.agent.route import _complete_json as complete_json
     try:
-        draft = await extract_by_model(
-            message, locale=locale, now=now, complete_json=complete_json, provider=provider
-        )
+        with usage.json_purpose("record"):
+            draft = await extract_by_model(
+                message, locale=locale, now=now, complete_json=complete_json, provider=provider
+            )
     except Exception as exc:  # noqa: BLE001 - a dead model costs the structure, not the note
         logger.info("record: model extraction unavailable (%s)", type(exc).__name__)
         draft = None

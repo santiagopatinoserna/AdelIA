@@ -33,7 +33,7 @@ from adelia.schemas import (
     Specialty,
 )
 from adelia.enrichment import profile_service
-from adelia.services import briefing_repo
+from adelia.services import briefing_repo, usage
 from adelia.services.briefing_html_renderer import render_briefing_html
 from adelia.services.qa_pre_baker import bake_questions, QAPrebakerError
 from adelia.services.sbar_formatter import EntityInput, format_sections
@@ -221,6 +221,7 @@ async def _retrieve_specialty_evidence(
         return "", []
 
 
+@usage.in_surface("briefing")
 async def run(
     *,
     briefing_id: UUID,

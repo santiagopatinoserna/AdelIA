@@ -97,9 +97,13 @@ services:
       # behaviour, where checkout was the first screen after the magic link.
       FREE_TRIAL_DAYS: ${FREE_TRIAL_DAYS:-30}
       # Public demo (audit 4.6) and the aggregate funnel (audit 4.8).
-      # OWNER_EMAIL is the ONLY account that may read GET /funnel/summary;
-      # empty means nobody can. DEMO_DAILY_BUDGET caps how many answers the
-      # public demo will pay for in a day (it also has a per-IP rate limit).
+      # ADMIN_EMAILS (comma-separated) plus OWNER_EMAIL, the older single
+      # address, are the only accounts that may read /funnel/summary,
+      # /funnel/usage, /analytics/summary and /dashboard/admin (auth.is_admin);
+      # config.py defaults both to empty, so production names Santiago here.
+      # DEMO_DAILY_BUDGET caps how many answers the public demo will pay for in
+      # a day (it also has a per-IP rate limit).
+      ADMIN_EMAILS: ${ADMIN_EMAILS:-santiagopatinoserna@gmail.com,santiagopatinoserna@godi.ai}
       OWNER_EMAIL: ${OWNER_EMAIL:-}
       DEMO_ENABLED: ${DEMO_ENABLED:-true}
       # Generation provider for the public demo only; empty follows the

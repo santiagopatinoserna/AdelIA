@@ -109,12 +109,14 @@ UPDATED_MONTH = {"es": "noviembre", "en": "November", "fr": "novembre"}
 
 @pytest.mark.parametrize("locale", LOCALES)
 def test_the_policy_date_moves_with_the_policy(locale):
-    # The Cloudflare declaration changed the policy on 2026-10-14 and the
-    # Anthropic one on 2026-11-03. A policy that changes under an older "last
-    # updated" date is itself a misstatement.
+    # The Cloudflare declaration changed the policy on 2026-10-14, the
+    # Anthropic one on 2026-11-03, and on 2026-11-08 the AI usage counter, the
+    # consented visitor journeys with their cookies section and the clicks on
+    # our short links. A policy that changes under an older "last updated"
+    # date is itself a misstatement.
     updated = _catalog(locale)["privacy"]["updated"]
-    assert re.search(r"\b3\b", updated) and "2026" in updated and UPDATED_MONTH[locale] in updated, (
-        f"privacy.updated ({locale}) does not carry the 2026-11-03 change: {updated}"
+    assert re.search(r"\b8\b", updated) and "2026" in updated and UPDATED_MONTH[locale] in updated, (
+        f"privacy.updated ({locale}) does not carry the 2026-11-08 change: {updated}"
     )
 
 
@@ -172,3 +174,43 @@ def test_new_legal_prose_has_no_em_dash(locale):
     ):
         assert "—" not in text
     assert "—" not in DPIA.read_text(encoding="utf-8").split("## 7. Actualizaciones")[-1]
+
+
+#: What the AI usage counter adds up and what it never keeps (services/usage,
+#: integrated 2026-11-08), per locale; and the count of "four numbers" that
+#: stopped being the whole of what is counted.
+USAGE_COUNTER = {
+    "es": (["proveedor de IA", "tokens", "páginas", "segundos de audio",
+            "no se guarda de quién es la llamada ni lo que decía"], "cuatro números agregados"),
+    "en": (["AI provider", "tokens", "pages", "seconds of audio",
+            "we keep neither whose call it was nor what it said"], "four aggregate numbers"),
+    "fr": (["fournisseur d’IA", "tokens", "pages", "secondes d’audio",
+            "on ne garde ni à qui est l’appel ni ce qu’il disait"], "quatre chiffres agrégés"),
+}
+
+
+@pytest.mark.parametrize("locale", LOCALES)
+def test_the_counters_section_declares_the_ai_usage_count(locale):
+    privacy = _catalog(locale)["privacy"]
+    says, stale = USAGE_COUNTER[locale]
+    for phrase in says:
+        assert phrase in privacy["countersBody"], (locale, phrase)
+    assert stale not in privacy["whereBody"], locale
+
+
+#: The clicks on our short links of the social networks (/r/<code>,
+#: services/short_links, 2026-11-08): counted like a visit, per code, and the
+#: counters section says so, and that the count says which post, not who.
+SHORT_LINKS = {
+    "es": ["adelia.godi.ai/r/", "qué publicación se abrió, no quién la abrió"],
+    "en": ["adelia.godi.ai/r/", "which post was opened, not who opened it"],
+    "fr": ["adelia.godi.ai/r/", "quelle publication a été ouverte, pas qui l’a ouverte"],
+}
+
+
+@pytest.mark.parametrize("locale", LOCALES)
+def test_the_counters_section_declares_the_short_link_clicks(locale):
+    body = _catalog(locale)["privacy"]["countersBody"]
+    for phrase in SHORT_LINKS[locale]:
+        assert phrase in body, (locale, phrase)
+

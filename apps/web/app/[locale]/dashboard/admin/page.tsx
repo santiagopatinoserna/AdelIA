@@ -143,6 +143,18 @@ export default async function AdminAnalyticsPage({
         )}
       </Section>
 
+      <Section title={t("linksTitle")} note={t("linksNote")} testid="admin-links">
+        <Bars
+          rows={(data.links ?? []).map((l) => ({
+            // A bio code says its network; a piece code, its piece id.
+            label: `/r/${l.code}  ${l.medium === "bio" ? `${l.source} (bio)` : l.content}`,
+            value: l.clicks,
+          }))}
+          number={number}
+          unit={t("clicks")}
+        />
+      </Section>
+
       <Section title={t("clicksTitle")} testid="admin-clicks">
         <Clicks data={data} number={number} t={t} />
       </Section>

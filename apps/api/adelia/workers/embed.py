@@ -1,5 +1,6 @@
 from adelia.config import settings
 from adelia.llm import get_mistral_client
+from adelia.services import usage
 
 # Mistral embeddings caps request size; large documents can chunk into
 # hundreds of pieces. Batch to stay under the limit (v0.1.1 carry-over).
@@ -42,6 +43,9 @@ async def embed_texts(texts: list[str]) -> list[list[float]]:
         response = await client.embeddings.create_async(
             model=settings.mistral_embed_model,
             inputs=batch,
+        )
+        usage.count(
+            "embed", "mistral", settings.mistral_embed_model, **usage.openai_style_tokens(response)
         )
         vectors.extend(item.embedding for item in response.data)
     return vectors

@@ -169,6 +169,9 @@ jobs:
       # boot the diary surface without it and the specs that exercise the
       # diary cards were failing on config, not on product, since 2026-06-12.
       TELEGRAM_BOT_TOKEN: e2e-dummy
+      # The admin of e2e/analytics-consent.spec.ts. config.py defaults the list
+      # to empty (the repo is public), so without this the admin page is a 404.
+      ADMIN_EMAILS: e2e-analytics-admin@adelia.test
       # No MISTRAL_API_KEY: the upload spec self-skips; auth/locale/a11y/GDPR run.
     steps:
       - uses: actions/checkout@v6
