@@ -22,6 +22,10 @@ async def _dispose_engine():
     # An erasure answers before its blob sweep ends; let it finish on this
     # loop instead of dying half-way through a pooled connection.
     await drain_erasure_sweeps()
+    # Same for the usage counts the mocked providers scheduled (services/usage).
+    from adelia.services import usage
+
+    await usage.drain()
     await engine.dispose()
 
 

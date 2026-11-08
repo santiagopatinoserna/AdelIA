@@ -30,6 +30,7 @@ from adelia.enrichment.evidence_retrieval import (
 )
 from adelia.enrichment.profile_service import ProfileFacts
 from adelia.schemas import ChatCitation
+from adelia.services import usage
 from adelia.services.answer_contract import chat_system_prompt
 from adelia.services.retrieval import retrieve_relevant_chunks
 from adelia.services.scope import Scope
@@ -146,12 +147,19 @@ async def _stream_mistral_tokens(messages: list[dict]) -> AsyncIterator[str]:
             setting="chat_reasoning_effort",
         ),
     )
+    stream_usage = None
     async for event in response:
+        # The token counts ride on the last chunk only.
+        if event.data and getattr(event.data, "usage", None) is not None:
+            stream_usage = event.data.usage
         if event.data and event.data.choices:
             delta = event.data.choices[0].delta
             piece = content_text(getattr(delta, "content", "") or "")
             if piece:
                 yield piece
+    usage.count(
+        "chat", "mistral", settings.mistral_chat_model, **usage.openai_style_tokens(stream_usage)
+    )
 
 
 def _anthropic_history(history: list[dict] | None) -> list[dict]:
@@ -188,6 +196,9 @@ async def _stream_anthropic_tokens(
             if piece:
                 yield piece
         final = await stream.get_final_message()
+    usage.count(
+        "chat", "anthropic", settings.anthropic_chat_model, **usage.anthropic_tokens(final)
+    )
     # A refusal can arrive after some text; raising ends the turn as an error,
     # not as an answer that stops mid-sentence.
     raise_on_refusal(final)
@@ -214,6 +225,9 @@ async def _stream_openai_tokens(messages: list[dict]) -> AsyncIterator[str]:
             piece = chunk.choices[0].delta.content or ""
             if piece:
                 yield piece
+    # Calls only: OpenAI streams no usage unless asked with stream_options, and
+    # asking would change the call the demo makes.
+    usage.count("chat", "openai", settings.openai_chat_model)
 
 
 async def generate_answer(

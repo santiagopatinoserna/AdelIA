@@ -7,7 +7,8 @@ happens. All it can do is add 1 to an integer.
 
 `GET /funnel/summary` is the only way back out and it is owner-only. It answers
 404, not 403, for everyone else: a 403 tells a stranger that the numbers exist
-and that some account can read them.
+and that some account can read them. `GET /funnel/usage` is the cost side of
+the same table of numbers (services/usage) behind the same gate.
 """
 from __future__ import annotations
 
@@ -17,7 +18,7 @@ from fastapi import APIRouter, Depends, HTTPException, Response, status
 
 from adelia.auth import get_current_user
 from adelia.config import settings
-from adelia.services import funnel
+from adelia.services import funnel, usage
 
 router = APIRouter(prefix="/funnel", tags=["funnel"])
 
@@ -41,6 +42,14 @@ async def record_event(event: str) -> Response:
     return Response(status_code=status.HTTP_204_NO_CONTENT)
 
 
+def _require_owner(user: Any) -> None:
+    """404 unless `user` is settings.owner_email. Unset owner: nobody passes."""
+    owner = (settings.owner_email or "").strip().lower()
+    email = (getattr(user, "email", "") or "").strip().lower()
+    if not owner or email != owner:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND)
+
+
 @router.get("/summary")
 async def funnel_summary(
     user: Annotated[Any, Depends(get_current_user)],
@@ -53,13 +62,25 @@ async def funnel_summary(
     right default for a number that describes the business rather than the
     account asking.
     """
-    owner = (settings.owner_email or "").strip().lower()
-    email = (getattr(user, "email", "") or "").strip().lower()
-    if not owner or email != owner:
-        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND)
+    _require_owner(user)
     rows = await funnel.summary(days)
     return {
         "days": len(rows),
         "columns": ["visit", "start", "signup", "activation", "demo_ask"],
         "rows": rows,
     }
+
+
+@router.get("/usage")
+async def usage_summary(
+    user: Annotated[Any, Depends(get_current_user)],
+    days: int = 30,
+) -> dict[str, Any]:
+    """Provider calls, tokens, OCR pages and audio seconds over the last `days`.
+
+    Owner-only, same gate and same 404 as /summary. `estimated_usd` applies the
+    list prices of services/usage_prices; models without an official price are
+    named in `unpriced`. Divide by `active_accounts` for the mean per account.
+    """
+    _require_owner(user)
+    return await usage.summary(days)

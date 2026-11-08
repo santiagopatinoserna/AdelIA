@@ -5,6 +5,7 @@ from dataclasses import dataclass, field
 from typing import AsyncIterator, Protocol
 
 from adelia.config import settings
+from adelia.services import usage
 
 
 @dataclass
@@ -51,6 +52,7 @@ class AnthropicProvider:
                 if event.type == "text":
                     yield {"type": "token", "text": event.text}
             final = await stream.get_final_message()
+        usage.count("agent_step", "anthropic", settings.agent_model, **usage.anthropic_tokens(final))
         for block in final.content:
             if getattr(block, "type", None) == "tool_use":
                 yield {"type": "tool_call", "id": block.id, "name": block.name, "args": block.input}
@@ -180,6 +182,9 @@ class MistralProvider:
                 settings.mistral_chat_model,
                 setting="chat_reasoning_effort",
             ),
+        )
+        usage.count(
+            "agent_step", "mistral", settings.mistral_chat_model, **usage.openai_style_tokens(resp)
         )
         choice = resp.choices[0]
         message = choice.message

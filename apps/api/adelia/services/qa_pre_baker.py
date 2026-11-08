@@ -17,6 +17,7 @@ from uuid import UUID
 from pydantic import ValidationError
 
 from adelia.config import settings
+from adelia.services import usage
 from adelia.services.briefing_i18n import qa_language
 from adelia.schemas import Citation, LLMMeta, QAItem, Specialty
 
@@ -136,6 +137,7 @@ async def _llm_structured_call(
     except Exception as e:
         raise QAPrebakerError(f"Unexpected error during Mistral call: {e}") from e
 
+    usage.count("briefing_qa", "mistral", model, **usage.openai_style_tokens(resp))
     content = resp.choices[0].message.content
     if isinstance(content, list):
         # reasoning_effort="high" answers with [ThinkChunk, TextChunk]; the JSON
@@ -187,8 +189,9 @@ async def _anthropic_structured_call(
     except Exception as e:
         raise QAPrebakerError(f"Unexpected error during Anthropic call: {e}") from e
 
-    usage = getattr(resp, "usage", None)
-    tokens_used = (usage.input_tokens + usage.output_tokens) if usage else 0
+    usage.count("briefing_qa", "anthropic", model, **usage.anthropic_tokens(resp))
+    resp_usage = getattr(resp, "usage", None)
+    tokens_used = (resp_usage.input_tokens + resp_usage.output_tokens) if resp_usage else 0
     try:
         data = json.loads(content)
     except json.JSONDecodeError as e:

@@ -13,7 +13,7 @@ from adelia.auth import get_current_user_id, require_active_subscription
 from adelia.agent.events import AgentEvent
 from adelia.agent.orchestrator import run_turn
 from adelia.agent.suggestions import build_suggestions
-from adelia.services import agent_thread
+from adelia.services import agent_thread, usage
 
 logger = logging.getLogger(__name__)
 router = APIRouter(prefix="/agent", tags=["agent"])
@@ -139,7 +139,11 @@ async def post_turn(payload: AgentTurnRequest,
             )
     history = [m.model_dump() for m in payload.history] if payload.history else None
 
+    # A guest's turns are counted apart from paying accounts' (services/usage).
+    surface = await usage.surface_for_account(user_id, "agent")
+
     async def event_publisher():
+        usage.set_surface(surface)
         # The browser's thread when it has one. A first stored turn opens one,
         # and the `thread` frame after `final` hands its id back.
         thread_id = payload.thread_id

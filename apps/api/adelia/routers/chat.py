@@ -9,6 +9,7 @@ from sse_starlette.sse import EventSourceResponse
 from adelia.auth import get_current_user_id, require_active_subscription
 from adelia.enrichment.profile_service import load_profile_facts
 from adelia.schemas import ChatCitation, ChatRequest, ChatSessionDetailOut, ChatSessionOut
+from adelia.services import usage
 from adelia.services.chat_orchestrator import ChatEvent, answer_question_streaming
 from adelia.services.chat_repo import (
     create_session,
@@ -85,6 +86,8 @@ async def post_chat(
     user_id: Annotated[uuid.UUID, Depends(get_current_user_id)],
 ):
     """SSE endpoint: streams ChatEvent JSON payloads back to the client."""
+    # A guest's answers are counted apart from paying accounts' (services/usage).
+    surface = await usage.surface_for_account(user_id, "chat")
     # How old the baby is, resolved once per turn. The answering path must not
     # open a session mid-stream, and without this the red-flag rule that
     # depends on age (under 3 months with a fever) can only fire when the
@@ -128,6 +131,7 @@ async def post_chat(
     )
 
     async def event_publisher():
+        usage.set_surface(surface)
         assistant_content_parts: list[str] = []
         final_citations: list[ChatCitation] = []
         # session_id sent once at start; subsequent token events carry only content
