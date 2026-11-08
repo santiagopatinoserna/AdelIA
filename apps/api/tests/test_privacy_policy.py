@@ -214,3 +214,22 @@ def test_the_counters_section_declares_the_short_link_clicks(locale):
     for phrase in SHORT_LINKS[locale]:
         assert phrase in body, (locale, phrase)
 
+
+#: How the counters section opens, per locale: (the claim it makes now, the one
+#: it made before). "Four numbers a day" was the whole funnel (services/funnel)
+#: until the short link clicks (#63) and the AI usage (#61) joined it, and the
+#: same paragraph lists both further down, so the opening contradicted it.
+COUNTERS_OPENING = {
+    "es": ("contamos unos pocos números al día", "cuatro números al día"),
+    "en": ("we count a few numbers a day", "four numbers a day"),
+    "fr": ("on compte quelques chiffres par jour", "quatre chiffres par jour"),
+}
+
+
+@pytest.mark.parametrize("locale", LOCALES)
+def test_the_counters_section_does_not_say_it_counts_only_four_numbers(locale):
+    body = _catalog(locale)["privacy"]["countersBody"]
+    says, stale = COUNTERS_OPENING[locale]
+    assert stale not in body, locale
+    assert says in body.split(":")[0], locale
+
