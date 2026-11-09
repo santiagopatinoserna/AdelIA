@@ -221,3 +221,59 @@ async def test_clarify_keeps_the_evidence_fakes_untouched():
     fakes = Fakes(evidence=[EVIDENCE])
     await _run(fakes, "Tiene fiebre, ¿qué hago?")
     assert "evidence" not in fakes.names()
+
+
+# --- the questions a topic asks before answering (2026-11-09) --------------------
+#
+# Santiago's verdict on the /dashboard agent: "si tiene dudas no hace
+# preguntas". A pediatric nurse hearing "in the nursery he sits in a corner and
+# does not move, at home he plays" asks how long he has been going and whether,
+# at home, he looks at her, smiles, answers to his name and babbles. These are
+# the agent's questions for that (agent/conversation.py decides when).
+
+NEW_FIELDS = ["nursery_time", "since_when", "social_signals", "general_state"]
+
+
+@pytest.mark.parametrize("locale", ["es", "en", "fr"])
+@pytest.mark.parametrize("field", NEW_FIELDS)
+def test_each_new_question_has_three_buttons_a_way_out_and_no_em_dash(locale, field):
+    q = CLARIFY_QUESTIONS[field][locale]
+    assert q["question"].strip() and "—" not in q["question"]
+    assert len(q["options"]) == 3
+    assert len({o["value"] for o in q["options"]}) == 3
+    assert q["skip"]["value"] == "unknown" and q["skip"]["label"].strip()
+    for option in q["options"]:
+        assert option["label"].strip() and "—" not in option["label"]
+        # routers/agent.Clarification caps a value at 16 characters.
+        assert len(option["value"]) <= 16
+
+
+@pytest.mark.parametrize("field", NEW_FIELDS)
+def test_the_three_languages_offer_the_same_values(field):
+    values = {loc: [o["value"] for o in CLARIFY_QUESTIONS[field][loc]["options"]]
+              for loc in ("es", "en", "fr")}
+    assert values["es"] == values["en"] == values["fr"]
+
+
+@pytest.mark.parametrize("locale", ["es", "en", "fr"])
+@pytest.mark.parametrize("field", NEW_FIELDS)
+def test_every_new_answer_reads_as_a_sentence_and_unknown_says_so(locale, field):
+    for option in CLARIFY_QUESTIONS[field][locale]["options"]:
+        sentence = clarification_sentence(field, option["value"], locale)
+        assert sentence and "—" not in sentence
+    assert clarification_sentence(field, "unknown", locale)
+    assert clarification_sentence(field, "nonsense", locale) is None
+
+
+def test_a_lost_skill_is_said_in_the_words_the_sources_use():
+    """"Ha dejado de hacer algo que hacía" is the one answer the corpus makes a
+    reason to consult at any age (SAP, AEPap: pérdida de habilidades). The
+    sentence carries those words so the search finds them."""
+    sentence = clarification_sentence("social_signals", "lost", "es")
+    assert "pérdida de habilidades" in sentence
+
+
+def test_the_social_answers_name_what_she_saw_not_just_the_button():
+    sentence = clarification_sentence("social_signals", "all", "es")
+    for word in ("mira", "sonríe", "responde a su nombre"):
+        assert word in sentence

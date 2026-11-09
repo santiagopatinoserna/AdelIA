@@ -37,6 +37,12 @@ logger = logging.getLogger(__name__)
 
 Intent = Literal["plan", "question", "record", "track", "clarify", "other"]
 Via = Literal["rule", "model", "fallback"]
+#: Where the turn sits in the conversation (agent/conversation.py). Only the
+#: model says it, and only when it was called with the thread.
+Turn = Literal["new", "follow_up", "correction"]
+TURNS: tuple[str, ...] = ("new", "follow_up", "correction")
+#: The longest search query taken from the model (conversation.MAX_QUERY_CHARS).
+SEARCH_QUERY_CHARS = 1000
 
 INTENTS: tuple[str, ...] = ("plan", "question", "record", "track", "clarify", "other")
 
@@ -46,6 +52,11 @@ class RouteDecision(BaseModel):
     confidence: float = Field(ge=0.0, le=1.0)
     missing: list[str] = Field(default_factory=list)
     via: Via
+    #: With the thread only: the model's reading of the turn, and her question
+    #: rewritten to stand alone. Optional and read apart from the rest, so a
+    #: bad value costs these two fields and never the intent.
+    turn: Turn | None = None
+    search_query: str | None = None
 
 
 # --- rules ------------------------------------------------------------------
@@ -351,6 +362,53 @@ _USER_PROMPT = {
     "fr": "Message : {message}\nLe parent a un compte : {account}\nAge connu (mois) : {age}",
 }
 
+#: Added to the system prompt only when the call carries the thread (2026-11-09).
+#: A first turn's prompt is byte for byte what it was, and so is its cost.
+_THREAD_RULES = """
+
+The message continues a conversation, shown before it (most recent last). Add two keys:
+{{"turn": "<follow_up | correction | new>", "search_query": "<text>"}}
+- "follow_up": it goes on with the same topic ("and at night?", "but it happens every day").
+- "correction": it says the last answer assumed something wrong ("he is not sick", "she has
+  no fever", "that was a new topic", another age).
+- "new": a different topic.
+"search_query": the parent's current question as ONE standalone sentence in the parent's
+language, built only from what THE PARENT wrote in this topic, never from the assistant's
+answers, and without what the parent says does not apply. For "new", the message itself."""
+
+#: The thread as the routing model reads it: a label per speaker, the tail
+#: only (agent/conversation.route_history cuts it).
+_THREAD_HEADER = {
+    "es": ("Conversación previa (lo más reciente al final):", "Madre", "AdelIA"),
+    "en": ("Earlier conversation (most recent last):", "Parent", "AdelIA"),
+    "fr": ("Conversation précédente (le plus récent à la fin) :", "Parent", "AdelIA"),
+}
+
+
+def _thread_block(history: list[dict] | None, lang: str) -> str:
+    turns = [m for m in history or [] if isinstance(m, dict) and isinstance(m.get("content"), str)
+             and m.get("role") in ("user", "assistant")]
+    if not turns:
+        return ""
+    header, parent, assistant = _THREAD_HEADER.get(lang, _THREAD_HEADER["es"])
+    lines = [header]
+    for m in turns:
+        who = parent if m["role"] == "user" else assistant
+        lines.append(f"{who}: {' '.join(m['content'].split())}")
+    return "\n".join(lines) + "\n\n"
+
+
+def _thread_fields(data: dict) -> dict:
+    """`turn` and `search_query` out of the model's JSON, kept only if valid."""
+    turn = data.pop("turn", None)
+    query = data.pop("search_query", None)
+    fields: dict = {}
+    if isinstance(turn, str) and turn in TURNS:
+        fields["turn"] = turn
+    if isinstance(query, str) and query.strip():
+        fields["search_query"] = query.strip()[:SEARCH_QUERY_CHARS]
+    return fields
+
 
 def _fence_free(text: str) -> str:
     text = text.strip()
@@ -446,18 +504,26 @@ async def route_by_model(
     has_account: bool = False,
     facts: ProfileFacts | None = None,
     provider: str | None = None,
+    history: list[dict] | None = None,
 ) -> RouteDecision:
     """One classifier call. Never raises on the model's output: a reply that
     is not valid JSON for `RouteDecision` is the `plan` fallback. Provider
     errors (no key, network) DO propagate; `route` turns them into the same
-    fallback under its deadline."""
+    fallback under its deadline.
+
+    `history` is the tail of the conversation (agent/conversation): with it,
+    the same call also says what kind of turn this is and what to search.
+    """
     lang = (locale or "es").split("-")[0].lower()
     system = _SYSTEM_PROMPT.format(
         intents=", ".join(f'"{i}"' for i in INTENTS),
         language=_LANGUAGE.get(lang, "Spanish"),
     )
+    thread = _thread_block(history, lang)
+    if thread:
+        system += _THREAD_RULES.format()
     age = facts.age_months if facts is not None else None
-    user = _USER_PROMPT.get(lang, _USER_PROMPT["es"]).format(
+    user = thread + _USER_PROMPT.get(lang, _USER_PROMPT["es"]).format(
         message=message.strip(),
         account="si" if has_account else "no",
         age=age if age is not None else "?",
@@ -465,9 +531,14 @@ async def route_by_model(
     raw = await _complete_json(system, user, provider=provider)
     try:
         data = json.loads(_fence_free(raw))
-        decision = RouteDecision.model_validate({**data, "via": "model"})
+        extra = _thread_fields(data) if isinstance(data, dict) and thread else {}
+        if isinstance(data, dict):
+            data.pop("turn", None)
+            data.pop("search_query", None)
+        decision = RouteDecision.model_validate({**data, "via": "model", **extra})
     except (ValueError, ValidationError, TypeError):
-        logger.info("route: model output did not validate (%r)", raw[:120])
+        # Never the text: with the thread it can carry her words (search_query).
+        logger.info("route: model output did not validate (%d chars)", len(raw))
         return _FALLBACK
     if decision.confidence < CONFIDENCE_FLOOR:
         decision = decision.model_copy(update={"intent": "clarify"})
@@ -482,6 +553,7 @@ async def route(
     facts: ProfileFacts | None = None,
     provider: str | None = None,
     timeout_s: float = MODEL_TIMEOUT_S,
+    history: list[dict] | None = None,
 ) -> RouteDecision:
     """Rules first; the model only when they abstain, under a deadline.
 
@@ -495,7 +567,8 @@ async def route(
     try:
         return await asyncio.wait_for(
             route_by_model(
-                message, locale=locale, has_account=has_account, facts=facts, provider=provider
+                message, locale=locale, has_account=has_account, facts=facts, provider=provider,
+                history=history,
             ),
             timeout=timeout_s,
         )
@@ -523,18 +596,22 @@ async def log_route(
     has_account: bool = False,
     facts: ProfileFacts | None = None,
     provider: str | None = None,
+    history: list[dict] | None = None,
 ) -> RouteDecision:
-    """Route and write ONE log line. Never raises, never logs the message."""
+    """Route and write ONE log line. Never raises, never logs the message
+    (nor the thread)."""
     try:
         decision = await route(
-            message, locale=locale, has_account=has_account, facts=facts, provider=provider
+            message, locale=locale, has_account=has_account, facts=facts, provider=provider,
+            history=history,
         )
     except Exception:  # noqa: BLE001 - a measurement must not become an error
         decision = _FALLBACK
     logger.info(
-        "route intent=%s via=%s conf=%.2f surface=%s missing=%s account=%s",
+        "route intent=%s via=%s conf=%.2f surface=%s missing=%s account=%s turn=%s",
         decision.intent, decision.via, decision.confidence, surface,
         ",".join(decision.missing) or "-", "yes" if has_account else "no",
+        decision.turn or "-",
     )
     return decision
 

@@ -68,7 +68,8 @@ class Clarification(BaseModel):
     """Her answer to a clarify card (AGENT_GRAPH step 3): the button's value.
     Checked against the buttons the API wrote (answer_contract)."""
 
-    field: Literal["age", "temperature"]
+    field: Literal["age", "temperature", "nursery_time", "since_when", "social_signals",
+                   "general_state"]
     value: str = Field(min_length=1, max_length=16)
 
 
@@ -77,6 +78,9 @@ class AgentTurnRequest(BaseModel):
     #: Present when she pressed a clarify button: `message` is the question
     #: again, and this is the value she chose.
     clarification: Clarification | None = None
+    #: A card with two questions (agent/conversation, 2026-11-09): both answers,
+    #: in the card's order. One round, so never more than two.
+    clarifications: list[Clarification] | None = Field(default=None, max_length=2)
     profile_id: uuid.UUID | None = None
     locale: str = "es"
     card_action: CardAction | None = None
@@ -150,13 +154,17 @@ async def post_turn(payload: AgentTurnRequest,
         yield {"event": "start", "data": json.dumps(
             {"thread_id": str(thread_id) if thread_id else None})}
         clarification = payload.clarification.model_dump() if payload.clarification else None
+        clarifications = (
+            [c.model_dump() for c in payload.clarifications] if payload.clarifications else None
+        )
         answer: list[str] = []
         final: AgentEvent | None = None
         failed = False
         async for event in run_turn(user_id=user_id, profile_id=payload.profile_id,
                                     message=payload.message, card_action=card_action,
                                     history=history, locale=payload.locale,
-                                    clarification=clarification):
+                                    clarification=clarification,
+                                    clarifications=clarifications):
             if event.type == "token":
                 answer.append(event.content)
             elif event.type == "final":
@@ -169,7 +177,7 @@ async def post_turn(payload: AgentTurnRequest,
         try:
             stored = await agent_thread.record_turn(
                 user_id=user_id, thread_id=thread_id, profile_id=payload.profile_id,
-                message=None if clarification else payload.message,
+                message=None if clarification or clarifications else payload.message,
                 answer="".join(answer),
                 citations=final.citations if final else [],
                 evidence_citations=final.evidence_citations if final else [],

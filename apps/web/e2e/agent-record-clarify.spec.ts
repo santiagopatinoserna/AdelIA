@@ -110,3 +110,94 @@ test("es: a clarify card asks one question with tall buttons and sends her quest
   await expect(p.locator('[data-testid="clarify-card"]')).toHaveCount(0);
   expect(await p.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
 });
+
+// 2026-11-09: "si tiene dudas no hace preguntas". A worry about how the baby
+// is at the nursery gets one round of two questions before any answer; she
+// answers with the buttons, or in her own words in the field below. Either
+// way the next turn carries the questions in its history, so the API knows
+// her words answer them and never asks a second round.
+const GUARDERIA =
+  "Mi bebé en la guardería es el único que en tiempo libre se queda sentado en una esquina sin moverse";
+const nursery = {
+  field: "nursery_time", question: "¿Cuánto lleva yendo a la guardería?",
+  options: [
+    { value: "lt1m", label: "Menos de un mes" },
+    { value: "1-3m", label: "De 1 a 3 meses" },
+    { value: "gt3m", label: "Más de 3 meses" },
+  ],
+  skip: { value: "unknown", label: "No lo sé" },
+};
+const signals = {
+  field: "social_signals",
+  question: "En casa y con otros niños, ¿te mira, sonríe, responde a su nombre y balbucea o dice palabras?",
+  options: [
+    { value: "all", label: "Sí, todo eso" },
+    { value: "some_not", label: "Alguna de esas no" },
+    { value: "lost", label: "Ha dejado de hacer algo que hacía" },
+  ],
+  skip: { value: "unknown", label: "No lo sé" },
+};
+const roundCard = {
+  type: "clarify", id: "clarify-nursery_time-social_signals", actions: [],
+  payload: {
+    ...nursery, questions: [nursery, signals], free: "O escríbemelo con tus palabras.",
+    message: GUARDERIA,
+  },
+};
+const asked = `${nursery.question}\n${signals.question}`;
+
+test("es: a two-question card sends her question with both answers, and the questions ride in the history", async ({ browser, page }) => {
+  const { p, bodies } = await open(page, browser, [
+    sse([["start", {}], ["card", { card: roundCard }], final]),
+    sse([["start", {}], ["token", { content: "A las pocas semanas de empezar es la adaptación [ev_1]." }], final]),
+  ]);
+  await say(p, GUARDERIA);
+  const card = p.locator('[data-testid="clarify-card"]:visible');
+  await expect(card.getByRole("group")).toHaveCount(2);
+  await expect(card).toContainText(nursery.question);
+  await expect(card).toContainText(signals.question);
+  await expect(card).toContainText("O escríbemelo con tus palabras.");
+  const heights = await card.evaluate((el) =>
+    [...el.querySelectorAll("button")].map((b) => (b as HTMLElement).offsetHeight));
+  expect(heights).toHaveLength(8);
+  for (const h of heights) expect(h).toBeGreaterThanOrEqual(44);
+  for (const colorScheme of ["light", "dark"] as const) {
+    await p.emulateMedia({ colorScheme, reducedMotion: "reduce" });
+    const audit = await new AxeBuilder({ page: p }).include('[data-testid="clarify-card"]').analyze();
+    expect(audit.violations, colorScheme).toEqual([]);
+  }
+  await card.getByRole("button", { name: "Menos de un mes" }).click();
+  await expect(card.getByRole("button", { name: "Menos de un mes" })).toHaveAttribute("aria-pressed", "true");
+  expect(bodies).toHaveLength(1);
+  await card.getByRole("button", { name: "Sí, todo eso" }).click();
+  await expect(p.getByText("es la adaptación")).toBeVisible();
+  expect(bodies[1]).toMatchObject({
+    message: GUARDERIA,
+    clarifications: [{ field: "nursery_time", value: "lt1m" }, { field: "social_signals", value: "all" }],
+    history: [{ role: "user", content: GUARDERIA }, { role: "assistant", content: asked }],
+  });
+  await expect(p.locator('[data-role="user"]').last()).toHaveText("Menos de un mes · Sí, todo eso");
+  await expect(p.locator('[data-testid="clarify-card"]')).toHaveCount(0);
+  expect(await p.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
+});
+
+test("es: answering the card in her own words sends the questions in the history and drops the card", async ({ browser, page }) => {
+  const { p, bodies } = await open(page, browser, [
+    sse([["start", {}], ["card", { card: roundCard }], final]),
+    sse([["start", {}], ["token", { content: "A las pocas semanas de empezar es la adaptación [ev_1]." }], final]),
+  ]);
+  await say(p, GUARDERIA);
+  await expect(p.locator('[data-testid="clarify-card"]:visible')).toBeVisible();
+  // After the first turn the field invites a follow-up: found by its label.
+  const box = p.getByLabel(es.agent.inputLabel);
+  await box.fill("Lleva dos semanas y en casa me mira y se ríe");
+  await box.press("Enter");
+  await expect(p.getByText("es la adaptación")).toBeVisible();
+  expect(bodies[1]).toMatchObject({
+    message: "Lleva dos semanas y en casa me mira y se ríe",
+    history: [{ role: "user", content: GUARDERIA }, { role: "assistant", content: asked }],
+  });
+  expect(bodies[1].clarification).toBeUndefined();
+  expect(bodies[1].clarifications).toBeUndefined();
+  await expect(p.locator('[data-testid="clarify-card"]')).toHaveCount(0);
+});

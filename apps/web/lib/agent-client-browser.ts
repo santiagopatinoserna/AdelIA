@@ -7,6 +7,7 @@ export async function* streamAgent(
     locale?: string;
     card_action?: object;
     clarification?: { field: string; value: string };
+    clarifications?: { field: string; value: string }[];
     history?: { role: string; content: string }[];
     thread_id?: string | null;
   },
