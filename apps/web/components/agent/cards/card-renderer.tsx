@@ -10,7 +10,11 @@ import { DocumentCard } from "./document-card";
 import { ProfileCard } from "./profile-card";
 import { ClarifyCard } from "./clarify-card";
 
-export type CardActionHandler = (intent: string, card: AgentCard, value?: string) => void;
+// A two-question clarify card answers both at once, in the card's order.
+export type ClarifyAnswer = { field: string; value: string };
+export type CardActionHandler = (
+  intent: string, card: AgentCard, value?: string, answers?: ClarifyAnswer[],
+) => void;
 
 export function CardRenderer({ card, onAction }: { card: AgentCard; onAction: CardActionHandler }) {
   const common = { card, onAction } as const;

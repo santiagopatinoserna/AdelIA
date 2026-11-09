@@ -1044,6 +1044,112 @@ CLARIFY_QUESTIONS: dict[str, dict[str, dict]] = {
     },
 }
 
+#: Asked before answering a worry about how the baby relates to others, and
+#: when nothing was found for a worry (agent/conversation.py, 2026-11-09). What
+#: a pediatric nurse asks first: how long the nursery has been going on (the
+#: adaptation the corpus describes lasts weeks: Berlin model, NHS separation
+#: anxiety), since when she notices it, and whether at home the baby looks at
+#: her, smiles, answers to his name and babbles or says words, or has stopped
+#: doing something he did: the signs the sources make a reason to consult
+#: (SAP, AEPap, CDC; conversation.SIGNAL_SOURCES ties each one to its passage).
+#: "Come, duerme y juega como siempre" is EnFamilia's "afectación del estado
+#: general". Three buttons and a way out each; she may also write instead.
+CLARIFY_QUESTIONS.update({
+    "nursery_time": {
+        "es": {
+            "question": "¿Cuánto lleva yendo a la guardería?",
+            "options": _options(("lt1m", "Menos de un mes"), ("1-3m", "De 1 a 3 meses"),
+                                ("gt3m", "Más de 3 meses")),
+            "skip": {"value": "unknown", "label": "No lo sé"},
+        },
+        "en": {
+            "question": "How long has your baby been going to nursery?",
+            "options": _options(("lt1m", "Less than a month"), ("1-3m", "1 to 3 months"),
+                                ("gt3m", "More than 3 months")),
+            "skip": {"value": "unknown", "label": "I don’t know"},
+        },
+        "fr": {
+            "question": "Depuis combien de temps ton bébé va-t-il à la crèche ?",
+            "options": _options(("lt1m", "Moins d’un mois"), ("1-3m", "De 1 à 3 mois"),
+                                ("gt3m", "Plus de 3 mois")),
+            "skip": {"value": "unknown", "label": "Je ne sais pas"},
+        },
+    },
+    "since_when": {
+        "es": {
+            "question": "¿Desde cuándo lo notas?",
+            "options": _options(("days", "Unos días"), ("weeks", "Unas semanas"),
+                                ("months", "Meses o desde siempre")),
+            "skip": {"value": "unknown", "label": "No lo sé"},
+        },
+        "en": {
+            "question": "Since when have you noticed it?",
+            "options": _options(("days", "A few days"), ("weeks", "A few weeks"),
+                                ("months", "Months or always")),
+            "skip": {"value": "unknown", "label": "I don’t know"},
+        },
+        "fr": {
+            "question": "Depuis quand le remarques-tu ?",
+            "options": _options(("days", "Quelques jours"), ("weeks", "Quelques semaines"),
+                                ("months", "Des mois ou depuis toujours")),
+            "skip": {"value": "unknown", "label": "Je ne sais pas"},
+        },
+    },
+    "social_signals": {
+        "es": {
+            "question": "En casa y con otros niños, ¿te mira, sonríe, responde a su nombre "
+                        "y balbucea o dice palabras?",
+            "options": _options(("all", "Sí, todo eso"), ("some_not", "Alguna de esas no"),
+                                ("lost", "Ha dejado de hacer algo que hacía")),
+            "skip": {"value": "unknown", "label": "No lo sé"},
+        },
+        "en": {
+            "question": "At home and with other children, does your baby look at you, "
+                        "smile, answer to their name and babble or say words?",
+            "options": _options(("all", "Yes, all of that"), ("some_not", "Not all of it"),
+                                ("lost", "Stopped doing something they did")),
+            "skip": {"value": "unknown", "label": "I don’t know"},
+        },
+        "fr": {
+            "question": "À la maison et avec d’autres enfants, est-ce qu’il te regarde, "
+                        "sourit, réagit à son prénom et babille ou dit des mots ?",
+            "options": _options(("all", "Oui, tout ça"), ("some_not", "Pas tout"),
+                                ("lost", "Il a arrêté de faire une chose qu’il faisait")),
+            "skip": {"value": "unknown", "label": "Je ne sais pas"},
+        },
+    },
+    "general_state": {
+        "es": {
+            "question": "¿Come, duerme y juega como siempre?",
+            "options": _options(("yes", "Sí"), ("partly", "No del todo"), ("no", "No")),
+            "skip": {"value": "unknown", "label": "No lo sé"},
+        },
+        "en": {
+            "question": "Is your baby eating, sleeping and playing as usual?",
+            "options": _options(("yes", "Yes"), ("partly", "Not quite"), ("no", "No")),
+            "skip": {"value": "unknown", "label": "I don’t know"},
+        },
+        "fr": {
+            "question": "Est-ce qu’il mange, dort et joue comme d’habitude ?",
+            "options": _options(("yes", "Oui"), ("partly", "Pas tout à fait"), ("no", "Non")),
+            "skip": {"value": "unknown", "label": "Je ne sais pas"},
+        },
+    },
+})
+
+#: Under a card with two questions: she may also answer in her own words in
+#: the field below (agent/conversation reads a typed answer as the answer).
+_CLARIFY_FREE_TEXT: dict[str, str] = {
+    "es": "O escríbemelo con tus palabras.",
+    "en": "Or tell me in your own words.",
+    "fr": "Ou écris-le-moi avec tes mots.",
+}
+
+
+def clarify_free_text(locale: str) -> str:
+    return _CLARIFY_FREE_TEXT.get(locale, _CLARIFY_FREE_TEXT[DEFAULT_LOCALE])
+
+
 #: The age the guard and the router see for each band: its youngest month.
 CLARIFY_AGE_FLOOR: dict[str, int] = {"0-2": 0, "3-11": 3, "12+": 12}
 
@@ -1057,6 +1163,78 @@ _CLARIFY_UNKNOWN: dict[str, dict[str, str]] = {
     "es": {"temperature": "no la he medido", "age": "no indicada"},
     "en": {"temperature": "not measured", "age": "not given"},
     "fr": {"temperature": "pas mesurée", "age": "non indiqué"},
+}
+
+#: The 2026-11-09 answers, said as she would say them, because the line goes
+#: into her message and into the search: "Sí, todo eso" alone means nothing
+#: to either. A lost skill is said with the corpus's own words ("pérdida de
+#: habilidades", SAP and AEPap) so the search finds the passage that says to
+#: consult. "unknown" is said in words, like the others.
+_CLARIFY_SAID: dict[str, dict[str, dict[str, str]]] = {
+    "nursery_time": {
+        "es": {"lt1m": "Lleva menos de un mes en la guardería.",
+               "1-3m": "Lleva de 1 a 3 meses en la guardería.",
+               "gt3m": "Lleva más de 3 meses en la guardería.",
+               "unknown": "No sé cuánto lleva en la guardería."},
+        "en": {"lt1m": "Has been at nursery for less than a month.",
+               "1-3m": "Has been at nursery for 1 to 3 months.",
+               "gt3m": "Has been at nursery for more than 3 months.",
+               "unknown": "I don’t know how long at nursery."},
+        "fr": {"lt1m": "Va à la crèche depuis moins d’un mois.",
+               "1-3m": "Va à la crèche depuis 1 à 3 mois.",
+               "gt3m": "Va à la crèche depuis plus de 3 mois.",
+               "unknown": "Je ne sais pas depuis quand il va à la crèche."},
+    },
+    "since_when": {
+        "es": {"days": "Lo noto desde hace unos días.",
+               "weeks": "Lo noto desde hace unas semanas.",
+               "months": "Lo noto desde hace meses o desde siempre.",
+               "unknown": "No sé desde cuándo pasa."},
+        "en": {"days": "I have noticed it for a few days.",
+               "weeks": "I have noticed it for a few weeks.",
+               "months": "I have noticed it for months, or always.",
+               "unknown": "I don’t know since when."},
+        "fr": {"days": "Je le remarque depuis quelques jours.",
+               "weeks": "Je le remarque depuis quelques semaines.",
+               "months": "Je le remarque depuis des mois, ou depuis toujours.",
+               "unknown": "Je ne sais pas depuis quand."},
+    },
+    "social_signals": {
+        "es": {"all": "En casa me mira, sonríe, responde a su nombre y balbucea o dice palabras.",
+               "some_not": "En casa alguna de estas cosas no la hace: mirarme, sonreír, "
+                           "responder a su nombre, balbucear o decir palabras.",
+               "lost": "Ha dejado de hacer algo que ya hacía (pérdida de habilidades).",
+               "unknown": "No sé si en casa me mira, sonríe, responde a su nombre o balbucea."},
+        "en": {"all": "At home my baby looks at me, smiles, answers to their name and "
+                      "babbles or says words.",
+               "some_not": "At home my baby does not do all of these: look at me, smile, "
+                           "answer to their name, babble or say words.",
+               "lost": "My baby has stopped doing something they used to do (loss of skills).",
+               "unknown": "I don’t know if at home my baby looks at me, smiles, answers "
+                          "to their name or babbles."},
+        "fr": {"all": "À la maison il me regarde, sourit, réagit à son prénom et babille "
+                      "ou dit des mots.",
+               "some_not": "À la maison il ne fait pas tout cela : me regarder, sourire, "
+                           "réagir à son prénom, babiller ou dire des mots.",
+               "lost": "Il a arrêté de faire une chose qu’il faisait déjà (perte de "
+                       "compétences acquises).",
+               "unknown": "Je ne sais pas si à la maison il me regarde, sourit, réagit à son "
+                          "prénom ou babille."},
+    },
+    "general_state": {
+        "es": {"yes": "Come, duerme y juega como siempre.",
+               "partly": "No come, duerme o juega del todo como siempre.",
+               "no": "No come, duerme ni juega como siempre.",
+               "unknown": "No sé si come, duerme y juega como siempre."},
+        "en": {"yes": "Eating, sleeping and playing as usual.",
+               "partly": "Not quite eating, sleeping or playing as usual.",
+               "no": "Not eating, sleeping or playing as usual.",
+               "unknown": "I don’t know if eating, sleeping and playing are as usual."},
+        "fr": {"yes": "Il mange, dort et joue comme d’habitude.",
+               "partly": "Il ne mange, ne dort ou ne joue pas tout à fait comme d’habitude.",
+               "no": "Il ne mange, ne dort et ne joue pas comme d’habitude.",
+               "unknown": "Je ne sais pas s’il mange, dort et joue comme d’habitude."},
+    },
 }
 
 
@@ -1079,6 +1257,8 @@ def clarification_sentence(field: str, value: str, locale: str) -> str | None:
     if q is None:
         return None
     lang = locale if locale in _CLARIFY_PREFIX else DEFAULT_LOCALE
+    if field in _CLARIFY_SAID:
+        return _CLARIFY_SAID[field][lang].get(value)
     if value == q["skip"]["value"]:
         label = _CLARIFY_UNKNOWN[lang][field]
     else:
@@ -1094,6 +1274,10 @@ def clarification_sentence(field: str, value: str, locale: str) -> str | None:
 _MISSING_FACT = {
     "temperature": "la temperatura que marca el termómetro",
     "age": "la edad del bebé",
+    "nursery_time": "cuánto lleva en la guardería",
+    "since_when": "desde cuándo pasa",
+    "social_signals": "si en casa mira, sonríe, responde a su nombre y balbucea o dice palabras",
+    "general_state": "si come, duerme y juega como siempre",
 }
 
 

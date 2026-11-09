@@ -1,11 +1,13 @@
 """The agent graph (docs/specs/AGENT_GRAPH.md): one graph, three surfaces.
 
     absorb -> write                                  (a confirmed card)
-           -> guard -> admit -> route -> clarify     (one question, buttons)
-                                       | record      (a diary line, account only)
-                                       | track       (her own data: tools, 3 steps)
-                                       | retrieve -> decide -> plan | answer | experience_only
-                    -> compose
+           -> thread -> guard -> admit -> route -> clarify   (one round, buttons)
+                                                 | record    (a diary line, account only)
+                                                 | track     (her own data: tools, 3 steps)
+                                                 | retrieve -> decide -> plan | answer
+                                                                       | experience_only
+                                                                       | clarify
+                              -> compose
 
 Until build step 2 every question got the four-section action plan, even
 "¿a qué edad gatean?", the agent behind /dashboard ran its own model-and-
@@ -19,8 +21,12 @@ What the graph guarantees, whatever surface runs it:
     message goes straight to `compose`: no spending gate, no route, no
     embedding, no model. A frightened parent is never told "come back
     tomorrow".
-  * At most one clarify question per turn, and only with buttons; the next
-    turn answers with what there is (principle 2).
+  * At most one clarify round per topic, and only with buttons (one question,
+    or two where the surface shows them); the next turn answers with what
+    there is (principle 2). `thread` (agent/conversation.py) reads the
+    transcript the surface sent: a follow-up is searched with her words in
+    the topic, a correction drops the answers she rejected, a new topic
+    carries nothing of the old one (2026-11-09).
   * Nothing is written without a confirmation card, and what comes back from
     the card is validated again (principle 3).
   * `decide` fixes `kind` from the clinical evidence (and, with an account,
@@ -63,11 +69,12 @@ from langgraph.config import get_stream_writer  # noqa: E402
 from langgraph.graph import END, START, StateGraph  # noqa: E402
 from langgraph.runtime import Runtime  # noqa: E402
 
+from adelia.agent import conversation  # noqa: E402
 from adelia.agent import implicit_subject  # noqa: E402
 from adelia.agent import lay_terms  # noqa: E402
 from adelia.agent import record as rec  # noqa: E402
 from adelia.agent import warning_signs  # noqa: E402
-from adelia.agent.route import RouteDecision  # noqa: E402
+from adelia.agent.route import RouteDecision, route_by_rules  # noqa: E402
 from adelia.clinical import red_flags  # noqa: E402
 from adelia.clinical.golden import is_refusal  # noqa: E402
 from adelia.clinical.age_scope import child_outside_scope  # noqa: E402
@@ -83,9 +90,11 @@ from adelia.enrichment.evidence_retrieval import (  # noqa: E402
 from adelia.enrichment.profile_service import ProfileFacts  # noqa: E402
 from adelia.services.answer_contract import (  # noqa: E402
     CLARIFY_AGE_FLOOR,
+    CLARIFY_QUESTIONS,
     PLAN_HEADINGS,
     chat_system_prompt,
     clarification_sentence,
+    clarify_free_text,
     clarify_question,
     experience_only_contract,
     experience_only_opening,
@@ -103,6 +112,14 @@ DEFAULT_LOCALE = "es"
 #: The time zone a diary line's "a las 5" is read in. Both countries AdelIA
 #: serves today (ES, FR) are on it.
 LOCAL_TZ = ZoneInfo("Europe/Madrid")
+
+#: The questions a surface can show. The demo page and its proxy know the two
+#: of build step 3 and one at a time; the agent canvas shows them all, two per
+#: card (agent/orchestrator lends ACCOUNT_CLARIFY_FIELDS and clarify_round=2).
+DEMO_CLARIFY_FIELDS: frozenset[str] = frozenset({"age", "temperature"})
+ACCOUNT_CLARIFY_FIELDS: frozenset[str] = frozenset(CLARIFY_QUESTIONS)
+#: What the routing model may call a missing fact, in our questions' names.
+_MISSING_ALIASES = {"duration": "since_when"}
 
 
 class GraphUnavailable(Exception):
@@ -123,7 +140,13 @@ class AgentState(TypedDict, total=False):
     card_action: dict | None
     #: Her answer to last turn's clarify question: {"field", "value"}.
     clarification: dict | None
+    #: Her answers to a two-question card, in order: [{"field", "value"}, ...].
+    clarifications: list[dict] | None
     clarified: bool
+    #: Where this turn sits in the conversation (agent/conversation.Conversation).
+    conversation: Any
+    #: What retrieval searches: her words in this topic (conversation.search_query).
+    search_query: str
     # Decisions
     flag: Any
     #: The guard refused a question about a child of 3 or more (age_scope).
@@ -203,6 +226,9 @@ class GraphDeps:
     stream: Stream | None = None
     #: The surface can show a question with buttons (the chat page cannot).
     can_ask: bool = True
+    #: Which questions it can show, and how many in one card.
+    clarify_fields: frozenset[str] = DEMO_CLARIFY_FIELDS
+    clarify_round: int = 1
     #: The surface can show a confirmation card and write after it.
     can_write: bool = False
     record_store: RecordStore | None = None
@@ -246,31 +272,59 @@ async def absorb(state: AgentState) -> dict:
     overwritten. Any answer, even one we cannot read, spends the turn's one
     question: `clarified` stops a second.
     """
-    answer = state.get("clarification")
-    if not answer:
+    answers = list(state.get("clarifications") or [])
+    if not answers and state.get("clarification"):
+        answers = [state["clarification"]]
+    if not answers:
         return {"clarified": False}
-    field_name, value = str(answer.get("field", "")), str(answer.get("value", ""))
     update: dict = {"clarified": True}
-    sentence = clarification_sentence(field_name, value, _locale(state))
-    if sentence is None:
-        logger.info("graph: unreadable clarification ignored (field=%s)", field_name)
-        return update
-    update["message"] = f"{state['message']}\n{sentence}"
+    lines: list[str] = []
     facts = state.get("facts")
-    if field_name == "age" and value in CLARIFY_AGE_FLOOR and (
-        facts is None or facts.age_months is None
-    ):
-        floor = CLARIFY_AGE_FLOOR[value]
-        update["facts"] = (
-            dataclasses.replace(facts, age_months=floor) if facts is not None
-            else ProfileFacts(None, None, None, None, floor)
-        )
+    for answer in answers[:2]:
+        if not isinstance(answer, dict):
+            continue
+        field_name, value = str(answer.get("field", "")), str(answer.get("value", ""))
+        sentence = clarification_sentence(field_name, value, _locale(state))
+        if sentence is None:
+            logger.info("graph: unreadable clarification ignored (field=%s)", field_name)
+            continue
+        lines.append(sentence)
+        if field_name == "age" and value in CLARIFY_AGE_FLOOR and (
+            facts is None or facts.age_months is None
+        ):
+            floor = CLARIFY_AGE_FLOOR[value]
+            facts = (
+                dataclasses.replace(facts, age_months=floor) if facts is not None
+                else ProfileFacts(None, None, None, None, floor)
+            )
+            update["facts"] = facts
+    if lines:
+        update["message"] = "\n".join([state["message"], *lines])
     return update
 
 
 def _after_absorb(state: AgentState) -> str:
     action = state.get("card_action") or {}
-    return "write" if action.get("intent") == "confirm" else "guard"
+    return "write" if action.get("intent") == "confirm" else "thread"
+
+
+async def thread(state: AgentState) -> dict:
+    """Where this turn sits in the conversation, by rules (agent/conversation).
+
+    Before the guard and free: no model, no database. Her answer to a clarify
+    question in words is read under the question it answers, so the guard
+    sees both, as it does with a button. A surface without a transcript (the
+    demo) gets a first turn, searched and answered exactly as before.
+    """
+    c = conversation.read(
+        state["message"], state.get("history"), clarified=bool(state.get("clarified"))
+    )
+    if c.kind != "new" or c.via != "first":
+        logger.info(
+            "graph: turn=%s via=%s asked=%s refused=%s behaviour=%s (surface=%s)",
+            c.kind, c.via, c.asked, c.refused, c.behaviour, state.get("surface"),
+        )
+    return {"conversation": c, "message": c.message, "search_query": c.search_query}
 
 
 _RECORD_REFUSED = {
@@ -365,35 +419,86 @@ async def route_node(state: AgentState, runtime: Runtime[GraphDeps]) -> dict:
     agent always did, and to the plan everywhere else.
     """
     deps = runtime.context
-    decision = await deps.route(
-        state["message"],
-        locale=_locale(state),
-        has_account=bool(state.get("account")),
-        facts=state.get("facts"),
-    )
-    intent, missing = decision.intent, list(decision.missing)
+    c = state.get("conversation")
+    kwargs: dict = {
+        "locale": _locale(state),
+        "has_account": bool(state.get("account")),
+        "facts": state.get("facts"),
+    }
+    # One round per topic (principle 2): a button pressed this turn, or a
+    # question already asked in this topic, and the graph answers with what
+    # there is.
+    spent = bool(state.get("clarified")) or (c is not None and c.asked)
+    if c is not None and deps.can_ask and not spent:
+        # A behaviour worry is asked before any answer (2026-11-09). Unless the
+        # free rules place it elsewhere (her own data, a diary line), the
+        # routing model is not paid, nor waited for, to then ask anyway.
+        first = _round(conversation.ask_first(c, state.get("facts")), deps, _locale(state))
+        ruled = route_by_rules(c.route_text, **kwargs) if first else None
+        if first and (ruled is None or ruled.intent in ("plan", "question", "clarify")):
+            logger.info("graph: asked before routing (%s, surface=%s)",
+                        ",".join(first), state.get("surface"))
+            return {"intent": "clarify", "intent_confidence": 1.0, "intent_via": "rule",
+                    "missing": first}
+    route_text = c.route_text if c is not None else state["message"]
+    if c is not None and c.kind == "follow_up" and c.via != "clarify":
+        # A diary line or her own data says so by itself ("Ha hecho 3 cacas
+        # hoy" after a question about green stools): routed with the topic it
+        # would read as a question, and the card would never come.
+        alone = route_by_rules(state["message"], **kwargs)
+        if alone is not None and alone.intent in ("record", "track"):
+            route_text = state["message"]
+    if c is not None and c.route_history:
+        # The same call as always, now reading the tail of the thread; the
+        # model is only consulted when the routing rules abstain.
+        kwargs["history"] = c.route_history
+    decision = await deps.route(route_text, **kwargs)
+    update: dict = {}
+    if c is not None and not c.decided and decision.via == "model":
+        c = conversation.with_kind(c, decision.turn, search_query=decision.search_query)
+        update = {"conversation": c, "search_query": c.search_query}
+    intent = decision.intent
+    missing = [_MISSING_ALIASES.get(f, f) for f in decision.missing]
     if intent == "clarify":
-        # One question, only one we can ask with buttons, and never twice in
-        # a row (principle 2): otherwise answer with what there is.
-        askable = [f for f in missing if clarify_question(f, _locale(state)) is not None]
-        if state.get("clarified") or not askable or not deps.can_ask:
+        askable = _askable(missing, deps, _locale(state))
+        if spent or not askable or not deps.can_ask:
             intent = "plan"
         else:
-            missing = askable[:1]
+            missing = askable[:deps.clarify_round]
     if intent == "record" and not (
         state.get("account") and deps.can_write and deps.record_store is not None
     ):
         intent = "plan"
     if intent in ("other",) or decision.via == "fallback":
-        intent = "track" if deps.track is not None else "plan"
+        # A behaviour worry or a correction is answered on the contract path,
+        # never in the tool loop's free format.
+        contract = c is not None and (c.behaviour or c.kind == "correction")
+        intent = "track" if deps.track is not None and not contract else "plan"
     if intent == "track" and deps.track is None:
         intent = "question"
     return {
+        **update,
         "intent": intent,
         "intent_confidence": decision.confidence,
         "intent_via": decision.via,
         "missing": missing,
     }
+
+
+def _askable(fields: list[str], deps: GraphDeps, locale: str) -> list[str]:
+    return [
+        f for f in fields
+        if f in deps.clarify_fields and clarify_question(f, locale) is not None
+    ]
+
+
+def _round(fields: list[str], deps: GraphDeps, locale: str) -> list[str]:
+    """A whole round this surface can show, or nothing: half a round asks the
+    wrong question (the demo knows the age, not the signals at home)."""
+    askable = _askable(fields, deps, locale)
+    if not fields or askable != fields or len(fields) > deps.clarify_round:
+        return []
+    return fields
 
 
 def _after_route(state: AgentState) -> str:
@@ -404,17 +509,29 @@ def _after_route(state: AgentState) -> str:
 
 
 async def clarify(state: AgentState) -> dict:
-    """One concrete question of one line, with two or three buttons."""
-    field_name = state["missing"][0]
-    question = clarify_question(field_name, _locale(state))
-    payload = {"field": field_name, **question}
-    # A streaming surface gets it as a card; the original message rides along
-    # so the page can send it back with the button's value.
+    """One concrete question of one line, with two or three buttons.
+
+    Two where the surface shows them (the agent): the card then lists both
+    under `questions` and says she may write instead. The first stays at the
+    top level, the shape the demo page reads.
+    """
+    fields = list(state["missing"])
+    questions = [{"field": f, **clarify_question(f, _locale(state))} for f in fields]
+    payload = dict(questions[0])
+    if len(questions) > 1:
+        payload["questions"] = questions
+        payload["free"] = clarify_free_text(_locale(state))
+    # A streaming surface gets it as a card; her question (in a follow-up,
+    # her words in the topic) rides along so the page can send it back with
+    # the buttons' values.
+    c = state.get("conversation")
+    message = c.route_text if c is not None else state["message"]
     _emit({"type": "card", "card": {
-        "type": "clarify", "id": f"clarify-{field_name}",
-        "payload": {**payload, "message": state["message"]}, "actions": [],
+        "type": "clarify", "id": "clarify-" + "-".join(fields),
+        "payload": {**payload, "message": message}, "actions": [],
     }})
-    return {"kind": "clarify", "answer": question["question"], "clarify": payload}
+    asked = "\n".join(q["question"] for q in questions)
+    return {"kind": "clarify", "answer": asked, "clarify": payload}
 
 
 # --- record and track ----------------------------------------------------------
@@ -464,7 +581,7 @@ async def retrieve(state: AgentState, runtime: Runtime[GraphDeps]) -> dict:
             "patient_context": found.patient_context,
             "citations": list(found.citations),
         }
-    spoken = deps.retrieval_text(state["message"])
+    spoken = deps.retrieval_text(state.get("search_query") or state["message"])
     text = spoken
     if deps.corpus_text is not None:
         text = await deps.corpus_text(spoken, _locale(state))
@@ -537,19 +654,32 @@ async def retrieve(state: AgentState, runtime: Runtime[GraphDeps]) -> dict:
     return {"evidence": list(evidence), "query_embedding": embeds[0]}
 
 
-async def decide(state: AgentState) -> dict:
+async def decide(state: AgentState, runtime: Runtime[GraphDeps]) -> dict:
     """`kind` from the clinical evidence and her own record; experience never decides.
 
     Nothing survived the cut-offs on either side: the code refuses, the model
-    is never asked (audit 3.1).
+    is never asked (audit 3.1). Before refusing a worry she observed, one round
+    of questions where the surface can ask and the topic has not had one: her
+    answers go into the next search (2026-11-09, "sin evidencia no es un
+    callejón"). Never for a fact question or a drug.
     """
     grounded = bool(state.get("evidence")) or bool(state.get("patient_context"))
-    return {"kind": "answer" if grounded else "no_evidence"}
+    if grounded:
+        return {"kind": "answer"}
+    deps, c = runtime.context, state.get("conversation")
+    if c is not None and deps.can_ask and not state.get("clarified"):
+        fields = _round(
+            conversation.ask_when_nothing_found(c, state.get("facts"), intent=state.get("intent")),
+            deps, _locale(state),
+        )
+        if fields:
+            return {"kind": "no_evidence", "intent": "clarify", "missing": fields}
+    return {"kind": "no_evidence"}
 
 
 def _after_decide(state: AgentState) -> str:
     if state["kind"] == "no_evidence":
-        return "experience_only"
+        return "clarify" if state.get("intent") == "clarify" else "experience_only"
     if state.get("intent") == "question":
         return "answer"
     return "plan"
@@ -577,7 +707,9 @@ async def _experience_for(state: AgentState, deps: GraphDeps) -> list:
 
 
 def _user_message(state: AgentState, deps: GraphDeps, experience: list) -> str:
-    blocks = [f"Pregunta del usuario: {state['message']}\n"]
+    c = state.get("conversation")
+    question = c.prompt_question if c is not None else state["message"]
+    blocks = [f"Pregunta del usuario: {question}\n"]
     patient = state.get("patient_context") or deps.patient_context
     if patient:
         blocks.append(f"## Patient data (cite as [N]):\n{patient}")
@@ -589,6 +721,8 @@ def _user_message(state: AgentState, deps: GraphDeps, experience: list) -> str:
         note = missing_fact_note(state["missing"])
         if note:
             blocks.append(note)
+    if c is not None and (note := conversation.correction_note(c)):
+        blocks.append(note)
     return "\n\n".join(blocks)
 
 
@@ -600,8 +734,16 @@ async def _compose_with_model(
     if deps.stream is not None:
         # A streaming surface: tokens go out as they come, and a provider
         # failure is the surface's error event, as it always was in the chat.
+        # A surface that sent a transcript gets back this topic's part of it
+        # (agent/conversation): nothing of an earlier topic, nothing of an
+        # answer she corrected.
+        c = state.get("conversation")
+        if state.get("history") and c is not None:
+            tokens = deps.stream(system, user, history=c.model_history)
+        else:
+            tokens = deps.stream(system, user)
         pieces: list[str] = []
-        async for piece in deps.stream(system, user):
+        async for piece in tokens:
             pieces.append(piece)
             _emit({"type": "token", "content": piece})
         return {"answer": "".join(pieces), "experience": experience, "streamed": True}
@@ -660,6 +802,35 @@ def experience_only_body_is_clean(text: str, locale: str) -> bool:
     return all(_CITATION.search(ln) for ln in bullets)
 
 
+_VISIT_NOTE = "note"
+
+
+def _dead_end(state: AgentState, deps: GraphDeps, refusal: dict) -> dict:
+    """The refusal, said once per topic, and what can still help.
+
+    Santiago's conversation of 2026-11-09 met the same "no tengo evidencia"
+    on every turn. The second time in a topic it is one short line that still
+    sends her to the pediatrician. Her own words follow, to take to the visit,
+    and a card offers to note them in her record: nothing of ours, no source,
+    no advice. Only where she can write (the agent); the chat, text only,
+    keeps the whole coded refusal every time.
+    """
+    c = state.get("conversation")
+    can_note = state.get("account") and deps.can_write and deps.record_store is not None
+    if c is None or not can_note:
+        return refusal
+    lang = _lang(state)
+    text = conversation.no_evidence_again(lang) if c.refused else refusal["answer"]
+    text = f"{text}\n\n{conversation.consult_note(c, lang)}"
+    now = deps.now()
+    draft = rec.RecordDraft(_VISIT_NOTE, None, None, now, conversation.visit_note(c))
+    card = rec.confirm_card(draft, locale=_locale(state), now=now)
+    card["payload"]["title"] = conversation.visit_card_title(lang)
+    card["payload"]["body"] = draft.text
+    _emit({"type": "card", "card": card})
+    return {**refusal, "answer": text}
+
+
 async def experience_only(state: AgentState, runtime: Runtime[GraphDeps]) -> dict:
     """No evidence: the coded refusal, or what other mothers say, fenced.
 
@@ -670,11 +841,11 @@ async def experience_only(state: AgentState, runtime: Runtime[GraphDeps]) -> dic
     Surfaces without the experience tier (the chat, the agent) refuse.
     """
     lang = _lang(state)
-    refusal = {"kind": "no_evidence", "answer": no_evidence_reply(lang), "experience": []}
     deps = runtime.context
+    refusal = {"kind": "no_evidence", "answer": no_evidence_reply(lang), "experience": []}
     experience = await _experience_for(state, deps)
     if not experience or deps.generate is None:
-        return refusal
+        return _dead_end(state, deps, refusal)
     user_message = "\n\n".join([
         f"Pregunta del usuario: {state['message']}\n",
         format_experience_for_prompt(experience),
@@ -790,7 +961,8 @@ async def compose(state: AgentState) -> dict:
 def build_graph():
     g = StateGraph(AgentState, context_schema=GraphDeps)
     for name, node in (
-        ("absorb", absorb), ("write", write), ("guard", guard), ("admit", admit),
+        ("absorb", absorb), ("write", write), ("thread", thread), ("guard", guard),
+        ("admit", admit),
         ("route", route_node), ("clarify", clarify), ("record", record), ("track", track),
         ("retrieve", retrieve), ("decide", decide), ("plan", plan), ("answer", answer),
         ("experience_only", experience_only), ("compose", compose),
@@ -798,7 +970,8 @@ def build_graph():
         g.add_node(name, node)
 
     g.add_edge(START, "absorb")
-    g.add_conditional_edges("absorb", _after_absorb, ["write", "guard"])
+    g.add_conditional_edges("absorb", _after_absorb, ["write", "thread"])
+    g.add_edge("thread", "guard")
     g.add_edge("write", "compose")
     g.add_conditional_edges("guard", _after_guard, ["compose", "admit"])
     g.add_edge("admit", "route")
@@ -806,7 +979,9 @@ def build_graph():
     for node in ("clarify", "record", "track"):
         g.add_edge(node, "compose")
     g.add_edge("retrieve", "decide")
-    g.add_conditional_edges("decide", _after_decide, ["plan", "answer", "experience_only"])
+    g.add_conditional_edges(
+        "decide", _after_decide, ["plan", "answer", "experience_only", "clarify"]
+    )
     for node in ("plan", "answer", "experience_only"):
         g.add_edge(node, "compose")
     g.add_edge("compose", END)

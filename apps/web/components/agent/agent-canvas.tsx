@@ -28,11 +28,16 @@ type Msg = {
   // A turn that failed carries what to send again: "Volver a preguntar"
   // replaces the failed exchange with the same question, sent once.
   retry?: DriveInput;
+  // A turn that asked with a clarify card shows no text, but the questions
+  // go into the history: her next message, typed or pressed, answers them,
+  // and the API never asks the same topic twice (2026-11-09).
+  asked?: string;
 };
 
 type DriveInput = {
   message?: string; card_action?: object; display?: string;
   clarification?: { field: string; value: string };
+  clarifications?: { field: string; value: string }[];
 };
 
 // The failed turn's placeholder becomes the sentence; only a turn she typed
@@ -165,14 +170,22 @@ export function AgentCanvas({
     const history = body.message
       ? messages
           .filter((m, k) =>
-            !(m.role === "assistant" && (m.content === "" || m.retry)) &&
+            !(m.role === "assistant" && ((m.content === "" && !m.asked) || m.retry)) &&
             !(m.role === "user" && messages[k + 1]?.retry))
           .slice(-HISTORY_MAX_MESSAGES)
           .map((m) => ({
             role: m.role,
-            content: m.content.slice(0, HISTORY_MAX_CHARS_PER_MESSAGE),
+            content: (m.content || m.asked || "").slice(0, HISTORY_MAX_CHARS_PER_MESSAGE),
           }))
       : undefined;
+    // She wrote instead of pressing: her words answer the card, which goes.
+    if (body.message && display === undefined && !body.clarification && !body.clarifications) {
+      const pending = cards.filter((c) => c.type === "clarify" && turnCardIds.current.has(c.id));
+      if (pending.length > 0) {
+        pending.forEach((c) => turnCardIds.current.delete(c.id));
+        setCards((p) => p.filter((c) => !pending.some((q) => q.id === c.id)));
+      }
+    }
     // Funnel steps (no-op without consent): that she asked, never what. A
     // clarify press answers the question already counted.
     const asking = Boolean(body.message) && display === undefined;
@@ -200,6 +213,12 @@ export function AgentCanvas({
         } else if (ev.type === "card") {
           turnCardIds.current.add(ev.card.id);
           setCards((p) => [ev.card, ...p.filter((c) => c.id !== ev.card.id)]);
+          if (ev.card.type === "clarify") {
+            const pl = ev.card.payload as { question: string; questions?: { question: string }[] };
+            const asked = (pl.questions?.map((q) => q.question) ?? [pl.question]).join("\n");
+            setMessages((p) => { const n = [...p]; const last = n[n.length - 1];
+              if (last?.role === "assistant") n[n.length - 1] = { ...last, asked }; return n; });
+          }
         } else if (ev.type === "final") {
           if (asking) track("answer_shown");
           setMessages((p) => { const n = [...p]; const last = n[n.length - 1];
@@ -237,7 +256,7 @@ export function AgentCanvas({
     void drive(failed.retry);
   }
 
-  const onCardAction: CardActionHandler = (intent, card, value) => {
+  const onCardAction: CardActionHandler = (intent, card, value, answers) => {
     turnCardIds.current.delete(card.id);
     if (intent === "cancel") { setCards((p) => p.filter((c) => c.id !== card.id)); return; }
     if (intent === "confirm") {
@@ -248,12 +267,22 @@ export function AgentCanvas({
       return;
     }
     if (intent === "clarify") {
+      type Opt = { value: string; label: string };
       const pl = card.payload as {
-        field: string; message: string;
-        options: { value: string; label: string }[]; skip: { value: string; label: string };
+        field: string; message: string; options: Opt[]; skip: Opt;
+        questions?: { field: string; options: Opt[]; skip: Opt }[];
       };
-      const chosen = [...pl.options, pl.skip].find((o) => o.value === value);
       setCards((p) => p.filter((c) => c.id !== card.id));
+      if (answers && answers.length > 0) {
+        // Her bubble shows the buttons she pressed; the API gets the values.
+        const labels = answers.map((a) => {
+          const q = pl.questions?.find((x) => x.field === a.field);
+          return [...(q?.options ?? []), ...(q ? [q.skip] : [])].find((o) => o.value === a.value)?.label ?? a.value;
+        });
+        void drive({ message: pl.message, display: labels.join(" · "), clarifications: answers });
+        return;
+      }
+      const chosen = [...pl.options, pl.skip].find((o) => o.value === value);
       void drive({
         message: pl.message, display: chosen?.label ?? value,
         clarification: { field: pl.field, value: value ?? pl.skip.value },

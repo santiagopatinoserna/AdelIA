@@ -24,9 +24,9 @@ y después **qué contrato** aplica.
 1. **Guardia antes que modelo.** Las banderas rojas se evalúan de forma determinista
    sobre el mensaje y también sobre cualquier dato que la madre registre
    (una temperatura anotada de 38,2 a los 2 meses es una urgencia, no un apunte).
-2. **Una pregunta como máximo.** Si falta un dato esencial, el grafo pregunta una
-   sola cosa y responde con lo que haya al siguiente turno. Nunca dos aclaraciones
-   seguidas: la madre no tiene tiempo.
+2. **Una ronda como máximo por tema.** Si falta un dato esencial, el grafo pregunta
+   una cosa (dos en el agente, en una sola tarjeta) y responde con lo que haya al
+   siguiente turno. Nunca dos rondas en el mismo tema: la madre no tiene tiempo.
 3. **Escribir solo con confirmación.** Registrar, guardar en perfil o generar un
    briefing pasa siempre por una tarjeta de confirmación (patrón ya existente).
 4. **La experiencia no decide.** «Lo que cuentan otras madres» entra solo en el nodo
@@ -98,6 +98,26 @@ Después de las banderas, el ámbito de edad (`clinical/age_scope`, relevo 4.1):
 mensaje nombra un niño de 3 años o más y ningún bebé, `kind = "no_evidence"` con una
 frase de ámbito más el rechazo (`out_of_scope_age_reply`), sin pasar por la puerta de
 gasto, el enrutado ni el embedding. Cubre B7, B12, B13 y B15 del golden.
+
+### `thread` (2026-11-09)
+Antes del guard, sin modelo (`agent/conversation.py`). Lee el historial que manda
+la superficie y decide si el turno es tema nuevo, seguimiento o corrección («no es
+enfermo», «no tiene fiebre», «es tema nuevo», otra edad). De ahí salen:
+- la búsqueda: sus palabras en el tema, nunca las de AdelIA y sin lo que ella
+  retira; en un tema de conducta, las palabras del corpus (adaptación, ansiedad por
+  separación, desarrollo social). Un primer turno se busca tal cual (golden intacto);
+- lo que ve el modelo que responde: el tema en un seguimiento, nada de otro tema,
+  y en una corrección solo sus palabras y una nota de lo que retira;
+- si el tema ya tuvo su ronda de preguntas y si ya se le dijo que no hay fuentes.
+Su respuesta escrita a una tarjeta cuenta como respuesta y se lee bajo su pregunta.
+Cuando las reglas no saben, la misma llamada de `route` (solo si las reglas de
+intención se abstienen) recibe la cola del hilo y devuelve también `turn` y
+`search_query`. Una preocupación de conducta pregunta antes de responder (cuánto
+lleva en la guardería o desde cuándo, y si en casa mira, sonríe, responde a su
+nombre y balbucea o dice palabras), sin pagar el enrutado. Sin evidencia: primero
+una ronda para una preocupación observada (nunca un dato ni un fármaco); después,
+el rechazo una sola vez por tema, sus propias palabras para la consulta y una
+tarjeta para anotarlas en su historial.
 
 ### `route`
 Dos capas, en este orden:

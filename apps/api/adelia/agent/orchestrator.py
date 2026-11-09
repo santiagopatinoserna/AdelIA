@@ -4,7 +4,13 @@ from uuid import UUID, uuid4
 
 from adelia.agent.events import AgentEvent
 from adelia.agent import cards
-from adelia.agent.graph import GraphDeps, Retrieved, WriteOutcome, stream_graph
+from adelia.agent.graph import (
+    ACCOUNT_CLARIFY_FIELDS,
+    GraphDeps,
+    Retrieved,
+    WriteOutcome,
+    stream_graph,
+)
 from adelia.agent.route import log_route
 from adelia.agent.tools import TOOLS, is_write_tool
 from adelia.agent.executor import execute_tool
@@ -63,7 +69,8 @@ def _system_prompt(locale: str) -> str:
 async def run_turn(*, user_id: UUID, profile_id: UUID | None, message: str,
                    history: list[dict] | None = None, card_action: dict | None = None,
                    locale: str = "es",
-                   clarification: dict | None = None) -> AsyncIterator[AgentEvent]:
+                   clarification: dict | None = None,
+                   clarifications: list[dict] | None = None) -> AsyncIterator[AgentEvent]:
     """One /dashboard turn through the agent graph (AGENT_GRAPH steps 4-5).
 
     Replaces `run_agent_turn`, the model-and-tools loop that answered every
@@ -90,14 +97,24 @@ async def run_turn(*, user_id: UUID, profile_id: UUID | None, message: str,
 
     async def _retrieve(state) -> Retrieved:
         known = state.get("facts") or facts
+        # The graph's `thread` node already read the conversation: the search
+        # is her words in this topic (agent/conversation), never AdelIA's last
+        # answer glued in front, which is how a "niño enfermo" frame kept
+        # coming back on 2026-11-09.
+        resolved = state.get("conversation") is not None
         return await chat_orchestrator.retrieve_for_account(
-            scope, question=state["message"], history=text_history, locale=locale,
+            scope, question=state["message"],
+            search_text=state.get("search_query") if resolved else None,
+            history=None if resolved else text_history, locale=locale,
             age_months=known.age_months, baby_name=known.display_name,
         )
 
-    def _stream(system_prompt: str, user_message: str):
-        return chat_orchestrator._guarded_stream(system_prompt, user_message,
-                                                 history=text_history)
+    def _stream(system_prompt: str, user_message: str, history: list[dict] | None = None):
+        # `history` is this topic's part of the transcript when the graph
+        # hands it (nothing of an earlier topic, nothing she corrected).
+        return chat_orchestrator._guarded_stream(
+            system_prompt, user_message, history=text_history if history is None else history
+        )
 
     async def _write_tool(name: str, args: dict) -> WriteOutcome:
         outcome = await _run_write_tool(name, args, user_id=user_id, profile_id=profile_id,
@@ -105,18 +122,21 @@ async def run_turn(*, user_id: UUID, profile_id: UUID | None, message: str,
         return WriteOutcome(text=outcome.text, card=outcome.card)
 
     def _track_for(state):
-        return _track(state, messages=messages, user_id=user_id, profile_id=profile_id,
-                      locale=locale, facts=facts)
+        # The tool loop sees this topic too: a new topic starts clean.
+        c = state.get("conversation")
+        return _track(state, messages=c.model_history if c is not None else messages,
+                      user_id=user_id, profile_id=profile_id, locale=locale, facts=facts)
 
     deps = GraphDeps(
         route=_route, retrieve=_retrieve, stream=_stream,
         can_ask=True, can_write=True, record_store=_DbRecordStore(user_id, pid),
         write_tool=_write_tool, track=_track_for,
+        clarify_fields=ACCOUNT_CLARIFY_FIELDS, clarify_round=2,
     )
     state = {
         "surface": "agent", "locale": locale, "message": message or "", "account": True,
         "facts": facts, "history": messages, "card_action": card_action,
-        "clarification": clarification,
+        "clarification": clarification, "clarifications": clarifications,
     }
     try:
         async for event in stream_graph(state, deps):

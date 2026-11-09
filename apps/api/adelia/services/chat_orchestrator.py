@@ -363,6 +363,7 @@ async def retrieve_for_account(
     locale: str = "es",
     age_months: int | None = None,
     baby_name: str | None = None,
+    search_text: str | None = None,
 ) -> Retrieved:
     """Her own record and the clinical evidence for one question (dual RAG).
 
@@ -385,6 +386,12 @@ async def retrieve_for_account(
     `age_months` and `baby_name` are the active child's, for
     settings.implicit_subject_expansion (agent/implicit_subject.py): her name
     counts as the subject, and her age goes into "Mi bebé de N meses: ...".
+
+    `search_text` is what the graph's `thread` node resolved from the
+    conversation (agent/conversation): her words in this topic. Given, it is
+    what the embedding searches, instead of the tail of `history`, which
+    carried AdelIA's last answer into the search (2026-11-09). The lexical
+    half and the temporal check still read `question`, the words she typed.
     """
     citations: list[ChatCitation] = []
     evidence_embedding: list[float] | None = None
@@ -393,7 +400,9 @@ async def retrieve_for_account(
     # augment the retrieval query with the tail of the conversation. Temporal
     # intent detection still runs on the raw question.
     retrieval_query = question
-    if history:
+    if search_text is not None:
+        retrieval_query = search_text
+    elif history:
         tail = " ".join(m["content"] for m in history[-2:] if isinstance(m.get("content"), str))
         retrieval_query = f"{tail[-1000:]}\n{question}"
     corpus_text = await corpus_query(retrieval_query, locale)
@@ -545,6 +554,7 @@ async def answer_question_streaming(
     side (no evidence AND nothing of her record).
     """
     scope = Scope(user_id=user_id, profile_id=profile_id)
+    session_history = history
 
     # Names are looked up at call time, so the tests' patches on this module
     # (embed_texts, retrieve_relevant_chunks, _stream_llm_tokens, ...) reach
@@ -554,14 +564,24 @@ async def answer_question_streaming(
 
     async def _retrieve(state) -> Retrieved:
         facts = state.get("facts")
+        # The graph read the conversation (agent/conversation): the search is
+        # her words in this topic, not the tail with the last answer in it.
+        resolved = state.get("conversation") is not None
         return await retrieve_for_account(
-            scope, question=state["message"], history=history, locale=locale,
+            scope, question=state["message"],
+            search_text=state.get("search_query") if resolved else None,
+            history=None if resolved else history, locale=locale,
             age_months=facts.age_months if facts is not None else None,
             baby_name=facts.display_name if facts is not None else None,
         )
 
-    def _stream(system_prompt: str, user_message: str) -> AsyncIterator[str]:
-        return _guarded_stream(system_prompt, user_message, history=history)
+    def _stream(
+        system_prompt: str, user_message: str, history: list[dict] | None = None
+    ) -> AsyncIterator[str]:
+        # This topic's part of the transcript when the graph hands it.
+        return _guarded_stream(
+            system_prompt, user_message, history=session_history if history is None else history
+        )
 
     deps = GraphDeps(route=_route, retrieve=_retrieve, stream=_stream, can_ask=False)
     state = {

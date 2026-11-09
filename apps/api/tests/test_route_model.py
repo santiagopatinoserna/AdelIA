@@ -225,3 +225,100 @@ async def test_spawn_route_log_runs_in_the_background_and_forgets_the_task(caplo
     await asyncio.sleep(0)
     assert task not in r._ROUTE_LOGS
     assert any("intent=track" in m for m in caplog.messages)
+
+
+# --- the thread, in the same call (2026-11-09) -----------------------------------
+#
+# The router used to read "Pero todos los días está así" and "No es enfermo"
+# alone. When the rules abstain the one classifier call it already made now
+# also reads a short tail of the conversation and says what kind of turn this
+# is and what to search; no second call. A first turn's prompt does not move.
+
+THREAD = [
+    {"role": "user", "content": "Mi bebé se queda sentado en una esquina en la guardería"},
+    {"role": "assistant", "content": "Que se quede en casa si no come ni duerme [ev_1]."},
+]
+
+
+def _seeing(seen: dict, reply: str = '{"intent": "plan", "confidence": 0.9, "missing": []}'):
+    async def _fake(system, user, *, provider=None):
+        seen["system"], seen["user"] = system, user
+        return reply
+    return _fake
+
+
+async def test_without_a_thread_the_prompt_is_the_one_it_always_was():
+    seen: dict = {}
+    with patch.object(r, "_complete_json", _seeing(seen)):
+        await r.route_by_model("tiene mocos", locale="es", has_account=True, facts=KNOWN_AGE)
+    assert '"turn"' not in seen["system"] and "search_query" not in seen["system"]
+    assert seen["user"] == r._USER_PROMPT["es"].format(message="tiene mocos", account="si",
+                                                       age=6)
+
+
+async def test_with_a_thread_the_same_call_reads_it_and_is_asked_for_turn_and_query():
+    seen: dict = {}
+    with patch.object(r, "_complete_json", _seeing(seen)):
+        await r.route_by_model("Pero todos los días está así", locale="es", has_account=True,
+                               facts=KNOWN_AGE, history=THREAD)
+    assert '"turn"' in seen["system"] and '"search_query"' in seen["system"]
+    assert "esquina en la guardería" in seen["user"]
+    assert "Que se quede en casa" in seen["user"]
+    assert seen["user"].rstrip().endswith("Edad conocida (meses): 6")
+
+
+async def test_the_model_says_the_kind_of_turn_and_the_search_query():
+    reply = ('{"intent": "plan", "confidence": 0.9, "missing": [], "turn": "follow_up", '
+             '"search_query": "bebé que no juega en la guardería todos los días"}')
+    with patch.object(r, "_complete_json", _completion(reply)):
+        d = await r.route_by_model("Pero todos los días está así", locale="es",
+                                   has_account=True, facts=KNOWN_AGE, history=THREAD)
+    assert d.via == "model" and d.turn == "follow_up"
+    assert d.search_query == "bebé que no juega en la guardería todos los días"
+
+
+@pytest.mark.parametrize("extra", [
+    '"turn": "sideways"', '"turn": 3', '"search_query": ["a"]', '"search_query": 7',
+])
+async def test_a_bad_turn_or_query_is_dropped_and_the_intent_survives(extra):
+    reply = '{"intent": "question", "confidence": 0.9, "missing": [], ' + extra + "}"
+    with patch.object(r, "_complete_json", _completion(reply)):
+        d = await r.route_by_model("Pero todos los días está así", locale="es",
+                                   has_account=True, facts=KNOWN_AGE, history=THREAD)
+    assert d.intent == "question" and d.via == "model"
+    assert d.turn is None and d.search_query is None
+
+
+async def test_route_hands_the_thread_to_the_model_only_when_the_rules_abstain():
+    seen: dict = {}
+    with patch.object(r, "_complete_json", _seeing(seen)):
+        d = await r.route("hola", locale="es", has_account=True, facts=KNOWN_AGE,
+                          history=THREAD)
+    assert d.via == "model" and "esquina" in seen["user"]
+    model = AsyncMock()
+    with patch.object(r, "_complete_json", model):
+        d = await r.route("que vacunas le tocan", locale="es", has_account=True,
+                          facts=KNOWN_AGE, history=THREAD)
+    assert d.via == "rule"
+    model.assert_not_awaited()
+
+
+async def test_log_route_names_the_turn_and_never_the_thread(caplog):
+    caplog.set_level("INFO", logger="adelia.agent.route")
+    reply = '{"intent": "plan", "confidence": 0.9, "missing": [], "turn": "correction"}'
+    with patch.object(r, "_complete_json", _completion(reply)):
+        await r.log_route("agent", "No es enfermo", locale="es", has_account=True,
+                          facts=KNOWN_AGE, history=THREAD)
+    line = next(m for m in caplog.messages if m.startswith("route intent="))
+    assert "turn=correction" in line
+    assert "esquina" not in line and "enfermo" not in line
+
+
+async def test_an_output_that_does_not_validate_is_logged_without_its_text(caplog):
+    caplog.set_level("INFO", logger="adelia.agent.route")
+    reply = '{"intent": "nonsense", "search_query": "mi bebé no juega en la guardería"}'
+    with patch.object(r, "_complete_json", _completion(reply)):
+        d = await r.route_by_model("x", locale="es", has_account=True, facts=KNOWN_AGE,
+                                   history=THREAD)
+    assert d.via == "fallback"
+    assert not any("guardería" in m for m in caplog.messages)

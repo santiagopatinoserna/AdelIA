@@ -143,3 +143,49 @@ async def test_confirming_the_card_writes_one_row_for_that_child_and_compares():
     assert [(r.value, r.profile_id, r.source) for r in rows] == [
         (37.2, child.id, "agent"), (37.8, child.id, "agent"),
     ]
+
+
+# --- the thread, through the real wiring (2026-11-09) ----------------------------
+
+
+async def _agent_turn(message, history, seen):
+    async def fake_stream(system_prompt, user_message, history=None, **kwargs):
+        seen["history"] = history
+        seen["user"] = user_message
+        yield "Respuesta [ev_1]."
+
+    async def fake_embed(texts):
+        seen.setdefault("embedded", []).append(list(texts))
+        return [[0.1] * 1024 for _ in texts]
+
+    facts = ProfileFacts(None, "Lucía", None, "F", 14)
+    with patch("adelia.agent.orchestrator.get_provider", _exploding_provider), \
+         patch("adelia.agent.orchestrator.load_profile_facts", return_value=facts), \
+         patch("adelia.services.chat_orchestrator.detect_temporal_intent", return_value=None), \
+         patch("adelia.services.chat_orchestrator.retrieve_relevant_chunks", return_value=[]), \
+         patch("adelia.services.chat_orchestrator.embed_texts", fake_embed), \
+         patch("adelia.services.chat_orchestrator._retrieve_evidence_for_query",
+               return_value=[_evidence_match()]), \
+         patch("adelia.services.chat_orchestrator._stream_llm_tokens", fake_stream):
+        return await _collect(run_turn(user_id=uuid4(), profile_id=None, message=message,
+                                       history=history))
+
+
+async def test_a_follow_up_embeds_her_words_in_the_topic_never_the_last_answer():
+    seen: dict = {}
+    naps = "¿Cuántas siestas tiene que hacer un bebé de 8 meses?"
+    history = [{"role": "user", "content": naps},
+               {"role": "assistant", "content": "Suelen hacer 2 siestas [ev_1]."}]
+    await _agent_turn("¿y por la noche?", history, seen)
+    assert seen["embedded"][0][0] == f"{naps}\n¿y por la noche?"
+    assert seen["history"] == history
+
+
+async def test_a_new_topic_after_noting_a_fever_reaches_the_model_without_it():
+    seen: dict = {}
+    history = [{"role": "user", "content": "Tiene 38.7. Seguimos su temp"},
+               {"role": "assistant", "content": "Anotado: 38,7 °C, hoy a las 10:57."}]
+    await _agent_turn("¿Cuándo puede empezar a comer huevo?", history, seen)
+    assert seen["embedded"][0][0] == "¿Cuándo puede empezar a comer huevo?"
+    assert seen["history"] == []
+    assert "38" not in seen["user"]
