@@ -87,6 +87,9 @@ test("demo: each marker is the number of its source card, and a tap opens that c
   await expect(page.getByTestId("plan-intro")).toHaveText(
     "Es frecuente y suele poder tratarse en casa [ev_2]. Lo principal es que la piel quede limpia y seca [ev_1][ev_2].",
   );
+  // What other mothers say is folded after a plan (2026-11-09): open it, so
+  // its marker is read like every other one.
+  await page.getByTestId("mothers-fold").locator(":scope > summary").click();
   const cites = answer.locator("[data-cite]");
   await expect(cites).toHaveCount(9);
   for (const cite of await cites.all()) {

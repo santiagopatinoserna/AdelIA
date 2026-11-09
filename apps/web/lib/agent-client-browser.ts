@@ -40,3 +40,14 @@ export async function getSuggestions(profileId: string | null, locale: string): 
   const json = (await res.json()) as { cards: AgentCard[] };
   return json.cards ?? [];
 }
+
+// She closed a suggestion card: the server keeps it closed for her account
+// (POST /agent/suggestions/dismiss, services/dismissals on the API).
+export async function dismissSuggestion(key: string): Promise<void> {
+  const res = await fetch("/api/backend/agent/suggestions/dismiss", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ key }),
+  });
+  if (!res.ok) throw new Error(`dismissSuggestion failed: ${res.status}`);
+}

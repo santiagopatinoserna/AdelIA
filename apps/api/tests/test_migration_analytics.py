@@ -43,12 +43,17 @@ async def _shape(database: str) -> dict:
     return {"version": version, "columns": columns}
 
 
-def test_this_revision_is_the_only_head_and_follows_the_usage_counters():
+def test_there_is_one_head_and_this_revision_follows_the_usage_counters():
+    """One head, and this revision is on the chain that leads to it. It was the
+    head itself until 0028_ui_dismissals was chained behind it on 2026-11-09;
+    the exact head is pinned by the newest migration's test."""
     heads = _alembic_words("heads")
     chain = _alembic_words("history", "-r", f"{PREVIOUS}:{REVISION}")
 
-    assert heads == [REVISION]
-    assert chain[:2] == [PREVIOUS, REVISION]
+    assert len(heads) == 1
+    assert REVISION in _alembic_words("history", "-r", f"{REVISION}:{heads[0]}")
+    # With a successor, alembic prints "0027_analytics," in the history line.
+    assert [w.rstrip(",") for w in chain[:2]] == [PREVIOUS, REVISION]
 
 
 @pytest.mark.skipif(not PG_AVAILABLE, reason="needs Postgres")

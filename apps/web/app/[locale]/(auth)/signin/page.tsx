@@ -1,10 +1,9 @@
 "use client";
 
-import { useActionState, useEffect } from "react";
+import { useActionState } from "react";
 import { useTranslations, useLocale } from "next-intl";
 import { Mail, ShieldCheck, Loader2, MailCheck, AlertCircle } from "lucide-react";
 
-import { clearShowcaseHidden } from "@/lib/showcase-storage";
 import { sendMagicLink, type SignInState } from "./actions";
 
 const initial: SignInState = { status: "idle" };
@@ -13,12 +12,6 @@ export default function SignInPage() {
   const t = useTranslations("signin");
   const locale = useLocale();
   const [state, action, pending] = useActionState(sendMagicLink, initial);
-
-  // Every login passes through here (magic link request, expired session):
-  // forget "hide for now" so the capability showcase greets the next login.
-  useEffect(() => {
-    clearShowcaseHidden();
-  }, []);
 
   return (
     <main className="flex min-h-screen items-center justify-center px-6 py-16">

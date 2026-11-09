@@ -1,19 +1,20 @@
 "use client";
 import { useEffect, useRef, useState } from "react";
 import { useTranslations } from "next-intl";
-import { streamAgent, getSuggestions } from "@/lib/agent-client-browser";
+import { streamAgent, getSuggestions, dismissSuggestion } from "@/lib/agent-client-browser";
 import type { AgentCard, AgentThread } from "@/lib/agent-types";
 import type { Citation, EvidenceCitation } from "@/lib/chat-types";
 import { AnswerContent } from "@/components/answer-content";
-import { CitationCard } from "@/components/citation-card";
-import { EvidenceCard } from "@/components/evidence-card";
-import { Database, BookMarked, Mic, RotateCcw, UserRoundCheck } from "lucide-react";
+import { Mic, RotateCcw } from "lucide-react";
 import { CardRenderer, type CardActionHandler } from "./cards/card-renderer";
 import { AgentInput } from "./agent-input";
+import { AgentSources } from "./agent-sources";
+import { PanelMore } from "./panel-more";
 import { track } from "@/lib/analytics";
 import { ProfileSwitcher } from "./profile-switcher";
-import { CapabilityShowcase } from "@/components/capability-showcase";
-import { GrowthMark, useGrowthMarkLabel } from "./growth-mark";
+import { GrowthMark, monthsSince, useGrowthMarkLabel } from "./growth-mark";
+import { askExampleKey } from "@/lib/ask-example";
+import { todayInAppZone } from "@/lib/dates";
 import { useActiveProfile } from "@/lib/profile-context";
 import { Link, useRouter } from "@/lib/navigation";
 import { takeLandingQuestion } from "@/lib/landing-question";
@@ -67,10 +68,20 @@ const HISTORY_MAX_CHARS_PER_MESSAGE = 2000;
 // Telegram-first daily diary: the bot lives outside the app on purpose.
 const TELEGRAM_BOT_URL = `https://t.me/${process.env.NEXT_PUBLIC_TELEGRAM_BOT ?? "Adelia_godiai_bot"}`;
 
+// "Hay demasiadas cosas, no sé dónde leer" (a mother, 2026-11-09). The first
+// screen is the conversation: the greeting, her baby's age, "Hoy" when there
+// is something today, one example question, the record button and the field.
+// Everything else (the API's suggestion cards, the visit summary, the
+// questionnaire, imports, "Guardar mi cuenta") is under one folded "Más"
+// (panel-more.tsx), once each. Once she asks, the thread is alone: no
+// greeting, no "Más", no suggestion card under the answer, only the cards of
+// the turn itself (a record to confirm, a question with buttons). There is no
+// desktop rail any more: it drew the same suggestions a second time.
+//
 // `today` is the "Hoy con <nombre>" card (components/today-follows-child): the
 // page fetches it and swaps it when she picks another child; the canvas only
-// decides where it sits, under the greeting and before the showcase, and only
-// while the thread is empty.
+// decides where it sits, under the greeting, and only while the thread is
+// empty.
 //
 // `initialThread` is the stored conversation she was in (GET /agent/thread),
 // read on the server. The panel still opens on her baby and "Hoy", as every
@@ -79,14 +90,12 @@ const TELEGRAM_BOT_URL = `https://t.me/${process.env.NEXT_PUBLIC_TELEGRAM_BOT ??
 // (lib/landing-question): it is sent once, on mount.
 export function AgentCanvas({
   locale,
-  userId,
   today = null,
   initialThread = null,
   askKey = null,
   isGuest = false,
 }: {
   locale: string;
-  userId: string;
   today?: React.ReactNode;
   initialThread?: AgentThread | null;
   askKey?: string | null;
@@ -94,6 +103,8 @@ export function AgentCanvas({
 }) {
   const t = useTranslations("agent");
   const tg = useTranslations("guestSpace");
+  const tp = useTranslations("panel");
+  const tAsk = useTranslations("showcaseAsk");
   const router = useRouter();
   const { activeId, profiles } = useActiveProfile();
   // Her baby's name in the greeting when we have it: the same server-fed
@@ -103,6 +114,16 @@ export function AgentCanvas({
   const active = profiles.find((p) => p.id === activeId);
   const activeName = active?.relationship === "child" ? active.display_name?.trim() : undefined;
   const growthMark = useGrowthMarkLabel();
+  // One example question that fits the child on screen (lib/ask-example: Lucía
+  // at 5 months was once offered a question about a 13-month-old). Read from
+  // the server-fed profile list during render, so nothing is set after mount
+  // (7adb21c). Noon in Madrid, as the age line counts.
+  const months =
+    active?.relationship === "child" && active.date_of_birth
+      ? monthsSince(active.date_of_birth, new Date(`${todayInAppZone()}T12:00:00`))
+      : null;
+  const askExample = tAsk(askExampleKey(months));
+  const [qOpen, qClose] = locale === "fr" ? ["« ", " »"] : ["“", "”"];
   // Only a thread about the child on screen can be resumed; one about a
   // sibling stays in the history.
   const resumable =
@@ -309,24 +330,34 @@ export function AgentCanvas({
     // unknown intent: no-op (avoid sending dead "[intent]" messages to the LLM)
   };
 
-  const cardRail = (
-    <div className="flex flex-col gap-3 overflow-y-auto p-3">
-      {cards.map((c) => <CardRenderer key={c.id} card={c} onAction={onCardAction} />)}
-    </div>
-  );
+  // She closed a suggestion: gone now, and the server remembers it for her
+  // account (services/dismissals), so neither a reload nor another phone
+  // brings it back. A failed save costs nothing worse than seeing it again.
+  function dismiss(card: AgentCard) {
+    const key = card.payload.dismiss_key;
+    setCards((p) => p.filter((c) => c.id !== card.id));
+    if (typeof key === "string") void dismissSuggestion(key).catch(() => {});
+  }
+
+  // The cards of the turn (a record to confirm, a question with buttons) sit
+  // in the thread; the API's standing suggestions only under "Más".
+  const turnCards = cards.filter((c) => turnCardIds.current.has(c.id));
+  const suggestions = cards.filter((c) => !turnCardIds.current.has(c.id));
 
   return (
     <div
       data-testid="agent-canvas"
-      className="ad-agent-canvas flex h-[calc(100dvh-7rem)] flex-col md:h-[calc(100dvh-3.5rem)] md:flex-row"
+      className="ad-agent-canvas flex h-[calc(100dvh-7rem)] flex-col md:h-[calc(100dvh-3.5rem)]"
     >
-      {/* Chat column — the page's main landmark */}
-      <main className="flex min-h-0 flex-1 flex-col">
+      {/* One reading column, the page's main landmark. */}
+      <main className="mx-auto flex min-h-0 w-full max-w-3xl flex-1 flex-col">
         <ProfileSwitcher />
         {/* "Falta el botón para grabar la cita con el médico" (2026-11-06):
             the real recorder, consent first, one tap from the main screen,
             for every account, and visible while a conversation is open too.
-            A guest also finds here the one way to keep what she did. */}
+            "Guardar mi cuenta" moved under "Más" (2026-11-09): two links
+            side by side above the greeting was where "no sé dónde leer"
+            started. */}
         {/* A <header>, not a <div>: the thread below stays the first div of
             this column, the scroll area whose bottom is the fold
             (e2e/showcase.spec.ts measures it as `main > div`). */}
@@ -362,19 +393,9 @@ export function AgentCanvas({
               {tg("newConversation")}
             </button>
           )}
-          {isGuest && (
-            <Link
-              href="/dashboard/guardar"
-              data-testid="save-account"
-              className="inline-flex min-h-[44px] items-center gap-1.5 px-2 text-sm font-medium text-primary-text underline underline-offset-4"
-            >
-              <UserRoundCheck className="h-4 w-4" strokeWidth={2} aria-hidden />
-              {tg("saveLink")}
-            </Link>
-          )}
         </header>
-        {/* Empty state on md+: the greeting, the mark and the showcase are
-            the only children, so `justify-content` centres the block instead
+        {/* Empty state on md+: the greeting, the age, "Hoy", the example and
+            "Más" are the only children, so `justify-content` centres the block instead
             of leaving 44 % of the column blank under it with nothing to
             scroll. `safe center` and not `center`: once the content DOES
             overflow (a short viewport), plain centring pushes the top of the
@@ -387,31 +408,37 @@ export function AgentCanvas({
               : ""
           }`}
         >
-          {/* The one headline of this screen. Everything below it (the
-              showcase section title included) is mono, small caps and amber:
-              two serif headlines competing was the reason nothing led. */}
+          {/* The one headline of this screen, the only serif on it. */}
           {/* Always the page's h1; once the thread has started it stays for
               screen readers only (axe page-has-heading-one), and the answers
               below start their headings at h2. */}
           <h1 className={messages.length === 0 ? "ad-rise font-display text-title text-ink" : "sr-only"}>
             {activeName ? t("greetingWithName", { name: activeName }) : t("greeting")}
           </h1>
-          {/* The height mark: the only warm signal of the panel, a real name
-              and a real age, so it cannot read as stock. It is a mark beside
-              the label, NOT a section rule (the full-width hairline it used to
-              draw doubled the header's own rule and separated the greeting
-              from the content it introduces). Nothing to render when the
+          {/* Her baby's real name and age, one quiet line. Nothing when the
               profile has no date of birth. */}
           {messages.length === 0 && growthMark && <GrowthMark label={growthMark} />}
           {messages.length === 0 && today}
-          {/* Capability showcase: an empty canvas tells a new mom nothing.
-              Seven concrete doors into the product with three visual weights
-              (three first-day rows, four second-week chips; "Ajustes" stays a
-              tab of the bottom bar instead of being repeated here), shown on
-              every login; "hide for now" lasts one session for this user on
-              this tab. The "ask" row opens /dashboard/chat (the path that
-              answers with citations), not this canvas. */}
-          {messages.length === 0 && <CapabilityShowcase locale={locale} userId={userId} />}
+          {/* One question to start with, sent here in one tap, so a first
+              visit is not an empty field. It replaces the showcase's three
+              rows and four chips (2026-11-09). */}
+          {messages.length === 0 && (
+            <div className="mt-6">
+              <p className="text-sm text-ink-soft">{tp("example")}</p>
+              <button
+                type="button"
+                data-testid="ask-example"
+                disabled={busy}
+                onClick={() => void drive({ message: askExample })}
+                className="mt-1 min-h-[44px] text-left text-base italic leading-snug text-ink underline decoration-line-strong underline-offset-4 hover:decoration-ink"
+              >
+                {qOpen}{askExample}{qClose}
+              </button>
+            </div>
+          )}
+          {messages.length === 0 && (
+            <PanelMore cards={suggestions} isGuest={isGuest} onAction={onCardAction} onDismiss={dismiss} />
+          )}
           {messages.map((m, i) => {
             // A turn that answered with a card only (a record to confirm, a
             // question with buttons) leaves no text: no empty bubble for it.
@@ -454,48 +481,21 @@ export function AgentCanvas({
                     {t("thinking")}
                   </p>
                 )}
-                {/* The source behind the [ev_N] markers in the text above.
-                    Same cards the chat renders, from the same payload: one
-                    citation renderer, two surfaces (audit 3.7). */}
-                {m.citations.length > 0 && (
-                  <div className="mt-4 border-t border-line pt-3">
-                    <p className="ad-eyebrow flex items-center gap-1.5">
-                      <Database className="h-3 w-3" strokeWidth={2.4} aria-hidden />
-                      {t("citationSourceUserData")}
-                    </p>
-                    <div className="mt-1.5 flex flex-wrap gap-1">
-                      {m.citations.map((c, n) => (
-                        <CitationCard key={c.chunk_id} citation={c} index={n + 1} locale={locale} />
-                      ))}
-                    </div>
-                  </div>
-                )}
-                {m.evidence_citations.length > 0 && (
-                  <div className="mt-4 border-t border-line pt-3">
-                    <p className="ad-eyebrow flex items-center gap-1.5 !text-accent-text">
-                      <BookMarked className="h-3 w-3" strokeWidth={2.4} aria-hidden />
-                      {t("citationSourceEvidence")}
-                    </p>
-                    <div className="mt-1.5 flex flex-col">
-                      {m.evidence_citations.map((ev) => (
-                        <EvidenceCard key={ev.tag} citation={ev} />
-                      ))}
-                    </div>
-                  </div>
-                )}
+                {/* The sources behind the markers in the text above, the same
+                    cards the chat renders (audit 3.7), folded into one line
+                    that a marker tap opens (agent-sources.tsx). */}
+                <AgentSources citations={m.citations} evidence={m.evidence_citations} locale={locale} />
               </div>
             );
           })}
-          {/* Mobile: cards render inline in the thread. While a card of this
-              turn waits for her (a record to confirm, a question with
-              buttons) it is the only one: a Telegram suggestion under "¿Lo
-              anoto así?" competed with a one-tap decision. */}
-          <div className="mt-3 flex flex-col gap-3 md:hidden">
-            {(cards.some((c) => turnCardIds.current.has(c.id))
-              ? cards.filter((c) => turnCardIds.current.has(c.id))
-              : cards
-            ).map((c) => <CardRenderer key={c.id} card={c} onAction={onCardAction} />)}
-          </div>
+          {/* The cards of the turn, in the thread at every width. No
+              standing suggestion here: a Telegram card under an answer or
+              under "¿Lo anoto así?" competed with what she came to read. */}
+          {turnCards.length > 0 && (
+            <div className="mt-3 flex flex-col gap-3">
+              {turnCards.map((c) => <CardRenderer key={c.id} card={c} onAction={onCardAction} />)}
+            </div>
+          )}
         </div>
         {/* After an answer the field says it continues the same topic: the
             history of this conversation rides with the next question. */}
@@ -503,17 +503,6 @@ export function AgentCanvas({
                     placeholder={messages.length > 0 ? tg("followUpPlaceholder") : undefined}
                     onSubmit={(text) => void drive({ message: text })} />
       </main>
-      {/* Desktop: card rail beside the chat. It is rendered unconditionally on
-          purpose: gating it on `cards.length` moves 320 px of layout the
-          moment getSuggestions resolves (measured: the same card 373 px wide
-          before the answer, 266 px after), and the API always returns at least
-          one card, so the gate would only ever be a flicker. */}
-      <aside
-        aria-label={t("suggestionsTitle")}
-        className="hidden w-80 border-l border-line md:flex md:flex-col"
-      >
-        {cardRail}
-      </aside>
     </div>
   );
 }

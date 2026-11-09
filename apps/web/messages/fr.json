@@ -893,68 +893,10 @@
     "cardInsightTitle": "Suggestion",
     "cardDocEntities": "données extraites",
     "profileSwitch": "Profil",
-    "suggestionsTitle": "Pour toi",
-    "growthMarkMonths": "{name} · {months, plural, =1 {# mois} other {# mois}}",
-    "growthMarkDays": "{name} · {days, plural, =1 {# jour} other {# jours}}",
+    "growthMarkMonths": "{months, plural, =1 {# mois} other {# mois}}",
+    "growthMarkDays": "{days, plural, =1 {# jour} other {# jours}}",
     "citationSourceEvidence": "Preuves cliniques",
-    "citationSourceUserData": "Vos données"
-  },
-  "showcase": {
-    "primaryEyebrow": "Premiers pas",
-    "secondaryEyebrow": "Et aussi",
-    "hide": "Masquer pour l’instant",
-    "collapsed": "Exemples de ce qu’AdelIA peut faire",
-    "show": "Afficher",
-    "cards": {
-      "ask": {
-        "title": "Pose une question, sources à l’appui",
-        "example": "Est-ce normal qu’à 13 mois elle ne veuille que du lait maternel ?",
-        "detail": "Je cite les documents de ton bébé, les recommandations et les études pédiatriques.",
-        "action": "Demander"
-      },
-      "diary": {
-        "title": "Journal quotidien sur Telegram à 20 h",
-        "example": "Deux tétées de moins aujourd’hui et un peu de nez qui coule, pas de fièvre",
-        "detail": "Le bot demande comment s’est passée la journée ; ta réponse, texte ou audio, est datée.",
-        "action": "Lier Telegram"
-      },
-      "record": {
-        "title": "Enregistre la consultation",
-        "example": "On continue la crème deux fois par jour et on revient dans 15 jours",
-        "detail": "Avec l’accord du pédiatre : l’essentiel en 3 à 6 points ; l’audio est supprimé après 48 h.",
-        "action": "Enregistrer"
-      },
-      "upload": {
-        "title": "Ajoute un compte rendu ou le carnet",
-        "example": "Une photo du carnet avec le vaccin des 12 mois",
-        "detail": "Je lis le document et j’en extrais médicaments, vaccins et observations datées.",
-        "action": "Ajouter"
-      },
-      "briefing": {
-        "title": "Briefing pour le spécialiste",
-        "example": "Demain on voit l’allergologue et je veux tout avoir résumé",
-        "detail": "Une page par spécialité, avec citations du carnet et des sources.",
-        "action": "Créer un briefing"
-      },
-      "questionnaire": {
-        "title": "Questionnaire guidé sur le reflux",
-        "example": "Elle régurgite après chaque tétée et cambre le dos",
-        "detail": "Des questions guidées, fondées sur des recommandations cliniques ; chaque item cite sa source.",
-        "action": "Commencer"
-      },
-      "import": {
-        "title": "Importe ce que tu as déjà",
-        "example": "Je veux le dossier complet de la clinique privée",
-        "detail": "Apple Health, CCD, transfert d’e-mails et modèles RGPD pour demander le dossier.",
-        "action": "Importer"
-      }
-    },
-    "chips": {
-      "upload": "Ajouter un compte rendu",
-      "briefing": "Briefing",
-      "questionnaire": "Questionnaire",
-      "import": "Importer"
-    }
+    "citationSourceUserData": "De son dossier"
   },
   "showcaseAsk": {
     "young": "Mon bébé régurgite après chaque tétée. Ça passe quand ?",
@@ -1206,5 +1148,15 @@
       "payment": "Paiement"
     },
     "sessionCount": "{count, plural, one {# session} other {# sessions}}"
+  },
+  "panel": {
+    "more": "Plus",
+    "briefing": "Préparer la prochaine visite",
+    "questionnaire": "Questionnaire du reflux",
+    "import": "Importer des comptes rendus",
+    "dismiss": "Ne plus afficher",
+    "sources": "{count, plural, =1 {1 source} other {# sources}}",
+    "example": "Par exemple",
+    "mothersOpen": "Lire ce qu’elles racontent"
   }
 }

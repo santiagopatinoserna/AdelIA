@@ -13,7 +13,7 @@ from adelia.auth import get_current_user_id, require_active_subscription
 from adelia.agent.events import AgentEvent
 from adelia.agent.orchestrator import run_turn
 from adelia.agent.suggestions import build_suggestions
-from adelia.services import agent_thread, usage
+from adelia.services import agent_thread, dismissals, usage
 
 logger = logging.getLogger(__name__)
 router = APIRouter(prefix="/agent", tags=["agent"])
@@ -194,6 +194,21 @@ async def post_turn(payload: AgentTurnRequest,
 async def get_suggestions(user_id: Annotated[uuid.UUID, Depends(get_current_user_id)],
                           profile_id: uuid.UUID | None = None, locale: str = "es"):
     return {"cards": await build_suggestions(user_id=user_id, profile_id=profile_id, locale=locale)}
+
+
+class DismissRequest(BaseModel):
+    key: str = Field(pattern=dismissals.KEY_PATTERN)
+
+
+@router.post("/suggestions/dismiss", status_code=204)
+async def dismiss_suggestion(payload: DismissRequest,
+                             user_id: Annotated[uuid.UUID, Depends(get_current_user_id)]) -> None:
+    """She closed a card: it does not come back, here or on another device.
+
+    "La barra de conectar a Telegram nunca desaparece" (2026-11-09). Not behind
+    the paywall, like the suggestions it silences.
+    """
+    await dismissals.dismiss(user_id, payload.key)
 
 
 @router.get("/thread")

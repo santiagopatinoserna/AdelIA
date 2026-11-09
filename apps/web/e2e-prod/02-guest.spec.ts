@@ -86,17 +86,18 @@ test("2 Invitada: grabar abre su espacio con Lucía", async () => {
   const box = (await record.boundingBox())!;
   expect(box.y + box.height, "record button inside the first 844px").toBeLessThanOrEqual(844);
 
+  // "Guardar mi cuenta", once, under the folded "Más" (2026-11-09), and no
+  // Telegram offer for a guest.
+  await page.getByTestId("panel-more").locator(":scope > summary").click();
   await expect(page.getByTestId("save-account")).toHaveText("Guardar mi cuenta");
+  await expect(page.getByTestId("save-account")).toHaveCount(1);
+  await expect(page.getByText(/Telegram/)).toHaveCount(0);
 
-  // "Primeros pasos": the example question names no age but Lucía's.
+  // The example question names no age but Lucía's.
   const mark = await page.getByTestId("growth-mark").innerText();
   const months = monthsInGrowthMark(mark);
   expect(months, `Lucía's age in "${mark}"`).not.toBeNull();
-  const showcase = page.getByTestId("capability-showcase");
-  await expect(showcase.getByRole("heading", { name: "Primeros pasos" })).toBeVisible();
-  const example = (
-    await showcase.locator('[data-testid="showcase-card"][data-key="ask"] p').first().innerText()
-  ).trim();
+  const example = (await page.getByTestId("ask-example").innerText()).trim();
   expect(foreignAges(example, months), `example "${example}" for ${months} months`).toEqual([]);
 
   await shot(page, RUN_DIR, "02-panel-lucia");
