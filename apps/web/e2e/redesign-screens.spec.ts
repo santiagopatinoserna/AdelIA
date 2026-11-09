@@ -52,7 +52,10 @@ test.describe("demo answers", () => {
       await ask(page, locale, { kind: "answer", intent: "plan", answer: longPlan(locale) });
       const map = page.getByTestId("plan-map");
       await expect(map).toBeVisible();
-      await expect(map.getByRole("button")).toHaveText([p.today, p.watch, p.doctor, p.remember]);
+      // One jump, the one safety needs (2026-11-09): "Hoy" follows the opening
+      // and "Vigila" follows "Hoy", so the other three pills only stood
+      // between her and what to do.
+      await expect(map.getByRole("button")).toHaveText([p.doctor]);
       await map.getByRole("button", { name: p.doctor }).click();
       const heading = page.getByTestId("plan-section-doctor").getByRole("heading");
       await expect(heading).toBeFocused();

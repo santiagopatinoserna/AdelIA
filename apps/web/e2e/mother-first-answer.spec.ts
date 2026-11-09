@@ -119,7 +119,13 @@ test("a plan answer renders as plan sections, keeps every line, and folds only t
   await expect(body.getByTestId("plan-section-today").locator("li")).toHaveText(["Acción uno [ev_1].", "Acción dos [2]."]);
   await expect(body.getByTestId("plan-section-doctor")).toContainText("Urgencias si aparece la señal de prueba [ev_1].");
   await expect(body.locator("hr")).toHaveCount(0);
-  await expect(body.locator("details")).toHaveCount(0);
+  // The only fold inside the answer is what other mothers say (experience,
+  // 2026-11-09); every clinical section is outside any <details>.
+  await expect(body.locator("details")).toHaveCount(1);
+  await expect(body.locator("details")).toHaveAttribute("data-testid", "mothers-fold");
+  for (const key of ["today", "watch", "doctor", "remember"]) {
+    expect(await body.getByTestId(`plan-section-${key}`).evaluate((el) => el.closest("details"))).toBeNull();
+  }
   await expect(page.getByTestId("answer-depth").locator(":scope > summary")).toContainText(es.demo.readMoreTitle);
   await expect(page.locator("#demo-answer-title")).toHaveText(es.demo.answerTitle);
   expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
@@ -166,6 +172,11 @@ test("the mothers section renders last, labelled as experience, and its source i
   await expect(mothers).toBeVisible();
   await expect(mothers.getByRole("heading", { level: 3 })).toHaveText(plan.mothers);
   await expect(mothers.getByText(es.demo.mothersLabel, { exact: true })).toBeVisible();
+  // Apart and folded after a plan (2026-11-09): the title and the label stay
+  // in view, the experience itself is one tap away and kept whole.
+  const fold = mothers.getByTestId("mothers-fold");
+  await expect(fold).not.toHaveAttribute("open", "");
+  await fold.locator(":scope > summary").click();
   await expect(mothers.locator("li")).toHaveText(["A otras madres les ayudó adelantar la rutina de la noche [ex_1]."]);
   // After "No olvides" and never styled like the doctor card.
   const order = await body.locator("[data-testid^='plan-section-']").evaluateAll(els => els.map(e => e.getAttribute("data-testid")));

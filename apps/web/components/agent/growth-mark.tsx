@@ -5,50 +5,17 @@ import { todayInAppZone } from "@/lib/dates";
 import type { Profile } from "@/lib/enrichment-types";
 import { useActiveProfile } from "@/lib/profile-context";
 
-// The height mark: the pencil line a parent draws on the door frame. It is the
-// ONE warm element of the panel home, and it is a MARK, not a rule: it sits to
-// the left of the label and takes one line of height.
-//
-// It cannot read as stock by construction: the label comes from the active
-// profile (a real name, a real age that changes on its own every month), so no
-// two accounts see the same mark. No pastel, no curve, no baby icon.
-//
-// Two strokes, not one, and in two colours. A single tilted stroke beside a
-// mono small-caps label fuses into a typographic glyph: the mark read as
-// "/ LUCIA · 7 MESES", a path separator, not a pencil line. The vertical
-// neutral stroke is the door frame; the near-level amber one is the tick left
-// on it, and it needs the frame to mean anything. Both are drawn at uniform
-// scale in a fixed 9x14 box, so the tilt does not change with the viewport.
-//
-// It is NOT a separator: the flex-1 hairline this used to carry became a
-// 781 px full-width divider at 1280, right under the header's own rule and
-// between the greeting and the content the greeting introduces.
+// Her baby's age under the greeting, one quiet line of body text ("5 meses").
+// It was a pencil mark on a door frame with "LUCÍA · 5 MESES" in amber small
+// caps; on 2026-11-09 a mother said the panel had "demasiadas cosas" and it
+// became plain text: one colour less, one icon less, and no second "Lucía"
+// under "¿Cómo está Lucía?". The age comes from the active profile, and there
+// is nothing to render without a date of birth or a name to greet.
 export function GrowthMark({ label }: { label: string }) {
   return (
-    <div className="mt-2 mb-4 flex w-fit items-center gap-2" data-testid="growth-mark">
-      <svg
-        aria-hidden="true"
-        viewBox="0 0 9 14"
-        className="h-3.5 w-[9px] shrink-0 overflow-visible"
-      >
-        <path
-          d="M1.5 0 L1.5 14"
-          fill="none"
-          stroke="var(--color-line-strong)"
-          strokeWidth="1"
-          vectorEffect="non-scaling-stroke"
-        />
-        <path
-          d="M0 8.9 L9 7.6"
-          fill="none"
-          stroke="var(--color-accent-line)"
-          strokeWidth="1.5"
-          strokeLinecap="round"
-          vectorEffect="non-scaling-stroke"
-        />
-      </svg>
-      <span className="ad-eyebrow shrink-0 whitespace-nowrap">{label}</span>
-    </div>
+    <p className="mt-1 text-base text-ink-soft" data-testid="growth-mark">
+      {label}
+    </p>
   );
 }
 

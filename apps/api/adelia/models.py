@@ -722,3 +722,20 @@ class UsageCounter(Base):
     cache_write_tokens = Column(BigInteger, nullable=False, server_default=text("0"))
     pages = Column(BigInteger, nullable=False, server_default=text("0"))
     audio_seconds = Column(BigInteger, nullable=False, server_default=text("0"))
+
+
+class UiDismissal(Base):
+    """A card or notice she closed on the panel, so it does not come back (migration 0028).
+
+    "La barra de conectar a Telegram nunca desaparece" (2026-11-09): the
+    suggestion cards are rebuilt on every request with random ids, so the only
+    stable thing to remember is the kind (`key`, e.g. "link_telegram"). Kept
+    per account on the server, not in the browser, so a reload or another
+    phone does not bring it back. Erased with the account (ON DELETE CASCADE).
+    """
+    __tablename__ = "ui_dismissals"
+    user_id = Column(
+        UUID(as_uuid=True), ForeignKey("users.id", ondelete="CASCADE"), primary_key=True
+    )
+    key = Column(String(40), primary_key=True)
+    dismissed_at = Column(DateTime(timezone=True), nullable=False, server_default=func.now())

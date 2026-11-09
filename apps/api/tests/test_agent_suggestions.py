@@ -71,3 +71,46 @@ async def test_suggestions_speak_her_language():
     assert "Journal sur Telegram" in fr
     # An unknown locale falls back to Spanish, the app's default.
     assert _words(await _all_cards("de")) == es
+
+
+# "La barra de conectar a Telegram nunca desaparece" (2026-11-09): a guest is
+# never offered the bot, and a card the mother closed does not come back.
+
+async def test_a_guest_gets_no_telegram_card():
+    guest = ProfileState(has_dob=True, unprocessed_docs=0, stale_briefing=False, is_child=True,
+                         telegram_linked=False, diary_today=False, telegram_enabled=True,
+                         is_guest=True)
+    with patch("adelia.agent.suggestions._gather_state", return_value=guest):
+        cards_out = await build_suggestions(user_id=uuid4(), profile_id=None)
+    intents = {a["intent"] for c in cards_out for a in c["actions"]}
+    assert not intents & {"link_telegram", "daily_diary"}
+
+
+async def test_a_closed_card_is_not_built_again_and_the_others_stay():
+    state = ProfileState(has_dob=False, unprocessed_docs=2, stale_briefing=False, is_child=True,
+                         telegram_linked=False, diary_today=False, telegram_enabled=True,
+                         dismissed=frozenset({"link_telegram"}))
+    with patch("adelia.agent.suggestions._gather_state", return_value=state):
+        cards_out = await build_suggestions(user_id=uuid4(), profile_id=None)
+    intents = {a["intent"] for c in cards_out for a in c["actions"]}
+    assert "link_telegram" not in intents
+    assert "process_docs" in intents
+    assert any(c["type"] == "question" for c in cards_out)
+
+
+async def test_every_card_she_can_close_names_what_to_remember():
+    """The card ids are random per request, so the key to remember is the kind."""
+    for state in [
+        ProfileState(has_dob=False, unprocessed_docs=2, stale_briefing=True, is_child=True,
+                     telegram_linked=False, diary_today=False, telegram_enabled=True),
+        ProfileState(has_dob=True, unprocessed_docs=0, stale_briefing=False, is_child=True,
+                     telegram_linked=True, diary_today=False, telegram_enabled=True),
+    ]:
+        with patch("adelia.agent.suggestions._gather_state", return_value=state):
+            cards_out = await build_suggestions(user_id=uuid4(), profile_id=None)
+        for c in cards_out:
+            if c["type"] == "insight":
+                continue
+            key = c["payload"]["dismiss_key"]
+            assert key in {"date_of_birth", "link_telegram", "daily_diary", "process_docs",
+                           "regen_briefing"}, key
