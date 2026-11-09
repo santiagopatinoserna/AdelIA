@@ -28,8 +28,9 @@ las invitadas que abrió con si se borraron. El proceso sale con 1 si algo falla
 1. Portada en es/en/fr: carga sin errores de página, línea de consentimiento con enlace a
    Privacidad, botón de grabar la consulta, ninguna petición a un endpoint que responda.
 2. Invitada: el botón de grabar crea su espacio y abre la grabadora con el consentimiento; el
-   panel muestra Lucía, «Hoy con Lucía», «Grabar la consulta» sin desplazarse y «Guardar mi
-   cuenta»; la pregunta de ejemplo de «Primeros pasos» no nombra otra edad que la de Lucía.
+   panel muestra Lucía, «Hoy con Lucía», «Grabar la consulta» sin desplazarse y, dentro de
+   «Más», «Guardar mi cuenta» una vez y nada de Telegram; la pregunta de ejemplo no nombra otra
+   edad que la de Lucía.
 3. Conversación sin modelo: dos preguntas urgentes, el campo pasa a «Pregunta más sobre esto»,
    la segunda petición lleva el historial, cuatro mensajes, y tras recargar «Seguir la
    conversación» devuelve el hilo.

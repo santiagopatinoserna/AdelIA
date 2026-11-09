@@ -2,7 +2,7 @@
 
 import { useId, type KeyboardEvent, type MouseEvent } from "react";
 import ReactMarkdown, { type Components } from "react-markdown";
-import { Bookmark, CalendarCheck, Eye, MessageCircle, Stethoscope } from "lucide-react";
+import { ChevronDown } from "lucide-react";
 import remarkGfm from "remark-gfm";
 import { useTranslations } from "next-intl";
 
@@ -221,9 +221,6 @@ function Md({ children, level = 3, cites }: { children: string; level?: 2 | 3; c
 const PLAN_KEYS = ["today", "watch", "doctor", "remember", "mothers"] as const;
 type PlanKey = (typeof PLAN_KEYS)[number];
 type PlanSection = { key: PlanKey; title: string; body: string };
-const PLAN_ICONS = {
-  today: CalendarCheck, watch: Eye, doctor: Stethoscope, remember: Bookmark, mothers: MessageCircle,
-};
 
 /*
  * The answer contract asks for an action plan under four exact headings
@@ -266,6 +263,9 @@ const CONTENT_CLASS = "mt-4 max-w-[62ch] break-words text-answer text-ink [&>:fi
 // on a soft tint, its heading in the error text colour; the full error fill
 // is kept for the emergency. "Lo que cuentan otras madres" is experience,
 // not evidence: a neutral tint and a label that says so.
+// No icon on any title (2026-11-09, "no sé dónde leer"): five pictograms beside
+// five words added a second thing to read per section. The titles are the
+// sans of the body, so the only serif on the panel stays its greeting.
 const SECTION_CLASS: Record<PlanKey, string> = {
   today: "border-l-[3px] border-today-line pl-4",
   watch: "",
@@ -287,6 +287,7 @@ export function AnswerContent({ children, level = 3, recordLinks = false }: {
 }) {
   const Heading = level === 2 ? "h2" : "h3";
   const t = useTranslations("demo");
+  const tp = useTranslations("panel");
   const tAll = useTranslations();
   // Existing words on purpose: the three catalogs are being edited elsewhere.
   const cites: CiteOptions = {
@@ -313,9 +314,18 @@ export function AnswerContent({ children, level = 3, recordLinks = false }: {
   const sectionId = (key: PlanKey) => `${uid}-plan-${key}`;
   // The map of the plan: one tap to "Cuándo ir al médico" instead of 1.6 to
   // 1.9 screens of scrolling (AUDITORIA_UX.md, problem 3). It hides nothing:
-  // every section stays open below it. Only the clinical sections are listed;
-  // what other mothers say is for later and sits last anyway.
-  const mapped = plan.sections.filter((section) => section.key !== "mothers");
+  // every section stays open below it. Since 2026-11-09 it is that one jump
+  // and no more ("no sé dónde leer"): "Hoy" follows the opening directly and
+  // "Vigila" follows "Hoy", so four pills on two rows only stood between her
+  // and what to do. UX_PRINCIPLES 12 asked for the whole map; the mother's
+  // complaint wins, and the jump that matters for safety stays.
+  const doctorAt = plan.sections.findIndex((section) => section.key === "doctor");
+  const mapped = doctorAt > 0 ? [plan.sections[doctorAt]] : [];
+  // What other mothers say is apart and folded when it follows a plan; it is
+  // experience, never evidence, and it is the one part of an answer she can
+  // leave for later. Its title and label stay visible, so she knows it is
+  // there and what it is. When it IS the answer (experience_only) it is open.
+  const foldMothers = plan.sections.some((section) => section.key !== "mothers");
   function jump(key: PlanKey) {
     const target = document.getElementById(sectionId(key));
     if (!target) return;
@@ -325,14 +335,14 @@ export function AnswerContent({ children, level = 3, recordLinks = false }: {
   }
 
   return (
-    <div data-testid="answer-content" onClick={onCite} onKeyDown={onCite} className={`${CONTENT_CLASS} space-y-6`}>
+    <div data-testid="answer-content" onClick={onCite} onKeyDown={onCite} className={`${CONTENT_CLASS} space-y-8`}>
       {plan.intro && (
         <div data-testid="plan-intro" className="text-lead font-medium [&>p]:whitespace-pre-wrap">
           <Md level={level} cites={cites}>{plan.intro}</Md>
         </div>
       )}
-      {mapped.length > 1 && (
-        <nav aria-label={t("planMap")} data-testid="plan-map" className="-mt-2 flex flex-wrap gap-2">
+      {mapped.length > 0 && (
+        <nav aria-label={t("planMap")} data-testid="plan-map" className="-mt-4 flex flex-wrap gap-2">
           {mapped.map((section) => (
             <button
               key={section.key}
@@ -346,9 +356,13 @@ export function AnswerContent({ children, level = 3, recordLinks = false }: {
         </nav>
       )}
       {plan.sections.map((section) => {
-        const Icon = PLAN_ICONS[section.key];
         const doctor = section.key === "doctor";
         const mothers = section.key === "mothers";
+        const body = (
+          <div className="mt-2 space-y-2 [&>:first-child]:mt-0">
+            <Md level={level} cites={cites}>{section.body.trim()}</Md>
+          </div>
+        );
         return (
           <section
             key={section.key}
@@ -358,17 +372,22 @@ export function AnswerContent({ children, level = 3, recordLinks = false }: {
           >
             <Heading
               tabIndex={-1}
-              className={`flex items-center gap-2 text-lg font-semibold leading-snug ${doctor ? "text-error-text" : "text-ink"}`}
+              className={`font-sans text-lg font-semibold leading-snug ${doctor ? "text-error-text" : "text-ink"}`}
             >
-              <Icon className="h-5 w-5 shrink-0" strokeWidth={2} aria-hidden />
               {section.title}
             </Heading>
             {mothers && (
               <p className="mt-1 text-sm leading-relaxed text-ink-soft">{t("mothersLabel")}</p>
             )}
-            <div className="mt-2 space-y-2 [&>:first-child]:mt-0">
-              <Md level={level} cites={cites}>{section.body.trim()}</Md>
-            </div>
+            {mothers && foldMothers ? (
+              <details data-testid="mothers-fold" className="group/mothers mt-1">
+                <summary className="flex min-h-[44px] cursor-pointer list-none items-center gap-2 text-sm font-medium text-primary-text [&::-webkit-details-marker]:hidden">
+                  {tp("mothersOpen")}
+                  <ChevronDown className="h-4 w-4 shrink-0 group-open/mothers:rotate-180" strokeWidth={2} aria-hidden />
+                </summary>
+                {body}
+              </details>
+            ) : body}
           </section>
         );
       })}

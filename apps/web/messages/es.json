@@ -893,68 +893,10 @@
     "cardInsightTitle": "Sugerencia",
     "cardDocEntities": "datos extraídos",
     "profileSwitch": "Perfil",
-    "suggestionsTitle": "Para ti",
-    "growthMarkMonths": "{name} · {months, plural, =1 {# mes} other {# meses}}",
-    "growthMarkDays": "{name} · {days, plural, =1 {# día} other {# días}}",
+    "growthMarkMonths": "{months, plural, =1 {# mes} other {# meses}}",
+    "growthMarkDays": "{days, plural, =1 {# día} other {# días}}",
     "citationSourceEvidence": "Evidencia clínica",
-    "citationSourceUserData": "Tu data"
-  },
-  "showcase": {
-    "primaryEyebrow": "Primeros pasos",
-    "secondaryEyebrow": "Y también",
-    "hide": "Ocultar por ahora",
-    "collapsed": "Ejemplos de lo que AdelIA puede hacer",
-    "show": "Mostrar",
-    "cards": {
-      "ask": {
-        "title": "Pregunta con citas",
-        "example": "¿Es normal que con 13 meses solo quiera leche materna?",
-        "detail": "Respondo citando los informes de tu bebé, guías clínicas y estudios pediátricos.",
-        "action": "Preguntar"
-      },
-      "diary": {
-        "title": "Diario a las 20:00 por Telegram",
-        "example": "Hoy dos tomas menos y algo de mocos, sin fiebre",
-        "detail": "El bot pregunta cómo ha ido el día; contestas en texto o audio y queda fechado.",
-        "action": "Enlazar Telegram"
-      },
-      "record": {
-        "title": "Graba la consulta",
-        "example": "Seguimos con la crema dos veces al día y volvemos en 15 días",
-        "detail": "Con permiso del pediatra: lo esencial en 3-6 puntos y el audio se borra a las 48 h.",
-        "action": "Grabar"
-      },
-      "upload": {
-        "title": "Sube un informe o la cartilla",
-        "example": "Foto de la cartilla con la vacuna de los 12 meses",
-        "detail": "Leo el documento y saco medicaciones, vacunas y observaciones con su fecha.",
-        "action": "Subir"
-      },
-      "briefing": {
-        "title": "Briefing para el especialista",
-        "example": "Mañana vamos al alergólogo y quiero llevarlo todo resumido",
-        "detail": "Una página por especialidad, con citas al historial y a la evidencia.",
-        "action": "Crear briefing"
-      },
-      "questionnaire": {
-        "title": "Cuestionario guiado de reflujo",
-        "example": "Regurgita después de cada toma y arquea la espalda",
-        "detail": "Preguntas guiadas y fundamentadas en guías clínicas; cada ítem cita su fuente.",
-        "action": "Empezar"
-      },
-      "import": {
-        "title": "Importa lo que ya tienes",
-        "example": "Quiero el historial completo de la clínica privada",
-        "detail": "Apple Health, CCD, reenvío de emails y plantillas RGPD para pedir el historial.",
-        "action": "Importar"
-      }
-    },
-    "chips": {
-      "upload": "Subir informe",
-      "briefing": "Briefing",
-      "questionnaire": "Cuestionario",
-      "import": "Importar"
-    }
+    "citationSourceUserData": "De su historial"
   },
   "showcaseAsk": {
     "young": "Regurgita después de cada toma, ¿hacia cuándo mejora?",
@@ -1206,5 +1148,15 @@
       "payment": "Pago"
     },
     "sessionCount": "{count, plural, one {# sesión} other {# sesiones}}"
+  },
+  "panel": {
+    "more": "Más",
+    "briefing": "Preparar la próxima visita",
+    "questionnaire": "Cuestionario del reflujo",
+    "import": "Importar informes",
+    "dismiss": "No volver a mostrar",
+    "sources": "{count, plural, =1 {1 fuente} other {# fuentes}}",
+    "example": "Por ejemplo",
+    "mothersOpen": "Leer lo que cuentan"
   }
 }

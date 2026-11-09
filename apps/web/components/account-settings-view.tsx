@@ -12,7 +12,6 @@ import { LocaleSwitcher } from "@/components/locale-switcher";
 import { Link } from "@/lib/navigation";
 import type { BillingStatus } from "@/lib/api-endpoints";
 import { formatInstant } from "@/lib/dates";
-import { clearShowcaseHidden } from "@/lib/showcase-storage";
 
 export function AccountSettingsView({
   email,
@@ -53,8 +52,6 @@ export function AccountSettingsView({
     try {
       const res = await fetch("/api/backend/users/me", { method: "DELETE" });
       if (res.status !== 204) throw new Error(`HTTP ${res.status}`);
-      // Leave nothing of this account behind in the tab, not even a UI flag.
-      clearShowcaseHidden();
       // Her language, not the bare root: "/" lands on the browser's locale.
       await signOut({ callbackUrl: `/${locale}` });
     } catch (e) {
@@ -191,10 +188,7 @@ export function AccountSettingsView({
         <p className="mt-1.5 text-ink-soft">{t("signOutBody")}</p>
         <button
           type="button"
-          onClick={() => {
-            clearShowcaseHidden();
-            void signOut({ callbackUrl: `/${locale}` });
-          }}
+          onClick={() => void signOut({ callbackUrl: `/${locale}` })}
           className="ad-btn ad-btn-ghost mt-3 min-h-[44px] px-3.5 py-2 text-sm"
         >
           <LogOut className="h-4 w-4" strokeWidth={2} />

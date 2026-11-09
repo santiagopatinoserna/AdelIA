@@ -16,6 +16,12 @@ class ProfileState:
     # False when TELEGRAM_BOT_TOKEN is empty: the bot is dead, so offering
     # "Enlazar" would send the parent to a chat that never answers.
     telegram_enabled: bool = False
+    # A guest of the landing (users.is_guest) is trying AdelIA with Lucía: a
+    # diary bot for a sample child is a promise she cannot use, and the link
+    # would tie her Telegram to an account she may never keep (2026-11-09).
+    is_guest: bool = False
+    # Card kinds she closed (services/dismissals): never built again for her.
+    dismissed: frozenset[str] = frozenset()
 
 def _cid() -> str:
     return uuid4().hex[:12]
@@ -25,6 +31,8 @@ async def _gather_state(*, user_id: UUID, profile_id: UUID | None) -> ProfileSta
     from sqlalchemy import select, func
     from adelia.models import Document
     from adelia.enrichment import profile_service
+    from adelia.models import User
+    from adelia.services.dismissals import dismissed_keys
     async with AsyncSessionLocal() as session:
         prof = None
         if profile_id is not None:
@@ -44,6 +52,8 @@ async def _gather_state(*, user_id: UUID, profile_id: UUID | None) -> ProfileSta
         # never clear when the default profile is the parent's.
         scope = profile_id if (prof is not None and prof.relationship == "child") else None
         diary_today = await has_diary_for(session, user_id, today_iso(), profile_id=scope)
+        is_guest = await session.scalar(select(User.is_guest).where(User.id == user_id))
+        dismissed = await dismissed_keys(session, user_id)
         return ProfileState(
             has_dob=bool(prof and prof.date_of_birth),
             unprocessed_docs=int(unprocessed or 0),
@@ -51,7 +61,9 @@ async def _gather_state(*, user_id: UUID, profile_id: UUID | None) -> ProfileSta
             is_child=bool(prof and prof.relationship == "child"),
             telegram_linked=bool(linked),
             diary_today=bool(diary_today),
-            telegram_enabled=bool(settings.telegram_bot_token))
+            telegram_enabled=bool(settings.telegram_bot_token),
+            is_guest=bool(is_guest),
+            dismissed=dismissed)
 
 # Every word a suggestion card shows, per locale. The router has always passed
 # `locale`, but the cards were written in Spanish only, so a French or English
@@ -112,27 +124,40 @@ _TEXT: dict[str, dict[str, str]] = {
 }
 
 
+def _closable(card: dict, key: str) -> dict:
+    """Name the kind she can close: the card id is random on every request."""
+    card["payload"]["dismiss_key"] = key
+    return card
+
+
 async def build_suggestions(*, user_id: UUID, profile_id: UUID | None, locale: str = "es") -> list[dict]:
     state = await _gather_state(user_id=user_id, profile_id=profile_id)
     tx = _TEXT.get(locale, _TEXT["es"])
     out: list[dict] = []
-    if state.is_child and not state.has_dob:
-        out.append(cards.card_question(_cid(), "date_of_birth", tx["dob"], input_type="date",
-                                       action_label=tx["save"]))
-    if state.telegram_enabled and not state.diary_today:
+    if state.is_child and not state.has_dob and "date_of_birth" not in state.dismissed:
+        out.append(_closable(cards.card_question(_cid(), "date_of_birth", tx["dob"],
+                                                 input_type="date", action_label=tx["save"]),
+                             "date_of_birth"))
+    if state.telegram_enabled and not state.diary_today and not state.is_guest:
+        # Linking replaces the link card with the daily one: no state to clear.
         if state.telegram_linked:
-            out.append(cards.card_action(_cid(), tx["diary_title"], tx["diary_body"],
-                                         tx["diary_cta"], "daily_diary"))
-        else:
-            out.append(cards.card_action(_cid(), tx["link_title"], tx["link_body"],
-                                         tx["link_cta"], "link_telegram"))
-    if state.unprocessed_docs:
-        out.append(cards.card_action(_cid(), tx["docs_title"],
-                                     tx["docs_body"].format(n=state.unprocessed_docs),
-                                     tx["docs_cta"], "process_docs"))
-    if state.stale_briefing:
-        out.append(cards.card_action(_cid(), tx["stale_title"], tx["stale_body"],
-                                     tx["stale_cta"], "regen_briefing"))
+            if "daily_diary" not in state.dismissed:
+                out.append(_closable(cards.card_action(_cid(), tx["diary_title"], tx["diary_body"],
+                                                       tx["diary_cta"], "daily_diary"),
+                                     "daily_diary"))
+        elif "link_telegram" not in state.dismissed:
+            out.append(_closable(cards.card_action(_cid(), tx["link_title"], tx["link_body"],
+                                                   tx["link_cta"], "link_telegram"),
+                                 "link_telegram"))
+    if state.unprocessed_docs and "process_docs" not in state.dismissed:
+        out.append(_closable(cards.card_action(_cid(), tx["docs_title"],
+                                               tx["docs_body"].format(n=state.unprocessed_docs),
+                                               tx["docs_cta"], "process_docs"),
+                             "process_docs"))
+    if state.stale_briefing and "regen_briefing" not in state.dismissed:
+        out.append(_closable(cards.card_action(_cid(), tx["stale_title"], tx["stale_body"],
+                                               tx["stale_cta"], "regen_briefing"),
+                             "regen_briefing"))
     if not out:
         out.append(cards.card_insight(_cid(), tx["ok_title"], tx["ok_body"], tone="positive"))
     return out

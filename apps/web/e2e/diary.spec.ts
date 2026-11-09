@@ -12,10 +12,11 @@ import { seedUserAndSessionCookie } from "./utils/session";
 // The api under test must run with a (dummy) TELEGRAM_BOT_TOKEN: without
 // it the suggestions hide both diary cards (the bot would be dead).
 
-const RAIL_LABEL = "Para ti"; // agent.suggestionsTitle (es)
+// The cards used to live in a desktop rail ("Para ti") and again inline on a
+// phone; since 2026-11-09 they live once, under the panel's folded "Más"
+// (components/agent/panel-more.tsx). Same cards, same buttons, one place.
 const CARD_LINK = "Diario por Telegram";
 const CARD_TODAY = "¿Cómo ha ido hoy?";
-const CARD_ALL_DONE = "Todo al día";
 
 function pgPool() {
   return new Pool({
@@ -102,10 +103,12 @@ async function insertDiaryDocument(userId: string, diaryDate: string): Promise<s
   return (rows[0] as { id: string }).id;
 }
 
-// Desktop viewport (Playwright default 1280x720): the cards live in the
-// aside rail; the inline mobile copy of the same cards is display:none.
-function suggestionRail(page: Page) {
-  return page.getByRole("complementary", { name: RAIL_LABEL });
+// The suggestions, opened: one "Más" at every width.
+async function suggestionRail(page: Page) {
+  const more = page.getByTestId("panel-more");
+  await more.locator(":scope > summary").click();
+  await expect(more).toHaveAttribute("open", "");
+  return more;
 }
 
 test.describe("daily diary (Telegram) UI", () => {
@@ -118,7 +121,7 @@ test.describe("daily diary (Telegram) UI", () => {
     await context.addCookies([cookie]);
     await page.goto("/es/dashboard");
 
-    const rail = suggestionRail(page);
+    const rail = await suggestionRail(page);
     await expect(rail.getByText(CARD_LINK, { exact: true })).toBeVisible({ timeout: 20_000 });
     await expect(rail.getByText(CARD_TODAY, { exact: true })).toHaveCount(0);
 
@@ -146,7 +149,7 @@ test.describe("daily diary (Telegram) UI", () => {
     });
     await page.goto("/es/dashboard");
 
-    const rail = suggestionRail(page);
+    const rail = await suggestionRail(page);
     await expect(rail.getByText(CARD_TODAY, { exact: true })).toBeVisible({ timeout: 20_000 });
     await expect(rail.getByText(CARD_LINK, { exact: true })).toHaveCount(0);
 
@@ -180,9 +183,13 @@ test.describe("daily diary (Telegram) UI", () => {
     await expect(page.getByText("Ha dormido bien y ha comido de todo.")).toBeVisible();
 
     // Agent home: today's entry exists, so no daily nudge and no link card.
+    // ("Todo al día" is no longer drawn: it repeated the greeting.)
+    const suggested = page.waitForResponse((r) => r.url().includes("/agent/suggestions"));
     await page.goto("/es/dashboard");
-    const rail = suggestionRail(page);
-    await expect(rail.getByText(CARD_ALL_DONE, { exact: true })).toBeVisible({ timeout: 20_000 });
+    await suggested;
+    const rail = await suggestionRail(page);
+    await expect(rail.getByRole("link").first()).toBeVisible({ timeout: 20_000 });
+    await expect(page.getByTestId("panel-suggestion")).toHaveCount(0);
     await expect(rail.getByText(CARD_TODAY, { exact: true })).toHaveCount(0);
     await expect(rail.getByText(CARD_LINK, { exact: true })).toHaveCount(0);
   });

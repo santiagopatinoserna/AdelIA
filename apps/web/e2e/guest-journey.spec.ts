@@ -42,7 +42,9 @@ test("a visitor's question opens her own space with Lucía, and it is kept", asy
   });
   expect(turns).toHaveLength(1);
   expect(turns[0].message).toBe(FIRST);
-  await expect(page.getByTestId("save-account")).toBeVisible();
+  // While she reads, nothing else competes with the answer (2026-11-09):
+  // "Guardar mi cuenta" waits under "Más" on the panel, checked below.
+  await expect(page.getByTestId("save-account")).toHaveCount(0);
   await page.screenshot({ path: join(SHOTS, "panel-first-answer-390.png") });
 
   // Where to keep asking about the same thing, and the follow-up uses it.
@@ -79,6 +81,10 @@ test("a visitor's question opens her own space with Lucía, and it is kept", asy
   await expect(today).toContainText("Lucía");
   await expect(today).toContainText(/5\s?h/);
   await page.screenshot({ path: join(SHOTS, "panel-today-lucia-390.png") });
+  // The one way to keep what she did, once, under "Más".
+  await page.getByTestId("panel-more").locator(":scope > summary").click();
+  await expect(page.getByTestId("save-account")).toHaveCount(1);
+  await expect(page.getByTestId("save-account")).toBeVisible();
 
   // The conversation is stored: one tap brings it back, and back again to "Hoy".
   await page.getByTestId("continue-conversation").click();

@@ -893,68 +893,10 @@
     "cardInsightTitle": "Insight",
     "cardDocEntities": "extracted data",
     "profileSwitch": "Profile",
-    "suggestionsTitle": "For you",
-    "growthMarkMonths": "{name} · {months, plural, =1 {# month} other {# months}}",
-    "growthMarkDays": "{name} · {days, plural, =1 {# day} other {# days}}",
+    "growthMarkMonths": "{months, plural, =1 {# month} other {# months}}",
+    "growthMarkDays": "{days, plural, =1 {# day} other {# days}}",
     "citationSourceEvidence": "Clinical evidence",
-    "citationSourceUserData": "Your data"
-  },
-  "showcase": {
-    "primaryEyebrow": "First steps",
-    "secondaryEyebrow": "Also",
-    "hide": "Hide for now",
-    "collapsed": "Examples of what AdelIA can do",
-    "show": "Show",
-    "cards": {
-      "ask": {
-        "title": "Ask, with citations",
-        "example": "Is it normal that at 13 months she only wants breast milk?",
-        "detail": "I answer citing your baby's records, clinical guidelines and pediatric studies.",
-        "action": "Ask"
-      },
-      "diary": {
-        "title": "Daily diary on Telegram at 20:00",
-        "example": "Two fewer feeds today and a bit of a runny nose, no fever",
-        "detail": "The bot asks how the day went; you reply in text or audio and it is filed by date.",
-        "action": "Link Telegram"
-      },
-      "record": {
-        "title": "Record the visit",
-        "example": "Keep using the cream twice a day and come back in 15 days",
-        "detail": "With the pediatrician's consent: the essentials in 3-6 points, audio deleted after 48 h.",
-        "action": "Record"
-      },
-      "upload": {
-        "title": "Upload a report or the health booklet",
-        "example": "A photo of the booklet with the 12-month vaccine",
-        "detail": "I read the document and pull out medications, vaccines and dated observations.",
-        "action": "Upload"
-      },
-      "briefing": {
-        "title": "Briefing for the specialist",
-        "example": "We see the allergist tomorrow and I want everything summed up",
-        "detail": "One page per specialty, citing the record and the evidence.",
-        "action": "Create briefing"
-      },
-      "questionnaire": {
-        "title": "Guided reflux questionnaire",
-        "example": "She spits up after every feed and arches her back",
-        "detail": "Guided questions grounded in clinical guidelines; every item cites its source.",
-        "action": "Start"
-      },
-      "import": {
-        "title": "Import what you already have",
-        "example": "I want the full record from the private clinic",
-        "detail": "Apple Health, CCD, email forwarding and GDPR templates to request the record.",
-        "action": "Import"
-      }
-    },
-    "chips": {
-      "upload": "Upload a report",
-      "briefing": "Briefing",
-      "questionnaire": "Questionnaire",
-      "import": "Import"
-    }
+    "citationSourceUserData": "From their records"
   },
   "showcaseAsk": {
     "young": "My baby spits up after every feed. When does it get better?",
@@ -1206,5 +1148,15 @@
       "payment": "Payment"
     },
     "sessionCount": "{count, plural, one {# session} other {# sessions}}"
+  },
+  "panel": {
+    "more": "More",
+    "briefing": "Prepare the next visit",
+    "questionnaire": "Reflux questionnaire",
+    "import": "Import reports",
+    "dismiss": "Don’t show again",
+    "sources": "{count, plural, =1 {1 source} other {# sources}}",
+    "example": "For example",
+    "mothersOpen": "Read what they say"
   }
 }

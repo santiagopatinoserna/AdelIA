@@ -1,5 +1,4 @@
 import { getLocale, getTranslations } from "next-intl/server";
-import { auth } from "@/lib/auth";
 import { Link } from "@/lib/navigation";
 import { AgentCanvas } from "@/components/agent/agent-canvas";
 import { TrackStep } from "@/components/analytics";
@@ -19,10 +18,6 @@ export default async function DashboardHome({
   const { ask, cuenta } = await searchParams;
   const locale = await getLocale();
   const t = await getTranslations("agent");
-  // The layout already redirects when there is no session; the id only
-  // scopes the showcase's "hide for now" flag to this user.
-  const session = await auth();
-  const userId = (session?.user as { id?: string } | undefined)?.id ?? "";
   // "Hoy con <nombre>" (vision note 2026-10-22): fetched here, next to the
   // other server-side reads, for the DEFAULT child, which is the same child
   // the ProfileProvider starts on. Fail-open to nothing: a transient API
@@ -31,7 +26,7 @@ export default async function DashboardHome({
   //
   // The conversation she was in (stored since 2026-11-06, GET /agent/thread),
   // so a reload picks it up, and whether she is a guest, for "Guardar mi
-  // cuenta". Both fail open to nothing, like "Hoy".
+  // cuenta" under "Más". Both fail open to nothing, like "Hoy".
   const [due, thread, billing] = await Promise.all([
     today(locale).catch(() => null),
     agentThread().catch(() => null),
@@ -48,7 +43,6 @@ export default async function DashboardHome({
         <TodayFollowsChild initial={due} locale={locale}>
           <AgentCanvas
             locale={locale}
-            userId={userId}
             today={<TodaySlot />}
             initialThread={thread}
             askKey={ask ?? null}
