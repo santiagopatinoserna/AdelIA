@@ -127,14 +127,13 @@
               "nursery_time",
               "social_signals"
             ]
-          },
-          "gap": "«guarde» (guardería abreviado) no se lee como guardería: pregunta desde cuándo en vez de cuánto lleva"
+          }
         },
         {
           "press": [
             {
-              "field": "since_when",
-              "value": "weeks"
+              "field": "nursery_time",
+              "value": "lt1m"
             },
             {
               "field": "social_signals",
@@ -253,8 +252,7 @@
           },
           "classifier": {
             "intent": "question"
-          },
-          "gap": "una pregunta corta sobre el mismo cuidado («lo baño con agua fria?») se lee como tema nuevo y pierde la fiebre"
+          }
         }
       ]
     },
@@ -281,8 +279,7 @@
           "expect": {
             "turn": "follow_up",
             "kind": "red_flag"
-          },
-          "gap": "un seguimiento tras la derivación (fiebre con 2 meses) se responde como si no se hubiera dicho: la guardia solo lee el mensaje nuevo"
+          }
         }
       ]
     },
@@ -537,16 +534,14 @@
             "kind": "answer",
             "shape": "plan",
             "doctor": true
-          },
-          "gap": "«ha vomitado 3 veces ... q hago» es una línea de diario para las reglas: tarjeta para anotar en vez del plan («q» no se lee como «qué»)"
+          }
         },
         {
           "say": "no tiene fiebre",
           "expect": {
             "turn": "follow_up",
             "kind": "answer"
-          },
-          "gap": "un seguimiento hereda la regla de anotar del primer mensaje del tema: «no tiene fiebre» se convierte en tarjeta"
+          }
         },
         {
           "say": "ahora llora sin lagrimas y tiene la boca seca",
@@ -728,8 +723,7 @@
             "turn": "follow_up",
             "kind": "answer",
             "shape": "question"
-          },
-          "gap": "un seguimiento hereda la regla de «sus datos» del primer mensaje: «es normal q tenga fiebre despues de la vacuna» va al bucle de herramientas, sin el contrato de respuesta corta"
+          }
         }
       ]
     },
@@ -803,8 +797,7 @@
             "kind": "answer",
             "shape": "plan",
             "doctor": true
-          },
-          "gap": "tras anotar, su pregunta hereda la regla de anotar del tema: «y q hago si sube mas» se convierte en otra tarjeta para anotar"
+          }
         }
       ]
     },
@@ -837,8 +830,7 @@
             "turn": "follow_up",
             "kind": "answer",
             "shape": "question"
-          },
-          "gap": "tras anotar, su pregunta hereda la regla de anotar del tema: otra tarjeta en vez de la respuesta"
+          }
         }
       ]
     },
@@ -971,8 +963,7 @@
           },
           "classifier": {
             "intent": "plan"
-          },
-          "gap": "«le pasa algo raro» sin síntoma y sin fuentes: dice que no tiene fuentes en vez de preguntar qué le pasa (el diseño pide aclarar)"
+          }
         },
         {
           "say": "esta como apagado y come menos",
@@ -1073,8 +1064,7 @@
           "expect": {
             "turn": "new",
             "kind": "no_evidence"
-          },
-          "gap": "una pregunta de adulto (`other`) va en el agente al bucle de herramientas, no a la frase de redirección del diseño"
+          }
         },
         {
           "say": "vale y la niña duerme bien boca arriba",
@@ -1084,8 +1074,7 @@
           },
           "classifier": {
             "intent": "question"
-          },
-          "gap": "«vale y la niña ...» tras una pregunta de adulto se lee como seguimiento: la búsqueda arrastra el dolor de espalda de la madre"
+          }
         }
       ]
     },
@@ -1231,7 +1220,6 @@
               "social_signals"
             ]
           },
-          "gap": "«he doesnt say any words» no se lee como preocupación de desarrollo: no pregunta antes",
           "classifier": {
             "intent": "plan"
           }
@@ -1272,8 +1260,7 @@
           },
           "classifier": {
             "intent": "plan"
-          },
-          "gap": "un seguimiento tras la derivación (fiebre con 2 meses) se responde como si no se hubiera dicho: la guardia solo lee el mensaje nuevo"
+          }
         }
       ]
     },
@@ -1365,6 +1352,219 @@
             "turn": "correction",
             "kind": "answer"
           }
+        }
+      ]
+    },
+    {
+      "id": "holdout-fiebre-5-semanas",
+      "locale": "es",
+      "age_months": 1,
+      "tags": [
+        "control_sobreajuste",
+        "fiebre",
+        "bandera_roja"
+      ],
+      "turns": [
+        {
+          "say": "tiene 38,1 de fiebre",
+          "expect": {
+            "turn": "new",
+            "kind": "red_flag"
+          },
+          "classifier": "down"
+        },
+        {
+          "say": "puedo esperar a mañana a q abra el centro de salud",
+          "evidence": false,
+          "expect": {
+            "turn": "follow_up",
+            "kind": "red_flag"
+          },
+          "classifier": {
+            "intent": "question"
+          }
+        },
+        {
+          "say": "y le pongo un supositorio de paracetamol?",
+          "evidence": false,
+          "expect": {
+            "turn": "follow_up",
+            "kind": "red_flag"
+          },
+          "classifier": {
+            "intent": "question"
+          }
+        }
+      ]
+    },
+    {
+      "id": "holdout-fr-fievre-bain",
+      "locale": "fr",
+      "age_months": 2,
+      "tags": [
+        "control_sobreajuste",
+        "fievre",
+        "bandera_roja"
+      ],
+      "turns": [
+        {
+          "say": "elle a 38,5 depuis ce matin",
+          "expect": {
+            "turn": "new",
+            "kind": "red_flag"
+          },
+          "classifier": "down"
+        },
+        {
+          "say": "et si ça baisse avec un bain tiède",
+          "expect": {
+            "turn": "follow_up",
+            "kind": "red_flag"
+          },
+          "classifier": {
+            "intent": "question"
+          }
+        }
+      ]
+    },
+    {
+      "id": "holdout-anotar-y-preguntar-xq",
+      "locale": "es",
+      "age_months": 11,
+      "tags": [
+        "control_sobreajuste",
+        "anotar",
+        "erratas"
+      ],
+      "turns": [
+        {
+          "say": "ha tenido 37,9 esta tarde",
+          "expect": {
+            "turn": "new",
+            "kind": "confirm",
+            "card": "confirm"
+          },
+          "classifier": "down"
+        },
+        {
+          "confirm": true,
+          "expect": {
+            "kind": "recorded"
+          }
+        },
+        {
+          "say": "xq le sube siempre por la tarde",
+          "expect": {
+            "turn": "follow_up",
+            "kind": "answer",
+            "shape": "question"
+          },
+          "classifier": {
+            "intent": "question"
+          }
+        },
+        {
+          "say": "tb tiene mocos, le lavo la nariz?",
+          "expect": {
+            "turn": "follow_up",
+            "kind": "answer"
+          },
+          "classifier": {
+            "intent": "question"
+          }
+        }
+      ]
+    },
+    {
+      "id": "holdout-en-clasificador-caido",
+      "locale": "en",
+      "age_months": 9,
+      "tags": [
+        "control_sobreajuste",
+        "clasificador_caido"
+      ],
+      "turns": [
+        {
+          "say": "is it ok to give her cows milk",
+          "expect": {
+            "turn": "new",
+            "kind": "answer",
+            "shape": "question"
+          },
+          "classifier": "down"
+        },
+        {
+          "say": "what about yogurt",
+          "expect": {
+            "turn": "follow_up",
+            "kind": "answer"
+          },
+          "classifier": "down"
+        }
+      ]
+    },
+    {
+      "id": "holdout-madre-agotada",
+      "locale": "es",
+      "age_months": 5,
+      "tags": [
+        "control_sobreajuste",
+        "adulto",
+        "cambio_tema"
+      ],
+      "turns": [
+        {
+          "say": "estoy agotada y no duermo nada, q me puedo tomar para dormir",
+          "evidence": false,
+          "expect": {
+            "turn": "new",
+            "kind": "no_evidence"
+          },
+          "classifier": "down"
+        },
+        {
+          "say": "bueno y el bebe cuantas tomas hace por la noche a esta edad",
+          "expect": {
+            "turn": "new",
+            "kind": "answer",
+            "not_seen": [
+              "agotada"
+            ]
+          },
+          "classifier": {
+            "intent": "question"
+          }
+        }
+      ]
+    },
+    {
+      "id": "holdout-raro-sin-clasificador",
+      "locale": "es",
+      "age_months": 15,
+      "tags": [
+        "control_sobreajuste",
+        "pregunta_vaga",
+        "clasificador_caido"
+      ],
+      "turns": [
+        {
+          "say": "no se q le pasa esta raro",
+          "evidence": false,
+          "expect": {
+            "turn": "new",
+            "kind": "clarify"
+          },
+          "classifier": "down"
+        },
+        {
+          "say": "esta mas lloron y come peor desde hace 2 dias",
+          "expect": {
+            "turn": "follow_up",
+            "kind": "answer",
+            "shape": "plan",
+            "doctor": true
+          },
+          "classifier": "down"
         }
       ]
     }

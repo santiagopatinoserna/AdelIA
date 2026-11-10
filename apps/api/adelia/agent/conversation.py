@@ -34,7 +34,9 @@ what this turn is and what each later step should see:
   route_history   a short tail of the transcript for the routing model, which
                   is called only when the routing rules abstain (no new call);
   asked, refused  whether this topic already spent its one clarify round, and
-                  whether it was already told there is no evidence.
+                  whether it was already told there is no evidence;
+  referral        the code of the red flag this topic was referred for, if any:
+                  the guard reads her follow-ups with the topic (2026-11-11).
 
 When the rules cannot place a turn it is a follow-up (`decided` False), and
 the routing model, if the routing rules already need it, may say otherwise
@@ -46,13 +48,17 @@ import re
 from dataclasses import dataclass, field
 from typing import Literal
 
-from adelia.agent.route import _SYMPTOM
-from adelia.clinical.red_flags import age_months_in, normalize
+from adelia.agent.route import _BABY_REF, _DRUG, _SYMPTOM, read_shorthand
+from adelia.clinical.red_flags import age_months_in
+from adelia.clinical.red_flags import normalize as _normalize
 from adelia.enrichment.profile_service import ProfileFacts
 from adelia.services.answer_contract import (
     CLARIFY_QUESTIONS,
+    RED_FLAG_REASONS,
     clarification_sentence,
     no_evidence_reply,
+    out_of_scope_reply,
+    red_flag_opening,
 )
 
 TurnKind = Literal["new", "follow_up", "correction"]
@@ -75,6 +81,13 @@ MAX_QUERY_CHARS = 1000
 VISIT_NOTE_CHARS = 500
 
 _LANGS = ("es", "en", "fr")
+
+
+def normalize(text: str) -> str:
+    """`red_flags.normalize`, with her shorthand spelled out («q», «tb», «la guarde»):
+    the rules below are written for whole words (route.read_shorthand)."""
+    return read_shorthand(_normalize(text))
+
 
 # --- vocabulary (matched on red_flags.normalize output) -------------------------
 
@@ -132,6 +145,15 @@ _CONTINUATION = re.compile(
 _ANAPHORA = re.compile(
     r"\b(?:asi|eso|esto|lo mismo|igual|like this|like that|the same|comme ca|pareil)\b"
 )
+#: «lo baño con agua fria?», «je lui donne du doliprane?»: a question that opens on
+#: the pronoun of the baby being talked about has no subject of its own. Read as
+#: a new topic it lost the fever it was about (the battery, 2026-11-10).
+#: «le»/«les» are never articles; «lo»/«la» are pronouns before a verb in the
+#: first person («lo baño», «la abrigo»), articles before a noun («la caca»).
+_POINTS_AT_HIM = re.compile(
+    r"^(?:se )?(?:le|les) \w+|^(?:se )?(?:lo|la) \w+o\b|^(?:je|on) (?:le|la|lui|l') ?\w+|"
+    r"^(?:should|can|do|shall) (?:i|we) \w+ (?:him|her|them)\b"
+)
 _AGE_FIX_WORDS = 8
 _SHORT_WORDS = 5
 #: A correction is short; a statement with nothing in common with the topic
@@ -155,6 +177,8 @@ _BEHAVIOUR = re.compile(
     r"plays alone|doesn'?t interact|no eye contact|doesn'?t look at|"
     r"doesn'?t (?:respond|answer) to (?:his|her|their) name|not talking|doesn'?t talk|"
     r"not babbling|doesn'?t babble|withdrawn|"
+    r"doesn'?t say (?:any |a )?words?|(?:isn'?t|not) saying (?:any )?words|no words yet|"
+    r"ne dit (?:pas )?(?:encore )?(?:de |d'|aucun )?mots?|"
     r"ne joue pas|reste (?:assis|seul|immobile|dans un coin)|dans un coin|joue seul|"
     r"ne (?:me )?regarde pas|ne (?:repond|reagit) pas a son prenom|ne parle pas|"
     r"ne babille pas|isole)\b"
@@ -169,12 +193,8 @@ _NURSERY = re.compile(
     r"\b(?:guarderia|escuela infantil|escoleta|daycare|day care|nursery|child ?care|"
     r"creche|garderie)\b"
 )
-#: A drug or a dose: never asked about, the coded refusal stands (audit 3.1).
-_DRUG = re.compile(
-    r"\b(?:dosis|mg|paracetamol|ibuprofeno|apiretal|dalsy|jarabe|medicamento|medicina|"
-    r"melatonina|antibiotico|supositorio|dose|medicine|medication|syrup|melatonin|"
-    r"doliprane|sirop|medicament)\b"
-)
+#: A drug or a dose (route._DRUG): never asked about, the coded refusal stands
+#: (audit 3.1).
 
 #: The corpus's words for a behaviour topic (Spanish: the corpus's language).
 #: Searched as she wrote it, the guardería question found "niño enfermo en la
@@ -320,6 +340,27 @@ def _is_record(answer: str) -> bool:
     return answer.startswith(_NOTED_OPENINGS)
 
 
+_OPENINGS = tuple(red_flag_opening(lang) for lang in _LANGS)
+
+
+def referral_code(answer: str) -> str | None:
+    """The red flag an answer referred her for, or None if it was not a referral.
+
+    The referral is code (answer_contract.red_flag_reply): its opening and its
+    reason are verbatim, in whichever language it was said.
+    """
+    if not answer.lstrip().startswith(_OPENINGS):
+        return None
+    for code, reasons in RED_FLAG_REASONS.items():
+        if any(reason in answer for reason in reasons.values()):
+            return code
+    return None
+
+
+def _is_redirect(answer: str) -> bool:
+    return any(out_of_scope_reply(lang) in answer for lang in _LANGS)
+
+
 def _words(n: str) -> list[str]:
     return re.findall(r"[a-z0-9']+", n)
 
@@ -412,6 +453,14 @@ def _classify(message: str, prev: list[tuple[str, str]]) -> tuple[str, str, tupl
         return "new", "rule", ()
     if retracted or generic or marker:
         return "correction", "rule", retracted
+    if referral_code(last_a):
+        # After a referral she goes on with it («le doy apiretal mientras», «puedo
+        # esperar a mañana?»): only her own "otra cosa" opens another topic.
+        return "follow_up", "rule", ()
+    if _is_redirect(last_a):
+        # Nothing to go on with about the baby after "only your baby": a message
+        # that names him starts his topic; more about herself stays in hers.
+        return ("new" if _BABY_REF.search(n) else "follow_up"), "rule", ()
     if (
         age_months_in(message) is not None
         and len(_words(n)) <= _AGE_FIX_WORDS
@@ -430,7 +479,12 @@ def _classify(message: str, prev: list[tuple[str, str]]) -> tuple[str, str, tupl
     if own & topic_stems and not _is_record(last_a):
         return "follow_up", "rule", ()
     words = len(_words(n))
-    if words >= _SELF_CONTAINED_STATEMENT or ("?" in message and words >= _SHORT_WORDS):
+    if words >= _SELF_CONTAINED_STATEMENT:
+        return "new", "rule", ()
+    if _POINTS_AT_HIM.match(opening):
+        # Undecided: the routing model, when it is called, may still say "new".
+        return "follow_up", "default", ()
+    if "?" in message and words >= _SHORT_WORDS:
         return "new", "rule", ()
     return "follow_up", "default", ()
 
@@ -455,6 +509,8 @@ class Conversation:
     answering: bool = False
     behaviour: bool = False
     nursery: bool = False
+    #: The red flag this topic was referred for (referral_code), or None.
+    referral: str | None = None
     decided: bool = True
     # What `with_kind` needs to read the turn again.
     _history: tuple = field(default=(), repr=False, compare=False)
@@ -555,6 +611,7 @@ def read(
     answering = via == "clarify" and not clarified
     asked = clarified or answering or any(is_clarify_question(a) for _, a in in_topic)
     refused = any(_is_refusal(a) for _, a in in_topic)
+    referral = next((code for _, a in reversed(in_topic) if (code := referral_code(a))), None)
 
     head = _query_lines(said)
     if kind == "new" and not clarified:
@@ -595,7 +652,8 @@ def read(
     spoken = normalize("\n".join(
         _without_retractions(w, frames) for w, frames in [*said, (turn_message, retracted)]
     ))
-    behaviour = bool(_BEHAVIOUR.search(spoken)) and not _ILLNESS.search(spoken)
+    # An illness she denies («No tiene fiebre») does not make it a sick baby.
+    behaviour = bool(_BEHAVIOUR.search(spoken)) and not _ILLNESS.search(_DENY_HAS.sub(" ", spoken))
     nursery = bool(_NURSERY.search(spoken))
     hint = _hint(behaviour, nursery) if (kind != "new" or clarified) else None
     if _query is not None and _query.strip():
@@ -618,7 +676,7 @@ def read(
         search_query=search, route_text=route_text, prompt_question=prompt,
         model_history=model_history, route_history=_route_history(history),
         retracted=retracted, asked=asked, refused=refused, answering=answering,
-        behaviour=behaviour, nursery=nursery, decided=decided,
+        behaviour=behaviour, nursery=nursery, referral=referral, decided=decided,
         _history=tuple(history or ()), _clarified=clarified,
     )
 
@@ -721,6 +779,6 @@ def correction_note(c: Conversation) -> str:
 __all__ = [
     "Conversation", "MAX_QUERY_CHARS", "ROUTE_HISTORY_CHARS", "ROUTE_HISTORY_MESSAGES",
     "SIGNAL_SOURCES", "ask_first", "ask_when_nothing_found", "consult_note",
-    "correction_note", "is_clarify_question", "no_evidence_again", "read",
+    "correction_note", "is_clarify_question", "no_evidence_again", "read", "referral_code",
     "visit_card_title", "visit_note", "with_kind",
 ]

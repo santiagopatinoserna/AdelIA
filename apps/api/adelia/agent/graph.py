@@ -4,6 +4,7 @@
            -> thread -> guard -> admit -> route -> clarify   (one round, buttons)
                                                  | record    (a diary line, account only)
                                                  | track     (her own data: tools, 3 steps)
+                                                 | redirect  (not about the baby, agent)
                                                  | retrieve -> decide -> plan | answer
                                                                        | experience_only
                                                                        | clarify
@@ -39,9 +40,10 @@ only they can show, through `GraphDeps`:
 
   demo   no account; evidence + experience; buttons; no writes; JSON response
   chat   account; her record + evidence; streams; no buttons, no cards
-  agent  account; her record + evidence; streams; buttons, cards, writes and
-         the tool loop (`track`), which also takes what the router cannot
-         place, as the agent always did
+  agent  account; her record + evidence; streams; buttons, cards, writes,
+         the tool loop (`track`) for her own data, and the redirect for what
+         is not about the baby. What the router cannot place takes the plan
+         or the short answer, never the tool loop (2026-11-11)
 
 Streaming surfaces read the nodes' events (`token`, `card`, `tool_call`)
 through LangGraph's custom stream (`stream_graph`); the demo reads the final
@@ -74,7 +76,12 @@ from adelia.agent import implicit_subject  # noqa: E402
 from adelia.agent import lay_terms  # noqa: E402
 from adelia.agent import record as rec  # noqa: E402
 from adelia.agent import warning_signs  # noqa: E402
-from adelia.agent.route import RouteDecision, route_by_rules  # noqa: E402
+from adelia.agent.route import (  # noqa: E402
+    RouteDecision,
+    fallback_intent,
+    names_the_baby,
+    route_by_rules,
+)
 from adelia.clinical import red_flags  # noqa: E402
 from adelia.clinical.golden import is_refusal  # noqa: E402
 from adelia.clinical.age_scope import child_outside_scope  # noqa: E402
@@ -102,6 +109,7 @@ from adelia.services.answer_contract import (  # noqa: E402
     missing_fact_note,
     no_evidence_reply,
     out_of_scope_age_reply,
+    out_of_scope_reply,
     red_flag_reply,
 )
 from adelia.services.citations import markers_in  # noqa: E402
@@ -120,6 +128,18 @@ DEMO_CLARIFY_FIELDS: frozenset[str] = frozenset({"age", "temperature"})
 ACCOUNT_CLARIFY_FIELDS: frozenset[str] = frozenset(CLARIFY_QUESTIONS)
 #: What the routing model may call a missing fact, in our questions' names.
 _MISSING_ALIASES = {"duration": "since_when"}
+#: A missing symptom has no buttons: the questions that make her say it
+#: («le pasa algo raro», the battery, 2026-11-10).
+_MISSING_EXPANDS = {"symptom": ("general_state", "since_when")}
+
+
+def _missing_fields(said: list[str]) -> list[str]:
+    out: list[str] = []
+    for name in said:
+        for f in _MISSING_EXPANDS.get(name, (_MISSING_ALIASES.get(name, name),)):
+            if f not in out:
+                out.append(f)
+    return out
 
 
 class GraphUnavailable(Exception):
@@ -373,6 +393,26 @@ def _referral(state: AgentState, flag) -> dict:
     }
 
 
+def _topic_flag(state: AgentState):
+    """The referral a topic already got, kept on her follow-ups in it.
+
+    The conversation battery (2026-11-10): after the referral for a fever at 2
+    months, «le doy apiretal mientras» was answered as if it had never been
+    said, because the guard read the new message alone, and «puedo esperar a
+    mañana?» would have been answered the same way. In a topic that was
+    referred (agent/conversation: only her own "otra cosa" leaves it), the
+    guard reads her words in the topic with this message, so the flag fires
+    with its age and its symptom; if her words alone do not fire it again (it
+    came from a button or a recorded value), the topic's own flag holds.
+    """
+    c = state.get("conversation")
+    if c is None or c.referral is None:
+        return None
+    text = "\n".join([*c.topic, state["message"]])
+    flag = red_flags.detect(text, locale=_locale(state), age_months=_age(state))
+    return flag or red_flags.RedFlag(c.referral, "topic", _age(state))
+
+
 async def guard(state: AgentState) -> dict:
     """Red flags, in code, before anything else (audit 3.3); then the age scope.
 
@@ -382,6 +422,8 @@ async def guard(state: AgentState) -> dict:
     clinical/age_scope).
     """
     flag = red_flags.detect(state["message"], locale=_locale(state), age_months=_age(state))
+    if flag is None:
+        flag = _topic_flag(state)
     if flag is not None:
         logger.info("graph: red flag %s fired (surface=%s)", flag.code, state.get("surface"))
         return _referral(state, flag)
@@ -414,9 +456,9 @@ async def route_node(state: AgentState, runtime: Runtime[GraphDeps]) -> dict:
     Then what this surface can do about it: a question with buttons only
     where buttons can be shown, a record only with an account and a card, the
     tool loop only where there is one (elsewhere her own data is a question
-    over her record). What the router cannot place (`other`, or the fallback
-    when the model is down) goes to the tool loop where there is one, as the
-    agent always did, and to the plan everywhere else.
+    over her record). `other` gets the redirect in the agent and the plan
+    elsewhere; the fallback when the model is down gets the plan, or in the
+    agent the short answer for a plain question (route.fallback_intent).
     """
     deps = runtime.context
     c = state.get("conversation")
@@ -442,12 +484,33 @@ async def route_node(state: AgentState, runtime: Runtime[GraphDeps]) -> dict:
                     "missing": first}
     route_text = c.route_text if c is not None else state["message"]
     if c is not None and c.kind == "follow_up" and c.via != "clarify":
-        # A diary line or her own data says so by itself ("Ha hecho 3 cacas
-        # hoy" after a question about green stools): routed with the topic it
-        # would read as a question, and the card would never come.
+        # The turn, not the topic's first message, says what she wants. What
+        # her message says by itself wins: a diary line or her own data ("Ha
+        # hecho 3 cacas hoy" after a question about green stools), a "qué
+        # hago" or a fact question. Routed with the topic, «y q hago si sube
+        # mas» after a noted 38,4 was the diary line again, and «es normal q
+        # tenga fiebre despues de la vacuna» after «qué vacunas le tocan» was
+        # her own data again (the battery, 2026-11-10). A missing fact or
+        # `other` is read with the topic, which may hold it. When her message
+        # says nothing by itself, the topic routes it, but never into the
+        # diary or the tool loop on the strength of its first message: then
+        # the router reads her message with the thread.
         alone = route_by_rules(state["message"], **kwargs)
-        if alone is not None and alone.intent in ("record", "track"):
+        if alone is not None and alone.intent not in ("clarify", "other"):
             route_text = state["message"]
+        elif alone is None:
+            topical = route_by_rules(route_text, **kwargs)
+            if topical is not None and topical.intent in ("record", "track"):
+                route_text = state["message"]
+    if c is not None and c.behaviour and spent:
+        # A behaviour worry asked first; after its round it is answered with the
+        # plan (and its «Cuándo ir al médico»). Nothing is left for the routing
+        # model to decide unless the rules place the message elsewhere (her own
+        # data, a diary line): six turns of the battery paid it for this.
+        ruled = route_by_rules(route_text, **kwargs)
+        if ruled is None or ruled.intent in ("plan", "question", "clarify"):
+            return {"intent": "plan", "intent_confidence": 1.0, "intent_via": "rule",
+                    "missing": []}
     if c is not None and c.route_history:
         # The same call as always, now reading the tail of the thread; the
         # model is only consulted when the routing rules abstain.
@@ -458,7 +521,7 @@ async def route_node(state: AgentState, runtime: Runtime[GraphDeps]) -> dict:
         c = conversation.with_kind(c, decision.turn, search_query=decision.search_query)
         update = {"conversation": c, "search_query": c.search_query}
     intent = decision.intent
-    missing = [_MISSING_ALIASES.get(f, f) for f in decision.missing]
+    missing = _missing_fields(decision.missing)
     if intent == "clarify":
         askable = _askable(missing, deps, _locale(state))
         if spent or not askable or not deps.can_ask:
@@ -469,11 +532,21 @@ async def route_node(state: AgentState, runtime: Runtime[GraphDeps]) -> dict:
         state.get("account") and deps.can_write and deps.record_store is not None
     ):
         intent = "plan"
-    if intent in ("other",) or decision.via == "fallback":
-        # A behaviour worry or a correction is answered on the contract path,
-        # never in the tool loop's free format.
+    agent = deps.track is not None
+    if intent == "other" and (not agent or names_the_baby(route_text)):
+        # The redirect is the agent's; elsewhere what nobody places takes the
+        # plan, as it always did (the golden gate runs the chat). Whoever says
+        # `other`, a message that names the baby is answered.
+        intent = "plan"
+    if decision.via == "fallback":
+        # Nobody could place it: the rules abstained and the classifier is down
+        # (the 429 of October) or late. The plan, or the short answer for a
+        # plain question in the topic (route.fallback_intent: a drug or a
+        # symptom said earlier still counts); never the tool loop, which
+        # has no answer contract and got every such turn until 2026-11-11. A
+        # behaviour worry or a correction always takes the plan.
         contract = c is not None and (c.behaviour or c.kind == "correction")
-        intent = "track" if deps.track is not None and not contract else "plan"
+        intent = fallback_intent(route_text) if agent and not contract else "plan"
     if intent == "track" and deps.track is None:
         intent = "question"
     return {
@@ -505,7 +578,17 @@ def _after_route(state: AgentState) -> str:
     intent = state.get("intent")
     if intent in ("clarify", "record", "track"):
         return intent
+    if intent == "other":
+        return "redirect"
     return "retrieve"
+
+
+async def redirect(state: AgentState) -> dict:
+    """Not about the baby (her own health, a pet, small talk): one sentence that
+    says what AdelIA is for, in code (AGENT_GRAPH.md, `other`). No retrieval, no
+    model, no source, no card. Until 2026-11-11 the agent sent these to its tool
+    loop, which answered an adult's back pain in free text."""
+    return {"kind": "no_evidence", "answer": out_of_scope_reply(_lang(state))}
 
 
 async def clarify(state: AgentState) -> dict:
@@ -964,6 +1047,7 @@ def build_graph():
         ("absorb", absorb), ("write", write), ("thread", thread), ("guard", guard),
         ("admit", admit),
         ("route", route_node), ("clarify", clarify), ("record", record), ("track", track),
+        ("redirect", redirect),
         ("retrieve", retrieve), ("decide", decide), ("plan", plan), ("answer", answer),
         ("experience_only", experience_only), ("compose", compose),
     ):
@@ -975,8 +1059,10 @@ def build_graph():
     g.add_edge("write", "compose")
     g.add_conditional_edges("guard", _after_guard, ["compose", "admit"])
     g.add_edge("admit", "route")
-    g.add_conditional_edges("route", _after_route, ["clarify", "record", "track", "retrieve"])
-    for node in ("clarify", "record", "track"):
+    g.add_conditional_edges(
+        "route", _after_route, ["clarify", "record", "track", "redirect", "retrieve"]
+    )
+    for node in ("clarify", "record", "track", "redirect"):
         g.add_edge(node, "compose")
     g.add_edge("retrieve", "decide")
     g.add_conditional_edges(

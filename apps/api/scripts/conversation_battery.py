@@ -29,6 +29,12 @@ refusal once, what the model would have been shown.
 
     .venv/bin/python scripts/conversation_battery.py
     .venv/bin/python scripts/conversation_battery.py --only fiebre-sin-cifra --format both
+    .venv/bin/python scripts/conversation_battery.py --classifier-down
+
+`--classifier-down` plays the day the classifier fails (the 429 of October,
+or its 2 s deadline): every turn the rules cannot place takes production's
+fallback instead of its recorded answer. A turn may also say so by itself,
+`"classifier": "down"`; the report counts those turns apart.
 
 With the model, only on request and under a hard spending cap, inside the
 production API container (the scenarios run where the corpus and the keys are):
@@ -329,11 +335,12 @@ def _sources(evidence: list[dict], citations: list[dict]) -> list[dict]:
 class _OfflineSurface:
     """What run_turn lends the graph, with fakes for what costs money."""
 
-    def __init__(self, store, *, evidence: bool, locale: str, classifier: dict | None = None):
+    def __init__(self, store, *, evidence: bool, locale: str,
+                 classifier: dict | str | None = None):
         from adelia.enrichment.evidence_retrieval import EvidenceMatch
 
         self.store, self.locale = store, locale
-        self.classifier, self.recorded = classifier, False
+        self.classifier, self.recorded, self.down = classifier, False, False
         self.paid: list[str] = []
         self.model_saw: dict | None = None
         self.evidence = [EvidenceMatch(
@@ -354,6 +361,9 @@ class _OfflineSurface:
                                   facts=kwargs.get("facts"))
         if decision is not None:
             return decision
+        if self.classifier == "down":
+            self.down = True
+            return _FALLBACK
         if self.classifier is None:
             return _FALLBACK
         self.recorded = True
@@ -404,14 +414,16 @@ class _MemoryStore:
         return same[-1] if same else None
 
 
-async def _offline_turn(scenario: dict, store: _MemoryStore, turn: dict, request: dict) -> dict:
+async def _offline_turn(scenario: dict, store: _MemoryStore, turn: dict, request: dict,
+                        *, classifier_down: bool = False) -> dict:
     from adelia.agent.graph import ACCOUNT_CLARIFY_FIELDS, GraphDeps, stream_graph
     from adelia.agent.orchestrator import sanitize_history
     from adelia.enrichment.profile_service import ProfileFacts
 
     locale = scenario["locale"]
+    classifier = "down" if classifier_down else turn.get("classifier")
     surface = _OfflineSurface(store, evidence=turn.get("evidence", True), locale=locale,
-                              classifier=turn.get("classifier"))
+                              classifier=classifier)
     messages = sanitize_history(request.get("history"))
     text_history = [m for m in messages if isinstance(m.get("content"), str)]
     deps = GraphDeps(
@@ -445,6 +457,8 @@ async def _offline_turn(scenario: dict, store: _MemoryStore, turn: dict, request
     }
     if observed["intent_via"] == "model":
         observed["intent_via"] = "recorded"
+    elif observed["intent_via"] == "fallback" and surface.down:
+        observed["intent_via"] = "down"
     return observed
 
 
@@ -461,18 +475,21 @@ def _scenario_result(scenario: dict, observed: list[dict], *, mode: str) -> dict
             "turns": turns, "ok": sum(t["ok"] for t in turns), "total": len(scenario["turns"])}
 
 
-async def run_offline(scenarios: list[dict]) -> dict:
-    """Every scenario through the real graph with fakes for what costs money."""
+async def run_offline(scenarios: list[dict], *, classifier_down: bool = False) -> dict:
+    """Every scenario through the real graph with fakes for what costs money;
+    with `classifier_down`, no recorded classifier answer is played."""
     results = []
     for scenario in scenarios:
         store = _MemoryStore()
 
         async def _turn(turn, request, scenario=scenario, store=store):
-            return await _offline_turn(scenario, store, turn, request)
+            return await _offline_turn(scenario, store, turn, request,
+                                       classifier_down=classifier_down)
 
         observed, _ = await _drive(scenario, _turn)
         results.append(_scenario_result(scenario, observed, mode="offline"))
-    return {"mode": "offline", "scenarios": results, "totals": _totals(results)}
+    return {"mode": "offline", "classifier_down": classifier_down, "scenarios": results,
+            "totals": _totals(results)}
 
 
 def _totals(results: list[dict], *, run_turns: list[dict] | None = None) -> dict:
@@ -487,7 +504,10 @@ def _totals(results: list[dict], *, run_turns: list[dict] | None = None) -> dict
            "routed": len(routed),
            "rules_alone": sum(1 for t in routed if t["intent_via"] == "rule"),
            "needs_classifier": sum(1 for t in routed if t["intent_via"] in ("recorded", "model")),
-           "fallback": sum(1 for t in routed if t["intent_via"] == "fallback")}
+           "fallback": sum(1 for t in routed if t["intent_via"] == "fallback"),
+           "classifier_down": sum(1 for t in routed if t["intent_via"] == "down"),
+           "tool_loop_unruled": sum(1 for t in turns if "track" in (t.get("paid") or [])
+                                    and t.get("intent_via") != "rule")}
     if run_turns is None:
         return out
     counts = [t["words"] for t in run_turns if t.get("words")]
@@ -719,6 +739,8 @@ def render_text(report: dict) -> str:
     """For a person, in Spanish: Santiago reads it."""
     t = report["totals"]
     mode = "sin modelo (falsos grabados)" if report["mode"] == "offline" else "con modelo"
+    if report.get("classifier_down"):
+        mode += ", con el clasificador caído"
     lines = [f"Batería de conversación, {mode}", ""]
     for s in report["scenarios"]:
         lines.append(f"{s['id']} ({s['locale']}, {s['total']} turnos): {s['ok']}/{s['total']}")
@@ -736,11 +758,16 @@ def render_text(report: dict) -> str:
                              "conocido (gap)")
     lines += ["", f"Turnos que cumplen: {t['ok']}/{t['turns']} ({_pct(t['ok'], t['turns'])}); "
               f"conversaciones enteras: {t['scenarios_ok']}/{t['scenarios']}",
-              f"Defectos conocidos: {t['gaps']} turnos; fallos nuevos: {t['failing_unexpected']}",
+              f"Turnos con defecto conocido (gap): {t['gaps']}; "
+              f"fallos nuevos: {t['failing_unexpected']}",
               f"Enrutado: {t['rules_alone']} de {t['routed']} turnos los deciden las reglas solas; "
               f"{t['needs_classifier']} necesitan el clasificador"
               + (" (respuesta grabada)" if report["mode"] == "offline" else "")
               + (f"; {t['fallback']} cayeron al respaldo" if t["fallback"] else "")]
+    if t.get("classifier_down"):
+        lines.append(f"Con el clasificador caído: {t['classifier_down']} turnos tomaron el "
+                     f"respaldo; {t['tool_loop_unruled']} acabaron en el bucle de herramientas "
+                     "sin que una regla los mandara")
     if report["mode"] == "model":
         lines.append(f"Turnos ejecutados: {t['turns_run']}/{t['turns']}")
         lines.append(f"Palabras por respuesta: mediana {t['words_median']}, "
@@ -765,6 +792,8 @@ def _parse(argv: list[str]) -> argparse.Namespace:
                         help="run through the real agent and providers (spends money)")
     parser.add_argument("--budget-usd", type=float, default=None,
                         help=f"hard spending cap with --with-model, at most {MAX_BUDGET_USD}")
+    parser.add_argument("--classifier-down", action="store_true",
+                        help="offline: play the fallback wherever the rules abstain")
     parser.add_argument("--scenarios", type=Path, default=None)
     parser.add_argument("--only", action="append", default=[], help="a scenario id")
     parser.add_argument("--out", type=Path, default=None, help="write the JSON report here")
@@ -800,7 +829,7 @@ def main(argv: list[str] | None = None, *, out: TextIO | None = None) -> int:
     if args.with_model:
         report = asyncio.run(_model_main(scenarios, args.budget_usd))
     else:
-        report = asyncio.run(run_offline(scenarios))
+        report = asyncio.run(run_offline(scenarios, classifier_down=args.classifier_down))
     if args.format in ("text", "both"):
         print(render_text(report), file=out)
     if args.format in ("json", "both"):

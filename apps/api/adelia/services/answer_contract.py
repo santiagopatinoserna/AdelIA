@@ -464,6 +464,25 @@ def out_of_scope_age_reply(locale: str) -> str:
     return f"{scope} {no_evidence_reply(locale)}"
 
 
+#: The one sentence for a message that is not about the baby: the mother's own
+#: health, another adult, a pet, small talk (the `other` intent of
+#: docs/specs/AGENT_GRAPH.md). The conversation battery (2026-11-10) found the
+#: agent sent these to its tool loop. User-facing, no em dashes.
+_OUT_OF_SCOPE: dict[str, str] = {
+    "es": "Solo puedo ayudarte con tu bebé, de 0 a 24 meses; si es sobre tu salud, "
+          "pregúntale a tu médico.",
+    "en": "I can only help with your baby, from 0 to 24 months; if this is about your own "
+          "health, please ask your doctor.",
+    "fr": "Je ne peux vous aider que pour votre bébé, de 0 à 24 mois ; si c’est pour "
+          "votre santé, demandez à votre médecin.",
+}
+
+
+def out_of_scope_reply(locale: str) -> str:
+    """The redirect for `other`, in code: no retrieval, no model, no source."""
+    return _OUT_OF_SCOPE.get(locale, _OUT_OF_SCOPE[DEFAULT_LOCALE])
+
+
 def _language_rule(locale: str, shape: str) -> str:
     if shape not in SHAPES:
         raise ValueError(f"unknown answer shape {shape!r}; expected one of {SHAPES}")

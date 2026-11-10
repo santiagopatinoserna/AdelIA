@@ -262,7 +262,10 @@ async def test_injected_system_turn_never_reaches_the_model():
         events = [
             e
             async for e in run_turn(
-                user_id=uuid.uuid4(), profile_id=None, message="¿y ahora?",
+                # Her own data, so the turn reaches the tool loop's provider (an
+                # unplaced «¿y ahora?» did until 2026-11-11; it now takes the
+                # sourced answer).
+                user_id=uuid.uuid4(), profile_id=None, message="¿y qué vacunas le tocan?",
                 history=poisoned, locale="es",
             )
         ]

@@ -129,7 +129,7 @@ _FACT_ASK = re.compile(
     r"cuant[oa]s? \w+ (?:debe|deberia|tiene que|suele|suelen|es normal|hay que|"
     r"necesita|toma|tienen que)|"
     r"is it normal|at what age|when (?:can|do|does|should)|what is (?:a|the)|"
-    r"why do babies|how (?:much|many) \w+ should|"
+    r"why do babies|how (?:much|many) \w+ should|is (?:that|this) normal|"
     r"est-ce normal|c'est normal|a quel age|a partir de quel age|"
     r"quand (?:est-ce|peut|peut-on|commence\w*)|qu'est-ce que|c'est quoi|combien de \w+ doit)\b"
 )
@@ -203,8 +203,8 @@ _NEEDS_AGE = re.compile(
     r"cantidad de (?:leche|biberon)|ml por toma|"
     r"how (?:much|many) (?:ml|oz|ounces|feeds|bottles|milk)|"
     r"combien de (?:ml|biberons|lait)|"
-    r"dormir|duerme|duerma|sue[nñ]o|siestas?|horas de sueno|"
-    r"sleep\w*|naps?|dort|dorme|sommeil|siestes?)\b"
+    r"dormir|duerme|duerma|sue[nñ]o|siestas?|horas de sueno|se despierta|despertares|"
+    r"sleep\w*|naps?|wakes? up|dort|dorme|sommeil|siestes?|se reveille)\b"
 )
 
 
@@ -230,6 +230,13 @@ _FEVER_REPORT = re.compile(
     r")\b"
 )
 
+# She says there is NO fever: «no tiene fiebre» is not a report to ask the
+# thermometer about (the battery, 2026-11-10, after vomiting).
+_NO_FEVER = re.compile(
+    r"\bno (?:tiene|tenia|ha tenido|tuvo|le ha (?:subido|dado)|le sube) (?:\w+ ){0,2}?"
+    r"(?:fiebre|febricula|decimas|temperatura|calentura)\b"
+)
+
 # A plausible body temperature written bare ("fiebre de 39, que hago"). The
 # guard's parser (red_flags.temperature_in) rejects a bare number followed by
 # a comma on purpose, to keep ages and weeks out of the fever rules; here the
@@ -245,14 +252,83 @@ _BARE_READING = re.compile(
 def _has_reading(message: str, n: str) -> bool:
     return temperature_in(message) is not None or bool(_BARE_READING.search(n))
 
+
+# How a mother in a hurry writes, read as the words the rules know (the
+# conversation battery, 2026-11-10: «ha vomitado 3 veces esta mañana q hago»
+# became a diary line to note, because «q hago» was not «que hago»). Whole
+# words only, on normalized text: common Spanish chat shorthand, and «la
+# guarde» for the nursery. The clinical guard reads her text as she wrote it.
+_SHORTHAND: tuple[tuple[re.Pattern[str], str], ...] = (
+    (re.compile(r"\b(?:xq|pq|porq|x q)\b"), "por que"),
+    # Not «k»: «vitamina K» is a newborn topic.
+    (re.compile(r"\b(?:q|ke)\b"), "que"),
+    (re.compile(r"\b(?:tb|tmb|tbn)\b"), "tambien"),
+    (re.compile(r"\bdsd\b"), "desde"),
+    (re.compile(r"\bxa\b"), "para"),
+    (re.compile(r"\bbb\b"), "bebe"),
+    (re.compile(r"\b(en|a|de) la guarde\b"), r"\1 la guarderia"),
+)
+
+
+def read_shorthand(n: str) -> str:
+    """Normalized text with her shorthand spelled out (`red_flags.normalize` first)."""
+    for pattern, word in _SHORTHAND:
+        n = pattern.sub(word, n)
+    return n
+
+
+# "Why...?" opening the message, or after "y" / "pero": «xq se despierta tanto».
+# Inside a statement («no come porque le duelen») it is not a question.
+_WHY_ASK = re.compile(r"(?:^|[¿?.!]\s*|\b(?:y|pero) )por que\b|^(?:why|pourquoi)\b")
+# "...es normal?" at the end: the fact question written after the fact.
+_NORMAL_AT_END = re.compile(r"\b(?:es normal|is (?:that|this|it) normal|c'est normal)\W*$")
+# How much he should sleep or eat: a fact, the age comes from her profile.
+_HOW_MUCH_SHOULD = re.compile(
+    r"\bcuant[oa]s? (?:tiene que|debe|deberia|necesita|suele) "
+    r"(?:dormir|comer|tomar|beber|mamar|pesar|medir)\b"
+)
+# "Something is wrong" with nothing she can describe yet (AGENT_GRAPH.md,
+# `clarify`: «le pasa algo» sin síntoma). Searched as written it finds
+# nothing and refuses; a pediatric nurse asks how he is and since when.
+_VAGUE_WORRY = re.compile(
+    r"\b(?:le pasa algo|algo (?:le pasa|raro|extrano)|no se (?:lo )?que le pasa|"
+    r"something(?:'s| is) (?:wrong|off|not right)|not (?:himself|herself)|"
+    r"je ne sais pas ce qu'(?:il|elle) a|(?:il|elle) a quelque chose|"
+    r"quelque chose ne va pas)\b"
+)
+#: In the classifier's words (and tests/data/routing_es.json); agent/graph asks it.
+_VAGUE_ASKS = ["symptom"]
+#: A drug or a dose (conversation.py asks nothing about one, audit 3.1).
+_DRUG = re.compile(
+    r"\b(?:dosis|mg|paracetamol|ibuprofeno|apiretal|dalsy|jarabe|medicamento|medicina|"
+    r"melatonina|antibiotico|supositorio|dose|medicine|medication|syrup|melatonin|"
+    r"doliprane|sirop|medicament|gotas|drops|gouttes|"
+    # A medicine asked for without its name: «algo para el dolor».
+    r"(?:algo|something|quelque chose) (?:para|for|contre|pour) (?:el |la |the |sa |son )?"
+    r"(?:dolor|fiebre|pain|fever|douleur|fievre))\b"
+)
+# A weight or a length is noted in the present: «hoy pesa 8,4 kg», «ya mide 72 cm».
+_PRESENT_MEASURE = re.compile(
+    r"\b(?:pesa|mide|weighs|measures|pese|mesure) \d{1,3}(?:[.,]\d{1,3})? ?"
+    r"(?:kg|kilos?|g|gramos|grams?|cm|centimetros|lbs?|pounds?)\b"
+)
+
+
 def _age_is_known(message_n: str, facts: ProfileFacts | None) -> bool:
     if facts is not None and facts.age_months is not None:
         return True
     return age_months_in(message_n) is not None
 
 
+def _fact_ask(n: str) -> bool:
+    return bool(_FACT_ASK.search(n) or _WHY_ASK.search(n) or _NORMAL_AT_END.search(n)
+                or _HOW_MUCH_SHOULD.search(n))
+
+
 def _asks_something(n: str) -> bool:
-    return "?" in n or "¿" in n or bool(_PLAN_ASK.search(n)) or bool(_FACT_ASK.search(n))
+    """A question, with or without its question mark («cuanto apiretal le doy»)."""
+    return ("?" in n or "¿" in n or bool(_PLAN_ASK.search(n)) or _fact_ask(n)
+            or bool(_QUESTION_OPENING.search(n.lstrip("¿¡( "))))
 
 
 def route_by_rules(
@@ -281,7 +357,7 @@ def route_by_rules(
       question a fact or an explanation with no worry attached.
     """
     del locale
-    n = normalize(message)
+    n = read_shorthand(normalize(message))
     if not n:
         return None
 
@@ -295,8 +371,7 @@ def route_by_rules(
 
     worried = bool(_WORRY.search(n))
     if (
-        _PAST_REPORT.search(n)
-        and _MEASUREMENT.search(n)
+        ((_PAST_REPORT.search(n) and _MEASUREMENT.search(n)) or _PRESENT_MEASURE.search(n))
         and not _asks_something(n)
         and not worried
     ):
@@ -312,16 +387,51 @@ def route_by_rules(
     if _NEEDS_AGE.search(n) and not _age_is_known(n, facts):
         return RouteDecision(intent="clarify", confidence=0.9, missing=["age"], via="rule")
 
-    if _FEVER_REPORT.search(n) and not _has_reading(message, n):
+    fever_report = _FEVER_REPORT.search(n) and not _NO_FEVER.search(n)
+    if fever_report and not _has_reading(message, n):
         return RouteDecision(intent="clarify", confidence=0.9, missing=["temperature"], via="rule")
+
+    if _VAGUE_WORRY.search(n) and not _SYMPTOM.search(n):
+        return RouteDecision(intent="clarify", confidence=0.9, missing=list(_VAGUE_ASKS),
+                             via="rule")
 
     if _PLAN_ASK.search(n) or (worried and _SYMPTOM.search(n)):
         return RouteDecision(intent="plan", confidence=0.9, via="rule")
 
-    if _FACT_ASK.search(n) and not worried:
+    if _fact_ask(n) and not worried:
         return RouteDecision(intent="question", confidence=0.85, via="rule")
 
     return None
+
+
+# A message shaped as a question: its opening word, in the three languages.
+_QUESTION_OPENING = re.compile(
+    r"^(?:(?:y|and|et|pero|but|mais) )?(?:cuant[oa]s?|cuando|como|donde|cual\w*|que|"
+    r"puedo|puede|se puede|es bueno|es malo|es normal|hay que|debo|tengo que|por que|"
+    r"how|what|when|where|which|why|is it|is that|are|can|could|should|do|does|"
+    r"combien|quand|comment|quel\w*|pourquoi|est-ce|peut|puis-je|dois|faut-il)\b"
+)
+
+
+def fallback_intent(message: str) -> str:
+    """The shape for a turn nobody could place: the rules abstained and the
+    classifier is down (the 429 of October, or its 2 s deadline).
+
+    Decision 1 of AGENT_GRAPH.md: the path with the most safeguards, the plan.
+    Only a plain question, with no symptom, no worry and no drug in it, takes
+    the short sourced answer. Never the tool loop, which has no answer
+    contract (the conversation battery, 2026-11-10).
+    """
+    n = read_shorthand(normalize(message)).lstrip("¿¡( ")
+    looks = _asks_something(n) or bool(_QUESTION_OPENING.search(n))
+    if looks and not (_SYMPTOM.search(n) or _WORRY.search(n) or _DRUG.search(n)):
+        return "question"
+    return "plan"
+
+
+def names_the_baby(message: str) -> bool:
+    """Whether the message names the baby: never `other`, whoever says so."""
+    return bool(_BABY_REF.search(read_shorthand(normalize(message))))
 
 
 # --- model ------------------------------------------------------------------

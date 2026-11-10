@@ -489,3 +489,128 @@ def test_her_button_presses_are_read_as_her_sentences_in_later_turns():
     c = conv.read("¿Y si sigue igual en un mes?", history)
     assert "Lleva menos de un mes en la guardería." in c.search_query
     assert "Menos de un mes · Sí, todo eso" not in c.search_query
+
+
+# --- the battery's gaps (2026-11-11): a referral, a redirect, her shorthand ---------
+
+from adelia.services.answer_contract import out_of_scope_reply, red_flag_reply  # noqa: E402
+
+FEVER_2M = "tiene 38,2 y no para de llorar"
+REFERRAL = red_flag_reply("fever_under_3_months", "es")
+
+
+@pytest.mark.parametrize("text", [
+    "le doy apiretal mientras", "y si le baja?", "puedo esperar a mañana?",
+    "lo baño con agua fria?", "se ha dormido ahora, la despierto para ir",
+])
+def test_after_a_referral_her_next_message_stays_in_the_flagged_topic(text):
+    """The battery: «le doy apiretal mientras» after a fever at 2 months got no
+    referral. The guard reads the topic only if the thread keeps her there."""
+    c = conv.read(text, [_u(FEVER_2M), _a(REFERRAL)])
+    assert c.kind == "follow_up"
+    assert c.referral == "fever_under_3_months"
+    assert c.topic == (FEVER_2M,)
+
+
+def test_a_referral_is_recognised_in_any_language():
+    fr = red_flag_reply("fever_under_3_months", "fr")
+    c = conv.read("il dort beaucoup aussi", [_u("mon bébé a 38,3"), _a(fr)])
+    assert c.referral == "fever_under_3_months"
+
+
+def test_a_topic_she_marks_as_new_after_a_referral_carries_no_referral():
+    c = conv.read("otra cosa, cuantas siestas tiene que hacer a los 2 meses?",
+                  [_u(FEVER_2M), _a(REFERRAL)])
+    assert c.kind == "new" and c.referral is None
+
+
+def test_a_topic_without_a_referral_has_none():
+    c = conv.read("y por la noche", [_u("cuantas siestas"), _a("Dos o tres [ev_1].")])
+    assert c.referral is None
+
+
+@pytest.mark.parametrize("text", ["vale y la niña duerme bien boca arriba",
+                                  "y mi bebé de 4 meses puede tomar fruta?"])
+def test_after_the_out_of_scope_redirect_a_message_about_the_baby_is_a_new_topic(text):
+    history = [_u("yo tengo dolor de espalda desde el parto"), _a(out_of_scope_reply("es"))]
+    c = conv.read(text, history)
+    assert c.kind == "new" and "espalda" not in c.search_query
+
+
+def test_after_the_redirect_more_about_herself_stays_in_that_topic():
+    history = [_u("yo tengo dolor de espalda desde el parto"), _a(out_of_scope_reply("es"))]
+    c = conv.read("y si estoy dando el pecho", history)
+    assert c.kind == "follow_up"
+
+
+@pytest.mark.parametrize("text", ["lo baño con agua fria?", "¿la abrigo mucho o poco?",
+                                  "le quito la ropa para dormir?"])
+def test_a_short_question_about_him_with_no_subject_of_its_own_goes_on_with_the_topic(text):
+    """«lo baño con agua fria?» after a fever was a new topic and lost the fever:
+    a question that opens on «lo/la/le» points back at the baby being talked about."""
+    history = [_u("tiene 38,5 y esta muy llorona"), _a("Ofrécele líquidos [ev_1].")]
+    c = conv.read(text, history)
+    assert c.kind == "follow_up"
+    assert "38,5" in c.search_query
+
+
+def test_a_long_self_contained_question_opening_on_le_is_still_a_new_topic():
+    history = [_u("cuantas siestas a los 8 meses"), _a("Dos [ev_1].")]
+    c = conv.read("le han salido unas manchas rojas en la barriga y en la espalda que no se "
+                  "van al apretar, ¿qué es?", history)
+    assert c.kind == "new"
+
+
+@pytest.mark.parametrize("text", ["en la guarde no juega con nadie siempre solo",
+                                  "desde q va a la guarde no juega con nadie"])
+def test_guarde_is_the_nursery(text):
+    c = conv.read(text, [])
+    assert c.behaviour and c.nursery
+    assert conv.ask_first(c, AGE_14) == ["nursery_time", "social_signals"]
+
+
+@pytest.mark.parametrize("text", ["he doesnt say any words yet", "she doesn't say a word",
+                                  "il ne dit aucun mot", "elle ne dit pas encore de mots"])
+def test_no_words_yet_is_a_development_worry_in_english_and_french(text):
+    c = conv.read(text, [])
+    assert c.behaviour
+    assert conv.ask_first(c, AGE_14) == ["since_when", "social_signals"]
+
+
+@pytest.mark.parametrize("text", ["tb tiene mocos", "tmb se despierta"])
+def test_tb_is_tambien_and_goes_on_with_the_topic(text):
+    history = [_u("tiene 38,5 y esta muy llorona"), _a("Ofrécele líquidos [ev_1].")]
+    c = conv.read(text, history)
+    assert c.kind == "follow_up" and c.via == "rule"
+
+
+def test_saying_he_has_no_fever_keeps_a_behaviour_topic_a_behaviour_topic():
+    """«Es tema nuevo. No tiene fiebre ninads» under the nursery question: the
+    fever she denies is not an illness that turns the topic into a sick baby."""
+    c = conv.read("Es tema nuevo. No tiene fiebre ninads", [_u(GUARDERIA), _a(ASKED)])
+    assert c.behaviour and c.nursery
+
+
+def test_a_fever_she_reports_still_makes_it_a_sick_baby():
+    c = conv.read("no juega con nadie y tiene fiebre", [])
+    assert not c.behaviour
+
+
+def test_drops_are_a_medicine_and_are_not_asked_about_when_nothing_is_found():
+    c = conv.read("le puedo dar gotas para los gases", [_u("llora y encoge las piernas"),
+                                                        _a("Puede ser cólico [ev_1].")])
+    assert conv.ask_when_nothing_found(c, AGE_14, intent="plan") == []
+
+
+@pytest.mark.parametrize("text", ["la caca es verde, es normal?", "la fiebre sube por la noche?"])
+def test_la_as_an_article_opens_its_own_short_question(text):
+    c = conv.read(text, [_u("cuantas siestas a los 8 meses"), _a("Dos [ev_1].")])
+    assert c.kind == "new"
+
+
+@pytest.mark.parametrize("text", ["puedo darle algo para el dolor",
+                                  "can i give her something for the pain",
+                                  "je peux lui donner quelque chose contre la douleur"])
+def test_something_for_the_pain_is_a_medicine_and_is_not_asked_about(text):
+    c = conv.read(text, [_u("le estan saliendo los dientes y babea"), _a("Es normal [ev_1].")])
+    assert conv.ask_when_nothing_found(c, AGE_14, intent="plan") == []

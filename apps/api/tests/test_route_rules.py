@@ -175,3 +175,137 @@ def test_a_record_does_not_need_the_age():
 def test_the_rules_abstain_when_nothing_matches():
     assert route_by_rules("hola", locale="es", has_account=True, facts=KNOWN_AGE) is None
     assert route_by_rules("   ", locale="es", has_account=True, facts=KNOWN_AGE) is None
+
+
+# --- her shorthand, a vague worry, the fallback (battery, 2026-11-11) ---------------
+#
+# The conversation battery found the rules did not read how a mother in a hurry
+# writes: «q hago» was not «qué hago», so «ha vomitado 3 veces esta mañana q hago»
+# became a diary line to note. Common Spanish chat shorthand is read as the word.
+
+from adelia.agent.route import fallback_intent  # noqa: E402
+
+
+@pytest.mark.parametrize("message", [
+    "ha vomitado 3 veces esta mañana q hago",
+    "y q hago si sube mas",
+    "ke hago le ha subido a 38,6",
+])
+def test_q_hago_is_que_hago(message):
+    d = route_by_rules(message, has_account=True, facts=KNOWN_AGE)
+    assert d is not None and d.intent == "plan"
+
+
+@pytest.mark.parametrize("message", [
+    "es normal q tenga fiebre despues de la vacuna",
+    "xq se despierta tanto por la noche",
+    "pq no quiere el biberon",
+    "cuanto tiene que dormir de dia a esta edad",
+    "cuanto deberia comer a esta edad",
+    "se despierta 4 veces es normal",
+    "is that normal",
+])
+def test_a_fact_or_a_why_in_her_shorthand_is_a_question(message):
+    d = route_by_rules(message, has_account=True, facts=KNOWN_AGE)
+    assert d is not None and d.intent == "question"
+
+
+def test_porque_inside_a_statement_is_not_a_why_question():
+    d = route_by_rules("no come xq le duelen los dientes", has_account=True, facts=KNOWN_AGE)
+    assert d is None or d.intent != "question"
+
+
+def test_shorthand_is_read_only_as_a_whole_word():
+    d = route_by_rules("ha tomado 120 ml de leche de vaca", has_account=True, facts=KNOWN_AGE)
+    assert d is not None and d.intent == "record"
+
+
+@pytest.mark.parametrize("message", [
+    "le pasa algo raro",
+    "no sé qué le pasa",
+    "no se q le pasa a mi bebe",
+    "something is wrong with her",
+    "je ne sais pas ce qu'il a",
+])
+def test_something_is_wrong_with_no_symptom_asks_how_he_is(message):
+    """AGENT_GRAPH.md, `clarify`: «le pasa algo» sin síntoma. The battery's «le pasa
+    algo raro» was searched, found nothing and refused."""
+    d = route_by_rules(message, has_account=True, facts=KNOWN_AGE)
+    assert d is not None and d.intent == "clarify"
+    assert d.missing == ["symptom"]
+
+
+def test_something_is_wrong_with_a_symptom_is_not_the_vague_question():
+    d = route_by_rules("no se que le pasa, tiene mocos y tose mucho desde hace 3 dias",
+                       has_account=True, facts=KNOWN_AGE)
+    assert d is not None and d.intent == "plan"
+
+
+@pytest.mark.parametrize("message", [
+    "is it ok to give him water", "can she sleep on her tummy",
+    "se puede dar agua a un bebe", "cuantas cucharadas de cereales",
+    "est-ce qu'il peut manger du fromage",
+])
+def test_with_the_classifier_down_a_plain_question_takes_the_short_answer(message):
+    assert fallback_intent(message) == "question"
+
+
+@pytest.mark.parametrize("message", [
+    "tiene mocos desde ayer", "hola, una cosa", "le puedo dar paracetamol?",
+    "is it ok that he cries so much", "llora mucho y no se que hacer",
+])
+def test_with_the_classifier_down_anything_else_takes_the_plan(message):
+    """Decision 1 of AGENT_GRAPH.md: what nobody could place gets the path with
+    the most safeguards. Only a plain question with no symptom, worry or drug is
+    a short answer."""
+    assert fallback_intent(message) == "plan"
+
+
+def test_night_wakings_depend_on_the_age_so_without_it_she_is_asked():
+    """tests/data/routing_es.json: «se despierta mucho por la noche es normal» with
+    no age is `clarify`. Reading «es normal» at the end must not answer it blind."""
+    d = route_by_rules("se despierta mucho por la noche es normal", facts=NO_AGE)
+    assert d is not None and d.intent == "clarify" and d.missing == ["age"]
+    d = route_by_rules("se despierta mucho por la noche es normal", facts=KNOWN_AGE)
+    assert d is not None and d.intent == "question"
+
+
+@pytest.mark.parametrize("message", ["no tiene fiebre", "sin fiebre pero vomita",
+                                     "she doesn't have a fever", "il n'a pas de fièvre"])
+def test_saying_there_is_no_fever_is_not_asked_for_the_thermometer(message):
+    """«no tiene fiebre» after vomiting (the battery) was asked «¿Cuánto ha marcado el
+    termómetro?»: the fever-report rule read the fever and not the «no»."""
+    d = route_by_rules(message, has_account=True, facts=KNOWN_AGE)
+    assert d is None or d.missing != ["temperature"]
+
+
+@pytest.mark.parametrize("message", ["hoy pesa 8,4 kg", "ya mide 72 cm", "pesa 9 kilos",
+                                     "she weighs 7.2 kg", "il pèse 8 kg"])
+def test_a_weight_or_a_length_in_the_present_is_a_diary_line(message):
+    d = route_by_rules(message, has_account=True, facts=KNOWN_AGE)
+    assert d is not None and d.intent == "record"
+
+
+@pytest.mark.parametrize("message", ["cuanto pesa un bebe de 9 meses",
+                                     "pesa 8,4 kg es normal?"])
+def test_a_question_about_weight_is_not_a_diary_line(message):
+    d = route_by_rules(message, has_account=True, facts=KNOWN_AGE)
+    assert d is None or d.intent != "record"
+
+
+def test_drops_are_a_medicine_for_the_fallback():
+    assert fallback_intent("le puedo dar gotas para los gases") == "plan"
+
+
+@pytest.mark.parametrize("message", ["cuanto apiretal le doy pesa 9 kilos",
+                                     "how much tylenol can i give she weighs 7 kg"])
+def test_a_dose_question_with_the_weight_in_it_is_never_a_diary_line(message):
+    d = route_by_rules(message, has_account=True, facts=KNOWN_AGE)
+    assert d is None or d.intent != "record"
+
+
+def test_vitamin_k_is_not_shorthand():
+    from adelia.agent.route import read_shorthand
+
+    assert read_shorthand("le pusieron la vitamina k al nacer") == (
+        "le pusieron la vitamina k al nacer")

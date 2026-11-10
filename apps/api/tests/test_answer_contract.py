@@ -158,3 +158,24 @@ def test_emergency_number_is_112_in_both_countries_and_falls_back():
 def test_unknown_red_flag_code_raises_instead_of_answering_generically():
     with pytest.raises(KeyError):
         red_flag_reply("not_a_flag", "es")
+
+
+# --- the redirect for a question that is not about the baby (2026-11-11) -------------
+
+
+@pytest.mark.parametrize("locale", ["es", "en", "fr"])
+def test_the_out_of_scope_redirect_is_one_sentence_about_her_baby(locale):
+    """AGENT_GRAPH.md: `other` (an adult, a pet, small talk) gets one sentence of
+    redirection. The battery found the agent sent it to the tool loop instead."""
+    from adelia.services.answer_contract import out_of_scope_reply
+
+    text = out_of_scope_reply(locale)
+    assert text.count(".") == 1 and text.endswith(".")
+    assert "24" in text and "—" not in text
+    assert text != no_evidence_reply(locale)
+
+
+def test_the_out_of_scope_redirect_falls_back_to_spanish():
+    from adelia.services.answer_contract import out_of_scope_reply
+
+    assert out_of_scope_reply("de") == out_of_scope_reply("es")

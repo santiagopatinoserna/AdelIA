@@ -20,6 +20,7 @@ Pinned here:
 """
 from __future__ import annotations
 
+import asyncio
 import io
 import json
 import sys
@@ -51,10 +52,15 @@ def _no_pinned_surface(monkeypatch):
 # --- 1. the scenarios ---------------------------------------------------------------
 
 
+HOLDOUT = "control_sobreajuste"
+
+
 def test_about_thirty_conversations_of_two_to_five_turns_mostly_in_spanish():
-    scenarios = cb.load_scenarios()
+    everything = cb.load_scenarios()
+    scenarios = [s for s in everything if HOLDOUT not in s["tags"]]
 
     assert 28 <= len(scenarios) <= 36
+    assert len({s["id"] for s in everything}) == len(everything)
     assert len({s["id"] for s in scenarios}) == len(scenarios)
     langs = Counter(s["locale"] for s in scenarios)
     assert langs["es"] > len(scenarios) / 2 and langs["en"] >= 3 and langs["fr"] >= 3
@@ -115,8 +121,84 @@ async def test_without_a_model_every_turn_meets_what_is_expected_but_the_known_g
     assert fixed == [], "a known gap now passes: remove its `gap` mark"
     totals = report["totals"]
     assert totals["turns"] > 60 and totals["ok"] == totals["turns"] - totals["gaps"]
-    assert 0 < totals["gaps"] <= 15
+    # Every gap of 2026-11-10 was fixed on 2026-11-11; the ratchet itself is
+    # pinned with a scenario of its own below.
+    assert 0 <= totals["gaps"] <= 15
     assert report["mode"] == "offline"
+
+
+def test_six_control_conversations_written_before_the_fixes_of_2026_11_11():
+    """The overfitting control: six conversations written before reading the
+    code of the fixes for the battery's gaps, in the three languages, with
+    turns where the classifier is down."""
+    holdout = [s for s in cb.load_scenarios() if HOLDOUT in s["tags"]]
+
+    assert len(holdout) == 6
+    assert {s["locale"] for s in holdout} == {"es", "en", "fr"}
+    assert any(t.get("classifier") == "down" for s in holdout for t in s["turns"])
+
+
+def test_a_gap_that_passes_is_reported_and_fails_the_run(monkeypatch):
+    scenario = {"id": "x", "locale": "es", "age_months": 8, "tags": [], "turns": [
+        {"say": "Se ha puesto morado", "expect": {"turn": "new", "kind": "red_flag"},
+         "gap": "un defecto ya arreglado"},
+    ]}
+    report = asyncio.run(cb.run_offline([scenario]))
+
+    assert report["totals"]["gaps_fixed"] == 1
+    monkeypatch.setattr(cb, "load_scenarios", lambda *_a, **_k: [scenario])
+    out = io.StringIO()
+    assert cb.main([], out=out) == 1
+    assert "quita su marca" in out.getvalue()
+
+
+async def test_a_turn_marked_classifier_down_takes_the_fallback_and_says_so():
+    scenario = {"id": "x", "locale": "en", "age_months": 9, "tags": [], "turns": [
+        {"say": "is it ok to give him water", "classifier": "down",
+         "expect": {"turn": "new", "kind": "answer", "shape": "question"}},
+    ]}
+    report = await cb.run_offline([scenario])
+
+    (turn,) = report["scenarios"][0]["turns"]
+    assert turn["intent_via"] == "down" and turn["ok"]
+    assert "track" not in turn["paid"]
+    assert report["totals"]["classifier_down"] == 1 and report["totals"]["fallback"] == 0
+
+
+async def test_with_the_classifier_down_no_turn_falls_into_the_tool_loop():
+    """The 429 of October: every turn the rules could not place went to the
+    agent's tool loop. With `classifier_down` the whole battery plays that day."""
+    scenarios = cb.load_scenarios()
+    report = await cb.run_offline(scenarios, classifier_down=True)
+
+    turns = [(s, t) for s in report["scenarios"] for t in s["turns"]]
+    loop = [(s["id"], t["n"]) for s, t in turns
+            if "track" in (t.get("paid") or []) and t.get("intent_via") != "rule"]
+    assert loop == []
+    expected = {(s["id"], n): turn["expect"]["kind"] for s in scenarios
+                for n, turn in enumerate(s["turns"], start=1)}
+    flags = [(s["id"], t["n"]) for s, t in turns if expected[(s["id"], t["n"])] == "red_flag"]
+    assert flags and all(t["kind"] == "red_flag" for s, t in turns
+                         if (s["id"], t["n"]) in flags)
+    assert report["totals"]["classifier_down"] > 0
+    assert report["classifier_down"] is True
+    assert "clasificador caído" in cb.render_text(report)
+
+
+def test_the_classifier_down_run_is_an_option(monkeypatch):
+    seen: list = []
+
+    async def _offline(scenarios, *, classifier_down=False):
+        seen.append(classifier_down)
+        return {"mode": "offline", "classifier_down": classifier_down, "scenarios": [],
+                "totals": cb._totals([])}
+
+    monkeypatch.setattr(cb, "run_offline", _offline)
+    monkeypatch.setattr(cb, "load_scenarios", lambda *_a, **_k: [])
+
+    cb.main(["--classifier-down"], out=io.StringIO())
+    cb.main([], out=io.StringIO())
+    assert seen == [True, False]
 
 
 async def test_the_report_counts_what_the_rules_decide_alone():

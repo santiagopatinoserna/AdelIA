@@ -483,3 +483,181 @@ async def test_the_chat_keeps_the_whole_refusal_every_time():
     history = [_u(SPOTS), _a(no_evidence_reply("es"))]
     events, _ = await _turn(s.chat(), "Pero no se le quitan con nada", history)
     assert _text(events) == no_evidence_reply("es")
+
+
+# --- the battery's gaps (2026-11-11) -------------------------------------------------
+#
+# scripts/conversation_battery.py marked 13 turns as known defects. The worst:
+# after a referral for fever at 2 months, «le doy apiretal mientras» was
+# answered as if the referral had never been said, because the guard read the
+# new message alone.
+
+from adelia.agent.route import route_by_rules  # noqa: E402
+from adelia.services.answer_contract import (  # noqa: E402
+    out_of_scope_reply,
+    red_flag_opening,
+    red_flag_reply,
+)
+
+AGE_2 = ProfileFacts(None, "Lucía", None, "F", 2)
+FEVER_2M = "tiene 38,2 y no para de llorar"
+
+
+class Rules(Surface):
+    """The real routing rules; where they abstain, this surface's decision (the
+    classifier's answer, or its fallback)."""
+
+    async def route(self, message, **kwargs):
+        self.calls.append(("route", message, kwargs))
+        ruled = route_by_rules(message, locale=kwargs.get("locale", "es"),
+                               has_account=kwargs.get("has_account", False),
+                               facts=kwargs.get("facts"))
+        return ruled or self.decision
+
+
+@pytest.mark.parametrize("locale, first, then", [
+    ("es", FEVER_2M, "le doy apiretal mientras"),
+    ("es", FEVER_2M, "y si le baja?"),
+    ("es", FEVER_2M, "puedo esperar a mañana?"),
+    ("es", FEVER_2M, "lo baño con agua fria?"),
+    ("fr", "mon bébé a 38,3", "il dort beaucoup aussi"),
+    ("fr", "mon bébé a 38,3", "je lui donne du doliprane en attendant ?"),
+])
+async def test_after_a_referral_her_follow_up_gets_the_referral_again(locale, first, then):
+    s = Surface()
+    history = [_u(first), _a(red_flag_reply("fever_under_3_months", locale))]
+    events, final = await _turn(s.agent(), then, history, facts=AGE_2, locale=locale)
+    assert final["kind"] == "red_flag"
+    assert final["flag"].code == "fever_under_3_months"
+    assert _text(events).startswith(red_flag_opening(locale))
+    assert s.calls == [], "no route, no retrieval, no model before the referral"
+    assert not _cards(events)
+
+
+async def test_the_referral_holds_on_its_own_code_when_her_words_alone_do_not_fire_it():
+    s = Surface()
+    history = [_u("lleva un rato raro"), _a(red_flag_reply("dehydration", "es"))]
+    _, final = await _turn(s.agent(), "y le doy agua?", history, facts=AGE_2)
+    assert final["kind"] == "red_flag" and final["flag"].code == "dehydration"
+    assert s.calls == []
+
+
+async def test_a_new_topic_she_marks_after_a_referral_is_routed_as_usual():
+    s = Surface(intent="question")
+    history = [_u(FEVER_2M), _a(red_flag_reply("fever_under_3_months", "es"))]
+    _, final = await _turn(s.agent(), "otra cosa, cuantas tomas hace por la noche a esta edad",
+                           history, facts=AGE_2)
+    assert final["kind"] == "answer" and "route" in s.names()
+
+
+async def test_after_noting_a_fever_her_question_is_routed_on_its_own():
+    """«y q hago si sube mas» inherited the diary rule of the topic's first message
+    and became a second card to note. The type of turn wins over that rule."""
+    s = Rules(intent="question")
+    history = [_u("ha tenido 38,4 a las 9"), _a("Anotado: 38,4 °C, hoy a las 9:00.")]
+    events, final = await _turn(s.agent(), "y q hago si sube mas", history)
+    assert final["intent"] == "plan" and final["kind"] == "answer"
+    assert not [c for c in _cards(events) if c["type"] == "confirm"]
+    _, routed, _ = s.one("route")
+    assert routed == "y q hago si sube mas"
+
+
+async def test_after_her_own_data_a_fact_question_is_not_the_tool_loop():
+    s = Rules(intent="plan")
+    history = [_u("que vacunas le tocan ahora"), _a("Le toca la triple vírica [ev_1].")]
+    _, final = await _turn(s.agent(), "es normal q tenga fiebre despues de la vacuna", history)
+    assert final["intent"] == "question" and "track" not in s.names()
+
+
+async def test_a_follow_up_the_rules_cannot_place_does_not_inherit_the_diary_rule():
+    s = Rules(intent="question", via="model")
+    history = [_u("ha dormido 3 h de siesta"), _a("Anotado: siesta de 3 h, hoy.")]
+    events, final = await _turn(s.agent(), "y eso es mucho", history)
+    assert final["intent"] == "question"
+    assert not [c for c in _cards(events) if c["type"] == "confirm"]
+
+
+async def test_a_follow_up_still_reads_its_topic_when_her_message_alone_says_nothing():
+    """«y por la noche» alone has no rule; with the topic it keeps reading as it did."""
+    s = Rules(intent="question", via="model")
+    _, _ = await _turn(s.agent(), "¿y por la noche?", [_u(SLEEP), _a(SLEEP_ANSWER)])
+    _, routed, _ = s.one("route")
+    assert routed == f"{SLEEP}\n¿y por la noche?"
+
+
+async def test_an_adult_question_on_the_agent_gets_the_redirect_and_nothing_else():
+    s = Surface(intent="other")
+    events, final = await _turn(s.agent(), "yo tengo dolor de espalda desde el parto", [])
+    assert final["kind"] == "no_evidence"
+    assert _text(events) == out_of_scope_reply("es")
+    assert s.names() == ["route"]
+    assert not _cards(events) and final["evidence_citations"] == []
+
+
+async def test_a_model_other_that_names_the_baby_is_answered_on_the_plan_path():
+    s = Surface(intent="other", via="model")
+    _, final = await _turn(s.agent(), "mi bebe y yo tenemos tos desde ayer", [])
+    assert final["intent"] == "plan" and "retrieve" in s.names() and "track" not in s.names()
+
+
+@pytest.mark.parametrize("message, shape", [
+    ("is it ok to give him water", "question"),
+    ("tiene mocos desde ayer", "plan"),
+    ("hola, una cosa", "plan"),
+])
+async def test_with_the_classifier_down_the_agent_never_falls_into_the_tool_loop(message, shape):
+    """The 429 of October: every turn the rules could not place went to the tool
+    loop, with no answer contract. Now it is the sourced answer (or its clarify
+    round), shaped by what the message looks like."""
+    s = Surface(intent="plan", via="fallback")
+    _, final = await _turn(s.agent(), message, [])
+    assert final["intent"] == shape and "track" not in s.names()
+    assert "retrieve" in s.names()
+
+
+async def test_the_chat_keeps_the_plan_for_its_fallback_and_for_other():
+    """The golden gate runs the chat without a model: its fallback stays the plan."""
+    for intent, via in (("plan", "fallback"), ("other", "rule")):
+        s = Surface(intent=intent, via=via)
+        _, final = await _turn(s.chat(), "is it ok to give him water", [])
+        assert final["intent"] == "plan" and final["kind"] == "answer"
+
+
+@pytest.mark.parametrize("message", ["Lleva dos semanas, y en casa sí, me mira y sonríe",
+                                     "y cuando me preocupo"])
+async def test_a_behaviour_topic_after_its_round_is_the_plan_without_paying_the_router(message):
+    """AGENT_GRAPH.md, `thread`: a behaviour worry asks first, then answers. After
+    the round there is nothing left for the routing model to decide: the plan,
+    with «Cuándo ir al médico», by rule (and also when the model is down)."""
+    s = Surface(intent="question", via="model")
+    history = [_u(GUARDERIA), _a(ASKED)]
+    if message.startswith("y "):
+        history += [_u("Menos de un mes · Sí, todo eso"), _a("Es la adaptación [ev_1].")]
+    _, final = await _turn(s.agent(), message, history)
+    assert final["intent"] == "plan" and final["intent_via"] == "rule"
+    assert "route" not in s.names()
+
+
+async def test_her_own_data_inside_a_behaviour_topic_still_goes_to_her_record():
+    s = Rules(intent="question", via="model")
+    history = [_u(GUARDERIA), _a(ASKED), _u("Menos de un mes · Sí, todo eso"),
+               _a("Es la adaptación [ev_1].")]
+    _, final = await _turn(s.agent(), "y en que percentil esta", history)
+    assert final["intent"] == "track"
+
+
+async def test_a_missing_symptom_is_asked_as_how_he_is_and_since_when():
+    """The routing set and the classifier call it `symptom`: there is no button for
+    a symptom, so the agent asks the two questions that make her say it."""
+    s = Surface(intent="clarify", missing=["symptom"], via="model")
+    events, final = await _turn(s.agent(), "le pasa algo pero no se que es", [])
+    (card,) = _cards(events)
+    assert [q["field"] for q in card["payload"]["questions"]] == ["general_state", "since_when"]
+    assert final["kind"] == "clarify"
+
+
+async def test_with_the_classifier_down_a_drug_said_earlier_in_the_topic_keeps_the_plan():
+    s = Surface(intent="plan", via="fallback")
+    _, final = await _turn(s.agent(), "¿y ahora?", [_u("¿le doy ibuprofeno?"),
+                                                     _a("No tengo fuentes [ev_1].")])
+    assert final["intent"] == "plan" and "track" not in s.names()
