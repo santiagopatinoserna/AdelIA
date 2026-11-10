@@ -3,7 +3,9 @@
 Read-only. It runs one read-only transaction on usage_counters (services/usage)
 and prices it with the list prices of services/usage_prices, so the figures
 are an ESTIMATE at list price, not the invoice. Calls of the golden gate
-(surface `golden`) are shown apart and never counted as real use; models
+(surface `golden`) and of test traffic (surface `qa`: X-AdelIA-QA requests and
+scripts/conversation_battery.py, counted since 2026-11-10) are shown apart and
+never counted as real use nor in the month's projection; models
 without an official price are named with their calls instead of priced at a
 guess. Santiago's question of 2026-11-08: where do the ~200 $ a month of
 Anthropic go.
@@ -49,6 +51,7 @@ from adelia.services.usage_prices import (  # noqa: E402
 
 DEFAULT_BUDGET_USD = 200.0
 GOLDEN = "golden"
+QA = "qa"
 
 
 @asynccontextmanager
@@ -86,12 +89,13 @@ def _period(rows: list[dict[str, Any]], start: date, end: date) -> dict[str, Any
     inside = [r for r in rows if start <= r["day"] <= end]
     models: dict[tuple[str, str], dict[str, Any]] = {}
     by_surface: dict[str, float] = {}
-    golden = {"calls": 0, "estimated_usd": 0.0}
+    apart = {GOLDEN: {"calls": 0, "estimated_usd": 0.0}, QA: {"calls": 0, "estimated_usd": 0.0}}
     for r in inside:
         usd = estimate_usd(r["provider"], r["model"], r)
-        if r["surface"] == GOLDEN:
-            golden["calls"] += r["calls"]
-            golden["estimated_usd"] = round(golden["estimated_usd"] + (usd or 0), 6)
+        if r["surface"] in apart:
+            bucket = apart[r["surface"]]
+            bucket["calls"] += r["calls"]
+            bucket["estimated_usd"] = round(bucket["estimated_usd"] + (usd or 0), 6)
             continue
         entry = models.setdefault(
             (r["provider"], r["model"]),
@@ -127,7 +131,8 @@ def _period(rows: list[dict[str, Any]], start: date, end: date) -> dict[str, Any
             "by_surface": dict(sorted(by_surface.items(), key=lambda kv: -kv[1])),
             "by_model": priced,
         },
-        "golden": golden,
+        "golden": apart[GOLDEN],
+        "qa": apart[QA],
         "unpriced": unpriced,
     }
 
@@ -202,6 +207,9 @@ def render_text(report: dict) -> str:
         if p["golden"]["calls"]:
             lines.append(f"  aparte, puerta golden: {p['golden']['calls']} llamadas, "
                          f"{_usd(p['golden']['estimated_usd'])}")
+        if p["qa"]["calls"]:
+            lines.append(f"  aparte, pruebas (QA): {p['qa']['calls']} llamadas, "
+                         f"{_usd(p['qa']['estimated_usd'])}")
         lines.append("")
     proj = report["month_projection"]
     budget = report["budget_usd"]

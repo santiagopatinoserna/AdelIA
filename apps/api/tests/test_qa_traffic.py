@@ -4,9 +4,10 @@ The production smoke suite (apps/web/e2e-prod) and other agents' runs used to
 add visits, guest signups, short-link clicks and provider calls to the same
 counters Santiago reads to decide where the product goes. A request carrying
 `X-AdelIA-QA: 1` is still served exactly as any other; it is only left out of
-the anonymous funnel, the consented analytics, the /r/ clicks and the usage
-counter. Not a security control: it opens nothing and closes nothing, and the
-demo's daily spending ceiling still counts it.
+the anonymous funnel, the consented analytics and the /r/ clicks. Its provider
+calls are counted under `qa` since 2026-11-10, apart from real use. Not a
+security control: it opens nothing and closes nothing, and the demo's daily
+spending ceiling still counts it.
 """
 from __future__ import annotations
 
@@ -251,16 +252,28 @@ async def test_a_test_batch_and_a_test_consent_are_not_stored(client):
 # --- the usage counter -----------------------------------------------------------------
 
 
-async def test_a_provider_call_of_test_traffic_is_not_counted(monkeypatch):
-    written: list[str] = []
+async def test_a_provider_call_of_test_traffic_is_counted_apart_under_qa(monkeypatch):
+    """Until 2026-11-10 a QA call was not counted at all, so what the test runs
+    cost (a conversation battery with the model) was invisible. Now it is
+    counted, under its own label, whatever surface it came through."""
+    written: list[tuple[str, str]] = []
 
-    async def _record(operation, provider, model, **_):
-        written.append(operation)
+    async def _record(operation, provider, model, *, surface=None, **_):
+        written.append((operation, surface))
 
     monkeypatch.setattr(usage, "record", _record)
-    with qa_traffic.marked():
-        usage.count("chat", "mistral", "mistral-small-latest", input_tokens=10)
-    usage.count("embed", "mistral", "mistral-embed", input_tokens=3)
+    with usage.surface("agent"):
+        with qa_traffic.marked():
+            usage.count("chat", "mistral", "mistral-small-latest", input_tokens=10)
+        usage.count("embed", "mistral", "mistral-embed", input_tokens=3)
     await asyncio.gather(*usage._live_pending())
 
-    assert written == ["embed"]
+    assert written == [("chat", "qa"), ("embed", "agent")]
+
+
+def test_qa_is_a_surface_of_its_own_even_when_the_process_pins_another(monkeypatch):
+    monkeypatch.setenv(usage.SURFACE_ENV, "golden")
+    assert "qa" in usage.SURFACES
+    with qa_traffic.marked():
+        assert usage.current_surface() == "qa"
+    assert usage.current_surface() == "golden"

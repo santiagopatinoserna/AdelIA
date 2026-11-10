@@ -8,12 +8,18 @@ counters Santiago reads to decide what to do next. A request that carries
 * the anonymous funnel (services/funnel.bump_quietly, and the signups and
   activations it derives from users, through the guest's email below),
 * the consented analytics (services/analytics: no batch, no consent proof),
-* the clicks of the short links (/funnel/link/<code>),
-* the usage counter (services/usage.count).
+* the clicks of the short links (/funnel/link/<code>).
+
+Its provider calls are counted, apart (2026-11-10). Until then they were left
+out of the usage counter too, and what the test runs cost could not be seen:
+a conversation battery with the model spends real money. services/usage now
+labels them `qa`, and the summary and scripts/usage_report.py show that cost
+next to the real use, never in it.
 
 This is hygiene for the figures, not security. Anybody can send the header and
-all it buys them is not being counted. It opens no route, skips no rate limit,
-and the demo's daily spending ceiling still counts every ask (routers/demo).
+all it buys them is being counted as a test instead of as a visitor. It opens
+no route, skips no rate limit, and the demo's daily spending ceiling still
+counts every ask (routers/demo).
 Do not hang anything else on it.
 
 The marker is a ContextVar set by a pure ASGI middleware for the length of

@@ -85,5 +85,31 @@ def estimate_usd(provider: str, model: str, counts: Mapping[str, Any]) -> float 
     return round(usd, 6)
 
 
+_COLUMNS = (("input_tokens", "input", 1_000_000), ("output_tokens", "output", 1_000_000),
+            ("cache_read_tokens", "cache_read", 1_000_000),
+            ("cache_write_tokens", "cache_write", 1_000_000),
+            ("pages", "per_page", 1), ("audio_seconds", "per_audio_minute", 60))
+
+
+def ceiling_usd(counts: Mapping[str, Any]) -> float | None:
+    """An upper bound for `counts` on a model without a price: each column at the
+    dearest price any model in the table has for it. None when a column has a
+    count and no model in the table prices it, so nothing can bound it.
+
+    For a spending cap only (scripts/conversation_battery.py), never for a
+    report: an unpriced model is still reported apart, as above.
+    """
+    usd = 0.0
+    for counter, column, per in _COLUMNS:
+        amount = float(counts.get(counter) or 0)
+        if not amount:
+            continue
+        dearest = max((getattr(p, column) for p in PRICES.values()), default=0.0)
+        if dearest <= 0:
+            return None
+        usd += amount / per * dearest
+    return round(usd, 6)
+
+
 def unpriced_reason(provider: str, model: str) -> str:
     return UNPRICED.get((provider, model), "no official price recorded in usage_prices.json")

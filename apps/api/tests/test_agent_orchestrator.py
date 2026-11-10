@@ -287,3 +287,27 @@ async def test_the_agent_hands_the_profile_name_and_age_to_the_subject(monkeypat
          "Mi bebé de 7 meses: Tiene diarrea desde ayer, ¿qué hago?"],
         ["Nora tiene diarrea, ¿qué hago?"],
     ]
+
+
+async def test_the_final_state_is_handed_to_an_observer_without_changing_the_stream():
+    """The conversation battery (scripts/conversation_battery.py) runs a
+    /dashboard turn through this very function and needs to know what the
+    graph decided (kind, intent, the kind of turn), which the SSE frames do
+    not carry. The frames stay exactly what the panel reads."""
+    from adelia.enrichment.profile_service import ProfileFacts
+
+    facts = ProfileFacts(profile_id=None, display_name="Adel", date_of_birth=None,
+                         sex="F", age_months=2)
+    seen: list[dict] = []
+    with patch("adelia.agent.orchestrator.get_provider", _exploding_provider), \
+         patch("adelia.agent.orchestrator.load_profile_facts", return_value=facts):
+        observed = await _collect(run_turn(
+            user_id=uuid4(), profile_id=None, message="Tiene 38,5 de fiebre",
+            on_final=seen.append))
+        plain = await _collect(run_turn(
+            user_id=uuid4(), profile_id=None, message="Tiene 38,5 de fiebre"))
+
+    assert [(e.type, e.content) for e in observed] == [(e.type, e.content) for e in plain]
+    (final,) = seen
+    assert final["kind"] == "red_flag"
+    assert final["conversation"].kind == "new"

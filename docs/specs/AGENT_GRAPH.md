@@ -214,6 +214,12 @@ LangChain.
   responde aunque siga faltando algo.
 - **Front**: Playwright con respuestas simuladas para los tres formatos
   (plan, respuesta corta, pregunta con botones) a 390 px.
+- **Conversación** (2026-11-10): `scripts/conversation_battery.py`, unas 30 conversaciones
+  de 2 a 5 turnos (`scripts/conversation_scenarios.json`) con lo esperado por turno. Sin
+  modelo (CI) dice cuántos turnos cumplen; los defectos conocidos llevan `gap` con su
+  motivo y el test obliga a quitar la marca cuando se arreglan. Con `--with-model
+  --budget-usd N`, en el contenedor de la API, cada turno pasa por `run_turn` con una
+  invitada QA que se borra al terminar, y el gasto cuenta bajo la etiqueta `qa`.
 
 ## Orden de construcción (cada paso desplegable por separado)
 
