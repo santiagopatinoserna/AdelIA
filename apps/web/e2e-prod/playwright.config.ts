@@ -30,6 +30,8 @@ const browser =
 
 export default defineConfig({
   testDir: ".",
+  // The usability battery has its own config and run (usability/README.md).
+  testIgnore: ["usability/**"],
   // One guest, one conversation, in order: never two at once on production.
   workers: 1,
   fullyParallel: false,

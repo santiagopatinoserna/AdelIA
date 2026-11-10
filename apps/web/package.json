@@ -8,7 +8,8 @@
     "start": "next start",
     "typecheck": "tsc --noEmit",
     "e2e": "playwright test",
-    "smoke:prod": "playwright test -c e2e-prod/playwright.config.ts"
+    "smoke:prod": "playwright test -c e2e-prod/playwright.config.ts",
+    "usability:prod": "playwright test -c e2e-prod/usability/playwright.config.ts"
   },
   "dependencies": {
     "@auth/core": "^0.34.3",

@@ -3,6 +3,9 @@
 Lo que Hermes ejecuta después de un despliegue, en lugar de escribir scripts de Playwright al
 vuelo. No forma parte de CI: `playwright.config.ts` de la raíz solo lee `e2e/`.
 
+La batería de usabilidad (anchos, teclado, zonas táctiles, axe, rendimiento en móvil, recorridos)
+vive en `usability/`, con su propia configuración: `usability/README.md`.
+
 ## Ejecutar
 
 Desde la raíz del repo, con Node 22 en el `PATH`:
