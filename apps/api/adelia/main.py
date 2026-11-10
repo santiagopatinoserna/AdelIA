@@ -360,8 +360,8 @@ async def request_logging(request: Request, call_next):
     )
     return response
 
-# Test traffic (X-AdelIA-QA: 1) is served as usual and only left out of the
-# counters (adelia/qa_traffic.py).
+# Test traffic (X-AdelIA-QA: 1) is served as usual, left out of the funnel and
+# the analytics, and its provider calls are counted apart (adelia/qa_traffic.py).
 app.add_middleware(QATrafficMiddleware)
 
 app.add_middleware(

@@ -30,6 +30,14 @@ inside (embed_texts, the agent provider) inherit it without a parameter.
 A golden gate process exports ADELIA_USAGE_SURFACE=golden, which pins the
 label for the whole process, so tests never pass for use.
 
+Test traffic is counted apart, not left out (2026-11-10). A request with
+`X-AdelIA-QA: 1` (adelia/qa_traffic.py) used to be skipped here, so what the
+smoke runs and a conversation battery with the model cost was invisible. Its
+calls now go under the surface `qa`, whatever door they came through, and the
+summary and scripts/usage_report.py show them next to the real use, never in
+it. `metered()` lets one run read what its own calls cost from this same count
+(scripts/conversation_battery.py stops at its budget with it).
+
 Prices are not stored: services/usage_prices holds the list prices with their
 source, and the summary and scripts/usage_report.py apply them when read.
 """
@@ -51,6 +59,7 @@ from adelia import qa_traffic
 from adelia.db import AsyncSessionLocal
 from adelia.models import Briefing, ChatMessage, Document, UsageCounter, User
 from adelia.services.funnel import MAX_SUMMARY_DAYS, _utc_date, utc_today
+from adelia.services import usage_prices
 from adelia.services.usage_prices import estimate_usd, unpriced_reason
 
 logger = logging.getLogger(__name__)
@@ -58,8 +67,11 @@ logger = logging.getLogger(__name__)
 # Closed lists for the same reason as funnel.COUNTED_EVENTS: an open string
 # column is an invitation to log something about the person in a label.
 SURFACES = (
-    "chat", "agent", "guest", "demo", "ingestion", "briefing", "corpus", "golden", "other",
+    "chat", "agent", "guest", "demo", "ingestion", "briefing", "corpus", "golden", "qa",
+    "other",
 )
+#: Test traffic (adelia/qa_traffic.py): counted, but never as real use.
+QA_SURFACE = "qa"
 OPERATIONS = (
     "chat", "agent_step", "route", "record", "translate", "ocr", "extract", "embed",
     "transcribe", "summarize", "briefing_qa",
@@ -83,6 +95,7 @@ MAX_PENDING = 256
 _surface: ContextVar[str] = ContextVar("adelia_usage_surface", default="other")
 _json_purpose: ContextVar[str] = ContextVar("adelia_usage_json_purpose", default="route")
 _PENDING: set[asyncio.Task] = set()
+_meter: ContextVar["Meter | None"] = ContextVar("adelia_usage_meter", default=None)
 
 
 def _check_surface(name: str) -> None:
@@ -156,6 +169,8 @@ async def surface_for_account(user_id: Any, default: str) -> str:
 
 
 def current_surface() -> str:
+    if qa_traffic.is_qa():
+        return QA_SURFACE
     pinned = os.environ.get(SURFACE_ENV, "").strip()
     if pinned in SURFACES:
         return pinned
@@ -247,6 +262,73 @@ def openai_style_tokens(response_or_usage: Any) -> dict[str, int]:
     }
 
 
+# --- a run's own meter ---------------------------------------------------------------
+
+
+class Meter:
+    """The calls counted inside one `metered()` block, priced at list price.
+
+    A list in a ContextVar: the tasks the block creates (the route
+    classifier's deadline, the embedding) get a copy of the context that
+    points at the same list, so their calls are seen too. Nothing about the
+    person is kept, only what count() receives.
+    """
+
+    def __init__(self) -> None:
+        self.calls: list[dict[str, Any]] = []
+
+    def estimated_usd(self) -> float:
+        return round(sum(
+            estimate_usd(c["provider"], c["model"], c) or 0.0 for c in self.calls), 6)
+
+    def capped_usd(self) -> float | None:
+        """What a spending cap must assume: list price, and a model without one
+        at the dearest known price (usage_prices.ceiling_usd). None when some
+        call cannot be bounded at all."""
+        total = 0.0
+        for c in self.calls:
+            usd = estimate_usd(c["provider"], c["model"], c)
+            if usd is None:
+                usd = usage_prices.ceiling_usd(c)
+            if usd is None:
+                return None
+            total += usd
+        return round(total, 6)
+
+    def unpriced(self) -> list[str]:
+        """provider/model of every call without an official price, once each."""
+        out: list[str] = []
+        for c in self.calls:
+            if estimate_usd(c["provider"], c["model"], c) is None:
+                name = f"{c['provider']}/{c['model']}"
+                if name not in out:
+                    out.append(name)
+        return out
+
+
+@contextmanager
+def metered() -> Iterator[Meter]:
+    """Every call counted inside the block is also added to the Meter it yields."""
+    meter = Meter()
+    token = _meter.set(meter)
+    try:
+        yield meter
+    finally:
+        _meter.reset(token)
+
+
+def _to_meter(operation: str, provider: str, model: str | None, surface: str,
+              counts: dict[str, int]) -> None:
+    meter = _meter.get()
+    if meter is None:
+        return
+    entry: dict[str, Any] = {"operation": operation, "provider": provider,
+                             "model": model or "unknown", "surface": surface}
+    entry.update({name: _count(counts.get(name, 0)) for name in COUNTERS if name != "calls"})
+    entry["calls"] = 1
+    meter.calls.append(entry)
+
+
 # --- writing ------------------------------------------------------------------------
 
 
@@ -277,18 +359,17 @@ def count(operation: str, provider: str, model: str | None, **counts: int) -> No
     the answer never waits for the database, and a failed or hung write is a
     warning in the log, never an error she sees. Only the operation and the
     provider are logged, never the arguments. Calls made for test traffic
-    (adelia/qa_traffic.py) are not counted.
+    (adelia/qa_traffic.py) are counted under `qa` (current_surface).
     """
-    if qa_traffic.is_qa():
-        return
     coro = None
     try:
+        label = current_surface()
+        _to_meter(operation, provider, model, label, counts)
         if len(_live_pending()) >= MAX_PENDING:
             logger.warning("usage: could not count %s/%s: too many pending writes",
                            operation, provider)
             return
-        coro = record(operation, provider, model, surface=current_surface(), day=utc_today(),
-                      **counts)
+        coro = record(operation, provider, model, surface=label, day=utc_today(), **counts)
         _spawn(coro)
     except Exception:  # noqa: BLE001 - a missed count is not an incident
         if coro is not None:
@@ -421,7 +502,9 @@ async def summary(days: int = 30, *, today: date | None = None) -> dict[str, Any
     One row per label set with the window's sums and its list-price estimate,
     biggest consumers first, the same totals per day and provider for the
     trend, and `active_accounts` for the window. Models without an official
-    price are named in `unpriced` and left out of `estimated_usd`.
+    price are named in `unpriced` and left out of `estimated_usd`. Test
+    traffic keeps its rows in `totals` (surface `qa`) but its cost is in `qa`,
+    never in `estimated_usd` nor in the daily trend.
     """
     days = max(1, min(days, MAX_SUMMARY_DAYS))
     end = today or utc_today()
@@ -441,7 +524,7 @@ async def summary(days: int = 30, *, today: date | None = None) -> dict[str, Any
         daily_rows = (
             await session.execute(
                 sa.select(UsageCounter.day, UsageCounter.provider, UsageCounter.model, *sums)
-                .where(*window)
+                .where(*window, UsageCounter.surface != QA_SURFACE)
                 .group_by(UsageCounter.day, UsageCounter.provider, UsageCounter.model)
                 .order_by(UsageCounter.day.desc(), UsageCounter.provider)
             )
@@ -475,11 +558,15 @@ async def summary(days: int = 30, *, today: date | None = None) -> dict[str, Any
         entry["estimated_usd"] = round(
             entry["estimated_usd"] + (estimate_usd(r.provider, r.model, row) or 0), 6)
 
+    qa = [r for r in totals if r["surface"] == QA_SURFACE]
     return {
         "from": start.isoformat(),
         "to": end.isoformat(),
         "active_accounts": active,
-        "estimated_usd": round(sum(r["estimated_usd"] or 0 for r in totals), 6),
+        "estimated_usd": round(
+            sum(r["estimated_usd"] or 0 for r in totals if r["surface"] != QA_SURFACE), 6),
+        "qa": {"calls": sum(r["calls"] for r in qa),
+               "estimated_usd": round(sum(r["estimated_usd"] or 0 for r in qa), 6)},
         "unpriced": unpriced,
         "totals": totals,
         "daily": list(by_day.values()),

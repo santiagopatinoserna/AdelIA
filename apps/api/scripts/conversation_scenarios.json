@@ -1,0 +1,1372 @@
+{
+  "about": "Conversation battery (scripts/conversation_battery.py). Each turn: what she writes (say), presses (press) or confirms (confirm); offline only, whether the fake retrieval finds a fragment (evidence, default true) and what the routing classifier answers when the rules abstain (classifier, recorded; production calls the model there); what the turn must do (expect); and, when it does not do it because of a known defect of the product, why (gap). Written the way a mother in a hurry writes: short, typos, few question marks. The two conversations of 2026-11-09 are word for word.",
+  "scenarios": [
+    {
+      "id": "guarderia-real-9nov-1",
+      "locale": "es",
+      "age_months": 14,
+      "tags": [
+        "guarderia",
+        "conversacion_real",
+        "desarrollo"
+      ],
+      "turns": [
+        {
+          "say": "Mi bebé en la guardería es el único que en tiempo libre se queda sentado en una esquina sin moverse. Todos los otros juegan pero él no se mueve. Pero en casa no es así, en casa juega",
+          "expect": {
+            "turn": "new",
+            "kind": "clarify",
+            "asks": [
+              "nursery_time",
+              "social_signals"
+            ],
+            "card": "clarify"
+          }
+        },
+        {
+          "say": "Pero todos los días está así",
+          "expect": {
+            "turn": "follow_up",
+            "kind": "answer",
+            "shape": "plan",
+            "doctor": true,
+            "not_seen": [
+              "enfermo"
+            ]
+          },
+          "classifier": {
+            "intent": "plan"
+          }
+        },
+        {
+          "say": "No es enfermo",
+          "expect": {
+            "turn": "correction",
+            "kind": "answer",
+            "shape": "plan",
+            "doctor": true
+          },
+          "classifier": {
+            "intent": "plan"
+          }
+        }
+      ]
+    },
+    {
+      "id": "guarderia-real-9nov-2",
+      "locale": "es",
+      "age_months": 14,
+      "tags": [
+        "guarderia",
+        "conversacion_real",
+        "anotar",
+        "fiebre",
+        "cambio_tema"
+      ],
+      "turns": [
+        {
+          "say": "Tiene 38.7. Seguimos su temp",
+          "expect": {
+            "turn": "new",
+            "kind": "confirm",
+            "card": "confirm"
+          },
+          "classifier": {
+            "intent": "record"
+          }
+        },
+        {
+          "confirm": true,
+          "expect": {
+            "kind": "recorded"
+          }
+        },
+        {
+          "say": "Mi bebé en la guardería es el único que en tiempo libre se queda sentado en una esquina sin moverse. Todos los otros juegan pero él no se mueve. Pero en casa no es así, en casa juega",
+          "expect": {
+            "turn": "new",
+            "kind": "clarify",
+            "asks": [
+              "nursery_time",
+              "social_signals"
+            ],
+            "not_seen": [
+              "38"
+            ]
+          }
+        },
+        {
+          "say": "Es tema nuevo. No tiene fiebre ninads",
+          "expect": {
+            "turn": "follow_up",
+            "kind": "answer",
+            "shape": "plan",
+            "not_seen": [
+              "38,7",
+              "38.7"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "guarderia-botones",
+      "locale": "es",
+      "age_months": 13,
+      "tags": [
+        "guarderia",
+        "desarrollo"
+      ],
+      "turns": [
+        {
+          "say": "en la guarde no juega con nadie siempre solo",
+          "expect": {
+            "turn": "new",
+            "kind": "clarify",
+            "asks": [
+              "nursery_time",
+              "social_signals"
+            ]
+          },
+          "gap": "«guarde» (guardería abreviado) no se lee como guardería: pregunta desde cuándo en vez de cuánto lleva"
+        },
+        {
+          "press": [
+            {
+              "field": "since_when",
+              "value": "weeks"
+            },
+            {
+              "field": "social_signals",
+              "value": "all"
+            }
+          ],
+          "expect": {
+            "turn": "follow_up",
+            "kind": "answer",
+            "shape": "plan"
+          },
+          "classifier": {
+            "intent": "plan"
+          }
+        },
+        {
+          "say": "y cuanto tarda en adaptarse",
+          "expect": {
+            "turn": "follow_up",
+            "kind": "answer"
+          },
+          "classifier": {
+            "intent": "question"
+          }
+        }
+      ]
+    },
+    {
+      "id": "fiebre-sin-cifra",
+      "locale": "es",
+      "age_months": 8,
+      "tags": [
+        "fiebre"
+      ],
+      "turns": [
+        {
+          "say": "tiene fiebre desde esta mañana",
+          "expect": {
+            "turn": "new",
+            "kind": "clarify",
+            "asks": [
+              "temperature"
+            ],
+            "card": "clarify"
+          }
+        },
+        {
+          "press": [
+            {
+              "field": "temperature",
+              "value": "38-38.9"
+            }
+          ],
+          "expect": {
+            "turn": "follow_up",
+            "kind": "answer",
+            "shape": "plan",
+            "doctor": true
+          },
+          "classifier": {
+            "intent": "plan"
+          }
+        },
+        {
+          "say": "y si no le baja",
+          "expect": {
+            "turn": "follow_up",
+            "kind": "answer",
+            "shape": "plan",
+            "doctor": true
+          },
+          "classifier": {
+            "intent": "plan"
+          }
+        }
+      ]
+    },
+    {
+      "id": "fiebre-con-cifra-noche",
+      "locale": "es",
+      "age_months": 10,
+      "tags": [
+        "fiebre",
+        "noche"
+      ],
+      "turns": [
+        {
+          "say": "tiene 38,5 y esta muy llorona",
+          "expect": {
+            "turn": "new",
+            "kind": "answer",
+            "shape": "plan",
+            "doctor": true
+          },
+          "classifier": {
+            "intent": "plan"
+          }
+        },
+        {
+          "say": "y por la noche q hago",
+          "expect": {
+            "turn": "follow_up",
+            "kind": "answer",
+            "shape": "plan",
+            "doctor": true
+          },
+          "classifier": {
+            "intent": "plan"
+          }
+        },
+        {
+          "say": "lo baño con agua fria?",
+          "expect": {
+            "turn": "follow_up",
+            "kind": "answer"
+          },
+          "classifier": {
+            "intent": "question"
+          },
+          "gap": "una pregunta corta sobre el mismo cuidado («lo baño con agua fria?») se lee como tema nuevo y pierde la fiebre"
+        }
+      ]
+    },
+    {
+      "id": "fiebre-menor-3-meses",
+      "locale": "es",
+      "age_months": 2,
+      "tags": [
+        "fiebre",
+        "fiebre_menor_3m",
+        "dosis"
+      ],
+      "turns": [
+        {
+          "say": "tiene 38,2 y no para de llorar",
+          "expect": {
+            "turn": "new",
+            "kind": "red_flag"
+          }
+        },
+        {
+          "say": "le doy apiretal mientras",
+          "evidence": false,
+          "expect": {
+            "turn": "follow_up",
+            "kind": "red_flag"
+          },
+          "gap": "un seguimiento tras la derivación (fiebre con 2 meses) se responde como si no se hubiera dicho: la guardia solo lee el mensaje nuevo"
+        }
+      ]
+    },
+    {
+      "id": "sueño-y-por-la-noche",
+      "locale": "es",
+      "age_months": 8,
+      "tags": [
+        "sueño",
+        "noche"
+      ],
+      "turns": [
+        {
+          "say": "cuantas siestas tiene q hacer",
+          "expect": {
+            "turn": "new",
+            "kind": "answer",
+            "shape": "question"
+          },
+          "classifier": {
+            "intent": "question"
+          }
+        },
+        {
+          "say": "¿y por la noche?",
+          "expect": {
+            "turn": "follow_up",
+            "kind": "answer",
+            "shape": "question"
+          },
+          "classifier": {
+            "intent": "question"
+          }
+        },
+        {
+          "say": "se despierta 4 veces es normal",
+          "expect": {
+            "turn": "follow_up",
+            "kind": "answer"
+          },
+          "classifier": {
+            "intent": "question"
+          }
+        }
+      ]
+    },
+    {
+      "id": "tomas-pecho",
+      "locale": "es",
+      "age_months": 3,
+      "tags": [
+        "tomas"
+      ],
+      "turns": [
+        {
+          "say": "cada cuanto tiene q comer",
+          "expect": {
+            "turn": "new",
+            "kind": "answer",
+            "shape": "question"
+          },
+          "classifier": {
+            "intent": "question"
+          }
+        },
+        {
+          "say": "toma pecho",
+          "expect": {
+            "turn": "follow_up",
+            "kind": "answer"
+          },
+          "classifier": {
+            "intent": "question"
+          }
+        },
+        {
+          "say": "y por la noche tb",
+          "expect": {
+            "turn": "follow_up",
+            "kind": "answer"
+          },
+          "classifier": {
+            "intent": "question"
+          }
+        }
+      ]
+    },
+    {
+      "id": "complementaria",
+      "locale": "es",
+      "age_months": 6,
+      "tags": [
+        "complementaria"
+      ],
+      "turns": [
+        {
+          "say": "cuando empiezo con la fruta",
+          "expect": {
+            "turn": "new",
+            "kind": "answer",
+            "shape": "question"
+          }
+        },
+        {
+          "say": "y el huevo",
+          "expect": {
+            "turn": "follow_up",
+            "kind": "answer"
+          }
+        },
+        {
+          "say": "y la carne cuanta",
+          "expect": {
+            "turn": "follow_up",
+            "kind": "answer"
+          }
+        }
+      ]
+    },
+    {
+      "id": "no-dice-palabras",
+      "locale": "es",
+      "age_months": 18,
+      "tags": [
+        "desarrollo"
+      ],
+      "turns": [
+        {
+          "say": "no dice ninguna palabra todavia",
+          "expect": {
+            "turn": "new",
+            "kind": "clarify",
+            "asks": [
+              "since_when",
+              "social_signals"
+            ]
+          }
+        },
+        {
+          "say": "siempre ha sido asi, si me mira y se rie",
+          "expect": {
+            "turn": "follow_up",
+            "kind": "answer",
+            "shape": "plan",
+            "doctor": true
+          },
+          "classifier": {
+            "intent": "plan"
+          }
+        },
+        {
+          "say": "y cuando me preocupo",
+          "expect": {
+            "turn": "follow_up",
+            "kind": "answer"
+          },
+          "classifier": {
+            "intent": "plan"
+          }
+        }
+      ]
+    },
+    {
+      "id": "no-gatea",
+      "locale": "es",
+      "age_months": 10,
+      "tags": [
+        "desarrollo"
+      ],
+      "turns": [
+        {
+          "say": "no gatea y ya tiene 10 meses",
+          "classifier": {
+            "intent": "plan"
+          },
+          "expect": {
+            "turn": "new",
+            "kind": "answer",
+            "shape": "plan",
+            "doctor": true
+          }
+        },
+        {
+          "say": "se sienta sola y se arrastra un poco",
+          "classifier": {
+            "intent": "plan"
+          },
+          "expect": {
+            "turn": "follow_up",
+            "kind": "answer"
+          }
+        }
+      ]
+    },
+    {
+      "id": "colico-llanto",
+      "locale": "es",
+      "age_months": 1,
+      "tags": [
+        "colico",
+        "dosis"
+      ],
+      "turns": [
+        {
+          "say": "llora muchisimo todas las tardes y encoge las piernas",
+          "expect": {
+            "turn": "new",
+            "kind": "answer",
+            "shape": "plan",
+            "doctor": true
+          },
+          "classifier": {
+            "intent": "plan"
+          }
+        },
+        {
+          "say": "son colicos",
+          "expect": {
+            "turn": "follow_up",
+            "kind": "answer"
+          },
+          "classifier": {
+            "intent": "question"
+          }
+        },
+        {
+          "say": "le puedo dar gotas para los gases",
+          "evidence": false,
+          "expect": {
+            "turn": "follow_up",
+            "kind": "no_evidence"
+          },
+          "classifier": {
+            "intent": "question"
+          }
+        }
+      ]
+    },
+    {
+      "id": "vomitos-y-deshidratacion",
+      "locale": "es",
+      "age_months": 9,
+      "tags": [
+        "vomitos",
+        "bandera_roja_a_mitad"
+      ],
+      "turns": [
+        {
+          "say": "ha vomitado 3 veces esta mañana q hago",
+          "expect": {
+            "turn": "new",
+            "kind": "answer",
+            "shape": "plan",
+            "doctor": true
+          },
+          "gap": "«ha vomitado 3 veces ... q hago» es una línea de diario para las reglas: tarjeta para anotar en vez del plan («q» no se lee como «qué»)"
+        },
+        {
+          "say": "no tiene fiebre",
+          "expect": {
+            "turn": "follow_up",
+            "kind": "answer"
+          },
+          "gap": "un seguimiento hereda la regla de anotar del primer mensaje del tema: «no tiene fiebre» se convierte en tarjeta"
+        },
+        {
+          "say": "ahora llora sin lagrimas y tiene la boca seca",
+          "expect": {
+            "turn": "follow_up",
+            "kind": "red_flag"
+          }
+        }
+      ]
+    },
+    {
+      "id": "diarrea",
+      "locale": "es",
+      "age_months": 7,
+      "tags": [
+        "diarrea"
+      ],
+      "turns": [
+        {
+          "say": "tiene diarrea desde ayer",
+          "expect": {
+            "turn": "new",
+            "kind": "answer",
+            "shape": "plan",
+            "doctor": true
+          },
+          "classifier": {
+            "intent": "plan"
+          }
+        },
+        {
+          "say": "puede comer normal o le doy solo agua",
+          "expect": {
+            "turn": "follow_up",
+            "kind": "answer"
+          },
+          "classifier": {
+            "intent": "question"
+          }
+        }
+      ]
+    },
+    {
+      "id": "piel-granitos",
+      "locale": "es",
+      "age_months": 4,
+      "tags": [
+        "piel"
+      ],
+      "turns": [
+        {
+          "say": "le han salido granitos rojos en la cara",
+          "expect": {
+            "turn": "new",
+            "kind": "answer",
+            "shape": "plan",
+            "doctor": true
+          },
+          "classifier": {
+            "intent": "plan"
+          }
+        },
+        {
+          "say": "no le pican y esta bien",
+          "expect": {
+            "turn": "follow_up",
+            "kind": "answer"
+          },
+          "classifier": {
+            "intent": "plan"
+          }
+        },
+        {
+          "say": "le pongo crema",
+          "expect": {
+            "turn": "follow_up",
+            "kind": "answer"
+          },
+          "classifier": {
+            "intent": "question"
+          }
+        }
+      ]
+    },
+    {
+      "id": "dientes",
+      "locale": "es",
+      "age_months": 6,
+      "tags": [
+        "dientes",
+        "dosis"
+      ],
+      "turns": [
+        {
+          "say": "le estan saliendo los dientes y babea un monton",
+          "expect": {
+            "turn": "new",
+            "kind": "answer",
+            "shape": "plan"
+          },
+          "classifier": {
+            "intent": "plan"
+          }
+        },
+        {
+          "say": "puedo darle algo para el dolor",
+          "evidence": false,
+          "expect": {
+            "turn": "follow_up",
+            "kind": "no_evidence"
+          },
+          "classifier": {
+            "intent": "question"
+          }
+        },
+        {
+          "say": "y un mordedor frio",
+          "expect": {
+            "turn": "follow_up",
+            "kind": "answer"
+          },
+          "classifier": {
+            "intent": "question"
+          }
+        }
+      ]
+    },
+    {
+      "id": "estreñimiento",
+      "locale": "es",
+      "age_months": 5,
+      "tags": [
+        "estreñimiento"
+      ],
+      "turns": [
+        {
+          "say": "lleva 4 dias sin hacer caca",
+          "expect": {
+            "turn": "new",
+            "kind": "answer",
+            "shape": "plan",
+            "doctor": true
+          }
+        },
+        {
+          "say": "toma biberon",
+          "expect": {
+            "turn": "follow_up",
+            "kind": "answer"
+          }
+        },
+        {
+          "say": "y si le doy zumo de pera",
+          "expect": {
+            "turn": "follow_up",
+            "kind": "answer"
+          }
+        }
+      ]
+    },
+    {
+      "id": "vacunas",
+      "locale": "es",
+      "age_months": 12,
+      "tags": [
+        "vacunas"
+      ],
+      "turns": [
+        {
+          "say": "que vacunas le tocan ahora",
+          "expect": {
+            "turn": "new",
+            "kind": "tracked"
+          }
+        },
+        {
+          "say": "es normal q tenga fiebre despues de la vacuna",
+          "expect": {
+            "turn": "follow_up",
+            "kind": "answer",
+            "shape": "question"
+          },
+          "gap": "un seguimiento hereda la regla de «sus datos» del primer mensaje: «es normal q tenga fiebre despues de la vacuna» va al bucle de herramientas, sin el contrato de respuesta corta"
+        }
+      ]
+    },
+    {
+      "id": "golpe-en-la-cabeza",
+      "locale": "es",
+      "age_months": 11,
+      "tags": [
+        "golpe_cabeza",
+        "bandera_roja_a_mitad"
+      ],
+      "turns": [
+        {
+          "say": "se ha caido de la cama y se ha dado en la cabeza",
+          "expect": {
+            "turn": "new",
+            "kind": "answer",
+            "shape": "plan",
+            "doctor": true
+          },
+          "classifier": {
+            "intent": "plan"
+          }
+        },
+        {
+          "say": "le ha salido un chichon",
+          "expect": {
+            "turn": "follow_up",
+            "kind": "answer"
+          },
+          "classifier": {
+            "intent": "plan"
+          }
+        },
+        {
+          "say": "ahora no se despierta bien, no hay forma de despertarlo",
+          "expect": {
+            "turn": "follow_up",
+            "kind": "red_flag"
+          }
+        }
+      ]
+    },
+    {
+      "id": "anotar-fiebre-y-seguir",
+      "locale": "es",
+      "age_months": 9,
+      "tags": [
+        "anotar",
+        "fiebre"
+      ],
+      "turns": [
+        {
+          "say": "ha tenido 38,4 a las 9",
+          "expect": {
+            "turn": "new",
+            "kind": "confirm",
+            "card": "confirm"
+          }
+        },
+        {
+          "confirm": true,
+          "expect": {
+            "kind": "recorded"
+          }
+        },
+        {
+          "say": "y q hago si sube mas",
+          "expect": {
+            "turn": "follow_up",
+            "kind": "answer",
+            "shape": "plan",
+            "doctor": true
+          },
+          "gap": "tras anotar, su pregunta hereda la regla de anotar del tema: «y q hago si sube mas» se convierte en otra tarjeta para anotar"
+        }
+      ]
+    },
+    {
+      "id": "anotar-sueño",
+      "locale": "es",
+      "age_months": 6,
+      "tags": [
+        "anotar",
+        "sueño"
+      ],
+      "turns": [
+        {
+          "say": "ha dormido 3 h de siesta",
+          "expect": {
+            "turn": "new",
+            "kind": "confirm",
+            "card": "confirm"
+          }
+        },
+        {
+          "confirm": true,
+          "expect": {
+            "kind": "recorded"
+          }
+        },
+        {
+          "say": "cuanto tiene que dormir de dia a esta edad",
+          "expect": {
+            "turn": "follow_up",
+            "kind": "answer",
+            "shape": "question"
+          },
+          "gap": "tras anotar, su pregunta hereda la regla de anotar del tema: otra tarjeta en vez de la respuesta"
+        }
+      ]
+    },
+    {
+      "id": "anotar-peso",
+      "locale": "es",
+      "age_months": 9,
+      "tags": [
+        "anotar"
+      ],
+      "turns": [
+        {
+          "say": "hoy pesa 8,4 kg",
+          "expect": {
+            "turn": "new",
+            "kind": "confirm",
+            "card": "confirm"
+          },
+          "classifier": {
+            "intent": "record"
+          }
+        },
+        {
+          "confirm": true,
+          "expect": {
+            "kind": "recorded"
+          }
+        },
+        {
+          "say": "en que percentil esta",
+          "expect": {
+            "turn": "follow_up",
+            "kind": "tracked"
+          }
+        }
+      ]
+    },
+    {
+      "id": "correccion-de-edad",
+      "locale": "es",
+      "age_months": 6,
+      "tags": [
+        "correccion_edad",
+        "tomas"
+      ],
+      "turns": [
+        {
+          "say": "cuanta leche tiene q tomar al dia",
+          "expect": {
+            "turn": "new",
+            "kind": "answer",
+            "shape": "question"
+          },
+          "classifier": {
+            "intent": "question"
+          }
+        },
+        {
+          "say": "perdona tiene 9 meses no 6",
+          "expect": {
+            "turn": "correction",
+            "kind": "answer"
+          },
+          "classifier": {
+            "intent": "question"
+          }
+        }
+      ]
+    },
+    {
+      "id": "cambio-de-tema",
+      "locale": "es",
+      "age_months": 8,
+      "tags": [
+        "cambio_tema",
+        "sueño",
+        "dientes"
+      ],
+      "turns": [
+        {
+          "say": "cuantas siestas a los 8 meses",
+          "expect": {
+            "turn": "new",
+            "kind": "answer",
+            "shape": "question"
+          },
+          "classifier": {
+            "intent": "question"
+          }
+        },
+        {
+          "say": "otra cosa, le esta saliendo un diente y esta irritable",
+          "expect": {
+            "turn": "new",
+            "kind": "answer",
+            "not_seen": [
+              "siestas"
+            ]
+          },
+          "classifier": {
+            "intent": "plan"
+          }
+        },
+        {
+          "say": "y duerme peor por eso",
+          "expect": {
+            "turn": "follow_up",
+            "kind": "answer"
+          },
+          "classifier": {
+            "intent": "question"
+          }
+        }
+      ]
+    },
+    {
+      "id": "pregunta-vaga",
+      "locale": "es",
+      "age_months": 7,
+      "tags": [
+        "pregunta_vaga"
+      ],
+      "turns": [
+        {
+          "say": "le pasa algo raro",
+          "evidence": false,
+          "expect": {
+            "turn": "new",
+            "kind": "clarify"
+          },
+          "classifier": {
+            "intent": "plan"
+          },
+          "gap": "«le pasa algo raro» sin síntoma y sin fuentes: dice que no tiene fuentes en vez de preguntar qué le pasa (el diseño pide aclarar)"
+        },
+        {
+          "say": "esta como apagado y come menos",
+          "expect": {
+            "turn": "follow_up",
+            "kind": "answer",
+            "shape": "plan",
+            "doctor": true
+          },
+          "classifier": {
+            "intent": "plan"
+          }
+        }
+      ]
+    },
+    {
+      "id": "dosis-sin-fuente",
+      "locale": "es",
+      "age_months": 10,
+      "tags": [
+        "dosis"
+      ],
+      "turns": [
+        {
+          "say": "cuanto apiretal le doy pesa 9 kilos",
+          "evidence": false,
+          "expect": {
+            "turn": "new",
+            "kind": "no_evidence"
+          },
+          "classifier": {
+            "intent": "question"
+          }
+        },
+        {
+          "say": "y de dalsy",
+          "evidence": false,
+          "expect": {
+            "turn": "follow_up",
+            "kind": "no_evidence"
+          },
+          "classifier": {
+            "intent": "question"
+          }
+        },
+        {
+          "say": "vale y cada cuantas horas",
+          "evidence": false,
+          "expect": {
+            "turn": "follow_up",
+            "kind": "no_evidence"
+          },
+          "classifier": {
+            "intent": "question"
+          }
+        }
+      ]
+    },
+    {
+      "id": "fuera-de-edad",
+      "locale": "es",
+      "age_months": 8,
+      "tags": [
+        "fuera_de_edad",
+        "cambio_tema"
+      ],
+      "turns": [
+        {
+          "say": "mi hijo de 5 años tose mucho por las noches",
+          "expect": {
+            "turn": "new",
+            "kind": "no_evidence"
+          }
+        },
+        {
+          "say": "y la peque de 8 meses tb tiene mocos",
+          "expect": {
+            "turn": "follow_up",
+            "kind": "answer"
+          },
+          "classifier": {
+            "intent": "plan"
+          }
+        }
+      ]
+    },
+    {
+      "id": "pregunta-de-adulto",
+      "locale": "es",
+      "age_months": 4,
+      "tags": [
+        "adulto"
+      ],
+      "turns": [
+        {
+          "say": "yo tengo dolor de espalda desde el parto que puedo tomar",
+          "evidence": false,
+          "expect": {
+            "turn": "new",
+            "kind": "no_evidence"
+          },
+          "gap": "una pregunta de adulto (`other`) va en el agente al bucle de herramientas, no a la frase de redirección del diseño"
+        },
+        {
+          "say": "vale y la niña duerme bien boca arriba",
+          "expect": {
+            "turn": "new",
+            "kind": "answer"
+          },
+          "classifier": {
+            "intent": "question"
+          },
+          "gap": "«vale y la niña ...» tras una pregunta de adulto se lee como seguimiento: la búsqueda arrastra el dolor de espalda de la madre"
+        }
+      ]
+    },
+    {
+      "id": "en-fever-no-reading",
+      "locale": "en",
+      "age_months": 5,
+      "tags": [
+        "fiebre",
+        "noche"
+      ],
+      "turns": [
+        {
+          "say": "she has a fever since lunch",
+          "expect": {
+            "turn": "new",
+            "kind": "clarify",
+            "asks": [
+              "temperature"
+            ]
+          }
+        },
+        {
+          "press": [
+            {
+              "field": "temperature",
+              "value": "37.5-37.9"
+            }
+          ],
+          "expect": {
+            "turn": "follow_up",
+            "kind": "answer",
+            "shape": "plan",
+            "doctor": true
+          },
+          "classifier": {
+            "intent": "plan"
+          }
+        },
+        {
+          "say": "what about tonight",
+          "expect": {
+            "turn": "follow_up",
+            "kind": "answer"
+          },
+          "classifier": {
+            "intent": "plan"
+          }
+        }
+      ]
+    },
+    {
+      "id": "en-naps-then-rash",
+      "locale": "en",
+      "age_months": 10,
+      "tags": [
+        "sueño",
+        "cambio_tema",
+        "piel"
+      ],
+      "turns": [
+        {
+          "say": "how many naps at 10 months",
+          "expect": {
+            "turn": "new",
+            "kind": "answer",
+            "shape": "question"
+          },
+          "classifier": {
+            "intent": "question"
+          }
+        },
+        {
+          "say": "by the way she has a red rash on her tummy",
+          "expect": {
+            "turn": "new",
+            "kind": "answer",
+            "not_seen": [
+              "naps"
+            ]
+          },
+          "classifier": {
+            "intent": "plan"
+          }
+        },
+        {
+          "say": "it doesnt itch",
+          "expect": {
+            "turn": "follow_up",
+            "kind": "answer"
+          },
+          "classifier": {
+            "intent": "question"
+          }
+        }
+      ]
+    },
+    {
+      "id": "en-diarrhea-then-floppy",
+      "locale": "en",
+      "age_months": 7,
+      "tags": [
+        "diarrea",
+        "bandera_roja_a_mitad"
+      ],
+      "turns": [
+        {
+          "say": "he has had diarrhea since yesterday",
+          "expect": {
+            "turn": "new",
+            "kind": "answer",
+            "shape": "plan",
+            "doctor": true
+          },
+          "classifier": {
+            "intent": "plan"
+          }
+        },
+        {
+          "say": "now hes floppy and hard to wake",
+          "expect": {
+            "turn": "follow_up",
+            "kind": "red_flag"
+          }
+        }
+      ]
+    },
+    {
+      "id": "en-no-words",
+      "locale": "en",
+      "age_months": 16,
+      "tags": [
+        "desarrollo"
+      ],
+      "turns": [
+        {
+          "say": "he doesnt say any words yet",
+          "expect": {
+            "turn": "new",
+            "kind": "clarify",
+            "asks": [
+              "since_when",
+              "social_signals"
+            ]
+          },
+          "gap": "«he doesnt say any words» no se lee como preocupación de desarrollo: no pregunta antes",
+          "classifier": {
+            "intent": "plan"
+          }
+        },
+        {
+          "say": "he points and smiles at us",
+          "expect": {
+            "turn": "follow_up",
+            "kind": "answer"
+          },
+          "classifier": {
+            "intent": "plan"
+          }
+        }
+      ]
+    },
+    {
+      "id": "fr-fievre-2-mois",
+      "locale": "fr",
+      "age_months": 2,
+      "tags": [
+        "fiebre",
+        "fiebre_menor_3m"
+      ],
+      "turns": [
+        {
+          "say": "mon bébé a 38,3",
+          "expect": {
+            "turn": "new",
+            "kind": "red_flag"
+          }
+        },
+        {
+          "say": "il dort beaucoup aussi",
+          "expect": {
+            "turn": "follow_up",
+            "kind": "red_flag"
+          },
+          "classifier": {
+            "intent": "plan"
+          },
+          "gap": "un seguimiento tras la derivación (fiebre con 2 meses) se responde como si no se hubiera dicho: la guardia solo lee el mensaje nuevo"
+        }
+      ]
+    },
+    {
+      "id": "fr-regurgite-et-la-nuit",
+      "locale": "fr",
+      "age_months": 4,
+      "tags": [
+        "tomas",
+        "vomitos",
+        "noche"
+      ],
+      "turns": [
+        {
+          "say": "il régurgite après chaque tétée",
+          "expect": {
+            "turn": "new",
+            "kind": "answer"
+          },
+          "classifier": {
+            "intent": "question"
+          }
+        },
+        {
+          "say": "et la nuit",
+          "expect": {
+            "turn": "follow_up",
+            "kind": "answer"
+          },
+          "classifier": {
+            "intent": "question"
+          }
+        }
+      ]
+    },
+    {
+      "id": "fr-dents-doliprane",
+      "locale": "fr",
+      "age_months": 8,
+      "tags": [
+        "dientes",
+        "dosis"
+      ],
+      "turns": [
+        {
+          "say": "ses dents poussent il pleure beaucoup",
+          "expect": {
+            "turn": "new",
+            "kind": "answer",
+            "shape": "plan"
+          },
+          "classifier": {
+            "intent": "plan"
+          }
+        },
+        {
+          "say": "je peux lui donner du doliprane combien",
+          "evidence": false,
+          "expect": {
+            "turn": "follow_up",
+            "kind": "no_evidence"
+          },
+          "classifier": {
+            "intent": "question"
+          }
+        }
+      ]
+    },
+    {
+      "id": "fr-constipation-correction",
+      "locale": "fr",
+      "age_months": 6,
+      "tags": [
+        "estreñimiento",
+        "correccion_edad"
+      ],
+      "turns": [
+        {
+          "say": "il fait plus caca depuis 3 jours",
+          "expect": {
+            "turn": "new",
+            "kind": "answer",
+            "shape": "plan"
+          }
+        },
+        {
+          "say": "pardon il a 11 mois pas 6",
+          "expect": {
+            "turn": "correction",
+            "kind": "answer"
+          }
+        }
+      ]
+    }
+  ]
+}

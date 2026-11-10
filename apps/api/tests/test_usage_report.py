@@ -128,6 +128,30 @@ def test_the_report_splits_today_the_week_and_the_month_and_keeps_golden_apart()
     json.dumps(report)
 
 
+def test_test_traffic_is_shown_apart_and_never_counted_as_real_use():
+    """2026-11-10: the QA runs (X-AdelIA-QA, the conversation battery) are now
+    counted under `qa`; the report shows what they cost next to the real use,
+    never inside it, and leaves them out of the month's projection."""
+    today = date(2026, 11, 10)
+    rows = [
+        _row(today, "agent", "agent_step", "anthropic", "claude-opus-5-5",
+             input_tokens=1_000_000),
+        _row(today, "qa", "agent_step", "anthropic", "claude-opus-5-5",
+             input_tokens=500_000, calls=7),
+        _row(today, "qa", "embed", "mistral", "mistral-embed", input_tokens=1_000_000),
+    ]
+
+    report = usage_report.build_report(rows, today=today, budget_usd=200)
+
+    today_period = report["periods"]["today"]
+    assert today_period["real"]["estimated_usd"] == pytest.approx(4.0)
+    assert "qa" not in today_period["real"]["by_surface"]
+    assert today_period["qa"] == {"calls": 8, "estimated_usd": pytest.approx(2.1)}
+    assert report["month_projection"]["real_usd_so_far"] == pytest.approx(4.0)
+    text = usage_report.render_text(report)
+    assert "pruebas (QA): 8 llamadas, 2.10 $" in text
+
+
 def test_the_text_says_the_budget_the_estimate_and_what_has_no_price():
     today = date(2026, 11, 8)
     rows = [

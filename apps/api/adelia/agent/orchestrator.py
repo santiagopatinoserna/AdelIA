@@ -1,5 +1,5 @@
 from __future__ import annotations
-from typing import AsyncIterator
+from typing import AsyncIterator, Callable
 from uuid import UUID, uuid4
 
 from adelia.agent.events import AgentEvent
@@ -70,7 +70,9 @@ async def run_turn(*, user_id: UUID, profile_id: UUID | None, message: str,
                    history: list[dict] | None = None, card_action: dict | None = None,
                    locale: str = "es",
                    clarification: dict | None = None,
-                   clarifications: list[dict] | None = None) -> AsyncIterator[AgentEvent]:
+                   clarifications: list[dict] | None = None,
+                   on_final: Callable[[dict], None] | None = None,
+                   ) -> AsyncIterator[AgentEvent]:
     """One /dashboard turn through the agent graph (AGENT_GRAPH steps 4-5).
 
     Replaces `run_agent_turn`, the model-and-tools loop that answered every
@@ -81,6 +83,11 @@ async def run_turn(*, user_id: UUID, profile_id: UUID | None, message: str,
     own data, or anything the router cannot place, goes to the tool loop
     below (`_track`), now bounded to MAX_STEPS. A confirmed card goes
     straight to its write.
+
+    `on_final` receives the graph's final state (kind, intent, the turn's
+    place in the conversation), which the SSE frames do not carry. Only
+    scripts/conversation_battery.py passes it, so a battery turn is this very
+    path; the frames are the same with or without it.
     """
     from adelia.services import chat_orchestrator
 
@@ -149,6 +156,8 @@ async def run_turn(*, user_id: UUID, profile_id: UUID | None, message: str,
                 yield AgentEvent(type="tool_call", tool_name=event["tool_name"])
             elif kind == "final":
                 final = event["state"]
+                if on_final is not None:
+                    on_final(final)
                 yield AgentEvent(
                     type="final",
                     citations=[_as_dict(c) for c in final.get("citations") or []],

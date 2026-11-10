@@ -440,7 +440,7 @@ async def test_only_the_owner_reads_usage_and_everyone_else_gets_404(client, mon
     assert as_stranger.status_code == 404
     assert as_owner.status_code == 200
     assert set(as_owner.json()) == {
-        "from", "to", "active_accounts", "totals", "daily", "estimated_usd", "unpriced",
+        "from", "to", "active_accounts", "totals", "daily", "estimated_usd", "unpriced", "qa",
     }
 
 
@@ -470,3 +470,65 @@ async def test_a_guest_account_is_labelled_guest_and_anything_else_the_default(m
         async with AsyncSessionLocal() as session:
             await session.execute(sa.delete(User).where(User.id.in_([paying, guest_id])))
             await session.commit()
+
+
+# --- the meter: what one run spent, read from the same count (2026-11-10) -------------
+
+
+async def test_a_meter_sees_the_calls_counted_inside_it_and_in_its_child_tasks(monkeypatch):
+    async def _record(*_, **__):
+        return None
+
+    monkeypatch.setattr(usage, "record", _record)
+    usage.count("embed", "mistral", "mistral-embed", input_tokens=1)
+    with usage.metered() as meter:
+        usage.count("chat", "anthropic", "claude-opus-5-5", input_tokens=1_000_000)
+
+        async def _child():
+            usage.count("embed", "mistral", "mistral-embed", input_tokens=1_000_000)
+
+        await asyncio.create_task(_child())
+    usage.count("embed", "mistral", "mistral-embed", input_tokens=1)
+    await usage.drain()
+
+    assert [(c["operation"], c["provider"], c["model"]) for c in meter.calls] == [
+        ("chat", "anthropic", "claude-opus-5-5"), ("embed", "mistral", "mistral-embed")]
+    assert meter.calls[0]["input_tokens"] == 1_000_000
+    # Opus 5.5 at 4 $ per million input, mistral-embed at 0.10.
+    assert meter.estimated_usd() == pytest.approx(4.1)
+    assert meter.unpriced() == []
+
+
+async def test_a_meter_counts_test_traffic_too_and_names_what_it_cannot_price(monkeypatch):
+    async def _record(*_, **__):
+        return None
+
+    monkeypatch.setattr(usage, "record", _record)
+    from adelia import qa_traffic
+
+    with usage.metered() as meter, qa_traffic.marked():
+        usage.count("chat", "anthropic", "a-model-nobody-priced", output_tokens=10)
+    await usage.drain()
+
+    assert len(meter.calls) == 1 and meter.calls[0]["surface"] == "qa"
+    assert meter.unpriced() == ["anthropic/a-model-nobody-priced"]
+    assert meter.estimated_usd() == 0
+    # The cap reads it at the dearest output price known (Opus 5.5, 20 $ per million).
+    assert meter.capped_usd() == pytest.approx(10 * 20 / 1_000_000)
+
+
+@needs_pg
+async def test_the_summary_keeps_test_traffic_out_of_the_real_figure(day):
+    await usage.record("chat", "anthropic", "claude-opus-5-5", input_tokens=1_000_000,
+                       surface="agent", day=day)
+    await usage.record("chat", "anthropic", "claude-opus-5-5", input_tokens=500_000,
+                       surface="qa", day=day)
+
+    out = await usage.summary(1, today=day)
+
+    assert out["estimated_usd"] == pytest.approx(4.0)
+    assert out["qa"] == {"calls": 1, "estimated_usd": pytest.approx(2.0)}
+    assert {r["surface"] for r in out["totals"]} == {"agent", "qa"}
+    # The daily trend is real use only.
+    assert [d["estimated_usd"] for d in out["daily"]] == [pytest.approx(4.0)]
+    assert [d["calls"] for d in out["daily"]] == [1]
