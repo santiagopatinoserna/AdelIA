@@ -1,0 +1,253 @@
+{
+  "_why": "Answered inside the browser by the usability battery (kit.stubTurnFor): never sent, never a model. apps/api/tests/test_usability_fixtures.py pins the clarify cards to answer_contract and the plan headings to PLAN_HEADINGS.",
+  "plan": {
+    "es": {
+      "message": "Tiene mocos y tose un poco por la noche, ¿qué hago?",
+      "answer": "Unos mocos con algo de tos por la noche suelen ser un catarro, y un catarro se cuida en casa.\n\n## Hoy\n- Lávale la nariz con suero fisiológico antes de las tomas y antes de dormir.\n- Ofrécele el pecho o el biberón más a menudo, en tomas cortas.\n\n## Vigila\n- Si come menos de la mitad de lo habitual.\n- Si moja menos pañales.\n- Si la tos no la deja dormir varias noches seguidas.\n\n## Cuándo ir al médico\n- Si respira muy deprisa o se le marcan las costillas al respirar.\n- Si tiene fiebre más de tres días.\n- Si la ves decaída aunque no tenga fiebre.\n\n## No olvides\n- Un catarro dura de 7 a 10 días y la tos puede seguir un poco más.\n\n## Lo que cuentan otras madres\n- Muchas cuentan que el lavado nasal es más fácil entre dos personas."
+    },
+    "en": {
+      "message": "She has a runny nose and coughs a bit at night, what do I do?",
+      "answer": "A runny nose with a little cough at night is usually a cold, and a cold is cared for at home.\n\n## Today\n- Clean her nose with saline drops before feeds and before sleep.\n- Offer the breast or the bottle more often, in shorter feeds.\n\n## Watch for\n- Eating less than half of her usual amount.\n- Fewer wet nappies.\n- A cough that keeps her awake several nights in a row.\n\n## When to see a doctor\n- If she breathes very fast or her ribs pull in when she breathes.\n- If she has a fever for more than three days.\n- If she seems floppy or unusually sleepy, even without a fever.\n\n## Don’t forget\n- A cold lasts 7 to 10 days and the cough can last a little longer.\n\n## What other mothers say\n- Many say cleaning the nose is easier with two people."
+    },
+    "fr": {
+      "message": "Elle a le nez qui coule et tousse un peu la nuit, je fais quoi ?",
+      "answer": "Un nez qui coule avec un peu de toux la nuit, c’est souvent un rhume, et un rhume se soigne à la maison.\n\n## Aujourd’hui\n- Lave-lui le nez au sérum physiologique avant les tétées et avant de dormir.\n- Propose le sein ou le biberon plus souvent, en petites quantités.\n\n## À surveiller\n- Si elle mange moins de la moitié de d’habitude.\n- Si elle mouille moins de couches.\n- Si la toux l’empêche de dormir plusieurs nuits de suite.\n\n## Quand consulter\n- Si elle respire très vite ou si ses côtes se creusent quand elle respire.\n- Si elle a de la fièvre plus de trois jours.\n- Si tu la trouves abattue, même sans fièvre.\n\n## À ne pas oublier\n- Un rhume dure de 7 à 10 jours et la toux peut durer un peu plus.\n\n## Ce que racontent d’autres mères\n- Beaucoup racontent que le lavage de nez est plus facile à deux."
+    }
+  },
+  "clarify": {
+    "es": {
+      "message": "Desde que va a la guardería está rara y llora mucho al dejarla, ¿es normal?",
+      "card": {
+        "type": "clarify",
+        "id": "clarify-nursery_time-general_state",
+        "payload": {
+          "field": "nursery_time",
+          "question": "¿Cuánto lleva yendo a la guardería?",
+          "options": [
+            {
+              "value": "lt1m",
+              "label": "Menos de un mes"
+            },
+            {
+              "value": "1-3m",
+              "label": "De 1 a 3 meses"
+            },
+            {
+              "value": "gt3m",
+              "label": "Más de 3 meses"
+            }
+          ],
+          "skip": {
+            "value": "unknown",
+            "label": "No lo sé"
+          },
+          "questions": [
+            {
+              "field": "nursery_time",
+              "question": "¿Cuánto lleva yendo a la guardería?",
+              "options": [
+                {
+                  "value": "lt1m",
+                  "label": "Menos de un mes"
+                },
+                {
+                  "value": "1-3m",
+                  "label": "De 1 a 3 meses"
+                },
+                {
+                  "value": "gt3m",
+                  "label": "Más de 3 meses"
+                }
+              ],
+              "skip": {
+                "value": "unknown",
+                "label": "No lo sé"
+              }
+            },
+            {
+              "field": "general_state",
+              "question": "¿Come, duerme y juega como siempre?",
+              "options": [
+                {
+                  "value": "yes",
+                  "label": "Sí"
+                },
+                {
+                  "value": "partly",
+                  "label": "No del todo"
+                },
+                {
+                  "value": "no",
+                  "label": "No"
+                }
+              ],
+              "skip": {
+                "value": "unknown",
+                "label": "No lo sé"
+              }
+            }
+          ],
+          "free": "O escríbemelo con tus palabras.",
+          "message": "Desde que va a la guardería está rara y llora mucho al dejarla, ¿es normal?"
+        },
+        "actions": []
+      }
+    },
+    "en": {
+      "message": "Since she started nursery she cries a lot when I leave her, is that normal?",
+      "card": {
+        "type": "clarify",
+        "id": "clarify-nursery_time-general_state",
+        "payload": {
+          "field": "nursery_time",
+          "question": "How long has your baby been going to nursery?",
+          "options": [
+            {
+              "value": "lt1m",
+              "label": "Less than a month"
+            },
+            {
+              "value": "1-3m",
+              "label": "1 to 3 months"
+            },
+            {
+              "value": "gt3m",
+              "label": "More than 3 months"
+            }
+          ],
+          "skip": {
+            "value": "unknown",
+            "label": "I don’t know"
+          },
+          "questions": [
+            {
+              "field": "nursery_time",
+              "question": "How long has your baby been going to nursery?",
+              "options": [
+                {
+                  "value": "lt1m",
+                  "label": "Less than a month"
+                },
+                {
+                  "value": "1-3m",
+                  "label": "1 to 3 months"
+                },
+                {
+                  "value": "gt3m",
+                  "label": "More than 3 months"
+                }
+              ],
+              "skip": {
+                "value": "unknown",
+                "label": "I don’t know"
+              }
+            },
+            {
+              "field": "general_state",
+              "question": "Is your baby eating, sleeping and playing as usual?",
+              "options": [
+                {
+                  "value": "yes",
+                  "label": "Yes"
+                },
+                {
+                  "value": "partly",
+                  "label": "Not quite"
+                },
+                {
+                  "value": "no",
+                  "label": "No"
+                }
+              ],
+              "skip": {
+                "value": "unknown",
+                "label": "I don’t know"
+              }
+            }
+          ],
+          "free": "Or tell me in your own words.",
+          "message": "Since she started nursery she cries a lot when I leave her, is that normal?"
+        },
+        "actions": []
+      }
+    },
+    "fr": {
+      "message": "Depuis qu’elle va à la crèche elle pleure beaucoup quand je la laisse, c’est normal ?",
+      "card": {
+        "type": "clarify",
+        "id": "clarify-nursery_time-general_state",
+        "payload": {
+          "field": "nursery_time",
+          "question": "Depuis combien de temps ton bébé va-t-il à la crèche ?",
+          "options": [
+            {
+              "value": "lt1m",
+              "label": "Moins d’un mois"
+            },
+            {
+              "value": "1-3m",
+              "label": "De 1 à 3 mois"
+            },
+            {
+              "value": "gt3m",
+              "label": "Plus de 3 mois"
+            }
+          ],
+          "skip": {
+            "value": "unknown",
+            "label": "Je ne sais pas"
+          },
+          "questions": [
+            {
+              "field": "nursery_time",
+              "question": "Depuis combien de temps ton bébé va-t-il à la crèche ?",
+              "options": [
+                {
+                  "value": "lt1m",
+                  "label": "Moins d’un mois"
+                },
+                {
+                  "value": "1-3m",
+                  "label": "De 1 à 3 mois"
+                },
+                {
+                  "value": "gt3m",
+                  "label": "Plus de 3 mois"
+                }
+              ],
+              "skip": {
+                "value": "unknown",
+                "label": "Je ne sais pas"
+              }
+            },
+            {
+              "field": "general_state",
+              "question": "Est-ce qu’il mange, dort et joue comme d’habitude ?",
+              "options": [
+                {
+                  "value": "yes",
+                  "label": "Oui"
+                },
+                {
+                  "value": "partly",
+                  "label": "Pas tout à fait"
+                },
+                {
+                  "value": "no",
+                  "label": "Non"
+                }
+              ],
+              "skip": {
+                "value": "unknown",
+                "label": "Je ne sais pas"
+              }
+            }
+          ],
+          "free": "Ou écris-le-moi avec tes mots.",
+          "message": "Depuis qu’elle va à la crèche elle pleure beaucoup quand je la laisse, c’est normal ?"
+        },
+        "actions": []
+      }
+    }
+  }
+}
