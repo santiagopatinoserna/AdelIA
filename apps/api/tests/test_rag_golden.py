@@ -427,13 +427,21 @@ class _ModelCalls:
     anthropic: int = 0
     #: French or English questions searched as written: no recorded translation.
     untranslated: set = field(default_factory=set)
+    #: The thinking effort each stubbed answer was asked for (None: the default).
+    efforts: list = field(default_factory=list)
 
 
 def _model_free_stream(calls: _ModelCalls):
-    """The generative stream without a model: the fixed text and every card's tag."""
+    """The generative stream without a model: the fixed text and every card's tag.
 
-    async def _stream(system_prompt, user_message, history=None, *, provider=None):
+    Takes what `chat_orchestrator._stream_llm_tokens` takes. Until 2026-11-11 it
+    stopped at `provider`: with the answer switches of #73 on, the graph passed
+    `effort` and every question carrying one failed with a TypeError, a gate
+    that would have blocked every deploy reading them from .env.prod."""
+
+    async def _stream(system_prompt, user_message, history=None, *, provider=None, effort=None):
         calls.stubbed += 1
+        calls.efforts.append(effort)
         tags = " ".join(f"[{t}]" for t in dict.fromkeys(_PROMPT_TAG.findall(user_message)))
         yield f"{MODEL_FREE_ANSWER} {tags}".rstrip()
 
@@ -1914,6 +1922,93 @@ async def test_the_fixed_answer_cites_every_card_it_is_given():
     assert text.startswith(module.MODEL_FREE_ANSWER)
     assert "[ev_1]" in text and "[ev_2]" in text
     assert calls.stubbed == 1 and calls.generation == 0
+
+
+@pytest.mark.asyncio
+async def test_the_fixed_answer_takes_every_argument_the_real_stream_takes():
+    """2026-11-11, the gate with the #73 switches on: the graph passed `effort`
+    and the stub, written before it existed, raised a TypeError on A1. Read off
+    the real signature, so the next argument the stream grows fails here and
+    not in the deploy that reads it from .env.prod."""
+    import inspect
+    import sys
+
+    module = sys.modules[__name__]
+    calls = module._ModelCalls()
+    stream = module._model_free_stream(calls)
+    real = list(inspect.signature(_chat._stream_llm_tokens).parameters.values())
+    samples = {"history": [], "provider": "anthropic", "effort": "low"}
+    missing = [p.name for p in real[2:] if p.name not in samples]
+    assert not missing, f"give the stub's test a sample for {missing}"
+    kwargs = {p.name: samples[p.name] for p in real[2:]}
+    user = "Pregunta\n\n[ev_1] A\nx\n"
+    text = "".join([piece async for piece in stream("system", user, **kwargs)])
+    assert text == f"{module.MODEL_FREE_ANSWER} [ev_1]"
+    assert calls.stubbed == 1 and calls.efforts == ["low"]
+
+
+#: The answer switches of #73 (and plan_brevity before them), as production can
+#: set them in .env.prod: off, as the supervisor's gate ran them, and every
+#: effort on. None of them may take the gate without a model to a client.
+_ANSWER_SWITCHES = {
+    "off": {},
+    "pr73": {"follow_up_brevity": True, "answer_effort_question": "low",
+             "answer_effort_follow_up": "low", "answer_effort_plan": None},
+    "all_on": {"follow_up_brevity": True, "plan_brevity": True,
+               "answer_effort_question": "low", "answer_effort_follow_up": "low",
+               "answer_effort_plan": "high"},
+    "plan_only": {"answer_effort_plan": "medium"},
+}
+
+
+@pytest.mark.asyncio
+@pytest.mark.parametrize("switches", list(_ANSWER_SWITCHES), ids=list(_ANSWER_SWITCHES))
+async def test_without_a_model_the_gate_passes_whatever_the_answer_switches(
+    monkeypatch, tmp_path, switches
+):
+    """The deploy's gate reads .env.prod: with the answer switches on there, the
+    gate without a model failed on every question that carried an effort, and
+    would have blocked every deploy. The real answering path, production on
+    Claude, each combination: the same numbers, the stub reached with the
+    effort the graph chose, and not one call to the Anthropic client."""
+    import sys
+
+    module = sys.modules[__name__]
+    for name, value in {
+        "follow_up_brevity": False, "plan_brevity": False, "answer_effort_question": None,
+        "answer_effort_follow_up": None, "answer_effort_plan": None,
+        **_ANSWER_SWITCHES[switches],
+    }.items():
+        monkeypatch.setattr(settings, name, value)
+    _real_path_with_fake_retrieval(monkeypatch, module)
+    called = _anthropic_tripwire(monkeypatch)
+    seen: list = []
+    stub = module._model_free_stream
+
+    def _watched(calls):
+        seen.append(calls)  # the run's own counter, read after it
+        return stub(calls)
+
+    monkeypatch.setattr(module, "_model_free_stream", _watched)
+    monkeypatch.setenv(DEPLOY_ENV, "1")
+    monkeypatch.setenv(MODEL_FREE_ENV, "1")
+    monkeypatch.setattr(module, "_CONFIGURED_PROVIDER", "anthropic")
+    monkeypatch.setattr(module, "REPORT_PATH", tmp_path / "golden_report.json")
+
+    await module.test_groups_a_and_b_meet_the_deploy_gate()
+
+    assert called == []
+    data = json.loads((tmp_path / "golden_report.json").read_text(encoding="utf-8"))
+    assert data["mode"] == "no_model" and data["skipped_reason"] is None
+    assert data["generation_calls"] == 0 and data["routing_calls"] == 0
+    assert data["generation_stubbed"] == len(_ab_reaching_retrieval())
+    assert data["recall_at_4"] == 1.0 and data["refusal_rate"] == 1.0
+    (calls,) = seen
+    configured = {settings.answer_effort_question, settings.answer_effort_plan}
+    assert set(calls.efforts) <= configured
+    assert len(calls.efforts) == data["generation_stubbed"]
+    if settings.answer_effort_question:
+        assert settings.answer_effort_question in calls.efforts
 
 
 @pytest.mark.asyncio
