@@ -641,3 +641,105 @@ def test_resume_is_an_option_and_needs_a_model_report(tmp_path, monkeypatch, cap
     assert cb.main(["--with-model", "--budget-usd", "1", "--resume", str(offline)]) == 2
     assert "nothing was run" in capsys.readouterr().err
     assert cb.main(["--resume", str(offline)]) == 2
+
+
+# --- comparing the answer settings on and off (2026-11-11, round 3) --------------------
+#
+# settings.answer_effort_* and settings.follow_up_brevity are measured by running the
+# regressions with the model twice, without and with them. Each report says which
+# settings it ran with, what contract and effort each turn got, and the words and
+# time of the follow-ups to an answered topic apart, which is what they change.
+
+REGRESSIONS_2 = Path(cb.__file__).with_name("conversation_regressions_2.json")
+
+
+async def test_a_model_report_says_which_answer_settings_it_ran_with(monkeypatch):
+    from adelia.config import settings
+
+    async def _record(*_, **__):
+        return None
+
+    monkeypatch.setattr(usage, "record", _record)
+    monkeypatch.setattr(settings, "follow_up_brevity", True)
+    monkeypatch.setattr(settings, "answer_effort_follow_up", "low")
+    report = await cb.run_with_model(
+        cb.load_scenarios()[:1], budget_usd=1, turn_runner=_spending_turn(100),
+        guest=_fake_guest, set_age=_no_age,
+    )
+    assert report["settings"]["follow_up_brevity"] is True
+    assert report["settings"]["answer_effort_follow_up"] == "low"
+    assert report["settings"]["answer_effort_plan"] is None
+    assert {"plan_brevity", "no_unasked_refusals", "answer_effort_question"} <= set(
+        report["settings"])
+
+
+def test_each_turn_says_its_contract_its_effort_and_whether_it_follows_an_answer():
+    from adelia.agent import conversation as conv
+
+    c = conv.read("y si le doy zumo de pera", [
+        {"role": "user", "content": "lleva 4 dias sin hacer caca"},
+        {"role": "assistant", "content": "No es necesariamente un problema [ev_1]."}])
+    o = cb._from_final({"conversation": c, "kind": "answer", "intent": "plan",
+                        "shape": "follow_up", "effort": "low"})
+    assert (o["shape"], o["effort"], o["follows_answer"]) == ("follow_up", "low", True)
+    assert cb._from_final({"kind": "red_flag"})["follows_answer"] is False
+
+
+def test_the_totals_give_the_follow_ups_to_an_answer_apart():
+    turns = [
+        {"ok": True, "words": 200, "ttft_s": 15.0, "total_s": 20.0, "follows_answer": False},
+        {"ok": True, "words": 60, "ttft_s": 5.0, "total_s": 6.0, "follows_answer": True},
+        {"ok": True, "words": 80, "ttft_s": 7.0, "total_s": 8.0, "follows_answer": True},
+    ]
+    results = [{"id": "x", "turns": turns, "ok": 3, "total": 3}]
+    t = cb._totals(results, run_turns=turns)
+    assert t["follow_ups_to_an_answer"] == 2
+    assert t["words_follow_up_median"] == 70
+    assert t["ttft_follow_up_median_s"] == 6.0
+    assert t["words_median"] == 80
+    assert "Seguimientos de un tema ya respondido: 2" in cb.render_text(
+        {"mode": "model", "totals": {**t, "turns": 3, "scenarios": 1}, "scenarios": [],
+         "spent_usd": 0.1, "budget_usd": 1.0, "list_usd": 0.1, "stopped": None})
+
+
+async def test_offline_the_effort_the_graph_asked_for_reaches_the_fake_model(monkeypatch):
+    from adelia.config import settings
+
+    monkeypatch.setattr(settings, "answer_effort_plan", "low")
+    scenario = {"id": "x", "locale": "es", "age_months": 5, "tags": [], "turns": [
+        {"say": "lleva 4 dias sin hacer caca", "expect": {"turn": "new", "kind": "answer"}}]}
+    report = await cb.run_offline([scenario])
+    (turn,) = report["scenarios"][0]["turns"]
+    assert turn["ok"] and turn["effort"] == "low" and turn["shape"] == "plan"
+
+
+async def test_the_six_failures_of_the_replay_pass_without_the_model():
+    """battery-regr-20261111-0408.json: 26 of 32. Three conversations failed on
+    the code (piel-granitos, estreñimiento, guarderia-botones, turn 3): they are
+    scripts/conversation_regressions_2.json as production played them, every
+    follow-up's search with its sources found. The other three (guarderia-real-
+    9nov-1 turn 3, no-gatea and golpe-en-la-cabeza turn 1) are searches that did
+    not bring the guide the corpus holds; they are already in
+    conversation_regressions.json with the same classifier decisions."""
+    report = await cb.run_offline(cb.load_scenarios(REGRESSIONS_2))
+    failing = [(s["id"], t["n"], [k for k, ok in t["checks"].items() if not ok])
+               for s in report["scenarios"] for t in s["turns"] if not t["ok"]]
+    assert failing == []
+    assert [s["id"] for s in report["scenarios"]] == [
+        "real2-guarderia-botones", "real2-piel-granitos", "real2-estreñimiento"]
+    piel = report["scenarios"][1]["turns"]
+    assert [t["kind"] for t in piel] == ["clarify", "no_evidence", "no_evidence"]
+
+
+def test_the_replay_keeps_what_production_did():
+    data = json.loads(REGRESSIONS_2.read_text(encoding="utf-8"))
+    turns = [t for s in data["scenarios"] for t in s["turns"]]
+    assert sum(1 for t in turns if t["real"]["failed"]) == 3
+    for t in turns:
+        if t["real"]["intent_via"] == "model":
+            assert t["classifier"]["intent"] == t["real"]["intent"]
+            assert t["classifier"]["turn"] == t["real"]["turn_type"]
+        if t["real"]["intent_via"] == "fallback":
+            assert t["classifier"] == "down"
+        if t["real"].get("sources_found"):
+            assert t["evidence"] is True

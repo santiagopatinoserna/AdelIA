@@ -339,3 +339,32 @@ async def test_the_stages_of_a_sourced_answer_reach_the_panel():
     stages = [(e.content, e.sources) for e in events if e.type == "status"]
     assert stages == [("searching", 0), ("writing", 1)]
     assert [e.type for e in events].index("status") < [e.type for e in events].index("token")
+
+
+@pytest.mark.parametrize("effort", [None, "low"])
+async def test_the_dashboard_hands_the_graphs_effort_to_the_answering_model(monkeypatch, effort):
+    """settings.answer_effort_question (2026-11-11): the graph picks the effort, the
+    agent's stream carries it to the provider; unset, the call is what it was."""
+    from adelia.config import settings
+    from adelia.enrichment.profile_service import UNKNOWN_PROFILE
+    from tests.test_chat_orchestrator import _evidence_match
+
+    monkeypatch.setattr(settings, "answer_effort_question", effort)
+    seen: list[dict] = []
+
+    async def fake_stream(*args, **kwargs):
+        seen.append(kwargs)
+        yield "Claro"
+
+    with patch("adelia.agent.orchestrator.load_profile_facts", return_value=UNKNOWN_PROFILE), \
+         patch("adelia.services.chat_orchestrator.detect_temporal_intent", return_value=None), \
+         patch("adelia.services.chat_orchestrator.retrieve_relevant_chunks", return_value=[]), \
+         patch("adelia.services.chat_orchestrator.embed_texts", return_value=[[0.1] * 1024]), \
+         patch("adelia.services.chat_orchestrator._retrieve_evidence_for_query",
+               return_value=[_evidence_match()]), \
+         patch("adelia.services.chat_orchestrator._stream_llm_tokens", fake_stream):
+        await _collect(run_turn(
+            user_id=uuid4(), profile_id=None,
+            message="¿cuándo empiezo con la alimentación complementaria?"))
+    assert len(seen) == 1
+    assert seen[0].get("effort") == effort

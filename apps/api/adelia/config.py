@@ -9,6 +9,9 @@ from pydantic_settings import BaseSettings, SettingsConfigDict
 # spends more tokens. A typo in the env var fails at boot instead of as a 422
 # in the middle of a parent's chat turn.
 ReasoningEffort = Literal["none", "high"]
+#: The effort levels Claude takes in `output_config` for an answer. The answering
+#: call always sent "medium" (services/chat_orchestrator._stream_anthropic_tokens).
+AnswerEffort = Literal["low", "medium", "high"]
 
 # The output size of every embedding model this code knows how to store, and
 # the ONE place that couples a model name to a vector dimension. The `chunks`
@@ -128,6 +131,26 @@ class Settings(BaseSettings):
     # Not read by extraction (temperature 0, JSON) or by the consultation summary.
     chat_reasoning_effort: ReasoningEffort | None = None
     briefing_reasoning_effort: ReasoningEffort | None = None
+
+    # How long Claude thinks before an answer of the graph (agent/graph.py), per shape.
+    # The regressions replayed in production on 2026-11-11 (04:08): first word at a
+    # median of 9.4 s and a p95 of 18.7 s, and the earlier battery measured 1.6 s plus
+    # 8.4 ms per thinking token. Estimated that way, short answers thought about 370
+    # tokens at the median (6 turns), plans about 1,480 (12) and follow-ups in a topic
+    # already answered about 1,320 (11; 1,560 for the plans among them). None
+    # (the default) keeps "medium", the effort every answer is sent with today, and
+    # the request is byte for byte what it was. Claude only: Mistral keeps its own
+    # chat_reasoning_effort. Red flags and refusals never reach a model.
+    #   answer_effort_question   a short answer (intent "question")
+    #   answer_effort_plan       a plan
+    #   answer_effort_follow_up  a follow-up in a topic that already had an answer with
+    #                            sources (agent/conversation `answered`); wins over the two
+    #                            above. A correction is not a follow-up.
+    # OFF until the conversation battery, run in production with and without them,
+    # shows the time gained and no check lost (docs/specs/AGENT_GRAPH.md).
+    answer_effort_question: AnswerEffort | None = None
+    answer_effort_plan: AnswerEffort | None = None
+    answer_effort_follow_up: AnswerEffort | None = None
 
     # ---- Dual-RAG retrieval cut-offs (cosine distance, lower = closer) ----
     # Calibrated 2026-08-31 against the production corpus (118 sources, 258
@@ -276,6 +299,15 @@ class Settings(BaseSettings):
     # until scripts/probe_plan_brevity.py, run in production, and the golden gate show it.
     plan_brevity: bool = False
 
+    # A follow-up in a topic already answered with sources answers what she asks now,
+    # in a few cited sentences, without the plan again (services/answer_contract.py,
+    # FOLLOW_UP_RULE). The same replay: median 165 words, and «y si le doy zumo de pera»
+    # wrote the whole «Cuándo ir al médico» of the turn before again. «Cuándo ir al
+    # médico» is written only if what is new changes it; a new warning sign always
+    # goes. Off, the graph asks for the plan or the short answer as before. OFF until
+    # the conversation battery, run in production, shows it.
+    follow_up_brevity: bool = False
+
     # STT (speech-to-text). "mistral" = Voxtral (UE por defecto, diarización);
     # "openai" = whisper-1 (sin diarización). Voxtral reusa mistral_api_key.
     stt_provider: str = "mistral"  # "mistral" | "openai"
@@ -371,7 +403,10 @@ class Settings(BaseSettings):
     # a way to buy someone else's embeddings by the megabyte.
     demo_max_question_chars: int = 300
 
-    @field_validator("chat_reasoning_effort", "briefing_reasoning_effort", mode="before")
+    @field_validator(
+        "chat_reasoning_effort", "briefing_reasoning_effort", "answer_effort_question",
+        "answer_effort_plan", "answer_effort_follow_up", mode="before",
+    )
     @classmethod
     def _blank_effort_means_unset(cls, value):
         # An env file line such as `CHAT_REASONING_EFFORT=` arrives as "". That

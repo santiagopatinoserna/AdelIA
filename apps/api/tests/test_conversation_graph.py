@@ -855,3 +855,236 @@ async def test_a_turn_without_a_model_says_no_stage():
     s = RecordSurface(evidence=())
     events, _ = await _turn(s.agent(), GRANITOS, [])
     assert not [e for e in events if e["type"] == "status" and e["stage"] == "writing"]
+
+
+# --- the regressions replayed with the real model (2026-11-11, 04:08) ---------------
+#
+# battery-regr-20261111-0408.json: 26 of 32 turns. In production the search of a
+# follow-up (her words in the topic) found the topic's guides on every turn: 4
+# sources for «no le pican y esta bien», «le pongo crema», «y si le doy zumo de
+# pera» and «y cuanto tarda en adaptarse». So the code path that says the short
+# line and offers the card without paying the model never ran: the model was
+# paid to write the refusal itself, the turn went out as an answer and the card
+# to note her words never came. The transcripts are
+# scripts/conversation_regressions_2.json.
+
+from adelia.config import settings  # noqa: E402
+from adelia.services.answer_contract import chat_system_prompt  # noqa: E402
+
+GRANITOS_ASKED = [_u(GRANITOS), _a(ASKED_WHEN_NOTHING)]
+CREAM_LINE = ("**Crema para los granitos rojos de la cara**: Sigo sin fuentes sobre esto. "
+              "Coméntalo con tu pediatra, que conoce a tu bebé.")
+PEAR = "y si le doy zumo de pera"
+PEAR_MIXED = (
+    "**Zumo de pera:** " + no_evidence_reply("es") + "\n\n## Cuándo ir al médico\n"
+    "Llama al pediatra de inmediato si:\n- Ves grandes cantidades de sangre, moco o agua "
+    "en las heces [ev_1]."
+)
+FEVER_ASSUMED = [_u("tiene mocos y tose"), _a("Con la fiebre que tiene, ofrécele líquidos [ev_1].")]
+CONSTIPATION = [_u("lleva 4 dias sin hacer caca"), _a("No es necesariamente un problema [ev_1]."),
+                _u("toma biberon"), _a("Con fórmula, 4 días es más de lo habitual [ev_1].")]
+
+
+async def test_sources_found_but_the_model_refuses_whole_is_the_dead_end_with_its_card():
+    """piel-granitos, turn 2: 4 sources, none on red spots that do not itch; the
+    model wrote the whole coded refusal and the turn went out as an answer. It is
+    the refusal: her words for the visit follow it, and the card to note them."""
+    s = RecordSurface(intent="plan", via="model", tokens=(no_evidence_reply("es"),))
+    events, final = await _turn(s.agent(), "no le pican y esta bien", GRANITOS_ASKED)
+    assert "stream" in s.names()
+    assert final["kind"] == "no_evidence"
+    assert final["answer"].startswith(no_evidence_reply("es"))
+    assert conv.consult_note(final["conversation"], "es") in final["answer"]
+    assert [c["type"] for c in _cards(events)] == ["confirm"]
+    streamed = "".join(e["content"] for e in events if e["type"] == "token")
+    assert streamed == final["answer"]
+    assert final["evidence_citations"] == [] and final["citations"] == []
+
+
+async def test_in_a_refused_topic_the_models_short_line_alone_gets_the_card():
+    """piel-granitos, turn 3, «le pongo crema» with the classifier down: the model
+    obeyed the refused note and wrote only the short line under a bold label."""
+    s = RecordSurface(intent="plan", via="fallback", tokens=(CREAM_LINE,))
+    history = [*GRANITOS_ASKED, _u("no le pican y esta bien"), _a(no_evidence_reply("es"))]
+    events, final = await _turn(s.agent(), "le pongo crema", history)
+    assert final["kind"] == "no_evidence"
+    assert final["answer"].startswith(CREAM_LINE)
+    assert [c["type"] for c in _cards(events)] == ["confirm"]
+
+
+@pytest.mark.parametrize("tokens", [
+    (PEAR_MIXED,),
+    ("Mis fuentes no dan un plazo [ev_1].\n\n**Cuánto tarda:** "
+     + conv.no_evidence_again("es"),),
+    ("Tu pediatra pidió repetir la analítica [2].\n\n**Zumo de pera:** "
+     + no_evidence_reply("es"),),
+])
+async def test_a_mixed_answer_keeps_its_sources_and_gets_no_card(tokens):
+    """estreñimiento and guarderia-botones, turn 3: a part answered with its citation
+    and the refusal for the rest is an answer, as before."""
+    s = RecordSurface(tokens=tokens)
+    events, final = await _turn(s.agent(), PEAR, CONSTIPATION)
+    assert final["kind"] == "answer"
+    assert final["answer"] == tokens[0]
+    assert not _cards(events)
+
+
+async def test_an_uncited_text_that_is_not_the_refusal_is_left_alone():
+    s = RecordSurface(tokens=("Puede ser normal a esta edad.",))
+    events, final = await _turn(s.agent(), PEAR, CONSTIPATION)
+    assert final["kind"] == "answer" and not _cards(events)
+
+
+async def test_with_only_her_record_the_models_refusal_stays_an_answer_once():
+    """No evidence and her record: decide already lets the record answer once
+    (the regressions of 2026-11-11 pin it); the dead end is for the next turn."""
+    s = RecordSurface(evidence=(), tokens=(no_evidence_reply("es"),), via="model")
+    _, final = await _turn(s.agent(), "no le pican y esta bien", GRANITOS_ASKED)
+    assert final["kind"] == "answer"
+
+
+async def test_the_chat_keeps_the_models_refusal_as_an_answer():
+    """The chat cannot note her words (and the golden gate runs it): unchanged."""
+    s = RecordSurface(tokens=(no_evidence_reply("es"),))
+    events, final = await _turn(s.chat(), "no le pican y esta bien", GRANITOS_ASKED,
+                                surface="chat")
+    assert final["kind"] == "answer" and not _cards(events)
+    assert final["answer"] == no_evidence_reply("es")
+
+
+# --- a follow-up in a topic already answered (settings.follow_up_brevity) -----------
+#
+# Median 165 words over the regressions, and the follow-ups were the longest:
+# «y si le doy zumo de pera» repeated the whole «Cuándo ir al médico» of the turn
+# before (175 words), «y cuanto tarda en adaptarse» the whole plan (169).
+
+class EffortSurface(RecordSurface):
+    """Records the thinking effort the graph asked for, if any."""
+
+    async def stream(self, system, user, history=None, **kwargs):
+        self.calls.append(("stream", system, user, history, kwargs))
+        for t in self.tokens:
+            yield t
+
+
+@pytest.fixture
+def follow_up_brevity(monkeypatch):
+    monkeypatch.setattr(settings, "follow_up_brevity", True)
+
+
+def test_the_follow_up_and_effort_settings_are_off_by_default():
+    from adelia.config import Settings
+
+    assert Settings.model_fields["follow_up_brevity"].default is False
+    for name in ("answer_effort_question", "answer_effort_plan", "answer_effort_follow_up"):
+        assert Settings.model_fields[name].default is None
+
+
+@pytest.mark.parametrize("name", ["answer_effort_question", "answer_effort_plan",
+                                  "answer_effort_follow_up"])
+def test_a_blank_effort_in_the_environment_means_unset(monkeypatch, name):
+    from adelia.config import Settings
+
+    monkeypatch.setenv(name.upper(), "")
+    assert getattr(Settings(), name) is None
+    monkeypatch.setenv(name.upper(), "low")
+    assert getattr(Settings(), name) == "low"
+
+
+async def test_off_a_follow_up_gets_the_plan_as_before():
+    s = EffortSurface()
+    _, final = await _turn(s.agent(), PEAR, CONSTIPATION)
+    assert s.one("stream")[1] == chat_system_prompt("es", shape="plan")
+    assert final["shape"] == "plan"
+
+
+@pytest.mark.usefixtures("follow_up_brevity")
+@pytest.mark.parametrize("intent", ["plan", "question"])
+async def test_on_a_follow_up_in_an_answered_topic_gets_the_follow_up_contract(intent):
+    s = EffortSurface(intent=intent)
+    _, final = await _turn(s.agent(), PEAR, CONSTIPATION)
+    assert s.one("stream")[1] == chat_system_prompt("es", shape="follow_up")
+    assert final["shape"] == "follow_up"
+    assert final["intent"] == intent
+
+
+@pytest.mark.usefixtures("follow_up_brevity")
+@pytest.mark.parametrize("message, history", [
+    ("lleva 4 dias sin hacer caca", []),
+    # A correction: the earlier answers rest on what she took back.
+    ("no tiene fiebre", FEVER_ASSUMED),
+    # Nothing answered with sources yet in this topic: a clarify round, a refusal.
+    ("no le pican y esta bien", GRANITOS_ASKED),
+    ("le pongo crema", [_u(GRANITOS), _a(no_evidence_reply("es"))]),
+    # Another topic.
+    ("Otra cosa, ¿cuántas siestas tiene que hacer?", CONSTIPATION),
+])
+async def test_on_anything_but_a_follow_up_in_an_answered_topic_keeps_its_shape(
+    message, history
+):
+    s = EffortSurface(intent="plan", via="model")
+    _, final = await _turn(s.agent(), message, history)
+    assert s.one("stream")[1] == chat_system_prompt("es", shape="plan")
+    assert final["shape"] == "plan"
+
+
+@pytest.mark.usefixtures("follow_up_brevity")
+async def test_on_a_button_answer_is_the_topics_first_answer_and_keeps_the_plan():
+    s = EffortSurface()
+    _, final = await _turn(
+        s.agent(), GUARDERIA, [_u(GUARDERIA), _a(ASKED)],
+        clarifications=[{"field": "nursery_time", "value": "lt1m"},
+                        {"field": "social_signals", "value": "all"}],
+    )
+    assert s.one("stream")[1] == chat_system_prompt("es", shape="plan")
+
+
+@pytest.mark.usefixtures("follow_up_brevity")
+async def test_on_a_red_flag_in_a_follow_up_is_still_the_referral_and_pays_nothing():
+    s = EffortSurface()
+    _, final = await _turn(s.agent(), "ahora no se despierta, no hay forma de despertarlo",
+                           CONSTIPATION)
+    assert final["kind"] == "red_flag" and "stream" not in s.names()
+
+
+# --- thinking effort (settings.answer_effort_*) ---------------------------------------
+#
+# The battery measured 1.6 s plus 8.4 ms a thinking token to the first word. The
+# answering model runs at effort "medium" for every answer; these settings lower
+# it for the answers that need less of it. Unset, the call is what it was.
+
+async def test_unset_the_graph_asks_for_no_effort():
+    s = EffortSurface()
+    await _turn(s.agent(), PEAR, CONSTIPATION)
+    assert s.one("stream")[4] == {}
+
+
+@pytest.mark.parametrize("intent, history, setting, expected", [
+    ("question", [], {"answer_effort_question": "low"}, "low"),
+    ("question", [], {"answer_effort_plan": "low"}, None),
+    ("plan", [], {"answer_effort_plan": "low"}, "low"),
+    ("plan", [], {"answer_effort_question": "low"}, None),
+    ("plan", [], {"answer_effort_follow_up": "low"}, None),
+    ("plan", CONSTIPATION, {"answer_effort_follow_up": "low", "answer_effort_plan": "high"},
+     "low"),
+    ("question", CONSTIPATION, {"answer_effort_follow_up": "low"}, "low"),
+    ("plan", CONSTIPATION, {"answer_effort_plan": "high"}, "high"),
+])
+async def test_the_effort_follows_the_shape_and_the_topic(
+    monkeypatch, intent, history, setting, expected
+):
+    for name, value in setting.items():
+        monkeypatch.setattr(settings, name, value)
+    s = EffortSurface(intent=intent)
+    message = PEAR if history else "lleva 4 dias sin hacer caca"
+    _, final = await _turn(s.agent(), message, history)
+    assert s.one("stream")[4] == ({} if expected is None else {"effort": expected})
+    assert final.get("effort") == expected
+
+
+async def test_a_correction_is_not_a_follow_up_for_the_effort(monkeypatch):
+    monkeypatch.setattr(settings, "answer_effort_follow_up", "low")
+    s = EffortSurface()
+    _, final = await _turn(s.agent(), "no tiene fiebre", FEVER_ASSUMED)
+    assert final["conversation"].kind == "correction"
+    assert s.one("stream")[4] == {}

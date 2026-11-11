@@ -183,6 +183,18 @@ Contrato corto: una frase que responde, hasta 3 viñetas, cita en cada una,
 sin encabezados de plan. Para `intent == "question"`. Mismas reglas de
 abstención (`no_evidence`, `evidence_only`).
 
+### Seguimiento de un tema ya respondido (2026-11-11, apagado)
+Detrás de `follow_up_brevity`, un seguimiento cuyo modelo ve en el hilo una respuesta
+anterior del tema con fuentes (`conversation.answered`; nunca una corrección, una
+respuesta a botones ni un tema nuevo) recibe el contrato `follow_up`: responde a lo que
+pregunta ahora en pocas frases citadas, sin repetir el plan, y «Cuándo ir al médico» solo
+si lo nuevo trae una señal que no tenía o cambia su urgencia; una señal nueva nunca se
+recorta. La intención no cambia. Detrás de `answer_effort_question`, `answer_effort_plan`
+y `answer_effort_follow_up` (sin valor, «medium» como siempre), el esfuerzo de
+pensamiento de Claude por forma de respuesta; el del seguimiento manda sobre los otros.
+Las banderas rojas, los rechazos del código y las preguntas con botones no llaman a
+ningún modelo.
+
 ### `record`
 1. Extracción estructurada (modelo, JSON): `tipo` ∈ {temperatura, toma, sueño,
    deposición, síntoma, medicación dada, vacuna puesta, nota}, `valor`, `unidad`,
@@ -208,6 +220,11 @@ descargo, emite los eventos SSE que ya consume el front (`token`, `card`,
 Un texto con el rechazo fijo sale solo con lo que cita: un rechazo entero, sin
 ninguna tarjeta; una respuesta mixta, con su evidencia citada y las madres que
 cita `[ex_N]` (2026-11-06, `docs/specs/RECHAZOS_Y_TARJETAS.md`).
+Con cuenta (2026-11-11): si hubo fuentes y el modelo escribió solo el rechazo, o en un
+tema ya rechazado solo la línea corta, sin ninguna cita, el turno acaba como el rechazo
+del código: `no_evidence`, sus palabras para la consulta tras el texto del modelo (que no
+se corta) y la tarjeta para anotarlas. En producción la búsqueda de un seguimiento
+encontraba siempre las fichas del tema, así que ese camino del código no se daba nunca.
 
 ## Qué se reutiliza y qué es nuevo
 
@@ -249,6 +266,12 @@ LangChain.
   Con el modelo real (11-nov, tope 2 $, 57 de 110 turnos): 16 fallos, sus conversaciones
   reproducidas sin modelo en `scripts/conversation_regressions.json` (20/32 en `main`, 32/32
   después). `--resume <informe>` corre solo lo que falta; `--from`, `--tag`, `--only` eligen.
+  Esas 11 con el modelo tras el despliegue (11-nov, 04:08): 26/32; de los 6 fallos, 3 de
+  código (`scripts/conversation_regressions_2.json`, 7/9 en `main`, 9/9 después) y 3 de
+  búsqueda (la ficha estaba en el corpus y no salió). El informe con modelo guarda los
+  ajustes con que corrió y, aparte, palabras y primera palabra de los seguimientos de un
+  tema ya respondido; los comandos para comparar los ajustes apagados y encendidos están
+  en el docstring de la batería.
 
 ## Orden de construcción (cada paso desplegable por separado)
 

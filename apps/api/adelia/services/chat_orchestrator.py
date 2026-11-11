@@ -98,6 +98,7 @@ async def _stream_llm_tokens(
     history: list[dict] | None = None,
     *,
     provider: str | None = None,
+    effort: str | None = None,
 ) -> AsyncIterator[str]:
     """Stream generation tokens from the configured provider.
 
@@ -108,10 +109,16 @@ async def _stream_llm_tokens(
     generation is pluggable. history: prior turns ({"role","content"}), oldest
     first; the RAG context lives only in the final user message.
 
+    `effort` is the thinking effort the graph asks for this answer
+    (settings.answer_effort_*): Claude only, None keeps "medium". Mistral has its
+    own knob (chat_reasoning_effort) and never receives this one.
+
     Raises RuntimeError if the selected provider's API key is missing.
     """
     if uses_anthropic(provider):
-        async for piece in _stream_anthropic_tokens(system_prompt, user_message, history):
+        async for piece in _stream_anthropic_tokens(
+            system_prompt, user_message, history, effort=effort
+        ):
             yield piece
         return
 
@@ -174,13 +181,15 @@ def _anthropic_history(history: list[dict] | None) -> list[dict]:
 
 
 async def _stream_anthropic_tokens(
-    system_prompt: str, user_message: str, history: list[dict] | None
+    system_prompt: str, user_message: str, history: list[dict] | None, *,
+    effort: str | None = None,
 ) -> AsyncIterator[str]:
     """Raises RuntimeError if ANTHROPIC_API_KEY missing, AnthropicRefusal on a refusal.
 
     Thinking is on by default on the current Claude models and cannot be turned
     off on the default one; effort "medium" (its default, set explicitly so a
-    model change does not move it) bounds it. text_stream yields only text
+    model change does not move it) bounds it; the graph may ask for another
+    level for one answer (`effort`, settings.answer_effort_*). text_stream yields only text
     deltas, so the reasoning is never streamed to the parent. No temperature:
     the current Claude models reject sampling parameters with a 400.
     """
@@ -190,7 +199,7 @@ async def _stream_anthropic_tokens(
         max_tokens=16000,
         system=system_prompt,
         messages=[*_anthropic_history(history), {"role": "user", "content": user_message}],
-        output_config={"effort": "medium"},
+        output_config={"effort": effort or "medium"},
     ) as stream:
         async for piece in stream.text_stream:
             if piece:
@@ -325,13 +334,19 @@ async def _retrieve_evidence_for_query(
 
 
 async def _guarded_stream(
-    system_prompt: str, user_message: str, *, history: list[dict] | None = None
+    system_prompt: str, user_message: str, *, history: list[dict] | None = None,
+    effort: str | None = None,
 ) -> AsyncIterator[str]:
     """`_stream_llm_tokens` under the SSE guards: a gap between tokens and a
     total budget. Abandoning the generator without aclose() leaves the HTTP
     stream to the provider open until GC, the exact leak these timeouts
     exist to prevent."""
-    token_iter = _stream_llm_tokens(system_prompt, user_message, history=history).__aiter__()
+    # The effort rides along only when the graph chose one, so a call without it
+    # is the call it always was.
+    extra = {"effort": effort} if effort is not None else {}
+    token_iter = _stream_llm_tokens(
+        system_prompt, user_message, history=history, **extra
+    ).__aiter__()
     stream_start = time.monotonic()
     try:
         while True:
@@ -589,11 +604,14 @@ async def answer_question_streaming(
         )
 
     def _stream(
-        system_prompt: str, user_message: str, history: list[dict] | None = None
+        system_prompt: str, user_message: str, history: list[dict] | None = None,
+        effort: str | None = None,
     ) -> AsyncIterator[str]:
-        # This topic's part of the transcript when the graph hands it.
+        # This topic's part of the transcript when the graph hands it, and the
+        # thinking effort it chose for this answer (None: the default).
         return _guarded_stream(
-            system_prompt, user_message, history=session_history if history is None else history
+            system_prompt, user_message, history=session_history if history is None else history,
+            effort=effort,
         )
 
     deps = GraphDeps(route=_route, retrieve=_retrieve, stream=_stream, can_ask=False)

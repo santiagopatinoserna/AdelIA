@@ -35,6 +35,9 @@ what this turn is and what each later step should see:
                   is called only when the routing rules abstain (no new call);
   asked, refused  whether this topic already spent its one clarify round, and
                   whether it was already told there is no evidence;
+  answered        whether the answering model sees, in `model_history`, an earlier
+                  answer of this topic with sources: a follow-up to it need not
+                  repeat it (settings.follow_up_brevity, 2026-11-11);
   referral        the code of the red flag this topic was referred for, if any:
                   the guard reads her follow-ups with the topic (2026-11-11).
 
@@ -360,6 +363,10 @@ def _is_refusal(answer: str) -> bool:
     return any(no_evidence_reply(lang) in answer or _AGAIN[lang] in answer for lang in _LANGS)
 
 
+#: An answer that cites the library ([ev_1]), whatever else it says.
+_SOURCED = re.compile(r"\[ev_\d+\]")
+
+
 def _is_record(answer: str) -> bool:
     return answer.startswith(_NOTED_OPENINGS)
 
@@ -579,6 +586,8 @@ class Conversation:
     retracted: tuple[str, ...] = ()
     asked: bool = False
     refused: bool = False
+    #: An earlier answer of this topic with sources is in `model_history`.
+    answered: bool = False
     answering: bool = False
     behaviour: bool = False
     nursery: bool = False
@@ -744,11 +753,17 @@ def read(
     else:
         search = _bounded(head, now, hint)
 
+    # What the model will read as earlier answers, not the whole topic: a correction,
+    # a button answer and a new topic carry none, so nothing there is "answered".
+    answered = any(m["role"] == "assistant" and _SOURCED.search(m["content"])
+                   for m in model_history)
+
     return Conversation(
         kind=kind, via=via, message=turn_message, topic=topic,
         search_query=search, route_text=route_text, prompt_question=prompt,
         model_history=model_history, route_history=_route_history(history),
-        retracted=retracted, asked=asked, refused=refused, answering=answering,
+        retracted=retracted, asked=asked, refused=refused, answered=answered,
+        answering=answering,
         behaviour=behaviour, nursery=nursery, referral=referral, decided=decided,
         _history=tuple(history or ()), _clarified=clarified,
     )

@@ -186,6 +186,10 @@ class AgentState(TypedDict, total=False):
     patient_context: str | None
     kind: str
     # Output
+    #: The contract the answering model got ("plan", "question", "follow_up") and the
+    #: thinking effort asked for it (None: the provider's default).
+    shape: str
+    effort: str | None
     answer: str
     streamed: bool
     citations: list
@@ -895,9 +899,44 @@ def _age_line(age_months: int) -> str:
     )
 
 
+def _follows_an_answer(state: AgentState) -> bool:
+    """A follow-up whose model sees an earlier answer of the topic with sources
+    (agent/conversation `answered`). A correction, a button answer and a new
+    topic carry no earlier answer to the model, so none of them is one."""
+    c = state.get("conversation")
+    return c is not None and c.kind == "follow_up" and c.answered
+
+
+def _shape(state: AgentState, shape: str) -> str:
+    """The contract for this answer: the intent's, or behind
+    settings.follow_up_brevity the follow-up's (answer_contract.FOLLOW_UP_RULE)."""
+    if settings.follow_up_brevity and _follows_an_answer(state):
+        return "follow_up"
+    return shape
+
+
+def _effort(state: AgentState, shape: str) -> str | None:
+    """The thinking effort for this answer (settings.answer_effort_*), or None.
+
+    The battery measured 1.6 s plus 8.4 ms per thinking token before the first
+    word; plans and follow-ups thought four times longer than short answers
+    (config.py has the figures). A follow-up in an answered topic takes its own
+    setting first, then the one of its intent.
+    """
+    if _follows_an_answer(state) and settings.answer_effort_follow_up:
+        return settings.answer_effort_follow_up
+    if shape == "follow_up":
+        shape = "question" if state.get("intent") == "question" else "plan"
+    if shape == "question":
+        return settings.answer_effort_question
+    return settings.answer_effort_plan
+
+
 async def _compose_with_model(
     state: AgentState, deps: GraphDeps, *, shape: str, experience: list
 ) -> dict:
+    shape = _shape(state, shape)
+    effort = _effort(state, shape)
     system = chat_system_prompt(_locale(state), shape=shape)
     user = _user_message(state, deps, experience)
     # The wait before the first word is the answering model's (the battery,
@@ -910,24 +949,31 @@ async def _compose_with_model(
         # A surface that sent a transcript gets back this topic's part of it
         # (agent/conversation): nothing of an earlier topic, nothing of an
         # answer she corrected.
+        # The effort rides along only when a setting chose one.
         c = state.get("conversation")
+        extra = {"effort": effort} if effort is not None else {}
         if state.get("history") and c is not None:
-            tokens = deps.stream(system, user, history=c.model_history)
+            tokens = deps.stream(system, user, history=c.model_history, **extra)
         else:
-            tokens = deps.stream(system, user)
+            tokens = deps.stream(system, user, **extra)
         pieces: list[str] = []
         async for piece in tokens:
             pieces.append(piece)
             _emit({"type": "token", "content": piece})
-        return {"answer": "".join(pieces), "experience": experience, "streamed": True}
+        answer = "".join(pieces)
+        out = {"answer": answer, "experience": experience, "streamed": True,
+               "shape": shape, "effort": effort}
+        if state.get("evidence") and _can_note(state, deps) and _only_the_refusal(answer):
+            out.update(_noted_refusal(state, deps, answer))
+        return out
     try:
         answer = await deps.generate(system, user)
     except Exception as exc:  # noqa: BLE001
         logger.warning("graph: generation failed (%s)", type(exc).__name__)
         # Retrieval worked, generation did not: the corpus fragments are the
         # honest thing to show, under a "could not compose an answer" note.
-        return {"kind": "evidence_only", "answer": "", "experience": []}
-    return {"answer": answer, "experience": experience}
+        return {"kind": "evidence_only", "answer": "", "experience": [], "shape": shape}
+    return {"answer": answer, "experience": experience, "shape": shape}
 
 
 def _source_count(state: AgentState) -> int:
@@ -1004,13 +1050,62 @@ def _dead_end(state: AgentState, deps: GraphDeps, refusal: dict) -> dict:
     lang = _lang(state)
     text = conversation.no_evidence_again(lang) if c.refused else refusal["answer"]
     text = f"{text}\n\n{conversation.consult_note(c, lang)}"
+    _offer_visit_note(state, deps, c)
+    return {**refusal, "answer": text}
+
+
+def _offer_visit_note(state: AgentState, deps: GraphDeps, c) -> None:
+    """The card that offers to note her words in her record for the visit."""
     now = deps.now()
     draft = rec.RecordDraft(_VISIT_NOTE, None, None, now, conversation.visit_note(c))
     card = rec.confirm_card(draft, locale=_locale(state), now=now)
-    card["payload"]["title"] = conversation.visit_card_title(lang)
+    card["payload"]["title"] = conversation.visit_card_title(_lang(state))
     card["payload"]["body"] = draft.text
     _emit({"type": "card", "card": card})
-    return {**refusal, "answer": text}
+
+
+#: A bold label the model puts before the refusal («**Zumo de pera:**»).
+_BOLD_LABEL = re.compile(r"\*\*[^*\n]{1,160}\*\*")
+#: What may stand next to the refusal, besides a bold label, for the text to be the
+#: refusal alone: a plain label such as «Zumo de pera:».
+_LABEL_WORDS = 12
+
+
+def _only_the_refusal(text: str) -> bool:
+    """Whether the model's text is the coded refusal, or the short line of a
+    refused topic, and nothing else: no citation of any kind, no heading, at
+    most a label naming the part."""
+    patient, used = markers_in(text)
+    if patient or used or _EX_MARKER.search(text) or _HEADING.search(text):
+        return False
+    rest, found = text, False
+    for lang in PLAN_HEADINGS:
+        for line in (no_evidence_reply(lang), conversation.no_evidence_again(lang)):
+            if line in rest:
+                rest, found = rest.replace(line, " "), True
+    return found and len(re.findall(r"\w+", _BOLD_LABEL.sub(" ", rest))) <= _LABEL_WORDS
+
+
+def _noted_refusal(state: AgentState, deps: GraphDeps, answer: str) -> dict:
+    """The model found nothing in the sources it was handed: the dead end, after it.
+
+    The regressions replayed with the real model (2026-11-11, 04:08): in production
+    a follow-up's search (her words in the topic) found the topic's guides every
+    time, 4 sources for «no le pican y esta bien» and for «le pongo crema», so
+    `decide` sent them to the model, which wrote the coded refusal (or, in a refused
+    topic, the short line) and nothing else. The turn went out as an answer, without
+    her words for the visit and without the card to note them that `_dead_end`
+    gives a search that finds nothing. Same ending now: her words follow the text
+    the model wrote (already streamed, never cut), and the card. Only where she can
+    note (the agent); the chat, which the golden gate runs, is unchanged.
+    """
+    c = state.get("conversation")
+    if c is None:
+        return {}
+    tail = f"\n\n{conversation.consult_note(c, _lang(state))}"
+    _emit({"type": "token", "content": tail})
+    _offer_visit_note(state, deps, c)
+    return {"kind": "no_evidence", "answer": f"{answer}{tail}", "experience": []}
 
 
 async def experience_only(state: AgentState, runtime: Runtime[GraphDeps]) -> dict:
