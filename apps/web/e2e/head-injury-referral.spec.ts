@@ -3,6 +3,7 @@ import { expect, test, type Browser, type Page } from "@playwright/test";
 import en from "../messages/en.json";
 import es from "../messages/es.json";
 import fr from "../messages/fr.json";
+import { ask } from "./utils/ask";
 import { seedUserAndSessionCookie } from "./utils/session";
 
 // The #retr4 finding (2026-11-11): «se ha dado un golpe en la cabeza y ha
@@ -53,8 +54,7 @@ async function say(page: Page, locale: keyof typeof CATALOGS, text: string) {
   const agent = CATALOGS[locale].agent;
   const box = page.getByPlaceholder(agent.placeholder)
     .or(page.getByRole("textbox", { name: agent.inputLabel })).filter({ visible: true });
-  await box.fill(text);
-  await box.press("Enter");
+  await ask(box, text);
 }
 
 for (const c of CASES) {
