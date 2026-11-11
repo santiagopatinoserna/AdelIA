@@ -1,6 +1,7 @@
 import { expect, test } from "@playwright/test";
 import AxeBuilder from "@axe-core/playwright";
 import es from "../messages/es.json";
+import { ask } from "./utils/ask";
 import { forceKeylessDemo } from "./utils/keyless-demo";
 
 // The landing's own answer, drawn when no guest can be created (see the helper).
@@ -39,8 +40,9 @@ async function start(page: import("@playwright/test").Page, bodies: unknown[]) {
     return route.fulfill({ json: body.clarification ? plan : clarify });
   });
   await page.goto("/es");
-  await page.locator("#demo-question").fill("Tiene fiebre, ¿qué hago?");
-  await page.getByRole("button", { name: es.demo.askCta, exact: true }).click();
+  await ask(page.locator("#demo-question"), "Tiene fiebre, ¿qué hago?", {
+    send: page.getByRole("button", { name: es.demo.askCta, exact: true }),
+  });
 }
 
 test("es: one question, three tall buttons and a way out, nothing else competing", async ({ page }) => {

@@ -13,6 +13,8 @@ test("pwa: service worker registers, serves offline.html without network, announ
     viewport: { width: 390, height: 844 },
     isMobile: true,
     hasTouch: true,
+    // The suite blocks the worker (playwright.config.ts); this spec is about it.
+    serviceWorkers: "allow",
   });
   const page = await context.newPage();
   await page.goto("/es");

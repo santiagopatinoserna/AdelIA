@@ -2,6 +2,7 @@ import { expect, test, type Browser, type Page } from "@playwright/test";
 import { Pool } from "pg";
 
 import es from "../messages/es.json";
+import { ask } from "./utils/ask";
 import { isoMonthsAgo, seedProfile } from "./utils/seed";
 import { seedUserAndSessionCookie } from "./utils/session";
 
@@ -109,9 +110,7 @@ async function answerWith(page: Page, answer: string, cites: unknown[]) {
     body: sse([["start", {}], ["token", { content: answer }],
                ["final", { citations: [], evidence_citations: cites }]]),
   }));
-  const box = page.getByTestId("agent-canvas").locator("textarea");
-  await box.fill("Regurgita después de cada toma");
-  await box.press("Enter");
+  await ask(page.getByTestId("agent-canvas").locator("textarea"), "Regurgita después de cada toma");
   await expect(page.locator('[data-role="assistant"] [data-testid="answer-content"]')).toBeVisible();
 }
 

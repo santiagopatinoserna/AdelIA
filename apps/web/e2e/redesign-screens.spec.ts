@@ -6,8 +6,9 @@ import { Pool } from "pg";
 import es from "../messages/es.json";
 import en from "../messages/en.json";
 import fr from "../messages/fr.json";
-import { seedUserAndSessionCookie } from "./utils/session";
+import { ask as askQuestion } from "./utils/ask";
 import { forceKeylessDemo } from "./utils/keyless-demo";
+import { seedUserAndSessionCookie } from "./utils/session";
 
 // The landing's own answer, drawn when no guest can be created (see the helper).
 test.beforeEach(async ({ page }) => forceKeylessDemo(page));
@@ -31,8 +32,9 @@ async function ask(page: Page, locale: "es" | "en" | "fr", payload: Record<strin
     evidence_citations: [citation], disclaimer: "Aviso clínico.", ...payload,
   } }));
   await page.goto(`/${locale}`);
-  await page.locator("#demo-question").fill("Pregunta de prueba");
-  await page.getByRole("button", { name: copy[locale].demo.askCta, exact: true }).click();
+  await askQuestion(page.locator("#demo-question"), "Pregunta de prueba", {
+    send: page.getByRole("button", { name: copy[locale].demo.askCta, exact: true }),
+  });
 }
 
 function longPlan(locale: "es" | "en" | "fr") {

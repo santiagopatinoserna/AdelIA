@@ -1,6 +1,7 @@
 import { expect, test, type Browser, type Page } from "@playwright/test";
 
 import es from "../messages/es.json";
+import { ask } from "./utils/ask";
 import { seedUserAndSessionCookie } from "./utils/session";
 
 // The conversation battery (2026-11-10) found that after the referral for a
@@ -27,8 +28,7 @@ async function say(page: Page, text: string) {
   // The empty panel's field, or the same field once the conversation started.
   const box = page.getByPlaceholder(es.agent.placeholder)
     .or(page.getByRole("textbox", { name: es.agent.inputLabel })).filter({ visible: true });
-  await box.fill(text);
-  await box.press("Enter");
+  await ask(box, text);
 }
 
 test("es: after a referral for fever at 2 months, her follow-up gets the referral again", async ({ browser }) => {

@@ -1,6 +1,7 @@
 import { expect, test, type Page, type Route } from "@playwright/test";
 import AxeBuilder from "@axe-core/playwright";
 import es from "../messages/es.json";
+import { ask } from "./utils/ask";
 import { seedUserAndSessionCookie } from "./utils/session";
 
 // AGENT_GRAPH steps 3-5 on /dashboard: a diary line comes back as a card that
@@ -54,9 +55,7 @@ async function open(page: Page, browser: import("@playwright/test").Browser, rep
 }
 
 async function say(p: Page, text: string) {
-  const box = p.getByPlaceholder(es.agent.placeholder);
-  await box.fill(text);
-  await box.press("Enter");
+  await ask(p.getByPlaceholder(es.agent.placeholder), text);
 }
 
 test("es: a diary line shows the entry as it will be saved, and yes sends exactly that", async ({ browser, page }) => {
@@ -189,9 +188,7 @@ test("es: answering the card in her own words sends the questions in the history
   await say(p, GUARDERIA);
   await expect(p.locator('[data-testid="clarify-card"]:visible')).toBeVisible();
   // After the first turn the field invites a follow-up: found by its label.
-  const box = p.getByLabel(es.agent.inputLabel);
-  await box.fill("Lleva dos semanas y en casa me mira y se ríe");
-  await box.press("Enter");
+  await ask(p.getByLabel(es.agent.inputLabel), "Lleva dos semanas y en casa me mira y se ríe");
   await expect(p.getByText("es la adaptación")).toBeVisible();
   expect(bodies[1]).toMatchObject({
     message: "Lleva dos semanas y en casa me mira y se ríe",

@@ -4,6 +4,7 @@ import path from "node:path";
 import es from "../messages/es.json";
 import en from "../messages/en.json";
 import fr from "../messages/fr.json";
+import { ask } from "./utils/ask";
 import { forceKeylessDemo } from "./utils/keyless-demo";
 
 // The landing's own answer, drawn when no guest can be created (see the helper).
@@ -126,8 +127,9 @@ for (const locale of ["es", "en", "fr"] as const) {
     await page.goto(`/${locale}`);
     const header = page.locator("header").first();
     await expect(header.getByText(catalogs[locale].demo.badge, { exact: true })).toBeVisible();
-    await page.locator("#demo-question").fill("Pregunta de prueba");
-    await page.locator('[data-testid="demo-ask"] button[type="submit"]').click();
+    await ask(page.locator("#demo-question"), "Pregunta de prueba", {
+      send: page.locator('[data-testid="demo-ask"] button[type="submit"]'),
+    });
     await expect(page.getByTestId("demo-answer")).toBeVisible();
     const logo = header.getByRole("link", { name: "AdelIA", exact: true });
     expect((await logo.boundingBox())!.height).toBeGreaterThanOrEqual(44);
@@ -166,8 +168,9 @@ for (const locale of ["es", "en", "fr"] as const) {
         year: 2026, url: "https://example.org", snippet: "Resumen de prueba." }],
     } }));
     await page.goto(`/${locale}`);
-    await page.locator("#demo-question").fill("Pregunta de prueba");
-    await page.locator('[data-testid="demo-ask"] button[type="submit"]').click();
+    await ask(page.locator("#demo-question"), "Pregunta de prueba", {
+      send: page.locator('[data-testid="demo-ask"] button[type="submit"]'),
+    });
     const depth = page.getByTestId("answer-depth");
     await depth.locator(":scope > summary").click();
     const source = depth.locator("details").first();

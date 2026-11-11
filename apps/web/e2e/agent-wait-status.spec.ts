@@ -3,6 +3,7 @@ import es from "../messages/es.json";
 import en from "../messages/en.json";
 import fr from "../messages/fr.json";
 import { parseAgentBlocks } from "@/lib/agent-types";
+import { ask } from "./utils/ask";
 import { seedUserAndSessionCookie } from "./utils/session";
 
 // The battery with the real model (2026-11-11): 7.0 s median to the first word,
@@ -68,9 +69,7 @@ for (const locale of ["es", "en", "fr"] as const) {
     const t = CATALOGS[locale].agent;
     const answer = "Ofrécele el pecho a demanda [ev_1].";
     const { page, context } = await openWithSlowStream(browser, locale, answer);
-    const box = page.getByPlaceholder(t.placeholder);
-    await box.fill("cada cuanto tiene q comer");
-    await box.press("Enter");
+    await ask(page.getByPlaceholder(t.placeholder), "cada cuanto tiene q comer");
 
     const wait = page.getByTestId("agent-wait");
     await expect(wait).toHaveText(t.statusSearching);
@@ -88,9 +87,7 @@ for (const locale of ["es", "en", "fr"] as const) {
 test("the writing stage reads at 390x844, light and dark", async ({ browser }, testInfo) => {
   for (const scheme of ["light", "dark"] as const) {
     const { page, context } = await openWithSlowStream(browser, "es", "Ofrécele el pecho [ev_1].", scheme);
-    const box = page.getByPlaceholder(es.agent.placeholder);
-    await box.fill("cada cuanto tiene q comer");
-    await box.press("Enter");
+    await ask(page.getByPlaceholder(es.agent.placeholder), "cada cuanto tiene q comer");
     await expect(page.getByTestId("agent-wait")).toHaveText("He encontrado 3 fuentes. Escribiendo…");
     const color = await page.getByTestId("agent-wait").evaluate((el) => getComputedStyle(el).color);
     expect(color).not.toBe(await page.evaluate(() => getComputedStyle(document.body).backgroundColor));

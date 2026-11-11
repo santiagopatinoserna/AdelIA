@@ -3,6 +3,7 @@ import AxeBuilder from "@axe-core/playwright";
 import es from "../messages/es.json";
 import en from "../messages/en.json";
 import fr from "../messages/fr.json";
+import { ask } from "./utils/ask";
 import { forceKeylessDemo } from "./utils/keyless-demo";
 
 // The landing's own answer, drawn when no guest can be created (see the helper).
@@ -29,8 +30,9 @@ for (const locale of ["es", "en", "fr"] as const) {
       } });
     });
     await page.goto(`/${locale}`);
-    await page.locator("#demo-question").fill("Pregunta breve sin redactar perfectamente");
-    await page.getByRole("button", { name: m.demo.askCta, exact: true }).click();
+    await ask(page.locator("#demo-question"), "Pregunta breve sin redactar perfectamente", {
+      send: page.getByRole("button", { name: m.demo.askCta, exact: true }),
+    });
     const answer = page.getByTestId("demo-answer");
     await expect(answer).toBeVisible();
     // Do not spend the first phone screen repeating the long question.
@@ -72,8 +74,9 @@ test("emergency and refusal never fold or shorten the original clinical answer",
       kind, answer: original, evidence_citations: [], disclaimer: "Aviso clínico siempre visible.",
     } }));
     await page.goto("/es");
-    await page.locator("#demo-question").fill("Consulta de prueba");
-    await page.getByRole("button", { name: "Preguntar", exact: true }).click();
+    await ask(page.locator("#demo-question"), "Consulta de prueba", {
+      send: page.getByRole("button", { name: "Preguntar", exact: true }),
+    });
     const content = page.getByTestId("answer-content");
     await expect(content).toBeVisible();
     if (kind === "red_flag") {
@@ -107,8 +110,9 @@ test("a plan answer renders as plan sections, keeps every line, and folds only t
     kind: "answer", answer, evidence_citations: [citation], disclaimer: "Aviso clínico siempre visible.",
   } }));
   await page.goto("/es");
-  await page.locator("#demo-question").fill("Pregunta de prueba");
-  await page.getByRole("button", { name: "Preguntar", exact: true }).click();
+  await ask(page.locator("#demo-question"), "Pregunta de prueba", {
+    send: page.getByRole("button", { name: "Preguntar", exact: true }),
+  });
   const body = page.getByTestId("answer-content");
   await expect(body.getByTestId("plan-intro")).toHaveText("Respuesta directa de prueba [ev_1].");
   for (const [key, title] of Object.entries(plan)) {
@@ -165,8 +169,9 @@ test("the mothers section renders last, labelled as experience, and its source i
     disclaimer: "Aviso clínico siempre visible.",
   } }));
   await page.goto("/es");
-  await page.locator("#demo-question").fill("Pregunta de prueba");
-  await page.getByRole("button", { name: "Preguntar", exact: true }).click();
+  await ask(page.locator("#demo-question"), "Pregunta de prueba", {
+    send: page.getByRole("button", { name: "Preguntar", exact: true }),
+  });
   const body = page.getByTestId("answer-content");
   const mothers = body.getByTestId("plan-section-mothers");
   await expect(mothers).toBeVisible();
@@ -229,8 +234,9 @@ for (const locale of ["es", "en", "fr"] as const) {
       disclaimer: "Aviso clínico siempre visible.",
     } }));
     await page.goto(`/${locale}`);
-    await page.locator("#demo-question").fill("Pregunta de prueba");
-    await page.getByRole("button", { name: m.demo.askCta, exact: true }).click();
+    await ask(page.locator("#demo-question"), "Pregunta de prueba", {
+      send: page.getByRole("button", { name: m.demo.askCta, exact: true }),
+    });
     const section = page.getByTestId("demo-answer");
     await expect(section.getByRole("heading", { level: 2 })).toHaveText(m.demo.experienceOnlyTitle);
     await expect(page.locator("#demo-answer-title")).not.toHaveText(m.demo.answerTitle);

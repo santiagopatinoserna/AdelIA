@@ -1,5 +1,6 @@
 import { expect, test } from "@playwright/test";
 import es from "../messages/es.json";
+import { ask } from "./utils/ask";
 import { forceKeylessDemo } from "./utils/keyless-demo";
 
 // The landing's own answer, drawn when no guest can be created (see the helper).
@@ -17,8 +18,9 @@ test.use({ viewport: { width: 390, height: 844 } });
 
 test("es: pressing a value through the real proxy never repeats the question", async ({ page }) => {
   await page.goto("/es");
-  await page.locator("#demo-question").fill("Tiene fiebre desde esta mañana, ¿qué hago?");
-  await page.getByRole("button", { name: es.demo.askCta, exact: true }).click();
+  await ask(page.locator("#demo-question"), "Tiene fiebre desde esta mañana, ¿qué hago?", {
+    send: page.getByRole("button", { name: es.demo.askCta, exact: true }),
+  });
   const box = page.getByTestId("demo-clarify");
   await expect(box).toBeVisible({ timeout: 30_000 });
 

@@ -2,6 +2,7 @@ import { expect, test } from "@playwright/test";
 import AxeBuilder from "@axe-core/playwright";
 import { homedir } from "node:os";
 import { join } from "node:path";
+import { ask as askQuestion } from "./utils/ask";
 import { forceKeylessDemo } from "./utils/keyless-demo";
 
 // The landing's own answer, drawn when no guest can be created (see the helper).
@@ -88,8 +89,9 @@ test("error retry preserves the submitted question, not an edited draft", async 
   });
   await page.goto("/es");
   const ask = page.getByTestId("demo-ask");
-  await ask.getByLabel(/Escribe tu pregunta/).fill("Pregunta original");
-  await ask.getByRole("button", { name: "Preguntar", exact: true }).click();
+  await askQuestion(ask.getByLabel(/Escribe tu pregunta/), "Pregunta original", {
+    send: ask.getByRole("button", { name: "Preguntar", exact: true }),
+  });
   await expect(ask.getByRole("alert")).toContainText("no está disponible");
   await page.screenshot({ path: `${shots}/ask-error.png`, fullPage: true });
   await ask.getByLabel(/Escribe tu pregunta/).fill("Borrador editado");
@@ -104,8 +106,9 @@ for (const status of [429, 500]) {
     await page.route("**/api/demo/ask", (route) => route.fulfill({ status, json: {} }));
     await page.goto("/es");
     const ask = page.getByTestId("demo-ask");
-    await ask.getByLabel(/Escribe tu pregunta/).fill("Pregunta de prueba");
-    await ask.getByRole("button", { name: "Preguntar", exact: true }).click();
+    await askQuestion(ask.getByLabel(/Escribe tu pregunta/), "Pregunta de prueba", {
+      send: ask.getByRole("button", { name: "Preguntar", exact: true }),
+    });
     await expect(ask.getByRole("alert")).toContainText(status === 429 ? "límite" : "Algo ha fallado");
     await expect(ask.getByRole("button", { name: "Reintentar la misma pregunta" })).toBeEnabled();
   });
@@ -116,8 +119,9 @@ test("a request timeout stops waiting and offers retry", async ({ page }) => {
   await page.route("**/api/demo/ask", () => new Promise<void>(() => {}));
   await page.goto("/es");
   const ask = page.getByTestId("demo-ask");
-  await ask.getByLabel(/Escribe tu pregunta/).fill("Pregunta sin respuesta");
-  await ask.getByRole("button", { name: "Preguntar", exact: true }).click();
+  await askQuestion(ask.getByLabel(/Escribe tu pregunta/), "Pregunta sin respuesta", {
+    send: ask.getByRole("button", { name: "Preguntar", exact: true }),
+  });
   await expect(page.getByTestId("demo-loading")).toBeVisible();
   await page.clock.fastForward(61000);
   await expect(ask.getByRole("alert")).toContainText("Algo ha fallado");

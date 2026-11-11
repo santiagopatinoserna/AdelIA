@@ -3,6 +3,7 @@ import { mkdirSync } from "node:fs";
 import { homedir } from "node:os";
 import { join } from "node:path";
 
+import { ask } from "./utils/ask";
 import { seedUserAndSessionCookie } from "./utils/session";
 
 // Consented visitor journeys (decision of Santiago, 2026-11-07), against the
@@ -228,15 +229,15 @@ test.describe("with consent", () => {
     await expect(page.getByTestId("consent-banner")).toBeHidden();
     await page.mouse.wheel(0, 2000);
 
-    await page.locator("#demo-question").fill(QUESTION);
-    await page.getByRole("button", { name: "Preguntar", exact: true }).click();
+    await ask(page.locator("#demo-question"), QUESTION, {
+      send: page.getByRole("button", { name: "Preguntar", exact: true }),
+    });
     await expect(page).toHaveURL(/\/es\/dashboard\/?$/, { timeout: 30_000 });
     await expect(page.locator('[data-role="assistant"]').first()).toContainText("112", {
       timeout: 30_000,
     });
     const field = page.getByPlaceholder("Pregunta más sobre esto");
-    await field.fill(FOLLOW_UP);
-    await field.press("Enter");
+    await ask(field, FOLLOW_UP);
     await expect(page.locator('[data-role="assistant"]')).toHaveCount(2, { timeout: 30_000 });
     await page.getByTestId("record-consult").click();
     await expect(page).toHaveURL(/consulta\/grabar/);
