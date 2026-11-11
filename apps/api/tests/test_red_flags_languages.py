@@ -103,6 +103,20 @@ POSITIVES: list[tuple[str, str, str, int | None]] = [
     ("en", "no_wet_nappy_12h", "Her nappy has stayed dry since last night, about 15 hours", 8),
     ("fr", "no_wet_nappy_12h", "Pas de couche mouillée depuis 14 heures", 8),
     ("fr", "no_wet_nappy_12h", "Il n'a pas mouillé sa couche depuis 14 h", 8),
+    # --- head injury (SEUP, NHS, HSE; the #retr4 finding) -------------------
+    ("es", "head_injury", "Se ha dado un golpe en la cabeza y ha perdido el conocimiento", 14),
+    ("es", "head_injury", "Se ha dado en la cabeza y ha vomitado varias veces", 14),
+    ("en", "head_injury", "He hit his head and passed out", 12),
+    ("en", "head_injury", "She bumped her head and has been sick three times", 18),
+    ("fr", "head_injury", "Il est tombé sur la tête et a perdu connaissance", 12),
+    ("fr", "head_injury", "Elle s'est cogné la tête et a vomi plusieurs fois", 14),
+    # --- green or bloody vomit (NHS, SEUP gastroenteritis) ------------------
+    ("es", "green_or_bloody_vomit", "Ha vomitado algo verde", 5),
+    ("es", "green_or_bloody_vomit", "Ha vomitado sangre", 8),
+    ("en", "green_or_bloody_vomit", "She's vomiting green", 5),
+    ("en", "green_or_bloody_vomit", "There's blood in her vomit", 10),
+    ("fr", "green_or_bloody_vomit", "Il vomit vert", 5),
+    ("fr", "green_or_bloody_vomit", "Elle a vomi du sang", 8),
     # --- fever under 3 months: age and temperature written the local way ---
     ("es", "fever_under_3_months", "Mi bebé de dos meses tiene 38,5 de fiebre", None),
     ("es", "fever_under_3_months", "Tiene 3 semanas y 38 de fiebre", None),

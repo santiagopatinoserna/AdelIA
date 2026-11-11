@@ -1,0 +1,763 @@
+{
+ "_about": "Written blind on 2026-11-11 by an agent that had not read adelia/clinical/ nor the coverage set. Measured before fixing: the guard at origin/main fired on 57 of 86, the first version of this sweep on 79 of 86; look-alikes 2 of 40 on both. The 7 misses were then fixed, so from here on this set is in-sample too.",
+ "positives": [
+  {
+   "code": "head_injury",
+   "locale": "es",
+   "text": "Mi bebe de 10 meses se ha caido de la cama y ha vomitado ya tres veces, q hago?",
+   "age_months": 10
+  },
+  {
+   "code": "head_injury",
+   "locale": "es",
+   "text": "Se a caido del cambiador, se dio en la cabeza y se quedo inconciente unos segundos",
+   "age_months": 7
+  },
+  {
+   "code": "head_injury",
+   "locale": "es",
+   "text": "Mi hija se ha golpeado la cabeza contra la mesa y ahora le sale un líquido transparente por la nariz.",
+   "age_months": 18
+  },
+  {
+   "code": "head_injury",
+   "locale": "es",
+   "text": "Se ha caído por las escaleras, unos seis escalones. Llora muchísimo, tiene 14 meses.",
+   "age_months": 14
+  },
+  {
+   "code": "head_injury",
+   "locale": "es",
+   "text": "despues del golpe en la cabeza esta muy dormido y no consigo despertarlo bien xq le pasa esto",
+   "age_months": 20
+  },
+  {
+   "code": "head_injury",
+   "locale": "es",
+   "text": "Mi bebé de 6 semanas se ha dado un golpe en la cabeza con el borde de la cuna.",
+   "age_months": 1
+  },
+  {
+   "code": "head_injury",
+   "locale": "es",
+   "text": "Se le ha caído de los brazos a mi suegra y le ha salido un chichón enorme y blandito en la cabeza. Tiene 8 meses.",
+   "age_months": 8
+  },
+  {
+   "code": "head_injury",
+   "locale": "en",
+   "text": "My 9 month old fell off the sofa onto the tiles and hit her head. She's been sick twice since. Is that normal?",
+   "age_months": 9
+  },
+  {
+   "code": "head_injury",
+   "locale": "en",
+   "text": "hes 16 months, banged his head on the coffee table and had a fit a few minutes later",
+   "age_months": 16
+  },
+  {
+   "code": "head_injury",
+   "locale": "en",
+   "text": "Toddler hit his head at the park and now theres blood coming out of his ear",
+   "age_months": 22
+  },
+  {
+   "code": "head_injury",
+   "locale": "en",
+   "text": "Baby rolled off our bed and bumped her head. Now she cant stay awake, keeps drifting off on me",
+   "age_months": 5
+  },
+  {
+   "code": "head_injury",
+   "locale": "fr",
+   "text": "Mon fils de 11 mois est tombé de sa chaise haute sur la tête, il a perdu connaissance quelques secondes.",
+   "age_months": 11
+  },
+  {
+   "code": "head_injury",
+   "locale": "fr",
+   "text": "elle est tombee du lit superpose sur la tete, plus d'un metre, elle pleure, je fais quoi",
+   "age_months": 23
+  },
+  {
+   "code": "head_injury",
+   "locale": "fr",
+   "text": "Ma fille de 2 mois s'est cognée la tête contre le montant du lit ce soir, elle a pleuré tout de suite.",
+   "age_months": 2
+  },
+  {
+   "code": "green_or_bloody_vomit",
+   "locale": "es",
+   "text": "mi bebe a bomitado verde, como bilis, q hago??",
+   "age_months": null
+  },
+  {
+   "code": "green_or_bloody_vomit",
+   "locale": "es",
+   "text": "Ha vomitado y en el vómito hay hilos de sangre. Tiene 5 meses.",
+   "age_months": 5
+  },
+  {
+   "code": "green_or_bloody_vomit",
+   "locale": "es",
+   "text": "Lo que ha vomitado parece posos de café, muy oscuro",
+   "age_months": 15
+  },
+  {
+   "code": "green_or_bloody_vomit",
+   "locale": "en",
+   "text": "She just threw up and it was bright green",
+   "age_months": 3
+  },
+  {
+   "code": "green_or_bloody_vomit",
+   "locale": "en",
+   "text": "My 7mo vomited and there's blood in it. Should I go to A&E?",
+   "age_months": 7
+  },
+  {
+   "code": "green_or_bloody_vomit",
+   "locale": "fr",
+   "text": "Mon bébé a vomi du vert foncé deux fois cette nuit",
+   "age_months": 4
+  },
+  {
+   "code": "lethargy",
+   "locale": "es",
+   "text": "No se despierta para la toma, lo muevo y nada, esta como flojo",
+   "age_months": 2
+  },
+  {
+   "code": "lethargy",
+   "locale": "es",
+   "text": "Mi niña está muy blandita, como un muñeco de trapo, y no responde cuando la llamo.",
+   "age_months": 9
+  },
+  {
+   "code": "lethargy",
+   "locale": "es",
+   "text": "Tiene fiebre desde ayer y ahora está tan dormido que cuesta muchísimo despertarle",
+   "age_months": 13
+  },
+  {
+   "code": "lethargy",
+   "locale": "en",
+   "text": "my son is really floppy and wont respond when I talk to him",
+   "age_months": 11
+  },
+  {
+   "code": "lethargy",
+   "locale": "fr",
+   "text": "Mon bébé est tout mou et ne réagit plus, il ouvre à peine les yeux",
+   "age_months": 6
+  },
+  {
+   "code": "lethargy",
+   "locale": "fr",
+   "text": "impossible de la reveiller pour le biberon, elle reste molle dans mes bras",
+   "age_months": 3
+  },
+  {
+   "code": "fever_under_3_months",
+   "locale": "es",
+   "text": "Mi bebé de 6 semanas tiene 38,2 de fiebre",
+   "age_months": 1
+  },
+  {
+   "code": "fever_under_3_months",
+   "locale": "es",
+   "text": "Tiene 2 meses y está ardiendo. Le he puesto el termómetro y marca 38.5",
+   "age_months": 2
+  },
+  {
+   "code": "fever_under_3_months",
+   "locale": "es",
+   "text": "recien nacido de 20 dias con fiebre q le doy",
+   "age_months": 0
+  },
+  {
+   "code": "fever_under_3_months",
+   "locale": "en",
+   "text": "My 7 week old has a temp of 38.1, can I give calpol?",
+   "age_months": 1
+  },
+  {
+   "code": "fever_under_3_months",
+   "locale": "en",
+   "text": "newborn is 10 days old and feels burning hot, thermometer says 100.6F",
+   "age_months": 0
+  },
+  {
+   "code": "fever_under_3_months",
+   "locale": "fr",
+   "text": "Mon bébé a 1 mois et il a 38,4 de fièvre",
+   "age_months": 1
+  },
+  {
+   "code": "non_blanching_rash",
+   "locale": "es",
+   "text": "Le han salido unos puntitos rojos en la tripa que no se van al apretar",
+   "age_months": 10
+  },
+  {
+   "code": "non_blanching_rash",
+   "locale": "es",
+   "text": "Tiene fiebre y manchas moradas en las piernas. He hecho lo del vaso y no desaparecen.",
+   "age_months": 14
+  },
+  {
+   "code": "non_blanching_rash",
+   "locale": "es",
+   "text": "le han salido petequias x todo el cuerpo",
+   "age_months": 8
+  },
+  {
+   "code": "non_blanching_rash",
+   "locale": "en",
+   "text": "Rash on his chest and the spots don't fade when I press a glass on them",
+   "age_months": 12
+  },
+  {
+   "code": "non_blanching_rash",
+   "locale": "fr",
+   "text": "Il a des petites taches rouges qui ne s'effacent pas quand j'appuie dessus",
+   "age_months": 7
+  },
+  {
+   "code": "non_blanching_rash",
+   "locale": "fr",
+   "text": "boutons violets sur les jambes, le test du verre ne les fait pas disparaitre",
+   "age_months": 18
+  },
+  {
+   "code": "respiratory_distress",
+   "locale": "es",
+   "text": "Le cuesta mucho respirar y se le hunden las costillas",
+   "age_months": 4
+  },
+  {
+   "code": "respiratory_distress",
+   "locale": "es",
+   "text": "tiene bronquiolitis y respira muy rapido, hace como un quejido en cada respiracion",
+   "age_months": 3
+  },
+  {
+   "code": "respiratory_distress",
+   "locale": "es",
+   "text": "Mi bebé ha dejado de respirar unos segundos mientras dormía.",
+   "age_months": 1
+  },
+  {
+   "code": "respiratory_distress",
+   "locale": "en",
+   "text": "she's grunting with every breath and her tummy is sucking in under her ribs",
+   "age_months": 2
+  },
+  {
+   "code": "respiratory_distress",
+   "locale": "en",
+   "text": "He's breathing really fast, like 70 a minute, and he's struggling. What do I do?",
+   "age_months": 6
+  },
+  {
+   "code": "respiratory_distress",
+   "locale": "fr",
+   "text": "Mon fils a du mal à respirer, on voit le creux sous les côtes à chaque inspiration",
+   "age_months": 5
+  },
+  {
+   "code": "cyanosis",
+   "locale": "es",
+   "text": "Se le han puesto los labios morados",
+   "age_months": 5
+  },
+  {
+   "code": "cyanosis",
+   "locale": "es",
+   "text": "la cara se le a puesto gris de repente",
+   "age_months": 7
+  },
+  {
+   "code": "cyanosis",
+   "locale": "es",
+   "text": "Tiene la piel como azulada y las manos moradas, no sé qué hacer",
+   "age_months": 3
+  },
+  {
+   "code": "cyanosis",
+   "locale": "en",
+   "text": "his lips have gone blue",
+   "age_months": 8
+  },
+  {
+   "code": "cyanosis",
+   "locale": "fr",
+   "text": "Ses lèvres deviennent bleues",
+   "age_months": 2
+  },
+  {
+   "code": "cyanosis",
+   "locale": "fr",
+   "text": "elle a le visage tout gris et violet pk??",
+   "age_months": 10
+  },
+  {
+   "code": "seizure",
+   "locale": "es",
+   "text": "Mi hijo está convulsionando, qué hago",
+   "age_months": 15
+  },
+  {
+   "code": "seizure",
+   "locale": "es",
+   "text": "Tiene fiebre y le ha dado como una crisis: se puso rígido y temblaba entero.",
+   "age_months": 19
+  },
+  {
+   "code": "seizure",
+   "locale": "es",
+   "text": "se le van los ojos para atras y mueve los brazos a sacudidas",
+   "age_months": 6
+  },
+  {
+   "code": "seizure",
+   "locale": "en",
+   "text": "my baby is having a fit right now",
+   "age_months": 10
+  },
+  {
+   "code": "seizure",
+   "locale": "en",
+   "text": "She went stiff and started jerking, eyes rolled back. Lasted about a minute.",
+   "age_months": 17
+  },
+  {
+   "code": "seizure",
+   "locale": "fr",
+   "text": "Mon bébé fait une convulsion",
+   "age_months": 9
+  },
+  {
+   "code": "choking",
+   "locale": "es",
+   "text": "Se está atragantando con un trozo de manzana y no puede toser",
+   "age_months": 11
+  },
+  {
+   "code": "choking",
+   "locale": "es",
+   "text": "Creo que se ha tragado una pila de botón del mando",
+   "age_months": 16
+  },
+  {
+   "code": "choking",
+   "locale": "es",
+   "text": "se le a quedado algo atascado en la garganta y no puede respirar bien",
+   "age_months": 13
+  },
+  {
+   "code": "choking",
+   "locale": "en",
+   "text": "shes choking on a grape and I cant get it out",
+   "age_months": 21
+  },
+  {
+   "code": "choking",
+   "locale": "fr",
+   "text": "Il s'étouffe avec un morceau de pain",
+   "age_months": 12
+  },
+  {
+   "code": "choking",
+   "locale": "fr",
+   "text": "ma fille a avale une petite piece de lego",
+   "age_months": 18
+  },
+  {
+   "code": "anaphylaxis",
+   "locale": "es",
+   "text": "Le he dado huevo por primera vez y se le está hinchando la cara y los labios",
+   "age_months": 8
+  },
+  {
+   "code": "anaphylaxis",
+   "locale": "es",
+   "text": "despues de probar cacahuete tiene ronchas x todo el cuerpo y le cuesta tragar",
+   "age_months": 12
+  },
+  {
+   "code": "anaphylaxis",
+   "locale": "es",
+   "text": "Le ha picado una avispa y se le hincha la lengua",
+   "age_months": 20
+  },
+  {
+   "code": "anaphylaxis",
+   "locale": "en",
+   "text": "Gave him peanut butter for the first time, now his lips and eyes are swelling up",
+   "age_months": 7
+  },
+  {
+   "code": "anaphylaxis",
+   "locale": "en",
+   "text": "hives all over after the yogurt and shes wheezing, struggling to breathe",
+   "age_months": 10
+  },
+  {
+   "code": "anaphylaxis",
+   "locale": "fr",
+   "text": "Après le poisson, ses lèvres et sa langue gonflent",
+   "age_months": 11
+  },
+  {
+   "code": "bulging_fontanelle",
+   "locale": "es",
+   "text": "Tiene la fontanela abultada y está muy irritable",
+   "age_months": 4
+  },
+  {
+   "code": "bulging_fontanelle",
+   "locale": "es",
+   "text": "le noto la mollera hinchada como un bulto, tiene 5 meses",
+   "age_months": 5
+  },
+  {
+   "code": "bulging_fontanelle",
+   "locale": "es",
+   "text": "La fontanela está muy tensa y dura, incluso cuando está tranquilo.",
+   "age_months": 3
+  },
+  {
+   "code": "bulging_fontanelle",
+   "locale": "en",
+   "text": "the soft spot on top of her head is bulging out",
+   "age_months": 2
+  },
+  {
+   "code": "bulging_fontanelle",
+   "locale": "fr",
+   "text": "Sa fontanelle est bombée",
+   "age_months": 3
+  },
+  {
+   "code": "bulging_fontanelle",
+   "locale": "fr",
+   "text": "la fontanelle est tendue et gonflee et il a de la fievre",
+   "age_months": 6
+  },
+  {
+   "code": "dehydration",
+   "locale": "es",
+   "text": "Lleva dos días con diarrea y tiene los ojos hundidos y la boca muy seca",
+   "age_months": 9
+  },
+  {
+   "code": "dehydration",
+   "locale": "es",
+   "text": "llora sin lagrimas y casi no bebe nada",
+   "age_months": 14
+  },
+  {
+   "code": "dehydration",
+   "locale": "es",
+   "text": "Se le ve la fontanela hundida y no quiere el pecho",
+   "age_months": 2
+  },
+  {
+   "code": "dehydration",
+   "locale": "en",
+   "text": "her eyes look sunken and her mouth is really dry",
+   "age_months": 11
+  },
+  {
+   "code": "dehydration",
+   "locale": "en",
+   "text": "hes been vomiting all day and when he cries no tears come out",
+   "age_months": 15
+  },
+  {
+   "code": "dehydration",
+   "locale": "fr",
+   "text": "Il pleure sans larmes et sa bouche est toute sèche",
+   "age_months": 8
+  },
+  {
+   "code": "no_wet_nappy_12h",
+   "locale": "es",
+   "text": "No ha mojado el pañal en 14 horas",
+   "age_months": 6
+  },
+  {
+   "code": "no_wet_nappy_12h",
+   "locale": "es",
+   "text": "tiene gastroenteritis y desde ayer x la tarde no hace pis",
+   "age_months": 12
+  },
+  {
+   "code": "no_wet_nappy_12h",
+   "locale": "es",
+   "text": "Lleva todo el día sin mojar el pañal, ¿es grave?",
+   "age_months": 4
+  },
+  {
+   "code": "no_wet_nappy_12h",
+   "locale": "en",
+   "text": "no wet diaper since last night, about 13 hours now",
+   "age_months": 9
+  },
+  {
+   "code": "no_wet_nappy_12h",
+   "locale": "fr",
+   "text": "pas de couche mouillee depuis hier soir",
+   "age_months": 7
+  },
+  {
+   "code": "no_wet_nappy_12h",
+   "locale": "fr",
+   "text": "Elle n'a pas fait pipi de la journée",
+   "age_months": 10
+  }
+ ],
+ "lookalikes": [
+  {
+   "locale": "es",
+   "text": "Se ha dado un golpe en la frente con la mesa, lloró un momento y ya está jugando tan tranquilo",
+   "age_months": 20,
+   "why": "minor head knock, child behaving normally, no warning sign"
+  },
+  {
+   "locale": "es",
+   "text": "Ha vomitado una vez después de un ataque de tos, ahora está bien y come",
+   "age_months": 14,
+   "why": "single post-tussive vomit, recovered"
+  },
+  {
+   "locale": "es",
+   "text": "tiene muchos mocos pero respira bien y come normal",
+   "age_months": 8,
+   "why": "common cold, breathing explicitly fine"
+  },
+  {
+   "locale": "es",
+   "text": "Las cacas son verdes desde ayer, está contento y come bien",
+   "age_months": 7,
+   "why": "green stool, not green vomit"
+  },
+  {
+   "locale": "es",
+   "text": "mi hijo de 2 años tiene un chichon pequeño en la frente de un golpe con el sofa",
+   "age_months": 24,
+   "why": "small bump in a 2-year-old, no red flag"
+  },
+  {
+   "locale": "es",
+   "text": "Se cayó de culete y se dio un golpecito en la cabeza. No perdió el conocimiento ni ha vomitado, está normal.",
+   "age_months": 15,
+   "why": "head knock with signs explicitly ruled out"
+  },
+  {
+   "locale": "es",
+   "text": "Después de las vacunas está muy dormilón pero se despierta para comer y come bien",
+   "age_months": 2,
+   "why": "post-vaccine sleepiness, wakes and feeds"
+  },
+  {
+   "locale": "es",
+   "text": "echa un poquito de leche despues de cada toma es normal?",
+   "age_months": 3,
+   "why": "milk spit-up / reflux, not vomit with blood or bile"
+  },
+  {
+   "locale": "es",
+   "text": "Le ha salido un sarpullido rojo en el pecho pero si aprieto se va",
+   "age_months": 10,
+   "why": "blanching rash"
+  },
+  {
+   "locale": "es",
+   "text": "Está babeando muchísimo y muerde todo, creo q le están saliendo los dientes",
+   "age_months": 6,
+   "why": "teething"
+  },
+  {
+   "locale": "es",
+   "text": "Me he mareado al ver a mi hija llorar tanto, creo que necesito dormir",
+   "age_months": null,
+   "why": "the parent feels faint, not the baby"
+  },
+  {
+   "locale": "es",
+   "text": "Tiene 38 de fiebre, tiene 9 meses y está jugando",
+   "age_months": 9,
+   "why": "fever in a baby over 3 months who is active"
+  },
+  {
+   "locale": "es",
+   "text": "ha regurgitado un poco de leche cortada",
+   "age_months": 2,
+   "why": "curdled milk regurgitation, normal"
+  },
+  {
+   "locale": "es",
+   "text": "Tiene la nariz tapada y hace ruidito al respirar cuando duerme, pero está tranquilo",
+   "age_months": 4,
+   "why": "nasal congestion noise, no distress"
+  },
+  {
+   "locale": "es",
+   "text": "Se le ponen los pies un poco morados cuando lleva rato sin calcetines, los labios los tiene rosas",
+   "age_months": 1,
+   "why": "peripheral acrocyanosis from cold in a newborn, central colour normal"
+  },
+  {
+   "locale": "es",
+   "text": "ha tenido hipo un buen rato despues de la toma",
+   "age_months": 1,
+   "why": "hiccups after feeding"
+  },
+  {
+   "locale": "es",
+   "text": "Se atraganta un poco con el agua del vaso pero tose y se le pasa",
+   "age_months": 9,
+   "why": "gagging with effective cough, resolves"
+  },
+  {
+   "locale": "es",
+   "text": "le a salido un granito que le pica de una picadura de mosquito",
+   "age_months": 13,
+   "why": "local mosquito bite reaction, no swelling of face or breathing problem"
+  },
+  {
+   "locale": "es",
+   "text": "La fontanela se le mueve un poco cuando le late el corazón, ¿es normal?",
+   "age_months": 3,
+   "why": "normal pulsation of the fontanelle, not bulging"
+  },
+  {
+   "locale": "es",
+   "text": "Hoy ha mojado menos pañales que de costumbre, pero lleva 5",
+   "age_months": 5,
+   "why": "fewer wet nappies but still several today"
+  },
+  {
+   "locale": "en",
+   "text": "He bumped his head on the cot bars, cried for a sec and is now laughing and crawling about",
+   "age_months": 11,
+   "why": "minor head bump, behaving normally"
+  },
+  {
+   "locale": "en",
+   "text": "She's got a runny nose and a bit of a cough but she's breathing fine and feeding well",
+   "age_months": 7,
+   "why": "cold, breathing explicitly fine"
+  },
+  {
+   "locale": "en",
+   "text": "spit up a bit of milk after her feed, she seems totally happy",
+   "age_months": 1,
+   "why": "milk posset, normal"
+  },
+  {
+   "locale": "en",
+   "text": "LO has a rash on his cheeks but it fades when I press on it",
+   "age_months": 8,
+   "why": "blanching rash"
+  },
+  {
+   "locale": "en",
+   "text": "Teething I think, very drooly and chewing everything, slight temp of 37.6",
+   "age_months": 6,
+   "why": "teething, no fever"
+  },
+  {
+   "locale": "en",
+   "text": "I feel faint and dizzy after being up all night with the baby",
+   "age_months": null,
+   "why": "the parent feels faint, not the baby"
+  },
+  {
+   "locale": "en",
+   "text": "Her poop is green and a bit mucusy. She's 5 months, eating and playing as normal.",
+   "age_months": 5,
+   "why": "green stool, not vomit"
+  },
+  {
+   "locale": "en",
+   "text": "toddler fell over at nursery, small bump on forehead, didnt lose consciousness, hes eating his tea now",
+   "age_months": 22,
+   "why": "minor fall, consciousness explicitly ruled out, normal behaviour"
+  },
+  {
+   "locale": "en",
+   "text": "Sleepy after her jabs today but waking for feeds and drinking fine",
+   "age_months": 4,
+   "why": "post-vaccine sleepiness, wakes and feeds"
+  },
+  {
+   "locale": "en",
+   "text": "his hands and feet feel a bit cold but hes pink and warm on his tummy",
+   "age_months": 3,
+   "why": "cool extremities, normal central colour"
+  },
+  {
+   "locale": "fr",
+   "text": "Il s'est cogné la tête contre le canapé, il a pleuré deux minutes et il joue normalement",
+   "age_months": 16,
+   "why": "minor head knock, normal behaviour"
+  },
+  {
+   "locale": "fr",
+   "text": "elle a vomi une fois apres avoir beaucoup toussé, depuis tout va bien",
+   "age_months": 10,
+   "why": "single post-tussive vomit"
+  },
+  {
+   "locale": "fr",
+   "text": "Il a le nez qui coule mais il respire bien et il mange bien",
+   "age_months": 9,
+   "why": "cold, breathing explicitly fine"
+  },
+  {
+   "locale": "fr",
+   "text": "Ses selles sont vertes depuis qu'on a changé de lait",
+   "age_months": 4,
+   "why": "green stool after formula change"
+  },
+  {
+   "locale": "fr",
+   "text": "Petite bosse sur le front de ma fille de 2 ans après une chute du tricycle, elle va très bien",
+   "age_months": 24,
+   "why": "small bump in a 2-year-old, low fall, well"
+  },
+  {
+   "locale": "fr",
+   "text": "Elle a des boutons rouges sur le ventre qui disparaissent quand j'appuie",
+   "age_months": 11,
+   "why": "blanching rash"
+  },
+  {
+   "locale": "fr",
+   "text": "il fait ses dents, il bave beaucoup et il est grognon",
+   "age_months": 7,
+   "why": "teething; grognon means grumpy, not grunting"
+  },
+  {
+   "locale": "fr",
+   "text": "Je me sens mal, j'ai failli m'évanouir ce matin en me levant",
+   "age_months": null,
+   "why": "the parent nearly fainted, not the baby"
+  },
+  {
+   "locale": "fr",
+   "text": "Il rejette un peu de lait après chaque biberon mais il prend bien du poids",
+   "age_months": 2,
+   "why": "milk regurgitation, thriving"
+  },
+  {
+   "locale": "fr",
+   "text": "il est somnolent depuis le vaccin mais il tete bien et se reveille normalement",
+   "age_months": 2,
+   "why": "post-vaccine sleepiness, wakes and feeds"
+  }
+ ]
+}
