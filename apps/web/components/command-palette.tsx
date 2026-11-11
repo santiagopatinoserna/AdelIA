@@ -129,10 +129,12 @@ export function CommandPalette() {
         type="button"
         onClick={() => setOpen(true)}
         aria-label={tc("label")}
-        className="ad-btn ad-btn-ghost h-9 gap-2 px-3 text-sm text-ink-soft"
+        className="ad-btn ad-btn-ghost h-9 min-w-[44px] gap-2 px-3 text-sm text-ink-soft"
       >
         <Search className="h-4 w-4 shrink-0" strokeWidth={2} />
-        <span>{tc("label")}</span>
+        {/* The word from lg: on a tablet the header's section icons need its
+            room to be 44 px each and all on screen (2026-11-11). */}
+        <span className="hidden lg:inline">{tc("label")}</span>
         <kbd className="hidden rounded border border-line-strong bg-surface-2 px-1.5 py-px font-mono text-[10px] text-ink-faint lg:inline">
           ⌘K
         </kbd>
