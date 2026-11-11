@@ -30,12 +30,22 @@ import { seedUserAndSessionCookie } from "./utils/session";
 const CATALOGS = { es, en, fr } as const;
 type Locale = keyof typeof CATALOGS;
 const LOCALES = ["es", "en", "fr"] as const;
+// No service worker, as the battery's contexts (page.ts openContext).
+// public/sw.js registers on hydration and controls the page within some 50 ms,
+// which is when say() now sends the turn, and it is the one thing between the
+// page's fetch and the network. CI once handed 2.es.light.360 a turn
+// that page.route, the context's request events and the trace never saw: it
+// reached the real API, which has no model key, and the card never came (the
+// panel showed "Ahora no puedo responderte"). Three local repeats, under load
+// or after an idle server, did the same, one real POST /agent/turn each.
 const PHONE = (width: number, height = 844): BrowserContextOptions => ({
   // As the usability battery opens a phone (page.ts openContext): desktop
   // Chrome at a phone's width, so a classic scrollbar takes its width too.
-  viewport: { width, height }, isMobile: false, hasTouch: true,
+  viewport: { width, height }, isMobile: false, hasTouch: true, serviceWorkers: "block",
 });
-const TABLET: BrowserContextOptions = { viewport: { width: 768, height: 1024 }, hasTouch: true };
+const TABLET: BrowserContextOptions = {
+  viewport: { width: 768, height: 1024 }, hasTouch: true, serviceWorkers: "block",
+};
 
 function pgPool() {
   return new Pool({
@@ -91,6 +101,10 @@ async function say(page: Page, text: string) {
   await expect
     .poll(() => field.evaluate((el) => Object.keys(el).some((k) => k.startsWith("__reactProps$"))))
     .toBe(true);
+  // The mocked turn is only an answer if nothing stands between the page and
+  // page.route: see PHONE.
+  expect(await page.evaluate(() => Boolean(navigator.serviceWorker?.controller)),
+    "a service worker controls the page").toBe(false);
   await field.fill(text);
   await field.press("Enter");
 }
