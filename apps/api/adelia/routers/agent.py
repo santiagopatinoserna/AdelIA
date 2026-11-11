@@ -105,6 +105,9 @@ def _map_event(event: AgentEvent) -> dict:
         return {"event": "card", "data": json.dumps({"card": event.card})}
     if event.type == "error":
         return {"event": "error", "data": json.dumps({"content": event.content})}
+    if event.type == "status":
+        return {"event": "status",
+                "data": json.dumps({"stage": event.content, "sources": event.sources})}
     # The terminal frame carries both citation namespaces (audit 3.7): the
     # canvas needs them to draw the source card under the answer, and until
     # it had them every [ev_N] the model wrote was an orphan marker.

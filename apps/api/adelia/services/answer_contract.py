@@ -99,15 +99,19 @@ _MOTHERS_RULE = {
     ),
 }
 
+#: «No olvides» keeps only what of her record bears on this worry: in the battery
+#: with the real model (2026-11-11), 18 of 21 plans reminded her that the
+#: pediatrician wanted a blood test repeated, under a fever, a fall or teething.
 _PLAN_RULE = {
     "es": (
         "Organiza la respuesta como un plan de acción: una frase inicial que responde, y "
         f"después solo estos apartados, en este orden: \"## {_H['es']['today']}\" (qué hacer "
         f"ahora), \"## {_H['es']['watch']}\" (qué observar), \"## {_H['es']['doctor']}\" (las "
         "señales de alarma de las fuentes y con qué urgencia actuar) y "
-        f"\"## {_H['es']['remember']}\" (indicaciones previas del pediatra y lo que conviene "
-        "anotar o preguntar). Omite un apartado si no hay nada respaldado: nunca un apartado "
-        "vacío ni relleno. Cada viñeta es una acción concreta de una frase con su cita. "
+        f"\"## {_H['es']['remember']}\" (las indicaciones previas del pediatra que tengan que "
+        "ver con lo que cuenta, y lo que conviene anotar o preguntar; lo de su historial que no "
+        "tiene que ver con esto no va). Omite un apartado si no hay nada respaldado: nunca un "
+        "apartado vacío ni relleno. Cada viñeta es una acción concreta de una frase con su cita. "
         "En el apartado del médico, usa la urgencia que indica la fuente para cada señal "
         "(urgencias, hoy, consulta programada): ni la subas ni la bajes. "
         + _MOTHERS_RULE["es"]
@@ -117,9 +121,10 @@ _PLAN_RULE = {
         f"these sections, in this order: \"## {_H['en']['today']}\" (what to do now), "
         f"\"## {_H['en']['watch']}\" (what to observe), \"## {_H['en']['doctor']}\" (the warning "
         "signs from the sources and how urgently to act) and "
-        f"\"## {_H['en']['remember']}\" (the pediatrician's earlier instructions and what to note "
-        "or ask). Leave out a section when nothing supports it: never an empty section or "
-        "filler. Each bullet is one concrete action in one sentence with its citation. "
+        f"\"## {_H['en']['remember']}\" (the pediatrician's earlier instructions that bear on "
+        "what she describes, and what to note or ask; what in her record has nothing to do "
+        "with this stays out). Leave out a section when nothing supports it: never an empty "
+        "section or filler. Each bullet is one concrete action in one sentence with its citation. "
         "In the doctor section, use the urgency the source states for each sign (emergency, "
         "today, booked visit): neither raise nor lower it. "
         + _MOTHERS_RULE["en"]
@@ -129,8 +134,9 @@ _PLAN_RULE = {
         f"uniquement ces rubriques, dans cet ordre : \"## {_H['fr']['today']}\" (quoi faire "
         f"maintenant), \"## {_H['fr']['watch']}\" (quoi observer), \"## {_H['fr']['doctor']}\" "
         "(les signes d’alerte des sources et avec quelle urgence agir) et "
-        f"\"## {_H['fr']['remember']}\" (les consignes antérieures du pédiatre et ce qu’il faut "
-        "noter ou demander). Omets une rubrique si rien ne l’étaye : jamais de rubrique vide "
+        f"\"## {_H['fr']['remember']}\" (les consignes antérieures du pédiatre qui concernent ce "
+        "qu’elle raconte, et ce qu’il faut noter ou demander ; ce qui dans son dossier n’a rien "
+        "à voir n’y va pas). Omets une rubrique si rien ne l’étaye : jamais de rubrique vide "
         "ni de remplissage. Chaque puce est une action concrète d’une phrase avec sa citation. "
         "Dans la rubrique du médecin, garde pour chaque signe l’urgence indiquée par la "
         "source (urgences, aujourd’hui, consultation programmée), sans l’augmenter ni la "

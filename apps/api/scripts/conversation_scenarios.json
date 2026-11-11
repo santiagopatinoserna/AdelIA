@@ -507,10 +507,10 @@
         },
         {
           "say": "le puedo dar gotas para los gases",
-          "evidence": false,
+          "corrected": "2026-11-11, batería con modelo: el corpus sí trata las gotas para los gases (HealthyChildren: no han demostrado funcionar); la expectativa no_evidence estaba mal",
           "expect": {
             "turn": "follow_up",
-            "kind": "no_evidence"
+            "kind": "answer"
           },
           "classifier": {
             "intent": "question"
@@ -648,10 +648,10 @@
         },
         {
           "say": "puedo darle algo para el dolor",
-          "evidence": false,
+          "corrected": "2026-11-11, batería con modelo: el corpus trae alivio sin fármacos (mordedor, masaje) y el modelo se abstiene del analgésico; la expectativa no_evidence estaba mal. La abstención de una dosis la cubren dosis-sin-fuente y fr-dents-doliprane",
           "expect": {
             "turn": "follow_up",
-            "kind": "no_evidence"
+            "kind": "answer"
           },
           "classifier": {
             "intent": "question"

@@ -757,3 +757,34 @@ async def test_the_chat_hands_the_profile_age_to_the_subject(
         answer_question_streaming(user_id=uuid4(), question=_NO_SUBJECT, age_months=7)
     )
     mock_embed.assert_awaited_once_with([_NO_SUBJECT, f"Mi bebé de 7 meses: {_NO_SUBJECT}"])
+
+
+async def test_her_record_and_the_guidelines_are_searched_at_the_same_time():
+    """Two queries on two sessions that never needed each other ran one after
+    the other on every account turn (the battery with the real model,
+    2026-11-11, measured 7.0 s to the first word). Each fake waits until the
+    other has started: run in a row, this would time out."""
+    import asyncio
+
+    from adelia.services.chat_orchestrator import retrieve_for_account
+    from adelia.services.scope import Scope
+
+    started = {"record": asyncio.Event(), "evidence": asyncio.Event()}
+
+    async def chunks(**kwargs):
+        started["record"].set()
+        await asyncio.wait_for(started["evidence"].wait(), timeout=2)
+        return []
+
+    async def evidence(*args, **kwargs):
+        started["evidence"].set()
+        await asyncio.wait_for(started["record"].wait(), timeout=2)
+        return [_evidence_match()]
+
+    with patch("adelia.services.chat_orchestrator.detect_temporal_intent", return_value=None), \
+         patch("adelia.services.chat_orchestrator.embed_texts", return_value=[[0.1] * 1024]), \
+         patch("adelia.services.chat_orchestrator.retrieve_relevant_chunks", chunks), \
+         patch("adelia.services.chat_orchestrator._retrieve_evidence_for_query", evidence):
+        out = await retrieve_for_account(Scope(user_id=uuid4()), question="¿Regurgita?",
+                                         locale="es")
+    assert len(out.evidence) == 1 and out.patient_context is None

@@ -54,6 +54,7 @@ from adelia.clinical.red_flags import normalize as _normalize
 from adelia.enrichment.profile_service import ProfileFacts
 from adelia.services.answer_contract import (
     CLARIFY_QUESTIONS,
+    PLAN_HEADINGS,
     RED_FLAG_REASONS,
     clarification_sentence,
     no_evidence_reply,
@@ -269,6 +270,29 @@ def no_evidence_again(locale: str) -> str:
     return _AGAIN.get(locale, _AGAIN["es"])
 
 
+#: How the note below starts; the conversation battery checks the model got it.
+REFUSED_NOTE_MARK = "Ya le dijiste en este tema que no tienes fuentes"
+
+
+def refused_note(c: "Conversation", locale: str) -> str:
+    """For the answering model, in a topic already told there is no evidence.
+
+    The conversation battery with the real model (2026-11-11): a mixed answer
+    closed each uncovered part with the whole coded paragraph again («la
+    carne, cuánta», «agua fría», «por qué en la guardería»), three turns in
+    one run. Prompt text, in Spanish like the contract's instructions: the
+    part still gets no advice, only the short line instead of the paragraph.
+    """
+    if not c.refused:
+        return ""
+    return (
+        f"{REFUSED_NOTE_MARK} sobre una parte. Si ahora una parte de lo que pregunta sigue "
+        "sin fuente, no repitas la frase de rechazo entera: en un párrafo aparte, nombra esa "
+        f"parte en negrita y sigue con estas palabras exactas: «{no_evidence_again(locale)}» "
+        "Sobre esa parte no añadas nada más: ni una cifra, ni una pauta."
+    )
+
+
 # --- reading the transcript -----------------------------------------------------
 
 
@@ -378,16 +402,16 @@ def _denied(pattern: re.Pattern[str], n: str) -> list[str]:
     return frames
 
 
-def _retracted(n: str, last_answer: str) -> tuple[str, ...]:
+def _retracted(n: str, said: str) -> tuple[str, ...]:
     """What she takes back from the last answer, or () when her "no" adds a fact.
 
     Taken back: X when the answer talked about it, or when X is being ill
     (his "No es enfermo" answered a plan that never wrote the word). "No
     tiene fiebre" after a fever-laden answer is a correction; "no tiene
-    hambre" after a sleep answer, or "no es la primera vez", is news.
+    hambre" after a sleep answer, or "no es la primera vez", is news. `said`
+    is the answer as `_read_answer` gives it.
     """
     short = len(_words(n)) <= _SELF_CONTAINED_WORDS
-    said = normalize(last_answer)
     out: list[str] = []
     for frame in _denied(_DENY_IS, n):
         if frame[:5] in said or frame in _ILLNESS_FRAME:
@@ -396,6 +420,52 @@ def _retracted(n: str, last_answer: str) -> tuple[str, ...]:
         if frame[:5] in said or (short and frame in _ILLNESS_FRAME):
             out.append(frame)
     return tuple(dict.fromkeys(out))
+
+
+#: A plan's sections of signs to watch for: what the answer names there is a
+#: condition («si tiene fiebre»), not something it assumed about the baby.
+_CONDITIONAL_HEADINGS = frozenset(
+    normalize(PLAN_HEADINGS[lang][key]) for lang in _LANGS for key in ("watch", "doctor")
+)
+#: A reading in an answer («Con 38,7 °C») is a fever it assumed, word or not.
+#: From 37,5: «agua a 37 grados» for a bath is not a fever.
+_READING = re.compile(
+    r"\b(?:37[.,][5-9]\d*|(?:3[89]|4[0-2])(?:[.,]\d+)?)\s*(?:°|º|grados?\b|degrees?\b)"
+)
+_FEVER_WORDS = " fiebre fever fievre"
+#: A no of any kind in her words, or her own «quise decir»: without either,
+#: nothing was taken back. The rules already catch the corrections with a no;
+#: the ones that reach the classifier are mostly these («perdona, quise decir...»).
+_NEGATION = re.compile(
+    r"\b(?:no|not|ni|nunca|jamas|never|pas|non|nope|"
+    r"quise decir|queria decir|me equivoque|me he equivocado|en realidad|perdona|perdon|"
+    r"i meant|i mean|actually|sorry|my mistake|"
+    r"je voulais dire|je veux dire|en fait|je me suis trompee?|pardon)\b|n't\b"
+)
+
+
+def _read_answer(text: str) -> str:
+    """An answer normalized, with a reading read as the fever it is."""
+    said = normalize(text)
+    return said + _FEVER_WORDS if _READING.search(said) else said
+
+
+def _assumed(answer: str) -> str:
+    """The part of an answer that says what it took the baby to have, normalized:
+    without the plan's sections of signs to watch for, and with a reading read
+    as the fever it is. The conversation battery with the real model
+    (2026-11-11): «no tiene fiebre» after a vomiting plan that listed fever only
+    under «Cuándo ir al médico» was taken as a correction, and the answering
+    model, without its own plan, wrote the same 330 words again."""
+    kept, skipping = [], False
+    for line in answer.splitlines():
+        if line.lstrip().startswith("#"):
+            skipping = normalize(line.lstrip("# ").strip()) in _CONDITIONAL_HEADINGS
+            if skipping:
+                continue
+        if not skipping:
+            kept.append(line)
+    return _read_answer("\n".join(kept))
 
 
 _SPLIT = re.compile(r"(?<=[.;!?])\s+|(?<=,)\s+|\s+(?=(?:pero|but|mais)\b)", re.IGNORECASE)
@@ -447,8 +517,11 @@ def _classify(message: str, prev: list[tuple[str, str]]) -> tuple[str, str, tupl
         if marker and _substantive(n):
             return "new", "rule", ()
         return "follow_up", "clarify", ()
-    retracted = _retracted(n, last_a)
+    retracted = _retracted(n, _read_answer(last_a))
     generic = bool(_GENERIC_DENIAL.search(n))
+    if retracted and not generic and not marker and not _retracted(n, _assumed(last_a)):
+        # She denies a sign the answer only listed to watch for: news, in the topic.
+        return "follow_up", "rule", ()
     if marker and _substantive(n) and not retracted and not generic:
         return "new", "rule", ()
     if retracted or generic or marker:
@@ -686,6 +759,11 @@ def with_kind(c: Conversation, kind: str | None, *, search_query: str | None = N
     """The routing model's verdict, taken only where the rules could not decide."""
     if c.decided or kind not in ("new", "follow_up", "correction"):
         return c
+    if kind == "correction" and not _NEGATION.search(normalize(c.message)):
+        # Nothing in her words takes anything back («le puedo dar gotas para los
+        # gases» after a colic answer, the real classifier, 2026-11-11): as a
+        # correction the model is told its earlier answers were wrong.
+        kind = "follow_up"
     query = search_query if kind != "new" else None
     return read(c.message, list(c._history), clarified=c._clarified, _force=kind,
                 _query=query[:MAX_QUERY_CHARS] if query else None)
@@ -717,9 +795,12 @@ def ask_when_nothing_found(c: Conversation, facts: ProfileFacts | None, *, inten
     """Before saying there is no evidence: one round, for a worry she observed.
 
     Never for a fact question or a drug (the coded refusal is the answer
-    there), and never in a topic that already had its round.
+    there), never in a topic that already had its round, and never once the
+    topic was told there is no evidence: the round comes before the refusal
+    («y si le doy zumo de pera» after a half-refused constipation answer, the
+    battery with the real model, 2026-11-11).
     """
-    if c.asked:
+    if c.asked or c.refused:
         return []
     if c.behaviour:
         return ask_first(c, facts)
@@ -780,5 +861,6 @@ __all__ = [
     "Conversation", "MAX_QUERY_CHARS", "ROUTE_HISTORY_CHARS", "ROUTE_HISTORY_MESSAGES",
     "SIGNAL_SOURCES", "ask_first", "ask_when_nothing_found", "consult_note",
     "correction_note", "is_clarify_question", "no_evidence_again", "read", "referral_code",
+    "REFUSED_NOTE_MARK", "refused_note",
     "visit_card_title", "visit_note", "with_kind",
 ]

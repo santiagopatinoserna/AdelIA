@@ -882,6 +882,8 @@
     "retry": "Volver a preguntar",
     "listen": "Dictar por voz",
     "thinking": "Pensando…",
+    "statusSearching": "Buscando en las fuentes…",
+    "statusWriting": "{count, plural, =0 {Escribiendo…} one {He encontrado 1 fuente. Escribiendo…} other {He encontrado # fuentes. Escribiendo…}}",
     "errorAnswer": "Ups, algo falló. Inténtalo otra vez.",
     "seeAll": "Ver todo",
     "confirmYes": "Sí",

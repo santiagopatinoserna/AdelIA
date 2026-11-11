@@ -154,6 +154,9 @@ async def run_turn(*, user_id: UUID, profile_id: UUID | None, message: str,
                 yield AgentEvent(type="card", card=event["card"])
             elif kind == "tool_call":
                 yield AgentEvent(type="tool_call", tool_name=event["tool_name"])
+            elif kind == "status":
+                yield AgentEvent(type="status", content=event["stage"],
+                                 sources=int(event.get("sources") or 0))
             elif kind == "final":
                 final = event["state"]
                 if on_final is not None:

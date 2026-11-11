@@ -14,9 +14,13 @@ class AgentEvent:
     pointing at nothing.
     """
 
-    type: Literal["token", "tool_call", "card", "final", "error"]
+    type: Literal["token", "tool_call", "card", "final", "error", "status"]
+    #: A token's text, an error's message, or a status's stage ("searching",
+    #: "writing"): what the turn is doing while she waits (2026-11-11).
     content: str = ""
     card: dict | None = None
     tool_name: str = ""
+    #: With the "writing" status: how many sources the answer is written from.
+    sources: int = 0
     citations: list[dict] = field(default_factory=list)
     evidence_citations: list[dict] = field(default_factory=list)

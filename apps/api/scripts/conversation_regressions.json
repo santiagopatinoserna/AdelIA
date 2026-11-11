@@ -1,0 +1,827 @@
+{
+ "about": "Las 16 vueltas que fallaron en la batería con el modelo real en producción (2026-11-11, 57 de 110 turnos), como regresiones sin modelo. Cada turno lleva lo que pasó de verdad (`real`): la decisión del clasificador real (`classifier`, o \"down\" si cayó al respaldo), si la búsqueda encontró evidencia (`evidence`) y si trajo su historial (`record`), y la respuesta que escribió el modelo (`model_answer`), que el falso repite para que el hilo lea el texto real. `evidence` y `record` se deducen de las fuentes de la transcripción: un rechazo entero sin fuentes cuenta como sin evidencia. `expect` es lo que debe pasar ahora. scripts/conversation_battery.py --scenarios scripts/conversation_regressions.json",
+ "source": "~/dev/adelia-design/shots/battery/battery-20261111-0115.json",
+ "scenarios": [
+  {
+   "id": "real-guarderia-real-9nov-1",
+   "from": "guarderia-real-9nov-1",
+   "locale": "es",
+   "age_months": 14,
+   "tags": [
+    "guarderia",
+    "conversacion_real",
+    "desarrollo"
+   ],
+   "turns": [
+    {
+     "say": "Mi bebé en la guardería es el único que en tiempo libre se queda sentado en una esquina sin moverse. Todos los otros juegan pero él no se mueve. Pero en casa no es así, en casa juega",
+     "evidence": false,
+     "record": false,
+     "real": {
+      "turn_type": "new",
+      "kind": "clarify",
+      "intent": "clarify",
+      "intent_via": "rule",
+      "failed": []
+     },
+     "expect": {
+      "turn": "new",
+      "kind": "clarify",
+      "asks": [
+       "nursery_time",
+       "social_signals"
+      ],
+      "card": "clarify"
+     }
+    },
+    {
+     "say": "Pero todos los días está así",
+     "evidence": true,
+     "record": true,
+     "model_answer": "Las fuentes no explican por qué se queda quieto solo en la guardería, pero sí cuánto conviene que se mueva un bebé.\n\n**Por qué en la guardería no juega y en casa sí**\nNo tengo evidencia clínica sobre esto en mi biblioteca, así que prefiero no responder antes que inventar. Coméntalo con tu pediatra, que conoce a tu bebé y puede valorarlo.\n\n## Hoy\n- Pide a la guardería que no lo dejen quieto más de una hora seguida ni mucho tiempo en la misma postura, sentado o tumbado [ev_3].\n- Pide que le ofrezcan juego en el suelo y, si aún no gatea, al menos 30 minutos al día boca abajo repartidos a lo largo del día [ev_3].\n- Pide que le cambien de postura al jugar, al comer y al llevarlo en brazos [ev_3].\n\n## No olvides\n- En la consulta del 6 de noviembre, la pediatra pidió repetir la analítica si seguía cansada o comía peor [2].\n- Anota cuánto tiempo seguido pasa quieto en la guardería y en qué postura, para contárselo a la pediatra.",
+     "real": {
+      "turn_type": "follow_up",
+      "kind": "answer",
+      "intent": "plan",
+      "intent_via": "rule",
+      "failed": [
+       "doctor"
+      ]
+     },
+     "expect": {
+      "turn": "follow_up",
+      "kind": "answer",
+      "shape": "plan",
+      "doctor": true,
+      "not_seen": [
+       "enfermo"
+      ]
+     }
+    },
+    {
+     "say": "No es enfermo",
+     "evidence": true,
+     "record": true,
+     "model_answer": "Con las fuentes que tengo puedo orientarte sobre cuánto conviene que se mueva un bebé, no sobre por qué cambia en la guardería.\n\n**Por qué en la guardería se queda quieto y en casa juega:** No tengo evidencia clínica sobre esto en mi biblioteca, así que prefiero no responder antes que inventar. Coméntalo con tu pediatra, que conoce a tu bebé y puede valorarlo.\n\n## Hoy\n- Pregunta en la guardería cuánto tiempo seguido pasa sentado en la esquina y si cambia de postura [ev_3].\n- Pide que le dejen jugar en el suelo y, si aún no gatea, que pase ratos boca abajo hasta sumar al menos 30 minutos al día [ev_3].\n- Ten en cuenta que leerle, contarle cuentos o hacer música con él sentado también es bueno para su desarrollo [ev_3].\n- Evita que pase más de una hora seguida inmóvil (cochecito, trona o sentado en un rincón) o mucho tiempo en la misma postura, sentado o tumbado [ev_3].\n\n## Vigila\n- Que en casa siga jugando en el suelo y cambiando de postura a lo largo del día [ev_3].",
+     "real": {
+      "turn_type": "correction",
+      "kind": "answer",
+      "intent": "plan",
+      "intent_via": "rule",
+      "failed": [
+       "doctor",
+       "refusal_once"
+      ]
+     },
+     "expect": {
+      "turn": "correction",
+      "kind": "answer",
+      "shape": "plan",
+      "doctor": true
+     }
+    }
+   ],
+   "why": "T2 y T3 sin «Cuándo ir al médico»: la búsqueda trajo la guía de movimiento (Gezond Leven), sin señales de alarma; recuperación, no código. T3 repetía el párrafo de rechazo entero: ahora el modelo recibe refused_note."
+  },
+  {
+   "id": "real-guarderia-botones",
+   "from": "guarderia-botones",
+   "locale": "es",
+   "age_months": 13,
+   "tags": [
+    "guarderia",
+    "desarrollo"
+   ],
+   "turns": [
+    {
+     "say": "en la guarde no juega con nadie siempre solo",
+     "evidence": false,
+     "record": false,
+     "real": {
+      "turn_type": "new",
+      "kind": "clarify",
+      "intent": "clarify",
+      "intent_via": "rule",
+      "failed": []
+     },
+     "expect": {
+      "turn": "new",
+      "kind": "clarify",
+      "asks": [
+       "nursery_time",
+       "social_signals"
+      ]
+     }
+    },
+    {
+     "press": [
+      {
+       "field": "nursery_time",
+       "value": "lt1m"
+      },
+      {
+       "field": "social_signals",
+       "value": "all"
+      }
+     ],
+     "evidence": false,
+     "record": true,
+     "model_answer": "No tengo evidencia clínica sobre esto en mi biblioteca, así que prefiero no responder antes que inventar. Coméntalo con tu pediatra, que conoce a tu bebé y puede valorarlo.",
+     "real": {
+      "turn_type": "follow_up",
+      "kind": "answer",
+      "intent": "plan",
+      "intent_via": "rule",
+      "failed": []
+     },
+     "expect": {
+      "turn": "follow_up",
+      "kind": "answer",
+      "shape": "plan"
+     }
+    },
+    {
+     "say": "y cuanto tarda en adaptarse",
+     "evidence": false,
+     "record": true,
+     "model_answer": "No tengo evidencia clínica sobre esto en mi biblioteca, así que prefiero no responder antes que inventar. Coméntalo con tu pediatra, que conoce a tu bebé y puede valorarlo.",
+     "real": {
+      "turn_type": "follow_up",
+      "kind": "answer",
+      "intent": "plan",
+      "intent_via": "rule",
+      "failed": [
+       "refusal_once"
+      ]
+     },
+     "expect": {
+      "turn": "follow_up",
+      "kind": "no_evidence",
+      "card": "confirm"
+     }
+    }
+   ],
+   "why": "T3 repetía el rechazo: el historial de la invitada «fundamentaba» el turno sin evidencia y se pagaba al modelo para rechazar otra vez. Ahora, en un tema ya rechazado, el código dice la línea corta y ofrece anotarlo."
+  },
+  {
+   "id": "real-fiebre-con-cifra-noche",
+   "from": "fiebre-con-cifra-noche",
+   "locale": "es",
+   "age_months": 10,
+   "tags": [
+    "fiebre",
+    "noche"
+   ],
+   "turns": [
+    {
+     "say": "tiene 38,5 y esta muy llorona",
+     "classifier": {
+      "intent": "plan",
+      "turn": "new"
+     },
+     "evidence": false,
+     "record": true,
+     "model_answer": "No tengo evidencia clínica sobre esto en mi biblioteca, así que prefiero no responder antes que inventar. Coméntalo con tu pediatra, que conoce a tu bebé y puede valorarlo.",
+     "real": {
+      "turn_type": "new",
+      "kind": "answer",
+      "intent": "plan",
+      "intent_via": "model",
+      "failed": [
+       "doctor"
+      ]
+     },
+     "expect": {
+      "turn": "new",
+      "kind": "clarify",
+      "asks": [
+       "since_when",
+       "general_state"
+      ],
+      "card": "clarify"
+     }
+    },
+    {
+     "say": "y por la noche q hago",
+     "evidence": true,
+     "record": true,
+     "model_answer": "Con 38,5 °C a su edad (revisión de los 4 meses en octubre [1]), las guías indican **llamar al pediatra**; mientras, mantenlo hidratado y cómodo [ev_4].\n\n## Hoy\n- **Llama al pediatra esta noche**: entre los 3 y 6 meses, 38,3 °C o más es motivo de llamada [ev_4].\n- Mantenlo hidratado y cómodo [ev_4].\n- Si está seco y alimentado y sigue llorando, prueba a mecerlo, envolverlo en una manta, cantarle o pasearlo en brazos [ev_1].\n- **Evita** abrigarlo de más si hace calor y humedad [ev_4], y **nunca lo sacudas**; si pierdes la calma, déjalo en la cuna sin mantas ni peluches, sal 10-15 minutos y llama a alguien de apoyo [ev_3].\n\n## Vigila\n- Vuelve a medirle la temperatura en el recto [ev_1].\n\n## Cuándo ir al médico\n**Llama de inmediato si:** [ev_2]\n- No moja ningún pañal en medio día.\n- Está adormilado.\n- Le cuesta respirar.\n- Tiene aspecto gris o llanto inconsolable.\n- Tiene manchas que no desaparecen al presionarlas con un vaso.\n- Se queja.\n\n**Llama al pediatra si:**\n- La fiebre es de 38,3 °C o más [ev_4].\n- Bebe menos de la mitad de lo normal [ev_2].\n- Vomita sin parar o tiene diarrea persistente [ev_2].\n- Empeora rápidamente [ev_2].\n- Sigue con más de 38 °C durante 5 días [ev_2].\n- Estás muy preocupada [ev_2].\n- Nada consigue calmarlo, por si hay una causa médica del llanto [ev_3].\n\n## No olvides\n- Regurgita tras casi todas las tomas [1]: si se pone irritable después de comer, coméntaselo al médico [ev_3].\n- La pediatra pidió repetir la analítica si sigue cansada o come peor [3].",
+     "real": {
+      "turn_type": "follow_up",
+      "kind": "answer",
+      "intent": "plan",
+      "intent_via": "rule",
+      "failed": []
+     },
+     "expect": {
+      "turn": "follow_up",
+      "kind": "answer",
+      "shape": "plan",
+      "doctor": true
+     }
+    },
+    {
+     "say": "lo baño con agua fria?",
+     "evidence": true,
+     "record": true,
+     "model_answer": "Si quieres bañarla para calmarla, las guías mencionan un baño **tibio** [ev_1]. Con 38,5 °C, **llama al pediatra** [ev_3].\n\n**Baño con agua fría para bajar la fiebre:** No tengo evidencia clínica sobre esto en mi biblioteca, así que prefiero no responder antes que inventar. Coméntalo con tu pediatra, que conoce a tu bebé y puede valorarlo.\n\n## Hoy\n- **Llama al pediatra esta noche**: entre los 3 y 6 meses, 38,3 °C o más es motivo de llamada [ev_3].\n- Mantenla hidratada y cómoda [ev_3], ofreciéndole de beber a menudo porque probablemente hará tomas más cortas [ev_4].\n- Si está seca y alimentada y sigue llorando, prueba a mecerla, cantarle, pasearla en brazos o un baño tibio [ev_1].\n- **Evita** abrigarla de más si hace calor y humedad [ev_3], y **nunca la sacudas ni la golpees**; si pierdes la calma, déjala en la cuna sin mantas ni peluches, sal 10-15 minutos y llama a alguien de apoyo [ev_2].\n\n## Vigila\n- Comprueba con regularidad si tiene fiebre [ev_4], midiéndola en el recto [ev_1].\n- Fíjate si está más decaída o duerme más o menos de lo normal [ev_4].\n\n## Cuándo ir al médico\n**Llama al pediatra si:**\n- Tiene 38,3 °C o más, como ahora [ev_3].\n- Está inconsolable y tiene 38 °C o más en el recto [ev_1].\n- Vomita o tiene diarrea que no cede [ev_4].\n- Nada consigue calmarla, por si hay una causa médica del llanto [ev_2].\n\n**Coméntalo con el médico si:**\n- Regurgita o vomita mucho o se pone irritable después de comer [ev_2].\n\n## No olvides\n- Cuéntale al pediatra que regurgita tras casi todas las tomas [1].\n- La pediatra pidió repetir la analítica si sigue cansada o come peor [3].",
+     "real": {
+      "turn_type": "follow_up",
+      "kind": "answer",
+      "intent": "plan",
+      "intent_via": "rule",
+      "failed": [
+       "refusal_once"
+      ]
+     },
+     "expect": {
+      "turn": "follow_up",
+      "kind": "answer"
+     }
+    }
+   ],
+   "why": "T1 sin evidencia («tiene 38,5» no dice fiebre) y con historial: el modelo rechazó sin la ronda de preguntas. Ahora pregunta primero. T3 repetía el rechazo entero dentro de una respuesta mixta."
+  },
+  {
+   "id": "real-complementaria",
+   "from": "complementaria",
+   "locale": "es",
+   "age_months": 6,
+   "tags": [
+    "complementaria"
+   ],
+   "turns": [
+    {
+     "say": "cuando empiezo con la fruta",
+     "evidence": false,
+     "record": true,
+     "model_answer": "Tu pediatra recomendó **empezar la alimentación complementaria a los 6 meses** [1].\n\n**Cuándo y cómo introducir la fruta en concreto:** No tengo evidencia clínica sobre esto en mi biblioteca, así que prefiero no responder antes que inventar. Coméntalo con tu pediatra, que conoce a tu bebé y puede valorarlo.",
+     "real": {
+      "turn_type": "new",
+      "kind": "answer",
+      "intent": "question",
+      "intent_via": "rule",
+      "failed": []
+     },
+     "expect": {
+      "turn": "new",
+      "kind": "answer",
+      "shape": "question"
+     }
+    },
+    {
+     "say": "y el huevo",
+     "evidence": true,
+     "record": true,
+     "model_answer": "Puedes ofrecer el huevo **en cuanto empiece la alimentación complementaria**, que tu pediatra fijó a los 6 meses [1]. No conviene retrasarlo, porque hacerlo no ayuda a prevenir la alergia [ev_1][ev_2].\n\n- Dáselo siempre **bien cocido (duro)**, nunca crudo ni poco cuajado. La mayoría de las reacciones aparecen con tortilla o huevo poco hecho [ev_1][ev_2].\n- Al principio, dale una pequeña cantidad una sola vez al día, como alternativa a la carne o el pescado [ev_4].\n- **Si aparecen síntomas** tras tomarlo, consulta con un pediatra alergólogo. Solo se retira la forma de huevo que causó la reacción [ev_1].",
+     "real": {
+      "turn_type": "follow_up",
+      "kind": "answer",
+      "intent": "question",
+      "intent_via": "rule",
+      "failed": []
+     },
+     "expect": {
+      "turn": "follow_up",
+      "kind": "answer"
+     }
+    },
+    {
+     "say": "y la carne cuanta",
+     "evidence": true,
+     "record": true,
+     "model_answer": "La carne se da **una sola vez al día**, como alternativa al pescado o al huevo, no además de ellos [ev_4].\n\n- Al principio, los alimentos nuevos se introducen en **pequeñas cantidades**, sin forzar y sin sal ni azúcar añadidos [ev_3].\n- Respeta sus señales de hambre y saciedad [ev_2].\n\n**Cantidad exacta de carne (gramos por toma):** No tengo evidencia clínica sobre esto en mi biblioteca, así que prefiero no responder antes que inventar. Coméntalo con tu pediatra, que conoce a tu bebé y puede valorarlo.",
+     "real": {
+      "turn_type": "follow_up",
+      "kind": "answer",
+      "intent": "question",
+      "intent_via": "rule",
+      "failed": [
+       "refusal_once"
+      ]
+     },
+     "expect": {
+      "turn": "follow_up",
+      "kind": "answer"
+     }
+    }
+   ],
+   "why": "T3 repetía el rechazo entero para «la carne, cuánta»: ahora el modelo recibe refused_note."
+  },
+  {
+   "id": "real-no-gatea",
+   "from": "no-gatea",
+   "locale": "es",
+   "age_months": 10,
+   "tags": [
+    "desarrollo"
+   ],
+   "turns": [
+    {
+     "say": "no gatea y ya tiene 10 meses",
+     "classifier": {
+      "intent": "plan",
+      "turn": "new"
+     },
+     "evidence": true,
+     "record": true,
+     "model_answer": "Hay bebés que no gatean, y la guía de UNICEF lo considera normal [ev_1].\n\n## Hoy\n- Déjala desplazarse libremente por el suelo a su manera [ev_1].\n- Coloca un objeto cerca de ella y cámbialo de lugar para animarla a moverse en distintas direcciones [ev_1].\n- **Evita** apurarla o forzar el gateo [ev_1].\n\n## Vigila\n- Si se mantiene sentada, porque el gateo suele llegar después de lograr sentarse [ev_1].\n- Si dice sílabas como ma, ba, pa o da [ev_1].\n- Si actúa con intención e imita gestos como aplaudir o decir chau [ev_1].\n\n## No olvides\n- Anota cómo se desplaza (arrastrándose, rodando, sentada) y si ya se sienta sola, para comentarlo en la próxima revisión.\n- La pediatra pidió repetir la analítica si sigue cansada o come peor [2].",
+     "real": {
+      "turn_type": "new",
+      "kind": "answer",
+      "intent": "plan",
+      "intent_via": "model",
+      "failed": [
+       "doctor"
+      ]
+     },
+     "expect": {
+      "turn": "new",
+      "kind": "answer",
+      "shape": "plan",
+      "doctor": true
+     }
+    },
+    {
+     "say": "se sienta sola y se arrastra un poco",
+     "classifier": "down",
+     "evidence": true,
+     "record": true,
+     "model_answer": "Que se siente sola es propio de los 8-12 meses [ev_1], y hay bebés que no gatean, lo cual es normal [ev_3].\n\n## Hoy\n- Déjala desplazarse libremente por el suelo a su manera [ev_3].\n- Coloca un objeto cerca y cámbialo de lugar para animarla a moverse en distintas direcciones [ev_3].\n- Dale tiempo de juego en el suelo, que es importante para su desarrollo [ev_4].\n- **Evita** apurarla o forzar el gateo [ev_3].\n\n## Vigila\n- Si se apoya sobre manos y rodillas o se pone de pie agarrada a un mueble [ev_1].\n- Si camina apoyándose en los muebles hacia el año [ev_2].\n- Si dice sílabas como ma, ba, pa o da e imita gestos como aplaudir o decir adiós [ev_3].\n\n## No olvides\n- La guía de hitos se refiere a bebés nacidos a término y cada niño lleva su propio ritmo [ev_1].\n- La pediatra pidió repetir la analítica si sigue cansada o come peor [2].",
+     "real": {
+      "turn_type": "follow_up",
+      "kind": "answer",
+      "intent": "plan",
+      "intent_via": "fallback",
+      "failed": []
+     },
+     "expect": {
+      "turn": "follow_up",
+      "kind": "answer"
+     }
+    }
+   ],
+   "why": "T1 sin «Cuándo ir al médico»: la única fuente (UNICEF) no trae señales de alarma; recuperación, no código (warning_signs_retrieval sigue apagado)."
+  },
+  {
+   "id": "real-colico-llanto",
+   "from": "colico-llanto",
+   "locale": "es",
+   "age_months": 1,
+   "tags": [
+    "colico",
+    "dosis"
+   ],
+   "turns": [
+    {
+     "say": "llora muchisimo todas las tardes y encoge las piernas",
+     "classifier": {
+      "intent": "plan",
+      "turn": "new"
+     },
+     "evidence": false,
+     "record": true,
+     "model_answer": "No tengo evidencia clínica sobre esto en mi biblioteca, así que prefiero no responder antes que inventar. Coméntalo con tu pediatra, que conoce a tu bebé y puede valorarlo.",
+     "real": {
+      "turn_type": "new",
+      "kind": "answer",
+      "intent": "plan",
+      "intent_via": "model",
+      "failed": [
+       "doctor"
+      ]
+     },
+     "expect": {
+      "turn": "new",
+      "kind": "clarify",
+      "asks": [
+       "since_when",
+       "general_state"
+      ],
+      "card": "clarify"
+     }
+    },
+    {
+     "say": "son colicos",
+     "classifier": {
+      "intent": "plan",
+      "turn": "follow_up"
+     },
+     "evidence": true,
+     "record": true,
+     "model_answer": "**Puede ser cólico, pero no lo puedo confirmar:** lo que describes encaja [ev_1][ev_2], aunque a su edad (más de 4 meses [1]) suele haber cedido [ev_1][ev_2].\n\nLos cólicos suelen empezar con llanto de golpe, más por la tarde y la noche, con las piernas encogidas sobre la tripa, los puños cerrados y la cara roja [ev_1]. En general desaparecen hacia los 3 o 4 meses, aunque pueden durar hasta los 6 [ev_3].\n\n## Hoy\n- Cuando llore, comprueba si tiene hambre, frío, calor o el pañal mojado: el llanto normal se calma al atender lo que necesita, y en el cólico sigue llorando [ev_1].\n- Ten en cuenta que también puede llorar por gases, reflujo o estreñimiento [ev_2].\n\n## Vigila\n- Anota si llora más de 3 horas al día, 3 días por semana, durante al menos 1 semana, y si por lo demás está sana [ev_2].\n- Observa si, cuando el llanto cede, vuelve a su aspecto normal [ev_1].\n- Fíjate si el resto del día está relativamente tranquila [ev_3].\n\n## Cuándo ir al médico\nHabla con su pediatra o con la enfermera de pediatría si:\n- No estás segura de por qué llora [ev_2].\n\n## No olvides\n- Su pediatra anotó regurgitaciones tras casi todas las tomas y pautó tomas más frecuentes y de menor volumen, con revisión en 2 meses [1]; coméntale este llanto en esa revisión.\n- La pediatra pidió repetir la analítica si sigue cansada o come peor [2].",
+     "real": {
+      "turn_type": "follow_up",
+      "kind": "answer",
+      "intent": "plan",
+      "intent_via": "model",
+      "failed": []
+     },
+     "expect": {
+      "turn": "follow_up",
+      "kind": "answer"
+     }
+    },
+    {
+     "say": "le puedo dar gotas para los gases",
+     "classifier": {
+      "intent": "plan",
+      "turn": "correction"
+     },
+     "evidence": true,
+     "record": true,
+     "model_answer": "Lo que cuentas se parece a los signos de cólico [ev_3], pero no puedo confirmarlo. Las gotas para los gases nunca han demostrado funcionar [ev_1].\n\n## Hoy\n- Prueba a mecerla, envolverla bien en una manta, pasearla en brazos o darle un baño tibio [ev_1].\n- Dale las tomas despacio, con pausas para que eructe y en un ambiente tranquilo [ev_1][ev_4].\n- Si toma biberón, prueba una tetina de flujo más lento [ev_1].\n- **No le des gotas para los gases ni agua para cólicos** [ev_1]. Si das el pecho, no dejes la lactancia por el llanto [ev_4]. **Nunca la sacudas ni la golpees**: si pierdes la calma, déjala en la cuna sin mantas ni peluches, sal 10–15 minutos y llama a alguien [ev_1][ev_2].\n\n## Vigila\n- Anota cuántas horas llora al día y cuántos días por semana: el cólico se define por más de 3 horas al día, 3 días por semana, durante al menos 1 semana [ev_3].\n- Comprueba si tiene hambre, frío o calor, el pañal sucio o demasiados estímulos [ev_2][ev_3].\n- Si está inconsolable, mídele la temperatura en el recto [ev_1].\n\n## Cuándo ir al médico\nAvisa al pediatra si:\n- Está inconsolable y tiene 38 °C o más en el recto [ev_1].\n\nHabla con su médico si:\n- Regurgita o vomita mucho, o se pone irritable después de comer, porque puede confundirse con el cólico [ev_2]. En su revisión de los 4 meses ya constaban regurgitaciones tras casi todas las tomas [1].\n- Llora a cualquier hora del día y de la noche [ev_4].\n- Las tomas le cuestan, duerme mal o su crecimiento se frena [ev_4].\n- Nada de lo que pruebas la calma, por si hay una causa médica [ev_2].\n- No estás segura de si es cólico [ev_3].\n\n## No olvides\n- La pauta de los 4 meses fue darle tomas más frecuentes y de menor volumen, con revisión en 2 meses [1].\n- La pediatra pidió repetir la analítica si sigue cansada o come peor [2].",
+     "real": {
+      "turn_type": "correction",
+      "kind": "answer",
+      "intent": "plan",
+      "intent_via": "model",
+      "failed": [
+       "kind",
+       "turn"
+      ]
+     },
+     "expect": {
+      "turn": "follow_up",
+      "kind": "answer"
+     }
+    }
+   ],
+   "why": "T1 sin evidencia (descripción sin «cólico») y con historial: rechazo sin ronda. T3: el clasificador real dijo `correction` sin ninguna negación; y la expectativa `no_evidence` estaba mal, el corpus sí trata las gotas para los gases."
+  },
+  {
+   "id": "real-vomitos-y-deshidratacion",
+   "from": "vomitos-y-deshidratacion",
+   "locale": "es",
+   "age_months": 9,
+   "tags": [
+    "vomitos",
+    "bandera_roja_a_mitad"
+   ],
+   "turns": [
+    {
+     "say": "ha vomitado 3 veces esta mañana q hago",
+     "evidence": true,
+     "record": true,
+     "model_answer": "Tres vómitos en una mañana son **vómitos repetidos**: consulta hoy con su pediatra lo antes posible [ev_1][ev_3].\n\n## Hoy\n- Llama hoy a su pediatra o centro de salud para que la valoren lo antes posible [ev_1][ev_3].\n- Ofrécele solución de rehidratación oral de farmacia en pequeñas cantidades con cuchara o jeringa, y aumenta poco a poco durante 3-4 horas [ev_3].\n- Mantenla en casa hasta al menos 48 horas después del último vómito [ev_2].\n- **No le des** sueros caseros, bebidas isotónicas, zumos ni bebidas azucaradas o con gas [ev_3].\n\n## Vigila\n- Distingue si devuelve solo algo de leche tras la toma, que es normal, o si es un vómito [ev_1].\n- Anota la hora de cada vómito y cuánto tiempo pasa desde la toma [ev_1].\n- Fíjate en si acepta y retiene la solución de rehidratación [ev_3].\n\n## Cuándo ir al médico\n**Llama a una ambulancia si:**\n- Vomita y además tiene dolor de cabeza, rigidez de cuello y erupción [ev_2].\n\n**Ve a urgencias de inmediato si:**\n- Moja menos pañales [ev_2].\n- Está somnolienta o cuesta despertarla [ev_2].\n- Tiene la piel pálida o moteada [ev_2].\n- Tiene las manos y los pies fríos [ev_2].\n- El dolor de barriga empeora rápido y se extiende [ev_2].\n- Tiene la lengua seca o llora sin lágrimas: llévala de inmediato al centro de salud más cercano [ev_1].\n\n**Llama al médico de inmediato o consulta lo antes posible si:**\n- Vomita más de 3 veces en 24 horas o durante más de 3 días [ev_2].\n- Vomita 3 o 4 veces en 2 horas [ev_1].\n- Vomita pasada hora y media de la toma [ev_1].\n- Tiene fiebre y está decaída [ev_1].\n- Tiene 39 °C o más [ev_2].\n- El vómito tiene sangre o es marrón o verde (bilis) [ev_2][ev_3].\n- Tiene dolor de tripa fuerte o constante [ev_1][ev_2][ev_3].\n- Sigue vomitando aunque le hayas dado bien la solución, o no consigue tomar suficientes líquidos [ev_3].\n- Está muy somnolienta o muy irritable [ev_3].\n- Tiene la boca seca, la fontanela hundida u orina menos [ev_3].\n- Ha viajado al extranjero hace poco y vomita más de lo habitual [ev_2].\n\n## No olvides\n- Comenta que ya regurgitaba tras casi todas las tomas y que la pauta era hacer tomas más frecuentes y de menor volumen [1].\n- Si la notas cansada o come peor, recuerda que la pediatra pidió repetir la analítica [2].",
+     "real": {
+      "turn_type": "new",
+      "kind": "answer",
+      "intent": "plan",
+      "intent_via": "rule",
+      "failed": []
+     },
+     "expect": {
+      "turn": "new",
+      "kind": "answer",
+      "shape": "plan",
+      "doctor": true
+     }
+    },
+    {
+     "say": "no tiene fiebre",
+     "evidence": true,
+     "record": true,
+     "model_answer": "**Tres vómitos en una mañana son vómitos repetidos: según las guías, llama hoy a tu pediatra lo antes posible.**\n\n## Hoy\n- Llama hoy al equipo de salud, porque ha vomitado de forma repetida [ev_1][ev_2].\n- Ofrécele solución de rehidratación oral de farmacia en pequeñas cantidades con cuchara o jeringa, y ve aumentando poco a poco durante unas 3 o 4 horas [ev_3].\n- Que se quede en casa al menos 48 horas tras el último vómito [ev_2].\n- **Evita** sueros caseros, bebidas isotónicas, zumos y bebidas azucaradas o con gas [ev_3].\n\n## Vigila\n- Fíjate si es solo un poco de leche devuelta tras la toma, que es normal, o un vómito de verdad [ev_1].\n- Apunta la hora de cada vómito y cuánto tiempo ha pasado desde la toma [ev_1].\n\n## Cuándo ir al médico\n**Llama a una ambulancia de inmediato si:**\n- Vomita y además tiene dolor de cabeza, rigidez de cuello y erupción [ev_2].\n\n**Ve a urgencias o al centro de salud más cercano de inmediato si:**\n- Tiene la lengua seca o llora sin lágrimas [ev_1].\n- Moja menos pañales [ev_2].\n- Está somnoliento o cuesta despertarlo [ev_2].\n- Tiene la piel pálida o moteada, o las manos y los pies fríos [ev_2].\n- El dolor de barriga empeora rápido y se extiende [ev_2].\n\n**Llama al médico de inmediato o consulta lo antes posible si:**\n- Vomita 3 o 4 veces en 2 horas [ev_1].\n- Vomita más de 3 veces en 24 horas [ev_2].\n- Vomita durante más de 3 días [ev_2].\n- Vomita pasada hora y media de la toma [ev_1].\n- El vómito trae sangre o es marrón, verde o con bilis [ev_2][ev_3].\n- Tiene dolor de tripa fuerte o constante [ev_1][ev_3].\n- Sigue vomitando pese a hacer bien la tolerancia [ev_3].\n- No puede tomar suficientes líquidos [ev_3].\n- Está muy somnoliento o muy irritable [ev_3].\n- Tiene la boca seca, la fontanela hundida u orina menos [ev_3].\n- Ha viajado al extranjero hace poco y vomita más de lo habitual [ev_2].\n\n## No olvides\n- Cuéntale a la pediatra que a los 4 meses ya regurgitaba tras casi todas las tomas, con la pauta de tomas más frecuentes y de menor volumen [1].\n- Recuérdale que pidió repetir la analítica si come peor [2].",
+     "real": {
+      "turn_type": "correction",
+      "kind": "answer",
+      "intent": "plan",
+      "intent_via": "rule",
+      "failed": [
+       "turn"
+      ]
+     },
+     "expect": {
+      "turn": "follow_up",
+      "kind": "answer"
+     }
+    },
+    {
+     "say": "ahora llora sin lagrimas y tiene la boca seca",
+     "evidence": false,
+     "record": false,
+     "real": {
+      "turn_type": "follow_up",
+      "kind": "red_flag",
+      "intent": null,
+      "intent_via": null,
+      "failed": []
+     },
+     "expect": {
+      "turn": "follow_up",
+      "kind": "red_flag"
+     }
+    }
+   ],
+   "why": "T2 «no tiene fiebre» se leyó como corrección porque la fiebre salía en «Cuándo ir al médico» del plan; el modelo, sin su plan, repitió 330 palabras."
+  },
+  {
+   "id": "real-piel-granitos",
+   "from": "piel-granitos",
+   "locale": "es",
+   "age_months": 4,
+   "tags": [
+    "piel"
+   ],
+   "turns": [
+    {
+     "say": "le han salido granitos rojos en la cara",
+     "classifier": {
+      "intent": "plan",
+      "turn": "new"
+     },
+     "evidence": false,
+     "record": true,
+     "model_answer": "No tengo evidencia clínica sobre esto en mi biblioteca, así que prefiero no responder antes que inventar. Coméntalo con tu pediatra, que conoce a tu bebé y puede valorarlo.",
+     "real": {
+      "turn_type": "new",
+      "kind": "answer",
+      "intent": "plan",
+      "intent_via": "model",
+      "failed": [
+       "doctor"
+      ]
+     },
+     "expect": {
+      "turn": "new",
+      "kind": "clarify",
+      "asks": [
+       "since_when",
+       "general_state"
+      ],
+      "card": "clarify"
+     }
+    },
+    {
+     "say": "no le pican y esta bien",
+     "classifier": {
+      "intent": "plan",
+      "turn": "follow_up"
+     },
+     "evidence": false,
+     "record": true,
+     "model_answer": "No tengo evidencia clínica sobre esto en mi biblioteca, así que prefiero no responder antes que inventar. Coméntalo con tu pediatra, que conoce a tu bebé y puede valorarlo.",
+     "real": {
+      "turn_type": "follow_up",
+      "kind": "answer",
+      "intent": "plan",
+      "intent_via": "model",
+      "failed": [
+       "refusal_once"
+      ]
+     },
+     "expect": {
+      "turn": "follow_up",
+      "kind": "answer"
+     }
+    },
+    {
+     "say": "le pongo crema",
+     "classifier": "down",
+     "evidence": false,
+     "record": true,
+     "model_answer": "No tengo evidencia clínica sobre esto en mi biblioteca, así que prefiero no responder antes que inventar. Coméntalo con tu pediatra, que conoce a tu bebé y puede valorarlo.",
+     "real": {
+      "turn_type": "follow_up",
+      "kind": "answer",
+      "intent": "plan",
+      "intent_via": "fallback",
+      "failed": [
+       "refusal_once"
+      ]
+     },
+     "expect": {
+      "turn": "follow_up",
+      "kind": "no_evidence",
+      "card": "confirm"
+     }
+    }
+   ],
+   "why": "T1 rechazo sin ronda (historial sin evidencia); T2 y T3 el rechazo entero otra vez pagando al modelo (hasta 18,8 s)."
+  },
+  {
+   "id": "real-dientes",
+   "from": "dientes",
+   "locale": "es",
+   "age_months": 6,
+   "tags": [
+    "dientes",
+    "dosis"
+   ],
+   "turns": [
+    {
+     "say": "le estan saliendo los dientes y babea un monton",
+     "classifier": {
+      "intent": "plan",
+      "turn": "new"
+     },
+     "evidence": true,
+     "record": true,
+     "model_answer": "Babear mucho es una de las molestias habituales cuando salen los dientes, y suele ser leve [ev_1][ev_2][ev_3].\n\n## Hoy\n- Ofrécele un mordedor apropiado para su edad, seguro y sin sustancias nocivas [ev_3][ev_4].\n- Masajéale suavemente las encías con un dedo limpio [ev_3][ev_4].\n- Dale cariño y contacto para calmarla [ev_3].\n- **Evita** congelar los mordedores, darle productos con anestésico local y ponerle collares o pulseras de ámbar [ev_3].\n\n## Vigila\n- Encía hinchada y enrojecida o un pequeño bulto morado antes de salir el diente, que no tiene importancia [ev_1][ev_2].\n- Irritabilidad, sueño inquieto o algo menos de apetito, que suelen ser leves [ev_2][ev_3].\n\n## Cuándo ir al médico\nAcude al pediatra si:\n- Tiene **fiebre**, porque los dientes no la causan [ev_1][ev_2].\n- Parece enferma o decaída [ev_1].\n- Tiene malestar, diarrea o vómitos, que no hay que achacar a los dientes [ev_1].\n- Los síntomas son distintos o más fuertes de lo habitual [ev_3].\n\n## No olvides\n- La pediatra pidió repetir la analítica si sigue cansada o come peor [2].\n- Tiene pendiente la revisión 2 meses después de la de los 4 meses [1].",
+     "real": {
+      "turn_type": "new",
+      "kind": "answer",
+      "intent": "plan",
+      "intent_via": "model",
+      "failed": []
+     },
+     "expect": {
+      "turn": "new",
+      "kind": "answer",
+      "shape": "plan"
+     }
+    },
+    {
+     "say": "puedo darle algo para el dolor",
+     "classifier": {
+      "intent": "question",
+      "turn": "follow_up"
+     },
+     "evidence": true,
+     "record": true,
+     "model_answer": "Para aliviarla, las fuentes recomiendan **mordedores** apropiados para su edad, seguros y sin sustancias nocivas, un masaje suave en las encías con un dedo limpio y cariño [ev_1][ev_4].\n\n- **No** le des productos con anestésico local ni congeles los mordedores, aunque algunos pueden enfriarse en la nevera según las instrucciones del fabricante [ev_1][ev_4].\n- Si tiene **fiebre** o parece enferma o decaída, llévala al pediatra, porque eso no se debe a los dientes [ev_3].\n\n**Medicamentos para el dolor (analgésicos)**: No tengo evidencia clínica sobre esto en mi biblioteca, así que prefiero no responder antes que inventar. Coméntalo con tu pediatra, que conoce a tu bebé y puede valorarlo.",
+     "real": {
+      "turn_type": "follow_up",
+      "kind": "answer",
+      "intent": "question",
+      "intent_via": "model",
+      "failed": [
+       "kind"
+      ]
+     },
+     "expect": {
+      "turn": "follow_up",
+      "kind": "answer",
+      "shape": "question"
+     }
+    },
+    {
+     "say": "y un mordedor frio",
+     "classifier": {
+      "intent": "question",
+      "turn": "follow_up"
+     },
+     "evidence": true,
+     "record": true,
+     "model_answer": "Sí, algunos mordedores pueden **enfriarse en la nevera**, siguiendo las instrucciones del fabricante [ev_3], pero **no** deben congelarse [ev_2].\n\n- Elige uno apropiado para su edad, seguro y sin sustancias nocivas [ev_2].\n- Si aumenta la baba, sécale la cara con suavidad para evitar rojeces [ev_3].",
+     "real": {
+      "turn_type": "follow_up",
+      "kind": "answer",
+      "intent": "question",
+      "intent_via": "model",
+      "failed": []
+     },
+     "expect": {
+      "turn": "follow_up",
+      "kind": "answer"
+     }
+    }
+   ],
+   "why": "T2: la expectativa `no_evidence` estaba mal; el corpus trae alivio sin fármacos (mordedores, masaje) y el modelo se abstuvo solo del analgésico."
+  },
+  {
+   "id": "real-estreñimiento",
+   "from": "estreñimiento",
+   "locale": "es",
+   "age_months": 5,
+   "tags": [
+    "estreñimiento"
+   ],
+   "turns": [
+    {
+     "say": "lleva 4 dias sin hacer caca",
+     "evidence": true,
+     "record": true,
+     "model_answer": "Si come y crece bien, 4 días sin caca no es necesariamente un problema, sobre todo si toma pecho [ev_1][ev_3].\n\n## Hoy\n- Empuja con suavidad sus rodillas hacia el pecho, puede ayudarle [ev_1].\n- Si toma pecho, pasar varios días o hasta una semana sin caca puede ser normal después del primer mes [ev_3].\n- Si toma fórmula, lo habitual es hacer caca casi a diario, a veces con 1 o 2 días sin hacer [ev_3].\n\n## Vigila\n- Que, cuando haga, la caca sea blanda y salga con facilidad [ev_1].\n- Que siga comiendo y creciendo bien [ev_1].\n- Que gruña, apriete o se ponga rojo no es necesariamente alarmante [ev_1][ev_3].\n\n## Cuándo ir al médico\n**Llama al pediatra de inmediato si:**\n- Hay grandes cantidades de sangre, moco o agua en las heces [ev_4].\n\n**Llama al pediatra si:**\n- Tiene problemas constantes para hacer caca: muy poco frecuente o parece que le duele [ev_1].\n- Hay algo de sangre en las heces o algo no te parece normal [ev_1].\n- Las heces son cada vez más acuosas o hace más deposiciones que tomas [ev_1].\n\n## No olvides\n- En la revisión de los 4 meses la pauta para sus regurgitaciones fue hacer tomas más frecuentes y de menor volumen, con revisión en 2 meses [1].\n- La pediatra pidió repetir la analítica si sigue cansada o come peor [2].",
+     "real": {
+      "turn_type": "new",
+      "kind": "answer",
+      "intent": "plan",
+      "intent_via": "rule",
+      "failed": []
+     },
+     "expect": {
+      "turn": "new",
+      "kind": "answer",
+      "shape": "plan",
+      "doctor": true
+     }
+    },
+    {
+     "say": "toma biberon",
+     "evidence": true,
+     "record": true,
+     "model_answer": "Con biberón, lo habitual es hacer caca casi a diario, a veces con 1 o 2 días sin hacer; 4 días es más de eso [ev_1].\n\n**Qué hacer si lleva 4 días sin caca tomando biberón**\n\nNo tengo evidencia clínica sobre esto en mi biblioteca, así que prefiero no responder antes que inventar. Coméntalo con tu pediatra, que conoce a tu bebé y puede valorarlo.\n\n## Vigila\n- Si aprieta, llora o se pone rojo al hacer caca, no es necesariamente alarmante, porque tumbado boca arriba le cuesta más [ev_1].\n\n## Cuándo ir al médico\n**Llévalo de inmediato al centro de salud si:**\n- Tiene la lengua seca o llora sin lágrimas, que son signos de deshidratación [ev_4].\n\n**Llama al pediatra de inmediato si:**\n- Hay grandes cantidades de sangre, moco o agua en las heces [ev_3].\n\n**Consulta lo antes posible si:**\n- Vomita pasada hora y media de la toma o de forma repetida [ev_4].\n- Vomita con fiebre y decaimiento [ev_4].\n- Vomita 3 o 4 veces en 2 horas [ev_4].\n- Al vomitar tiene un dolor de tripa fuerte o constante [ev_4].\n\n## No olvides\n- La pauta de la revisión de los 4 meses para sus regurgitaciones fue tomas más frecuentes y de menor volumen [1].\n- La pediatra pidió repetir la analítica si sigue cansada o come peor [2].",
+     "real": {
+      "turn_type": "follow_up",
+      "kind": "answer",
+      "intent": "plan",
+      "intent_via": "rule",
+      "failed": []
+     },
+     "expect": {
+      "turn": "follow_up",
+      "kind": "answer"
+     }
+    },
+    {
+     "say": "y si le doy zumo de pera",
+     "evidence": false,
+     "record": true,
+     "model_answer": "No tengo evidencia clínica sobre esto en mi biblioteca, así que prefiero no responder antes que inventar. Coméntalo con tu pediatra, que conoce a tu bebé y puede valorarlo.",
+     "real": {
+      "turn_type": "follow_up",
+      "kind": "answer",
+      "intent": "plan",
+      "intent_via": "rule",
+      "failed": [
+       "refusal_once"
+      ]
+     },
+     "expect": {
+      "turn": "follow_up",
+      "kind": "no_evidence",
+      "card": "confirm"
+     }
+    }
+   ],
+   "why": "T3 «y si le doy zumo de pera»: sin evidencia en un tema ya rechazado, el modelo repitió el rechazo entero."
+  },
+  {
+   "id": "real-golpe-en-la-cabeza",
+   "from": "golpe-en-la-cabeza",
+   "locale": "es",
+   "age_months": 11,
+   "tags": [
+    "golpe_cabeza",
+    "bandera_roja_a_mitad"
+   ],
+   "turns": [
+    {
+     "say": "se ha caido de la cama y se ha dado en la cabeza",
+     "classifier": {
+      "intent": "plan",
+      "turn": "new"
+     },
+     "evidence": true,
+     "record": true,
+     "model_answer": "Una caída desde poca altura, como una cama, puede causar fractura de cráneo o lesión intracraneal en niños pequeños [ev_1].\n\n**Qué hacer ahora, qué vigilar tras el golpe y cuándo llevarla al médico o a urgencias:** No tengo evidencia clínica sobre esto en mi biblioteca, así que prefiero no responder antes que inventar. Coméntalo con tu pediatra, que conoce a tu bebé y puede valorarlo.",
+     "real": {
+      "turn_type": "new",
+      "kind": "answer",
+      "intent": "plan",
+      "intent_via": "model",
+      "failed": [
+       "doctor"
+      ]
+     },
+     "expect": {
+      "turn": "new",
+      "kind": "answer",
+      "shape": "plan",
+      "doctor": true
+     }
+    },
+    {
+     "say": "le ha salido un chichon",
+     "classifier": {
+      "intent": "plan",
+      "turn": "follow_up"
+     },
+     "evidence": true,
+     "record": true,
+     "model_answer": "Si solo le ha salido un chichón, aplica frío y obsérvala durante 24 horas [ev_1].\n\n## Hoy\n- Ponle **hielo envuelto en un pañuelo o compresas frías** sobre el chichón [ev_1].\n- **Obsérvala durante las próximas 24 horas** tras el golpe [ev_1].\n\n## Cuándo ir al médico\n**Ve a urgencias si:**\n- Vomita, sobre todo si los vómitos se repiten [ev_1][ev_4].\n- Está somnolienta o cuesta despertarla [ev_1][ev_4].\n- Está irritable, desorientada o hace cosas extrañas [ev_1][ev_4].\n- Cambia su comportamiento habitual [ev_4].\n- Tiene dificultad para moverse con normalidad (la guía menciona hablar o caminar en niños mayores) [ev_4].\n- Parece tener dolor de cabeza intenso, que va a más o no mejora [ev_4].\n- Se desmaya o tiene convulsiones [ev_1].\n- Le sale sangre o líquido claro por la nariz o los oídos [ev_1][ev_4].\n- El golpe ha sido de cierta importancia [ev_1].\n- La cama desde la que cayó mide **más de un metro** de altura [ev_4].\n- Tiene cualquier actitud que te preocupe [ev_4].",
+     "real": {
+      "turn_type": "follow_up",
+      "kind": "answer",
+      "intent": "plan",
+      "intent_via": "model",
+      "failed": []
+     },
+     "expect": {
+      "turn": "follow_up",
+      "kind": "answer"
+     }
+    },
+    {
+     "say": "ahora no se despierta bien, no hay forma de despertarlo",
+     "evidence": false,
+     "record": false,
+     "real": {
+      "turn_type": "follow_up",
+      "kind": "red_flag",
+      "intent": null,
+      "intent_via": null,
+      "failed": []
+     },
+     "expect": {
+      "turn": "follow_up",
+      "kind": "red_flag"
+     }
+    }
+   ],
+   "why": "T1 sin «Cuándo ir al médico»: la búsqueda trajo solo un fragmento de prevención de caídas y no la guía de la SEUP; recuperación, no código."
+  }
+ ]
+}
