@@ -141,6 +141,14 @@ jobs:
     # ("Playwright does not support chromium on ubuntu26.04-x64"), so every e2e job failed
     # at install. Move back to ubuntu-latest once Playwright supports it.
     runs-on: ubuntu-24.04
+    # Steps run inside the official Playwright image (noble = Ubuntu 24.04), which already has
+    # Chromium and its system libraries. The browser install step used to run apt-get, and on
+    # PR #80 (2026-11-11) it failed twice with "Temporary failure resolving
+    # 'azure.archive.ubuntu.com'" (exit code 100), so no PR could pass. The tag MUST equal the
+    # @playwright/test version in pnpm-lock.yaml: tests/test_ci_workflow.py (api job) and the
+    # "Playwright image matches the lockfile" step below fail when they drift.
+    container:
+      image: mcr.microsoft.com/playwright:v1.60.0-noble
     services:
       postgres:
         image: pgvector/pgvector:pg16
@@ -156,7 +164,8 @@ jobs:
           --health-timeout 3s
           --health-retries 10
     env:
-      POSTGRES_HOST: localhost
+      # From inside the job container the service is reached by its name, not localhost.
+      POSTGRES_HOST: postgres
       POSTGRES_PORT: "5432"
       POSTGRES_USER: adelia
       POSTGRES_PASSWORD: adelia_ci
@@ -208,9 +217,26 @@ jobs:
           nohup pnpm start -p 3001 > /tmp/web.log 2>&1 &
           for i in $(seq 1 30); do curl -fsS http://localhost:3001/es > /dev/null && break || sleep 1; done
 
-      - name: Install Playwright browsers
+      # No browser install: the image has them. Fail here, with a clear message, if the
+      # lockfile moved without the image tag (Dependabot bumps only the npm package).
+      - name: Playwright image matches the lockfile
         working-directory: apps/web
-        run: pnpm exec playwright install --with-deps chromium
+        run: |
+          image="$(grep -oE 'mcr\.microsoft\.com/playwright:v[0-9.]+' \
+            ../../.github/workflows/ci.yml | head -n 1)"
+          image_version="${image##*:v}"
+          locked_version="$(pnpm exec playwright --version | awk '{print $2}')"
+          echo "image: $image_version  lockfile: $locked_version"
+          if [ -z "$image_version" ] || [ "$image_version" != "$locked_version" ]; then
+            echo "::error::Set the e2e container image to v$locked_version-noble in ci.yml"
+            exit 1
+          fi
+          dirs="$(pnpm exec playwright install --dry-run chromium \
+            | awk '/Install location:/ {print $3}')"
+          test -n "$dirs"
+          for dir in $dirs; do
+            test -d "$dir" || { echo "::error::$dir is not in the image"; exit 1; }
+          done
 
       - name: E2E
         working-directory: apps/web
