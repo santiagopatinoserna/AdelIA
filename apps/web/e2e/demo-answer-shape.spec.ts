@@ -3,6 +3,7 @@ import AxeBuilder from "@axe-core/playwright";
 import es from "../messages/es.json";
 import en from "../messages/en.json";
 import fr from "../messages/fr.json";
+import { ask as askQuestion } from "./utils/ask";
 import { forceKeylessDemo } from "./utils/keyless-demo";
 
 // The landing's own answer, drawn when no guest can be created (see the helper).
@@ -25,8 +26,9 @@ async function ask(page: import("@playwright/test").Page, locale: "es" | "en" | 
     kind: "answer", intent, answer, evidence_citations: [citation], disclaimer: "Aviso clínico.",
   } }));
   await page.goto(`/${locale}`);
-  await page.locator("#demo-question").fill("Pregunta de prueba");
-  await page.getByRole("button", { name: copy[locale].demo.askCta, exact: true }).click();
+  await askQuestion(page.locator("#demo-question"), "Pregunta de prueba", {
+    send: page.getByRole("button", { name: copy[locale].demo.askCta, exact: true }),
+  });
   await expect(page.getByTestId("demo-answer")).toBeVisible();
 }
 
@@ -58,8 +60,9 @@ test("es: an answer without intent (older API) is still titled as a plan", async
     kind: "answer", answer: "Respuesta [ev_1].", evidence_citations: [citation], disclaimer: "Aviso clínico.",
   } }));
   await page.goto("/es");
-  await page.locator("#demo-question").fill("Pregunta de prueba");
-  await page.getByRole("button", { name: es.demo.askCta, exact: true }).click();
+  await askQuestion(page.locator("#demo-question"), "Pregunta de prueba", {
+    send: page.getByRole("button", { name: es.demo.askCta, exact: true }),
+  });
   await expect(page.locator("#demo-answer-title")).toHaveText(es.demo.answerTitle);
 });
 

@@ -5,8 +5,9 @@ import { homedir } from "node:os";
 import { join } from "node:path";
 
 import es from "../messages/es.json";
-import { seedUserAndSessionCookie } from "./utils/session";
+import { ask } from "./utils/ask";
 import { forceKeylessDemo } from "./utils/keyless-demo";
+import { seedUserAndSessionCookie } from "./utils/session";
 
 // The landing's own answer, drawn when no guest can be created (see the helper).
 test.beforeEach(async ({ page }) => forceKeylessDemo(page));
@@ -58,8 +59,9 @@ async function askDemo(page: Page) {
     body: JSON.stringify({ kind: "answer", intent: "plan", answer: planAnswer, evidence_citations: citations, disclaimer }),
   }));
   await page.goto("/es");
-  await page.locator("#demo-question").fill("Tiene el culito muy rojo, ¿qué hago?");
-  await page.getByRole("button", { name: "Preguntar", exact: true }).click();
+  await ask(page.locator("#demo-question"), "Tiene el culito muy rojo, ¿qué hago?", {
+    send: page.getByRole("button", { name: "Preguntar", exact: true }),
+  });
   await expect(page.getByTestId("demo-answer")).toBeVisible();
 }
 
@@ -175,9 +177,7 @@ test("agent: a record marker matches its card in her history, drawn apart from e
     }]]),
   }));
   await page.goto("/es/dashboard");
-  const box = page.getByPlaceholder(es.agent.placeholder);
-  await box.fill("¿Cómo va la piel?");
-  await box.press("Enter");
+  await ask(page.getByPlaceholder(es.agent.placeholder), "¿Cómo va la piel?");
   const answer = page.getByTestId("answer-content").last();
   await expect(answer).toContainText("lo que más ayuda");
   await shot(page, "agent-answer-390");

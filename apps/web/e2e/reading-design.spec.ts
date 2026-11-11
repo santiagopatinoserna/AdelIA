@@ -1,4 +1,5 @@
 import { expect, test } from "@playwright/test";
+import { ask } from "./utils/ask";
 import { forceKeylessDemo } from "./utils/keyless-demo";
 
 // The landing's own answer, drawn when no guest can be created (see the helper).
@@ -34,8 +35,9 @@ test("landing: the question and a suggested question are in the first screen of 
 test("demo: source titles and attribution remain readable without truncation", async ({ page }) => {
   await page.setViewportSize({ width: 390, height: 844 });
   await page.goto("/es");
-  await page.locator("#demo-question").fill("Mi bebé de 2 meses tiene fiebre de 38,2 grados.");
-  await page.getByRole("button", { name: "Preguntar", exact: true }).click();
+  await ask(page.locator("#demo-question"), "Mi bebé de 2 meses tiene fiebre de 38,2 grados.", {
+    send: page.getByRole("button", { name: "Preguntar", exact: true }),
+  });
   const answer = page.getByTestId("demo-answer");
   await expect(answer).toBeVisible();
   const source = answer.getByRole("link", { name: /Fiebre en menores de 5 años/ });
@@ -75,8 +77,9 @@ test("demo: each source is one row and its summary opens on tap", async ({ page 
   );
   await page.setViewportSize({ width: 390, height: 844 });
   await page.goto("/es");
-  await page.locator("#demo-question").fill("¿Es normal que regurgite después de las tomas?");
-  await page.getByRole("button", { name: "Preguntar", exact: true }).click();
+  await ask(page.locator("#demo-question"), "¿Es normal que regurgite después de las tomas?", {
+    send: page.getByRole("button", { name: "Preguntar", exact: true }),
+  });
 
   const answer = page.getByTestId("demo-answer");
   const depth = answer.getByTestId("answer-depth");

@@ -7,6 +7,7 @@ import fr from "../messages/fr.json";
 import fixtures from "../e2e-prod/usability/fixtures.json";
 import { smallTargets } from "../e2e-prod/usability/kit";
 import { coveredControls, tapTargets } from "../e2e-prod/usability/page";
+import { ask } from "./utils/ask";
 import { isoMonthsAgo, seedProfile } from "./utils/seed";
 import { seedUserAndSessionCookie } from "./utils/session";
 
@@ -94,20 +95,10 @@ async function mockTurns(page: Page, bodies: string[]) {
 // The server-rendered field is on screen before React hydrates it, and an
 // Enter pressed then goes nowhere: hydration also empties the field. CI under
 // load (5.en.360 next to trial-account-hydration's 30 s run) handed this spec
-// such a page and the answer never came. Wait for the handlers, as
-// poc-journey.spec.ts does.
-async function say(page: Page, text: string) {
-  const field = page.getByTestId("agent-canvas").locator("textarea");
-  await expect
-    .poll(() => field.evaluate((el) => Object.keys(el).some((k) => k.startsWith("__reactProps$"))))
-    .toBe(true);
-  // The mocked turn is only an answer if nothing stands between the page and
-  // page.route: see PHONE.
-  expect(await page.evaluate(() => Boolean(navigator.serviceWorker?.controller)),
-    "a service worker controls the page").toBe(false);
-  await field.fill(text);
-  await field.press("Enter");
-}
+// such a page and the answer never came. ask() waits for the handlers and
+// checks that no service worker stands between the page and page.route (see
+// PHONE).
+const say = (page: Page, text: string) => ask(page.getByTestId("agent-canvas").locator("textarea"), text);
 
 // --- 1. the urgency calls in one tap ------------------------------------------
 

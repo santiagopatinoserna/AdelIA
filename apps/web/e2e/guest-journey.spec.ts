@@ -1,4 +1,5 @@
 import { expect, test } from "@playwright/test";
+import { ask } from "./utils/ask";
 import { mkdirSync } from "node:fs";
 import { homedir } from "node:os";
 import { join } from "node:path";
@@ -30,8 +31,9 @@ test("a visitor's question opens her own space with Lucía, and it is kept", asy
     await route.continue();
   });
 
-  await page.locator("#demo-question").fill(FIRST);
-  await page.getByRole("button", { name: "Preguntar", exact: true }).click();
+  await ask(page.locator("#demo-question"), FIRST, {
+    send: page.getByRole("button", { name: "Preguntar", exact: true }),
+  });
 
   // The real panel, as a guest, with her question answered once.
   await expect(page).toHaveURL(/\/es\/dashboard\/?$/, { timeout: 30_000 });
@@ -50,8 +52,7 @@ test("a visitor's question opens her own space with Lucía, and it is kept", asy
   // Where to keep asking about the same thing, and the follow-up uses it.
   const field = page.getByPlaceholder("Pregunta más sobre esto");
   await expect(field).toBeVisible();
-  await field.fill(SECOND);
-  await field.press("Enter");
+  await ask(field, SECOND);
   await expect(page.locator('[data-role="assistant"]')).toHaveCount(2, { timeout: 30_000 });
   await expect(page.locator('[data-role="assistant"]').nth(1)).toContainText("112");
   expect(turns).toHaveLength(2);

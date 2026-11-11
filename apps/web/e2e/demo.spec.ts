@@ -1,5 +1,6 @@
 import AxeBuilder from "@axe-core/playwright";
 import { expect, test, type Page } from "@playwright/test";
+import { ask as askQuestion } from "./utils/ask";
 import { forceKeylessDemo } from "./utils/keyless-demo";
 
 // The landing's own answer, drawn when no guest can be created (see the helper).
@@ -218,10 +219,10 @@ test.describe("public demo: sending from the keyboard", () => {
     await page.goto("/es");
     const ask = page.getByTestId("demo-ask");
     const field = ask.getByLabel(/Escribe tu pregunta/);
-    await field.fill("ok");
-    // The button is still disabled (under 3 characters): not hydrated-proof on
-    // its own, so type a real question next and check only that one is sent.
-    await field.press("Enter");
+    // Under 3 characters the button stays disabled and Enter must do nothing.
+    // askQuestion() presses it on a hydrated field, so React does see it; a
+    // real question follows and only that one is sent.
+    await askQuestion(field, "ok");
     await expect(field).toHaveValue("ok");
 
     await field.fill("¿Cuánto debe dormir?");

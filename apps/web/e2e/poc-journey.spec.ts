@@ -1,10 +1,11 @@
-import { expect, test, type Locator, type Page } from "@playwright/test";
+import { expect, test, type Page } from "@playwright/test";
 import { readFileSync } from "node:fs";
 import path from "node:path";
 import { Pool } from "pg";
 
 import es from "../messages/es.json";
 import fr from "../messages/fr.json";
+import { ask, waitHydrated } from "./utils/ask";
 import { isoMonthsAgo } from "./utils/seed";
 import { magicLinkPath } from "./utils/session";
 
@@ -76,19 +77,11 @@ const sse = (events: [string, unknown][]) =>
 // file chosen, a box ticked or a button pressed goes nowhere and leaves no
 // error. CI under load can hand the test a page that has loaded but not yet
 // hydrated: the upload never left (stored/refused both false for 30 s) and the
-// delete button never armed (no navigation in 20 s). Wait for the handlers.
-async function hydrated(locator: Locator) {
-  await locator.waitFor({ state: "attached" });
-  await expect
-    .poll(() => locator.evaluate((el) => Object.keys(el).some((k) => k.startsWith("__reactProps$"))))
-    .toBe(true);
-}
+// delete button never armed (no navigation in 20 s). Wait for the handlers
+// (utils/ask.ts, which every question of the suite also goes through).
+const hydrated = waitHydrated;
 
-async function ask(page: Page, placeholder: string, text: string) {
-  const box = page.getByPlaceholder(placeholder);
-  await box.fill(text);
-  await box.press("Enter");
-}
+const askIn = (page: Page, placeholder: string, text: string) => ask(page.getByPlaceholder(placeholder), text);
 
 test("the sign-in form never says the link left when it did not", async ({ page }) => {
   // A real Resend key would send a real email to a .test inbox.
@@ -133,7 +126,7 @@ for (const L of LOCALES) {
 
     // 4. First question to the agent. No key: an honest sentence and a way to
     //    ask again, not "check your connection" and not a dead end.
-    await ask(page, m.agent.placeholder, L.question);
+    await askIn(page, m.agent.placeholder, L.question);
     await expect(page.getByText(m.agent.unavailableAnswer)).toBeVisible({ timeout: 30_000 });
     await expect(page.getByText(m.agent.errorAnswer)).toHaveCount(0);
     // When the model is back, "ask again" sends the same words once.
@@ -155,14 +148,14 @@ for (const L of LOCALES) {
 
     // 5. The same question in the chat, real API, no key.
     await page.goto(`/${L.locale}/dashboard/chat`);
-    await ask(page, m.chat.placeholder, L.question);
+    await askIn(page, m.chat.placeholder, L.question);
     await expect(page.getByText(m.chat.unavailableAnswer)).toBeVisible({ timeout: 30_000 });
     await expect(page.getByText(m.chat.errorAnswer)).toHaveCount(0);
     await expect(page.getByRole("button", { name: m.chat.retry })).toBeVisible();
 
     // 6. A diary line, read by rules (no model), confirmed with one tap.
     await page.goto(`/${L.locale}/dashboard`);
-    await ask(page, m.agent.placeholder, L.diary);
+    await askIn(page, m.agent.placeholder, L.diary);
     const card = page.locator('[data-testid="confirm-card"]:visible');
     await expect(card.getByTestId("confirm-body")).toContainText("37,8 °C", { timeout: 30_000 });
     await card.getByRole("button", { name: m.agent.confirmYes, exact: true }).click();

@@ -1,5 +1,6 @@
 import { expect, test } from "@playwright/test";
 
+import { ask } from "./utils/ask";
 import { seedUserAndSessionCookie } from "./utils/session";
 
 const SHOTS = "/tmp/adelia-shots";
@@ -39,10 +40,8 @@ test("recorrido completo: garantía de éxito en navegador", async ({ browser })
 
   // 2. Chat — ask about the baby's reflux, expect an evidence-cited answer
   await page.goto("/es/dashboard/chat");
-  await page.getByPlaceholder(/Pregunta a tu historial/).fill(
-    "Mi bebé toma omeprazol para el reflujo y no mejora. ¿Qué pregunto al pediatra?",
-  );
-  await page.keyboard.press("Enter");
+  await ask(page.getByPlaceholder(/Pregunta a tu historial/),
+    "Mi bebé toma omeprazol para el reflujo y no mejora. ¿Qué pregunto al pediatra?");
   // Robust completion signal: the send button shows "Pensando…" while
   // streaming and returns to "Enviar" when the answer is done.
   // The answer now renders; it ends with the disclaimer.

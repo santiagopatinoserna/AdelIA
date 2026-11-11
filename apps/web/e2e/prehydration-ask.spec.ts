@@ -1,9 +1,10 @@
-import { expect, test, type Browser, type BrowserContext, type Locator, type Page } from "@playwright/test";
+import { expect, test, type Browser, type BrowserContext, type Page } from "@playwright/test";
 import { Pool } from "pg";
 
 import es from "../messages/es.json";
 import en from "../messages/en.json";
 import fr from "../messages/fr.json";
+import { isHydrated } from "./utils/ask";
 import { isoMonthsAgo, seedProfile } from "./utils/seed";
 import { seedUserAndSessionCookie } from "./utils/session";
 
@@ -76,8 +77,8 @@ async function holdScripts(page: Page) {
   return open;
 }
 
-const hydrated = (el: Locator) =>
-  el.evaluate((node) => Object.keys(node).some((k) => k.startsWith("__reactProps$")));
+// Checked once, not waited for: this spec types before hydration on purpose.
+const hydrated = isHydrated;
 
 const sse = (events: [string, unknown][]) =>
   events.map(([e, d]) => `event: ${e}\ndata: ${JSON.stringify(d)}\n\n`).join("");

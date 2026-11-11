@@ -13,6 +13,7 @@ import type { AnswerSourceContext as SourceContextType } from "@/components/answ
 import es from "../messages/es.json";
 import en from "../messages/en.json";
 import fr from "../messages/fr.json";
+import { ask } from "./utils/ask";
 import { forceKeylessDemo } from "./utils/keyless-demo";
 
 // The landing's own answer, drawn when no guest can be created (see the helper).
@@ -34,8 +35,9 @@ async function answerWith(page: Page, answer: string, kind = "answer", withSourc
     body: JSON.stringify({ kind, answer, evidence_citations: withSources ? [citation] : [], disclaimer }),
   }));
   await page.goto("/es");
-  await page.locator("#demo-question").fill("¿Qué aparece en su historia?");
-  await page.getByRole("button", { name: "Preguntar", exact: true }).click();
+  await ask(page.locator("#demo-question"), "¿Qué aparece en su historia?", {
+    send: page.getByRole("button", { name: "Preguntar", exact: true }),
+  });
   await expect(page.getByTestId("demo-answer")).toBeVisible();
 }
 
