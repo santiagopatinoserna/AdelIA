@@ -35,15 +35,34 @@ export function useConsent(): ConsentState | "pending" {
 // button or the first screen of the panel (e2e/showcase.spec.ts measures that
 // screen). There, without an answer nothing is measured, and Settings holds
 // the same choice.
+//
+// The landing places its own banner in the page (LandingConsent): there the
+// sheet covered the example questions until she answered it (usability run,
+// 2026-11-11).
 export function Analytics() {
   const consent = useConsent();
   const pathname = usePathname();
   return (
     <>
       {consent === "accepted" && <JourneyTracker />}
-      {consent === "unknown" && !PRIVATE_PAGES.test(pathname) && <ConsentBanner />}
+      {consent === "unknown" && !PRIVATE_PAGES.test(pathname) && !LANDING_PAGE.test(pathname) && (
+        <ConsentBanner />
+      )}
     </>
   );
+}
+
+const LANDING_PAGE = /^\/(es|en|fr)\/?$/;
+
+/**
+ * The landing's banner, in the flow of the page right after its first block
+ * (the question, the examples and Lucía's story) instead of a sheet over its
+ * bottom: it covers nothing, and it appears where nothing above it moves. The
+ * same two buttons, the same words.
+ */
+export function LandingConsent() {
+  const consent = useConsent();
+  return consent === "unknown" ? <ConsentBanner inline /> : null;
 }
 
 function isTextField(el: Element | null): boolean {
@@ -132,8 +151,11 @@ function JourneyTracker() {
  * analytics-consent.spec.ts). While it is open it publishes its height as
  * --ad-consent-h on <html>: the page gains that room at the bottom and the
  * "new version" toast rises above it (globals.css).
+ *
+ * `inline`: the same banner in the flow of the page (the landing's, see
+ * LandingConsent). It covers nothing, so it publishes no height.
  */
-function ConsentBanner() {
+function ConsentBanner({ inline = false }: { inline?: boolean }) {
   const t = useTranslations("consent");
   const ref = useRef<HTMLDivElement>(null);
   const [typing, setTyping] = useState(false);
@@ -164,7 +186,7 @@ function ConsentBanner() {
 
   useLayoutEffect(() => {
     const el = ref.current;
-    if (!el) return;
+    if (!el || inline) return;
     const root = document.documentElement;
     const publish = () => root.style.setProperty("--ad-consent-h", `${el.offsetHeight}px`);
     publish();
@@ -176,7 +198,7 @@ function ConsentBanner() {
       root.classList.remove("ad-consent-open");
       root.style.removeProperty("--ad-consent-h");
     };
-  }, []);
+  }, [inline]);
 
   return (
     <div
@@ -186,7 +208,7 @@ function ConsentBanner() {
       data-testid="consent-banner"
       data-track-private
       hidden={typing}
-      className="ad-consent"
+      className={inline ? "ad-consent-inline" : "ad-consent"}
     >
       <p className="text-[0.9375rem] leading-snug text-ink">
         {t("bannerText")}{" "}

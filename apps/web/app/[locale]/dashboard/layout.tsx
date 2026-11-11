@@ -77,7 +77,9 @@ export default async function DashboardLayout({
             className="ad-btn ad-btn-primary min-h-[44px] min-w-[44px] px-3.5 py-2 text-sm max-sm:border-line-control max-sm:bg-surface max-sm:text-ink max-sm:shadow-none max-sm:hover:bg-surface-2"
           >
             <UploadCloud className="h-4 w-4" strokeWidth={2.2} />
-            <span className="hidden sm:inline">{t("uploadCta")}</span>
+            {/* The word from lg: on a tablet the section icons need its room
+                to be 44 px targets, all of them on screen (2026-11-11). */}
+            <span className="hidden lg:inline">{t("uploadCta")}</span>
           </Link>
         </div>
       </header>

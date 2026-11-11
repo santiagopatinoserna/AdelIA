@@ -766,6 +766,15 @@
     padding-block: 11px;
     margin-block: -11px;
   }
+  /* 11 px each side is 44 only on a 22 px line: the cookie banner's 20.6 px
+     line left «Detalles» at 42.6 (usability run, 2026-11-11). Where the
+     browser knows `lh`, the padding makes up whatever the line lacks. */
+  @supports (height: 1lh) {
+    .ad-tap-inline {
+      padding-block: max(11px, calc((2.75rem - 1lh) / 2));
+      margin-block: min(-11px, calc((1lh - 2.75rem) / 2));
+    }
+  }
   .ad-tap-inline:focus-visible { outline: none; box-shadow: none; }
   .ad-tap-inline:focus-visible > span {
     outline: 2px solid var(--color-focus);
@@ -913,6 +922,28 @@ html.ad-consent-open body {
 }
 html.ad-consent-open .ad-update-toast {
   bottom: calc(var(--ad-consent-h, 0px) + 0.75rem);
+}
+/* The landing's banner sits in the page, right after its first block (the
+   question, the examples, Lucía's story): as a sheet it covered the example
+   questions until she answered it (usability run, 2026-11-11). On a phone it
+   spans the screen like the sheet did (out of the landing's 24 px gutter), so
+   its text keeps the sheet's width and its two lines. */
+.ad-consent-inline {
+  margin: 1.25rem -24px 0;
+  padding: 0.875rem 1rem;
+  background: var(--color-surface);
+  border-block: 1px solid var(--color-line);
+}
+.ad-consent-inline[hidden] {
+  display: none;
+}
+@media (min-width: 700px) {
+  .ad-consent-inline {
+    margin-inline: 0;
+    padding: 1rem;
+    border: 1px solid var(--color-line);
+    border-radius: 1rem;
+  }
 }
 @media (min-width: 768px) {
   .ad-consent {

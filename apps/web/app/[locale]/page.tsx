@@ -3,7 +3,7 @@ import { getLocale, getTranslations } from "next-intl/server";
 
 import { DemoAsk } from "@/components/demo-ask";
 import { DemoRecord } from "@/components/demo-record";
-import { TrackStep } from "@/components/analytics";
+import { LandingConsent, TrackStep } from "@/components/analytics";
 import { FunnelVisit, StartLink } from "@/components/funnel";
 import { LocaleSwitcher } from "@/components/locale-switcher";
 import { auth } from "@/lib/auth";
@@ -185,6 +185,8 @@ export default async function HomePage() {
         </div>
 
         </div>
+        {/* The cookie banner, in the page and not over it (components/analytics). */}
+        <LandingConsent />
         <details className={styles.support} data-testid="home-about">
           <summary className={styles.aboutToggle}>{t("home.aboutLabel")}</summary>
           <div className={styles.aboutContent}>
@@ -254,22 +256,24 @@ export default async function HomePage() {
       <footer className="border-t border-line">
         <div className={styles.footerInner}>
           <p className="t-small max-w-md text-ink-soft">{t("home.footerDisclaimer")}</p>
+          {/* Each link a 44 px target around the same small words: at 360 px
+              they were 33 to 43 px wide and 36 tall (usability run, 2026-11-11). */}
           <nav className="flex flex-wrap gap-x-5 text-sm" aria-label="Footer">
-            <Link href="/privacidad" className="py-2 text-ink-soft hover:text-primary-text-hover">
+            <Link href="/privacidad" className="inline-flex min-h-[44px] min-w-[44px] items-center text-ink-soft hover:text-primary-text-hover">
               {t("home.footerPrivacy")}
             </Link>
-            <Link href="/terminos" className="py-2 text-ink-soft hover:text-primary-text-hover">
+            <Link href="/terminos" className="inline-flex min-h-[44px] min-w-[44px] items-center text-ink-soft hover:text-primary-text-hover">
               {t("home.footerTerms")}
             </Link>
             {/* Change or withdraw the measurement answer at any time (AEPD). */}
-            <Link href="/privacidad#cookies" className="py-2 text-ink-soft hover:text-primary-text-hover">
+            <Link href="/privacidad#cookies" className="inline-flex min-h-[44px] min-w-[44px] items-center text-ink-soft hover:text-primary-text-hover">
               {t("consent.footerLink")}
             </Link>
             <a
               href={GITHUB_URL}
               target="_blank"
               rel="noreferrer"
-              className="py-2 text-ink-soft hover:text-primary-text-hover"
+              className="inline-flex min-h-[44px] min-w-[44px] items-center text-ink-soft hover:text-primary-text-hover"
             >
               {t("home.footerGithub")}
             </a>

@@ -55,7 +55,9 @@ export default async function DashboardHome({
           aria-label={t("seeAll")}
           className="absolute right-3 top-2 hidden md:block"
         >
-          <Link href="/dashboard/overview" className="text-sm text-ink-faint underline">
+          {/* 44 px tall around the same small words: it was an 18 px target
+              on a tablet (usability run, 2026-11-11). */}
+          <Link href="/dashboard/overview" className="inline-flex min-h-[44px] min-w-[44px] items-center text-sm text-ink-faint underline">
             {t("seeAll")}
           </Link>
         </nav>

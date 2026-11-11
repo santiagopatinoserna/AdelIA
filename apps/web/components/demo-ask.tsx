@@ -9,6 +9,7 @@ import { AnswerContent, type AnswerCorpusStats } from "@/components/answer-conte
 import { useDictation } from "@/hooks/use-dictation";
 import type { DemoAnswerKind, DemoClarify, DemoIntent, EvidenceCitation } from "@/lib/chat-types";
 import { track } from "@/lib/analytics";
+import { emergencyNumber } from "@/lib/emergency";
 import { keepLandingQuestion } from "@/lib/landing-question";
 
 const SPEECH_LANG: Record<string, string> = { es: "es-ES", en: "en-GB", fr: "fr-FR" };
@@ -441,14 +442,6 @@ function titleKey(result: DemoAnswer) {
   if (result.kind === "no_evidence") return "noEvidenceTitle";
   if (result.kind === "evidence_only") return "evidenceOnlyTitle";
   return isShortAnswer(result) ? "shortAnswerTitle" : "answerTitle";
-}
-
-// The number in the fixed red-flag frame of the API (answer_contract,
-// "Llama al {number}" / "Call {number}" / "Appelez le {number}"), or null.
-// Only that frame counts: a number elsewhere in the text is not a phone.
-const EMERGENCY_FRAME = /(?:Llama al|Call|Appelez le) (\d{2,3})\b/;
-function emergencyNumber(answer: string): string | null {
-  return EMERGENCY_FRAME.exec(answer)?.[1] ?? null;
 }
 
 // A fact question answered in one sentence is not a plan, and the page must

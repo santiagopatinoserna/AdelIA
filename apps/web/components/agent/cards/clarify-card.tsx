@@ -1,5 +1,5 @@
 "use client";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import type { AgentCard } from "@/lib/agent-types";
 import type { ClarifyAnswer, CardActionHandler } from "./card-renderer";
 
@@ -44,11 +44,22 @@ export function ClarifyCard({ card, onAction }: { card: AgentCard; onAction: Car
   );
 }
 
+// The whole round fits a 360x780 phone (usability run, 2026-11-11: the second
+// question and «O escríbemelo» were under the fold). Every button keeps its
+// 44 px and the options their full width; «No lo sé» shares the last option's
+// row instead of taking one of its own, and the spacing is the panel's
+// tighter step. When the card arrives below what she sees (a long thread, a
+// short phone) the thread brings it whole into view, once, and no further
+// than that: the end of the card meets the bottom of the thread.
 function ClarifyRound({ card, questions, free, onAction }: {
   card: AgentCard; questions: Question[]; free?: string; onAction: CardActionHandler;
 }) {
   // Local to the card and set only by her taps: nothing runs on mount.
   const [chosen, setChosen] = useState<Record<string, string>>({});
+  const ref = useRef<HTMLElement>(null);
+  useEffect(() => {
+    ref.current?.scrollIntoView({ block: "nearest" });
+  }, []);
   function choose(field: string, value: string) {
     const next = { ...chosen, [field]: value };
     setChosen(next);
@@ -58,33 +69,40 @@ function ClarifyRound({ card, questions, free, onAction }: {
     }
   }
   const titleId = `clarify-${card.id}`;
+  const optionButton = (q: Question, option: Option, extra = "") => {
+    const pressed = chosen[q.field] === option.value;
+    return (
+      <button key={option.value} type="button" aria-pressed={pressed} data-testid="clarify-option"
+              onClick={() => choose(q.field, option.value)}
+              className={`ad-btn min-h-11 justify-start ${extra} ${pressed ? "ad-btn-primary" : "ad-btn-ghost"}`}>
+        {option.label}
+      </button>
+    );
+  };
   return (
-    <section data-testid="clarify-card" aria-labelledby={`${titleId}-0`} className="ad-card ad-rise p-4">
+    <section ref={ref} data-testid="clarify-card" aria-labelledby={`${titleId}-0`} className="ad-card ad-rise p-3">
       {questions.map((q, i) => {
         const qid = `${titleId}-${i}`;
+        const last = q.options[q.options.length - 1];
+        const skipPressed = chosen[q.field] === q.skip.value;
         return (
-          <div key={q.field} className={i > 0 ? "mt-5" : undefined}>
-            <h2 id={qid} className="mb-2 font-sans text-base font-semibold text-ink">{q.question}</h2>
-            <div className="flex flex-col gap-2" role="group" aria-labelledby={qid}>
-              {[...q.options, q.skip].map((option) => {
-                const pressed = chosen[q.field] === option.value;
-                const skip = option === q.skip;
-                return (
-                  <button key={option.value} type="button" aria-pressed={pressed}
-                          data-testid={skip ? "clarify-skip" : "clarify-option"}
-                          onClick={() => choose(q.field, option.value)}
-                          className={skip
-                            ? `inline-flex min-h-11 items-center self-start text-sm font-medium text-primary-text underline underline-offset-4 ${pressed ? "font-semibold" : ""}`
-                            : `ad-btn min-h-11 w-full justify-start ${pressed ? "ad-btn-primary" : "ad-btn-ghost"}`}>
-                    {option.label}
-                  </button>
-                );
-              })}
+          <div key={q.field} className={i > 0 ? "mt-3.5" : undefined}>
+            <h2 id={qid} className="mb-1.5 font-sans text-base font-semibold text-ink">{q.question}</h2>
+            <div className="flex flex-col gap-1.5" role="group" aria-labelledby={qid}>
+              {q.options.slice(0, -1).map((option) => optionButton(q, option, "w-full"))}
+              <div className="flex items-stretch gap-1.5">
+                {last && optionButton(q, last, "min-w-0 flex-1")}
+                <button type="button" aria-pressed={skipPressed} data-testid="clarify-skip"
+                        onClick={() => choose(q.field, q.skip.value)}
+                        className={`inline-flex min-h-11 min-w-11 shrink-0 items-center justify-center text-sm text-primary-text underline underline-offset-4 ${skipPressed ? "font-semibold" : "font-medium"}`}>
+                  {q.skip.label}
+                </button>
+              </div>
             </div>
           </div>
         );
       })}
-      {free && <p className="mt-4 text-sm text-ink-soft">{free}</p>}
+      {free && <p className="mt-2.5 text-sm text-ink-soft">{free}</p>}
     </section>
   );
 }
