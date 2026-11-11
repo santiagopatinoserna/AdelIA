@@ -831,3 +831,119 @@ async def test_offline_the_fake_search_records_what_the_account_search_would_add
     assert any("traumatismo craneal" in s for s in head["searched"])
     assert not any("signos de alarma" in s for s in head["searched"])
     assert any("signos de alarma" in s for s in crawl["searched"])
+
+
+# --- round 5: the resumed run of 2026-11-11, 17:04 (battery-resume-20261111-1704) ----
+#
+# 86 of 110 turns, but the 53 run today and the 57 carried from the morning were
+# measured on different code and settings; the report now gives this run apart.
+# Four of today's turns ended in Mistral's 429 on the search's embedding:
+# scripts/conversation_regressions_4.json replays them without a model, the
+# provider's refusal included (`search_fails`). Six turns took the classifier's
+# fallback and the report could not say why: each turn now keeps how long routing
+# took and the fallback's reason.
+
+REGRESSIONS_4 = Path(cb.__file__).with_name("conversation_regressions_4.json")
+
+
+def _say(text: str, **turn) -> dict:
+    return {"say": text, **turn}
+
+
+async def test_offline_a_search_the_provider_refuses_once_is_answered(monkeypatch):
+    from adelia.agent import graph
+
+    monkeypatch.setattr(graph, "SEARCH_RETRY_PAUSE_S", 0)
+    scenario = {"id": "x", "locale": "es", "age_months": 8, "tags": [], "turns": [
+        _say("tiene mocos desde ayer", search_fails=1, classifier={"intent": "plan"},
+             expect={"turn": "new", "kind": "answer"})]}
+    report = await cb.run_offline([scenario])
+    (turn,) = report["scenarios"][0]["turns"]
+    assert turn["ok"] and turn["error"] is None
+
+
+async def test_offline_a_turn_that_raises_is_a_failed_turn_not_a_crashed_run(monkeypatch):
+    """run_turn turns an exception into the panel's error frame; offline does the same,
+    so the turn fails with `no_error` and the next scenario still runs."""
+    from adelia.agent import graph
+
+    monkeypatch.setattr(graph, "SEARCH_RETRY_PAUSE_S", 0)
+    broken = {"id": "x", "locale": "es", "age_months": 8, "tags": [], "turns": [
+        _say("tiene mocos desde ayer", search_fails=2, classifier={"intent": "plan"},
+             expect={"turn": "new", "kind": "answer"})]}
+    fine = {"id": "y", "locale": "es", "age_months": 8, "tags": [], "turns": [
+        _say("tiene mocos desde ayer", classifier={"intent": "plan"},
+             expect={"turn": "new", "kind": "answer"})]}
+    report = await cb.run_offline([broken, fine])
+    (bad,), (good,) = [s["turns"] for s in report["scenarios"]]
+    assert bad["ok"] is False and bad["checks"]["no_error"] is False
+    assert "429" in bad["error"]
+    assert good["ok"]
+
+
+async def test_the_four_turns_the_provider_refused_pass_without_the_model(monkeypatch):
+    from adelia.agent import graph
+
+    monkeypatch.setattr(graph, "SEARCH_RETRY_PAUSE_S", 0)
+    report = await cb.run_offline(cb.load_scenarios(REGRESSIONS_4))
+    failing = [(s["id"], t["n"], [k for k, ok in t["checks"].items() if not ok])
+               for s in report["scenarios"] for t in s["turns"] if not t["ok"]]
+    assert failing == []
+    assert report["totals"]["turns"] == 11
+
+
+def test_each_refused_turn_keeps_what_production_did():
+    data = json.loads(REGRESSIONS_4.read_text(encoding="utf-8"))
+    turns = [t for s in data["scenarios"] for t in s["turns"]]
+    refused = [t for t in turns if t["real"]["failed"]]
+    assert len(refused) == 4
+    assert all(t["search_fails"] == 1 and "429" in t["real"]["error"] for t in refused)
+    assert all("search_fails" not in t for t in turns if not t["real"]["failed"])
+    for t in turns:
+        if t["real"]["intent_via"] == "model":
+            assert t["classifier"] == {"intent": t["real"]["intent"],
+                                       "turn": t["real"]["turn_type"]}
+        if t["real"]["intent_via"] == "fallback":
+            assert t["classifier"] == "down"
+        if t["real"].get("sources_found"):
+            assert t["evidence"] is True
+
+
+def test_each_turn_keeps_how_long_routing_took_and_why_it_fell_back():
+    o = cb._from_final({"kind": "answer", "intent": "plan", "intent_via": "fallback",
+                        "route_s": 2.004, "route_reason": "timeout"})
+    assert (o["route_s"], o["route_reason"]) == (2.004, "timeout")
+    assert cb._from_final({"kind": "red_flag"})["route_s"] is None
+
+
+def test_the_totals_count_the_fallbacks_by_reason():
+    turns = [{"ok": True, "intent_via": "fallback", "route_reason": "timeout"},
+             {"ok": True, "intent_via": "fallback", "route_reason": "timeout"},
+             {"ok": True, "intent_via": "fallback", "route_reason": "error:RateLimitError 429"},
+             {"ok": True, "intent_via": "model", "route_reason": None}]
+    t = cb._totals([{"id": "x", "turns": turns, "ok": 4, "total": 4}])
+    assert t["fallback"] == 3
+    assert t["fallback_reasons"] == {"timeout": 2, "error:RateLimitError 429": 1}
+
+
+async def test_a_resumed_report_gives_this_runs_turns_apart(monkeypatch):
+    async def _record(*_, **__):
+        return None
+
+    monkeypatch.setattr(usage, "record", _record)
+    previous = _previous_run("anotar-sueño")
+    todo = cb.not_yet_measured(cb.load_scenarios(), previous)
+
+    async def _turn(guest, scenario, request):
+        return _observed(answer="Respuesta [ev_1].", model_saw=None, ttft_s=3.0, total_s=4.0)
+
+    report = await cb.run_with_model(
+        todo, budget_usd=1, turn_runner=_turn, guest=_fake_guest, set_age=_no_age,
+        carried=previous,
+    )
+    assert report["totals"]["turns_run"] == 110
+    this_run = report["totals_run"]
+    assert this_run["turns"] == this_run["turns_run"] == 53
+    assert this_run["ttft_median_s"] == 3.0 and report["totals"]["ttft_median_s"] == 7.0
+    text = cb.render_text(report)
+    assert "Esta pasada: " in text and "/53" in text

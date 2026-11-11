@@ -84,7 +84,18 @@ to see what it changes.
 `--from <id>` starts at a scenario (file order), `--tag <tag>` keeps a topic
 (repeatable), `--only <id>` names one; they combine, also with `--resume`.
 A model turn records when the search began and when the answering model was
-called (`stages_s`), next to the time to the first word.
+called (`stages_s`), next to the time to the first word, and how long routing
+took and why a fallback was one (`route_s`, `route_reason`). A resumed report
+gives this run's totals apart (`totals_run`): the carried turns ran on other code.
+
+The resumed run of 2026-11-11 (17:04) ended four turns in Mistral's 429 on the
+search's embedding; scripts/conversation_regressions_4.json replays them, and a
+turn's `search_fails: N` makes the offline search get that refusal N times. A
+whole clean pass, once this code is deployed (docs/BATERIA_MODELO_2026-11-11.md,
+section 5.4; about 2.3 $ at today's cost per answer shape):
+
+    docker exec -w /app infra-api-1 .venv/bin/python scripts/conversation_battery.py \\
+        --with-model --budget-usd 2.5 --out /tmp/battery-full.json
 
 Each scenario gets a fresh guest created as test traffic (her synthetic address
 starts with "qa-", adelia/qa_traffic.py), with the scenario's age on her child.
@@ -123,6 +134,7 @@ import statistics
 import sys
 import time
 import uuid
+from collections import Counter
 from contextlib import asynccontextmanager
 from dataclasses import dataclass
 from datetime import date, datetime, timedelta
@@ -415,6 +427,10 @@ def _from_final(state: dict) -> dict:
         "kind": kind,
         "intent": state.get("intent"),
         "intent_via": state.get("intent_via"),
+        # How long routing took and, for a fallback, why: its 2 s deadline, a
+        # provider's refusal (with its status) or a reply that did not validate.
+        "route_s": state.get("route_s"),
+        "route_reason": state.get("route_reason"),
         "asks": list(state.get("missing") or []) if kind == "clarify" else [],
         # The contract and the thinking effort the answering model got, and whether
         # it followed an answer with sources in its topic: what the answer settings
@@ -439,16 +455,24 @@ def _sources(evidence: list[dict], citations: list[dict]) -> list[dict]:
 # --- without a model ----------------------------------------------------------------
 
 
+class ProviderRefused(Exception):
+    """What mistralai raised for the search's embedding on 2026-11-11 (a turn's
+    `search_fails`): 429, «Not enough capacity», code 3505."""
+
+    status_code = 429
+
+
 class _OfflineSurface:
     """What run_turn lends the graph, with fakes for what costs money."""
 
     def __init__(self, store, *, evidence: bool, locale: str,
                  classifier: dict | str | None = None, record: bool = False,
-                 model_answer: str | None = None):
+                 model_answer: str | None = None, search_fails: int = 0):
         from adelia.enrichment.evidence_retrieval import EvidenceMatch
 
         self.store, self.locale = store, locale
         self.record, self.model_answer = record, model_answer
+        self.search_fails = search_fails
         self.classifier, self.recorded, self.down = classifier, False, False
         self.paid: list[str] = []
         self.model_saw: dict | None = None
@@ -487,6 +511,11 @@ class _OfflineSurface:
         from adelia.services.chat_orchestrator import corpus_variants
 
         self.paid.append("retrieve")
+        if self.search_fails:
+            self.search_fails -= 1
+            raise ProviderRefused(
+                'API error occurred: Status 429. Body: {"message":"Not enough capacity '
+                'available for this request, please retry later.","code":"3505"}')
         # What the account search would add to her words in this topic, with the
         # lexicon (on in production) and the development search on, whatever this
         # process's settings say (`search_adds`). Her own words stand in for the
@@ -545,7 +574,8 @@ async def _offline_turn(scenario: dict, store: _MemoryStore, turn: dict, request
     classifier = "down" if classifier_down else turn.get("classifier")
     surface = _OfflineSurface(store, evidence=turn.get("evidence", True), locale=locale,
                               classifier=classifier, record=turn.get("record", False),
-                              model_answer=turn.get("model_answer"))
+                              model_answer=turn.get("model_answer"),
+                              search_fails=int(turn.get("search_fails") or 0))
     messages = sanitize_history(request.get("history"))
     text_history = [m for m in messages if isinstance(m.get("content"), str)]
     deps = GraphDeps(
@@ -564,18 +594,22 @@ async def _offline_turn(scenario: dict, store: _MemoryStore, turn: dict, request
     tokens: list[str] = []
     cards: list[dict] = []
     final: dict = {}
-    async for event in stream_graph(state, deps):
-        if event["type"] == "token":
-            tokens.append(event["content"])
-        elif event["type"] == "card":
-            cards.append(event["card"])
-        elif event["type"] == "final":
-            final = event["state"]
+    error = None
+    try:
+        async for event in stream_graph(state, deps):
+            if event["type"] == "token":
+                tokens.append(event["content"])
+            elif event["type"] == "card":
+                cards.append(event["card"])
+            elif event["type"] == "final":
+                final = event["state"]
+    except Exception as exc:  # noqa: BLE001 - run_turn's error frame, as the panel gets it
+        error = str(exc)
     observed = {
         **_from_final(final),
         "answer": "".join(tokens), "cards": cards,
         "sources": _sources(final.get("evidence_citations") or [], final.get("citations") or []),
-        "paid": surface.paid, "model_saw": surface.model_saw, "error": None,
+        "paid": surface.paid, "model_saw": surface.model_saw, "error": error,
         "searched": surface.searched,
     }
     if observed["intent_via"] == "model":
@@ -628,6 +662,9 @@ def _totals(results: list[dict], *, run_turns: list[dict] | None = None) -> dict
            "rules_alone": sum(1 for t in routed if t["intent_via"] == "rule"),
            "needs_classifier": sum(1 for t in routed if t["intent_via"] in ("recorded", "model")),
            "fallback": sum(1 for t in routed if t["intent_via"] == "fallback"),
+           # Why: "timeout" (its 2 s deadline), "error:<type> <status>", "invalid".
+           "fallback_reasons": dict(Counter(t.get("route_reason") or "?" for t in routed
+                                            if t["intent_via"] == "fallback")),
            "classifier_down": sum(1 for t in routed if t["intent_via"] == "down"),
            "tool_loop_unruled": sum(1 for t in turns if "track" in (t.get("paid") or [])
                                     and t.get("intent_via") != "rule")}
@@ -872,6 +909,9 @@ async def run_with_model(
               "list_usd": listed, "stopped": stopped, "unpriced": unpriced,
               "settings": answer_settings()}
     if carried is not None:
+        # What this run measured, apart: the carried turns ran on earlier code and
+        # settings (2026-11-11: 57 turns at 01:15, 53 at 17:04 with new settings).
+        report["totals_run"] = _totals(results, run_turns=run_turns)
         results, kept = _merge(carried, results)
         run_turns = run_turns + kept
         report["previous_spent_usd"] = carried.get("spent_usd")
@@ -943,7 +983,17 @@ def render_text(report: dict) -> str:
               f"Enrutado: {t['rules_alone']} de {t['routed']} turnos los deciden las reglas solas; "
               f"{t['needs_classifier']} necesitan el clasificador"
               + (" (respuesta grabada)" if report["mode"] == "offline" else "")
-              + (f"; {t['fallback']} cayeron al respaldo" if t["fallback"] else "")]
+              + (f"; {t['fallback']} cayeron al respaldo" if t["fallback"] else "")
+              + (" (" + ", ".join(f"{k}: {v}" for k, v in t["fallback_reasons"].items()) + ")"
+                 if t.get("fallback_reasons") else "")]
+    if report.get("totals_run") is not None:
+        r = report["totals_run"]
+        lines.append(
+            f"Esta pasada: {r['ok']}/{r['turns']} turnos ({_pct(r['ok'], r['turns'])}), "
+            f"{r['scenarios_ok']}/{r['scenarios']} conversaciones; primera palabra, mediana "
+            f"{r['ttft_median_s']} s y p95 {r['ttft_p95_s']} s; palabras, mediana "
+            f"{r['words_median']}; {r['cost_usd']:.4f} $. El resto viene del informe anterior "
+            "(--resume), medido con otro código.")
     if t.get("classifier_down"):
         lines.append(f"Con el clasificador caído: {t['classifier_down']} turnos tomaron el "
                      f"respaldo; {t['tool_loop_unruled']} acabaron en el bucle de herramientas "

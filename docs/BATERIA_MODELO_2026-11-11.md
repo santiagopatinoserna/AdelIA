@@ -185,3 +185,108 @@ docker exec -w /app infra-api-1 .venv/bin/python scripts/conversation_battery.py
 Un escenario a medias se repite desde su primer turno: su invitada se borró y sus primeras
 respuestas son el historial de las siguientes. Para medir los arreglos de este cambio con el
 modelo: `--scenarios scripts/conversation_regressions.json` (32 turnos, ~1,1 $).
+
+## 5. La pasada reanudada (17:04): los 53 turnos de hoy
+
+Fuente: `~/dev/adelia-design/shots/battery/battery-resume-20261111-1704.json` (`--resume` sobre el
+informe de la 01:15, producción, con `answer_effort_question=low`, `answer_effort_follow_up=low`,
+`follow_up_brevity`, `plan_brevity`, `no_unasked_refusals`, `warning_signs_retrieval`,
+`lay_query_expansion` e `implicit_subject_expansion`). El informe unido da 86/110, pero mezcla dos
+códigos. Separado:
+
+| | Turnos | Cumplen | Conversaciones enteras | Palabras (mediana) | Primera palabra (mediana / p95) | Respaldo | Gasto |
+|---|---|---|---|---|---|---|---|
+| Hoy, código actual | 53 | 45 (84,9 %) | 14/22 | 97 | 4,1 s / 17,8 s | 4 | 0,96 $ |
+| 11-nov, arrastrados | 57 | 41 (71,9 %) | 9/20 | 101,5 | 7,0 s / 20,2 s | 2 | 1,93 $ |
+
+Las medianas de tiempo cuentan también los turnos sin modelo (urgencias, tarjetas). Los 16 fallos
+del 11-nov ya estaban arreglados: sin modelo, con la decisión real del clasificador grabada,
+`conversation_regressions.json` da 32/32, `_2` 9/9 y `_3` 11/11 con el código de hoy; ninguno
+vuelve a fallar. La batería da ahora los totales de la pasada nueva aparte (`totals_run`, «Esta
+pasada» en el texto).
+
+### 5.1 Los 8 fallos de hoy
+
+| Turno | Falla | Causa raíz | Tipo | Arreglo |
+|---|---|---|---|---|
+| dosis-sin-fuente T3, pregunta-de-adulto T2, fr-constipation-correction T2, holdout-anotar-y-preguntar-xq T4 | no_error, kind, turn | El embedding de la búsqueda recibió de Mistral 429 «Not enough capacity» (código 3505) a los 5,2-6,5 s. El SDK no reintenta si no se le dice, y el error llegó a la madre como «no disponible» | proveedor + código | `graph._once_more`: un reintento tras 0,5 s, solo para 429/5xx |
+| fr-dents-doliprane T2 | kind | El corpus sí lo trata («Poussée dentaire du bébé»: si sufre demasiado, puede darse paracetamol; si no basta, al médico). El modelo respondió eso y se abstuvo de la dosis | expectativa | escenario corregido |
+| en-naps-then-rash T2 | kind | «a red rash on her tummy» solo trajo el hemangioma; el modelo se abstuvo. En T3 («it doesnt itch») sí salieron exantema súbito, pañal y la ficha de la HSE | recuperación | No (umbrales) |
+| fr-regurgite-et-la-nuit T2 | kind | «et la nuit» tras un plan de regurgitación: llegaron 4 fuentes del tema (HUG entre ellas) y el modelo escribió solo el rechazo. La ficha de HUG dice «para dormir, boca arriba; no inclinar la cama» en un fragmento aparte; el informe guarda títulos, no fragmentos, así que no se puede saber si llegó | recuperación o modelo | No |
+| holdout-en-clasificador-caido T2 | kind | «what about yogurt» a los 9 meses: el corpus solo habla del yogur a partir de los 12 meses; el modelo se abstuvo, que es lo que pide el contrato | corpus | No (conversación de control, no se toca) |
+
+`scripts/conversation_regressions_4.json` reproduce sin modelo las 4 conversaciones del 429, tal
+como las jugó producción: con `search_fails: 1` la búsqueda falsa recibe el mismo 429 una vez. Sin
+el reintento dan 7/11 (los mismos 4 turnos, con los mismos checks que en producción); con él, 11/11.
+Los otros 4 no tienen defecto de código que reproducir sin modelo. Dos de los cinco seguimientos con
+contrato `follow_up` acabaron en el rechazo entero (noche y yogur): con lo que recibieron es
+defendible, pero hay que mirarlo en la pasada completa.
+
+### 5.2 Los 6 turnos que cayeron al respaldo
+
+Todos por el plazo de 2 s, no por un error ni un 429: la llamada al modelo que responde empezó a los
+2,02 s en los cuatro de hoy, y la llamada del clasificador (Claude Haiku 5.5 con
+`llm_provider=anthropic`, no Mistral) nunca llegó a contarse, porque `wait_for` la canceló. Un
+séptimo quedó tapado por el 429 (pregunta-de-adulto T2: tampoco se contó su clasificador).
+
+Los siete llevaban el hilo en la llamada. Sin modelo, con la batería, se ve qué llamadas lo llevan:
+
+| Llamadas al clasificador | Total | No llegaron en 2 s |
+|---|---|---|
+| Sin hilo (primer turno) | 16 | 0 |
+| Con hilo, turno ya decidido por las reglas | 16 | 4 |
+| Con hilo, turno sin decidir | 10 | 3 |
+
+Con hilo, el sistema lleva además las reglas del hilo (690 caracteres) y el modelo escribe `turn` y
+`search_query`: 93 y 79 tokens de salida en las dos llamadas con hilo que se contaron, cuando la
+respuesta de un primer turno (`intent`, `confidence`, `missing`) son unos 20. En un turno que las reglas ya decidieron,
+esas dos claves se tiraban (`conversation.with_kind`). Arreglo: en ese turno el clasificador sigue
+leyendo el hilo para la intención, pero con el prompt de sistema de un primer turno, byte a byte, y
+sin pedirle `turn` ni `search_query` (`route(ask_turn=False)`). No se pierde ninguna decisión: las
+que deja de escribir no se usaban. En el turno sin decidir no cambia nada.
+
+Lo que no he aplicado: subir el plazo de 2 s en los turnos sin decidir. Un respaldo en un tema sin
+respuesta previa es un plan con esfuerzo medio (en-naps T3, 23,8 s); esperar 1 s más costaría menos
+si el clasificador hubiera dicho `question`, pero no hay latencias del clasificador para elegir la
+cifra. Desde hoy cada turno guarda cuánto tardó el enrutado (`route_s`) y por qué cayó
+(`route_reason`: `timeout`, `error:<tipo> <estado>` o `invalid`), y el texto los cuenta por motivo;
+la pasada completa da esa distribución.
+
+### 5.3 La cola lenta
+
+p95 de hoy: 17,8 s. Los 9 turnos más lentos (13,7 a 23,8 s) son todos planes con esfuerzo medio
+(`answer_effort_plan` sin valor). Del momento en que se llama al modelo a la primera palabra:
+
+| Forma | Turnos | Mediana | Tokens de salida (mediana, casi todo pensamiento) |
+|---|---|---|---|
+| Plan, esfuerzo medio | 14 | 11,2 s | 1.578 |
+| Respuesta corta, esfuerzo bajo | 8 | 3,2 s | 408 |
+| Seguimiento, esfuerzo bajo | 5 | 3,4 s | 475 |
+
+Antes del modelo: mediana de 0,9 s en español y de 2,0 s en inglés y francés (hasta 5,6 s), por la
+traducción al español del corpus (`corpus_query`, en serie antes del embedding, plazo de 3 s).
+
+- Bajado: los planes por respaldo (2 de los 9: en-naps T3 y fuera-de-edad T2), con el arreglo de 5.2.
+- No bajado, con cifras: el pensamiento es casi toda la espera de un plan (11,2 de unos 13 s).
+  Con `answer_effort_plan=low` la primera palabra de un plan pasaría de unos 13 s a unos 5 s si se
+  comporta como las respuestas cortas, pero es donde se pierden señales (night/brevity perdió una).
+  Es un ajuste de producción, no de código: medirlo antes con `--tag` sobre los planes y
+  `probe_plan_contract.py --checklist` (24/24 señales en dos tandas).
+- No bajado: la traducción. Sin ella el inglés respondía 4 de 8 temas del golden y el francés 7 de 8
+  (`agent/corpus_query.py`); no puede ir en paralelo con el embedding que la necesita.
+
+### 5.4 La pasada limpia completa
+
+Los 110 turnos con el código de esta rama, una vez desplegada, con los ajustes de producción (el
+informe los guarda en `settings`):
+
+```
+docker exec -w /app infra-api-1 .venv/bin/python scripts/conversation_battery.py \
+    --with-model --budget-usd 2.5 --out /tmp/battery-full.json
+docker cp infra-api-1:/tmp/battery-full.json \
+    ~/dev/adelia-design/shots/battery/battery-full-$(date +%Y%m%d-%H%M).json
+```
+
+Coste estimado con el gasto por forma de hoy: unos 2,3 $; hasta 2,9 $ si todos los seguimientos del
+11-nov acaban en plan. Si el tope para antes de terminar, `--resume /tmp/battery-full.json` con el
+mismo código completa el resto sin mezclar códigos.

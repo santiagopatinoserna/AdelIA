@@ -56,6 +56,7 @@ import dataclasses
 import logging
 import os
 import re
+import time
 from dataclasses import dataclass, field
 from datetime import datetime
 from typing import Any, AsyncIterator, Awaitable, Callable, Protocol, TypedDict
@@ -148,6 +149,31 @@ class GraphUnavailable(Exception):
     (the demo answers 503); the graph never improvises an answer instead."""
 
 
+#: A provider's refusal for capacity, or a server error: worth one more try. On
+#: 2026-11-11 Mistral answered the search's embedding with 429 «Not enough capacity»
+#: after about 5 s on 4 of 53 turns of the battery, and each turn became «no
+#: disponible» for the mother. The SDK does not retry unless told to.
+TRANSIENT_STATUS = frozenset({429, 500, 502, 503, 504, 529})
+SEARCH_RETRY_PAUSE_S = 0.5
+
+
+async def _once_more(call: Callable[[], Awaitable[Any]]) -> Any:
+    """`call()`, and once more after a pause when the provider refused it for capacity.
+
+    Only then: a missing key, a bad request or our own bug fails at once, and a
+    second refusal reaches the surface's error as before.
+    """
+    try:
+        return await call()
+    except Exception as exc:
+        if getattr(exc, "status_code", None) not in TRANSIENT_STATUS:
+            raise
+        logger.warning("graph: search refused (%s %s), trying once more",
+                       type(exc).__name__, exc.status_code)
+    await asyncio.sleep(SEARCH_RETRY_PAUSE_S)
+    return await call()
+
+
 class AgentState(TypedDict, total=False):
     # Input
     surface: str
@@ -176,6 +202,10 @@ class AgentState(TypedDict, total=False):
     intent_confidence: float
     intent_via: str
     missing: list[str]
+    #: How long `deps.route` took, and why a fallback is one (RouteDecision.reason):
+    #: what the battery reports to tell a late classifier from a refused one.
+    route_s: float
+    route_reason: str | None
     # Retrieval
     #: What the account search found while the routing model was deciding
     #: (route_node), handed to `retrieve` when the decision kept it valid.
@@ -522,17 +552,25 @@ async def route_node(state: AgentState, runtime: Runtime[GraphDeps]) -> dict:
     prefetch = _prefetch(state, deps, route_text, kwargs)
     if c is not None and c.route_history:
         # The same call as always, now reading the tail of the thread; the
-        # model is only consulted when the routing rules abstain.
+        # model is only consulted when the routing rules abstain. Where the
+        # rules already placed the turn, its kind and search words are theirs
+        # (conversation.with_kind), so the model reads the thread for the intent
+        # only and is not asked to write them: with them, 7 of 26 calls missed
+        # the 2 s deadline, without a thread 0 of 16 (the battery, 2026-11-11).
         kwargs["history"] = c.route_history
+        if c.decided:
+            kwargs["ask_turn"] = False
+    started = time.perf_counter()
     try:
         decision = await deps.route(route_text, **kwargs)
     except BaseException:
         await _drop(prefetch)
         raise
-    update: dict = {}
+    update: dict = {"route_s": round(time.perf_counter() - started, 3),
+                    "route_reason": decision.reason}
     if c is not None and not c.decided and decision.via == "model":
         c = conversation.with_kind(c, decision.turn, search_query=decision.search_query)
-        update = {"conversation": c, "search_query": c.search_query}
+        update.update({"conversation": c, "search_query": c.search_query})
     intent = decision.intent
     missing = _missing_fields(decision.missing)
     if intent == "clarify":
@@ -600,7 +638,8 @@ def _prefetch(state: AgentState, deps: GraphDeps, route_text: str, kwargs: dict
     if deps.retrieve is None or route_by_rules(route_text, **kwargs) is not None:
         return None
     _emit({"type": "status", "stage": "searching"})
-    task = asyncio.ensure_future(deps.retrieve(dict(state)))
+    snapshot = dict(state)
+    task = asyncio.ensure_future(_once_more(lambda: deps.retrieve(snapshot)))
     return _Prefetch(query=state.get("search_query"), task=task)
 
 
@@ -718,7 +757,7 @@ async def retrieve(state: AgentState, runtime: Runtime[GraphDeps]) -> dict:
         found = state.get("prefetched")
         if found is None:
             _emit({"type": "status", "stage": "searching"})
-            found = await deps.retrieve(state)
+            found = await _once_more(lambda: deps.retrieve(state))
         return {
             "evidence": list(found.evidence),
             "patient_context": found.patient_context,
@@ -754,7 +793,7 @@ async def retrieve(state: AgentState, runtime: Runtime[GraphDeps]) -> dict:
         texts.append(warning_signs.warning_query(widened or text, _locale(state)))
         warning_index = len(texts) - 1
     try:
-        embeds = await deps.embed(texts)
+        embeds = await _once_more(lambda: deps.embed(texts))
     except Exception as exc:  # noqa: BLE001 - no key, no network, provider down
         logger.warning("graph: embedding failed (%s)", type(exc).__name__)
         raise GraphUnavailable("embedding failed") from exc

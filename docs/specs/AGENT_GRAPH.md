@@ -143,6 +143,10 @@ bucle de herramientas (2026-11-11). Un tema de conducta, tras su ronda, va al pl
 sin pagar el clasificador. Si el clasificador cae, el agente responde con fuentes
 (plan, o respuesta corta para una pregunta sin síntoma, preocupación ni fármaco),
 nunca con el bucle de herramientas.
+Si las reglas del hilo ya decidieron el turno, el clasificador lee el hilo solo para la intención,
+con el prompt de un primer turno, sin pedirle `turn` ni `search_query`, que no se usaban
+(2026-11-11: con hilo, 7 de 26 llamadas pasaron de los 2 s; sin hilo, 0 de 16). Un respaldo dice por
+qué (`reason`: `timeout`, `error:<tipo> <estado>`, `invalid`) y el estado guarda `route_s`.
 Intenciones:
 - `plan`: hay una preocupación y quiere saber qué hacer → plan de acción.
 - `question`: quiere un dato o una explicación breve, sin acción
@@ -170,6 +174,9 @@ pregunta, anota o cambia las palabras de la búsqueda. Sin evidencia, su histori
 salta la ronda de una preocupación observada; en un tema ya rechazado, el agente responde la
 línea corta y la tarjeta para anotar sin pagar al modelo. El modelo que responde recibe la edad
 del perfil. Mientras espera, el panel lee `status` («searching», «writing» con cuántas fuentes).
+Una búsqueda que el proveedor rechaza por capacidad o por error del servidor (429, 5xx) se repite una
+vez tras 0,5 s (`graph._once_more`, 2026-11-11: el 429 de Mistral al embedding dejó 4 de 53 turnos en
+«no disponible»); cualquier otro error, o un segundo rechazo, llega a la superficie como antes.
 Detrás de `implicit_subject_expansion` (apagado), una frase que no nombra a nadie
 («Tiene diarrea desde ayer») se busca también como «Mi bebé de N meses: …», con los
 mismos cortes y la mejor distancia por fragmento (`agent/implicit_subject.py`).
@@ -286,6 +293,9 @@ LangChain.
   `scripts/conversation_regressions_3.json`, con dos formas más de contar el golpe: sin modelo,
   `search_adds` comprueba lo que la búsqueda añade a sus palabras; con el modelo, `found`, las
   fuentes que recibe el modelo que responde (comandos en el docstring de la batería).
+  La pasada reanudada (11-nov, 17:04, los 53 turnos que faltaban con los ajustes nuevos): 45/53;
+  revisión y comando de la pasada limpia en `docs/BATERIA_MODELO_2026-11-11.md`, apartado 5. Los 4
+  turnos del 429 de Mistral están en `scripts/conversation_regressions_4.json` (`search_fails`).
 
 ## Orden de construcción (cada paso desplegable por separado)
 

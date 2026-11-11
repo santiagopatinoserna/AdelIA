@@ -1,0 +1,277 @@
+{
+  "about": "Los 4 turnos de la batería reanudada (2026-11-11, 17:04, los 53 turnos de hoy con los ajustes nuevos encendidos) que acabaron en error: la búsqueda pidió el embedding a Mistral y recibió 429 «Not enough capacity» (backend_out_of_capacity) a los 5,2-6,5 s, y la madre vio «no disponible». Cada conversación, tal como la jugó producción: la decisión real del clasificador en cada turno en que se le preguntó (`classifier`, o \"down\" si no respondió en sus 2 s), si la búsqueda encontró fuentes (`real.sources_found`) y la respuesta real del modelo como historial del turno siguiente. En el turno que falló, `search_fails: 1` hace que la búsqueda falsa reciba ese mismo 429 una vez; su decisión del clasificador no llegó al informe (el turno murió antes del estado final), así que queda la del escenario, y su evidencia la del escenario. En main dan 7/11; con el reintento de la búsqueda (agent/graph._once_more), 11/11. Los otros 4 fallos de hoy no tienen defecto de código que reproducir sin modelo: en-naps-then-rash T2 y fr-regurgite-et-la-nuit T2 son búsquedas que no trajeron el fragmento que el corpus tiene, holdout-en-clasificador-caido T2 es una abstención (el corpus no dice nada del yogur antes de los 12 meses) y fr-dents-doliprane T2 era una expectativa mal escrita (corregida en conversation_scenarios.json). scripts/conversation_battery.py --scenarios scripts/conversation_regressions_4.json",
+  "source": "~/dev/adelia-design/shots/battery/battery-resume-20261111-1704.json",
+  "scenarios": [
+    {
+      "id": "real4-dosis-sin-fuente",
+      "from": "dosis-sin-fuente",
+      "locale": "es",
+      "age_months": 10,
+      "tags": [
+        "dosis"
+      ],
+      "turns": [
+        {
+          "say": "cuanto apiretal le doy pesa 9 kilos",
+          "classifier": {
+            "intent": "plan",
+            "turn": "new"
+          },
+          "evidence": true,
+          "model_answer": "No tengo evidencia clínica sobre esto en mi biblioteca, así que prefiero no responder antes que inventar. Coméntalo con tu pediatra, que conoce a tu bebé y puede valorarlo.",
+          "real": {
+            "turn_type": "new",
+            "kind": "no_evidence",
+            "intent": "plan",
+            "intent_via": "model",
+            "sources_found": 4,
+            "failed": []
+          },
+          "expect": {
+            "turn": "new",
+            "kind": "no_evidence"
+          }
+        },
+        {
+          "say": "y de dalsy",
+          "classifier": "down",
+          "evidence": true,
+          "model_answer": "**Dosis de Dalsy (ibuprofeno) para 9 kilos**\n\nSigo sin fuentes sobre esto. Coméntalo con tu pediatra, que conoce a tu bebé.",
+          "real": {
+            "turn_type": "follow_up",
+            "kind": "no_evidence",
+            "intent": "plan",
+            "intent_via": "fallback",
+            "sources_found": 4,
+            "failed": []
+          },
+          "expect": {
+            "turn": "follow_up",
+            "kind": "no_evidence"
+          }
+        },
+        {
+          "say": "vale y cada cuantas horas",
+          "classifier": {
+            "intent": "question"
+          },
+          "evidence": false,
+          "search_fails": 1,
+          "real": {
+            "turn_type": null,
+            "kind": null,
+            "intent": null,
+            "intent_via": null,
+            "sources_found": null,
+            "failed": [
+              "no_error",
+              "kind",
+              "turn"
+            ],
+            "error": "429 backend_out_of_capacity (Mistral, embedding)",
+            "classifier": "respondió a tiempo; su decisión se perdió con el turno"
+          },
+          "expect": {
+            "turn": "follow_up",
+            "kind": "no_evidence"
+          }
+        }
+      ]
+    },
+    {
+      "id": "real4-pregunta-de-adulto",
+      "from": "pregunta-de-adulto",
+      "locale": "es",
+      "age_months": 4,
+      "tags": [
+        "adulto"
+      ],
+      "turns": [
+        {
+          "say": "yo tengo dolor de espalda desde el parto que puedo tomar",
+          "evidence": false,
+          "real": {
+            "turn_type": "new",
+            "kind": "no_evidence",
+            "intent": "other",
+            "intent_via": "rule",
+            "sources_found": null,
+            "failed": []
+          },
+          "expect": {
+            "turn": "new",
+            "kind": "no_evidence"
+          }
+        },
+        {
+          "say": "vale y la niña duerme bien boca arriba",
+          "classifier": "down",
+          "evidence": true,
+          "search_fails": 1,
+          "real": {
+            "turn_type": null,
+            "kind": null,
+            "intent": null,
+            "intent_via": null,
+            "sources_found": null,
+            "failed": [
+              "no_error",
+              "kind",
+              "turn"
+            ],
+            "error": "429 backend_out_of_capacity (Mistral, embedding)",
+            "classifier": "no respondió en sus 2 s (respaldo)"
+          },
+          "expect": {
+            "turn": "new",
+            "kind": "answer"
+          }
+        }
+      ]
+    },
+    {
+      "id": "real4-fr-constipation-correction",
+      "from": "fr-constipation-correction",
+      "locale": "fr",
+      "age_months": 6,
+      "tags": [
+        "estreñimiento",
+        "correccion_edad"
+      ],
+      "turns": [
+        {
+          "say": "il fait plus caca depuis 3 jours",
+          "evidence": true,
+          "model_answer": "**Après le premier mois, un bébé allaité peut rester plusieurs jours sans faire caca ; au lait infantile, c'est moins habituel [ev_4].**\n\n## Aujourd’hui\n- Notez le jour exact de sa dernière selle et s'il est nourri au sein ou au lait infantile, car la fréquence attendue en dépend [ev_4].\n- S'il est allaité, sachez qu'après le premier mois il peut passer plusieurs jours, voire une semaine, sans faire caca [ev_4].\n- S'il pousse fort, pleure ou devient rouge en essayant, ce n'est pas forcément inquiétant [ev_4].\n\n## À surveiller\n- S'il est au lait infantile, comparez avec l'habitude : en général une selle presque chaque jour, parfois 1 à 2 jours sans [ev_4].\n\n## Quand consulter\nParlez-en à votre pédiatre (consultation programmée) :\n- en cas de doute [ev_1] ;\n- s'il est au lait infantile et reste plus de 1 à 2 jours sans selles, au-delà de l'habitude décrite [ev_4].",
+          "real": {
+            "turn_type": "new",
+            "kind": "answer",
+            "intent": "plan",
+            "intent_via": "rule",
+            "sources_found": 4,
+            "failed": []
+          },
+          "expect": {
+            "turn": "new",
+            "kind": "answer",
+            "shape": "plan"
+          }
+        },
+        {
+          "say": "pardon il a 11 mois pas 6",
+          "evidence": true,
+          "search_fails": 1,
+          "real": {
+            "turn_type": null,
+            "kind": null,
+            "intent": null,
+            "intent_via": null,
+            "sources_found": null,
+            "failed": [
+              "no_error",
+              "kind",
+              "turn"
+            ],
+            "error": "429 backend_out_of_capacity (Mistral, embedding)",
+            "classifier": "no se le preguntó: las reglas leyeron la corrección de edad"
+          },
+          "expect": {
+            "turn": "correction",
+            "kind": "answer"
+          }
+        }
+      ]
+    },
+    {
+      "id": "real4-holdout-anotar-y-preguntar-xq",
+      "from": "holdout-anotar-y-preguntar-xq",
+      "locale": "es",
+      "age_months": 11,
+      "tags": [
+        "control_sobreajuste",
+        "anotar",
+        "erratas"
+      ],
+      "turns": [
+        {
+          "say": "ha tenido 37,9 esta tarde",
+          "evidence": true,
+          "real": {
+            "turn_type": "new",
+            "kind": "confirm",
+            "intent": "record",
+            "intent_via": "rule",
+            "sources_found": null,
+            "failed": []
+          },
+          "expect": {
+            "turn": "new",
+            "kind": "confirm",
+            "card": "confirm"
+          }
+        },
+        {
+          "confirm": true,
+          "evidence": true,
+          "real": {
+            "turn_type": null,
+            "kind": "recorded",
+            "intent": null,
+            "intent_via": null,
+            "sources_found": null,
+            "failed": []
+          },
+          "expect": {
+            "kind": "recorded"
+          }
+        },
+        {
+          "say": "xq le sube siempre por la tarde",
+          "evidence": true,
+          "record": true,
+          "model_answer": "La temperatura normal varía a lo largo del día y **suele ser más alta al final de la tarde** [ev_3].\n\n- Que 37,9 °C cuente como fiebre depende de cómo se midió: se considera fiebre más de 37,5 °C en la axila o más de 38 °C en el recto [ev_3].\n- A su edad (más de 6 meses), hay que llamar al pediatra si llega a **39,4 °C o más** [ev_1], o si la fiebre de más de 38 °C dura 5 días o bebe menos de la mitad de lo normal [ev_4].\n- Llama **de inmediato** si no moja ningún pañal en medio día o si aparecen adormilamiento, dificultad para respirar, aspecto gris, llanto inconsolable, quejidos o manchas que no desaparecen al presionarlas con un vaso [ev_4].",
+          "real": {
+            "turn_type": "follow_up",
+            "kind": "answer",
+            "intent": "question",
+            "intent_via": "rule",
+            "sources_found": 4,
+            "failed": []
+          },
+          "expect": {
+            "turn": "follow_up",
+            "kind": "answer",
+            "shape": "question"
+          }
+        },
+        {
+          "say": "tb tiene mocos, le lavo la nariz?",
+          "classifier": {
+            "intent": "question"
+          },
+          "evidence": true,
+          "record": true,
+          "search_fails": 1,
+          "real": {
+            "turn_type": null,
+            "kind": null,
+            "intent": null,
+            "intent_via": null,
+            "sources_found": null,
+            "failed": [
+              "no_error",
+              "kind",
+              "turn"
+            ],
+            "error": "429 backend_out_of_capacity (Mistral, embedding)",
+            "classifier": "respondió a tiempo; su decisión se perdió con el turno"
+          },
+          "expect": {
+            "turn": "follow_up",
+            "kind": "answer"
+          }
+        }
+      ]
+    }
+  ]
+}

@@ -57,6 +57,9 @@ class RouteDecision(BaseModel):
     #: bad value costs these two fields and never the intent.
     turn: Turn | None = None
     search_query: str | None = None
+    #: Why a fallback is one ("timeout", "error:<type> <status>", "invalid"); set by
+    #: the code, never read from the model's JSON. The battery reports it (2026-11-11).
+    reason: str | None = None
 
 
 # --- rules ------------------------------------------------------------------
@@ -443,6 +446,18 @@ MODEL_TIMEOUT_S = 2.0
 
 _FALLBACK = RouteDecision(intent="plan", confidence=0.0, via="fallback")
 
+
+def _fallback(reason: str) -> RouteDecision:
+    return _FALLBACK.model_copy(update={"reason": reason})
+
+
+def _error_reason(exc: BaseException) -> str:
+    """The exception's type and, for a provider's refusal, its HTTP status (a 429
+    is capacity, not a bug). Never its text, which may quote the request."""
+    status = getattr(exc, "status_code", None)
+    return f"error:{type(exc).__name__}" + (f" {status}" if isinstance(status, int) else "")
+
+
 _LANGUAGE = {"es": "Spanish", "en": "English", "fr": "French"}
 
 _SYSTEM_PROMPT = """You classify ONE message a parent sends to a pediatric assistant.
@@ -615,6 +630,7 @@ async def route_by_model(
     facts: ProfileFacts | None = None,
     provider: str | None = None,
     history: list[dict] | None = None,
+    ask_turn: bool = True,
 ) -> RouteDecision:
     """One classifier call. Never raises on the model's output: a reply that
     is not valid JSON for `RouteDecision` is the `plan` fallback. Provider
@@ -623,6 +639,10 @@ async def route_by_model(
 
     `history` is the tail of the conversation (agent/conversation): with it,
     the same call also says what kind of turn this is and what to search.
+    With `ask_turn` False (the rules already placed the turn) it reads the
+    thread for the intent only: the system prompt is a first turn's, and no
+    `turn` or `search_query` is asked for or taken. Those two fields were most
+    of what the model wrote, and the graph threw them away (2026-11-11).
     """
     lang = (locale or "es").split("-")[0].lower()
     system = _SYSTEM_PROMPT.format(
@@ -630,7 +650,8 @@ async def route_by_model(
         language=_LANGUAGE.get(lang, "Spanish"),
     )
     thread = _thread_block(history, lang)
-    if thread:
+    asks_turn = bool(thread) and ask_turn
+    if asks_turn:
         system += _THREAD_RULES.format()
     age = facts.age_months if facts is not None else None
     user = thread + _USER_PROMPT.get(lang, _USER_PROMPT["es"]).format(
@@ -641,15 +662,16 @@ async def route_by_model(
     raw = await _complete_json(system, user, provider=provider)
     try:
         data = json.loads(_fence_free(raw))
-        extra = _thread_fields(data) if isinstance(data, dict) and thread else {}
+        extra = _thread_fields(data) if isinstance(data, dict) and asks_turn else {}
         if isinstance(data, dict):
             data.pop("turn", None)
             data.pop("search_query", None)
+            data.pop("reason", None)
         decision = RouteDecision.model_validate({**data, "via": "model", **extra})
     except (ValueError, ValidationError, TypeError):
         # Never the text: with the thread it can carry her words (search_query).
         logger.info("route: model output did not validate (%d chars)", len(raw))
-        return _FALLBACK
+        return _fallback("invalid")
     if decision.confidence < CONFIDENCE_FLOOR:
         decision = decision.model_copy(update={"intent": "clarify"})
     return _bounded_by_account(decision, has_account)
@@ -664,12 +686,13 @@ async def route(
     provider: str | None = None,
     timeout_s: float = MODEL_TIMEOUT_S,
     history: list[dict] | None = None,
+    ask_turn: bool = True,
 ) -> RouteDecision:
     """Rules first; the model only when they abstain, under a deadline.
 
     Never raises and never waits longer than `timeout_s`: the surfaces call
     this on the user-facing path, where a slow classifier must cost a log
-    line, not a second of the mother's time.
+    line, not a second of the mother's time. A fallback says why (`reason`).
     """
     decision = route_by_rules(message, locale=locale, has_account=has_account, facts=facts)
     if decision is not None:
@@ -678,15 +701,17 @@ async def route(
         return await asyncio.wait_for(
             route_by_model(
                 message, locale=locale, has_account=has_account, facts=facts, provider=provider,
-                history=history,
+                history=history, ask_turn=ask_turn,
             ),
             timeout=timeout_s,
         )
     except asyncio.TimeoutError:
         logger.info("route: model exceeded %.1fs, falling back to plan", timeout_s)
+        return _fallback("timeout")
     except Exception as exc:  # noqa: BLE001 - routing must never break the answer
-        logger.info("route: model unavailable (%s), falling back to plan", type(exc).__name__)
-    return _FALLBACK
+        reason = _error_reason(exc)
+        logger.info("route: model unavailable (%s), falling back to plan", reason)
+        return _fallback(reason)
 
 
 # --- measure only (build step 1) --------------------------------------------
@@ -707,21 +732,22 @@ async def log_route(
     facts: ProfileFacts | None = None,
     provider: str | None = None,
     history: list[dict] | None = None,
+    ask_turn: bool = True,
 ) -> RouteDecision:
     """Route and write ONE log line. Never raises, never logs the message
     (nor the thread)."""
     try:
         decision = await route(
             message, locale=locale, has_account=has_account, facts=facts, provider=provider,
-            history=history,
+            history=history, ask_turn=ask_turn,
         )
-    except Exception:  # noqa: BLE001 - a measurement must not become an error
-        decision = _FALLBACK
+    except Exception as exc:  # noqa: BLE001 - a measurement must not become an error
+        decision = _fallback(_error_reason(exc))
     logger.info(
-        "route intent=%s via=%s conf=%.2f surface=%s missing=%s account=%s turn=%s",
+        "route intent=%s via=%s conf=%.2f surface=%s missing=%s account=%s turn=%s reason=%s",
         decision.intent, decision.via, decision.confidence, surface,
         ",".join(decision.missing) or "-", "yes" if has_account else "no",
-        decision.turn or "-",
+        decision.turn or "-", decision.reason or "-",
     )
     return decision
 
