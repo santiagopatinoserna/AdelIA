@@ -1,0 +1,249 @@
+{
+ "about": "Las 3 conversaciones que fallaron por el código al pasar las 11 regresiones con el modelo real en producción (2026-11-11, 04:08, 26 de 32 turnos), tal como las jugó producción: la búsqueda de cada seguimiento encontró fuentes (`real.sources_found`), la decisión del clasificador real en cada turno en que se le preguntó (`classifier`, o \"down\" si cayó al respaldo) y la respuesta real del modelo (`model_answer`). Las otras 3 (guarderia-real-9nov-1 turno 3, no-gatea y golpe-en-la-cabeza turno 1) son búsquedas que no trajeron la ficha que el corpus tiene, sin defecto de código que reproducir sin modelo; ya están en conversation_regressions.json con las mismas decisiones del clasificador. scripts/conversation_battery.py --scenarios scripts/conversation_regressions_2.json",
+ "source": "~/dev/adelia-design/shots/battery/battery-regr-20261111-0408.json",
+ "scenarios": [
+  {
+   "id": "real2-guarderia-botones",
+   "from": "real-guarderia-botones",
+   "locale": "es",
+   "age_months": 13,
+   "tags": [
+    "guarderia",
+    "desarrollo"
+   ],
+   "turns": [
+    {
+     "say": "en la guarde no juega con nadie siempre solo",
+     "evidence": false,
+     "record": false,
+     "real": {
+      "turn_type": "new",
+      "kind": "clarify",
+      "intent": "clarify",
+      "intent_via": "rule",
+      "sources_found": null,
+      "failed": []
+     },
+     "expect": {
+      "turn": "new",
+      "kind": "clarify",
+      "asks": [
+       "nursery_time",
+       "social_signals"
+      ],
+      "card": "clarify"
+     }
+    },
+    {
+     "press": [
+      {
+       "field": "nursery_time",
+       "value": "lt1m"
+      },
+      {
+       "field": "social_signals",
+       "value": "all"
+      }
+     ],
+     "evidence": true,
+     "record": true,
+     "model_answer": "Con menos de un mes en la guardería, todavía está en plena adaptación, y el malestar no siempre se nota con llanto [ev_3].\n\n**Si es normal que a su edad juegue sin los otros niños**\n\nNo tengo evidencia clínica sobre esto en mi biblioteca, así que prefiero no responder antes que inventar. Coméntalo con tu pediatra, que conoce a tu bebé y puede valorarlo.\n\n## Hoy\n- Deja que lleve a la guardería su objeto de apego [ev_4].\n- Valida sus emociones cuando lo dejes y cuando lo recojas [ev_4].\n- Evita forzar el ritmo de la adaptación [ev_4].\n\n## Vigila\n- Si cambia su educadora de referencia o su horario, porque el malestar puede reactivarse meses después [ev_3].\n\n## Cuándo ir al médico\nConsulta con el pediatra, y valora no llevarlo ese día a la guardería, si:\n- no juega, no come y no duerme en el mismo día [ev_1][ev_2].\n- además ha pasado una noche con mucha flema y ronquidos, aunque no tenga fiebre [ev_2].\n\n## No olvides\n- Si está cansada o come peor, la pediatra pidió repetir la analítica [2].",
+     "real": {
+      "turn_type": "follow_up",
+      "kind": "answer",
+      "intent": "plan",
+      "intent_via": "rule",
+      "sources_found": 4,
+      "failed": []
+     },
+     "expect": {
+      "turn": "follow_up",
+      "kind": "answer",
+      "shape": "plan"
+     }
+    },
+    {
+     "say": "y cuanto tarda en adaptarse",
+     "evidence": true,
+     "record": true,
+     "model_answer": "Mis fuentes no dan un plazo: llevar dos meses no garantiza que esté adaptado, y el malestar puede volver meses después [ev_1].\n\n**Cuánto tiempo tarda exactamente en adaptarse**\n\nSigo sin fuentes sobre esto. Coméntalo con tu pediatra, que conoce a tu bebé.\n\n## Hoy\n- Deja que lleve a la guardería su objeto de apego [ev_2].\n- Valida sus emociones al dejarlo y al recogerlo [ev_2].\n- Evita forzar el ritmo de la adaptación [ev_2].\n\n## Vigila\n- Si cambia su educadora de referencia o su horario, porque el malestar puede reactivarse [ev_1].\n- Que no llore mucho no descarta que lo esté pasando mal [ev_1].\n- Apego intenso, rechazo de sólidos o peor sueño en casa son esperables en la adaptación y no son alarma por sí solos [ev_2].\n\n## Cuándo ir al médico\nDéjalo en casa ese día y consulta con el pediatra si:\n- no juega, no come y no duerme en el mismo día [ev_3][ev_4].\n- además ha pasado una noche con mucha flema y ronquidos, aunque no tenga fiebre [ev_4].\n\n## No olvides\n- Si está cansada o come peor, la pediatra pidió repetir la analítica [2].",
+     "real": {
+      "turn_type": "follow_up",
+      "kind": "answer",
+      "intent": "plan",
+      "intent_via": "rule",
+      "sources_found": 4,
+      "failed": [
+       "kind",
+       "card"
+      ]
+     },
+     "expect": {
+      "turn": "follow_up",
+      "kind": "answer"
+     }
+    }
+   ],
+   "why": "T3 «y cuanto tarda en adaptarse»: la búsqueda del seguimiento (sus palabras en el tema y las del corpus para la guardería) encontró 4 fuentes, y el estudio WiKi respalda que no hay un plazo fijo [ev_1]; la respuesta es mixta y citada, así que es una respuesta, no el rechazo que suponía conversation_regressions.json (evidence: false). El defecto real es la longitud: repitió el plan entero del turno 2 (169 palabras), lo que trata settings.follow_up_brevity."
+  },
+  {
+   "id": "real2-piel-granitos",
+   "from": "real-piel-granitos",
+   "locale": "es",
+   "age_months": 4,
+   "tags": [
+    "piel"
+   ],
+   "turns": [
+    {
+     "say": "le han salido granitos rojos en la cara",
+     "classifier": {
+      "intent": "clarify",
+      "turn": "new",
+      "missing": [
+       "since_when",
+       "general_state"
+      ]
+     },
+     "evidence": false,
+     "record": false,
+     "real": {
+      "turn_type": "new",
+      "kind": "clarify",
+      "intent": "clarify",
+      "intent_via": "model",
+      "sources_found": null,
+      "failed": []
+     },
+     "expect": {
+      "turn": "new",
+      "kind": "clarify",
+      "asks": [
+       "since_when",
+       "general_state"
+      ],
+      "card": "clarify"
+     }
+    },
+    {
+     "say": "no le pican y esta bien",
+     "classifier": {
+      "intent": "plan",
+      "turn": "follow_up"
+     },
+     "evidence": true,
+     "record": true,
+     "model_answer": "No tengo evidencia clínica sobre esto en mi biblioteca, así que prefiero no responder antes que inventar. Coméntalo con tu pediatra, que conoce a tu bebé y puede valorarlo.",
+     "real": {
+      "turn_type": "follow_up",
+      "kind": "answer",
+      "intent": "plan",
+      "intent_via": "model",
+      "sources_found": 4,
+      "failed": []
+     },
+     "expect": {
+      "turn": "follow_up",
+      "kind": "no_evidence",
+      "card": "confirm"
+     }
+    },
+    {
+     "say": "le pongo crema",
+     "classifier": "down",
+     "evidence": true,
+     "record": true,
+     "model_answer": "**Crema para los granitos rojos de la cara**: Sigo sin fuentes sobre esto. Coméntalo con tu pediatra, que conoce a tu bebé.",
+     "real": {
+      "turn_type": "follow_up",
+      "kind": "answer",
+      "intent": "plan",
+      "intent_via": "fallback",
+      "sources_found": 4,
+      "failed": [
+       "kind",
+       "card"
+      ]
+     },
+     "expect": {
+      "turn": "follow_up",
+      "kind": "no_evidence",
+      "card": "confirm"
+     }
+    }
+   ],
+   "why": "T2 y T3: la búsqueda encontró 4 fuentes del tema, ninguna sobre granitos que no pican, y el modelo escribió el rechazo entero (T2) y, en el tema ya rechazado, solo la línea corta (T3). Salían como respuesta, sin sus palabras para la consulta ni la tarjeta para anotarlas. Ahora un texto del modelo que es solo el rechazo, sin ninguna cita, termina como el callejón sin salida del código (agent/graph._noted_refusal)."
+  },
+  {
+   "id": "real2-estreñimiento",
+   "from": "real-estreñimiento",
+   "locale": "es",
+   "age_months": 5,
+   "tags": [
+    "estreñimiento"
+   ],
+   "turns": [
+    {
+     "say": "lleva 4 dias sin hacer caca",
+     "evidence": true,
+     "record": true,
+     "model_answer": "**Cuatro días sin caca no es necesariamente un problema a los 5 meses si come, crece bien y las heces salen blandas [ev_1][ev_3].**\n\n## Hoy\n- Si le cuesta, empuja con suavidad sus rodillas hacia el pecho [ev_1].\n- No te alarmes si gruñe, aprieta o se pone rojo: si la caca sale blanda y con facilidad, es buena señal [ev_1][ev_3].\n- Si toma fórmula, ten en cuenta que suele hacer caca casi a diario y solo a veces pasa 1 o 2 días sin hacer [ev_3].\n\n## Vigila\n- Que cuando haga caca sea blanda y no dura [ev_1].\n- Que siga comiendo y ganando peso como hasta ahora (6,4 kg en la revisión de los 4 meses) [1][ev_1].\n\n## Cuándo ir al médico\nLlama al pediatra si:\n- Tiene problemas constantes para hacer caca (muy poco frecuentes o aparentemente dolorosas) [ev_1].\n- Ves sangre en las heces [ev_1].\n- Algo no te parece normal [ev_1].\n- Las heces se vuelven cada vez más acuosas o hace más deposiciones que tomas [ev_1].\n\n## No olvides\n- Anota los días entre deposiciones y cómo son las heces para comentarlo en la revisión.\n- La pediatra pidió repetir la analítica si sigue cansada o come peor [2].",
+     "real": {
+      "turn_type": "new",
+      "kind": "answer",
+      "intent": "plan",
+      "intent_via": "rule",
+      "sources_found": 4,
+      "failed": []
+     },
+     "expect": {
+      "turn": "new",
+      "kind": "answer",
+      "shape": "plan",
+      "doctor": true
+     }
+    },
+    {
+     "say": "toma biberon",
+     "evidence": true,
+     "record": true,
+     "model_answer": "**Con biberón de fórmula, 4 días es más de lo habitual: estos bebés suelen hacer caca casi a diario y solo a veces pasan 1 o 2 días sin hacer [ev_1].**\n\n## Hoy\n- Si el biberón es de leche materna, pasar hasta 4 días sin caca puede ser normal si no se le ve incómodo; si tiene malestar, consulta [ev_4].\n- No te alarmes si aprieta, llora o se pone rojo al hacer caca: hacerla tumbado boca arriba cuesta esfuerzo [ev_1].\n- Olvida lo que te dije de empujarle las rodillas hacia el pecho: mis fuentes no lo respaldan.\n\n## Cuándo ir al médico\nLlévalo de inmediato al centro de salud más cercano si:\n- Tiene la lengua seca y llora sin lágrimas, que son señales de deshidratación [ev_4].\n\nLlama al pediatra de inmediato si:\n- Ves grandes cantidades de sangre, moco o agua en las heces [ev_3].\n\nConsulta lo antes posible si:\n- Vomita pasada hora y media de la toma [ev_4].\n- Vomita de forma repetida [ev_4].\n- Vomita y además tiene fiebre y decaimiento [ev_4].\n\nPide ayuda si:\n- Vomita 3 o 4 veces en 2 horas [ev_4].\n- Al vomitar tiene un dolor de tripa fuerte o constante [ev_4].\n\n## No olvides\n- Coméntale a la pediatra estos 4 días sin caca con biberón y anota cuándo la hace y cómo es [ev_1].\n- La pediatra pidió repetir la analítica si sigue cansada o come peor [2].",
+     "real": {
+      "turn_type": "follow_up",
+      "kind": "answer",
+      "intent": "plan",
+      "intent_via": "rule",
+      "sources_found": 4,
+      "failed": []
+     },
+     "expect": {
+      "turn": "follow_up",
+      "kind": "answer"
+     }
+    },
+    {
+     "say": "y si le doy zumo de pera",
+     "evidence": true,
+     "record": true,
+     "model_answer": "**Zumo de pera:** No tengo evidencia clínica sobre esto en mi biblioteca, así que prefiero no responder antes que inventar. Coméntalo con tu pediatra, que conoce a tu bebé y puede valorarlo.\n\n## Cuándo ir al médico\nLlévalo de inmediato al centro de salud más cercano si:\n- Tiene la lengua seca y llora sin lágrimas (deshidratación) [ev_4].\n\nLlama al pediatra de inmediato si:\n- Ves grandes cantidades de sangre, moco o agua en las heces [ev_3].\n\nConsulta lo antes posible si:\n- Vomita pasada hora y media de la toma [ev_4].\n- Vomita de forma repetida [ev_4].\n- Vomita y además tiene fiebre y decaimiento [ev_4].\n\nPide ayuda si:\n- Vomita 3 o 4 veces en 2 horas [ev_4].\n- Al vomitar tiene un dolor de tripa fuerte o constante [ev_4].\n\nConsulta si:\n- El biberón es de leche materna y lo notas incómodo por no hacer caca [ev_4].\n\n## No olvides\n- La pediatra recomendó empezar la alimentación complementaria a los 6 meses [2]: pregúntale por el zumo antes de dárselo.\n- Anota los días sin caca y cómo son las heces para comentárselo, porque con fórmula lo habitual es hacer casi a diario [ev_1].",
+     "real": {
+      "turn_type": "follow_up",
+      "kind": "answer",
+      "intent": "plan",
+      "intent_via": "rule",
+      "sources_found": 4,
+      "failed": [
+       "kind",
+       "card"
+      ]
+     },
+     "expect": {
+      "turn": "follow_up",
+      "kind": "answer"
+     }
+    }
+   ],
+   "why": "T3 «y si le doy zumo de pera»: el corpus no tiene zumo de pera para un bebé de 5 meses (la ficha de la AAP solo nombra ciruelas pasas cuando ya come sólidos), así que el rechazo de esa parte es correcto. Esta vez el turno 2 no rechazó nada, así que no era un tema ya rechazado como suponía conversation_regressions.json, y la búsqueda encontró las fichas del estreñimiento: respuesta mixta. El defecto real es que repitió entero el «Cuándo ir al médico» del turno 2 (175 palabras), lo que trata settings.follow_up_brevity."
+  }
+ ]
+}

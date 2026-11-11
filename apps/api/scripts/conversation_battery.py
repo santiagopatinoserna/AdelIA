@@ -48,6 +48,22 @@ without paying again for what was measured, hand the last report back:
     ... conversation_battery.py --with-model --budget-usd 2.5 \\
         --resume /tmp/battery.json --out /tmp/battery-2.json
 
+Comparing the answer settings (settings.answer_effort_*, settings.follow_up_brevity,
+2026-11-11): run the same regressions twice, off and on, with the same cap. The
+environment of `docker exec` wins over the env file, and a blank effort reads as
+unset. Each report keeps the settings it ran with (`settings`), the contract and
+effort of each turn (`shape`, `effort`) and, apart, the words and the first word
+of the follow-ups to an answered topic (`follows_answer`), which is what they move:
+
+    docker exec -w /app -e FOLLOW_UP_BREVITY=false -e ANSWER_EFFORT_QUESTION= \
+        -e ANSWER_EFFORT_PLAN= -e ANSWER_EFFORT_FOLLOW_UP= infra-api-1 \
+        .venv/bin/python scripts/conversation_battery.py --with-model --budget-usd 1.5 \
+        --scenarios scripts/conversation_regressions.json --out /tmp/regr-off.json
+    docker exec -w /app -e FOLLOW_UP_BREVITY=true -e ANSWER_EFFORT_QUESTION=low \
+        -e ANSWER_EFFORT_PLAN= -e ANSWER_EFFORT_FOLLOW_UP=low infra-api-1 \
+        .venv/bin/python scripts/conversation_battery.py --with-model --budget-usd 1.5 \
+        --scenarios scripts/conversation_regressions.json --out /tmp/regr-on.json
+
 `--from <id>` starts at a scenario (file order), `--tag <tag>` keeps a topic
 (repeatable), `--only <id>` names one; they combine, also with `--resume`.
 A model turn records when the search began and when the answering model was
@@ -376,6 +392,12 @@ def _from_final(state: dict) -> dict:
         "intent": state.get("intent"),
         "intent_via": state.get("intent_via"),
         "asks": list(state.get("missing") or []) if kind == "clarify" else [],
+        # The contract and the thinking effort the answering model got, and whether
+        # it followed an answer with sources in its topic: what the answer settings
+        # change (settings.answer_effort_*, settings.follow_up_brevity).
+        "shape": state.get("shape"),
+        "effort": state.get("effort"),
+        "follows_answer": bool(c is not None and c.kind == "follow_up" and c.answered),
     }
 
 
@@ -439,9 +461,10 @@ class _OfflineSurface:
                          patient_context=RECORD if self.record else None)
 
     def stream(self, history_default: list[dict]):
-        async def _stream(system: str, user: str, history: list[dict] | None = None):
+        async def _stream(system: str, user: str, history: list[dict] | None = None,
+                          effort: str | None = None):
             self.paid.append("stream")
-            self.model_saw = {"system": system, "user": user,
+            self.model_saw = {"system": system, "user": user, "effort": effort,
                               "history": history_default if history is None else history}
             yield self.model_answer or "Texto de prueba [ev_1]."
         return _stream
@@ -575,6 +598,8 @@ def _totals(results: list[dict], *, run_turns: list[dict] | None = None) -> dict
     counts = [t["words"] for t in run_turns if t.get("words")]
     ttft = [t["ttft_s"] for t in run_turns if t.get("ttft_s") is not None]
     total = [t["total_s"] for t in run_turns if t.get("total_s") is not None]
+    follow = [t for t in run_turns if t.get("follows_answer") and t.get("words")]
+    follow_ttft = [t["ttft_s"] for t in follow if t.get("ttft_s") is not None]
     out.update({
         "words_median": statistics.median(counts) if counts else None,
         "words_mean": round(statistics.fmean(counts), 1) if counts else None,
@@ -582,8 +607,30 @@ def _totals(results: list[dict], *, run_turns: list[dict] | None = None) -> dict
         "ttft_p95_s": round(_p95(ttft), 3) if ttft else None,
         "total_median_s": round(statistics.median(total), 3) if total else None,
         "cost_usd": round(sum(t.get("cost_usd") or 0 for t in run_turns), 6),
+        # A follow-up to a topic already answered with sources: what
+        # follow_up_brevity and answer_effort_follow_up change.
+        "follow_ups_to_an_answer": len(follow),
+        "words_follow_up_median": (statistics.median(t["words"] for t in follow)
+                                   if follow else None),
+        "ttft_follow_up_median_s": (round(statistics.median(follow_ttft), 3)
+                                    if follow_ttft else None),
     })
     return out
+
+
+#: The settings that change what the answering model is asked or handed. A model
+#: report keeps them, so a run with them on and one with them off can be compared.
+ANSWER_SETTINGS = (
+    "llm_provider", "anthropic_chat_model", "answer_effort_question", "answer_effort_plan",
+    "answer_effort_follow_up", "follow_up_brevity", "plan_brevity", "no_unasked_refusals",
+    "warning_signs_retrieval", "lay_query_expansion", "implicit_subject_expansion",
+)
+
+
+def answer_settings() -> dict:
+    from adelia.config import settings
+
+    return {name: getattr(settings, name) for name in ANSWER_SETTINGS}
 
 
 def _p95(values: list[float]) -> float:
@@ -784,7 +831,8 @@ async def run_with_model(
         listed = meter.estimated_usd()
         unpriced = meter.unpriced()
     report = {"mode": "model", "budget_usd": budget_usd, "spent_usd": spent,
-              "list_usd": listed, "stopped": stopped, "unpriced": unpriced}
+              "list_usd": listed, "stopped": stopped, "unpriced": unpriced,
+              "settings": answer_settings()}
     if carried is not None:
         results, kept = _merge(carried, results)
         run_turns = run_turns + kept
@@ -868,6 +916,15 @@ def render_text(report: dict) -> str:
                      f"media {t['words_mean']}")
         lines.append(f"Tiempo hasta la respuesta: mediana {t['ttft_median_s']} s, "
                      f"p95 {t['ttft_p95_s']} s; hasta el final: mediana {t['total_median_s']} s")
+        if t.get("follow_ups_to_an_answer"):
+            lines.append(f"Seguimientos de un tema ya respondido: {t['follow_ups_to_an_answer']}; "
+                         f"palabras, mediana {t['words_follow_up_median']}; primera palabra, "
+                         f"mediana {t['ttft_follow_up_median_s']} s")
+        on = {k: v for k, v in (report.get("settings") or {}).items()
+              if k not in ("llm_provider", "anthropic_chat_model") and v}
+        if report.get("settings") is not None:
+            lines.append("Ajustes de respuesta encendidos: "
+                         + (", ".join(f"{k}={v}" for k, v in on.items()) or "ninguno"))
         spent = report["spent_usd"]
         lines.append(f"Gasto contado (etiqueta qa): {spent or 0:.4f} $ de un tope de "
                      f"{report['budget_usd']:.2f} $; a precio de lista, solo modelos con "

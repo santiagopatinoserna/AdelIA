@@ -116,11 +116,14 @@ async def run_turn(*, user_id: UUID, profile_id: UUID | None, message: str,
             age_months=known.age_months, baby_name=known.display_name,
         )
 
-    def _stream(system_prompt: str, user_message: str, history: list[dict] | None = None):
+    def _stream(system_prompt: str, user_message: str, history: list[dict] | None = None,
+                effort: str | None = None):
         # `history` is this topic's part of the transcript when the graph
-        # hands it (nothing of an earlier topic, nothing she corrected).
+        # hands it (nothing of an earlier topic, nothing she corrected);
+        # `effort`, the thinking effort it chose for this answer (None: default).
         return chat_orchestrator._guarded_stream(
-            system_prompt, user_message, history=text_history if history is None else history
+            system_prompt, user_message, history=text_history if history is None else history,
+            effort=effort,
         )
 
     async def _write_tool(name: str, args: dict) -> WriteOutcome:

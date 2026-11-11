@@ -289,6 +289,71 @@ _QUESTION_RULE: dict[str, str] = {
     ),
 }
 
+#: The `follow_up` shape, behind settings.follow_up_brevity: a follow-up in a topic
+#: that already had an answer with sources (agent/conversation `answered`). The
+#: regressions replayed in production on 2026-11-11 (04:08) had a median of 165
+#: words, and the follow-ups repeated what they followed: «y si le doy zumo de
+#: pera» wrote the whole «Cuándo ir al médico» of the turn before again (175
+#: words), «y cuanto tarda en adaptarse» the whole plan (169). The earlier answer
+#: is above it in the thread, whole. Like the short answer, this replaces only the
+#: format clause; the citations, the refusals and the rest are the same text. The
+#: doctor section stays where something new changes it, and a warning sign the
+#: sources tie to what she says now is never cut, the bound night/brevity taught.
+FOLLOW_UP_RULE: dict[str, str] = {
+    "es": (
+        "Responde en español. Es un seguimiento: en este tema ya le diste una respuesta con "
+        "fuentes, que ella tiene arriba en la conversación. Responde solo a lo que pregunta o "
+        "cuenta ahora, en pocas frases: primero una frase que responde directamente, con su "
+        "cita, y después, solo si aportan algo que esa frase no dice, hasta 3 viñetas de una "
+        "frase, cada una con su cita ([ev_N], o [N] si es un dato del bebé). No repitas lo que "
+        "ya le dijiste: ni la frase inicial de antes, ni los apartados "
+        f"«{_H['es']['today']}», «{_H['es']['watch']}» o «{_H['es']['remember']}», ni las "
+        f"señales de alarma que ya le diste. Escribe \"## {_H['es']['doctor']}\" solo si lo "
+        "nuevo lo cambia: si las fuentes ligan a lo que cuenta ahora una señal de alarma que "
+        "no le habías dado, o cambian la urgencia de una que ya le diste; entonces escribe "
+        "esas señales con la urgencia que da la fuente (urgencias, hoy, consulta programada), "
+        "sin subirla ni bajarla. Una señal de alarma que las fuentes ligan a lo que cuenta "
+        "ahora nunca se recorta por brevedad. No repitas la pregunta, no añadas una "
+        "explicación clínica larga y no inventes consejos tranquilizadores. Usa negrita solo "
+        "para lo esencial."
+    ),
+    "en": (
+        "Answer in English. This is a follow-up: in this topic you already gave her an answer "
+        "with sources, which she has above in the conversation. Answer only what she asks or "
+        "says now, in a few sentences: first one sentence that answers directly, with its "
+        "citation, then, only if they add something that sentence does not say, up to 3 "
+        "bullets of one sentence, each with its citation ([ev_N], or [N] for the baby's own "
+        "data). Do not repeat what you already told her: not the earlier opening sentence, "
+        f"not the “{_H['en']['today']}”, “{_H['en']['watch']}” or “{_H['en']['remember']}” "
+        "sections, not the warning signs you already gave. Write "
+        f"\"## {_H['en']['doctor']}\" only if what is new changes it: if the sources tie to "
+        "what she says now a warning sign you had not given her, or change the urgency of one "
+        "you gave; then write those signs with the urgency the source gives (emergency, "
+        "today, booked visit), neither raised nor lowered. A warning sign the sources tie to "
+        "what she says now is never cut for brevity. Do not repeat the question, do not add a "
+        "long clinical explanation and do not invent soothing advice. Use bold only for "
+        "essentials."
+    ),
+    "fr": (
+        "Réponds en français. C’est une suite : dans ce sujet tu lui as déjà donné une réponse "
+        "avec des sources, qu’elle a plus haut dans la conversation. Réponds seulement à ce "
+        "qu’elle demande ou raconte maintenant, en quelques phrases : d’abord une phrase qui "
+        "répond directement, avec sa citation, puis, seulement si elles apportent ce que cette "
+        "phrase ne dit pas, jusqu’à 3 puces d’une phrase, chacune avec sa citation ([ev_N], ou "
+        "[N] pour une donnée du bébé). Ne répète pas ce que tu lui as déjà dit : ni la phrase "
+        f"d’ouverture d’avant, ni les rubriques « {_H['fr']['today']} », "
+        f"« {_H['fr']['watch']} » ou « {_H['fr']['remember']} », ni les signes d’alerte déjà "
+        f"donnés. Écris \"## {_H['fr']['doctor']}\" seulement si ce qui est nouveau le "
+        "change : si les sources rattachent à ce qu’elle raconte maintenant un signe d’alerte "
+        "que tu ne lui avais pas donné, ou changent l’urgence d’un signe déjà donné ; écris "
+        "alors ces signes avec l’urgence que donne la source (urgences, aujourd’hui, "
+        "consultation programmée), sans l’augmenter ni la réduire. Un signe d’alerte que les "
+        "sources rattachent à ce qu’elle raconte maintenant n’est jamais sacrifié à la "
+        "brièveté. Ne répète pas la question, n’ajoute pas de longue explication clinique et "
+        "n’invente pas de conseils rassurants. Garde le gras pour l’essentiel."
+    ),
+}
+
 #: The coded refusal is for what she asked, behind settings.no_unasked_refusals.
 #: Measured in prod on 2026-11-06 (demo, Claude, 30 real questions): four good
 #: plans carried a section the model made up and closed with the refusal,
@@ -429,8 +494,9 @@ PLAN_BREVITY_RULE: dict[str, str] = {
 
 #: The answer shapes a surface may ask for. `plan` is the default and the
 #: path with the most safeguards; the graph picks `question` only when the
-#: route node said so (agent/graph.py).
-SHAPES: tuple[str, ...] = ("plan", "question")
+#: route node said so, and `follow_up` only behind settings.follow_up_brevity
+#: for a follow-up in a topic already answered with sources (agent/graph.py).
+SHAPES: tuple[str, ...] = ("plan", "question", "follow_up")
 
 
 DEFAULT_LOCALE = "es"
@@ -494,6 +560,8 @@ def _language_rule(locale: str, shape: str) -> str:
         raise ValueError(f"unknown answer shape {shape!r}; expected one of {SHAPES}")
     if shape == "question":
         return _QUESTION_RULE.get(locale, _QUESTION_RULE[DEFAULT_LOCALE])
+    if shape == "follow_up":
+        return FOLLOW_UP_RULE.get(locale, FOLLOW_UP_RULE[DEFAULT_LOCALE])
     return contract_for(locale).language_rule
 
 

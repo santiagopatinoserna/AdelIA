@@ -462,3 +462,56 @@ async def test_ocr_refusal_fails_the_document_instead_of_storing_nothing(
 
     with pytest.raises(llm.AnthropicRefusal):
         await ocr_mod.extract_text_from_pdf(b"%PDF", "application/pdf")
+
+
+# ---------------------------------------------------------------------------
+# The answering model's thinking effort (settings.answer_effort_*, 2026-11-11)
+# ---------------------------------------------------------------------------
+
+
+@pytest.mark.parametrize("effort", ["low", "medium", "high"])
+async def test_the_graph_can_ask_the_answer_for_another_effort(monkeypatch, anthropic_on, effort):
+    wire = _Wire(sse_reply=_sse(["ok"]))
+    _wire_into(monkeypatch, wire, chat_orchestrator)
+    pieces = [p async for p in chat_orchestrator._stream_llm_tokens(
+        "SYSTEM", "pregunta", effort=effort)]
+    assert pieces == ["ok"]
+    assert wire.bodies[0]["output_config"] == {"effort": effort}
+
+
+async def test_the_guarded_stream_hands_the_effort_through(monkeypatch, anthropic_on):
+    wire = _Wire(sse_reply=_sse(["ok"]))
+    _wire_into(monkeypatch, wire, chat_orchestrator)
+    pieces = [p async for p in chat_orchestrator._guarded_stream(
+        "SYSTEM", "pregunta", history=None, effort="low")]
+    assert pieces == ["ok"]
+    assert wire.bodies[0]["output_config"] == {"effort": "low"}
+
+
+async def test_without_an_effort_the_answer_keeps_medium(monkeypatch, anthropic_on):
+    wire = _Wire(sse_reply=_sse(["ok"]))
+    _wire_into(monkeypatch, wire, chat_orchestrator)
+    [p async for p in chat_orchestrator._guarded_stream("SYSTEM", "pregunta", effort=None)]
+    assert wire.bodies[0]["output_config"] == {"effort": "medium"}
+
+
+async def test_mistral_never_receives_the_answer_effort(monkeypatch):
+    """Mistral has its own knob (chat_reasoning_effort); this one is Claude's."""
+    seen = {}
+
+    class _Chat:
+        async def stream_async(self, **kwargs):
+            seen.update(kwargs)
+
+            async def _none():
+                if False:
+                    yield None
+            return _none()
+
+    class _Client:
+        chat = _Chat()
+
+    monkeypatch.setattr(settings, "llm_provider", "mistral")
+    monkeypatch.setattr(chat_orchestrator, "get_mistral_client", lambda: _Client())
+    [p async for p in chat_orchestrator._stream_llm_tokens("S", "q", effort="low")]
+    assert "output_config" not in seen and "reasoning_effort" not in seen

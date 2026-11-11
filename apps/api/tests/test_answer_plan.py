@@ -384,3 +384,91 @@ def test_the_prod_compose_passes_plan_brevity_off_by_default():
     golden gate (which extends the same service) would measure it off."""
     compose = Path(__file__).resolve().parents[3] / "infra" / "docker-compose.prod.yml"
     assert "PLAN_BREVITY: ${PLAN_BREVITY:-false}" in compose.read_text(encoding="utf-8")
+
+
+# --- a follow-up in a topic already answered (shape "follow_up") --------------------
+#
+# The regressions replayed with the real model (2026-11-11, 04:08): median 165
+# words, and follow-ups repeated the plan they followed («y si le doy zumo de
+# pera» wrote the whole «Cuándo ir al médico» of the turn before again). The
+# graph asks for this shape only behind settings.follow_up_brevity, only for a
+# follow-up in a topic that already had an answer with sources.
+
+def _follow_up_rule(locale):
+    from adelia.services.answer_contract import FOLLOW_UP_RULE
+
+    return FOLLOW_UP_RULE[locale]
+
+
+def test_follow_up_is_a_shape():
+    from adelia.services.answer_contract import SHAPES
+
+    assert "follow_up" in SHAPES
+
+
+@pytest.mark.parametrize("locale", ["es", "en", "fr"])
+@pytest.mark.parametrize("unasked", [False, True])
+@pytest.mark.parametrize("brevity", [False, True])
+def test_the_follow_up_contract_swaps_only_the_format_clause(
+    monkeypatch, locale, unasked, brevity
+):
+    """Citations, the refusal for an uncovered part, the refusal for nothing, the
+    source for another age, no invention: the same text as any answer. Only the
+    format clause changes, like the short answer's."""
+    from adelia.config import settings
+
+    monkeypatch.setattr(settings, "no_unasked_refusals", unasked)
+    monkeypatch.setattr(settings, "plan_brevity", brevity)
+    follow_up = answer_contract(locale, shape="follow_up")
+    question = answer_contract(locale, shape="question")
+    from adelia.services.answer_contract import _QUESTION_RULE
+
+    assert follow_up == question.replace(_QUESTION_RULE[locale], _follow_up_rule(locale))
+    assert CONTRACTS[locale].refusal in follow_up
+
+
+@pytest.mark.parametrize("locale", ["es", "en", "fr"])
+def test_the_follow_up_rule_answers_what_she_asks_now_with_citations(locale):
+    rule = _follow_up_rule(locale)
+    assert "[ev_N]" in rule and "[N]" in rule
+    assert "3" in rule
+
+
+@pytest.mark.parametrize("locale", ["es", "en", "fr"])
+def test_the_follow_up_rule_keeps_a_new_warning_sign_and_names_the_doctor_heading(locale):
+    """«Cuándo ir al médico» only if what is new changes it; a new sign always goes,
+    with the urgency the source gives, and is never cut for brevity."""
+    rule = _follow_up_rule(locale)
+    doctor = PLAN_HEADINGS[locale]["doctor"]
+    assert f"## {doctor}" in rule
+    marker = {"es": "nunca se recorta", "en": "never cut", "fr": "jamais sacrifié"}[locale]
+    assert marker in rule
+    urgency = {"es": "urgencia que da la fuente", "en": "urgency the source gives",
+               "fr": "l’urgence que donne la source"}[locale]
+    assert urgency in rule
+
+
+@pytest.mark.parametrize("locale", ["es", "en", "fr"])
+def test_the_follow_up_rule_writes_no_other_plan_heading(locale):
+    rule = _follow_up_rule(locale)
+    for key in ("today", "watch", "remember"):
+        assert f"## {PLAN_HEADINGS[locale][key]}" not in rule
+        assert PLAN_HEADINGS[locale][key] in rule  # named, to say it is not repeated
+
+
+@pytest.mark.parametrize("locale", ["es", "en", "fr"])
+def test_the_follow_up_rule_has_no_em_dash_and_no_brochure_words(locale):
+    rule = _follow_up_rule(locale)
+    assert "—" not in rule and "–" not in rule
+
+
+def test_the_follow_up_rule_says_the_same_in_the_three_languages():
+    rules = [_follow_up_rule(locale) for locale in ("es", "en", "fr")]
+    counts = [(r.count("##"), r.count("[ev_N]"), r.count("3")) for r in rules]
+    assert counts[0] == counts[1] == counts[2]
+
+
+def test_the_chat_prompt_takes_the_follow_up_shape():
+    from adelia.services.answer_contract import chat_system_prompt
+
+    assert _follow_up_rule("es") in chat_system_prompt("es", shape="follow_up")
