@@ -368,3 +368,82 @@ async def test_the_dashboard_hands_the_graphs_effort_to_the_answering_model(monk
             message="¿cuándo empiezo con la alimentación complementaria?"))
     assert len(seen) == 1
     assert seen[0].get("effort") == effort
+
+
+# --- the development warning signs (agent/development_signs.py) -----------------------
+#
+# The battery with the real model (2026-11-11): «no gatea y ya tiene 10 meses» got
+# UNICEF alone and no «Cuándo ir al médico». With settings.development_signs_retrieval
+# on, the agent tells the account search the topic is about development; the model
+# is handed the warning-signs fragment after the main one, and the card of the one
+# it cites goes out with the answer.
+
+def _titled(title: str):
+    from dataclasses import replace
+
+    from tests.test_chat_orchestrator import _evidence_match
+
+    return replace(_evidence_match(), source_title=title)
+
+
+async def _development_turn(monkeypatch, message: str, *, on: bool = True):
+    from adelia.config import settings
+    from adelia.enrichment.profile_service import ProfileFacts
+
+    monkeypatch.setattr(settings, "development_signs_retrieval", on)
+    monkeypatch.setattr(settings, "lay_query_expansion", False)
+    monkeypatch.setattr(settings, "implicit_subject_expansion", False)
+    facts = ProfileFacts(profile_id=None, display_name="Nora", date_of_birth=None,
+                         sex="F", age_months=10)
+    embedded: list[list[str]] = []
+    users: list[str] = []
+    found = [[_titled("Jugar, amar, compartir (UNICEF)")],
+             [_titled("Desarrollo psicomotor y signos de alarma (AEPap)")]]
+
+    async def fake_embed(batch):
+        embedded.append(list(batch))
+        return [[0.1] * 1024 for _ in batch]
+
+    async def fake_evidence(*args, **kwargs):
+        return found.pop(0) if found else []
+
+    async def fake_stream(system, user, **kwargs):
+        users.append(user)
+        yield "Si a los 12 meses no gatea ni se desplaza, consúltalo [ev_2]."
+
+    with patch("adelia.agent.orchestrator.load_profile_facts", return_value=facts), \
+         patch("adelia.services.chat_orchestrator.detect_temporal_intent", return_value=None), \
+         patch("adelia.services.chat_orchestrator.retrieve_relevant_chunks", return_value=[]), \
+         patch("adelia.services.chat_orchestrator.embed_texts", fake_embed), \
+         patch("adelia.services.chat_orchestrator._retrieve_evidence_for_query", fake_evidence), \
+         patch("adelia.services.chat_orchestrator._stream_llm_tokens", fake_stream):
+        events = await _collect(run_turn(user_id=uuid4(), profile_id=None, message=message))
+    return events, embedded, users
+
+
+async def test_a_milestone_worry_reaches_the_development_signs_and_the_card_goes_out(
+    monkeypatch,
+):
+    from adelia.agent.development_signs import signs_query
+
+    message = "no gatea y ya tiene 10 meses"
+    events, embedded, users = await _development_turn(monkeypatch, message)
+
+    assert embedded == [[message, signs_query(message)]]
+    (user,) = users
+    assert "signos de alarma (AEPap)" in user
+    (final,) = [e for e in events if e.type == "final"]
+    assert [c["title"] for c in final.evidence_citations] == [
+        "Desarrollo psicomotor y signos de alarma (AEPap)"]
+
+
+async def test_with_the_setting_off_the_agent_searches_as_before(monkeypatch):
+    message = "no gatea y ya tiene 10 meses"
+    _, embedded, _ = await _development_turn(monkeypatch, message, on=False)
+    assert embedded == [[message]]
+
+
+async def test_a_worry_that_is_not_development_is_searched_as_before(monkeypatch):
+    message = "Tiene diarrea desde ayer y no quiere el biberón"
+    _, embedded, _ = await _development_turn(monkeypatch, message)
+    assert embedded == [[message]]

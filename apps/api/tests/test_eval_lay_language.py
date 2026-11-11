@@ -177,3 +177,21 @@ async def test_a_guarded_probe_searches_nothing_in_either_mode(monkeypatch):
     for on in (False, True):
         result = await ev.run_probe(probe, on=on, translate=False, cache={})
         assert result.guarded and not result.nearest and not result.cards
+
+
+def test_the_bump_on_the_head_is_probed_against_the_seup_sheet():
+    """The battery with the real model (2026-11-11): «se ha caido de la cama y se ha
+    dado en la cabeza» found one fragment on preventing falls, not SEUP's sheet for
+    parents. The head entries of the lexicon are measured here, in production, each
+    probe expecting that sheet in the cards with the setting on."""
+    assert len(ev.HEAD_BUMP) >= 4
+    assert {loc for _, loc, _ in ev.HEAD_BUMP} == {"es", "fr", "en"}
+    head = [p for p in ev.probes() if p.group == "head"]
+    assert len(head) == len(ev.HEAD_BUMP)
+    ids = [i for i, _, _ in ev.PROD_MISSES + ev.COLLOQUIAL + ev.EVERYDAY + ev.HEAD_BUMP]
+    assert len(ids) == len(set(ids))
+    for probe in head:
+        assert probe.expect_source == ev.SEUP_HEAD_SHEET
+        assert red_flags.detect(probe.question, locale=probe.locale,
+                                age_months=probe.age_months) is None
+        assert "traumatismo craneal" in clinical_terms(probe.question), probe.id

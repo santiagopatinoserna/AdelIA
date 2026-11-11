@@ -21,7 +21,8 @@ only, and prints for each probe:
 
 Probes: the seven production misses of 2026-11-05, 23 colloquial questions
 (every domain, es/fr/en, L23 the control with no lay word), the everyday
-complaints added on 2026-11-06 (two left out of the lexicon on purpose), and
+complaints added on 2026-11-06 (two left out of the lexicon on purpose), the
+bump on the head of 2026-11-11 (H1-H5, each expecting SEUP's sheet), and
 groups A and B of the golden set (clinical/golden.py). The summary counts, per mode, the
 probes answered with evidence, the group A probes whose expected source is in
 the cards, and the group B probes that fall UNDER the cut. Any B that moves
@@ -121,6 +122,19 @@ EVERYDAY: tuple[tuple[str, str, str], ...] = (
     ("E12", "en", "He won't eat anything since yesterday"),
 )
 
+#: A bump on the head (the battery with the real model, 2026-11-11): «se ha caido de
+#: la cama y se ha dado en la cabeza» found one fragment on preventing falls and not
+#: SEUP's sheet for parents, which only came when she wrote «chichón». The head
+#: entries of the lexicon (golpe_cabeza, caida) expect that sheet in the cards.
+SEUP_HEAD_SHEET = "Traumatismo craneal, información para padres"
+HEAD_BUMP: tuple[tuple[str, str, str], ...] = (
+    ("H1", "es", "se ha caido de la cama y se ha dado en la cabeza"),
+    ("H2", "es", "Se ha caído de la cama y se ha dado un golpe"),
+    ("H3", "es", "se ha dado en la cabeza con la mesa"),
+    ("H4", "fr", "Il est tombé du lit et s'est cogné la tête"),
+    ("H5", "en", "He fell off the bed and hit his head"),
+)
+
 #: Seconds between probes, so a run of ~110 probes stays under Mistral's rate.
 PAUSE_SECONDS = 2.0
 
@@ -128,7 +142,7 @@ PAUSE_SECONDS = 2.0
 @dataclass
 class Probe:
     id: str
-    group: str  # "prod" | "lay" | "A" | "B"
+    group: str  # "prod" | "lay" | "everyday" | "head" | "A" | "B"
     locale: str
     question: str
     age_months: int | None
@@ -160,6 +174,7 @@ def probes() -> list[Probe]:
     out = [Probe(i, "prod", loc, q, AGE_MONTHS) for i, loc, q in PROD_MISSES]
     out += [Probe(i, "lay", loc, q, AGE_MONTHS) for i, loc, q in COLLOQUIAL]
     out += [Probe(i, "everyday", loc, q, AGE_MONTHS) for i, loc, q in EVERYDAY]
+    out += [Probe(i, "head", loc, q, AGE_MONTHS, SEUP_HEAD_SHEET) for i, loc, q in HEAD_BUMP]
     for group in ("A", "B"):
         out += [
             Probe(q.id, group, q.locale, q.question, q.age_months, q.expect_source)

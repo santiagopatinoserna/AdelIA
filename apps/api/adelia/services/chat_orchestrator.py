@@ -18,7 +18,7 @@ from adelia.llm import (
     reasoning_effort_kwargs,
     uses_anthropic,
 )
-from adelia.agent import implicit_subject, lay_terms
+from adelia.agent import development_signs, implicit_subject, lay_terms
 from adelia.agent.corpus_query import corpus_query
 from adelia.agent.graph import GraphDeps, Retrieved, stream_graph
 from adelia.agent.route import log_route
@@ -370,6 +370,21 @@ async def _guarded_stream(
         await token_iter.aclose()
 
 
+def corpus_variants(corpus_text: str, *, lay: bool, development: bool
+                    ) -> tuple[str | None, str | None]:
+    """The texts the account search adds to the corpus rendering of her words.
+
+    The lexicon's (her words plus the clinical terms, agent/lay_terms.py) and the
+    development warning signs' (the widest of the two plus the development words,
+    agent/development_signs.py); None for each one that is off or has nothing to
+    add. Pure, so the conversation battery's fake search records exactly what
+    this search would embed (scripts/conversation_battery.py, `search_adds`).
+    """
+    widened = lay_terms.expanded_query(corpus_text) if lay else None
+    signs = development_signs.signs_query(widened or corpus_text) if development else None
+    return widened, signs
+
+
 async def retrieve_for_account(
     scope: Scope,
     *,
@@ -379,6 +394,7 @@ async def retrieve_for_account(
     age_months: int | None = None,
     baby_name: str | None = None,
     search_text: str | None = None,
+    development: bool = False,
 ) -> Retrieved:
     """Her own record and the clinical evidence for one question (dual RAG).
 
@@ -407,6 +423,12 @@ async def retrieve_for_account(
     what the embedding searches, instead of the tail of `history`, which
     carried AdelIA's last answer into the search (2026-11-09). The lexical
     half and the temporal check still read `question`, the words she typed.
+
+    `development` is the agent's reading that the topic is about development
+    (agent/development_signs.applies). With settings.development_signs_retrieval
+    on, the topic plus the corpus's development words is one more text in the
+    same embedding call and one more evidence search, run beside the others;
+    its new fragments go after the main ones, only when those found something.
     """
     citations: list[ChatCitation] = []
     evidence_embedding: list[float] | None = None
@@ -423,10 +445,14 @@ async def retrieve_for_account(
         retrieval_query = f"{tail[-1000:]}\n{question}"
     corpus_text = await corpus_query(retrieval_query, locale)
     # Her words rendered in the corpus's terms, a second evidence search in the
-    # same embedding call (agent/lay_terms.py). Off by default, and then the
-    # lexicon is not read. The temporal path asks for her own lab curve, which
-    # no lay word names, so it searches as before.
-    widened = lay_terms.expanded_query(corpus_text) if settings.lay_query_expansion else None
+    # same embedding call (agent/lay_terms.py), and the development warning signs
+    # (agent/development_signs.py). Each off by default, and then not read. The
+    # temporal path asks for her own lab curve, which no lay word names, so it
+    # searches as before.
+    widened, signs = corpus_variants(
+        corpus_text, lay=settings.lay_query_expansion,
+        development=development and settings.development_signs_retrieval,
+    )
     widened_embedding: list[float] | None = None
     # The baby she did not name, put back, as its own evidence search
     # (agent/implicit_subject.py). Off by default, and then not read. Like the
@@ -439,6 +465,7 @@ async def retrieve_for_account(
         if settings.implicit_subject_expansion else None
     )
     subject_embedding: list[float] | None = None
+    signs_embedding: list[float] | None = None
 
     temporal = detect_temporal_intent(question)
     if temporal is not None:
@@ -477,6 +504,10 @@ async def retrieve_for_account(
         widened_index = len(texts) - 1
         if subject is not None:
             texts.append(subject)
+        subject_index = len(texts) - 1
+        if signs is not None:
+            texts.append(signs)
+        signs_index = len(texts) - 1
         query_embeds = await embed_texts(texts)
         if not query_embeds:
             raise RuntimeError("embed_texts returned empty — cannot retrieve chunks")
@@ -484,8 +515,10 @@ async def retrieve_for_account(
         evidence_embedding = query_embeds[corpus_index]
         if widened is not None and len(query_embeds) > widened_index:
             widened_embedding = query_embeds[widened_index]
-        if subject is not None and len(query_embeds) > len(texts) - 1:
-            subject_embedding = query_embeds[len(texts) - 1]
+        if subject is not None and len(query_embeds) > subject_index:
+            subject_embedding = query_embeds[subject_index]
+        if signs is not None and len(query_embeds) > signs_index:
+            signs_embedding = query_embeds[signs_index]
         # Her record is searched while the guidelines are (below): two
         # queries on two sessions that never needed each other ran one after
         # the other until the battery with the real model (2026-11-11).
@@ -518,6 +551,11 @@ async def retrieve_for_account(
             subject_embedding, query_text=question, locale=locale,
             max_distance=settings.implicit_subject_max_distance,
         ))
+    if signs_embedding is not None:
+        # Under the same cut-offs as her own words, beside the other searches.
+        searches.append(_retrieve_evidence_for_query(
+            signs_embedding, query_text=question, locale=locale
+        ))
     try:
         evidence_matches, *also = await asyncio.gather(*searches)
     except BaseException:
@@ -537,10 +575,13 @@ async def retrieve_for_account(
                     page=c.page,
                 )
             )
+    found_signs = also.pop() if signs_embedding is not None else []
     if also:
         evidence_matches = merge_by_best_distance(
             [evidence_matches, *also], top_k=4, relative_margin=settings.evidence_relative_margin
         )
+    if signs_embedding is not None:
+        evidence_matches = development_signs.add_signs_fragments(evidence_matches, found_signs)
     return Retrieved(
         evidence=evidence_matches, patient_context=patient_context or None, citations=citations
     )

@@ -1,0 +1,310 @@
+{
+  "about": "Las tres búsquedas que fallaron con el modelo real en producción (2026-11-11, battery-regr-20261111-0408.json: golpe-en-la-cabeza T1, no-gatea T1, guarderia-real-9nov-1 T2 y T3): la ficha estaba en el corpus y no salió. Las mismas conversaciones que conversation_regressions.json, con la decisión real del clasificador y la respuesta real del modelo, y dos formas más de contar el golpe. Sin modelo, `search_adds` dice qué debe añadir la búsqueda con cuenta a sus palabras (léxico de madre y señales del desarrollo encendidos); con el modelo, `found` dice qué fuentes debe recibir el modelo que responde. Con el modelo, en el servidor y con DEVELOPMENT_SIGNS_RETRIEVAL=true: scripts/conversation_battery.py --with-model --budget-usd 1 --scenarios scripts/conversation_regressions_3.json",
+  "source": "~/dev/adelia-design/shots/battery/battery-regr-20261111-0408.json",
+  "scenarios": [
+    {
+      "id": "real3-golpe-en-la-cabeza",
+      "from": "real-golpe-en-la-cabeza",
+      "locale": "es",
+      "age_months": 11,
+      "tags": [
+        "golpe_cabeza",
+        "bandera_roja_a_mitad"
+      ],
+      "turns": [
+        {
+          "say": "se ha caido de la cama y se ha dado en la cabeza",
+          "classifier": {
+            "intent": "plan",
+            "turn": "new"
+          },
+          "evidence": true,
+          "record": true,
+          "model_answer": "Una caída desde poca altura, como una cama, puede causar fractura de cráneo o lesión intracraneal en niños pequeños [ev_1].\n\n**Qué hacer ahora, qué vigilar tras el golpe y cuándo llevarla al médico o a urgencias:** No tengo evidencia clínica sobre esto en mi biblioteca, así que prefiero no responder antes que inventar. Coméntalo con tu pediatra, que conoce a tu bebé y puede valorarlo.",
+          "real": {
+            "turn_type": "new",
+            "kind": "answer",
+            "intent": "plan",
+            "intent_via": "model",
+            "failed": [
+              "doctor"
+            ]
+          },
+          "expect": {
+            "turn": "new",
+            "kind": "answer",
+            "shape": "plan",
+            "doctor": true,
+            "search_adds": [
+              "traumatismo craneal"
+            ],
+            "found": [
+              "Traumatismo craneal, información para padres"
+            ]
+          }
+        },
+        {
+          "say": "le ha salido un chichon",
+          "classifier": {
+            "intent": "plan",
+            "turn": "follow_up"
+          },
+          "evidence": true,
+          "record": true,
+          "model_answer": "Si solo le ha salido un chichón, aplica frío y obsérvala durante 24 horas [ev_1].\n\n## Hoy\n- Ponle **hielo envuelto en un pañuelo o compresas frías** sobre el chichón [ev_1].\n- **Obsérvala durante las próximas 24 horas** tras el golpe [ev_1].\n\n## Cuándo ir al médico\n**Ve a urgencias si:**\n- Vomita, sobre todo si los vómitos se repiten [ev_1][ev_4].\n- Está somnolienta o cuesta despertarla [ev_1][ev_4].\n- Está irritable, desorientada o hace cosas extrañas [ev_1][ev_4].\n- Cambia su comportamiento habitual [ev_4].\n- Tiene dificultad para moverse con normalidad (la guía menciona hablar o caminar en niños mayores) [ev_4].\n- Parece tener dolor de cabeza intenso, que va a más o no mejora [ev_4].\n- Se desmaya o tiene convulsiones [ev_1].\n- Le sale sangre o líquido claro por la nariz o los oídos [ev_1][ev_4].\n- El golpe ha sido de cierta importancia [ev_1].\n- La cama desde la que cayó mide **más de un metro** de altura [ev_4].\n- Tiene cualquier actitud que te preocupe [ev_4].",
+          "real": {
+            "turn_type": "follow_up",
+            "kind": "answer",
+            "intent": "plan",
+            "intent_via": "model",
+            "failed": []
+          },
+          "expect": {
+            "turn": "follow_up",
+            "kind": "answer",
+            "search_adds": [
+              "traumatismo craneal"
+            ]
+          }
+        },
+        {
+          "say": "ahora no se despierta bien, no hay forma de despertarlo",
+          "evidence": false,
+          "record": false,
+          "real": {
+            "turn_type": "follow_up",
+            "kind": "red_flag",
+            "intent": null,
+            "intent_via": null,
+            "failed": []
+          },
+          "expect": {
+            "turn": "follow_up",
+            "kind": "red_flag"
+          }
+        }
+      ],
+      "why": "T1 trajo solo un fragmento de prevención de caídas (Cuidado con las caídas de los niños) y no la hoja de la SEUP, que salió en T2 con «chichón». El léxico de madre (lay_terms, entradas golpe_cabeza y caida) añade «traumatismo craneal, golpe en la cabeza», las palabras del tema de la hoja. T2 ya la traía; T3 es la bandera roja, que no busca."
+    },
+    {
+      "id": "golpe-sin-cabeza",
+      "locale": "es",
+      "age_months": 9,
+      "tags": [
+        "golpe_cabeza"
+      ],
+      "why": "La segunda forma en que lo cuenta una madre: la caída y el golpe, sin nombrar la cabeza.",
+      "turns": [
+        {
+          "say": "Se ha caído de la cama y se ha dado un golpe",
+          "expect": {
+            "turn": "new",
+            "kind": "answer",
+            "search_adds": [
+              "traumatismo craneal"
+            ],
+            "found": [
+              "Traumatismo craneal, información para padres"
+            ]
+          }
+        },
+        {
+          "say": "llora pero se calma en brazos",
+          "expect": {
+            "turn": "follow_up",
+            "kind": "answer",
+            "search_adds": [
+              "traumatismo craneal"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "golpe-fr",
+      "locale": "fr",
+      "age_months": 13,
+      "tags": [
+        "golpe_cabeza"
+      ],
+      "why": "En francés la búsqueda va en español (corpus_query); sin modelo se leen sus palabras.",
+      "turns": [
+        {
+          "say": "Il est tombé du lit et s'est cogné la tête",
+          "expect": {
+            "turn": "new",
+            "kind": "answer",
+            "search_adds": [
+              "traumatismo craneal"
+            ],
+            "found": [
+              "Traumatismo craneal, información para padres"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "real3-no-gatea",
+      "from": "real-no-gatea",
+      "locale": "es",
+      "age_months": 10,
+      "tags": [
+        "desarrollo"
+      ],
+      "turns": [
+        {
+          "say": "no gatea y ya tiene 10 meses",
+          "classifier": {
+            "intent": "plan",
+            "turn": "new"
+          },
+          "evidence": true,
+          "record": true,
+          "model_answer": "Hay bebés que no gatean, y la guía de UNICEF lo considera normal [ev_1].\n\n## Hoy\n- Déjala desplazarse libremente por el suelo a su manera [ev_1].\n- Coloca un objeto cerca de ella y cámbialo de lugar para animarla a moverse en distintas direcciones [ev_1].\n- **Evita** apurarla o forzar el gateo [ev_1].\n\n## Vigila\n- Si se mantiene sentada, porque el gateo suele llegar después de lograr sentarse [ev_1].\n- Si dice sílabas como ma, ba, pa o da [ev_1].\n- Si actúa con intención e imita gestos como aplaudir o decir chau [ev_1].\n\n## No olvides\n- Anota cómo se desplaza (arrastrándose, rodando, sentada) y si ya se sienta sola, para comentarlo en la próxima revisión.\n- La pediatra pidió repetir la analítica si sigue cansada o come peor [2].",
+          "real": {
+            "turn_type": "new",
+            "kind": "answer",
+            "intent": "plan",
+            "intent_via": "model",
+            "failed": [
+              "doctor"
+            ]
+          },
+          "expect": {
+            "turn": "new",
+            "kind": "answer",
+            "shape": "plan",
+            "doctor": true,
+            "search_adds": [
+              "signos de alarma",
+              "un hito que se retrasa"
+            ],
+            "found": [
+              "Desarrollo psicomotor y signos de alarma|Desarrollo: ¿Qué esperamos",
+              "WHO Motor Development Study|El desarrollo psicomotor normal"
+            ]
+          }
+        },
+        {
+          "say": "se sienta sola y se arrastra un poco",
+          "classifier": "down",
+          "evidence": true,
+          "record": true,
+          "model_answer": "Que se siente sola es propio de los 8-12 meses [ev_1], y hay bebés que no gatean, lo cual es normal [ev_3].\n\n## Hoy\n- Déjala desplazarse libremente por el suelo a su manera [ev_3].\n- Coloca un objeto cerca y cámbialo de lugar para animarla a moverse en distintas direcciones [ev_3].\n- Dale tiempo de juego en el suelo, que es importante para su desarrollo [ev_4].\n- **Evita** apurarla o forzar el gateo [ev_3].\n\n## Vigila\n- Si se apoya sobre manos y rodillas o se pone de pie agarrada a un mueble [ev_1].\n- Si camina apoyándose en los muebles hacia el año [ev_2].\n- Si dice sílabas como ma, ba, pa o da e imita gestos como aplaudir o decir adiós [ev_3].\n\n## No olvides\n- La guía de hitos se refiere a bebés nacidos a término y cada niño lleva su propio ritmo [ev_1].\n- La pediatra pidió repetir la analítica si sigue cansada o come peor [2].",
+          "real": {
+            "turn_type": "follow_up",
+            "kind": "answer",
+            "intent": "plan",
+            "intent_via": "fallback",
+            "failed": []
+          },
+          "expect": {
+            "turn": "follow_up",
+            "kind": "answer",
+            "search_adds": [
+              "signos de alarma",
+              "un hito que se retrasa"
+            ]
+          }
+        }
+      ],
+      "why": "T1 trajo solo UNICEF, sin señales de alarma, y no hubo «Cuándo ir al médico». La búsqueda de señales del desarrollo (development_signs_retrieval) añade la frase y las palabras del corpus para el desarrollo (signos de alarma, un hito que se retrasa) y hasta dos fragmentos tras los de su frase: deben salir las fichas de signos de alarma (AEPap o SAP) y de desarrollo normal (OMS o AEPap)."
+    },
+    {
+      "id": "real3-guarderia-real-9nov-1",
+      "from": "real-guarderia-real-9nov-1",
+      "locale": "es",
+      "age_months": 14,
+      "tags": [
+        "guarderia",
+        "conversacion_real",
+        "desarrollo"
+      ],
+      "turns": [
+        {
+          "say": "Mi bebé en la guardería es el único que en tiempo libre se queda sentado en una esquina sin moverse. Todos los otros juegan pero él no se mueve. Pero en casa no es así, en casa juega",
+          "evidence": false,
+          "record": false,
+          "real": {
+            "turn_type": "new",
+            "kind": "clarify",
+            "intent": "clarify",
+            "intent_via": "rule",
+            "failed": []
+          },
+          "expect": {
+            "turn": "new",
+            "kind": "clarify",
+            "asks": [
+              "nursery_time",
+              "social_signals"
+            ],
+            "card": "clarify"
+          }
+        },
+        {
+          "say": "Pero todos los días está así",
+          "evidence": true,
+          "record": true,
+          "model_answer": "Las fuentes no explican por qué se queda quieto solo en la guardería, pero sí cuánto conviene que se mueva un bebé.\n\n**Por qué en la guardería no juega y en casa sí**\nNo tengo evidencia clínica sobre esto en mi biblioteca, así que prefiero no responder antes que inventar. Coméntalo con tu pediatra, que conoce a tu bebé y puede valorarlo.\n\n## Hoy\n- Pide a la guardería que no lo dejen quieto más de una hora seguida ni mucho tiempo en la misma postura, sentado o tumbado [ev_3].\n- Pide que le ofrezcan juego en el suelo y, si aún no gatea, al menos 30 minutos al día boca abajo repartidos a lo largo del día [ev_3].\n- Pide que le cambien de postura al jugar, al comer y al llevarlo en brazos [ev_3].\n\n## No olvides\n- En la consulta del 6 de noviembre, la pediatra pidió repetir la analítica si seguía cansada o comía peor [2].\n- Anota cuánto tiempo seguido pasa quieto en la guardería y en qué postura, para contárselo a la pediatra.",
+          "real": {
+            "turn_type": "follow_up",
+            "kind": "answer",
+            "intent": "plan",
+            "intent_via": "rule",
+            "failed": [
+              "doctor"
+            ]
+          },
+          "expect": {
+            "turn": "follow_up",
+            "kind": "answer",
+            "shape": "plan",
+            "doctor": true,
+            "not_seen": [
+              "enfermo"
+            ],
+            "search_adds": [
+              "signos de alarma",
+              "un hito que se retrasa"
+            ],
+            "found": [
+              "Desarrollo psicomotor y signos de alarma|Desarrollo: ¿Qué esperamos|El desarrollo del lenguaje y sus alteraciones"
+            ]
+          }
+        },
+        {
+          "say": "No es enfermo",
+          "evidence": true,
+          "record": true,
+          "model_answer": "Con las fuentes que tengo puedo orientarte sobre cuánto conviene que se mueva un bebé, no sobre por qué cambia en la guardería.\n\n**Por qué en la guardería se queda quieto y en casa juega:** No tengo evidencia clínica sobre esto en mi biblioteca, así que prefiero no responder antes que inventar. Coméntalo con tu pediatra, que conoce a tu bebé y puede valorarlo.\n\n## Hoy\n- Pregunta en la guardería cuánto tiempo seguido pasa sentado en la esquina y si cambia de postura [ev_3].\n- Pide que le dejen jugar en el suelo y, si aún no gatea, que pase ratos boca abajo hasta sumar al menos 30 minutos al día [ev_3].\n- Ten en cuenta que leerle, contarle cuentos o hacer música con él sentado también es bueno para su desarrollo [ev_3].\n- Evita que pase más de una hora seguida inmóvil (cochecito, trona o sentado en un rincón) o mucho tiempo en la misma postura, sentado o tumbado [ev_3].\n\n## Vigila\n- Que en casa siga jugando en el suelo y cambiando de postura a lo largo del día [ev_3].",
+          "real": {
+            "turn_type": "correction",
+            "kind": "answer",
+            "intent": "plan",
+            "intent_via": "rule",
+            "failed": [
+              "doctor",
+              "refusal_once"
+            ]
+          },
+          "expect": {
+            "turn": "correction",
+            "kind": "answer",
+            "shape": "plan",
+            "doctor": true,
+            "search_adds": [
+              "signos de alarma",
+              "un hito que se retrasa"
+            ],
+            "found": [
+              "Desarrollo psicomotor y signos de alarma|Desarrollo: ¿Qué esperamos|El desarrollo del lenguaje y sus alteraciones"
+            ]
+          }
+        }
+      ],
+      "why": "T2 y T3 trajeron guías de adaptación y de cuándo no llevar a un niño enfermo a la guardería; el único «Cuándo ir al médico» posible era el del niño enfermo. Un tema de conducta busca también las señales de alarma del desarrollo (development_signs_retrieval), también tras «No es enfermo»."
+    }
+  ]
+}

@@ -123,6 +123,9 @@ services:
       # only after scripts/probe_warning_signs.py and the server golden gate pass.
       WARNING_SIGNS_RETRIEVAL: ${WARNING_SIGNS_RETRIEVAL:-false}
       NO_UNASKED_REFUSALS: ${NO_UNASKED_REFUSALS:-false}
+      # Head sheet and development warning signs (SEUP) found by retrieval. Off by default;
+      # without this line a value in .env.prod never reaches the container.
+      DEVELOPMENT_SIGNS_RETRIEVAL: ${DEVELOPMENT_SIGNS_RETRIEVAL:-false}
       # Plans read in seconds (answer_contract.PLAN_BREVITY_RULE). Off by default;
       # on only after scripts/probe_plan_brevity.py and the server golden gate pass,
       # and Santiago agrees: it changes how every plan reads.

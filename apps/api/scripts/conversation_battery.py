@@ -15,6 +15,9 @@ a hurry writes, and says for each turn whether it did what it must:
   no_other_topic  nothing of an earlier topic reaches the model (or the answer)
   refusal_once    "no sources" said at most once per topic
   card        the card the turn must show (a record to confirm, a question)
+  search_adds offline: what the account search adds to her words in this topic
+              (the lexicon's terms, the development words), with both on
+  found       with the model: a source the answering model must be handed
 
 Two modes.
 
@@ -63,6 +66,20 @@ of the follow-ups to an answered topic (`follows_answer`), which is what they mo
         -e ANSWER_EFFORT_PLAN= -e ANSWER_EFFORT_FOLLOW_UP=low infra-api-1 \
         .venv/bin/python scripts/conversation_battery.py --with-model --budget-usd 1.5 \
         --scenarios scripts/conversation_regressions.json --out /tmp/regr-on.json
+
+The three search failures of 2026-11-11 (the SEUP sheet for a bump on the head, the
+development warning signs for «no gatea» and after «No es enfermo») are
+scripts/conversation_regressions_3.json. Offline, `search_adds` checks what the
+account search adds to her words; with the model, `found` checks the sources the
+answering model was handed (`handed` in the report). The lexicon is on in
+production; the development search is not, so say it for the run:
+
+    docker exec -w /app -e DEVELOPMENT_SIGNS_RETRIEVAL=true infra-api-1 \\
+        .venv/bin/python scripts/conversation_battery.py --with-model --budget-usd 1 \\
+        --scenarios scripts/conversation_regressions_3.json --out /tmp/regr3-on.json
+
+and the same with `-e DEVELOPMENT_SIGNS_RETRIEVAL=false` (--out /tmp/regr3-off.json)
+to see what it changes.
 
 `--from <id>` starts at a scenario (file order), `--tag <tag>` keeps a topic
 (repeatable), `--only <id>` names one; they combine, also with `--resume`.
@@ -256,6 +273,13 @@ def evaluate(scenario: dict, observed: list[dict], *, mode: str) -> list[dict]:
                                 else doctor in answer)
         if "card" in e:
             checks["card"] = e["card"] in [c.get("type") for c in o.get("cards") or []]
+        if "search_adds" in e and mode == "offline":
+            added = "\n".join(o.get("searched") or [])
+            checks["search_adds"] = all(w in added for w in e["search_adds"])
+        if "found" in e and mode != "offline":
+            handed = [t or "" for t in o.get("handed") or []]
+            checks["found"] = all(any(re.search(rx, t, re.IGNORECASE) for t in handed)
+                                  for rx in e["found"])
         checks["no_dose"] = not has_dose(answer)
         if e["kind"] == "red_flag" or o.get("kind") == "red_flag":
             first = answer.startswith(opening)
@@ -398,6 +422,9 @@ def _from_final(state: dict) -> dict:
         "shape": state.get("shape"),
         "effort": state.get("effort"),
         "follows_answer": bool(c is not None and c.kind == "follow_up" and c.answered),
+        # The sources the answering model was handed, cited or not: what `found`
+        # reads with the model (a search that missed the corpus's guide).
+        "handed": [getattr(m, "source_title", None) for m in state.get("evidence") or []],
     }
 
 
@@ -425,6 +452,7 @@ class _OfflineSurface:
         self.classifier, self.recorded, self.down = classifier, False, False
         self.paid: list[str] = []
         self.model_saw: dict | None = None
+        self.searched: list[str] = []
         self.evidence = [EvidenceMatch(
             chunk_id=uuid.UUID(int=1), source_id=uuid.UUID(int=2),
             source_title="Fragmento grabado", organization="AEP", publication_year=2024,
@@ -454,9 +482,18 @@ class _OfflineSurface:
                              missing=list(self.classifier.get("missing") or []))
 
     async def retrieve(self, state):
+        from adelia.agent import development_signs
         from adelia.agent.graph import Retrieved
+        from adelia.services.chat_orchestrator import corpus_variants
 
         self.paid.append("retrieve")
+        # What the account search would add to her words in this topic, with the
+        # lexicon (on in production) and the development search on, whatever this
+        # process's settings say (`search_adds`). Her own words stand in for the
+        # corpus rendering: a French or English turn is not translated offline.
+        text = state.get("search_query") or state.get("message") or ""
+        self.searched = [t for t in corpus_variants(
+            text, lay=True, development=development_signs.applies(state)) if t]
         return Retrieved(evidence=list(self.evidence),
                          patient_context=RECORD if self.record else None)
 
@@ -539,6 +576,7 @@ async def _offline_turn(scenario: dict, store: _MemoryStore, turn: dict, request
         "answer": "".join(tokens), "cards": cards,
         "sources": _sources(final.get("evidence_citations") or [], final.get("citations") or []),
         "paid": surface.paid, "model_saw": surface.model_saw, "error": None,
+        "searched": surface.searched,
     }
     if observed["intent_via"] == "model":
         observed["intent_via"] = "recorded"

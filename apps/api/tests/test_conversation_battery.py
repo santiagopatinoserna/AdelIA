@@ -743,3 +743,91 @@ def test_the_replay_keeps_what_production_did():
             assert t["classifier"] == "down"
         if t["real"].get("sources_found"):
             assert t["evidence"] is True
+
+
+# --- the three search failures of #73 (2026-11-11, round 4) ----------------------------
+#
+# battery-regr-20261111-0408.json left three turns that failed on the search, not the
+# code: the bump on the head (SEUP's sheet did not come), «no gatea» (UNICEF alone) and
+# the guardería topic after «No es enfermo» (no development warning signs). Without a
+# model the search is a fake, so a turn says what the account search must ADD to her
+# words (`search_adds`: the lexicon's terms, the development words) and, with the
+# model, which sources the answering model must be handed (`found`).
+
+REGRESSIONS_3 = Path(cb.__file__).with_name("conversation_regressions_3.json")
+
+
+async def test_the_three_search_failures_pass_without_the_model():
+    report = await cb.run_offline(cb.load_scenarios(REGRESSIONS_3))
+    failing = [(s["id"], t["n"], [k for k, ok in t["checks"].items() if not ok])
+               for s in report["scenarios"] for t in s["turns"] if not t["ok"]]
+    assert failing == []
+    checked = [t for s in report["scenarios"] for t in s["turns"]
+               if "search_adds" in t["checks"]]
+    assert len(checked) >= 6
+
+
+def test_each_search_regression_says_what_production_missed_and_what_must_come():
+    data = json.loads(REGRESSIONS_3.read_text(encoding="utf-8"))
+    ids = [s["id"] for s in data["scenarios"]]
+    assert {"real3-golpe-en-la-cabeza", "real3-no-gatea", "real3-guarderia-real-9nov-1"} <= set(
+        ids)
+    missed = [t for s in data["scenarios"] for t in s["turns"] if t.get("real", {}).get("failed")]
+    # golpe T1, no-gatea T1, guardería T2 and T3: each says what was missed and
+    # what the search must add and bring now.
+    assert len(missed) == 4
+    for t in missed:
+        assert t["expect"].get("search_adds") and t["expect"].get("found"), t["say"]
+    for s in data["scenarios"]:
+        for t in s["turns"]:
+            if t.get("real", {}).get("intent_via") == "model":
+                assert t["classifier"]["intent"] == t["real"]["intent"]
+
+
+def test_offline_a_search_that_does_not_add_the_corpus_words_fails():
+    scenario = {"locale": "es", "turns": [
+        {"expect": {"kind": "answer", "search_adds": ["traumatismo craneal"]}}]}
+    good = {"kind": "answer", "searched": ["se ha dado en la cabeza\ntraumatismo craneal"]}
+    bad = {"kind": "answer", "searched": []}
+    assert cb.evaluate(scenario, [good], mode="offline")[0]["checks"]["search_adds"] is True
+    assert cb.evaluate(scenario, [bad], mode="offline")[0]["checks"]["search_adds"] is False
+    # With the model the real search speaks for itself (`found`).
+    assert "search_adds" not in cb.evaluate(scenario, [bad], mode="model")[0]["checks"]
+
+
+def test_with_the_model_found_reads_what_the_answering_model_was_handed():
+    scenario = {"locale": "es", "turns": [
+        {"expect": {"kind": "answer", "found": ["Traumatismo craneal.*SEUP"]}}]}
+    handed = {"kind": "answer",
+              "handed": ["Accidentes infantiles", "Traumatismo craneal, información para "
+                         "padres (SEUP)"]}
+    missed = {"kind": "answer", "handed": ["Cuidado con las caídas de los niños"]}
+    assert cb.evaluate(scenario, [handed], mode="model")[0]["checks"]["found"] is True
+    assert cb.evaluate(scenario, [missed], mode="model")[0]["checks"]["found"] is False
+    # Offline the fragment is a fake: nothing to read.
+    assert "found" not in cb.evaluate(scenario, [missed], mode="offline")[0]["checks"]
+
+
+def test_a_turn_reports_the_titles_the_answering_model_was_handed():
+    from tests.test_chat_orchestrator import _evidence_match
+
+    o = cb._from_final({"kind": "answer", "evidence": [_evidence_match()]})
+    assert o["handed"] == ["Reflujo (GER) vs enfermedad por reflujo (GERD)"]
+    assert cb._from_final({"kind": "red_flag"})["handed"] == []
+
+
+async def test_offline_the_fake_search_records_what_the_account_search_would_add():
+    """With the lexicon (on in production) and the development search, whatever
+    this process's settings say: offline checks the code that decides, not the
+    environment it runs in."""
+    def _one(say: str) -> dict:
+        return {"id": say, "locale": "es", "age_months": 10, "tags": [], "turns": [
+            {"say": say, "classifier": {"intent": "plan", "turn": "new"},
+             "expect": {"turn": "new", "kind": "answer"}}]}
+
+    report = await cb.run_offline([_one("se ha caido de la cama y se ha dado en la cabeza"),
+                                   _one("no gatea y ya tiene 10 meses")])
+    (head,), (crawl,) = [s["turns"] for s in report["scenarios"]]
+    assert any("traumatismo craneal" in s for s in head["searched"])
+    assert not any("signos de alarma" in s for s in head["searched"])
+    assert any("signos de alarma" in s for s in crawl["searched"])

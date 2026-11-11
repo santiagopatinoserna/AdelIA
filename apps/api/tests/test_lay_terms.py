@@ -205,6 +205,66 @@ def test_choking_now_is_a_red_flag_before_the_lexicon_reads_it(message, locale):
     assert "atragantamiento" in clinical_terms(message), message
 
 
+# --- a bump on the head (the battery with the real model, 2026-11-11) -------------
+#
+# "se ha caido de la cama y se ha dado en la cabeza" found one fragment on preventing
+# falls and a plan that opened on "puede causar fractura de cráneo" with nothing to
+# do; the SEUP sheet for parents ("Tema: qué hacer en casa tras un golpe en la
+# cabeza", then "signos de empeoramiento y cuándo acudir a urgencias") only came on
+# the next turn, when she wrote "chichón". Her sentence says what happened; the
+# sheet names the injury.
+
+@pytest.mark.parametrize("message", [
+    "se ha caido de la cama y se ha dado en la cabeza",
+    "Se ha caído de la cama y se ha dado un golpe",
+    "se ha dado en la cabeza",
+    "Se ha dado un golpe en la cabeza con la mesa",
+    "se dio con la cabeza contra el suelo",
+    "Se ha golpeado la cabeza",
+    "se cayó del cambiador",
+    "Se me ha caído de los brazos",
+    "se ha caido del sofa y llora",
+    "Le ha salido un chichón en la frente",
+    "se ha dado un cabezazo con la cuna",
+    "Se ha caído de la cama y se ha dado un golpe\nllora pero se calma en brazos",  # held
+    "He fell off the bed and hit his head",
+    "She bumped her head on the table",
+    "Il est tombé du lit",
+    "Elle s'est cognée la tête contre la table",
+])
+def test_a_bump_on_the_head_gets_the_head_injury_terms(message):
+    terms = clinical_terms(message)
+    assert "traumatismo craneal" in terms, f"{message!r} -> {terms}"
+    assert "golpe en la cabeza" in terms or "golpe en la cabeza" in _plain(message)
+
+
+@pytest.mark.parametrize("message", [
+    "Se ha caído y se ha dado un golpe en la rodilla",       # another part of the body
+    "Se dio un golpe en la espalda al caerse de la cama",    # the back, not the head
+    "Se ha caído de la cama y se ha hecho daño en el brazo",
+    "Se ha caído y se ha dado en la boca, le sangra el labio",
+    "¿Le doy golpecitos en la espalda para que eche los gases?",
+    "Se le cae mucho el pelo",
+    "¿Cuándo se le cae el cordón?",
+    "Se me ha caído el chupete al suelo, ¿lo lavo?",
+    "Le duele la cabeza",                                    # a headache, not a bump
+    "Tiene la cabeza plana por detrás",
+    "He hit his knee on the table",
+    "Il est tombé et s'est cogné le genou",
+])
+def test_a_bump_elsewhere_or_a_fall_of_something_else_gets_no_head_terms(message):
+    assert "traumatismo craneal" not in clinical_terms(message), message
+
+
+def test_a_head_injury_with_a_red_flag_is_referred_before_the_lexicon():
+    """The entry reads it too; the guard refers it first, on her own words."""
+    from adelia.clinical.red_flags import detect
+
+    message = "Se ha caído de la cama, se ha dado en la cabeza y ahora no se despierta"
+    assert detect(message, locale="es", age_months=11) is not None
+    assert "traumatismo craneal" in clinical_terms(message)
+
+
 def test_red_stool_in_the_nappy_is_stool_not_diaper_dermatitis():
     terms = clinical_terms("Tiene caca roja en el pañal")
     assert "deposiciones" in terms
