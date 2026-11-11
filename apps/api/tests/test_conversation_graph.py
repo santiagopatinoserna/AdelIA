@@ -1088,3 +1088,107 @@ async def test_a_correction_is_not_a_follow_up_for_the_effort(monkeypatch):
     _, final = await _turn(s.agent(), "no tiene fiebre", FEVER_ASSUMED)
     assert final["conversation"].kind == "correction"
     assert s.one("stream")[4] == {}
+
+
+# --- round 5: the battery with the new settings on (battery-resume-20261111-1704) -----
+#
+# Four of its 53 turns ended in an error: the embedding of the search got Mistral's
+# 429 «Not enough capacity» after about 5 s, and the mother got «no disponible». A
+# provider's capacity refusal is retried once; anything else, or a second refusal,
+# still reaches the surface's error. Six turns took the classifier's fallback, every
+# one with the thread in the call; where the rules had already placed the turn, the
+# call no longer asks for the kind of turn and the search words it never used.
+
+from adelia.agent import graph as graph_module  # noqa: E402
+
+
+class _NoCapacity(Exception):
+    """What mistralai raised for the embedding (code 3505, backend_out_of_capacity)."""
+
+    status_code = 429
+
+
+class FlakySurface(Surface):
+    def __init__(self, *, fails: int, error: type = _NoCapacity, **kwargs):
+        super().__init__(**kwargs)
+        self.fails, self.error = fails, error
+
+    async def retrieve(self, state):
+        self.calls.append(("retrieve", state["search_query"], state["message"]))
+        if self.fails:
+            self.fails -= 1
+            raise self.error("API error occurred: Status 429")
+        return Retrieved(evidence=self.evidence)
+
+
+async def test_a_follow_up_the_rules_placed_reads_the_thread_but_is_not_asked_its_kind():
+    s = Surface(intent="question")
+    await _turn(s.agent(), "¿y por la noche?", [_u(SLEEP), _a(SLEEP_ANSWER)])
+    _, _, kwargs = s.one("route")
+    assert kwargs["history"] == [_u(SLEEP), _a(SLEEP_ANSWER)]
+    assert kwargs["ask_turn"] is False
+
+
+async def test_a_turn_the_rules_could_not_place_still_asks_the_model_its_kind():
+    s = Surface(intent="question")
+    await _turn(s.agent(), "Se despierta mucho", [_u(MILK), _a(MILK_ANSWER)])
+    _, _, kwargs = s.one("route")
+    assert kwargs["history"] and kwargs.get("ask_turn", True) is True
+
+
+async def test_the_final_state_says_how_long_routing_took_and_why_it_fell_back():
+    s = Surface(intent="plan", via="fallback")
+    s.decision = s.decision.model_copy(update={"reason": "timeout"})
+    _, final = await _turn(s.agent(), "tiene mocos", [])
+    assert final["route_reason"] == "timeout" and final["route_s"] >= 0
+    s = Surface(intent="question")
+    _, final = await _turn(s.agent(), SLEEP, [])
+    assert final.get("route_reason") is None and final["route_s"] >= 0
+
+
+@pytest.mark.parametrize("message", [
+    "tiene mocos",  # the rules abstain: searched while the classifier decides
+    SLEEP,  # the rules place it: searched by the retrieve node
+])
+async def test_a_search_refused_for_capacity_is_tried_once_more(monkeypatch, message):
+    monkeypatch.setattr(graph_module, "SEARCH_RETRY_PAUSE_S", 0)
+    s = FlakySurface(fails=1, intent="question", via="model")
+    _, final = await _turn(s.agent(), message, [])
+    assert final["kind"] == "answer" and s.names().count("retrieve") == 2
+    assert "stream" in s.names()
+
+
+@pytest.mark.parametrize("fails, error, tries", [(2, _NoCapacity, 2), (1, RuntimeError, 1)])
+async def test_a_second_refusal_or_another_error_still_reaches_the_surface(
+    monkeypatch, fails, error, tries
+):
+    monkeypatch.setattr(graph_module, "SEARCH_RETRY_PAUSE_S", 0)
+    for message in ("tiene mocos", SLEEP):
+        s = FlakySurface(fails=fails, error=error, intent="question", via="model")
+        with pytest.raises(error):
+            await _turn(s.agent(), message, [])
+        assert s.names().count("retrieve") == tries and "stream" not in s.names()
+
+
+async def test_the_demo_embedding_refused_for_capacity_is_tried_once_more(monkeypatch):
+    from tests.test_agent_graph import _run
+
+    monkeypatch.setattr(graph_module, "SEARCH_RETRY_PAUSE_S", 0)
+    fakes = Fakes(intent="question")
+    refusals = [_NoCapacity("API error occurred: Status 429")]
+
+    async def _embed(texts):
+        fakes.calls.append(("embed", list(texts)))
+        if refusals:
+            raise refusals.pop()
+        return [[0.0] * 1024]
+
+    state = await _run(fakes, "¿A qué edad gatean?", embed=_embed)
+    assert state["kind"] == "answer" and fakes.names().count("embed") == 2
+
+
+async def test_a_turn_the_model_placed_still_says_how_long_routing_took():
+    s = Surface(via="model", turn="follow_up", search_query="¿Se despierta mucho por la noche?")
+    _, final = await _turn(s.agent(), "Se despierta mucho", [_u(MILK), _a(MILK_ANSWER)])
+    assert final["conversation"].via == "model"
+    assert final["route_s"] >= 0 and final["route_reason"] is None

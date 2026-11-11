@@ -322,3 +322,80 @@ async def test_an_output_that_does_not_validate_is_logged_without_its_text(caplo
                                    history=THREAD)
     assert d.via == "fallback"
     assert not any("guardería" in m for m in caplog.messages)
+
+
+# --- why it fell back, and a turn the rules already placed (2026-11-11, round 5) -----
+#
+# The battery with the real model (battery-resume-20261111-1704.json): 6 turns took
+# the fallback, every one of them with the thread in the call. The report could only
+# say so by inference (the model step began at 2.02 s and the classifier's tokens were
+# never counted). A fallback now says why. And of the 42 classifier calls, the 16
+# without a thread never missed the 2 s deadline while 7 of the 26 with one did; in
+# 16 of those 26 the rules had already placed the turn, so the `turn` and
+# `search_query` the model was asked for were thrown away (conversation.with_kind).
+
+
+async def test_a_fallback_says_why():
+    async def _slow(system, user, *, provider=None):
+        await asyncio.sleep(0.5)
+        return '{"intent": "question", "confidence": 0.9, "missing": []}'
+
+    class _Busy(Exception):
+        status_code = 429
+
+    async def _busy(system, user, *, provider=None):
+        raise _Busy("no capacity")
+
+    with patch.object(r, "_complete_json", _slow):
+        late = await r.route("hola", locale="es", has_account=True, facts=KNOWN_AGE,
+                             timeout_s=0.05)
+    with patch.object(r, "_complete_json", _busy):
+        busy = await r.route("hola", locale="es", has_account=True, facts=KNOWN_AGE)
+    with patch.object(r, "_complete_json", _completion("no se")):
+        invalid = await r.route("hola", locale="es", has_account=True, facts=KNOWN_AGE)
+    assert (late.via, late.reason) == ("fallback", "timeout")
+    assert (busy.via, busy.reason) == ("fallback", "error:_Busy 429")
+    assert (invalid.via, invalid.reason) == ("fallback", "invalid")
+    ruled = await r.route("que vacunas le tocan", locale="es", has_account=True,
+                          facts=KNOWN_AGE)
+    assert ruled.reason is None
+
+
+async def test_a_reason_the_model_writes_is_not_taken():
+    reply = '{"intent": "question", "confidence": 0.9, "missing": [], "reason": "timeout"}'
+    with patch.object(r, "_complete_json", _completion(reply)):
+        d = await r.route_by_model("hola", locale="es", has_account=True, facts=KNOWN_AGE)
+    assert d.via == "model" and d.reason is None
+
+
+async def test_a_turn_already_placed_reads_the_thread_but_is_not_asked_its_kind():
+    placed: dict = {}
+    first: dict = {}
+    with patch.object(r, "_complete_json", _seeing(placed)):
+        await r.route_by_model("y de dalsy", locale="es", has_account=True, facts=KNOWN_AGE,
+                               history=THREAD, ask_turn=False)
+    with patch.object(r, "_complete_json", _seeing(first)):
+        await r.route_by_model("y de dalsy", locale="es", has_account=True, facts=KNOWN_AGE)
+    # The first turn's system prompt, byte for byte: no turn, no search_query to write.
+    assert placed["system"] == first["system"]
+    assert "esquina en la guardería" in placed["user"]
+    assert placed["user"].rstrip().endswith("Edad conocida (meses): 6")
+
+
+async def test_a_kind_or_query_it_was_not_asked_for_is_dropped():
+    reply = ('{"intent": "question", "confidence": 0.9, "missing": [], "turn": "new", '
+             '"search_query": "dalsy"}')
+    with patch.object(r, "_complete_json", _completion(reply)):
+        d = await r.route_by_model("y de dalsy", locale="es", has_account=True,
+                                   facts=KNOWN_AGE, history=THREAD, ask_turn=False)
+    assert d.intent == "question" and d.via == "model"
+    assert d.turn is None and d.search_query is None
+
+
+async def test_route_and_log_route_hand_ask_turn_down():
+    for call in (r.route, lambda m, **kw: r.log_route("agent", m, **kw)):
+        seen: dict = {}
+        with patch.object(r, "_complete_json", _seeing(seen)):
+            await call("hola", locale="es", has_account=True, facts=KNOWN_AGE,
+                       history=THREAD, ask_turn=False)
+        assert "esquina" in seen["user"] and '"search_query"' not in seen["system"]
