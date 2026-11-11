@@ -703,6 +703,13 @@
   .ad-field:hover { border-color: var(--color-primary-text); }
   .ad-field:focus { border-color: var(--color-primary-text); }
   .ad-field:disabled { background: var(--color-surface-2); color: var(--color-ink-faint); cursor: not-allowed; }
+  /* Sent before the page was ready (lib/early-ask.ts): her words stay, read
+     only, and breathe softly until the app takes them and sends them. */
+  textarea[data-early-ask][aria-busy="true"] { cursor: progress; opacity: 0.7; }
+  @media (prefers-reduced-motion: no-preference) {
+    textarea[data-early-ask][aria-busy="true"] { animation: ad-early-wait 1.4s ease-in-out infinite alternate; }
+  }
+  @keyframes ad-early-wait { from { opacity: 0.85; } to { opacity: 0.55; } }
 
   /* Suggested question: a quiet full-width row, 48 px tall, no box. */
   .ad-chip {

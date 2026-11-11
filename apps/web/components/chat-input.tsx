@@ -3,6 +3,7 @@ import { useRef, useState } from "react";
 import { useTranslations } from "next-intl";
 import { Send, Square } from "lucide-react";
 import { ClinicalDisclaimer } from "@/components/clinical-disclaimer";
+import { useEarlyAsk } from "@/lib/early-ask";
 
 export function ChatInput({
   onSubmit,
@@ -25,14 +26,17 @@ export function ChatInput({
     el.style.height = `${Math.min(el.scrollHeight, 160)}px`;
   }
 
-  function submit() {
-    if (!text.trim() || disabled) return;
-    onSubmit(text.trim());
+  function submit(value = text) {
+    if (!value.trim() || disabled) return;
+    onSubmit(value.trim());
     setText("");
     requestAnimationFrame(() => {
       if (taRef.current) taRef.current.style.height = "auto";
     });
   }
+
+  // What she wrote or sent before hydration (lib/early-ask.ts).
+  useEarlyAsk("chat", taRef, setText, submit);
 
   function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
@@ -50,11 +54,14 @@ export function ChatInput({
   return (
     <form
       onSubmit={handleSubmit}
+      data-early-scope
       className="border-t border-line bg-surface/80 p-3 backdrop-blur-sm md:px-6"
     >
       <div className="flex items-end gap-2">
         <textarea
           ref={taRef}
+          data-early-ask="chat"
+          suppressHydrationWarning
           rows={1}
           value={text}
           onChange={(e) => {
@@ -80,6 +87,8 @@ export function ChatInput({
         ) : (
           <button
             type="submit"
+            data-early-send
+            suppressHydrationWarning
             disabled={!text.trim()}
             aria-label={t("send")}
             className="ad-btn ad-btn-primary min-h-[44px] px-4 py-2.5 text-sm disabled:cursor-not-allowed disabled:opacity-50"
