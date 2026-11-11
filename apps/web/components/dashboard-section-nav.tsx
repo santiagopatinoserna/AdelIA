@@ -38,23 +38,30 @@ export function DashboardSectionNav() {
       {items.map((it) => {
         const active = pathname.startsWith(it.href);
         return (
+          // The link is the 44 px box she presses; the pill inside is what
+          // she sees, the same size as before. The bare icons were 28x28
+          // targets on a tablet (usability run, 2026-11-11).
           <Link
             key={it.href}
             href={it.href}
             aria-label={it.label}
             aria-current={active ? "page" : undefined}
             title={it.label}
-            className={
-              active
-                ? "flex shrink-0 items-center gap-1.5 rounded-lg bg-primary-tint px-2.5 py-1.5 text-primary-text ring-1 ring-primary-tint-line"
-                : "flex shrink-0 items-center gap-1.5 rounded-lg p-1.5 text-ink-faint transition-colors hover:bg-primary-tint hover:text-primary-text-hover lg:px-2.5 lg:py-1.5"
-            }
+            className="group/sec flex min-h-[44px] min-w-[44px] shrink-0 items-center justify-center rounded-lg"
           >
-            <it.icon className="h-4 w-4 shrink-0" strokeWidth={2} />
-            {/* Labels for everyone at lg+ — seven bare icons were a guessing
-                game; below lg the active one keeps its label as before. */}
-            <span className={`text-xs font-medium ${active ? "" : "hidden lg:inline"}`}>
-              {it.label}
+            <span
+              className={
+                active
+                  ? "flex items-center gap-1.5 rounded-lg bg-primary-tint px-2.5 py-1.5 text-primary-text ring-1 ring-primary-tint-line"
+                  : "flex items-center gap-1.5 rounded-lg p-1.5 text-ink-faint transition-colors group-hover/sec:bg-primary-tint group-hover/sec:text-primary-text-hover lg:px-2.5 lg:py-1.5"
+              }
+            >
+              <it.icon className="h-4 w-4 shrink-0" strokeWidth={2} />
+              {/* Labels for everyone at lg+: seven bare icons were a guessing
+                  game; below lg the active one keeps its label as before. */}
+              <span className={`text-xs font-medium ${active ? "" : "hidden lg:inline"}`}>
+                {it.label}
+              </span>
             </span>
           </Link>
         );

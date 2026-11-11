@@ -55,11 +55,13 @@ export function AgentInput({ onSubmit, onStop, disabled, locale, placeholder }: 
 
   return (
     <div className="border-t border-line bg-surface p-3">
-    <div className="flex items-end gap-2">
+    {/* gap-1.5 and px-2.5, not 2 and 3: at 360 px «Demande-en plus à ce sujet»
+        was cut by a few pixels (usability run, 2026-11-11). */}
+    <div className="flex items-end gap-1.5">
       <textarea value={input} onChange={(e) => setInput(e.target.value)} rows={1}
         placeholder={placeholder ?? t("placeholder")} aria-label={t("inputLabel")}
         onKeyDown={(e) => { if (e.key === "Enter" && !e.shiftKey) { e.preventDefault(); submit(); } }}
-        className="ad-field max-h-32 min-h-[44px] flex-1 resize-none px-3 py-2" />
+        className="ad-field max-h-32 min-h-[44px] flex-1 resize-none px-2.5 py-2" />
       {micSupported && (
         <button type="button" onClick={toggleMic} aria-pressed={listening} aria-label={t("listen")}
           className={`ad-btn min-h-[44px] w-11 justify-center ${listening ? "ad-btn-accent" : "ad-btn-ghost"}`}>

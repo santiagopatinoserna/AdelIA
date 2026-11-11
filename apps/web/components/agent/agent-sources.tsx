@@ -3,6 +3,7 @@ import { useTranslations } from "next-intl";
 import { ChevronDown } from "lucide-react";
 
 import type { Citation, EvidenceCitation } from "@/lib/chat-types";
+import { isRedFlag } from "@/lib/emergency";
 import { CitationCard } from "@/components/citation-card";
 import { EvidenceCard } from "@/components/evidence-card";
 
@@ -30,7 +31,7 @@ export function AgentSources({
   const tp = useTranslations("panel");
   const count = citations.length + evidence.length;
   if (count === 0) return null;
-  const urgent = evidence.some((e) => e.source_id?.startsWith("red_flag:"));
+  const urgent = isRedFlag(evidence);
   return (
     <details
       data-testid="agent-sources"

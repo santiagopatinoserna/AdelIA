@@ -5,7 +5,7 @@ import { streamAgent, getSuggestions, dismissSuggestion } from "@/lib/agent-clie
 import type { AgentCard, AgentThread } from "@/lib/agent-types";
 import type { Citation, EvidenceCitation } from "@/lib/chat-types";
 import { AnswerContent } from "@/components/answer-content";
-import { Mic, RotateCcw } from "lucide-react";
+import { Mic, Phone, RotateCcw } from "lucide-react";
 import { CardRenderer, type CardActionHandler } from "./cards/card-renderer";
 import { AgentInput } from "./agent-input";
 import { AgentSources } from "./agent-sources";
@@ -18,6 +18,7 @@ import { todayInAppZone } from "@/lib/dates";
 import { useActiveProfile } from "@/lib/profile-context";
 import { Link, useRouter } from "@/lib/navigation";
 import { takeLandingQuestion } from "@/lib/landing-question";
+import { urgentCallNumber } from "@/lib/emergency";
 
 // An assistant turn now carries what it cited (audit 3.7). Empty arrays on a
 // user turn and on any answer that cited nothing, which is most of them.
@@ -105,6 +106,8 @@ export function AgentCanvas({
   const tg = useTranslations("guestSpace");
   const tp = useTranslations("panel");
   const tAsk = useTranslations("showcaseAsk");
+  const tDemo = useTranslations("demo");
+  const tManifest = useTranslations("manifest");
   const router = useRouter();
   const { activeId, profiles } = useActiveProfile();
   // Her baby's name in the greeting when we have it: the same server-fed
@@ -361,14 +364,20 @@ export function AgentCanvas({
         {/* A <header>, not a <div>: the thread below stays the first div of
             this column, the scroll area whose bottom is the fold
             (e2e/showcase.spec.ts measures it as `main > div`). */}
+        {/* Once a conversation is open the record button says «Grabar» (the
+            app's own short name for it, manifest.recordShort; its accessible
+            name stays the full one): with the full label «Nueva conversación»
+            wrapped to a second row at 360 px, and at 390 in French, and took
+            52 px from the answer (usability run, 2026-11-11). */}
         <header className="flex flex-wrap items-center gap-2 px-3 pt-2">
           <Link
             href="/dashboard/consulta/grabar"
             data-testid="record-consult"
+            aria-label={messages.length > 0 ? tg("recordConsult") : undefined}
             className="ad-btn ad-btn-ghost min-h-[44px] px-3.5 text-sm"
           >
             <Mic className="h-4 w-4" strokeWidth={2.2} aria-hidden />
-            {tg("recordConsult")}
+            {messages.length > 0 ? tManifest("recordShort") : tg("recordConsult")}
           </Link>
           {messages.length === 0 && resumable && !resumed && !askKey && (
             <button
@@ -394,17 +403,20 @@ export function AgentCanvas({
             </button>
           )}
         </header>
-        {/* Empty state on md+: the greeting, the age, "Hoy", the example and
+        {/* Empty state on lg+: the greeting, the age, "Hoy", the example and
             "Más" are the only children, so `justify-content` centres the block instead
             of leaving 44 % of the column blank under it with nothing to
             scroll. `safe center` and not `center`: once the content DOES
             overflow (a short viewport), plain centring pushes the top of the
             block out of reach, while `safe` falls back to flex-start.
-            The phone keeps the top alignment it already had. */}
+            From lg only: on a tablet held upright (768x1024) the centring
+            opened the panel on about 250 px of blank above the greeting
+            (usability run, 2026-11-11). The tablet and the phone read from
+            the top. */}
         <div
           className={`min-h-0 flex-1 overflow-y-auto p-3 ${
             messages.length === 0
-              ? "md:flex md:flex-col md:[justify-content:safe_center]"
+              ? "lg:flex lg:flex-col lg:[justify-content:safe_center]"
               : ""
           }`}
         >
@@ -456,8 +468,25 @@ export function AgentCanvas({
             // The answer is read like the demo's: Markdown, the plan's
             // sections and map, quiet citation markers, at full width. It used
             // to be printed raw, "## Hoy - **...**" (AUDITORIA_UX.md, 11c).
+            //
+            // The guard's referral opens with the call, one tap, as on the
+            // demo (UX_PRINCIPLES 13): the panel said «Llama al 112» only as
+            // text (usability run, 2026-11-11). The number comes from the
+            // API's fixed frame, which already picks the country's number;
+            // the referral follows whole, untouched.
+            const call = m.retry ? null : urgentCallNumber(m.content, m.evidence_citations);
             return (
               <div key={i} data-testid="agent-message" data-role="assistant" className="my-4 [&_[data-testid=answer-content]]:mt-0">
+                {call && (
+                  <a
+                    data-testid="call-emergency"
+                    href={`tel:${call}`}
+                    className="ad-btn ad-btn-danger ad-btn-lg mb-4 w-full"
+                  >
+                    <Phone className="h-5 w-5" aria-hidden />
+                    {tDemo("callEmergency", { number: call })}
+                  </a>
+                )}
                 {m.retry ? (
                   <>
                     <p role="alert" className="text-base text-ink">{m.content}</p>
