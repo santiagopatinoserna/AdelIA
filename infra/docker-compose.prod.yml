@@ -123,10 +123,22 @@ services:
       # only after scripts/probe_warning_signs.py and the server golden gate pass.
       WARNING_SIGNS_RETRIEVAL: ${WARNING_SIGNS_RETRIEVAL:-false}
       NO_UNASKED_REFUSALS: ${NO_UNASKED_REFUSALS:-false}
+      # Head sheet and development warning signs (SEUP) found by retrieval. Off by default;
+      # without this line a value in .env.prod never reaches the container.
+      DEVELOPMENT_SIGNS_RETRIEVAL: ${DEVELOPMENT_SIGNS_RETRIEVAL:-false}
       # Plans read in seconds (answer_contract.PLAN_BREVITY_RULE). Off by default;
       # on only after scripts/probe_plan_brevity.py and the server golden gate pass,
       # and Santiago agrees: it changes how every plan reads.
       PLAN_BREVITY: ${PLAN_BREVITY:-false}
+      # A follow-up answered in a few cited sentences (answer_contract.FOLLOW_UP_RULE) and
+      # Claude's thinking effort per shape (config.py answer_effort_*). Off by default; an
+      # empty effort keeps "medium", today's request. On only after the conversation
+      # battery, run in production with and without them. tests/test_prod_compose.py
+      # fails when a switch in config.py has no line here.
+      FOLLOW_UP_BREVITY: ${FOLLOW_UP_BREVITY:-false}
+      ANSWER_EFFORT_QUESTION: ${ANSWER_EFFORT_QUESTION:-}
+      ANSWER_EFFORT_PLAN: ${ANSWER_EFFORT_PLAN:-}
+      ANSWER_EFFORT_FOLLOW_UP: ${ANSWER_EFFORT_FOLLOW_UP:-}
       # Every public request reaches this server through the Cloudflare tunnel,
       # which sets CF-Connecting-IP to the real address, so the per-address
       # limits count that one (adelia/ratelimit.client_ip). Off by default in
