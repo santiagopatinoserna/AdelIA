@@ -3,7 +3,7 @@ from typing import AsyncIterator, Callable
 from uuid import UUID, uuid4
 
 from adelia.agent.events import AgentEvent
-from adelia.agent import cards
+from adelia.agent import cards, development_signs
 from adelia.agent.graph import (
     ACCOUNT_CLARIFY_FIELDS,
     GraphDeps,
@@ -109,11 +109,14 @@ async def run_turn(*, user_id: UUID, profile_id: UUID | None, message: str,
         # answer glued in front, which is how a "niño enfermo" frame kept
         # coming back on 2026-11-09.
         resolved = state.get("conversation") is not None
+        # A milestone or a behaviour topic also searches its warning signs
+        # (agent/development_signs.py, behind settings.development_signs_retrieval).
         return await chat_orchestrator.retrieve_for_account(
             scope, question=state["message"],
             search_text=state.get("search_query") if resolved else None,
             history=None if resolved else text_history, locale=locale,
             age_months=known.age_months, baby_name=known.display_name,
+            development=development_signs.applies(state),
         )
 
     def _stream(system_prompt: str, user_message: str, history: list[dict] | None = None,

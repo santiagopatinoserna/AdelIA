@@ -282,6 +282,19 @@ class Settings(BaseSettings):
     # production, shows it; off, retrieval makes exactly the calls it made before.
     warning_signs_retrieval: bool = False
 
+    # The development warning signs, from the library (agent/development_signs.py).
+    # Measured with the real model on 2026-11-11 (the conversation battery,
+    # docs/BATERIA_MODELO_2026-11-11.md): «no gatea y ya tiene 10 meses» got UNICEF
+    # alone and no «Cuándo ir al médico», and the guardería topic after «No es enfermo»
+    # got the sick child's, while AEPap, SAP and the WHO motor study are in the corpus.
+    # On, the /dashboard agent's search of a development or behaviour topic also
+    # searches the topic plus the corpus's development words, under the same two
+    # cut-offs, and adds up to two new fragments after the main ones. It never runs
+    # without main evidence, so it cannot turn a refusal into an answer. OFF until the
+    # conversation battery with the model (conversation_regressions_3.json), run in
+    # production with it on, shows those sources; off, the search is the one of before.
+    development_signs_retrieval: bool = False
+
     # The coded refusal only for what she asked (services/answer_contract.py,
     # NO_UNASKED_REFUSALS_RULE). Same measurement: four good plans closed a section she
     # never asked for ("Cremas o pomadas", "Edad exacta en meses", "Cómo corregirla",

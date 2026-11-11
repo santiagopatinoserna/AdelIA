@@ -173,6 +173,16 @@ del perfil. Mientras espera, el panel lee `status` («searching», «writing» c
 Detrás de `implicit_subject_expansion` (apagado), una frase que no nombra a nadie
 («Tiene diarrea desde ayer») se busca también como «Mi bebé de N meses: …», con los
 mismos cortes y la mejor distancia por fragmento (`agent/implicit_subject.py`).
+Detrás de `development_signs_retrieval` (apagado, 2026-11-11), en el agente, un tema de
+desarrollo (un hito que aún no llega: «no gatea», «no se sienta», «no anda») o de conducta
+(`conversation.behaviour`, también tras «No es enfermo») busca además el tema con las palabras
+del corpus para las señales de alarma del desarrollo, con los mismos cortes, y añade hasta dos
+fragmentos detrás de los de su frase (`agent/development_signs.py`); el modelo los recibe y
+`compose` deja la tarjeta de los que cita. Sin evidencia principal no añade nada: B2 sigue
+rechazada (0,2164 a UNICEF con su vector grabado, fuera del corte 0,19).
+El léxico de madre (`lay_query_expansion`, encendido en producción) lee también el golpe en la
+cabeza y la caída del bebé (es/en/fr) con las palabras de la hoja de la SEUP («traumatismo
+craneal, golpe en la cabeza»).
 
 ### `plan`
 Contrato actual de plan (Hoy / Vigila / Cuándo ir al médico / No olvides /
@@ -272,6 +282,10 @@ LangChain.
   ajustes con que corrió y, aparte, palabras y primera palabra de los seguimientos de un
   tema ya respondido; los comandos para comparar los ajustes apagados y encendidos están
   en el docstring de la batería.
+  Los 3 fallos de búsqueda (golpe T1, no-gatea T1, guardería T2 y T3) están en
+  `scripts/conversation_regressions_3.json`, con dos formas más de contar el golpe: sin modelo,
+  `search_adds` comprueba lo que la búsqueda añade a sus palabras; con el modelo, `found`, las
+  fuentes que recibe el modelo que responde (comandos en el docstring de la batería).
 
 ## Orden de construcción (cada paso desplegable por separado)
 

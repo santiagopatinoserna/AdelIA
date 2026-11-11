@@ -759,6 +759,146 @@ async def test_the_chat_hands_the_profile_age_to_the_subject(
     mock_embed.assert_awaited_once_with([_NO_SUBJECT, f"Mi bebé de 7 meses: {_NO_SUBJECT}"])
 
 
+# --- the development warning signs (agent/development_signs.py) ----------------------
+#
+# The /dashboard agent searches here, so settings.development_signs_retrieval reaches
+# it here: off, or a topic that is not about development, the calls of before; on,
+# one more text in the same embedding call and one more evidence search, whose new
+# fragments go after the main ones, and only when the main search found something.
+
+_MILESTONE = "no gatea y ya tiene 10 meses"
+
+
+@patch("adelia.services.chat_orchestrator._retrieve_evidence_for_query", return_value=[])
+@patch("adelia.services.chat_orchestrator.retrieve_relevant_chunks", return_value=[])
+@patch("adelia.services.chat_orchestrator.embed_texts")
+@patch("adelia.services.chat_orchestrator.detect_temporal_intent", return_value=None)
+async def test_with_the_development_search_off_the_account_searches_as_before(
+    mock_temporal, mock_embed, mock_chunks, mock_evidence, monkeypatch,
+):
+    from adelia.agent import development_signs
+    from adelia.config import settings
+    from adelia.services.chat_orchestrator import retrieve_for_account
+    from adelia.services.scope import Scope
+
+    monkeypatch.setattr(settings, "development_signs_retrieval", False)
+    monkeypatch.setattr(settings, "lay_query_expansion", False)
+    monkeypatch.setattr(settings, "implicit_subject_expansion", False)
+
+    def _never(*args, **kwargs):
+        raise AssertionError("the development words are read with the setting off")
+
+    monkeypatch.setattr(development_signs, "signs_query", _never)
+    mock_embed.return_value = [[0.1] * 1024]
+    await retrieve_for_account(Scope(user_id=uuid4()), question=_MILESTONE, locale="es",
+                               development=True)
+
+    mock_embed.assert_awaited_once_with([_MILESTONE])
+    mock_evidence.assert_awaited_once_with([0.1] * 1024, query_text=_MILESTONE, locale="es")
+
+
+@patch("adelia.services.chat_orchestrator._retrieve_evidence_for_query", return_value=[])
+@patch("adelia.services.chat_orchestrator.retrieve_relevant_chunks", return_value=[])
+@patch("adelia.services.chat_orchestrator.embed_texts")
+@patch("adelia.services.chat_orchestrator.detect_temporal_intent", return_value=None)
+async def test_a_topic_that_is_not_about_development_searches_as_before(
+    mock_temporal, mock_embed, mock_chunks, mock_evidence, monkeypatch,
+):
+    from adelia.config import settings
+    from adelia.services.chat_orchestrator import retrieve_for_account
+    from adelia.services.scope import Scope
+
+    monkeypatch.setattr(settings, "development_signs_retrieval", True)
+    monkeypatch.setattr(settings, "lay_query_expansion", False)
+    monkeypatch.setattr(settings, "implicit_subject_expansion", False)
+    mock_embed.return_value = [[0.1] * 1024]
+    await retrieve_for_account(Scope(user_id=uuid4()), question="¿Regurgita?", locale="es")
+
+    mock_embed.assert_awaited_once_with(["¿Regurgita?"])
+    mock_evidence.assert_awaited_once()
+
+
+@patch("adelia.services.chat_orchestrator._retrieve_evidence_for_query")
+@patch("adelia.services.chat_orchestrator.retrieve_relevant_chunks", return_value=[])
+@patch("adelia.services.chat_orchestrator.embed_texts")
+@patch("adelia.services.chat_orchestrator.detect_temporal_intent", return_value=None)
+async def test_with_it_on_a_development_topic_also_gets_the_warning_signs_after_the_rest(
+    mock_temporal, mock_embed, mock_chunks, mock_evidence, monkeypatch,
+):
+    from adelia.agent.development_signs import signs_query
+    from adelia.config import settings
+    from adelia.services.chat_orchestrator import retrieve_for_account
+    from adelia.services.scope import Scope
+
+    monkeypatch.setattr(settings, "development_signs_retrieval", True)
+    monkeypatch.setattr(settings, "lay_query_expansion", False)
+    monkeypatch.setattr(settings, "implicit_subject_expansion", False)
+    unicef = _evidence_match()
+    held_again = unicef
+    alarm = _evidence_match()
+    who = _evidence_match()
+    third = _evidence_match()
+    mock_evidence.side_effect = [[unicef], [held_again, alarm, who, third]]
+    mock_embed.return_value = [[0.1] * 1024, [0.4] * 1024]
+
+    out = await retrieve_for_account(Scope(user_id=uuid4()), question=_MILESTONE, locale="es",
+                                     development=True)
+
+    mock_embed.assert_awaited_once_with([_MILESTONE, signs_query(_MILESTONE)])
+    assert [c.args[0] for c in mock_evidence.await_args_list] == [[0.1] * 1024, [0.4] * 1024]
+    # Same cut-offs: nothing stricter or looser is passed for it.
+    assert mock_evidence.await_args_list[1].kwargs.get("max_distance") is None
+    assert out.evidence == [unicef, alarm, who]
+
+
+@patch("adelia.services.chat_orchestrator._retrieve_evidence_for_query")
+@patch("adelia.services.chat_orchestrator.retrieve_relevant_chunks", return_value=[])
+@patch("adelia.services.chat_orchestrator.embed_texts")
+@patch("adelia.services.chat_orchestrator.detect_temporal_intent", return_value=None)
+async def test_the_development_search_never_turns_nothing_found_into_an_answer(
+    mock_temporal, mock_embed, mock_chunks, mock_evidence, monkeypatch,
+):
+    from adelia.config import settings
+    from adelia.services.chat_orchestrator import retrieve_for_account
+    from adelia.services.scope import Scope
+
+    monkeypatch.setattr(settings, "development_signs_retrieval", True)
+    monkeypatch.setattr(settings, "lay_query_expansion", False)
+    monkeypatch.setattr(settings, "implicit_subject_expansion", False)
+    mock_evidence.side_effect = [[], [_evidence_match()]]
+    mock_embed.return_value = [[0.1] * 1024, [0.4] * 1024]
+
+    out = await retrieve_for_account(Scope(user_id=uuid4()), question=_MILESTONE, locale="es",
+                                     development=True)
+    assert out.evidence == []
+
+
+@patch("adelia.services.chat_orchestrator._retrieve_evidence_for_query", return_value=[])
+@patch("adelia.services.chat_orchestrator.retrieve_relevant_chunks", return_value=[])
+@patch("adelia.services.chat_orchestrator.embed_texts")
+@patch("adelia.services.chat_orchestrator.detect_temporal_intent", return_value=None)
+async def test_the_development_words_follow_the_lexicon_s_rendering_when_there_is_one(
+    mock_temporal, mock_embed, mock_chunks, mock_evidence, monkeypatch,
+):
+    """The same order as the demo's warning search: the widest rendering of her words."""
+    from adelia.agent.development_signs import signs_query
+    from adelia.agent.lay_terms import expanded_query
+    from adelia.config import settings
+    from adelia.services.chat_orchestrator import retrieve_for_account
+    from adelia.services.scope import Scope
+
+    monkeypatch.setattr(settings, "development_signs_retrieval", True)
+    monkeypatch.setattr(settings, "lay_query_expansion", True)
+    monkeypatch.setattr(settings, "implicit_subject_expansion", False)
+    question = "No gatea y no come nada"
+    mock_embed.return_value = [[0.1] * 1024, [0.2] * 1024, [0.3] * 1024]
+    await retrieve_for_account(Scope(user_id=uuid4()), question=question, locale="es",
+                               development=True)
+    widened = expanded_query(question)
+    assert widened is not None
+    mock_embed.assert_awaited_once_with([question, widened, signs_query(widened)])
+
+
 async def test_her_record_and_the_guidelines_are_searched_at_the_same_time():
     """Two queries on two sessions that never needed each other ran one after
     the other on every account turn (the battery with the real model,

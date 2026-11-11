@@ -87,6 +87,29 @@ def _two_of(words: tuple[str, ...]) -> str:
     return "^(?:" + "|".join(pairs) + ")"
 
 
+#: A bump on the head and a baby's fall (the entries golpe_cabeza and caida).
+#: Reflexive or a noun: "le da el sol en la cabeza" is not a bump.
+_BLOW_ES = (
+    r"(se\s+(me\s+|le\s+)?(ha\s+|habra\s+)?(dado|dio|golpeado|golpeo|pegado|pego|chocado|choco)"
+    r"|golpe\w*|porrazo|trompazo|tortazo)"
+)
+_HEAD_ES = r"(cabeza|cabecita|frente|nuca|coco)"
+_FALL_ES = r"(se\s+(me\s+|le\s+|nos\s+)?(ha\s+)?(caido|cayo|cae)|caerse|caida)"
+#: Where a baby lies, sits or is held: a fall from there is a fall on the head's account.
+_PERCH_ES = (
+    r"(cama|camita|cambiador|sofa|trona|cuna|minicuna|brazos|carro|carrito|cochecito|silla|"
+    r"hamaca|mesa|escalera\w*|tobogan|columpio|banera)"
+)
+#: Another part of the body named after an article ("en la rodilla", "el labio"),
+#: never "de los brazos", where she fell from, nor "en brazos", where she is held.
+_OTHER_PART = (
+    r"(?<!\bde )\b(el|la|las|los|un|una|su|sus)\s+(rodillas?|piernas?|brazos?|codos?|manos?|"
+    r"dedos?|pies?|tobillos?|munecas?|espalda|boca|dientes?|labios?|nariz|ojos?|barbilla|"
+    r"culo|culete|trasero)\b"
+    r"|\b(his|her|their)\s+(knee|arm|leg|hand|finger|foot|back|mouth|tooth|teeth|lip|nose)s?\b"
+    r"|\b(le|la|les|son|sa|ses)\s+(genou|bras|jambe|main|doigt|pied|dos|bouche|dent|levre|nez)s?\b"
+)
+
 _HFM_ES = _two_of(("manos?", "pies?", "boca"))
 _HFM_EN = _two_of(("hands?", "feet|foot", "mouth"))
 _HFM_FR = _two_of(("mains?", "pieds?", "bouche"))
@@ -345,6 +368,41 @@ LEXICON: tuple[LayEntry, ...] = (
         ),
         ("atragantamiento", "golpes en la espalda", "compresiones torácicas"),
         unless=_rx(r"\beruct\w*|\bgases\b|\bburp\w*|\brots?\b"),
+    ),
+    # A bump on the head (the battery with the real model, 2026-11-11): "se ha caido
+    # de la cama y se ha dado en la cabeza" found one fragment on preventing falls,
+    # and SEUP's sheet for parents ("qué hacer en casa tras un golpe en la cabeza",
+    # "cuándo acudir a urgencias") only on the next turn, which said "chichón". She
+    # says what happened; the sheet names the injury. Her head named, or a bump or a
+    # fall from where a baby lies or is held: that fall is the head's worry. Another
+    # part of the body named (a knee, the back, the mouth) is that part's. Every
+    # word of danger after the bump (not waking, fits) is the guard's, which has
+    # already run on her words.
+    LayEntry(
+        "golpe_cabeza",
+        _rx(
+            rf"\b{_BLOW_ES}\b.{{0,30}}\b{_HEAD_ES}\b",
+            rf"\b{_HEAD_ES}\b.{{0,30}}\b(golpe\w*|contra|choc\w*)\b",
+            r"\bchichon\w*|\bcabezazos?\b|\bcoscorron\w*",
+            r"\b(hit|bump\w*|bang\w*|knock\w*)\s+(his|her|their|the)\s+head\b|\bhead\s+injur\w*",
+            r"\bbump\s+on\s+(his|her|their|the)\s+head\b",
+            r"\bcogne\w*\s+(la\s+)?tete\b|\bchoc\s+a\s+la\s+tete\b|\bbosse\s+sur\s+(la\s+)?tete\b",
+        ),
+        ("traumatismo craneal", "golpe en la cabeza"),
+    ),
+    LayEntry(
+        "caida",
+        _rx(
+            rf"\b{_FALL_ES}\s+(\w+\s+){{0,2}}(de|del|desde)\s+(la\s+|el\s+|los\s+|las\s+|una\s+|un\s+)?"
+            rf"{_PERCH_ES}\b",
+            r"\bse\s+(me\s+|le\s+|nos\s+)?ha\s+caido\s+al\s+suelo\b",
+            rf"\b{_FALL_ES}\b.{{0,40}}\b(golpe|golpeado|golpeo|porrazo|trompazo|tortazo)\b",
+            r"\b(fell|fallen|falls|rolled)\s+off\s+(the\s+|a\s+|his\s+|her\s+)?"
+            r"(bed|sofa|couch|changing\s+table|table|chair|high\s?chair)\b",
+            r"\btombee?s?\s+(du|de\s+la|de\s+son|de\s+sa)\s+(lit|canape|table|chaise|bras)\b",
+        ),
+        ("traumatismo craneal", "golpe en la cabeza"),
+        unless=_rx(_OTHER_PART),
     ),
 )
 
