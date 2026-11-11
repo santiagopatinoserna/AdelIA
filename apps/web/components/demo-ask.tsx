@@ -10,6 +10,7 @@ import { useDictation } from "@/hooks/use-dictation";
 import type { DemoAnswerKind, DemoClarify, DemoIntent, EvidenceCitation } from "@/lib/chat-types";
 import { track } from "@/lib/analytics";
 import { emergencyNumber } from "@/lib/emergency";
+import { useEarlyAsk } from "@/lib/early-ask";
 import { keepLandingQuestion } from "@/lib/landing-question";
 
 const SPEECH_LANG: Record<string, string> = { es: "es-ES", en: "en-GB", fr: "fr-FR" };
@@ -69,6 +70,7 @@ export function DemoAsk({ suggested, corpusStats, hasSession = false, consentNot
   const [slow, setSlow] = useState(false);
   const [typing, setTyping] = useState(false);
   const form = useRef<HTMLFormElement>(null);
+  const field = useRef<HTMLTextAreaElement>(null);
   const pending = useRef<AbortController | null>(null);
   // Dictated text is appended, never sent: she reads it and fixes a wrong
   // word before pressing send, as with anything typed.
@@ -156,11 +158,15 @@ export function DemoAsk({ suggested, corpusStats, hasSession = false, consentNot
     }
   }
 
+  // What she wrote or sent before hydration (lib/early-ask.ts).
+  useEarlyAsk("landing", field, setQuestion, (text) => void ask(text));
+
   return (
     <div data-testid="demo-ask">
       <form
         hidden={Boolean(result) && !busy}
         ref={form}
+        data-early-scope
         onSubmit={(event) => {
           event.preventDefault();
           void ask(question);
@@ -174,7 +180,11 @@ export function DemoAsk({ suggested, corpusStats, hasSession = false, consentNot
         </label>
         <div className="relative">
           <textarea
+            ref={field}
             id="demo-question"
+            data-early-ask="landing"
+            data-early-min={3}
+            suppressHydrationWarning
             rows={2}
             maxLength={300}
             value={question}
@@ -236,6 +246,8 @@ export function DemoAsk({ suggested, corpusStats, hasSession = false, consentNot
           <button
             type="submit"
             data-track="landing-ask"
+            data-early-send
+            suppressHydrationWarning
             disabled={busy || question.trim().length < 3}
             aria-busy={busy}
             className="ad-btn ad-btn-primary ad-btn-lg w-full sm:w-auto sm:min-w-36"

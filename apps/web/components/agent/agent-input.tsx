@@ -3,6 +3,7 @@ import { useEffect, useRef, useState } from "react";
 import { useTranslations } from "next-intl";
 import { Mic, Send, Square } from "lucide-react";
 import { ClinicalDisclaimer } from "@/components/clinical-disclaimer";
+import { useEarlyAsk } from "@/lib/early-ask";
 
 // Minimal shape of the Web Speech API (no DOM lib types ship for it).
 type SpeechResultList = ArrayLike<ArrayLike<{ transcript: string }>>;
@@ -34,6 +35,7 @@ export function AgentInput({ onSubmit, onStop, disabled, locale, placeholder }: 
   const [micSupported, setMicSupported] = useState(false);
   const recRef = useRef<SpeechRecognitionLike | null>(null);
   const baseRef = useRef("");
+  const fieldRef = useRef<HTMLTextAreaElement>(null);
 
   useEffect(() => { setMicSupported(getSpeechCtor() !== null); return () => recRef.current?.stop(); }, []);
 
@@ -51,14 +53,19 @@ export function AgentInput({ onSubmit, onStop, disabled, locale, placeholder }: 
     recRef.current = rec; setListening(true); rec.start();
   }
 
-  function submit() { const text = input.trim(); if (!text) return; onSubmit(text); setInput(""); }
+  function submit(value = input) {
+    const text = value.trim(); if (!text) return; onSubmit(text); setInput("");
+  }
+  // What she wrote or sent before hydration (lib/early-ask.ts).
+  useEarlyAsk("panel", fieldRef, setInput, submit);
 
   return (
     <div className="border-t border-line bg-surface p-3">
     {/* gap-1.5 and px-2.5, not 2 and 3: at 360 px «Demande-en plus à ce sujet»
         was cut by a few pixels (usability run, 2026-11-11). */}
-    <div className="flex items-end gap-1.5">
-      <textarea value={input} onChange={(e) => setInput(e.target.value)} rows={1}
+    <div data-early-scope className="flex items-end gap-1.5">
+      <textarea ref={fieldRef} data-early-ask="panel" suppressHydrationWarning
+        value={input} onChange={(e) => setInput(e.target.value)} rows={1}
         placeholder={placeholder ?? t("placeholder")} aria-label={t("inputLabel")}
         onKeyDown={(e) => { if (e.key === "Enter" && !e.shiftKey) { e.preventDefault(); submit(); } }}
         className="ad-field max-h-32 min-h-[44px] flex-1 resize-none px-2.5 py-2" />
@@ -73,7 +80,8 @@ export function AgentInput({ onSubmit, onStop, disabled, locale, placeholder }: 
           <Square className="h-5 w-5" />
         </button>
       ) : (
-        <button type="button" onClick={submit} disabled={!input.trim()} aria-label={t("send")}
+        <button type="button" onClick={() => submit()} disabled={!input.trim()} aria-label={t("send")}
+          data-early-send suppressHydrationWarning
           className="ad-btn ad-btn-primary min-h-[44px] w-11 justify-center">
           <Send className="h-5 w-5" />
         </button>

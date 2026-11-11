@@ -7,6 +7,7 @@ import { Fraunces, Hanken_Grotesk } from "next/font/google";
 import { Analytics } from "@/components/analytics";
 import { ServiceWorkerRegister } from "@/components/sw-register";
 import { locales } from "@/lib/i18n";
+import { EARLY_ASK_SCRIPT } from "@/lib/early-ask-script";
 import { IOS_SPLASH } from "@/lib/ios-splash";
 import { SITE_URL } from "@/lib/seo";
 import "../globals.css";
@@ -119,6 +120,9 @@ export default async function LocaleLayout({
               "try{var t=localStorage.getItem('adelia-theme');if(t==='dark'||t==='light')document.documentElement.dataset.theme=t}catch(e){}",
           }}
         />
+        {/* A question written or sent before hydration is kept and sent once
+            React is ready (lib/early-ask.ts). Inline, before any field. */}
+        <script dangerouslySetInnerHTML={{ __html: EARLY_ASK_SCRIPT }} />
         {/* Explicit on purpose. Next 15.5 streams `metadata` into the <body>
             for regular user agents (React hoists it later), but Chrome only
             honours a manifest link that is inside <head> at parse time and
