@@ -873,6 +873,43 @@ RED_FLAG_REASONS: dict[str, dict[str, str]] = {
             "une méningite et cela s’évalue immédiatement."
         ),
     },
+    "head_injury": {
+        "es": (
+            "Has descrito una señal de alarma tras un golpe en la cabeza (pérdida de "
+            "conocimiento, vómitos repetidos, sangre o líquido por el oído o la nariz, "
+            "convulsión o mucho sueño). Se valora en urgencias ahora, aunque parezca que ya "
+            "está bien."
+        ),
+        "en": (
+            "You have described a warning sign after a knock to the head (losing "
+            "consciousness, repeated vomiting, blood or fluid from the ear or nose, a seizure "
+            "or great sleepiness). It is assessed in an emergency department now, even if "
+            "they seem fine."
+        ),
+        "fr": (
+            "Vous décrivez un signe d’alerte après un coup à la tête (perte de connaissance, "
+            "vomissements répétés, sang ou liquide par l’oreille ou le nez, convulsion ou "
+            "forte somnolence). Cela s’évalue aux urgences maintenant, même s’il semble aller "
+            "bien."
+        ),
+    },
+    "green_or_bloody_vomit": {
+        "es": (
+            "Has descrito un vómito verde, con sangre o como posos de café. Puede ser el "
+            "signo de una obstrucción intestinal o de un sangrado y se valora en urgencias "
+            "ahora."
+        ),
+        "en": (
+            "You have described green vomit, blood in the vomit or vomit that looks like "
+            "coffee grounds. It can be the sign of a blocked bowel or of bleeding and is "
+            "assessed in an emergency department now."
+        ),
+        "fr": (
+            "Vous décrivez un vomissement vert, avec du sang ou qui ressemble à du marc de "
+            "café. Cela peut être le signe d’une occlusion intestinale ou d’un saignement "
+            "et s’évalue aux urgences maintenant."
+        ),
+    },
     "lethargy": {
         "es": (
             "Has descrito que no se despierta, no reacciona o está muy decaído. Un bebé "

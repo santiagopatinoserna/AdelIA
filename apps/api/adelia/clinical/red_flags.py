@@ -58,6 +58,24 @@ a visit, not 112. One case so far: a pause in the sleep of a snoring child of
 6 months or more, with no acute illness, no long pause and no other alarm
 sign, goes to the RAG, whose sleep sources send it to the pediatrician
 (`_sleep_pause_only`).
+
+Head injury and green or bloody vomit (2026-11-11, the #retr4 finding). "Se
+ha dado un golpe en la cabeza y ha perdido el conocimiento", "se ha desmayado",
+"ha vomitado varias veces" after a knock and "le sale sangre por el oido" all
+reached the model; only "no reacciona" fired. Two flags were added, each sign
+written next to the corpus source that sends it to the emergency department:
+
+  head_injury            SEUP "Traumatismo craneal" (cited), NHS head injury,
+                         HSE emergency department, SBP, Bambino Gesu
+  green_or_bloody_vomit  NHS "Diarrhoea and vomiting" (cited), SEUP
+                         gastroenteritis, KidsDoc newborn, reflux red flags
+
+and the unconscious or fainted baby with no fall in the message joined
+`lethargy` (NHS "What to do if your child has an accident": unconscious, floppy
+or does not wake is 999). tests/red_flag_phrasings.py holds how mothers tell
+every flag, with her spelling ("q", "se a puesto", "bomita", "inconciente"),
+which `_mother_spelling` reads before the patterns; scripts/red_flag_coverage.py
+prints the table per flag, against this tree or any git ref.
 """
 from __future__ import annotations
 
@@ -69,14 +87,20 @@ from dataclasses import dataclass
 # Highest first. A question can carry several flags ("she had a fit and her
 # lips went blue"); the parent gets one answer, so the most time-critical
 # wins. Choking and anaphylaxis are minutes; fever in a neonate is hours.
+#
+# head_injury sits above seizure and lethargy because it only fires when the
+# message tells a knock or a fall: a fit or a faint after one is answered with
+# the head-injury reason and the SEUP sheet, not the febrile-seizure protocol.
 PRIORITY: tuple[str, ...] = (
     "choking",
     "anaphylaxis",
     "cyanosis",
+    "head_injury",
     "seizure",
     "respiratory_distress",
     "non_blanching_rash",
     "bulging_fontanelle",
+    "green_or_bloody_vomit",
     "lethargy",
     "fever_under_3_months",
     "dehydration",
@@ -129,7 +153,7 @@ def normalize(text: str) -> str:
 # see _sleep_pause_only.
 _PAUSES: tuple[str, ...] = (
     # es
-    r"\bapnea\w*\b", r"\bdej(?:a|o|aba) de respirar\b", r"\bpar(?:a|o|aba) de respirar\b",
+    r"\bapnea\w*\b", r"\bdej(?:a|o|aba|ado) de respirar\b", r"\bpar(?:a|o|aba|ado) de respirar\b",
     # en
     r"\bapnoea\w*\b", r"\bapnea\w*\b", r"\bstop(?:s|ped)? breathing\b",
     # fr
@@ -142,14 +166,21 @@ _PATTERNS: dict[str, tuple[str, ...]] = {
         r"\batragant\w*", r"\bse (?:le )?atragant\w*", r"\bcuerpo extra[nñ]o\b",
         r"\bse (?:ha )?trag\w+ (?:un|una|el|la)\b", r"\bobstruccion de (?:la )?via aerea\b",
         r"\bmaniobra de heimlich\b", r"\bno puede (?:respirar|toser) (?:desde que|tras)\b",
+        # "se le fue por mal sitio" alone is a cough that clears it (ERC: let
+        # him cough); it is the flag once he cannot cough.
+        r"\bno (?:puede|consigue) ni toser\b",
+        r"\b(?:atascad|atorad|trabad|clavad)\w*[^.;]{0,15}\bgarganta\b",
+        r"\bpor mal sitio\b[^.;]{0,40}\bno (?:puede|consigue) (?:toser|respirar|llorar)\b",
         # en
         r"\bchok(?:ing|ed|es)\b", r"\bfor?eign body\b", r"\bairway obstruction\b",
         r"\bswallowed a\b", r"\bheimlich\b",
         r"\b(?:can'?t|cannot|unable to) make (?:a|any) (?:sound|noise)\b",
+        r"\bstuck in (?:his|her|their|the|its) throat\b",
         # fr
         r"\betouffe\w*\b", r"\bfausse route\b", r"\bcorps etranger\b", r"\ba avale (?:un|une)\b",
         r"\bs'?etrangl\w*", r"\bavale(?:e)? de travers\b",
         r"\bn'?arrive (?:plus|pas) a (?:tousser|crier)\b",
+        r"\b(?:coince|bloque)\w* dans (?:la|sa) gorge\b",
     ),
     "anaphylaxis": (
         # es
@@ -158,6 +189,13 @@ _PATTERNS: dict[str, tuple[str, ...]] = {
         r"\b(?:se le )?(?:ha )?hinch\w+ (?:la |las |los |el )?(?:cara|lengua|labios|garganta)\b",
         r"\bhinchazon de (?:la )?(?:cara|lengua|labios|garganta)\b",
         r"\badrenalina autoinyect\w*", r"\bautoinyector de adrenalina\b",
+        # Hives with the throat or the breath in it (AEP 2019: skin plus a
+        # second system is anaphylaxis).
+        r"\b(?:ronchas|habones|urticaria)\b[^.;]{0,60}"
+        r"\b(?:(?:cuesta|no puede) (?:tragar|respirar)|pitos|silb\w*)",
+        r"\b(?:hives|welts)\b[^.;]{0,60}"
+        r"\b(?:wheez\w*|(?:trouble|difficulty|struggling)(?: to)? (?:swallow|breath)\w*)",
+        r"\b(?:plaques|urticaire)\b[^.;]{0,60}\b(?:mal a (?:avaler|respirer)|siffl\w*)",
         # en
         r"\banaphyla\w*", r"\bepipen\b", r"\bswollen (?:lips|tongue|face|throat)\b",
         r"\bsevere allergic reaction\b",
@@ -171,15 +209,19 @@ _PATTERNS: dict[str, tuple[str, ...]] = {
     "cyanosis": (
         # es
         r"\bcianosis\b", r"\bcianotic\w*",
-        r"\b(?:labios|lengua|piel|cara|manos|pies|u[nñ]as)[^.,;]{0,24}(?:azul\w*|morad\w*|violet\w*)",
-        r"\b(?:se (?:ha )?(?:pone|puso|puesto)|esta)[^.,;]{0,16}(?:azul\w*|morad\w*)",
+        r"\b(?:labios|lengua|piel|cara|manos|pies|u[nñ]as|boca)[^.,;]{0,24}"
+        r"(?:azul\w*|morad\w*|violet\w*|grisace\w*|gris\b)",
+        r"\b(?:se (?:le |les )?(?:ha |han )?(?:pone|ponen|puso|pusieron|puesto)|esta)"
+        r"[^.,;]{0,16}(?:azul\w*|morad\w*)",
         # en
         r"\bcyanosis\b", r"\bcyanotic\b", r"\bblue (?:lips|tongue|around the mouth)\b",
         r"\b(?:lips|tongue|skin)[^.,;]{0,20}(?:blue|dusky|grey|gray)\b",
         r"\bturning blue\b", r"\bwent blue\b",
+        r"\b(?:turning|turned|went|gone|going|goes) (?:blue|purple|grey|gray)\b",
         # fr
-        r"\bcyanose\w*\b", r"\b(?:levres|langue|peau)[^.,;]{0,20}bleu\w*",
-        r"\bdevient bleu\w*", r"\bbleuit\b",
+        r"\bcyanose\w*\b", r"\b(?:levres|langue|peau|visage)[^.,;]{0,20}(?:bleu|violet|gris)\w*",
+        r"\bdevien\w* (?:bleu|violet|gris)\w*", r"\bbleuit\b",
+        r"\b(?:il|elle) est (?:tout|toute|completement) (?:bleu|violet|gris)\w*",
     ),
     "seizure": (
         # es
@@ -187,9 +229,13 @@ _PATTERNS: dict[str, tuple[str, ...]] = {
         r"\bcrisis (?:febril|convulsiva|epileptica)\w*", r"\bha convulsionado\b",
         r"\bataque epileptic\w*", r"\bespasmo\w* febril\w*",
         r"\bojos en blanco\b", r"\bse (?:quedo|puso) rigid\w*",
+        r"\bse (?:ha )?(?:quedado|quedo|puesto|puso) (?:rigid|ties)\w*",
+        r"\bojos (?:para |hacia )(?:atras|arriba)\b",
         # en
         r"\bseizur\w*", r"\bconvuls\w*", r"\bfebrile fit\b", r"\bhad a fit\b",
-        r"\beyes? roll(?:ed|ing)? (?:back|up)\b", r"\b(?:went|goes|going|gone) (?:completely )?stiff\b",
+        r"\b(?:having|has) a fit\b", r"\bwhole body (?:was |is )?(?:jerking|shaking|twitching)\b",
+        r"\beyes? roll(?:ed|ing)? (?:back|up)\b",
+        r"\b(?:went|goes|going|gone) (?:completely )?stiff\b",
         # fr
         r"\bconvuls\w*", r"\bcrise convulsive\b", r"\bcrise febrile\b",
         r"\byeux (?:reverses|revulses)\b", r"\bs'?est raidi\w*",
@@ -197,13 +243,18 @@ _PATTERNS: dict[str, tuple[str, ...]] = {
     "respiratory_distress": (
         # es
         r"\bquejido\w*\b", r"\bse queja al respirar\b", r"\btiraje\b", r"\bretraccion\w*\b",
-        r"\baleteo nasal\b", r"\bse le marcan las costillas\b", r"\bhunde (?:el pecho|las costillas)\b",
-        r"\b(?:le cuesta|no puede|dificultad para) respirar\b", r"\brespira (?:muy )?(?:rapid|agitad)\w*",
+        r"\baleteo nasal\b", r"\bse le marcan las costillas\b",
+        r"\bhunde (?:el pecho|las costillas)\b",
+        r"\b(?:le cuesta|no puede|dificultad para) respirar\b",
+        r"\brespira (?:muy |super |demasiado |tan )?(?:rapid|agitad)\w*",
+        r"\ble cuesta (?:mucho |muchisimo |bastante )respirar\b",
+        r"\brespira con (?:mucho |mucha |gran )?(?:esfuerzo|dificultad)\b",
         r"\bdistres respiratori\w*", r"\bno respira\b",
         # en
         r"\bgrunting\b", r"\bchest (?:in)?drawing\b", r"\bretractions?\b", r"\bnasal flaring\b",
         r"\b(?:struggling|working hard|difficulty) (?:to )?breath\w*",
         r"\bcan(?:'?t|not| not) breathe\b",
+        r"\bcan(?:'?t|not| not) catch (?:his|her|their|a) breath\b",
         r"\bribs (?:are )?(?:showing|sucking in)\b",
         r"\bbreathing (?:really |very |so |too |extremely )?(?:fast|quickly|rapidly)\b",
         r"\b(?:skin|belly|tummy|chest|stomach)\b[^.,;]{0,25}\b(?:pull|suck|sink|draw)\w* in\b",
@@ -212,7 +263,7 @@ _PATTERNS: dict[str, tuple[str, ...]] = {
         r"\b(?:du mal|difficulte\w*) a respirer\b", r"\bne respire (?:plus|pas)\b",
         r"\bdetresse respiratoire\b",
         r"\bgemi\w*", r"\bn'?arrive (?:plus|pas) a respirer\b",
-        r"\brespire (?:tres |trop |si )?(?:vite|rapidement)\b",
+        r"\brespire (?:tres |trop |si |super |hyper )?(?:vite|rapidement)\b",
         r"\b(?:ventre|cotes|thorax)\b[^.,;]{0,20}\bse (?:creus|rentr)\w*",
         *_PAUSES,
     ),
@@ -220,10 +271,14 @@ _PATTERNS: dict[str, tuple[str, ...]] = {
         # es
         r"\bno (?:se )?(?:blanquea|blanquean)\b",
         r"\b(?:manchas?|puntos?|erupcion|sarpullido)[^.,;]{0,40}no (?:se )?(?:van|desaparec\w+|blanque\w+)",
+        # "manchitas", "puntitos" and the verbs a mother uses for "fade".
+        r"\b(?:manch|punt)it\w*[^.,;]{0,40}no (?:se )?(?:van|quitan|borran|desaparec\w+)",
+        r"\bno (?:se )?(?:van|quitan|borran) al (?:presionar|apretar|estirar)\b",
         r"\bno desaparec\w+ al (?:presionar|apretar|estirar)\b",
         r"\bpetequia\w*\b", r"\bpurpur\w*\b", r"\bprueba del vaso\b",
+        r"\blo del vaso\b[^.;]{0,40}\bno (?:se )?(?:van|quitan|borran|desaparec\w+)",
         # en
-        r"\bnon[- ]?blanching\b", r"\b(?:does|do) ?n'?o?t (?:fade|blanch)\b",
+        r"\bnon[- ]?blanching\b", r"\b(?:does|do) ?n'?o?t (?:fade|blanch|disappear)\b",
         r"\b(?:rash|spots)[^.,;]{0,40}(?:(?:does|do) ?n'?o?t|won'?t) (?:fade|blanch|go away when)",
         r"\bpetechia\w*\b", r"\bpurpur\w*\b", r"\bglass test\b", r"\btumbler test\b",
         r"\b(?:press|roll)\w* (?:a |the )?(?:drinking )?glass\b",
@@ -238,45 +293,78 @@ _PATTERNS: dict[str, tuple[str, ...]] = {
         r"\bfontanela\w*[^.,;]{0,40}(?:abombad|abultad|tensa|hinchad|salient)\w*",
         r"\bmollera[^.,;]{0,40}(?:abombad|abultad|hinchad|salient)\w*",
         # en
-        r"\bbulging (?:fontanel\w*|soft spot)", r"\bfontanel\w*[^.,;]{0,40}(?:bulg|swollen|raised|tense)\w*",
-        r"\bsoft spot[^.,;]{0,40}(?:bulg|swollen|raised|tense)\w*",
+        r"\bbulging (?:fontanel\w*|soft spot)",
+        r"\bfontanel\w*[^.,;]{0,40}(?:bulg|swollen|raised|tense|puffy)\w*",
+        r"\bsoft spot[^.,;]{0,40}(?:bulg|swollen|raised|tense|puffy)\w*",
         # fr
         r"\bfontanelle[^.,;]{0,40}(?:bombee|tendue|gonflee|bombe)\b",
     ),
     "lethargy": (
         # es
-        r"\bletargi\w*", r"\bletargic\w*", r"\bno (?:se )?despierta\b", r"\bno hay forma de despertarl\w*",
+        r"\bletargi\w*", r"\bletargic\w*", r"\bno (?:se )?despierta\b",
+        r"\bno hay forma de despertarl\w*",
         r"\bno reacciona\b", r"\bno responde a (?:nada|est[ií]mulos|mi voz|la voz)\b",
         r"\bmuy decaid\w*", r"\bno se mantiene despiert\w*", r"\bmuy flojit\w*", r"\bhipotoni\w*",
         r"\bno (?:consigo|puedo|logro) despertarl\w*", r"\bcuesta (?:mucho )?despertarl\w*",
+        r"\bno hay (?:manera|quien) de despertarl\w*",
+        r"\bno hay quien (?:lo|la|le) despierte\b",
+        r"\bno me reconoce\b", r"\bmuneco de trapo\b",
+        r"\bno responde cuando (?:la |le |lo )?(?:llamo|hablo|llamamos|hablamos)\b",
+        r"\bcuesta (?:muchisimo|much\w+|bastante) despertarl\w*",
+        r"\besta (?:muy |tan |super )?floj(?:o|a|ito|ita)\b",
+        # Unconscious or fainted, with no fall in the message (a fall makes it
+        # head_injury). NHS "What to do if your child has an accident" sends
+        # an unconscious, floppy or unwakeable child to 999; KidsDoc sends a
+        # faint to 112. Subject-anchored: "casi me desmayo" is the mother, and
+        # "de forma inconsciente" is an adverb.
+        r"(?<!no )\bse (?:ha |habia )?desmay\w*",
+        r"\b(?:ha tenido|tuvo|le (?:ha )?dado|le dio) un desmayo\b",
+        r"(?<!no )(?<!no ha )(?<!sin )\bperd\w* el (?:conocimiento|sentido)\b",
+        r"\bperdida (?:de )?(?:la )?(?:conciencia|consciencia|conocimiento)\b",
+        r"(?<!no )\b(?:esta|estaba|se (?:ha )?quedado|se quedo|se queda|parece) inconscient\w*",
+        r"\bse (?:ha )?quedado sin sentido\b",
         # en
         r"\blethargi\w*", r"\bwon'?t wake\b", r"\bwill not wake\b", r"\bnot waking\b",
         r"\bunresponsive\b", r"\bfloppy\b", r"\bdoes ?n'?o?t respond to\b",
         r"\bcan(?:'?t|not| not) (?:\w+ )?(?:wake|rouse)\b", r"\bhard to (?:wake|rouse)\b",
+        r"\b(?:won'?t|wouldn'?t) respond\b(?! to (?:the )?(?:antibiotic|treatment|medicine))",
+        # "has a limp" is a gait; "is limp" is tone.
+        r"\b(?:is|was|'s|very|so|really|all|gone|went) limp\b",
+        r"\b(?:he|she|baby|they|it)(?:'s| has| had| just)? (?:passed out|fainted|blacked out)\b",
+        r"\band (?:then )?(?:passed out|fainted|blacked out)\b",
+        r"(?<!never )\blost consciousness\b", r"\b(?:is|was|went|been|'s) unconscious\b",
+        r"(?<!n't )(?<!not )(?<!never )\bknocked out\b",
         # fr
         r"\blethargi\w*", r"\bne se reveille pas\b", r"\bne reagit pas\b", r"\btres abattu\w*",
         r"\bhypotoni\w*", r"\bmou et ne reagit\b",
         r"\bn'?arrive (?:plus|pas) a (?:le |la |l')?reveiller\b", r"\bdifficile a reveiller\b",
-        r"\bimpossible de (?:le |la |l')?reveiller\b", r"\best (?:tout |tres |completement )?(?:molle?|flasque)\b",
+        r"\bimpossible de (?:le |la |l')?reveiller\b",
+        r"\best (?:tout |tres |completement )?(?:molle?|flasque)\b",
+        r"\bs'?(?:est|etait) evanoui\w*", r"(?<!pas )(?<!jamais )\bperdu connaissance\b",
+        r"(?<!pas de )(?<!sans )\bperte de connaissance\b",
+        r"\best inconscient\w*", r"\b(?:il|elle) est tombee? dans les pommes\b",
     ),
     "dehydration": (
         # es
         r"\bdeshidrat\w*", r"\bojos hundid\w*", r"\bfontanela hundid\w*", r"\bmollera hundid\w*",
         r"\bllora sin lagrimas\b", r"\bsin lagrimas\b", r"\bboca (?:muy )?seca\b",
-        r"\bla piel no vuelve\b",
+        r"\bla piel no vuelve\b", r"\bhundid\w* (?:la )?(?:mollera|fontanela)\b",
         # en
         r"\bdehydrat\w*", r"\bsunken (?:eyes|fontanel\w*|soft spot)\b", r"\bno tears\b",
         r"\bdry mouth\b", r"\bskin turgor\b",
         r"\beyes?\b[^.,;]{0,20}\bsunken\b", r"\b(?:cries|crying|cried) without (?:any )?tears\b",
+        r"\bmouth (?:is |looks |feels )?(?:really |very |so )?dry\b",
         # fr
         r"\bdeshydrat\w*", r"\byeux creux\b", r"\byeux enfonces\b", r"\bfontanelle creuse\b",
         r"\bpleure sans larmes\b", r"\bbouche seche\b",
+        r"\byeux\b[^.,;]{0,15}\b(?:creux|enfonces)\b",
     ),
     "no_wet_nappy_12h": (
         # es
         r"\bno ha (?:mojado|manchado) (?:el )?pa[nñ]al\b",
         r"\bpa[nñ]al(?:es)? (?:esta |sigue |continua |lleva )?(?:todo el dia )?(?:completamente )?sec\w*",
         r"\bno (?:orina|hace pis|ha orinado|ha hecho pis)\b", r"\bsin (?:orinar|hacer pis|mojar)\b",
+        r"\bno moja (?:el |los )?pa[nñ]al\w*",
         # en
         r"\bno wet (?:nappy|nappies|diaper|diapers)\b", r"\bdry (?:nappy|nappies|diaper|diapers)\b",
         r"\bhas ?n'?o?t (?:peed|weed|wee'?d|urinated|had a wet)\b", r"\bnot passed urine\b",
@@ -284,9 +372,59 @@ _PATTERNS: dict[str, tuple[str, ...]] = {
         r"(?:still )?(?:completely |totally )?dry\b",
         # fr
         r"\bcouches? seches?\b", r"\bpas de couche mouillee\b", r"\bn'?a pas (?:urine|fait pipi)\b",
-        r"\bn'?a pas mouille\b", r"\bcouche\w* (?:est |sont |reste |restent )?(?:toujours |encore )?seche",
+        r"\bn'?a pas mouille\b",
+        r"\bcouche\w* (?:est |sont |reste |restent )?(?:toujours |encore )?seche",
+        r"\bpas de pipi\b",
+    ),
+    # NHS "Diarrhoea and vomiting": green or yellow-green vomit, blood or
+    # something like coffee grounds is A&E or 999. SEUP gastroenteritis
+    # ("verdosos, con sangre o como posos de cafe": back to urgencias), KidsDoc
+    # newborn ("vomita bilis": urgencias ahora mismo) and the reflux red flags
+    # ("vomito bilioso ... emergencia quirurgica") say the same. The colour has
+    # to be the vomit's: up to three words between, none of them "y", "mocos"
+    # or "caca", so "vomita y tiene mocos verdes" is not it.
+    "green_or_bloody_vomit": (
+        # es
+        r"\b(?:vomit\w*|devuelt\w*|devuelve|regurgit\w*)"
+        r"(?: (?!y\b|e\b|o\b|ni\b|no\b|sin\b|nunca\b|pero\b|mocos?\b|cacas?\b|heces\b|pis\b)"
+        r"\w+){0,3}?"
+        r" (?:verd(?:e|os|us)\w*|bilis|bilios\w*|(?:con |de )?sangre|(?:como )?posos de cafe)\b",
+        r"\b(?:sangre|bilis) (?:en|de) (?:el |los |su |sus )?vomit\w*",
+        # "vomito y era verde", "ha vomitado y traia sangre": the colour told after it.
+        r"\bvomit\w*[^.;]{0,30}\by (?:era|es|estaba|salio|sale)(?: \w+)? (?:verde\w*|bilis)\b",
+        r"\bvomit\w*[^.;]{0,30}\by (?:tenia|tiene|traia|trae|llevaba|lleva|habia|hay)"
+        r" (?:hilos de |un poco de |algo de )?sangre\b"
+        r"(?! en (?:las |la |el |los )?(?:heces|cacas?|pa[nñ]al\w*|deposicion\w*))",
+        # en
+        r"\b(?:vomit\w*|threw up|throw\w* up|thrown up|puk\w*|spat up|spit\w* up|"
+        r"(?:his|her|the|their) sick)"
+        r"(?: (?!and\b|but\b|not\b|no\b|never\b|without\b|snot\b|poo\w*|nappy\b|diaper\b)\w+){0,3}?"
+        r" (?:green\w*|bile|bilious|blood\w*|coffee grounds?)\b",
+        r"\b(?:blood|bile)\b (?:in|on) (?:his |her |the |their )?(?:vomit|sick)\b",
+        r"\b(?:vomit\w*|threw up|thrown up|been sick|was sick|puked)\b[^.;]{0,30}"
+        r"\b(?:it|the vomit|the sick)(?:'s| is| was| looks?| looked)(?: \w+){0,2}"
+        r" (?:green\w*|bloody|blood\w*)\b(?! (?:poo\w*|stools?|nappy|diaper|snot))",
+        r"\b(?:vomit\w*|threw up|thrown up|been sick|was sick|puked)\b[^.;]{0,30}"
+        r"\b(?:blood|bile) in it\b",
+        # fr
+        r"\b(?:vomi\w*|rejet\w*|regurgit\w*)"
+        r"(?: (?!et\b|mais\b|pas\b|sans\b|jamais\b|morve\b|selles?\b|caca\b)[\w']+){0,3}?"
+        r" (?:vert\w*|verdatre\w*|bile|bilieu\w*|sang\b|sanglant\w*|marc de cafe)",
+        r"\b(?:sang|bile) dans (?:le |les |ses )?vomi\w*",
+        r"\bvomi\w*[^.;]{0,30}\b(?:c'etait|c'est|il y avait|il y a)(?: \w+)?"
+        r" (?:vert\w*|du sang|sang)\b(?! dans (?:les |la |ses )?(?:selles|couche\w*))",
     ),
 }
+
+#: Blood the baby swallowed from a cracked nipple comes back up and is not a
+#: bleed: the reflux red-flag sheet counts hematemesis "no por sangre
+#: deglutida". With one of these in the message, blood in the vomit goes to
+#: the RAG, whose sources say so; a green vomit still fires.
+_SWALLOWED_BLOOD = re.compile(
+    r"\bgrieta\w*|\bpezon\w*|\bsangre (?:deglutida|tragada)\b"
+    r"|\bcracked nipple\w*|\bswallowed blood\b|\bcrevasse\w*|\bmamelon\w*"
+)
+_GREEN_OR_BILE = re.compile(r"\bverd(?:e|os|us)\w*|\bbili\w*|\bgreen\w*|\bvert\w*|\bverdatre\w*")
 
 _COMPILED: dict[str, tuple[re.Pattern[str], ...]] = {
     code: tuple(re.compile(p) for p in patterns) for code, patterns in _PATTERNS.items()
@@ -295,7 +433,9 @@ _COMPILED: dict[str, tuple[re.Pattern[str], ...]] = {
 #: The one flag that is computed rather than pattern-matched: it needs the
 #: age and the temperature together (NICE NG143 1.2.12), so no single regex
 #: can express it.
-COMPUTED_CODES = frozenset({"fever_under_3_months"})
+#: head_injury is computed too: a sign that is an alarm after a knock (a vomit,
+#: a sleepy child, a lump) is ordinary without one, so it needs both.
+COMPUTED_CODES = frozenset({"fever_under_3_months", "head_injury"})
 
 # A code in PRIORITY with neither patterns nor a computation is a flag that
 # silently never fires; a pattern set with no place in PRIORITY never wins.
@@ -320,7 +460,16 @@ _FEVER_WORDS = re.compile(
     r"(?:really |very |so |quite |extremely )?hot\b|\bfeels? hot to (?:the )?touch\b"
     r"|\bburning (?:hot|up)\b"
     r"|\b(?:il|elle) est (?:tres |tout |bien |vraiment )?chaud(?:e)?\b|\bbrulant\w*"
+    # The same, the way Spanish mothers say it ("esta ardiendo", "tiene
+    # calentura", "la noto muy caliente"), "running a temp" and "fievreux".
+    # Subject-anchored like the rest: "el agua esta caliente" is a bath.
+    r"|\bcalentura\b|\besta ardiendo\b|\b(?:lo|la|le) noto (?:muy |super )?caliente\b"
+    r"|\brunning a (?:temp|temperature|fever)\b|\b(?:has|got) a temp\b"
+    r"|\bfievreu\w*"
 )
+
+#: "38 y pico" is how a Spanish mother reads a thermometer past 38.
+_TEMPERATURE_Y_PICO = re.compile(r"(?<![\d,.])(3[89]|4[0-3]) y (?:pico|algo|medio)\b")
 
 #: A thermometer in the sentence makes a bare 35..43 a reading, the same way
 #: the word "fever" does: "le thermometre indique 38".
@@ -443,6 +592,8 @@ def _fever_flag(question: str, age: int | None) -> RedFlag | None:
         return None
     n = normalize(question)
     temp = temperature_in(question)
+    if temp is None and (m := _TEMPERATURE_Y_PICO.search(n)) is not None:
+        temp = float(m.group(1))
     if temp is not None and temp >= FEVER_THRESHOLD_C:
         return RedFlag("fever_under_3_months", f"{temp:g} C", age, temp)
     if temp is not None and temp < FEVER_THRESHOLD_C and not _FEVER_WORDS.search(n):
@@ -520,6 +671,208 @@ def _sleep_pause_only(n: str, age: int | None) -> bool:
     return not any(p.search(n) for p in _DISTRESS_WITHOUT_PAUSES)
 
 
+# --- a knock to the head -----------------------------------------------------
+#
+# Every sign below is written in the source that makes it an emergency AFTER A
+# KNOCK, so it only counts when the message tells one (_HEAD_BLOW):
+#
+#   lost consciousness, even briefly   NHS head injury (999), SBP, Bambino Gesu
+#   vomiting more than once            HSE ("vomita mas de una vez": urgencias),
+#                                      SEUP ("vomitos repetidos"), SBP (3+)
+#   blood or clear fluid, ear or nose  SEUP, NHS (999), SBP
+#   a seizure                          NHS (999), SBP ("convulsion tras el golpe")
+#   sleepiness that does not pass      NHS ("no consigue mantenerse despierto"),
+#                                      SEUP ("dificultad para despertarlos"),
+#                                      SBP ("somnolencia excesiva"); a child who
+#                                      is just sleepy may sleep (NHS), so plain
+#                                      "tiene sueno" is not it
+#   a fall over a metre or down stairs SEUP (>1 m), NHS (>1 m or 5 steps)
+#   any knock under 3 months           SEUP ("siempre que tenga menos de 3 meses")
+#   a big lump under 1 year, a soft    NHS (under 1: a large lump, swelling or
+#   one at any age                     cut, 999 or A&E), Bambino Gesu
+#                                      ("hinchazon blanda del craneo")
+#
+# One vomit after a knock is not here: NHS makes it same-day advice and HSE
+# starts at more than one, so it goes to the RAG, which holds both. Blood from
+# inside the ear needs no knock in the message (NHS: bleeding from the ears),
+# unless an ear infection explains it (NHS ear infections: same-day advice).
+
+_HEAD_BLOW = re.compile(
+    # es. "golpe de tos / de calor" is a cough fit and heatstroke; "se le cayo
+    # el chupete" and "se cae el pelo" are things falling, not the baby.
+    r"\bgolpe(?:s|cit\w*|ad\w*|o)?\b(?! de (?:tos|calor|aire|frio|sol|suerte))"
+    r"|\bse golpe\w*|\bcabezazo\w*|\btrompazo\w*|\bporrazo\w*|\bcostalazo\w*|\bcoscorron\w*"
+    r"|\bchichon\w*|\btraumatismo\w*"
+    r"|\bse (?:ha |habia )?(?:caido|cayo|callo|cae)\b"
+    r"(?! (?:el|la|los|las|un|una|unos|unas|su|sus|mi|mis|algo)\b)"
+    r"|\b(?:caerse|al caer)\b|\bcaida\b(?! del? (?:pelo|cabello|diente|ombligo|cordon))"
+    r"|\bse (?:ha )?(?:dado|dio) (?:con|en|contra)\b|\bdarse (?:con|en|contra)\b"
+    # en. "fell asleep" and "fell ill" are not falls.
+    r"|\b(?:hit|hitting|bump|bumped|bumping|bang|banged|banging|knock|knocked|smacked)\b"
+    r" (?:his |her |their |its |the )?head\b"
+    r"|\bhead (?:injury|injuries|bump|knock|trauma)\b"
+    r"|\bfell\b(?! (?:asleep|ill|sick|pregnant|in love|for\b))"
+    r"|\bfall(?:en|ing|s)? (?:off|from|out|down|over|on|onto)\b|\bhad a (?:fall|tumble)\b"
+    r"|\brolled off\b|\bknocked out\b"
+    # fr. "tombe malade" is falling ill; "tombe dans les pommes" is a faint.
+    r"|\btombe\w*\b(?! (?:malade|enceinte|amoureu\w*|de sommeil|dans les pommes))"
+    r"|\bchute\b|\bcogne\w*|\bs'?est tape\w*|\btape la tete\b"
+    r"|\b(?:choc|coup) (?:a|sur) la tete\b|\btraumatisme cranien\w*"
+)
+
+_HEAD_SIGNS: tuple[re.Pattern[str], ...] = tuple(re.compile(p) for p in (
+    # vomiting more than once
+    r"\bvomit\w*[^.;]{0,20}\b(?:varias|muchas|dos|tres|cuatro|cinco|[2-9]|\d{2}) veces\b",
+    r"\bno (?:para|deja) de vomitar\b", r"\b(?:sigue|no para de) vomitando\b",
+    r"\bvomit\w* (?:sin parar|una y otra vez|todo el rato|otra vez|de nuevo)\b",
+    r"\b(?:ha vuelto|volvio) a vomitar\b",
+    r"\b(?:dos|tres|cuatro|varios|muchos|[2-9]|\d{2}) vomitos\b", r"\bvomitos repetidos\b",
+    r"\b(?:vomited|been sick|thrown up|threw up|puked|was sick)[^.;]{0,20}\b(?:twice|two times|"
+    r"three times|[2-9] times|several times|a few times|more than once|again|repeatedly|"
+    r"multiple times)\b",
+    r"\bkeeps? (?:on )?(?:vomiting|being sick|throwing up|puking)\b",
+    r"\b(?:won'?t|can'?t) stop (?:vomiting|being sick|throwing up)\b",
+    r"\b(?:still|repeatedly) (?:vomiting|throwing up|being sick)\b",
+    r"\bvomi\w*[^.;]{0,20}\b(?:plusieurs|deux|trois|quatre|[2-9]) fois\b",
+    r"\bn'?arrete (?:pas|plus) de vomir\b", r"\bvomit sans arret\b",
+    r"\b(?:encore|de nouveau) vomi\b", r"\brevomi\w*", r"\bvomissements (?:repetes|a repetition)\b",
+    # blood or clear fluid from the ear or the nose
+    r"\b(?:sangre|sangr\w*|liquido\w*)\b[^.;]{0,30}\b(?:oido|oidos|oreja|orejas|nariz)\b",
+    r"\b(?:oido|oidos|oreja|nariz)\b[^.;]{0,15}\b(?:sangr\w*|liquido)",
+    r"\b(?:blood|bleeding|fluid|liquid)\b[^.;]{0,30}\b(?:ears?|nose)\b",
+    r"\b(?:ears?|nose)\b[^.;]{0,15}\b(?:bleed\w*|leak\w*|blood)",
+    r"\b(?:sang|saign\w*|liquide)\b[^.;]{0,30}\b(?:oreilles?|nez)\b",
+    r"\b(?:oreilles?|nez)\b[^.;]{0,15}\b(?:saign\w*|coule)",
+    # sleepiness that does not pass
+    # "muy dormido" is a child asleep, which NHS says he may be.
+    r"\b(?:muy|super|tan|demasiado) (?:somnolient\w*|adormilad\w*)",
+    r"\bsomnolencia (?:excesiva|intensa|que no)\b",
+    r"\bmucho sueno\b[^.;]{0,30}\bno se (?:le )?pasa\b", r"\bno se (?:le )?pasa el sueno\b",
+    r"\bno (?:se )?(?:mantiene|consigue mantenerse|puede mantenerse|aguanta) despiert\w*",
+    r"\bno hay quien (?:lo|la|le) mantenga despiert\w*", r"\bse (?:le )?cierran los ojos\b",
+    r"\b(?:very|really|so|unusually|extremely|super) (?:drowsy|sleepy)\b",
+    r"\b(?:can'?t|cannot|won'?t|unable to) stay awake\b",
+    r"\bkeeps? (?:falling|nodding) (?:asleep|off)\b",
+    r"\b(?:tres|super|trop|anormalement) (?:somnolent\w*|endormi\w*)",
+    r"\bn'?arrive (?:pas|plus) a rester eveill\w*", r"\bs'endort tout le temps\b",
+    r"\bsomnolence (?:excessive|anormale|inhabituelle)\b",
+    # a high fall
+    r"\b(?:mas de|desde mas de) (?:un|1) metro\b", r"\bpor las escaleras\b",
+    r"\bdesde (?:una |la )?(?:ventana|litera|altura)\b",
+    r"\b(?:down|off) the stairs\b", r"\bdown a flight\b",
+    r"\bmore than (?:a|one|1) (?:metre|meter)\b", r"\bfrom a (?:window|height|bunk)\b",
+    r"\bdans les escaliers\b", r"\bplus d'?(?:un|1) metre\b", r"\bd'?une fenetre\b",
+))
+
+_HEAD_LUMP = re.compile(
+    r"\b(?:chichon\w*|bulto\w*|hinchazon|hinchad\w*|bola|bollo)\b"
+    r"|\b(?:lump|swelling|goose ?egg|bump on (?:his|her|their|the) head)\b"
+    r"|\b(?:bosse|gonflement|hematome|enflure)\b"
+)
+_LUMP_SOFT = re.compile(r"\b(?:bland\w*|esponjos\w*|soft|squishy|boggy|spongy|molle?)\b")
+_LUMP_BIG = re.compile(r"\b(?:grande|enorme|gran|big|huge|large|massive|grosse?)\b")
+
+_EAR_BLEEDING = re.compile(
+    r"\b(?:sangre|sangra\w*)\b[^.;]{0,15}\boidos?\b|\boidos?\b[^.;]{0,10}\bsangr\w*"
+    r"|\b(?:blood|bleeding)\b (?:from|out of|coming out of|in) (?:his|her|their|the|its) ears?\b"
+    r"|\bears? (?:is |are )?bleeding\b"
+    r"|\b(?:sang|saign\w*)\b[^.;]{0,15}\b(?:de|par|dans) l'oreille\b"
+)
+_EAR_INFECTION = re.compile(r"\botitis\b|\binfeccion de oido\b|\bear infection\b|\botite\b")
+
+#: The age below which SEUP sends any knock to the head to the emergency department.
+HEAD_INJURY_ANY_KNOCK_MONTHS = 3
+#: The age below which NHS sends a large lump or swelling after a knock to 999
+#: or A&E (NICE CG176 behind it puts "large" at over 5 cm). A plain "chichon"
+#: is not it: the conversation battery's golpe-en-la-cabeza scenario, at 11
+#: months, expects the sources' answer to it.
+HEAD_INJURY_BIG_LUMP_MONTHS = 12
+
+
+# A knock the mother places somewhere else ("se dio un golpe en el dedo", "she
+# banged her knee") is not a head injury unless the head is named as well.
+_HEAD_WORD = re.compile(
+    r"\b(?:cabeza|craneo|frente|nuca|head|forehead|skull|tete|crane|front)\b"
+)
+_OTHER_PART = re.compile(
+    r"\b(?:en|de) (?:el |la |los |las |su |sus )?(?:dedos?|manos?|brazos?|piernas?|rodillas?|pies?"
+    r"|codos?|labios?|boca|dientes?|tobillos?|espalda|culete|culo|trasero)\b"
+    r"|\b(?:hit|hurt|bumped|banged|knocked|cut|on) (?:his|her|their|the|a) (?:fingers?|hands?"
+    r"|arms?|legs?|knees?|foot|feet|elbows?|lips?|mouth|teeth|tooth|toes?|bottom|back)\b"
+    r"|\b(?:au|aux|a la|sur (?:le|la|les|son|sa|ses)|cogne (?:le|la|les|son|sa|ses)) (?:doigts?"
+    r"|mains?|bras|jambes?|genoux?|pieds?|coudes?|levres?|bouche|dents?|fesses|dos)\b"
+)
+# "no le sale sangre", "sin vomitar mas", "wasn't sick again", "pas de sang":
+# a sign she rules out, read back to the last comma.
+_NEGATION_BEFORE = re.compile(r"(?:\b(?:no|sin|ni|nunca|not|never|without|pas|sans)\b|n't)[^,.;]*$")
+
+
+def _negated(n: str, start: int) -> bool:
+    return _NEGATION_BEFORE.search(n[max(0, start - 20):start]) is not None
+
+
+def _first_sign(n: str, patterns) -> re.Match[str] | None:
+    for pattern in patterns:
+        for m in pattern.finditer(n):
+            if not _negated(n, m.start()):
+                return m
+    return None
+
+
+def _head_injury_flag(n: str, age: int | None) -> RedFlag | None:
+    """A knock to the head with a sign its sources send to the emergency department.
+
+    Signs and sources are in the table above `_HEAD_BLOW`. The lethargy and
+    seizure patterns count as signs after a knock, so "se cayo y no reacciona"
+    gets the head-injury answer and its source rather than the generic one.
+    """
+    ear = _first_sign(n, (_EAR_BLEEDING,))
+    if ear is not None and not _EAR_INFECTION.search(n):
+        return RedFlag("head_injury", ear.group(0), age)
+    if (blow := _HEAD_BLOW.search(n)) is None:
+        return None
+    if _OTHER_PART.search(n) and not _HEAD_WORD.search(n):
+        return None
+    if age is not None and age < HEAD_INJURY_ANY_KNOCK_MONTHS:
+        return RedFlag("head_injury", blow.group(0), age)
+    if (m := _first_sign(n, _HEAD_SIGNS)) is not None:
+        return RedFlag("head_injury", m.group(0), age)
+    for pattern in (*_COMPILED["lethargy"], *_COMPILED["seizure"]):
+        if (m := pattern.search(n)) is not None:
+            return RedFlag("head_injury", m.group(0), age)
+    if (lump := _HEAD_LUMP.search(n)) is not None:
+        under_one = age is None or age < HEAD_INJURY_BIG_LUMP_MONTHS
+        if _LUMP_SOFT.search(n) or (under_one and _LUMP_BIG.search(n)):
+            return RedFlag("head_injury", lump.group(0), age)
+    return None
+
+
+# --- how a mother spells it at night -----------------------------------------
+#
+# Read before the patterns, so each pattern keeps one spelling. Only fixes that
+# cannot make a sentence mean something else: abbreviations ("q", "xq", "x",
+# "d", "tb", "mui"), b for v in the words this module reads ("bomita",
+# "conbulsion", "berde"), "desmallado", "inconciente", "reaciona", "abonbada",
+# and "a" for "ha" before a participle ("se a puesto", "no a echo pis").
+_MOTHER_SPELLING: tuple[tuple[re.Pattern[str], str], ...] = tuple(
+    (re.compile(p), r) for p, r in (
+        (r"\b(?:q|k)\b", "que"), (r"\b(?:xq|pq|porq)\b", "porque"), (r"\bx\b", "por"),
+        (r"\bd\b(?!')", "de"), (r"\btb\b", "tambien"), (r"\bmui\b", "muy"),
+        (r"\bbomit", "vomit"), (r"\bconbuls", "convuls"), (r"\bberde", "verde"),
+        (r"desmall", "desmay"), (r"inconcien", "inconscien"), (r"\breaciona", "reacciona"),
+        (r"abonbad", "abombad"), (r"\ba echo\b", "ha hecho"), (r"\becho pis\b", "hecho pis"),
+        (r"\b(se|le|lo|la|me|te|no|ya|y|i|que|nos|les) a "
+         r"(?=\w+(?:ado|ido|ada|ida|ao|to|sto|cho)\b)", r"\1 ha "),
+    )
+)
+
+
+def _mother_spelling(n: str) -> str:
+    for pattern, replacement in _MOTHER_SPELLING:
+        n = pattern.sub(replacement, n)
+    return n
+
+
 def detect(
     question: str,
     *,
@@ -535,7 +888,7 @@ def detect(
     del locale  # matching is language-agnostic; the ANSWER is localized
     if not question or not question.strip():
         return None
-    n = normalize(question)
+    n = _mother_spelling(normalize(question))
     age = _effective_age(question, age_months)
 
     hits: dict[str, RedFlag] = {}
@@ -554,6 +907,14 @@ def detect(
 
     if "respiratory_distress" in hits and _sleep_pause_only(n, age):
         hits.pop("respiratory_distress")
+
+    vomit = hits.get("green_or_bloody_vomit")
+    if (vomit is not None and _SWALLOWED_BLOOD.search(n)
+            and not _GREEN_OR_BILE.search(vomit.matched)):
+        hits.pop("green_or_bloody_vomit")
+
+    if (head := _head_injury_flag(n, age)) is not None:
+        hits["head_injury"] = head
 
     if (fever := _fever_flag(question, age)) is not None:
         hits["fever_under_3_months"] = fever
@@ -627,7 +988,26 @@ _ERC = {
     "url": "https://www.resuscitationjournal.com/article/S0300-9572(21)00068-X/fulltext",
 }
 
+# These two live with their topic, not in the urgent-care file: the SEUP sheet
+# with the falls (evidence_seguridad.json), the NHS page with digestion
+# (evidence_digestivo_piel.json). Each is the source that names the sign and
+# sends it to the emergency department.
+_SEUP_TCE = {
+    "title": "Traumatismo craneal, información para padres (SEUP)",
+    "organization": "Sociedad Española de Urgencias de Pediatría (SEUP)",
+    "year": None,
+    "url": "https://seup.org/wp-content/uploads/2025/08/24_Traumatismo-craneal_nueva.pdf",
+}
+_NHS_DV = {
+    "title": "Diarrhoea and vomiting (NHS)",
+    "organization": "NHS (National Health Service, Reino Unido)",
+    "year": 2023,
+    "url": "https://www.nhs.uk/conditions/diarrhoea-and-vomiting/",
+}
+
 RED_FLAG_SOURCES: dict[str, dict[str, object]] = {
+    "head_injury": _SEUP_TCE,
+    "green_or_bloody_vomit": _NHS_DV,
     "fever_under_3_months": _NG143,
     "non_blanching_rash": _NG240,
     "respiratory_distress": _NG9,

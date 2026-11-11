@@ -1,0 +1,302 @@
+"""How a mother tells each red flag, and how she tells the things that only look like one.
+
+The coverage set behind tests/test_red_flag_coverage.py and
+scripts/red_flag_coverage.py. tests/test_red_flags_languages.py keeps two clean
+sentences per flag and language; this set is wider on purpose: the way a mother
+types at night (no accents, "q", "xq", "se a puesto", "bomita", "inconciente"),
+the words the corpus sources use for each sign, and the battery's own turns.
+
+Origin of each phrase, in the last field:
+
+* a corpus title (short form) when the sign and its wording come from that source;
+* "bateria" for a turn of scripts/conversation_scenarios.json;
+* "madre" for a sentence written in a mother's voice for a sign already in the
+  module's guideline, "errata" when it carries her spelling.
+
+The head-injury phrases are the #retr4 finding (2026-11-11): "se ha dado un
+golpe en la cabeza y ha perdido el conocimiento", "se ha desmayado", "se ha
+quedado inconsciente", "se ha dado en la cabeza y ha vomitado varias veces",
+"le sale sangre por el oido" all went to the model; only "no reacciona" fired.
+
+Rules, the same as the languages file: a positive the detector misses is fixed
+in the detector, never reworded until it passes; a look-alike that fires is
+narrowed in the detector only where a source says the sign is not urgent.
+"""
+from __future__ import annotations
+
+# (code, locale, sentence, profile age in months or None, origin)
+POSITIVES: list[tuple[str, str, str, int | None, str]] = [
+    # --- head injury: SEUP "Traumatismo craneal", NHS "Head injury and
+    # concussion", HSE "when to go to an emergency department", SBP
+    # "Traumatismo craneoencefalico leve", Bambino Gesu "Cuando llevar al nino
+    # a urgencias", Comunidad de Madrid "Accidentes infantiles".
+    ("head_injury", "es", "Se ha dado un golpe en la cabeza y ha perdido el conocimiento", 14,
+     "retr4; NHS head, SBP TCE"),
+    ("head_injury", "es", "Se ha caído de la cama y se ha desmayado", 10, "NHS head"),
+    ("head_injury", "es", "Se ha quedado inconsciente después de caerse del sofá", 12, "NHS head"),
+    ("head_injury", "es", "Se ha dado en la cabeza y ha vomitado varias veces", 14,
+     "retr4; SEUP TCE"),
+    ("head_injury", "es", "Se golpeó la cabeza con la mesa y no para de vomitar", 20, "SEUP TCE"),
+    ("head_injury", "es", "Se dio un cabezazo contra el suelo y lleva 3 vómitos", 16, "SBP TCE"),
+    ("head_injury", "es", "Se ha caído del cambiador, ha vomitado dos veces", 7, "HSE urg"),
+    ("head_injury", "es", "Se cayó de la trona y le sale sangre por el oído", 11, "NHS head"),
+    ("head_injury", "es", "Le sale sangre por el oído", 15, "retr4; NHS head"),
+    ("head_injury", "es", "Desde que se dio el golpe le sale un líquido transparente por la nariz",
+     18, "SEUP TCE"),
+    ("head_injury", "es", "Se ha dado un golpe en la cabeza y tiene mucho sueño, no se le pasa", 20,
+     "SEUP TCE, SBP TCE"),
+    ("head_injury", "es",
+     "Se cayó del sofá y está muy adormilado, no hay quien lo mantenga despierto",
+     13, "NHS head"),
+    ("head_injury", "es", "Después del golpe en la cabeza ha tenido una convulsión", 15, "SBP TCE"),
+    ("head_injury", "es",
+     "Tiene 4 meses, se cayó de la cama y le ha salido un bulto blando muy grande",
+     4, "Bambino urg, NHS head"),
+    ("head_injury", "es", "Se ha caído del carro, tiene 6 semanas", None, "SEUP TCE (<3 meses)"),
+    ("head_injury", "es", "Se ha caído rodando por las escaleras", 18, "NHS head (>5 escalones)"),
+    ("head_injury", "es", "se a dado un golpe en la cabeza i a bomitado 3 veces", 14, "errata"),
+    ("head_injury", "es", "se callo de la cama y esta inconciente", 9, "errata"),
+    ("head_injury", "es", "se dio en la cabeza y no para d vomitar q hago", 22, "errata"),
+    ("head_injury", "en", "He hit his head and passed out", 12, "NHS head"),
+    ("head_injury", "en", "She fell off the bed and was knocked out for a few seconds", 10,
+     "SBP TCE"),
+    ("head_injury", "en", "He banged his head and has been sick three times", 18, "HSE urg"),
+    ("head_injury", "en", "She bumped her head an hour ago and keeps vomiting", 13, "SEUP TCE"),
+    ("head_injury", "en", "After falling down the stairs there's blood coming from his ear", 20,
+     "NHS head"),
+    ("head_injury", "en", "She hit her head and now clear fluid is coming out of her nose", 16,
+     "NHS head"),
+    ("head_injury", "en",
+     "He fell and hit his head and now he's really drowsy and can't stay awake",
+     14, "NHS head"),
+    ("head_injury", "en", "She bumped her head and then had a fit", 15, "NHS head"),
+    ("head_injury", "en",
+     "My 5 month old rolled off the changing table and has a big squishy lump on "
+     "his head", None, "NHS head (<1 year)"),
+    ("head_injury", "en", "he hit his head on the table, threw up twice", 13, "HSE urg"),
+    ("head_injury", "fr", "Il est tombé sur la tête et a perdu connaissance", 12, "NHS head"),
+    ("head_injury", "fr", "Elle s'est cogné la tête et a vomi plusieurs fois", 14, "SEUP TCE"),
+    ("head_injury", "fr", "Il est tombé du lit et il saigne de l'oreille", 10, "NHS head"),
+    ("head_injury", "fr",
+     "Depuis le choc à la tête il est très somnolent, il n'arrive pas à rester "
+     "éveillé", 16, "NHS head"),
+    ("head_injury", "fr", "Il a fait une convulsion après être tombé sur la tête", 15, "SBP TCE"),
+    ("head_injury", "fr",
+     "Elle est tombée de la table à langer et elle a une grosse bosse molle", 4,
+     "Bambino urg"),
+    ("head_injury", "fr", "elle s'est tapé la tete et a vomi 3 fois", 14, "errata"),
+    ("head_injury", "fr", "Du liquide clair coule de son nez depuis qu'il s'est cogné", 18,
+     "NHS head"),
+    ("head_injury", "fr", "Il est tombé et il est inconscient", 11, "NHS head"),
+    # --- lethargy, now with the unconscious baby told without a fall: NHS
+    # "What to do if your child has an accident" (inconsciente, flacido o no
+    # se despierta), KidsDoc "Dificultad para respirar" (se desmaya), NICE
+    # NG143 (does not wake / no response).
+    ("lethargy", "es", "Se ha desmayado", 10, "retr4; NHS accident"),
+    ("lethargy", "es", "Se ha quedado inconsciente", 10, "retr4; NHS accident"),
+    ("lethargy", "es", "Ha perdido el conocimiento un momento", 18, "NHS accident"),
+    ("lethargy", "es", "ahora no se despierta bien, no hay forma de despertarlo", 11, "bateria"),
+    ("lethargy", "es", "Está muy adormilado y no hay quien lo despierte", 6, "HSE urg"),
+    ("lethargy", "es", "Está muy flojo, no me mira ni me reconoce", 6, "HSE urg"),
+    ("lethargy", "es", "no reaciona cuando le hablo", 5, "errata"),
+    ("lethargy", "es", "esta inconciente", 8, "errata"),
+    ("lethargy", "es", "se a desmallado en mis brazos", 8, "errata"),
+    ("lethargy", "en", "now hes floppy and hard to wake", 7, "bateria"),
+    ("lethargy", "en", "She fainted in my arms", 9, "NHS accident"),
+    ("lethargy", "en", "He's very limp and won't respond", 4, "NICE NG143"),
+    ("lethargy", "en", "She passed out", 12, "KidsDoc respirar"),
+    ("lethargy", "fr", "Elle s'est évanouie", 9, "NHS accident"),
+    ("lethargy", "fr", "Il a perdu connaissance", 12, "NHS accident"),
+    ("lethargy", "fr", "Il est très somnolent, on n'arrive pas à le réveiller", 3, "NICE NG143"),
+    # --- green or bloody vomit: NHS "Diarrhoea and vomiting", SEUP
+    # "Gastroenteritis aguda", KidsDoc newborn "vomita bilis", HUG reflux,
+    # reflux red-flag sheet, 1177 "Vomitos en ninos de 0 a 1 ano".
+    ("green_or_bloody_vomit", "es", "Ha vomitado algo verde", 5, "NHS D&V"),
+    ("green_or_bloody_vomit", "es", "Los vómitos son verdes", 9, "SEUP GEA"),
+    ("green_or_bloody_vomit", "es", "Vomita bilis", 1, "KidsDoc RN"),
+    ("green_or_bloody_vomit", "es", "Ha vomitado sangre", 8, "NHS D&V"),
+    ("green_or_bloody_vomit", "es", "El vómito tiene sangre", 10, "1177"),
+    ("green_or_bloody_vomit", "es", "Vomita como posos de café", 12, "SEUP GEA"),
+    ("green_or_bloody_vomit", "es", "a bomitado berde", 6, "errata"),
+    ("green_or_bloody_vomit", "es", "vomita amarillo verdoso y llora mucho", 7, "NHS D&V"),
+    ("green_or_bloody_vomit", "en", "She's vomiting green", 5, "NHS D&V"),
+    ("green_or_bloody_vomit", "en", "His sick is green", 9, "NHS D&V"),
+    ("green_or_bloody_vomit", "en", "He threw up blood", 8, "NHS D&V"),
+    ("green_or_bloody_vomit", "en", "There's blood in her vomit", 10, "NHS D&V"),
+    ("green_or_bloody_vomit", "en", "The vomit looks like coffee grounds", 12, "NHS D&V"),
+    ("green_or_bloody_vomit", "fr", "Il vomit vert", 5, "HUG reflux"),
+    ("green_or_bloody_vomit", "fr", "Elle a vomi du sang", 8, "HUG reflux"),
+    ("green_or_bloody_vomit", "fr", "Ses vomissements sont verdâtres", 3, "ameli reflux"),
+    ("green_or_bloody_vomit", "fr", "Il vomit de la bile", 2, "ameli reflux"),
+    # --- fever under 3 months (NICE NG143 1.2.12) ---------------------------
+    ("fever_under_3_months", "es", "tiene 38,2 y no para de llorar", 2, "bateria"),
+    ("fever_under_3_months", "es", "Mi bebé de 1 mes tiene fiebre", None, "NICE NG143"),
+    ("fever_under_3_months", "es", "tiene 2 meses y 38 y pico", None, "madre"),
+    ("fever_under_3_months", "es", "Tiene 15 días y tiene calentura", None, "madre"),
+    ("fever_under_3_months", "es", "mi bb de 2 meses esta ardiendo", None, "errata"),
+    ("fever_under_3_months", "es", "tiene 3 semanas y esta destemplado", None, "madre"),
+    ("fever_under_3_months", "en", "My 6 week old has a fever", None, "NICE NG143"),
+    ("fever_under_3_months", "en", "Newborn with a temp of 38.2", None, "NICE NG143"),
+    ("fever_under_3_months", "en", "She's 2 months and running a temp", None, "madre"),
+    ("fever_under_3_months", "fr", "mon bébé a 38,3", 2, "bateria"),
+    ("fever_under_3_months", "fr", "Mon bébé de 5 semaines a de la fièvre", None, "NICE NG143"),
+    ("fever_under_3_months", "fr", "Nourrisson de 3 semaines fiévreux", None, "madre"),
+    # --- non-blanching rash (NICE NG143 / NG240) ----------------------------
+    ("non_blanching_rash", "es", "Le han salido unas manchitas rojas q no se van al apretar", 14,
+     "errata"),
+    ("non_blanching_rash", "es", "Tiene manchas que no desaparecen al estirar la piel", 14,
+     "madre"),
+    ("non_blanching_rash", "es", "Le salen manchas moradas que no se quitan al presionar", 14,
+     "NHS urgent (manchas)"),
+    ("non_blanching_rash", "es",
+     "Hice la prueba del vaso y los puntitos no se borran", 14, "madre"),
+    ("non_blanching_rash", "en", "She has a rash that won't fade under a glass", 14, "NICE NG240"),
+    ("non_blanching_rash", "en", "Tiny red pinprick spots that don't disappear when I press", 14,
+     "NICE NG240"),
+    ("non_blanching_rash", "fr", "Des petites taches violettes qui ne disparaissent pas quand on "
+     "appuie", 14, "NICE NG240"),
+    ("non_blanching_rash", "fr",
+     "Des taches qui ne partent pas quand on étire la peau", 14, "madre"),
+    # --- respiratory distress (NICE NG9 1.2.1) ------------------------------
+    ("respiratory_distress", "es", "Le cuesta mucho respirar", 5, "NICE NG9"),
+    ("respiratory_distress", "es", "Respira con mucho esfuerzo y se le hunde el pecho", 5,
+     "NICE NG9"),
+    ("respiratory_distress", "es", "respira mui rapido y se le marcan las costillas", 5, "errata"),
+    ("respiratory_distress", "es", "Respira súper rápido", 5, "madre"),
+    ("respiratory_distress", "en", "He's struggling to breathe", 5, "NICE NG9"),
+    ("respiratory_distress", "en", "She's wheezing and can't catch her breath", 5, "HSE urg"),
+    ("respiratory_distress", "fr", "Il a du mal à respirer", 5, "NICE NG9"),
+    ("respiratory_distress", "fr", "Elle respire super vite", 5, "madre"),
+    # --- cyanosis (NICE NG9 / NG143 red) -----------------------------------
+    ("cyanosis", "es", "Se le han puesto los labios morados", 3, "NICE NG9"),
+    ("cyanosis", "es", "Se le pone la boca morada cuando tose", 3, "madre"),
+    ("cyanosis", "es", "Tiene la cara grisácea", 3, "NHS D&V (gris)"),
+    ("cyanosis", "es", "se a puesto morado", 3, "errata"),
+    ("cyanosis", "en", "His lips are going blue", 3, "NICE NG9"),
+    ("cyanosis", "en", "She's turning purple", 3, "madre"),
+    ("cyanosis", "fr", "Ses lèvres deviennent violettes", 3, "madre"),
+    ("cyanosis", "fr", "Il est tout bleu", 3, "madre"),
+    ("cyanosis", "fr", "Elle devient grise", 3, "NHS D&V (gris)"),
+    # --- seizure (AEP convulsiones febriles) ------------------------------
+    ("seizure", "es", "Está convulsionando", 10, "AEP CF"),
+    ("seizure", "es", "a tenido una conbulsion con la fiebre", 10, "errata"),
+    ("seizure", "es", "Se ha quedado tieso y temblando", 10, "madre"),
+    ("seizure", "es", "Tiembla entero y pone los ojos en blanco", 10, "AEP CF"),
+    ("seizure", "en", "She's having a fit", 10, "NHS febrile seizures"),
+    ("seizure", "en", "His whole body was jerking and he wouldn't respond", 10, "madre"),
+    ("seizure", "fr", "Elle convulse", 10, "AEP CF"),
+    ("seizure", "fr", "Il a les yeux révulsés et il tremble", 10, "AEP CF"),
+    # --- choking (ERC 2021) -------------------------------------------------
+    ("choking", "es", "Se ha atragantado con una uva y no respira", 11, "ERC"),
+    ("choking", "es", "Se ha tragado una pila de botón", 11, "Familia y Salud cuerpo extrano"),
+    ("choking", "es", "se a atragantao con un trozo de pan", 11, "errata"),
+    ("choking", "es", "Se le ha ido algo por mal sitio y no puede ni toser", 11, "ERC"),
+    ("choking", "en", "Something's stuck in her throat", 11, "ERC"),
+    ("choking", "en", "She swallowed a coin", 11, "ERC"),
+    ("choking", "fr", "Il s'étouffe avec un morceau de pomme", 11, "ERC"),
+    ("choking", "fr", "Il a quelque chose coincé dans la gorge", 11, "ERC"),
+    # --- anaphylaxis (AEP 2019) ---------------------------------------------
+    ("anaphylaxis", "es", "Se le han hinchado los labios después de comer huevo", 12, "AEP anaf"),
+    ("anaphylaxis", "es", "se le a hinchado la lengua", 12, "errata"),
+    ("anaphylaxis", "es", "Tiene ronchas por todo el cuerpo y le cuesta tragar", 12, "AEP anaf"),
+    ("anaphylaxis", "en", "His face is swelling up after eating peanuts", 12, "AEP anaf"),
+    ("anaphylaxis", "fr", "Son visage gonfle après avoir mangé de l'œuf", 12, "AEP anaf"),
+    ("anaphylaxis", "fr", "Il a des plaques partout et du mal à avaler", 12, "AEP anaf"),
+    # --- bulging fontanelle (NICE NG143) -------------------------------------
+    ("bulging_fontanelle", "es", "Tiene la fontanela abultada", 4, "NICE NG143"),
+    ("bulging_fontanelle", "es", "la fontanela la tiene abonbada", 4, "errata"),
+    ("bulging_fontanelle", "en", "The soft spot on his head is puffy and raised", 4, "NICE NG143"),
+    ("bulging_fontanelle", "en", "Her soft spot looks puffy", 4, "madre"),
+    ("bulging_fontanelle", "fr", "Sa fontanelle est bombée", 4, "NICE NG143"),
+    ("bulging_fontanelle", "fr", "La fontanelle est gonflée et il a de la fièvre", 4, "NICE NG143"),
+    # --- dehydration (NICE CG84) --------------------------------------------
+    ("dehydration", "es", "ahora llora sin lagrimas y tiene la boca seca", 9, "bateria"),
+    ("dehydration", "es", "Se le ha hundido la mollera", 9, "NICE CG84"),
+    ("dehydration", "es", "esta deshidratao", 9, "errata"),
+    ("dehydration", "en", "His mouth is really dry and no tears when he cries", 9, "NICE CG84"),
+    ("dehydration", "fr", "Il a les yeux cernés et creux", 9, "NICE CG84"),
+    ("dehydration", "fr", "Elle pleure sans larmes", 9, "NICE CG84"),
+    # --- no wet nappy for 12 hours (NICE NG9 1.6.1) --------------------------
+    ("no_wet_nappy_12h", "es", "No hace pis desde ayer", 8, "NICE NG9"),
+    ("no_wet_nappy_12h", "es", "Lleva todo el día sin mojar el pañal", 8, "NICE NG9"),
+    ("no_wet_nappy_12h", "es", "no a echo pis en todo el dia", 8, "errata"),
+    ("no_wet_nappy_12h", "es", "No moja el pañal desde anoche", 8, "madre"),
+    ("no_wet_nappy_12h", "en", "He hasn't peed all day", 8, "NICE NG9"),
+    ("no_wet_nappy_12h", "en", "No wet diaper since last night", 8, "NICE NG9"),
+    ("no_wet_nappy_12h", "fr", "Pas de pipi depuis ce matin, ça fait 14 heures", 8, "madre"),
+    ("no_wet_nappy_12h", "fr", "Il n'a pas fait pipi de la journée", 8, "NICE NG9"),
+]
+
+# (locale, sentence, profile age in months or None, why it is not an emergency)
+LOOKALIKES: list[tuple[str, str, int | None, str]] = [
+    # A knock with nothing else: SEUP and NHS treat it at home with 24 hours of watching.
+    ("es", "Se ha dado un golpe pero está jugando tan normal", 14, "SEUP: leve, vigilar en casa"),
+    ("es", "Se ha dado un golpe en la cabeza, ¿cuánto tiempo tengo que vigilarle?", 20,
+     "pregunta de vigilancia, SEUP"),
+    ("es", "Se cayó de la cama, lloró un poco y ya está bien, ¿le pongo hielo?", 14,
+     "NHS: frío envuelto en casa"),
+    ("es", "Se dio un golpe en la frente y le ha salido un chichón pequeño, está contento", 18,
+     "NHS: el chichón solo cuenta por debajo de 1 año"),
+    ("es", "Se ha dado un golpe en la cabeza y tiene sueño, es su hora de la siesta", 18,
+     "NHS: puede dormir si tiene sueño"),
+    ("es", "Se ha caído y ha vomitado una vez, ahora juega", 18,
+     "HSE: más de un vómito; NHS: una vez es consulta el mismo día"),
+    ("es", "Se le ha caído el chupete al suelo, ¿lo lavo?", 8, "no es una caída del bebé"),
+    ("es", "Le dan golpes de tos y vomita varias veces la flema",
+     18, "golpe de tos, no traumatismo"),
+    ("es", "Se cayó de la cama y le ha salido un chichón", 11,
+     "NHS: un chichón grande bajo 1 año; la batería espera respuesta"),
+    ("es", "Se ha dado la vuelta en la cuna y ha vomitado dos veces", 5, "darse la vuelta"),
+    ("es", "Mi bebé de 2 meses ya se da la vuelta en el cambiador", None, "darse la vuelta"),
+    ("es", "Tiene otitis y le ha salido un poco de sangre del oído", 14,
+     "NHS otitis: líquido del oído es consulta el mismo día"),
+    # The sign she rules out, and a knock somewhere else.
+    ("es", "Se dio un golpe pero no perdió el conocimiento y está bien", 14, "signo negado"),
+    ("es", "Se cayó pero no le sale sangre de ningún sitio", 14, "signo negado"),
+    ("es", "No se ha desmayado, solo lloraba", 12, "signo negado"),
+    ("es", "Se cayó de la cama y está muy dormido", 14, "NHS: puede dormir"),
+    ("es", "Se ha dado un golpe en el dedo", 2, "SEUP <3 meses habla de la cabeza"),
+    ("es", "Se dio en la rodilla y ha vomitado dos veces", 14, "golpe en otra parte"),
+    ("es", "El vómito no es verde, es blanco", 9, "color negado"),
+    ("es", "Vomita pero sin sangre", 9, "sangre negada"),
+    ("en", "He bumped his head but wasn't knocked out", 14, "sign ruled out"),
+    ("en", "The vomit is not green", 9, "colour ruled out"),
+    ("en", "He fell asleep and threw up twice", 14, "fell asleep is not a fall"),
+    ("fr", "Il s'est cogné mais n'a pas perdu connaissance", 14, "signe nié"),
+    ("fr", "Il tombe de sommeil et a vomi deux fois", 14, "tomber de sommeil"),
+    ("en", "He bumped his head on the table but he's playing normally", 15, "NHS: home care"),
+    ("en", "She hit her head, cried for a minute and is fine now", 14, "NHS: home care"),
+    ("en", "He fell asleep in the car seat, should I move him?", 6, "fell asleep is not a fall"),
+    ("fr", "Il s'est cogné la tête mais il joue normalement", 16, "SEUP: leve"),
+    ("fr", "Elle est tombée malade hier, elle a le nez qui coule", 12, "tomber malade"),
+    # The vomit that is not the flag.
+    ("es", "Ha vomitado una vez después de toser", 10, "un vómito tras la tos"),
+    ("es", "Ha vomitado un poco de sangre, tengo grietas en el pezón", 1,
+     "sangre deglutida de la madre (hoja de reflujo: hematemesis no deglutida)"),
+    ("es", "Regurgita leche cortada después de las tomas", 3, "regurgitación"),
+    ("es", "Hace cacas verdes, ¿es normal?", 4, "heces verdes, no vómito"),
+    ("es", "Tiene mocos verdes, ¿es una infección?", 14, "mocos verdes"),
+    ("en", "She was sick once after a coughing fit", 10, "one vomit after cough"),
+    ("es", "Vomitó y era leche, ahora está tranquila", 4, "vómito de leche"),
+    ("en", "He threw up and it was just milk", 4, "milk"),
+    ("en", "She was sick and it's green poo too", 9, "green stool"),
+    ("en", "Green poo, is that normal?", 4, "green stool"),
+    ("fr", "Elle a vomi une fois après avoir toussé", 10, "un vomissement après la toux"),
+    ("fr", "Ses selles sont vertes", 4, "selles vertes"),
+    # Breathing that is fine, and a nose that runs.
+    ("es", "Tiene mocos y respira bien", 8, "mocos sin dificultad"),
+    ("es", "Le sangra la nariz de vez en cuando", 20, "epistaxis sin golpe"),
+    ("es", "Le supura el oído y tiene otitis", 20, "otitis: NHS consejo el mismo día"),
+    ("es", "Hace ruiditos al respirar cuando duerme pero está bien", 2, "ruidos del lactante"),
+    ("en", "He has a runny nose but is breathing fine", 8, "runny nose"),
+    ("fr", "Il a le nez qui coule mais il respire bien", 8, "nez qui coule"),
+    # Sleep, colour and a mother's own fright.
+    ("es", "Duerme mucho, ¿es normal a los 2 meses?", 2, "sueño normal"),
+    ("es", "Casi me desmayo del susto cuando lo vi caer, pero él está bien", 14,
+     "la que se marea es la madre"),
+    ("es", "Se chupa el dedo de forma inconsciente", 10, "inconsciente como adverbio"),
+    ("es", "Se pone rojo cuando hace caca", 3, "esfuerzo al defecar"),
+    ("es", "Hace cacas muy blandas desde ayer", 9, "heces blandas"),
+    ("en", "I nearly passed out when I saw the bump, he is fine", 14, "the mother"),
+    ("fr", "Il est un peu fatigué après la crèche", 14, "fatigue ordinaire"),
+]

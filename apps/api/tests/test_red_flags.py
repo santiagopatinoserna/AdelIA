@@ -221,13 +221,24 @@ def test_every_flag_points_at_a_source_in_the_urgent_care_corpus():
     """A rename in the corpus must not leave a flag citing a source that is
     no longer loaded: the red-flag answer skips retrieval, so this mapping is
     the only thing standing between the parent and an unsourced claim."""
-    corpus = json.loads(
-        (Path(__file__).resolve().parents[1] / "adelia" / "enrichment" / "data"
-         / "evidence_urgencias_lactante.json").read_text(encoding="utf-8")
-    )
-    titles = {s["title"] for s in corpus["sources"]}
+    data = Path(__file__).resolve().parents[1] / "adelia" / "enrichment" / "data"
+
+    def titles(filename: str) -> set[str]:
+        corpus = json.loads((data / filename).read_text(encoding="utf-8"))
+        return {s["title"] for s in corpus["sources"]}
+
+    # Two flags cite the source a mother's sign comes from, which the corpus
+    # keeps with its own topic rather than with the infant urgent-care
+    # guidelines: the SEUP head-injury sheet sits with the falls, the NHS
+    # diarrhoea and vomiting page with digestion. Every other flag is held to
+    # the urgent-care file exactly as before.
+    elsewhere = {
+        "head_injury": "evidence_seguridad.json",
+        "green_or_bloody_vomit": "evidence_digestivo_piel.json",
+    }
     for code in PRIORITY:
-        assert RED_FLAG_SOURCES[code]["title"] in titles, code
+        filename = elsewhere.get(code, "evidence_urgencias_lactante.json")
+        assert RED_FLAG_SOURCES[code]["title"] in titles(filename), code
 
 
 def test_citation_has_the_shape_the_evidence_card_renders():
