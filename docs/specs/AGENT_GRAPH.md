@@ -118,6 +118,11 @@ nombre y balbucea o dice palabras), sin pagar el enrutado. Sin evidencia: primer
 una ronda para una preocupación observada (nunca un dato ni un fármaco); después,
 el rechazo una sola vez por tema, sus propias palabras para la consulta y una
 tarjeta para anotarlas en su historial.
+Tras una derivación, el tema sigue derivado (2026-11-11): solo su «otra cosa» abre
+otro, y `guard` lee sus palabras del tema con el mensaje nuevo, así que «le doy
+apiretal mientras» o «puedo esperar a mañana?» reciben la derivación otra vez. Tras
+la frase de redirección, un mensaje que nombra al bebé abre tema nuevo. Las reglas
+leen sus abreviaturas («q», «xq», «tb», «la guarde»).
 
 ### `route`
 Dos capas, en este orden:
@@ -127,6 +132,12 @@ Dos capas, en este orden:
    («¿en qué percentil está?», «¿qué vacunas le tocan?») → `track`.
 2. **Clasificador** (modelo pequeño, salida JSON estricta con `intent`,
    `confidence`, `missing`). Umbral: `confidence < 0.6` → `clarify`.
+En un seguimiento manda el turno: si su mensaje solo ya lo deciden las reglas, se
+enruta solo; el primer mensaje del tema nunca lo convierte en anotación ni en el
+bucle de herramientas (2026-11-11). Un tema de conducta, tras su ronda, va al plan
+sin pagar el clasificador. Si el clasificador cae, el agente responde con fuentes
+(plan, o respuesta corta para una pregunta sin síntoma, preocupación ni fármaco),
+nunca con el bucle de herramientas.
 Intenciones:
 - `plan`: hay una preocupación y quiere saber qué hacer → plan de acción.
 - `question`: quiere un dato o una explicación breve, sin acción
@@ -135,7 +146,8 @@ Intenciones:
 - `track`: pregunta por los datos de su hijo (expediente, curvas, vacunas, informes).
 - `clarify`: falta la edad (sin perfil) o el dato que cambia la respuesta
   (fiebre sin cifra, «le pasa algo» sin síntoma).
-- `other`: fuera de ámbito (adultos, mascotas, charla) → una frase de redirección.
+- `other`: fuera de ámbito (adultos, mascotas, charla) → una frase de redirección
+  (`out_of_scope_reply`, en el agente; en la demo y el chat sigue el plan).
 
 ### `clarify`
 Una única pregunta concreta, de una línea, con los 2 o 3 valores más probables
@@ -220,6 +232,9 @@ LangChain.
   motivo y el test obliga a quitar la marca cuando se arreglan. Con `--with-model
   --budget-usd N`, en el contenedor de la API, cada turno pasa por `run_turn` con una
   invitada QA que se borra al terminar, y el gasto cuenta bajo la etiqueta `qa`.
+  `--classifier-down` repite la batería con el clasificador caído. El 2026-11-11 se
+  arreglaron sus 13 defectos (82/95 → 95/95) y se añadieron 6 conversaciones de
+  control escritas antes de mirar el arreglo (etiqueta `control_sobreajuste`).
 
 ## Orden de construcción (cada paso desplegable por separado)
 

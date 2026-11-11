@@ -183,8 +183,12 @@ async def test_the_agent_asks_with_a_clarify_card_that_carries_her_message():
     assert final["kind"] == "clarify"
 
 
-@pytest.mark.parametrize("intent, via", [("other", "rule"), ("plan", "fallback")])
-async def test_what_the_router_cannot_place_goes_to_the_agents_tool_loop(intent, via):
+@pytest.mark.parametrize("intent, via", [("track", "rule"), ("track", "model")])
+async def test_her_own_data_goes_to_the_agents_tool_loop_and_streams_once(intent, via):
+    """Until 2026-11-11 `other` and the classifier's fallback came here too; the
+    conversation battery found an adult's back pain answered by the tool loop.
+    They now take the redirect and the sourced answer
+    (tests/test_conversation_graph.py); the loop is for her own data."""
     fakes = Account(intent=intent, via=via)
     events, final = await _run(fakes.agent(), "hola")
     assert "track" in fakes.names() and "retrieve" not in fakes.names()

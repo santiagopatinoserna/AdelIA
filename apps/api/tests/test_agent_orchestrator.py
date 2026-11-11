@@ -18,10 +18,15 @@ def _fake_provider(steps, seen_systems=None):
             self._i += 1
     return P()
 
+# Until 2026-11-11 these three sent messages nobody could place («hi», «¿mi Hb?»,
+# «¿es normal?»), which went to the tool loop; they now take the sourced answer
+# (tests/test_conversation_graph.py). Her own data still goes to the loop, which
+# is what these tests are about.
 async def test_plain_answer_streams_tokens():
     steps = [[{"type": "token", "text": "Hola"}, {"type": "stop", "stop_reason": "end_turn"}]]
     with patch("adelia.agent.orchestrator.get_provider", return_value=_fake_provider(steps)):
-        events = await _collect(run_turn(user_id=uuid4(), profile_id=None, message="hi"))
+        events = await _collect(run_turn(user_id=uuid4(), profile_id=None,
+                                         message="¿en qué percentil está?"))
     assert any(e.type == "token" and e.content == "Hola" for e in events)
     assert events[-1].type == "final"
 
@@ -36,7 +41,8 @@ async def test_read_tool_emits_card_then_final():
     outcome = ToolOutcome(text="Hb baja", card=cards.card_lab("l1", "Hb", 9.0, "g/dL", "low", "12-16", "Bajo"))
     with patch("adelia.agent.orchestrator.get_provider", return_value=_fake_provider(steps)), \
          patch("adelia.agent.orchestrator.execute_tool", return_value=outcome):
-        events = await _collect(run_turn(user_id=uuid4(), profile_id=None, message="¿mi Hb?"))
+        events = await _collect(run_turn(user_id=uuid4(), profile_id=None,
+                                         message="¿mi Hb en la última analítica?"))
     assert any(e.type == "card" and e.card["type"] == "lab" for e in events)
     assert events[-1].type == "final"
 
@@ -62,7 +68,7 @@ async def test_agent_system_prompt_carries_the_answer_contract(locale):
     with patch("adelia.agent.orchestrator.get_provider",
                return_value=_fake_provider(steps, seen)):
         await _collect(run_turn(user_id=uuid4(), profile_id=None,
-                                      message="¿es normal?", locale=locale))
+                                      message="¿qué vacunas le tocan?", locale=locale))
 
     assert len(seen) == 1
     system = seen[0]
