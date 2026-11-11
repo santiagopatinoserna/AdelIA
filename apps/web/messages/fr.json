@@ -882,6 +882,8 @@
     "retry": "Redemander",
     "listen": "Dictée vocale",
     "thinking": "Je réfléchis…",
+    "statusSearching": "Je cherche dans les sources…",
+    "statusWriting": "{count, plural, =0 {J’écris…} one {J’ai trouvé 1 source. J’écris…} other {J’ai trouvé # sources. J’écris…}}",
     "errorAnswer": "Oups, ça a planté. Réessaie.",
     "seeAll": "Tout voir",
     "confirmYes": "Oui",

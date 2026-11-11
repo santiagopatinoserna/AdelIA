@@ -61,3 +61,12 @@ async def test_both_answers_reach_the_graph(client):
     assert resp.status_code == 200, resp.text
     assert seen["clarifications"] == [{"field": "since_when", "value": "days"},
                                       {"field": "general_state", "value": "no"}]
+
+
+def test_map_status():
+    """What the panel shows while it waits (agent-canvas.tsx)."""
+    import json as _json
+
+    ev = _map_event(AgentEvent(type="status", content="writing", sources=3))
+    assert ev["event"] == "status"
+    assert _json.loads(ev["data"]) == {"stage": "writing", "sources": 3}

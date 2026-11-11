@@ -395,6 +395,7 @@ async def retrieve_for_account(
     """
     citations: list[ChatCitation] = []
     evidence_embedding: list[float] | None = None
+    chunks_task: asyncio.Future | None = None
 
     # Elliptical follow-ups ("¿y ese valor?") embed poorly on their own —
     # augment the retrieval query with the tail of the conversation. Temporal
@@ -470,7 +471,10 @@ async def retrieve_for_account(
             widened_embedding = query_embeds[widened_index]
         if subject is not None and len(query_embeds) > len(texts) - 1:
             subject_embedding = query_embeds[len(texts) - 1]
-        chunks = await retrieve_relevant_chunks(
+        # Her record is searched while the guidelines are (below): two
+        # queries on two sessions that never needed each other ran one after
+        # the other until the battery with the real model (2026-11-11).
+        chunks_task = asyncio.ensure_future(retrieve_relevant_chunks(
             scope=scope,
             query_embedding=query_embedding,
             top_k=8,
@@ -481,7 +485,33 @@ async def retrieve_for_account(
             # search it would only dilute the question.
             query_text=question,
             locale=locale,
-        )
+        ))
+
+    # Dual-RAG: the evidence searches, together (each opens its own session
+    # and is best effort: it never raises).
+    searches = [_retrieve_evidence_for_query(
+        evidence_embedding, query_text=question, locale=locale
+    )]
+    if widened_embedding is not None:
+        searches.append(_retrieve_evidence_for_query(
+            widened_embedding, query_text=question, locale=locale
+        ))
+    if subject_embedding is not None:
+        # Our rewrite of her words admits only under its own, stricter cut
+        # (config.implicit_subject_max_distance has the measurement).
+        searches.append(_retrieve_evidence_for_query(
+            subject_embedding, query_text=question, locale=locale,
+            max_distance=settings.implicit_subject_max_distance,
+        ))
+    try:
+        evidence_matches, *also = await asyncio.gather(*searches)
+    except BaseException:
+        if chunks_task is not None:
+            chunks_task.cancel()
+            await asyncio.gather(chunks_task, return_exceptions=True)
+        raise
+    if chunks_task is not None:
+        chunks = await chunks_task
         patient_context = _format_rag_context(chunks)
         for c in chunks:
             citations.append(
@@ -492,23 +522,6 @@ async def retrieve_for_account(
                     page=c.page,
                 )
             )
-
-    # Dual-RAG: parallel evidence retrieval
-    evidence_matches = await _retrieve_evidence_for_query(
-        evidence_embedding, query_text=question, locale=locale
-    )
-    also = []
-    if widened_embedding is not None:
-        also.append(await _retrieve_evidence_for_query(
-            widened_embedding, query_text=question, locale=locale
-        ))
-    if subject_embedding is not None:
-        # Our rewrite of her words admits only under its own, stricter cut
-        # (config.implicit_subject_max_distance has the measurement).
-        also.append(await _retrieve_evidence_for_query(
-            subject_embedding, query_text=question, locale=locale,
-            max_distance=settings.implicit_subject_max_distance,
-        ))
     if also:
         evidence_matches = merge_by_best_distance(
             [evidence_matches, *also], top_k=4, relative_margin=settings.evidence_relative_margin

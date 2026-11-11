@@ -51,6 +51,7 @@ state (`run_graph`).
 """
 from __future__ import annotations
 
+import asyncio
 import dataclasses
 import logging
 import os
@@ -176,6 +177,9 @@ class AgentState(TypedDict, total=False):
     intent_via: str
     missing: list[str]
     # Retrieval
+    #: What the account search found while the routing model was deciding
+    #: (route_node), handed to `retrieve` when the decision kept it valid.
+    prefetched: Any
     query_embedding: list[float]
     evidence: list
     experience: list
@@ -511,11 +515,16 @@ async def route_node(state: AgentState, runtime: Runtime[GraphDeps]) -> dict:
         if ruled is None or ruled.intent in ("plan", "question", "clarify"):
             return {"intent": "plan", "intent_confidence": 1.0, "intent_via": "rule",
                     "missing": []}
+    prefetch = _prefetch(state, deps, route_text, kwargs)
     if c is not None and c.route_history:
         # The same call as always, now reading the tail of the thread; the
         # model is only consulted when the routing rules abstain.
         kwargs["history"] = c.route_history
-    decision = await deps.route(route_text, **kwargs)
+    try:
+        decision = await deps.route(route_text, **kwargs)
+    except BaseException:
+        await _drop(prefetch)
+        raise
     update: dict = {}
     if c is not None and not c.decided and decision.via == "model":
         c = conversation.with_kind(c, decision.turn, search_query=decision.search_query)
@@ -549,6 +558,14 @@ async def route_node(state: AgentState, runtime: Runtime[GraphDeps]) -> dict:
         intent = fallback_intent(route_text) if agent and not contract else "plan"
     if intent == "track" and deps.track is None:
         intent = "question"
+    if prefetch is not None:
+        searched = update.get("search_query", state.get("search_query"))
+        if intent not in ("clarify", "record", "track", "other") and searched == prefetch.query:
+            update["prefetched"] = await prefetch.task
+        else:
+            # The classifier asked, wrote, or searched other words: the overlap
+            # is dropped and `retrieve` searches what the decision says.
+            await _drop(prefetch)
     return {
         **update,
         "intent": intent,
@@ -556,6 +573,42 @@ async def route_node(state: AgentState, runtime: Runtime[GraphDeps]) -> dict:
         "intent_via": decision.via,
         "missing": missing,
     }
+
+
+@dataclass
+class _Prefetch:
+    query: str | None
+    task: asyncio.Task
+
+
+def _prefetch(state: AgentState, deps: GraphDeps, route_text: str, kwargs: dict
+              ) -> _Prefetch | None:
+    """The account search, started while the routing model decides.
+
+    The battery with the real model (2026-11-11) measured 7.0 s to the first
+    word; 17 of 51 routed turns waited for the classifier (up to its 2 s
+    deadline, reached twice) and only then embedded and searched. Both are
+    independent until the decision: when the rules abstain, the search starts
+    now with the words the thread already resolved, and `route_node` keeps it
+    only if the decision still leads to it with the same words. Account
+    surfaces only: the demo's search depends on the intent (warning signs).
+    """
+    if deps.retrieve is None or route_by_rules(route_text, **kwargs) is not None:
+        return None
+    _emit({"type": "status", "stage": "searching"})
+    task = asyncio.ensure_future(deps.retrieve(dict(state)))
+    return _Prefetch(query=state.get("search_query"), task=task)
+
+
+async def _drop(prefetch: _Prefetch | None) -> None:
+    """Cancel and await a search nobody will read (no session left open)."""
+    if prefetch is None:
+        return
+    prefetch.task.cancel()
+    try:
+        await prefetch.task
+    except BaseException:  # noqa: BLE001 - its result and its failure are both moot
+        pass
 
 
 def _askable(fields: list[str], deps: GraphDeps, locale: str) -> list[str]:
@@ -658,7 +711,10 @@ async def track(state: AgentState, runtime: Runtime[GraphDeps]) -> dict:
 async def retrieve(state: AgentState, runtime: Runtime[GraphDeps]) -> dict:
     deps = runtime.context
     if deps.retrieve is not None:
-        found = await deps.retrieve(state)
+        found = state.get("prefetched")
+        if found is None:
+            _emit({"type": "status", "stage": "searching"})
+            found = await deps.retrieve(state)
         return {
             "evidence": list(found.evidence),
             "patient_context": found.patient_context,
@@ -746,10 +802,13 @@ async def decide(state: AgentState, runtime: Runtime[GraphDeps]) -> dict:
     answers go into the next search (2026-11-09, "sin evidencia no es un
     callejón"). Never for a fact question or a drug.
     """
-    grounded = bool(state.get("evidence")) or bool(state.get("patient_context"))
-    if grounded:
+    if state.get("evidence"):
         return {"kind": "answer"}
     deps, c = runtime.context, state.get("conversation")
+    # Her record alone does not skip the round. In production it came back on
+    # every turn of the QA guest (the battery with the real model, 2026-11-11),
+    # so «le han salido granitos rojos en la cara» paid the model to refuse and
+    # was never asked how long or how the baby is.
     if c is not None and deps.can_ask and not state.get("clarified"):
         fields = _round(
             conversation.ask_when_nothing_found(c, state.get("facts"), intent=state.get("intent")),
@@ -757,6 +816,12 @@ async def decide(state: AgentState, runtime: Runtime[GraphDeps]) -> dict:
         )
         if fields:
             return {"kind": "no_evidence", "intent": "clarify", "missing": fields}
+    if state.get("patient_context"):
+        # Her record can still answer (her pediatrician's own instruction), once.
+        # In a topic already told there is no evidence, where her words can be
+        # noted, it only bought the same refusal again, in 2 to 19 s.
+        if not (c is not None and c.refused and _can_note(state, deps)):
+            return {"kind": "answer"}
     return {"kind": "no_evidence"}
 
 
@@ -793,6 +858,8 @@ def _user_message(state: AgentState, deps: GraphDeps, experience: list) -> str:
     c = state.get("conversation")
     question = c.prompt_question if c is not None else state["message"]
     blocks = [f"Pregunta del usuario: {question}\n"]
+    if (age := _age(state)) is not None:
+        blocks.append(_age_line(age))
     patient = state.get("patient_context") or deps.patient_context
     if patient:
         blocks.append(f"## Patient data (cite as [N]):\n{patient}")
@@ -806,7 +873,26 @@ def _user_message(state: AgentState, deps: GraphDeps, experience: list) -> str:
             blocks.append(note)
     if c is not None and (note := conversation.correction_note(c)):
         blocks.append(note)
+    if c is not None and (note := conversation.refused_note(c, _lang(state))):
+        blocks.append(note)
     return "\n\n".join(blocks)
+
+
+def _age_line(age_months: int) -> str:
+    """The age her profile gives, for the answering model.
+
+    The battery with the real model (2026-11-11): never told the age, the model
+    took it from her record («A su edad (ya pasó la revisión de los 4 meses)»)
+    for babies of 8, 10 and 18 months, and told the mother of an 18-month-old
+    with no words that words were not expected yet. The contract already says
+    a source for another age supports nothing; this is the age it checks.
+    """
+    said = "menos de 1 mes" if age_months < 1 else (
+        "1 mes" if age_months == 1 else f"{age_months} meses")
+    return (
+        f"Edad del bebé hoy, según su perfil: {said}. Las edades y fechas de su historial "
+        "son las de cuando se escribió cada documento."
+    )
 
 
 async def _compose_with_model(
@@ -814,6 +900,10 @@ async def _compose_with_model(
 ) -> dict:
     system = chat_system_prompt(_locale(state), shape=shape)
     user = _user_message(state, deps, experience)
+    # The wait before the first word is the answering model's (the battery,
+    # 2026-11-11: 1.6 s plus 8.4 ms a thinking token): say it is writing, and
+    # from how many sources, instead of «Pensando…» for up to 20 s.
+    _emit({"type": "status", "stage": "writing", "sources": _source_count(state)})
     if deps.stream is not None:
         # A streaming surface: tokens go out as they come, and a provider
         # failure is the surface's error event, as it always was in the chat.
@@ -838,6 +928,11 @@ async def _compose_with_model(
         # honest thing to show, under a "could not compose an answer" note.
         return {"kind": "evidence_only", "answer": "", "experience": []}
     return {"answer": answer, "experience": experience}
+
+
+def _source_count(state: AgentState) -> int:
+    """The distinct sources behind the fragments the model is handed."""
+    return len({getattr(m, "source_id", None) or id(m) for m in state.get("evidence") or []})
 
 
 async def plan(state: AgentState, runtime: Runtime[GraphDeps]) -> dict:
@@ -888,6 +983,11 @@ def experience_only_body_is_clean(text: str, locale: str) -> bool:
 _VISIT_NOTE = "note"
 
 
+def _can_note(state: AgentState, deps: GraphDeps) -> bool:
+    """Her words can be offered as a note for the visit (the agent, with an account)."""
+    return bool(state.get("account") and deps.can_write and deps.record_store is not None)
+
+
 def _dead_end(state: AgentState, deps: GraphDeps, refusal: dict) -> dict:
     """The refusal, said once per topic, and what can still help.
 
@@ -899,8 +999,7 @@ def _dead_end(state: AgentState, deps: GraphDeps, refusal: dict) -> dict:
     keeps the whole coded refusal every time.
     """
     c = state.get("conversation")
-    can_note = state.get("account") and deps.can_write and deps.record_store is not None
-    if c is None or not can_note:
+    if c is None or not _can_note(state, deps):
         return refusal
     lang = _lang(state)
     text = conversation.no_evidence_again(lang) if c.refused else refusal["answer"]

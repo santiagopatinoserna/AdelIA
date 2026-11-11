@@ -18,6 +18,10 @@ export type AgentStreamEvent =
   | { type: "thread"; thread_id: string }
   | { type: "token"; content: string }
   | { type: "tool_call"; tool_name: string }
+  // What the turn is doing while she waits (2026-11-11): "searching" when the
+  // search starts, "writing" with how many sources when the answering model is
+  // called. Two things that happen on the server, nothing invented.
+  | { type: "status"; stage: string; sources: number }
   | { type: "card"; card: AgentCard }
   // The terminal frame carries the citations of every tool call of the turn
   // (audit 3.7). Before it did, the answer contract asked the model for
@@ -50,6 +54,9 @@ export function* parseAgentBlocks(
       case "thread": if (data.thread_id) yield { type: "thread", thread_id: String(data.thread_id) }; break;
       case "token": yield { type: "token", content: String(data.content ?? "") }; break;
       case "tool_call": yield { type: "tool_call", tool_name: String(data.tool_name ?? "") }; break;
+      case "status":
+        yield { type: "status", stage: String(data.stage ?? ""), sources: Number(data.sources ?? 0) || 0 };
+        break;
       case "card": yield { type: "card", card: data.card as AgentCard }; break;
       case "final":
         yield {

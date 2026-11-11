@@ -614,3 +614,75 @@ def test_la_as_an_article_opens_its_own_short_question(text):
 def test_something_for_the_pain_is_a_medicine_and_is_not_asked_about(text):
     c = conv.read(text, [_u("le estan saliendo los dientes y babea"), _a("Es normal [ev_1].")])
     assert conv.ask_when_nothing_found(c, AGE_14, intent="plan") == []
+
+
+# --- the conversation battery with the real model (2026-11-11) ---------------------
+#
+# 57 turns in production with the real classifier and the real answers. Two of
+# the 16 that failed were the thread misreading a turn; the transcripts are in
+# scripts/conversation_regressions.json.
+
+_VOMIT_PLAN = (
+    "Tres vómitos en una mañana son **vómitos repetidos**: consulta hoy con su pediatra "
+    "[ev_1].\n\n## Hoy\n- Ofrécele solución de rehidratación oral [ev_3].\n\n## Vigila\n"
+    "- Si tiene fiebre y está decaída [ev_1].\n\n## Cuándo ir al médico\n"
+    "**Llama al médico si:**\n- Tiene fiebre y está decaída [ev_1].\n- Tiene 39 °C o más "
+    "[ev_2].\n\n## No olvides\n- Anota la hora de cada vómito [ev_1]."
+)
+
+
+def test_denying_a_sign_the_plan_only_listed_to_watch_for_is_news_not_a_correction():
+    """«no tiene fiebre» after the vomiting plan: the plan named fever only as a
+    sign to watch for («Tiene fiebre y está decaída» under the doctor heading),
+    it never assumed one. Read as a correction, the answering model lost its own
+    plan and wrote the same 330 words again (vomitos-y-deshidratacion, turn 2)."""
+    history = [_u("ha vomitado 3 veces esta mañana q hago"), _a(_VOMIT_PLAN)]
+    c = conv.read("no tiene fiebre", history)
+    assert (c.kind, c.via) == ("follow_up", "rule")
+    assert c.model_history and "no tiene fiebre" in c.search_query
+
+
+def test_denying_the_fever_an_answer_opened_with_is_still_a_correction():
+    """The frame can be a reading: «Hoy has anotado 38,7 °C» assumed a fever."""
+    plan = "Con 38,7 °C, ofrécele líquidos [ev_1].\n\n## Vigila\n- Si respira rápido [ev_1]."
+    c = conv.read("No tiene fiebre", [_u("¿qué hago?"), _a(plan)])
+    assert c.kind == "correction" and "fiebre" in c.retracted
+
+
+def test_the_classifier_cannot_call_a_turn_a_correction_she_did_not_make():
+    """«le puedo dar gotas para los gases» after the colic answer: the rules
+    leave it undecided and the real classifier said `correction`. Nothing in it
+    takes anything back, so it stays a follow-up: as a correction the model was
+    told its earlier answers were wrong (colico-llanto, turn 3)."""
+    history = [_u("llora muchisimo todas las tardes y encoge las piernas"),
+               _a("Puede ser cólico [ev_1]."), _u("son colicos"), _a("Encaja [ev_1].")]
+    c = conv.read("le puedo dar gotas para los gases", history)
+    assert not c.decided
+    c = conv.with_kind(c, "correction")
+    assert c.kind == "follow_up" and c.model_history
+
+
+def test_a_correction_with_a_no_in_it_is_still_the_classifiers_to_call():
+    """The rule above only drops a verdict nothing in her words supports."""
+    c = conv.read("le cambio la crema o no", [_u("le salen granitos"), _a("Es normal [ev_1].")])
+    assert not c.decided
+    assert conv.with_kind(c, "correction").kind == "correction"
+
+
+@pytest.mark.parametrize("text", ["perdona, quise decir que hace caca líquida",
+                                  "me equivoqué, es la otra oreja",
+                                  "I meant diarrhea", "en fait je voulais dire la diarrhée"])
+def test_a_correction_without_a_no_is_still_the_classifiers_to_call(text):
+    """Corrections with a «no» are the rules'; the ones that reach the classifier
+    are those without one («quise decir», «me equivoqué», "I meant")."""
+    c = conv.read(text, [_u("mi bebé vomita después de cada toma"), _a("Puede ser normal [ev_1].")])
+    if c.decided:
+        assert c.kind == "correction"
+    else:
+        assert conv.with_kind(c, "correction").kind == "correction"
+
+
+def test_a_bath_temperature_is_not_a_fever_the_answer_assumed():
+    plan = "Báñala con agua a 37 grados [ev_1].\n\n## Cuándo ir al médico\n- Si tiene fiebre [ev_1]."
+    c = conv.read("no tiene fiebre", [_u("le cuesta dormir"), _a(plan)])
+    assert c.kind == "follow_up"

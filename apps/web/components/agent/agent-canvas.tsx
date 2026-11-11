@@ -146,6 +146,9 @@ export function AgentCanvas({
   }
   const [cards, setCards] = useState<AgentCard[]>([]);
   const [busy, setBusy] = useState(false);
+  // What the API says the turn is doing while she waits (status frames):
+  // set only from the stream, never on mount (the duplicated-DOM bug, 7adb21c).
+  const [waitStage, setWaitStage] = useState<{ stage: string; sources: number } | null>(null);
   const abortRef = useRef<AbortController | null>(null);
   const epochRef = useRef(0);
   // Cards a turn delivered (a clarify question, a record to confirm) must
@@ -186,6 +189,7 @@ export function AgentCanvas({
     const controller = new AbortController();
     abortRef.current = controller;
     setBusy(true);
+    setWaitStage(null);
     // A failed exchange is not history: neither the error sentence nor the
     // question it failed on (that one is being sent again, or was abandoned).
     const history = body.message
@@ -228,6 +232,8 @@ export function AgentCanvas({
         if (stale()) break;
         if (ev.type === "thread") {
           threadRef.current = ev.thread_id;
+        } else if (ev.type === "status") {
+          setWaitStage({ stage: ev.stage, sources: ev.sources });
         } else if (ev.type === "token") {
           setMessages((p) => { const n = [...p]; const last = n[n.length - 1];
             if (last?.role === "assistant") n[n.length - 1] = { ...last, content: last.content + ev.content }; return n; });
@@ -476,9 +482,13 @@ export function AgentCanvas({
                 ) : m.content ? (
                   <AnswerContent level={2} recordLinks={m.citations.length > 0}>{m.content}</AnswerContent>
                 ) : (
-                  <p role="status" className="flex items-center gap-2.5 text-base text-ink-soft">
+                  <p role="status" data-testid="agent-wait" className="flex items-center gap-2.5 text-base text-ink-soft">
                     <span className="ad-pulse-dot shrink-0" aria-hidden />
-                    {t("thinking")}
+                    {waitStage?.stage === "writing"
+                      ? t("statusWriting", { count: waitStage.sources })
+                      : waitStage?.stage === "searching"
+                        ? t("statusSearching")
+                        : t("thinking")}
                   </p>
                 )}
                 {/* The sources behind the markers in the text above, the same

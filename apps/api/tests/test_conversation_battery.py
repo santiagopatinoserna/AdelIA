@@ -127,6 +127,38 @@ async def test_without_a_model_every_turn_meets_what_is_expected_but_the_known_g
     assert report["mode"] == "offline"
 
 
+REGRESSIONS = Path(cb.__file__).with_name("conversation_regressions.json")
+
+
+async def test_the_sixteen_turns_that_failed_with_the_real_model_pass_without_it():
+    """The battery with the real model in production (2026-11-11) stopped at its
+    2 $ cap after 57 of 110 turns: 41 met what was expected, 16 did not. Their
+    conversations are scripts/conversation_regressions.json, replayed without a
+    model: the real classifier's decision on each turn it was asked, whether the
+    search found evidence and her record, and the model's real answer as the
+    history the next turn reads. On main they gave 20 of 32."""
+    report = await cb.run_offline(cb.load_scenarios(REGRESSIONS))
+
+    failing = [(s["id"], t["n"], [k for k, ok in t["checks"].items() if not ok])
+               for s in report["scenarios"] for t in s["turns"] if not t["ok"]]
+    assert failing == []
+    assert report["totals"]["turns"] == 32
+
+
+def test_each_regression_keeps_what_production_did():
+    data = json.loads(REGRESSIONS.read_text(encoding="utf-8"))
+    failed = [f for s in data["scenarios"] for t in s["turns"] for f in t["real"]["failed"]]
+    turns = [t for s in data["scenarios"] for t in s["turns"]]
+    assert sum(1 for t in turns if t["real"]["failed"]) == 16
+    assert Counter(failed) == {"doctor": 7, "refusal_once": 7, "turn": 2, "kind": 2}
+    for t in turns:
+        if t["real"]["intent_via"] == "model":
+            assert t["classifier"] == {"intent": t["real"]["intent"],
+                                       "turn": t["real"]["turn_type"]}
+        if t["real"]["intent_via"] == "fallback":
+            assert t["classifier"] == "down"
+
+
 def test_six_control_conversations_written_before_the_fixes_of_2026_11_11():
     """The overfitting control: six conversations written before reading the
     code of the fixes for the battery's gaps, in the three languages, with
@@ -512,3 +544,100 @@ async def test_a_real_dashboard_turn_reports_what_the_graph_decided():
     assert observed["kind"] == "red_flag" and observed["turn_type"] == "new"
     assert observed["answer"].startswith(red_flag_reply("fever_under_3_months", "es")[:20])
     assert observed["error"] is None and observed["total_s"] >= observed["ttft_s"] >= 0
+
+
+async def test_a_model_turn_records_when_each_stage_began(monkeypatch):
+    """The battery with the real model gave only the time to the first word and
+    to the end; the next run says how long the search and the routing took."""
+    from adelia.agent import orchestrator
+    from adelia.agent.events import AgentEvent
+
+    async def fake_run_turn(**kwargs):
+        yield AgentEvent(type="status", content="searching")
+        await asyncio.sleep(0.01)
+        yield AgentEvent(type="status", content="writing", sources=2)
+        await asyncio.sleep(0.01)
+        yield AgentEvent(type="token", content="Hola")
+        yield AgentEvent(type="final")
+
+    monkeypatch.setattr(orchestrator, "run_turn", fake_run_turn)
+    guest = cb.Guest(user_id=uuid.uuid4(), profile_id=uuid.uuid4())
+    o = await cb.dashboard_turn(guest, {"locale": "es"}, {"message": "hola", "history": []})
+    assert set(o["stages_s"]) == {"searching", "writing"}
+    assert 0 <= o["stages_s"]["searching"] <= o["stages_s"]["writing"] <= o["ttft_s"]
+    assert o["sources_found"] == 2
+
+
+# --- running only part of it (the 2 $ cap stopped at 57 of 110, 2026-11-11) ----------
+
+
+def test_from_starts_at_a_scenario_and_tag_keeps_its_topic():
+    scenarios = cb.load_scenarios()
+    ids = [s["id"] for s in scenarios]
+    start = ids.index("anotar-sueño")
+
+    picked = cb.select_scenarios(scenarios, start="anotar-sueño")
+    assert [s["id"] for s in picked] == ids[start:]
+    fr = cb.select_scenarios(scenarios, tags=["fiebre"])
+    assert fr and all("fiebre" in s["tags"] for s in fr)
+    both = cb.select_scenarios(scenarios, only=["dientes", "vacunas"], tags=["dientes"])
+    assert [s["id"] for s in both] == ["dientes"]
+    with pytest.raises(ValueError):
+        cb.select_scenarios(scenarios, start="no-existe")
+
+
+def _previous_run(stopped_at: str) -> dict:
+    """A model report like the one of 2026-11-11: whole scenarios, then skips."""
+    out, stop = [], False
+    for s in cb.load_scenarios():
+        stop = stop or s["id"] == stopped_at
+        turns = [({"n": n, "ok": False, "skipped": "budget", "checks": {}} if stop else
+                  {"n": n, "ok": True, "checks": {"kind": True}, "kind": "answer",
+                   "words": 100, "ttft_s": 7.0, "total_s": 8.5, "cost_usd": 0.03})
+                 for n in range(1, len(s["turns"]) + 1)]
+        out.append({"id": s["id"], "locale": s["locale"], "age_months": s.get("age_months"),
+                    "tags": s.get("tags", []), "turns": turns,
+                    "ok": 0 if stop else len(turns), "total": len(turns)})
+    return {"mode": "model", "spent_usd": 1.93, "scenarios": out}
+
+
+async def test_resume_runs_only_what_the_last_run_did_not_measure(monkeypatch):
+    """`--resume <report.json>`: the scenarios that ran whole are carried over
+    as they were and not paid again; the one it stopped in and the rest run.
+    A half-run scenario runs from its first turn: its guest is gone and the
+    answers of its first turns are the next turns' history."""
+    async def _record(*_, **__):
+        return None
+
+    monkeypatch.setattr(usage, "record", _record)
+    previous = _previous_run("anotar-sueño")
+    scenarios = cb.load_scenarios()
+    todo = cb.not_yet_measured(scenarios, previous)
+    ran = {s["id"] for s in todo}
+    assert "anotar-sueño" in ran and "guarderia-real-9nov-1" not in ran
+    assert sum(len(s["turns"]) for s in todo) == 53
+
+    seen: list[str] = []
+
+    async def _turn(guest, scenario, request):
+        seen.append(scenario["id"])
+        return _observed(answer="Respuesta [ev_1].", model_saw=None)
+
+    report = await cb.run_with_model(
+        todo, budget_usd=1, turn_runner=_turn, guest=_fake_guest, set_age=_no_age,
+        carried=previous,
+    )
+    assert set(seen) == ran
+    assert [s["id"] for s in report["scenarios"]] == [s["id"] for s in scenarios]
+    carried = [s for s in report["scenarios"] if s.get("carried")]
+    assert {s["id"] for s in carried} == {s["id"] for s in scenarios} - ran
+    assert report["totals"]["turns_run"] == 110
+    assert report["previous_spent_usd"] == pytest.approx(1.93)
+
+
+def test_resume_is_an_option_and_needs_a_model_report(tmp_path, monkeypatch, capsys):
+    offline = tmp_path / "offline.json"
+    offline.write_text(json.dumps({"mode": "offline", "scenarios": []}), encoding="utf-8")
+    assert cb.main(["--with-model", "--budget-usd", "1", "--resume", str(offline)]) == 2
+    assert "nothing was run" in capsys.readouterr().err
+    assert cb.main(["--resume", str(offline)]) == 2

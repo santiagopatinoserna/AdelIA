@@ -179,3 +179,19 @@ def test_the_out_of_scope_redirect_falls_back_to_spanish():
     from adelia.services.answer_contract import out_of_scope_reply
 
     assert out_of_scope_reply("de") == out_of_scope_reply("es")
+
+
+@pytest.mark.parametrize("locale, said", [
+    ("es", "que tengan que ver con lo que cuenta"),
+    ("en", "that bear on what she describes"),
+    ("fr", "qui concernent ce qu’elle raconte"),
+])
+def test_the_plan_reminds_only_what_of_her_record_bears_on_her_worry(locale, said):
+    """The battery with the real model (2026-11-11): 18 of 21 «No olvides»
+    sections carried «la pediatra pidió repetir la analítica si sigue cansada o
+    come peor», under fever, teething, crawling or a fall. The section keeps her
+    pediatrician's instructions; only the unrelated ones go."""
+    from adelia.services.answer_contract import chat_system_prompt
+
+    prompt = chat_system_prompt(locale, shape="plan")
+    assert said in prompt

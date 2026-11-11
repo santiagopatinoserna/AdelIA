@@ -67,7 +67,8 @@ async def test_a_fact_question_takes_the_contract_path_not_the_tool_loop():
         events = await _collect(run_turn(user_id=uuid4(), profile_id=None,
                                          message="¿A qué edad empiezan a gatear?"))
     assert seen["system"] == chat_system_prompt("es", shape="question")
-    assert [e.type for e in events] == ["token", "final"]
+    # The two stages of the wait come first (2026-11-11), then the answer.
+    assert [e.type for e in events] == ["status", "status", "token", "final"]
     assert events[-1].evidence_citations[0]["tag"] == "ev_1"
 
 

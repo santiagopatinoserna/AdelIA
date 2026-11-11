@@ -42,6 +42,17 @@ production API container (the scenarios run where the corpus and the keys are):
     docker exec -w /app infra-api-1 .venv/bin/python scripts/conversation_battery.py \\
         --with-model --budget-usd 2 --out /tmp/battery.json
 
+The 2 $ cap of 2026-11-11 stopped at 57 of 110 turns. To measure the rest
+without paying again for what was measured, hand the last report back:
+
+    ... conversation_battery.py --with-model --budget-usd 2.5 \\
+        --resume /tmp/battery.json --out /tmp/battery-2.json
+
+`--from <id>` starts at a scenario (file order), `--tag <tag>` keeps a topic
+(repeatable), `--only <id>` names one; they combine, also with `--resume`.
+A model turn records when the search began and when the answering model was
+called (`stages_s`), next to the time to the first word.
+
 Each scenario gets a fresh guest created as test traffic (her synthetic address
 starts with "qa-", adelia/qa_traffic.py), with the scenario's age on her child.
 Every turn goes through agent/orchestrator.run_turn, the very path of a
@@ -110,12 +121,49 @@ OFFLINE_NAME = "Lucía"
 HISTORY_MAX_MESSAGES = 12
 HISTORY_MAX_CHARS = 2000
 CONFIRMED = "(confirma la tarjeta)"
+#: Her record as the account search brings it back, for a turn marked `record`:
+#: in production it came back on every turn of the QA guest (2026-11-11).
+RECORD = ("[1] Revisión de los 4 meses: regurgita tras casi todas las tomas; tomas más "
+          "frecuentes y de menor volumen.\n\n[2] La pediatra pide repetir la analítica si "
+          "sigue cansada o come peor.")
 PRESSED = "(pulsa un botón)"
 
 
 def load_scenarios(path: Path | str | None = None) -> list[dict]:
     data = json.loads(Path(path or SCENARIOS).read_text(encoding="utf-8"))
     return data["scenarios"]
+
+
+def select_scenarios(scenarios: list[dict], *, only: list[str] | tuple = (),
+                     start: str | None = None, tags: list[str] | tuple = ()) -> list[dict]:
+    """The scenarios to run, in file order: from `start` on, only those named,
+    only those with one of `tags`. An unknown `start` is a typo, not an empty run."""
+    picked = list(scenarios)
+    if start is not None:
+        ids = [s["id"] for s in picked]
+        if start not in ids:
+            raise ValueError(f"there is no scenario {start!r}")
+        picked = picked[ids.index(start):]
+    if only:
+        picked = [s for s in picked if s["id"] in only]
+    if tags:
+        picked = [s for s in picked if set(tags) & set(s.get("tags") or [])]
+    return picked
+
+
+def measured(report: dict) -> set[str]:
+    """The scenarios a model report ran whole (no turn skipped by the cap)."""
+    return {s["id"] for s in report.get("scenarios") or []
+            if s.get("turns") and len(s["turns"]) == s.get("total", len(s["turns"]))
+            and not any(t.get("skipped") for t in s["turns"])}
+
+
+def not_yet_measured(scenarios: list[dict], report: dict) -> list[dict]:
+    """What `--resume` runs: every scenario the earlier report did not run whole.
+    One it stopped in runs from its first turn: its guest was erased, and the
+    answers of its first turns are the history the later ones read."""
+    done = measured(report)
+    return [s for s in scenarios if s["id"] not in done]
 
 
 # --- the checks ------------------------------------------------------------------
@@ -202,11 +250,21 @@ def evaluate(scenario: dict, observed: list[dict], *, mode: str) -> list[dict]:
         if leaks or (n > 1 and e.get("turn") == "new"):
             checks["no_other_topic"] = _no_other_topic(o, leaks, mode=mode)
         said_it = refusal in answer
-        checks["refusal_once"] = not (said_it and topic in refused)
+        told = (mode == "offline" and conversation_note_mark() in
+                ((o.get("model_saw") or {}).get("user") or ""))
+        # Offline, a model answer is a recording: what the code owes is telling
+        # the model the topic was already refused (agent/conversation.refused_note).
+        checks["refusal_once"] = not (said_it and topic in refused and not told)
         if said_it:
             refused.add(topic)
         out.append({"n": n, "ok": all(checks.values()), "checks": checks})
     return out
+
+
+def conversation_note_mark() -> str:
+    from adelia.agent.conversation import REFUSED_NOTE_MARK
+
+    return REFUSED_NOTE_MARK
 
 
 def _no_other_topic(o: dict, leaks: list[str], *, mode: str) -> bool:
@@ -336,10 +394,12 @@ class _OfflineSurface:
     """What run_turn lends the graph, with fakes for what costs money."""
 
     def __init__(self, store, *, evidence: bool, locale: str,
-                 classifier: dict | str | None = None):
+                 classifier: dict | str | None = None, record: bool = False,
+                 model_answer: str | None = None):
         from adelia.enrichment.evidence_retrieval import EvidenceMatch
 
         self.store, self.locale = store, locale
+        self.record, self.model_answer = record, model_answer
         self.classifier, self.recorded, self.down = classifier, False, False
         self.paid: list[str] = []
         self.model_saw: dict | None = None
@@ -375,14 +435,15 @@ class _OfflineSurface:
         from adelia.agent.graph import Retrieved
 
         self.paid.append("retrieve")
-        return Retrieved(evidence=list(self.evidence))
+        return Retrieved(evidence=list(self.evidence),
+                         patient_context=RECORD if self.record else None)
 
     def stream(self, history_default: list[dict]):
         async def _stream(system: str, user: str, history: list[dict] | None = None):
             self.paid.append("stream")
             self.model_saw = {"system": system, "user": user,
                               "history": history_default if history is None else history}
-            yield "Texto de prueba [ev_1]."
+            yield self.model_answer or "Texto de prueba [ev_1]."
         return _stream
 
     async def track(self, state):
@@ -423,7 +484,8 @@ async def _offline_turn(scenario: dict, store: _MemoryStore, turn: dict, request
     locale = scenario["locale"]
     classifier = "down" if classifier_down else turn.get("classifier")
     surface = _OfflineSurface(store, evidence=turn.get("evidence", True), locale=locale,
-                              classifier=classifier)
+                              classifier=classifier, record=turn.get("record", False),
+                              model_answer=turn.get("model_answer"))
     messages = sanitize_history(request.get("history"))
     text_history = [m for m in messages if isinstance(m.get("content"), str)]
     deps = GraphDeps(
@@ -620,6 +682,8 @@ async def dashboard_turn(guest: Guest, scenario: dict, request: dict) -> dict:
     evidence: list[dict] = []
     start = time.perf_counter()
     first = None
+    stages: dict[str, float] = {}
+    sources_found = None
     async for event in run_turn(
         user_id=guest.user_id, profile_id=guest.profile_id,
         message=request.get("message") or "", history=request.get("history"),
@@ -628,6 +692,11 @@ async def dashboard_turn(guest: Guest, scenario: dict, request: dict) -> dict:
     ):
         if first is None and event.type in ("token", "card"):
             first = time.perf_counter() - start
+        if event.type == "status":
+            # When the search began and when the answering model was called.
+            stages.setdefault(event.content, round(time.perf_counter() - start, 3))
+            if event.content == "writing":
+                sources_found = event.sources
         if event.type == "token":
             tokens.append(event.content)
         elif event.type == "card":
@@ -642,6 +711,7 @@ async def dashboard_turn(guest: Guest, scenario: dict, request: dict) -> dict:
         "answer": "".join(tokens), "cards": cards, "sources": _sources(evidence, citations),
         "paid": None, "model_saw": None, "error": error,
         "ttft_s": round(first if first is not None else total, 3), "total_s": round(total, 3),
+        "stages_s": stages, "sources_found": sources_found,
     }
 
 
@@ -659,8 +729,13 @@ async def run_with_model(
     scenarios: list[dict], *, budget_usd: float, turn_runner: TurnRunner | None = None,
     guest: GuestFactory | None = None,
     set_age: Callable[[Guest, int | None], Awaitable[None]] | None = None,
+    carried: dict | None = None,
 ) -> dict:
-    """Every scenario through run_turn as test traffic, until the budget is spent."""
+    """Every scenario through run_turn as test traffic, until the budget is spent.
+
+    `carried` is an earlier model report (`--resume`): the scenarios it ran whole
+    and this run does not are kept as they were, marked `carried`, and the totals
+    cover both; the budget counts only what this run spends."""
     if not 0 < budget_usd <= MAX_BUDGET_USD:
         raise ValueError(f"the budget must be above 0 and at most {MAX_BUDGET_USD} $")
     runner = turn_runner or dashboard_turn
@@ -708,9 +783,28 @@ async def run_with_model(
         spent = meter.capped_usd()
         listed = meter.estimated_usd()
         unpriced = meter.unpriced()
-    return {"mode": "model", "budget_usd": budget_usd, "spent_usd": spent, "list_usd": listed,
-            "stopped": stopped, "unpriced": unpriced, "scenarios": results,
-            "totals": _totals(results, run_turns=run_turns)}
+    report = {"mode": "model", "budget_usd": budget_usd, "spent_usd": spent,
+              "list_usd": listed, "stopped": stopped, "unpriced": unpriced}
+    if carried is not None:
+        results, kept = _merge(carried, results)
+        run_turns = run_turns + kept
+        report["previous_spent_usd"] = carried.get("spent_usd")
+    return {**report, "scenarios": results, "totals": _totals(results, run_turns=run_turns)}
+
+
+def _merge(carried: dict, results: list[dict]) -> tuple[list[dict], list[dict]]:
+    """An earlier report's whole scenarios with this run's, in the earlier order."""
+    fresh = {r["id"]: r for r in results}
+    done = measured(carried)
+    merged: list[dict] = []
+    kept_turns: list[dict] = []
+    for s in carried.get("scenarios") or []:
+        if s["id"] in fresh:
+            merged.append(fresh.pop(s["id"]))
+        elif s["id"] in done:
+            merged.append({**s, "carried": True})
+            kept_turns += s["turns"]
+    return merged + list(fresh.values()), kept_turns
 
 
 def _turn_cost(calls: list[dict]) -> tuple[float, bool]:
@@ -796,19 +890,35 @@ def _parse(argv: list[str]) -> argparse.Namespace:
                         help="offline: play the fallback wherever the rules abstain")
     parser.add_argument("--scenarios", type=Path, default=None)
     parser.add_argument("--only", action="append", default=[], help="a scenario id")
+    parser.add_argument("--from", dest="start", default=None,
+                        help="start at this scenario id (file order)")
+    parser.add_argument("--tag", action="append", default=[],
+                        help="only scenarios with this tag (repeatable)")
+    parser.add_argument("--resume", type=Path, default=None,
+                        help="with --with-model: an earlier model report (--out); run only "
+                             "the scenarios it did not run whole and keep the rest")
     parser.add_argument("--out", type=Path, default=None, help="write the JSON report here")
     parser.add_argument("--format", choices=("text", "json", "both"), default="text")
     return parser.parse_args(argv)
 
 
-async def _model_main(scenarios: list[dict], budget: float) -> dict:
+async def _model_main(scenarios: list[dict], budget: float, carried: dict | None = None
+                      ) -> dict:
     from adelia.db import engine
 
     try:
-        return await run_with_model(scenarios, budget_usd=budget)
+        return await run_with_model(scenarios, budget_usd=budget, carried=carried)
     finally:
         await usage.drain()
         await engine.dispose()
+
+
+def _earlier_report(path: Path) -> dict | None:
+    try:
+        report = json.loads(path.read_text(encoding="utf-8"))
+    except (OSError, ValueError):
+        return None
+    return report if isinstance(report, dict) and report.get("mode") == "model" else None
 
 
 def main(argv: list[str] | None = None, *, out: TextIO | None = None) -> int:
@@ -823,11 +933,23 @@ def main(argv: list[str] | None = None, *, out: TextIO | None = None) -> int:
         print(f"--with-model needs --budget-usd above 0 and at most {MAX_BUDGET_USD}; "
               "nothing was run.", file=sys.stderr)
         return 2
-    scenarios = load_scenarios(args.scenarios)
-    if args.only:
-        scenarios = [s for s in scenarios if s["id"] in args.only]
+    carried = None
+    if args.resume is not None:
+        carried = _earlier_report(args.resume) if args.with_model else None
+        if carried is None:
+            print("--resume needs --with-model and a report of a model run (--out); "
+                  "nothing was run.", file=sys.stderr)
+            return 2
+    try:
+        scenarios = select_scenarios(load_scenarios(args.scenarios), only=args.only,
+                                     start=args.start, tags=args.tag)
+    except ValueError as exc:
+        print(f"{exc}; nothing was run.", file=sys.stderr)
+        return 2
+    if carried is not None:
+        scenarios = not_yet_measured(scenarios, carried)
     if args.with_model:
-        report = asyncio.run(_model_main(scenarios, args.budget_usd))
+        report = asyncio.run(_model_main(scenarios, args.budget_usd, carried))
     else:
         report = asyncio.run(run_offline(scenarios, classifier_down=args.classifier_down))
     if args.format in ("text", "both"):

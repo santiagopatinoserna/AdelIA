@@ -23,6 +23,7 @@ from zoneinfo import ZoneInfo
 
 import pytest
 
+from adelia.agent import conversation as conv
 from adelia.agent import record as rec
 from adelia.agent.graph import (
     ACCOUNT_CLARIFY_FIELDS,
@@ -661,3 +662,196 @@ async def test_with_the_classifier_down_a_drug_said_earlier_in_the_topic_keeps_t
     _, final = await _turn(s.agent(), "¿y ahora?", [_u("¿le doy ibuprofeno?"),
                                                      _a("No tengo fuentes [ev_1].")])
     assert final["intent"] == "plan" and "track" not in s.names()
+
+
+# --- the conversation battery with the real model (2026-11-11) ---------------------
+#
+# In production a guest's record always came back from the account search, so a
+# turn with no evidence was "grounded" by it: the model was paid (2 to 19 s) to
+# write the coded refusal, the worry never got its round of questions, and the
+# refusal came back whole on every turn (piel-granitos, colico-llanto,
+# fiebre-con-cifra-noche, guarderia-botones, estreñimiento). The transcripts are
+# in scripts/conversation_regressions.json.
+
+RECORD = "[1] Revisión de los 4 meses: regurgita tras casi todas las tomas."
+GRANITOS = "le han salido granitos rojos en la cara"
+
+
+class RecordSurface(Surface):
+    """Her record always comes back, as it did for the QA guest in production."""
+
+    async def retrieve(self, state):
+        self.calls.append(("retrieve", state["search_query"], state["message"]))
+        return Retrieved(evidence=self.evidence, patient_context=RECORD)
+
+
+async def test_with_her_record_and_no_evidence_a_worry_still_gets_its_round_first():
+    s = RecordSurface(evidence=())
+    events, final = await _turn(s.agent(), GRANITOS, [])
+    assert final["kind"] == "clarify" and final["missing"] == ["since_when", "general_state"]
+    assert [c["type"] for c in _cards(events)] == ["clarify"]
+    assert "stream" not in s.names()
+
+
+async def test_a_fact_question_with_only_her_record_is_still_answered_from_it():
+    """«cuando empiezo con la fruta»: her pediatrician's own instruction was the
+    useful half of that answer; a fact question never gets the round."""
+    s = RecordSurface(intent="question", evidence=())
+    _, final = await _turn(s.agent(), "cuando empiezo con la fruta", [])
+    assert final["kind"] == "answer" and "stream" in s.names()
+
+
+async def test_in_a_refused_topic_her_record_does_not_buy_the_refusal_again():
+    s = RecordSurface(evidence=())
+    history = [_u(GRANITOS), _a(ASKED_WHEN_NOTHING), _u("no le pican y esta bien"),
+               _a(no_evidence_reply("es"))]
+    events, final = await _turn(s.agent(), "le pongo crema", history)
+    assert final["kind"] == "no_evidence"
+    assert final["answer"].startswith(conv.no_evidence_again("es"))
+    assert no_evidence_reply("es") not in final["answer"]
+    assert "stream" not in s.names()
+    assert [c["type"] for c in _cards(events)] == ["confirm"]
+
+
+async def test_the_chat_keeps_answering_a_refused_topic_from_her_record():
+    """The chat has no card to note her words: it keeps what it always did."""
+    s = RecordSurface(evidence=())
+    history = [_u(GRANITOS), _a(no_evidence_reply("es"))]
+    await _turn(s.chat(), "le pongo crema", history, surface="chat")
+    assert "stream" in s.names()
+
+
+async def test_a_part_still_without_source_after_the_refusal_is_one_short_line():
+    """Mixed answers said the whole coded paragraph again for each uncovered part
+    (complementaria, fiebre-con-cifra-noche, guarderia-real-9nov-1). The model is
+    told the topic was refused and given the short line; the part still gets no
+    advice."""
+    s = RecordSurface()
+    history = [_u("cuando empiezo con la fruta"),
+               _a("Tu pediatra dijo a los 6 meses [1].\n\n**La fruta:** "
+                  + no_evidence_reply("es")),
+               _u("y el huevo"), _a("En cuanto empiece [ev_1].")]
+    await _turn(s.agent(), "y la carne cuanta", history)
+    user = s.one("stream")[2]
+    assert conv.no_evidence_again("es") in user
+    assert conv.REFUSED_NOTE_MARK in user
+
+
+async def test_a_topic_never_refused_gets_no_such_note():
+    s = RecordSurface()
+    await _turn(s.agent(), "y el huevo", [_u("cuando empiezo con la fruta"), _a("A los 6 [1].")])
+    assert conv.REFUSED_NOTE_MARK not in s.one("stream")[2]
+
+
+@pytest.mark.parametrize("age, said", [(14, "14 meses"), (1, "1 mes"), (0, "menos de 1 mes")])
+async def test_the_answering_model_is_told_the_age_her_profile_gives(age, said):
+    """The answers took the age from the record («A su edad (ya pasó la revisión
+    de los 4 meses)») for babies of 8, 10 and 18 months: for the 18-month-old
+    with no words it said «aún no se esperan palabras». The contract already
+    forbids a source for another age; the model was never told the age."""
+    s = RecordSurface()
+    facts = ProfileFacts(None, "Leo", None, "M", age)
+    await _turn(s.agent(), "cuantas siestas tiene q hacer", [], facts=facts)
+    user = s.one("stream")[2]
+    assert f"Edad del bebé hoy, según su perfil: {said}." in user
+
+
+async def test_without_an_age_the_model_is_told_none():
+    s = RecordSurface()
+    await _turn(s.agent(), "y el huevo", [], facts=ProfileFacts(None, None, None, None, None))
+    assert "Edad del bebé hoy" not in s.one("stream")[2]
+
+
+async def test_once_told_there_is_no_evidence_the_topic_is_not_asked_its_round_late():
+    """«y si le doy zumo de pera» on the third turn of a constipation topic whose
+    second answer already said the coded refusal for a part: the round comes
+    before the refusal, not after two answers (estreñimiento, turn 3)."""
+    s = Surface(evidence=())
+    history = [_u("lleva 4 dias sin hacer caca"), _a("Puede ser normal [ev_1]."),
+               _u("toma biberon"), _a("Con biberón [ev_1].\n\n**Qué hacer:** "
+                                      + no_evidence_reply("es"))]
+    events, final = await _turn(s.agent(), "y si le doy zumo de pera", history)
+    assert final["kind"] == "no_evidence"
+    assert "clarify" not in [c["type"] for c in _cards(events)]
+
+
+# --- time to the first word (the battery with the real model, 2026-11-11) ----------
+#
+# Median 7.0 s to the first word, p95 20.2 s. Most of it is the answering
+# model's own thinking (8.4 ms a thinking token, r = 0.97 over 44 turns); what
+# the code owns is what it waits for in a row before that call.
+
+import asyncio  # noqa: E402
+
+
+class SlowRouter(Surface):
+    """The rules abstain and the routing model answers only once the search has
+    started: if the graph searched after routing, this would never return."""
+
+    def __init__(self, **kwargs):
+        super().__init__(via="model", **kwargs)
+        self.searching = asyncio.Event()
+        self.searches = 0
+
+    async def route(self, message, **kwargs):
+        self.calls.append(("route", message, kwargs))
+        await asyncio.wait_for(self.searching.wait(), timeout=2)
+        return self.decision
+
+    async def retrieve(self, state):
+        self.searches += 1
+        self.searching.set()
+        self.calls.append(("retrieve", state["search_query"], state["message"]))
+        await asyncio.sleep(0)
+        return Retrieved(evidence=self.evidence)
+
+
+async def test_the_search_starts_while_the_routing_model_thinks():
+    """When the rules abstain, the classifier (up to its 2 s deadline) and the
+    search (embedding and two queries) no longer wait for each other."""
+    s = SlowRouter()
+    _, final = await _turn(s.agent(), "mi bebe hace un ruido raro al respirar dormido", [])
+    assert final["kind"] == "answer"
+    assert s.searches == 1 and "stream" in s.names()
+
+
+async def test_a_search_the_router_makes_useless_is_dropped():
+    """The classifier asks a question: the search it overlapped is thrown away
+    and nothing is answered from it."""
+    s = SlowRouter(intent="clarify", missing=("since_when",))
+    events, final = await _turn(s.agent(), "mi bebe hace un ruido raro al respirar dormido", [])
+    assert final["kind"] == "clarify" and "stream" not in s.names()
+
+
+async def test_a_follow_up_the_router_rewrites_is_searched_again_with_its_words():
+    s = SlowRouter(turn="follow_up", search_query="despertares nocturnos del lactante")
+    history = [_u("mi bebe hace un ruido raro al respirar dormido"), _a("Puede ser normal [ev_1].")]
+    await _turn(s.agent(), "Se despierta mucho", history)
+    searched = [c[1] for c in s.calls if c[0] == "retrieve"]
+    assert searched[-1].startswith("despertares nocturnos del lactante")
+
+
+async def test_the_rules_alone_do_not_start_a_search_before_routing():
+    s = Surface()
+    await _turn(s.agent(), "¿a qué edad gatean los bebés?", [])
+    assert s.names().index("route") < s.names().index("retrieve")
+    assert s.names().count("retrieve") == 1
+
+
+async def test_the_wait_says_what_is_happening_before_the_first_word():
+    """Up to 20 s of «Pensando…» (the battery's p95). The graph says when it
+    searches and, before the answering model starts, how many sources it
+    found: two things that happen, nothing invented (UX_PRINCIPLES 8)."""
+    s = Surface()
+    events, _ = await _turn(s.agent(), "¿a qué edad gatean los bebés?", [])
+    kinds = [(e["type"], e.get("stage")) for e in events]
+    first_token = kinds.index(("token", None))
+    assert kinds[:first_token] == [("status", "searching"), ("status", "writing")]
+    writing = next(e for e in events if e.get("stage") == "writing")
+    assert writing["sources"] == 1
+
+
+async def test_a_turn_without_a_model_says_no_stage():
+    s = RecordSurface(evidence=())
+    events, _ = await _turn(s.agent(), GRANITOS, [])
+    assert not [e for e in events if e["type"] == "status" and e["stage"] == "writing"]

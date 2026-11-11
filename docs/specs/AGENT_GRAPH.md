@@ -123,6 +123,11 @@ otro, y `guard` lee sus palabras del tema con el mensaje nuevo, así que «le do
 apiretal mientras» o «puedo esperar a mañana?» reciben la derivación otra vez. Tras
 la frase de redirección, un mensaje que nombra al bebé abre tema nuevo. Las reglas
 leen sus abreviaturas («q», «xq», «tb», «la guarde»).
+Con el modelo real (2026-11-11, `docs/BATERIA_MODELO_2026-11-11.md`): negar algo que el plan
+solo listaba en «Vigila» o «Cuándo ir al médico» («no tiene fiebre» tras un plan de vómitos)
+es un dato nuevo, no una corrección; una lectura («38,7 °C») cuenta como la fiebre que la
+respuesta daba por hecha; y el clasificador no puede llamar corrección a un turno sin negación.
+En un tema ya rechazado, el modelo recibe la línea corta para la parte que siga sin fuente.
 
 ### `route`
 Dos capas, en este orden:
@@ -159,6 +164,12 @@ falta algo, se responde con lo que hay y se dice qué cambiaría.
 Lo que hoy hace `routers/demo.py`: `retrieval_query` neutraliza el nombre, embed,
 `retrieve_evidence` con corte 0.19 y margen 0.08, luego `retrieve_experience`
 (mejor esfuerzo). `decide` fija `kind` solo con la evidencia.
+Con cuenta (2026-11-11): cuando las reglas de intención se abstienen, la búsqueda (su historial
+y las guías, a la vez) empieza mientras el clasificador decide, y se descarta si la decisión
+pregunta, anota o cambia las palabras de la búsqueda. Sin evidencia, su historial ya no se
+salta la ronda de una preocupación observada; en un tema ya rechazado, el agente responde la
+línea corta y la tarjeta para anotar sin pagar al modelo. El modelo que responde recibe la edad
+del perfil. Mientras espera, el panel lee `status` («searching», «writing» con cuántas fuentes).
 Detrás de `implicit_subject_expansion` (apagado), una frase que no nombra a nadie
 («Tiene diarrea desde ayer») se busca también como «Mi bebé de N meses: …», con los
 mismos cortes y la mejor distancia por fragmento (`agent/implicit_subject.py`).
@@ -235,6 +246,9 @@ LangChain.
   `--classifier-down` repite la batería con el clasificador caído. El 2026-11-11 se
   arreglaron sus 13 defectos (82/95 → 95/95) y se añadieron 6 conversaciones de
   control escritas antes de mirar el arreglo (etiqueta `control_sobreajuste`).
+  Con el modelo real (11-nov, tope 2 $, 57 de 110 turnos): 16 fallos, sus conversaciones
+  reproducidas sin modelo en `scripts/conversation_regressions.json` (20/32 en `main`, 32/32
+  después). `--resume <informe>` corre solo lo que falta; `--from`, `--tag`, `--only` eligen.
 
 ## Orden de construcción (cada paso desplegable por separado)
 

@@ -317,3 +317,25 @@ async def test_the_final_state_is_handed_to_an_observer_without_changing_the_str
     (final,) = seen
     assert final["kind"] == "red_flag"
     assert final["conversation"].kind == "new"
+
+
+async def test_the_stages_of_a_sourced_answer_reach_the_panel():
+    from adelia.enrichment.profile_service import UNKNOWN_PROFILE
+    from tests.test_chat_orchestrator import _evidence_match
+
+    async def fake_stream(*args, **kwargs):
+        yield "Claro"
+
+    with patch("adelia.agent.orchestrator.load_profile_facts", return_value=UNKNOWN_PROFILE), \
+         patch("adelia.services.chat_orchestrator.detect_temporal_intent", return_value=None), \
+         patch("adelia.services.chat_orchestrator.retrieve_relevant_chunks", return_value=[]), \
+         patch("adelia.services.chat_orchestrator.embed_texts", return_value=[[0.1] * 1024]), \
+         patch("adelia.services.chat_orchestrator._retrieve_evidence_for_query",
+               return_value=[_evidence_match()]), \
+         patch("adelia.services.chat_orchestrator._stream_llm_tokens", fake_stream):
+        events = await _collect(run_turn(
+            user_id=uuid4(), profile_id=None,
+            message="¿cuándo empiezo con la alimentación complementaria?"))
+    stages = [(e.content, e.sources) for e in events if e.type == "status"]
+    assert stages == [("searching", 0), ("writing", 1)]
+    assert [e.type for e in events].index("status") < [e.type for e in events].index("token")

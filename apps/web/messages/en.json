@@ -882,6 +882,8 @@
     "retry": "Ask again",
     "listen": "Voice input",
     "thinking": "Thinking…",
+    "statusSearching": "Searching the sources…",
+    "statusWriting": "{count, plural, =0 {Writing…} one {Found 1 source. Writing…} other {Found # sources. Writing…}}",
     "errorAnswer": "Oops, something went wrong. Try again.",
     "seeAll": "See all",
     "confirmYes": "Yes",
