@@ -127,6 +127,15 @@ services:
       # on only after scripts/probe_plan_brevity.py and the server golden gate pass,
       # and Santiago agrees: it changes how every plan reads.
       PLAN_BREVITY: ${PLAN_BREVITY:-false}
+      # A follow-up answered in a few cited sentences (answer_contract.FOLLOW_UP_RULE) and
+      # Claude's thinking effort per shape (config.py answer_effort_*). Off by default; an
+      # empty effort keeps "medium", today's request. On only after the conversation
+      # battery, run in production with and without them. tests/test_prod_compose.py
+      # fails when a switch in config.py has no line here.
+      FOLLOW_UP_BREVITY: ${FOLLOW_UP_BREVITY:-false}
+      ANSWER_EFFORT_QUESTION: ${ANSWER_EFFORT_QUESTION:-}
+      ANSWER_EFFORT_PLAN: ${ANSWER_EFFORT_PLAN:-}
+      ANSWER_EFFORT_FOLLOW_UP: ${ANSWER_EFFORT_FOLLOW_UP:-}
       # Every public request reaches this server through the Cloudflare tunnel,
       # which sets CF-Connecting-IP to the real address, so the per-address
       # limits count that one (adelia/ratelimit.client_ip). Off by default in
