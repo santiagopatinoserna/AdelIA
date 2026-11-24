@@ -30,7 +30,9 @@ LOCALES = ["es", "en", "fr"]
 #: Everyone `privacy.whereBody` names as a processor today. Telegram is
 #: optional for the user but is still a party the data crosses. Anthropic was
 #: added on 2026-11-03, before LLM_PROVIDER=anthropic was switched on in prod.
-PROCESSORS = ["Anthropic", "Mistral", "Stripe", "Resend", "Cloudflare", "Telegram"]
+#: GitHub on 2026-11-24, before the first offsite backup (docs/BACKUPS.md): it
+#: only ever holds ciphertext, and is declared all the same.
+PROCESSORS = ["Anthropic", "Mistral", "Stripe", "Resend", "Cloudflare", "Telegram", "GitHub"]
 
 #: The closing sentence per locale, with the number as a word.
 CLOSING = {
@@ -54,6 +56,21 @@ ANTHROPIC_ROLE = {
     "es": ["Claude", "fuera de la UE", "cláusulas contractuales tipo", "entrenar"],
     "en": ["Claude", "outside the EU", "standard contractual clauses", "train"],
     "fr": ["Claude", "hors de l’UE", "clauses contractuelles types", "entraîner"],
+}
+#: What GitHub holds (an encrypted backup it cannot read) and the transfer basis.
+GITHUB_ROLE = {
+    "es": ["copia de seguridad", "ciframos", "no puede leer", "Marco de Privacidad de Datos",
+           "cláusulas contractuales tipo"],
+    "en": ["backup", "encrypt", "cannot read", "Data Privacy Framework",
+           "standard contractual clauses"],
+    "fr": ["sauvegarde", "chiffre", "ne peut pas lire", "Data Privacy Framework",
+           "clauses contractuelles types"],
+}
+#: The retention promise for backups: how long, and never the consultation audio.
+BACKUP_RETENTION = {
+    "es": ["copia de seguridad", "30 días", "audio de las consultas"],
+    "en": ["backup", "30 days", "consultation audio"],
+    "fr": ["sauvegarde", "30 jours", "audio des consultations"],
 }
 #: The sentence /profesionales carried while every model ran in the EU. With the
 #: consultation summary and extraction on Claude it is false, so it must be gone.
@@ -132,6 +149,26 @@ def test_anthropic_is_declared_with_its_role_location_and_transfer_basis(locale)
 
 
 @pytest.mark.parametrize("locale", LOCALES)
+def test_github_is_declared_as_an_encrypted_backup_with_its_transfer_basis(locale):
+    body = _catalog(locale)["privacy"]["whereBody"]
+    start = body.index("GitHub")
+    # The GitHub passage ends at the closing count.
+    passage = body[start : CLOSING[locale].search(body).start()]
+    missing = [term for term in GITHUB_ROLE[locale] if term not in passage]
+    assert not missing, f"the GitHub passage ({locale}) lacks {missing}"
+
+
+@pytest.mark.parametrize("locale", LOCALES)
+def test_the_retention_section_bounds_the_backups(locale):
+    """Erasure is not instant in a backup: the policy says for how long a deleted
+    record can survive in one, and that none carries the consultation audio
+    (scripts/adelia_backup.py keeps 30 days and blob_archive leaves the audio out)."""
+    body = _catalog(locale)["privacy"]["retentionBody"]
+    missing = [term for term in BACKUP_RETENTION[locale] if term not in body]
+    assert not missing, f"privacy.retentionBody ({locale}) lacks {missing}"
+
+
+@pytest.mark.parametrize("locale", LOCALES)
 def test_the_professionals_page_no_longer_promises_eu_only_processing(locale):
     body = _catalog(locale)["professionals"]["whereBody"]
     assert "Anthropic" in body and "Mistral" in body
@@ -152,6 +189,14 @@ def test_the_dpia_declares_anthropic_and_dates_the_change():
     updates = text.split("## 7. Actualizaciones posteriores al cierre")[-1]
     assert "Anthropic" in text.split("## 1. Descripción del tratamiento")[0]
     assert "2026-11-03" in updates and "Anthropic" in updates
+
+
+def test_the_dpia_dates_the_offsite_backup_and_keeps_the_audio_out_of_it():
+    updates = DPIA.read_text(encoding="utf-8").split(
+        "## 7. Actualizaciones posteriores al cierre")[-1]
+    entry = updates[updates.index("2026-11-24"):]
+    assert "GitHub" in entry and "age" in entry
+    assert "audio" in entry and "no" in entry
 
 
 @pytest.mark.parametrize("locale", LOCALES)
