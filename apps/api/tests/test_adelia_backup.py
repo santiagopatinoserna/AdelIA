@@ -5,6 +5,7 @@ this process, never to the real one. What they hold the script to:
 
 - a backup that failed half way leaves nothing published,
 - an old backup goes, the newest never does, and other releases are never touched,
+- a backup's age is the stamp in its own tag, never GitHub's `created_at`,
 - the token never follows a download to the signed storage URL,
 - what is downloaded is decrypted only after it matches its checksums, and what is
   decrypted matches the manifest it was sealed with.
@@ -44,9 +45,19 @@ TOKEN = "fake-token-for-tests"
 needs_age = pytest.mark.skipif(shutil.which("age") is None, reason="needs the age binary")
 
 
+# What GitHub sends as a release's `created_at`: the date of the commit its tag points
+# to, here the README the repository was born with, the same for every backup.
+COMMIT_DATE = "2026-01-05T09:00:00Z"
+
+
+def _tag(when: datetime, prefix: str = "backup-") -> str:
+    return f"{prefix}{when.strftime('%Y%m%d-%H%M%S')}"
+
+
 class FakeGitHub:
     """The release endpoints the script calls, in memory. Pages of PAGE releases so
-    pagination is exercised with a handful."""
+    pagination is exercised with a handful. `created_at` behaves as on GitHub (the
+    tagged commit's date, see COMMIT_DATE) and `published_at` is set on publishing."""
 
     PAGE = 2
 
@@ -67,11 +78,12 @@ class FakeGitHub:
         self.next_id += 1
         return self.next_id
 
-    def add_release(self, tag: str, created_at: datetime, draft: bool = False) -> dict:
+    def add_release(self, tag: str, draft: bool = False) -> dict:
         rid = self._id()
+        now = datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
         release = {
             "id": rid, "tag_name": tag, "draft": draft, "assets": [],
-            "created_at": created_at.strftime("%Y-%m-%dT%H:%M:%SZ"),
+            "created_at": COMMIT_DATE, "published_at": None if draft else now,
             "upload_url": f"{self.base}/uploads/repos/{REPO}/releases/{rid}/assets{{?name,label}}",
         }
         self.releases.append(release)
@@ -132,8 +144,7 @@ class FakeGitHub:
                 body = self.rfile.read(int(self.headers.get("Content-Length", 0)))
                 if url.path == f"/repos/{REPO}/releases":
                     data = json.loads(body)
-                    rel = fake.add_release(data["tag_name"], datetime.now(timezone.utc),
-                                           draft=data.get("draft", False))
+                    rel = fake.add_release(data["tag_name"], draft=data.get("draft", False))
                     return self._send(201, rel)
                 m = re.fullmatch(rf"/uploads/repos/{REPO}/releases/(\d+)/assets", url.path)
                 if m:
@@ -154,6 +165,9 @@ class FakeGitHub:
                 body = json.loads(self.rfile.read(int(self.headers.get("Content-Length", 0))))
                 rel = next(r for r in fake.releases if r["id"] == int(m.group(1)))
                 rel["draft"] = body["draft"]
+                if not body["draft"]:
+                    rel["published_at"] = datetime.now(timezone.utc).strftime(
+                        "%Y-%m-%dT%H:%M:%SZ")
                 return self._send(200, rel)
 
             def do_DELETE(self):
@@ -202,7 +216,7 @@ def test_the_token_never_follows_a_download_to_storage(github, tmp_path):
 
 def test_every_page_of_releases_is_read(github):
     for i in range(5):
-        github.add_release(f"backup-{i}", datetime.now(timezone.utc))
+        github.add_release(f"backup-{i}")
 
     assert [r["tag_name"] for r in _client(github).releases()] == [
         f"backup-{i}" for i in range(5)]
@@ -211,20 +225,34 @@ def test_every_page_of_releases_is_read(github):
 def test_old_backups_go_the_newest_never_and_nothing_else_is_touched():
     now = datetime(2026, 12, 31, 12, tzinfo=timezone.utc)
 
-    def rel(tag, days, draft=False):
-        return {"id": tag, "tag_name": tag, "draft": draft,
-                "created_at": (now - timedelta(days=days)).strftime("%Y-%m-%dT%H:%M:%SZ")}
+    def rel(name, days, draft=False, tag=None):
+        return {"id": name, "name": name, "draft": draft, "created_at": COMMIT_DATE,
+                "tag_name": tag or _tag(now - timedelta(days=days))}
 
-    releases = [rel("backup-old", 40), rel("backup-recent", 3), rel("backup-edge", 29.9),
-                rel("v1.0", 400), rel("backup-killed-run", 1, draft=True),
-                rel("backup-running", 0.01, draft=True)]
-    expired = {r["tag_name"] for r in backup.select_expired(releases, "backup-", 30, now)}
-    assert expired == {"backup-old", "backup-killed-run"}
+    releases = [rel("old", 40), rel("recent", 3), rel("edge", 29.9),
+                rel("v1.0", 400, tag="v1.0"), rel("manual", 400, tag="backup-manual"),
+                rel("killed-run", 1, draft=True), rel("running", 0.01, draft=True)]
+    expired = {r["name"] for r in backup.select_expired(releases, "backup-", 30, now)}
+    assert expired == {"old", "killed-run"}
 
     # A month without backups must not end with none: the newest stays, however old.
-    alone = [rel("backup-last", 90), rel("backup-older", 120)]
-    assert [r["tag_name"] for r in backup.select_expired(alone, "backup-", 30, now)] == [
-        "backup-older"]
+    alone = [rel("last", 90), rel("older", 120)]
+    assert [r["name"] for r in backup.select_expired(alone, "backup-", 30, now)] == ["older"]
+
+
+def test_a_backups_age_is_its_own_stamp_not_githubs_created_at():
+    """Live run of 2026-11-24: a backup published at 22:38:04Z came back from GitHub
+    with created_at 21:51:52Z, the date of the README commit its tag points to. Every
+    backup shares that date, so reading it would keep one backup at random once the
+    repository is 30 days old and call the newest stale every day after the first."""
+    now = datetime(2026, 12, 31, 12, tzinfo=timezone.utc)
+    releases = [{"id": days, "draft": False, "created_at": COMMIT_DATE,
+                 "tag_name": _tag(now - timedelta(days=days))} for days in (40, 1, 2)]
+
+    assert [r["id"] for r in backup.select_expired(releases, "backup-", 30, now)] == [40]
+    assert backup.newest(releases, "backup-")["id"] == 1
+    assert backup.backup_time(releases[1], "backup-") == now - timedelta(days=1)
+    assert backup.backup_time({"tag_name": "backup-manual"}, "backup-") is None
 
 
 def test_a_file_is_split_under_the_limit_and_comes_back_whole(tmp_path):
@@ -342,12 +370,13 @@ def test_a_dump_that_is_not_a_dump_stops_the_backup(github, configured):
 
 
 def test_check_says_when_the_newest_backup_is_too_old(github, configured, capsys):
-    github.add_release("backup-a", datetime.now(timezone.utc) - timedelta(hours=40))
+    github.add_release(_tag(datetime.now(timezone.utc) - timedelta(hours=40)))
     assert backup.main(["check", "--max-age-hours", "30"]) == backup.FAILED
     assert "40 h" in capsys.readouterr().out
 
-    github.add_release("backup-b", datetime.now(timezone.utc) - timedelta(hours=2))
+    github.add_release(_tag(datetime.now(timezone.utc) - timedelta(hours=2)))
     assert backup.main(["check", "--max-age-hours", "30"]) == 0
+    assert "hace 2 h" in capsys.readouterr().out
 
 
 def test_missing_configuration_is_its_own_exit_code(monkeypatch, capsys):

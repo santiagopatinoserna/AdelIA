@@ -77,6 +77,7 @@ PART_BYTES = 1900 * 1024 * 1024
 DRAFT_GRACE = timedelta(hours=6)
 BUNDLE = ("manifest.json", "db.dump", "blobs.tar")
 SUMS = "SHA256SUMS"
+STAMP = "%Y%m%d-%H%M%S"  # UTC, in every tag: the backup's age is read from it
 FORMAT = 1
 CHUNK = 1024 * 1024
 FAILED, CONFIG = 1, 2
@@ -105,11 +106,6 @@ def _require(name: str) -> str:
 
 def _now() -> datetime:
     return datetime.now(timezone.utc)
-
-
-def _parse_time(stamp: str) -> datetime:
-    # Python 3.10, the server's, does not read the trailing Z GitHub sends.
-    return datetime.fromisoformat(stamp.replace("Z", "+00:00"))
 
 
 def sha256_file(path: Path) -> str:
@@ -271,25 +267,43 @@ class GitHub:
             shutil.copyfileobj(resp, out, CHUNK)
 
 
+def backup_time(release: dict[str, Any], prefix: str) -> datetime | None:
+    """When a backup was taken: the UTC stamp of its own tag, `<prefix>YYYYmmdd-HHMMSS`.
+    None for any other tag, so such a release is never pruned, picked or counted.
+
+    Not GitHub's `created_at`: for a release that is the date of the commit its tag
+    points to, and this repository's only commit is its README, the same for every
+    backup (live run of 2026-11-24: created_at 21:51:52Z for a backup published at
+    22:38:04Z). Read from there, `check` called the newest stale every day after the
+    first and pruning kept one backup at random once the repository was 30 days old.
+    The stamp is also the moment of the data, which is what the age must measure."""
+    tag = str(release.get("tag_name", ""))
+    if not tag.startswith(prefix):
+        return None
+    try:
+        return datetime.strptime(tag[len(prefix):], STAMP).replace(tzinfo=timezone.utc)
+    except ValueError:
+        return None
+
+
 def select_expired(releases: list[dict[str, Any]], prefix: str, keep_days: int,
                    now: datetime) -> list[dict[str, Any]]:
     """Published backups older than keep_days, except the newest whatever its age
     (a month without backups must not end with none), and drafts a killed run left.
-    Releases whose tag lacks the prefix are never touched."""
-    mine = [r for r in releases if str(r.get("tag_name", "")).startswith(prefix)]
-    published = sorted((r for r in mine if not r.get("draft")),
-                       key=lambda r: _parse_time(r["created_at"]), reverse=True)
+    Releases whose tag is not a backup stamp under the prefix are never touched."""
+    mine = [(when, r) for r in releases if (when := backup_time(r, prefix)) is not None]
+    published = sorted(((when, r) for when, r in mine if not r.get("draft")),
+                       key=lambda pair: pair[0], reverse=True)
     cutoff = now - timedelta(days=keep_days)
-    expired = [r for r in published[1:] if _parse_time(r["created_at"]) < cutoff]
-    drafts = [r for r in mine if r.get("draft")
-              and _parse_time(r["created_at"]) < now - DRAFT_GRACE]
+    expired = [r for when, r in published[1:] if when < cutoff]
+    drafts = [r for when, r in mine if r.get("draft") and when < now - DRAFT_GRACE]
     return expired + drafts
 
 
 def newest(releases: list[dict[str, Any]], prefix: str) -> dict[str, Any] | None:
-    published = [r for r in releases
-                 if str(r.get("tag_name", "")).startswith(prefix) and not r.get("draft")]
-    return max(published, key=lambda r: _parse_time(r["created_at"]), default=None)
+    published = [(when, r) for r in releases
+                 if not r.get("draft") and (when := backup_time(r, prefix)) is not None]
+    return max(published, key=lambda pair: pair[0])[1] if published else None
 
 
 def split_file(path: Path, part_bytes: int = PART_BYTES) -> list[Path]:
@@ -454,7 +468,7 @@ def run_backup(*, dump: Any = dump_database, blobs: Any = export_blobs,
     workdir.mkdir(parents=True, exist_ok=True)
     os.chmod(workdir, 0o700)
 
-    stamp = _now().strftime("%Y%m%d-%H%M%S")
+    stamp = _now().strftime(STAMP)
     tag = f"{prefix}{stamp}"
     scratch = Path(tempfile.mkdtemp(prefix=f"{stamp}-", dir=workdir))
     draft: dict[str, Any] | None = None
@@ -643,10 +657,13 @@ def main(argv: list[str] | None = None) -> int:
         if args.command == "backup":
             run_backup()
         elif args.command == "list":
-            for release in sorted(_github().releases(), key=lambda r: r["created_at"]):
+            prefix = _prefix()
+            mine = [(when, r) for r in _github().releases()
+                    if (when := backup_time(r, prefix)) is not None]
+            for when, release in sorted(mine, key=lambda pair: pair[0]):
                 size = sum(a.get("size", 0) for a in release.get("assets", []))
                 state = "borrador" if release.get("draft") else "publicada"
-                print(f"{release['tag_name']}  {release['created_at']}  {_mb(size)}  {state}")
+                print(f"{release['tag_name']}  {when:%Y-%m-%d %H:%M} UTC  {_mb(size)}  {state}")
         elif args.command == "fetch":
             manifest = fetch(_github(), _prefix(), args.tag, args.out, _identity())
             print(f"{manifest['tag']} descifrada en {args.out}: db.dump, blobs.tar"
@@ -670,7 +687,9 @@ def main(argv: list[str] | None = None) -> int:
             if last is None:
                 print("no hay ninguna copia en GitHub")
                 return FAILED
-            hours = (_now() - _parse_time(last["created_at"])).total_seconds() / 3600
+            taken = backup_time(last, _prefix())
+            assert taken is not None  # newest() only returns stamped backups
+            hours = (_now() - taken).total_seconds() / 3600
             if hours > args.max_age_hours:
                 print(f"la última copia ({last['tag_name']}) tiene {hours:.0f} h")
                 return FAILED
