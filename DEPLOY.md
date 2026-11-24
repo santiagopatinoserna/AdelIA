@@ -174,8 +174,9 @@ imprime la IP del servidor.
 ## Operación
 
 - **Logs**: `docker compose -f infra/docker-compose.prod.yml logs -f api`
-- **Backups**: dumps cada 24 h en el volumen `pgbackups` (restore en el README).
-  Los blobs (PDFs originales) están en `miniodata` — snapshot del volumen aparte.
+- **Backups**: dumps cada 24 h en el volumen `pgbackups` (restore en el README), en el mismo
+  servidor. La copia de fuera (base y archivos originales, cifrada, en un repo privado de GitHub)
+  se instala y se restaura con `docs/BACKUPS.md`.
 - **Actualizar**: `git pull && docker compose ... up -d --build`
 
 ## Vigilancia desde fuera

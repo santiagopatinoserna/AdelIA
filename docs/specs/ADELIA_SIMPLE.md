@@ -28,10 +28,11 @@ Lo mínimo que promete: lo que entra no se pierde y se puede sacar.
 Límites, a propósito: el audio de la consulta no se descarga nunca; la DPIA lo guarda solo hasta
 tener el texto (48 h; 7 días si falla). De la consulta queda la transcripción y el resumen.
 
-Fuera del código (servidor, tarea de Santiago, no verificado en el servidor): según
-`infra/docker-compose.prod.yml`, la copia diaria de Postgres queda en un volumen del mismo
-servidor, y nada en el repo copia los archivos originales (MinIO); el README pide un snapshot
-manual. Si el servidor se pierde, se pierden datos y copias. Hace falta una copia fuera de él.
+Copias: el volcado diario de Postgres vive en el mismo servidor. Desde el 2026-11-24 hay además una
+copia diaria fuera, cifrada con age antes de salir, en un repo privado de GitHub (base entera y
+originales, nunca el audio de las consultas; 30 días): `scripts/adelia_backup.py`,
+`docs/BACKUPS.md`. Probada de punta a punta contra GitHub con la base de pruebas (copia, descarga,
+descifrado, restauración en una base temporal). Falta instalarla en el servidor: tarea de Santiago.
 
 ## Estado (2026-11-21)
 
