@@ -3,13 +3,14 @@ from typing import BinaryIO
 
 import boto3
 from botocore.client import Config
+from botocore.exceptions import ClientError
 from botocore.response import StreamingBody
 
 from adelia.config import settings
 
 
 class S3Storage:
-    def __init__(self) -> None:
+    def __init__(self, bucket: str | None = None) -> None:
         self._client = boto3.client(
             "s3",
             endpoint_url=settings.s3_endpoint_url,
@@ -18,7 +19,9 @@ class S3Storage:
             region_name=settings.s3_region,
             config=Config(signature_version="s3v4"),
         )
-        self._bucket = settings.s3_bucket
+        # Another bucket than the app's only for scripts/blob_archive.py, which
+        # restores a backup into a scratch bucket to prove it restores.
+        self._bucket = bucket or settings.s3_bucket
 
     async def put_object(self, key: str, body: BinaryIO, content_type: str) -> None:
         await asyncio.to_thread(
@@ -47,3 +50,10 @@ class S3Storage:
             Params={"Bucket": self._bucket, "Key": key},
             ExpiresIn=expires_in,
         )
+
+    async def ensure_bucket(self) -> None:
+        """Create the bucket if it does not exist (a restore into a fresh one)."""
+        try:
+            await asyncio.to_thread(self._client.head_bucket, Bucket=self._bucket)
+        except ClientError:
+            await asyncio.to_thread(self._client.create_bucket, Bucket=self._bucket)
