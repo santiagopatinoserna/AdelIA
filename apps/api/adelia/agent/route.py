@@ -157,6 +157,76 @@ _OWN_DATA = re.compile(
     r"dossier medical|son dossier)\b"
 )
 
+# What she already noted, asked back (owner's direction, 2026-11-21: any question
+# is looked up in what she saved, trends included). Before this every one of
+# these went to the classifier, and «¿cuándo le di la última dosis de apiretal?»
+# went to the guidelines by rule: her answer is in her notes, not in a source.
+# Past or progressive verbs about the child, "the last one", "how is it going".
+# A rule of thumb («cuánto debe comer», «es normal», a baby in general) is
+# `_NORMATIVE` and keeps its sourced answer; a worry keeps the plan.
+_NOTES_ASK = re.compile(
+    r"\bcuant[oa]s? (?:\w+ ){0,4}?(?:ha|han|he|hemos|has|lleva|llevamos|llevo|hizo|tuvo|"
+    r"tomo|comio|durmio|bebio|mamo)\b|"
+    r"\bcuanto (?:pesa|pesaba)\b|"
+    r"\bcuando (?:fue|ha sido|era) (?:la |el |su )?ultim[oa]\b|"
+    r"\bcuando le (?:di|dimos|dio|he dado|hemos dado|ha dado|puse|pusimos)\b|"
+    r"\bcuando (?:tomo|comio|durmio|hizo|tuvo|mamo|bebio)\b|"
+    r"\ba que hora (?:le (?:di|dimos|dio|he dado)|tomo|comio|mamo|hizo|tuvo|(?:se )?durmio)\b|"
+    r"\b(?:la|el|su|sus) ultim[oa]s? (?:tomas?|biberon\w*|fiebres?|temperaturas?|cacas?|"
+    r"deposicion\w*|dosis|panal\w*|siestas?|medicin\w*|medicamento\w*|apiretal|dalsy|pesos?)\b|"
+    r"\bcomo (?:va|van|ha ido|han ido|evoluciona|ha evolucionado) (?:su |sus |el |la |los |las )?"
+    r"(?:peso|fiebre|temperatura|sueno|tomas|alimentacion|cacas|deposiciones|panales|siestas)\b|"
+    r"\bevolucion (?:de |del |de la |de su |de sus )?(?:peso|fiebre|temperatura|sueno|tomas)\b|"
+    r"\b(?:que|lo que) (?:he|hemos|has) (?:anotado|apuntado|registrado|guardado)\b|"
+    r"\bmis (?:notas|anotaciones|apuntes|registros)\b|"
+    r"\bresumen (?:de |del )?(?:hoy|ayer|dia|la semana|esta semana|sus tomas|su sueno)\b|"
+    r"\bhow (?:much|many) (?:\w+ ){0,2}?(?:has|have|did) (?:she|he|the baby|baby|it|i|we)\b|"
+    r"\bhow (?:much|many) (?:\w+ )?(?:today|yesterday|this week)\b|"
+    r"\bwhen (?:was|did) (?:\w+ ){0,2}?last\b|"
+    r"\bwhen did (?:i|we) (?:\w+ )?give\b|"
+    r"\b(?:her|his) last (?:feed|bottle|fever|temperature|dose|poo|poop|nappy|diaper|nap|weight)\b|"
+    r"\bhow is (?:her|his) (?:weight|sleep|fever|temperature|feeding)\b|"
+    r"\bwhat (?:have|did) (?:i|we) (?:noted?|logged|log|recorded|record|saved)\b|"
+    r"\bhow much does (?:she|he) weigh\b|"
+    r"\bcombien (?:de \w+ )?(?:a-t-(?:il|elle)|il a|elle a|j'ai|on a|lui ai)\b|"
+    r"\bcombien (?:de \w+ )?(?:aujourd'hui|hier|cette semaine)\b|"
+    r"\bquand (?:est-ce qu')?(?:a-t-(?:il|elle)|il a|elle a|j'ai|je lui ai)\b|"
+    r"\b(?:son|sa) derni(?:er|ere) (?:biberon|tetee|repas|fievre|temperature|dose|selle|couche|"
+    r"sieste|poids)\b|"
+    r"\bcomment (?:evolue|va) (?:son|sa|ses) (?:poids|fievre|temperature|sommeil|alimentation)\b|"
+    r"\bce que j'ai note\b|"
+    r"\bcombien (?:pese-t-(?:il|elle)|il pese|elle pese)\b"
+)
+_NORMATIVE = re.compile(
+    r"\b(?:debe|deberia|deben|tiene que|tienen que|suele|suelen|necesita|normal|normales|"
+    r"should|supposed to|doit|devrait|faut-il|normale)\b|"
+    r"\b(?:un|una|los|las) (?:bebes?|ninos?|ninas?|lactantes?|recien nacidos?)\b|"
+    r"\b(?:a|most) (?:baby|newborn|infant|toddler)\b|\bbabies\b|"
+    r"\b(?:un|les) (?:bebes?|nourrissons?|enfants?)\b"
+)
+# «¿Cuántas tomas lleva esta semana?» names a window of her calendar, not how long
+# something has lasted: `_WORRY` reads «lleva <dos palabras> semana» as the latter.
+_CALENDAR_SPAN = re.compile(
+    r"\b(?:esta|la|this|cette) (?:semana|week|semaine)\b|\b(?:este|el|this|ce) (?:mes|month|mois)\b"
+)
+
+
+def asks_about_notes(n: str) -> bool:
+    """«¿Cuántas tomas lleva hoy?»: a question about what she noted.
+
+    `n` is `read_shorthand(normalize(message))`. agent/diary reads the same
+    test to answer it in code, so the route and the answer never disagree.
+    """
+    if not _NOTES_ASK.search(n) or _NORMATIVE.search(n):
+        return False
+    return not _WORRY.search(_CALENDAR_SPAN.sub(" ", n))
+
+
+def names_her_reports(n: str) -> bool:
+    """Her reports, results, check-ups or the record (`_OWN_DATA`): documents to search."""
+    return bool(_OWN_DATA.search(n))
+
+
 # What only the tools do (build step 5): briefings and profile fixes (write
 # tools, behind a confirmation card), clinical trials and drug interactions
 # (read tools). Not a plan and not a fact question: a contract answer would
@@ -352,7 +422,8 @@ def route_by_rules(
       track   what only the tools do: briefings, profile fixes, trials,
               interactions (needs an account, otherwise a question);
       record  a measurement reported in the past tense, nothing asked, no worry;
-      track   the child's own data (needs an account, otherwise a question);
+      track   the child's own data, or what she noted asked back (needs an
+              account, otherwise a question);
       clarify the age changes the answer and nobody knows it, or she reports
               a fever without the thermometer reading (age first: one
               question per turn);
@@ -382,7 +453,7 @@ def route_by_rules(
             return RouteDecision(intent="record", confidence=0.9, via="rule")
         return RouteDecision(intent="plan", confidence=0.8, via="rule")
 
-    if _OWN_DATA.search(n):
+    if _OWN_DATA.search(n) or asks_about_notes(n):
         if has_account:
             return RouteDecision(intent="track", confidence=0.9, via="rule")
         return RouteDecision(intent="question", confidence=0.8, via="rule")
@@ -472,8 +543,9 @@ Intents:
   ("is it normal that...", "at what age...", "when...", "what is...").
 - "record": the parent reports something that happened (a temperature, a feed, sleep,
   a nappy) to leave it noted. Only possible when the parent has an account.
-- "track": the parent asks about THEIR OWN child's data: percentiles, vaccines due,
-  reports, lab results, the record. Only possible when the parent has an account.
+- "track": the parent asks about THEIR OWN child's data: what they already noted (feeds,
+  sleep, temperatures, nappies, weight, medicines given) and how it is going, percentiles,
+  vaccines due, reports, lab results, the record. Only possible when the parent has an account.
 - "clarify": an essential fact is missing and the answer depends on it (no age and the
   topic is fever, feeding amounts or sleep; "something is wrong" with no symptom).
   Put the missing fact in "missing" ("age", "symptom", "temperature", "duration").

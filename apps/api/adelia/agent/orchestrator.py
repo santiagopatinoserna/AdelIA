@@ -1,11 +1,13 @@
 from __future__ import annotations
+from datetime import datetime
 from typing import AsyncIterator, Callable
 from uuid import UUID, uuid4
 
 from adelia.agent.events import AgentEvent
-from adelia.agent import cards, development_signs
+from adelia.agent import cards, development_signs, diary
 from adelia.agent.graph import (
     ACCOUNT_CLARIFY_FIELDS,
+    LOCAL_TZ,
     GraphDeps,
     Retrieved,
     WriteOutcome,
@@ -138,7 +140,8 @@ async def run_turn(*, user_id: UUID, profile_id: UUID | None, message: str,
         # The tool loop sees this topic too: a new topic starts clean.
         c = state.get("conversation")
         return _track(state, messages=c.model_history if c is not None else messages,
-                      user_id=user_id, profile_id=profile_id, locale=locale, facts=facts)
+                      user_id=user_id, profile_id=profile_id, locale=locale, facts=facts,
+                      now=deps.now())
 
     deps = GraphDeps(
         route=_route, retrieve=_retrieve, stream=_stream,
@@ -181,7 +184,7 @@ def _as_dict(citation) -> dict:
 
 
 async def _track(state, *, messages: list[dict], user_id: UUID, profile_id: UUID | None,
-                 locale: str, facts) -> AsyncIterator[dict]:
+                 locale: str, facts, now: datetime | None = None) -> AsyncIterator[dict]:
     """The graph's `track` node for the agent: the model with the tools, MAX_STEPS at most.
 
     Her own data (percentiles, vaccines due, her reports and lab results),
@@ -191,7 +194,25 @@ async def _track(state, *, messages: list[dict], user_id: UUID, profile_id: UUID
     referral included (2026-08-31), and the guard has already run by now.
     Write tools are never run here: they become a confirmation card and the
     turn pauses until she confirms (principle 3).
+
+    A question about what she noted that the rules can read («¿cuántas tomas
+    lleva hoy?», «¿cómo va su peso?») is answered from her notes in code, with
+    no model at all (agent/diary, 2026-11-21): the numbers are her own, a model
+    could only miscount them, and the answer does not wait on a provider.
     """
+    ask = diary.parse_question(state["message"])
+    if ask is not None:
+        readings = await diary.read_notes(
+            Scope(user_id=user_id, profile_id=facts.profile_id or profile_id), ask,
+            now=now or datetime.now(LOCAL_TZ), locale=locale, facts=facts,
+        )
+        text = diary.reply(readings)
+        yield {"type": "token", "content": text}
+        for reading in readings:
+            if reading.card is not None:
+                yield {"type": "card", "card": reading.card}
+        yield {"type": "result", "answer": text, "citations": [], "evidence_citations": []}
+        return
     provider = get_provider()
     convo = list(messages) + [{"role": "user", "content": state["message"]}]
     # Citations accumulated across every tool call of the turn, so the final

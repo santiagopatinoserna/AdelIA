@@ -229,6 +229,14 @@ Las herramientas actuales (`percentil_crecimiento`, `proximas_vacunas`,
 `buscar_en_expediente`, `evaluar_labs`) en un bucle acotado a 3 pasos.
 Las de escritura (`generar_briefing`, `completar_perfil`) siguen pasando por
 tarjeta de confirmación.
+Lo anotado, preguntado de vuelta (2026-11-21, `agent/diary.py`, `docs/specs/ADELIA_SIMPLE.md`):
+«¿cuántas tomas lleva hoy?», «¿cómo va su peso?», «¿cuándo le di la última dosis?» van a
+`track` por regla (`route.asks_about_notes`; una regla general, «es normal» o una
+preocupación siguen su camino). Si las reglas leen el tipo y la ventana, responde el código
+sin modelo: totales por día, la más alta, lo último, el cambio de peso con los pesos de sus
+informes, y una tarjeta `trend` con la gráfica. Lo que nombra sus informes (`_OWN_DATA`) y lo
+que las reglas no leen sigue en el bucle, que tiene `consultar_anotaciones` con los mismos
+números.
 
 ### `compose`
 Poda y renumera citas (`services/citations.prune_and_renumber`), añade

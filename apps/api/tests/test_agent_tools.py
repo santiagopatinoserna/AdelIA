@@ -12,6 +12,11 @@ def test_write_classification():
     assert is_write_tool("completar_perfil") is True
     assert is_write_tool("buscar_en_expediente") is False
 
+def test_her_notes_are_a_read_tool():
+    """What she noted is read back without a confirmation card (agent/diary)."""
+    assert "consultar_anotaciones" in tool_names()
+    assert is_write_tool("consultar_anotaciones") is False
+
 def test_schema_shape():
     for t in TOOLS:
         assert {"name", "description", "input_schema"} <= set(t)

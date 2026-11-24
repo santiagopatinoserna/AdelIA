@@ -35,3 +35,12 @@ def card_profile(card_id: str, profiles: list[dict], active_id: str | None) -> d
 
 def card_insight(card_id: str, title: str, body: str, tone: str = "neutral") -> dict:
     return _card("insight", card_id, {"title": title, "body": body, "tone": tone})
+
+def card_trend(card_id: str, title: str, unit: str, style: str, points: list[dict]) -> dict:
+    """What she noted, drawn: `style` "bars" (a total per day) or "line" (readings).
+
+    Every label and number arrives formatted (agent/diary), so the web only draws.
+    A line's points also carry `x`, days after the first, to space them by the calendar.
+    """
+    return _card("trend", card_id, {"title": title, "unit": unit, "style": style,
+                                    "points": points})

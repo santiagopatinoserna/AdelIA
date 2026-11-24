@@ -9,9 +9,11 @@ through, so a tool never opens a session to ask how old the baby is.
 from __future__ import annotations
 
 from dataclasses import dataclass, field
+from datetime import datetime
 from uuid import UUID, uuid4
 
-from adelia.agent import cards
+from adelia.agent import cards, diary
+from adelia.agent.graph import LOCAL_TZ
 from adelia.agent.pediatrics import (
     calendar_meta,
     due_vaccines,
@@ -25,6 +27,7 @@ from adelia.enrichment.profile_service import UNKNOWN_PROFILE, ProfileFacts
 from adelia.enrichment.trial_matcher import match_for_patient
 from adelia.services.answer_contract import red_flag_reply
 from adelia.services.chat_orchestrator import answer_question_streaming
+from adelia.services.scope import Scope
 
 
 @dataclass
@@ -150,6 +153,10 @@ async def execute_tool(
     if name == "proximas_vacunas":
         return await _vaccines_tool(args, user_id=user_id, profile_id=profile_id,
                                     facts=facts, locale=locale)
+
+    if name == diary.TOOL:
+        return await _notes_tool(args, user_id=user_id, profile_id=profile_id,
+                                 facts=facts, locale=locale)
 
     if name == "generar_briefing":
         # WRITE tool: never executed here — orchestrator intercepts and emits a confirm card.
@@ -289,3 +296,21 @@ async def _vaccines_tool(
     body = " ".join(lines) + calendar_line
     tone = "warn" if (late and record_seen) else "neutral"
     return ToolOutcome(text=body, card=cards.card_insight(_cid(), "Vacunas", body, tone=tone))
+
+
+async def _notes_tool(
+    args: dict, *, user_id: UUID, profile_id: UUID | None, facts: ProfileFacts, locale: str
+) -> ToolOutcome:
+    """What she noted, summed in code (agent/diary); the model only words it.
+
+    The resolved profile first, like the rest of the turn (audit 4.1): a turn
+    with no explicit child reads the default child's notes, never both.
+    """
+    ask = diary.ask_from_args(args)
+    if ask is None:
+        return ToolOutcome(text=f"Tipo de anotación desconocido: {args.get('kind')}")
+    scope = Scope(user_id=user_id, profile_id=facts.profile_id or profile_id)
+    readings = await diary.read_notes(scope, ask, now=datetime.now(LOCAL_TZ), locale=locale,
+                                      facts=facts)
+    card = next((r.card for r in readings if r.card is not None), None)
+    return ToolOutcome(text=diary.reply(readings), card=card)
