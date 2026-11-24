@@ -45,6 +45,9 @@ export type DocumentDTO = {
   summary?: string | null;
   /** Daily diary entries (Telegram): ISO date the entry is about. */
   diary_date?: string | null;
+  /** GET /documents/{id}/file gives her file back. Only the single-document
+   * route sets it (null in lists); false for the consultation audio. */
+  original?: boolean | null;
 };
 
 export type TelegramLinkDTO = {

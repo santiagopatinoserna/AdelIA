@@ -276,6 +276,7 @@
     "docFailedTitle": "We could not read this document.",
     "docFailedBody": "The transcription or the file reading may have failed. The original file is still stored, so you can try again.",
     "retryDoc": "Try again",
+    "docOriginal": "Open the original file",
     "retryDocRunning": "Trying again…",
     "retryDocError": "That did not work. Please try again."
   },

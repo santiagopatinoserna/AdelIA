@@ -6,11 +6,12 @@ import re
 import uuid
 from datetime import datetime, timedelta, timezone
 from typing import Annotated
+from urllib.parse import quote
 
 import sqlalchemy as sa
 import httpx
 from botocore.exceptions import ClientError, EndpointConnectionError
-from fastapi import APIRouter, BackgroundTasks, Depends, File, Form, HTTPException, UploadFile, status, Query
+from fastapi import APIRouter, BackgroundTasks, Depends, File, Form, HTTPException, UploadFile, status, Query, Response
 from anthropic import APIError as AnthropicAPIError
 from anthropic import APIStatusError as AnthropicStatusError
 from mistralai.client.errors import MistralError
@@ -176,7 +177,13 @@ def _file_name_from_key(s3_key: str) -> str:
     return leaf[37:] if len(leaf) > 37 and leaf[36] == "-" else leaf
 
 
-def _doc_to_out(doc: Document, *, entity_count: int = 0, chunk_count: int = 0) -> DocumentOut:
+def _doc_to_out(
+    doc: Document,
+    *,
+    entity_count: int = 0,
+    chunk_count: int = 0,
+    original: bool | None = None,
+) -> DocumentOut:
     return DocumentOut(
         id=doc.id,
         source=doc.source,
@@ -192,6 +199,7 @@ def _doc_to_out(doc: Document, *, entity_count: int = 0, chunk_count: int = 0) -
         summary=(doc.document_metadata or {}).get("summary"),
         diary_date=(doc.document_metadata or {}).get("diary_date"),
         extraction=(doc.document_metadata or {}).get("extraction"),
+        original=original,
     )
 
 
@@ -745,7 +753,85 @@ async def get_document(
         sa.select(sa.func.count()).select_from(Chunk).where(Chunk.document_id == doc.id)
     )
 
-    return _doc_to_out(doc, entity_count=entity_count or 0, chunk_count=chunk_count or 0)
+    return _doc_to_out(
+        doc,
+        entity_count=entity_count or 0,
+        chunk_count=chunk_count or 0,
+        original=await _original_is_kept(db, doc),
+    )
+
+
+# What a browser shows in a tab. Any other type she gets as a download, so a
+# file the Telegram bot accepted is never rendered as a page of this origin.
+_SHOWN_INLINE = frozenset({"application/pdf", "image/png", "image/jpeg"})
+
+
+async def _original_is_kept(db: AsyncSession, doc: Document) -> bool:
+    """Whether the file she sent is still hers to open (the vault promise,
+    docs/specs/ADELIA_SIMPLE.md, 2026-11-24). Until then the blob was written
+    at upload and read by the pipeline only: no route gave the PDF, the photo
+    of the vaccine card or the voice note back, and the export carries text.
+
+    Never the consultation audio, whatever its state: the DPIA keeps it as a
+    means to its transcript (48 h after it, 7 days if it failed), and serving
+    it would turn it into an archive. Nor any blob already on a deletion clock
+    (a Telegram voice note expires the same way): one rule, read from the
+    tombstone the retention code writes, not from a second list of types.
+    """
+    if doc.source == "consulta":
+        return False
+    return await db.get(BlobTombstone, doc.s3_key) is None
+
+
+def _content_disposition(kind: str, name: str) -> str:
+    """RFC 6266 with the UTF-8 name of RFC 5987: the upload keeps accented
+    letters ("análisis.pdf") and a header must be latin-1, so `filename` is an
+    ASCII stand-in for the clients that ignore `filename*`."""
+    plain = "".join(c if c.isascii() and c not in '"\\' else "_" for c in name)
+    return f"{kind}; filename=\"{plain}\"; filename*=UTF-8''{quote(name, safe='')}"
+
+
+@router.get("/{doc_id}/file")
+async def get_document_file(
+    doc_id: uuid.UUID,
+    user_id: Annotated[uuid.UUID, Depends(get_current_user_id)],
+):
+    """The file she sent, byte for byte. Not behind the paywall: access and
+    portability (GDPR art. 15 and 20) are not features one stops paying for.
+
+    Opaque 404 across users, for an erased document, for a recording kept only
+    as its transcript and for a blob storage no longer has. The row is read in
+    a session closed before the blob is fetched, so no pooled connection waits
+    on storage (the pool exhaustion behind the 500s of the upload route).
+    """
+    async with AsyncSessionLocal() as db:
+        doc = await db.get(Document, doc_id)
+        if doc is None or doc.user_id != user_id or doc.deleted_at is not None:
+            raise HTTPException(status_code=404, detail="Not found")
+        if not await _original_is_kept(db, doc):
+            raise HTTPException(status_code=404, detail="Not found")
+        s3_key, mime_type = doc.s3_key, doc.mime_type
+
+    try:
+        stream = await storage.get_object(s3_key)
+        content = await asyncio.to_thread(stream.read)
+    except ClientError as exc:
+        if exc.response.get("Error", {}).get("Code") not in ("NoSuchKey", "404"):
+            raise
+        logger.warning("original missing from storage doc_id=%s", doc_id)
+        raise HTTPException(status_code=404, detail="Not found") from exc
+
+    kind = "inline" if mime_type in _SHOWN_INLINE else "attachment"
+    return Response(
+        content=content,
+        media_type=mime_type,
+        headers={
+            "Content-Disposition": _content_disposition(kind, _file_name_from_key(s3_key)),
+            # Health records: never in a shared cache, never kept by the browser.
+            "Cache-Control": "private, no-store",
+            "X-Content-Type-Options": "nosniff",
+        },
+    )
 
 
 @router.delete("/{doc_id}", status_code=status.HTTP_204_NO_CONTENT)

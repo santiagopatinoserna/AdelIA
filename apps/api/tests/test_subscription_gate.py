@@ -107,6 +107,9 @@ FREE_ROUTES = [
     ("agent-suggestions", "GET", "/agent/suggestions"),
     ("shares-list", "GET", "/shares"),
     ("data-export", "GET", "/users/me/export"),
+    # Her original file back (the vault promise, 2026-11-24). An unknown id is
+    # enough: a paywalled route answers 402 before it looks the document up.
+    ("documents-original", "GET", "/documents/00000000-0000-0000-0000-000000000000/file"),
 ]
 
 

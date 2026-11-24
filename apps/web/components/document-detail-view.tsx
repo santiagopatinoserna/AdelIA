@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import { useTranslations } from "next-intl";
-import { ArrowLeft, RotateCcw, Trash2 } from "lucide-react";
+import { ArrowLeft, FileText, RotateCcw, Trash2 } from "lucide-react";
 
 import { formatDay, formatInstant } from "@/lib/dates";
 import { Link, useRouter } from "@/lib/navigation";
@@ -168,6 +168,22 @@ export function DocumentDetailView({
         {formatInstant(doc.created_at, locale)}
         {doc.raw_text ? `  ·  ${t("docReady")}` : ""}
       </p>
+      {/* The file she sent, as she sent it, even when reading it failed (the
+          vault promise, 2026-11-24). A PDF or a photo opens in a tab, anything
+          else downloads: the API sets the disposition. Never the consultation
+          audio, of which only the text is kept (`original` is false). */}
+      {doc.original && (
+        <a
+          href={`/api/backend/documents/${doc.id}/file`}
+          target="_blank"
+          rel="noopener"
+          data-testid="document-original"
+          className="mt-1 inline-flex min-h-[44px] items-center gap-1.5 text-sm text-primary-text transition-colors hover:text-primary-text-hover"
+        >
+          <FileText className="h-4 w-4" strokeWidth={2} aria-hidden />
+          {t("docOriginal")}
+        </a>
+      )}
       {/* Post-recording essence: the takeaway before the full conversation.
           Bullets come as "- " lines from the backend, rendered as a list. */}
       {isConsulta && doc.summary && (

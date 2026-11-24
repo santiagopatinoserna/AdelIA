@@ -276,6 +276,7 @@
     "docFailedTitle": "Nous n’avons pas pu lire ce document.",
     "docFailedBody": "La transcription ou la lecture du fichier a peut-être échoué. Le fichier d’origine est toujours conservé, tu peux donc réessayer.",
     "retryDoc": "Réessayer",
+    "docOriginal": "Ouvrir le fichier d’origine",
     "retryDocRunning": "Nouvelle tentative…",
     "retryDocError": "Cela n’a pas fonctionné. Réessaie."
   },

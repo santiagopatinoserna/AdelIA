@@ -276,6 +276,7 @@
     "docFailedTitle": "No pudimos leer este documento.",
     "docFailedBody": "Puede haber fallado la transcripción o la lectura del archivo. El archivo original sigue guardado, así que puedes reintentarlo.",
     "retryDoc": "Reintentar",
+    "docOriginal": "Abrir el archivo original",
     "retryDocRunning": "Reintentando…",
     "retryDocError": "No se pudo reintentar. Inténtalo otra vez."
   },

@@ -61,6 +61,9 @@ class DocumentOut(BaseModel):
     # flagged the silent drops). None for documents processed before this
     # existed and for pipelines that fail before extraction.
     extraction: ExtractionReport | None = None
+    # Whether GET /documents/{id}/file gives her the file she sent. Set by the
+    # single-document route only, None in lists (the vault promise, 2026-11-24).
+    original: bool | None = None
 
     model_config = ConfigDict(from_attributes=True)
 
