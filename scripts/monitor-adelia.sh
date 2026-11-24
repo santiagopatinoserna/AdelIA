@@ -45,6 +45,30 @@ notify() {
     --data-urlencode "disable_web_page_preview=true" || true
 }
 
+# The offsite backup (docs/BACKUPS.md), at most once an hour: the newest backup on
+# GitHub must be younger than 30 h. One alert when it goes stale and one when a
+# fresh one appears, like the outage alerts. Skipped without ADELIA_BACKUP_REPO (set
+# in the plist). Exit code 2 means GitHub could not be asked (no network, gh logged
+# out): not an alert, the next hour asks again.
+backup_check() {
+  [[ -n "${ADELIA_BACKUP_REPO:-}" ]] || return 0
+  local checked="${STATE_DIR}/backup_checked" state="${STATE_DIR}/backup" now out rc
+  now=$(date +%s)
+  (( now - $(cat "${checked}" 2>/dev/null || echo 0) < 3600 )) && return 0
+  echo "${now}" > "${checked}"
+  out=$(python3 "$(dirname "$0")/adelia_backup.py" check --max-age-hours 30 2>&1)
+  rc=$?
+  if [[ ${rc} -eq 1 && "$(cat "${state}" 2>/dev/null)" != "alerted" ]]; then
+    echo alerted > "${state}"
+    notify "🟠 Copia de seguridad de AdelIA: ${out} (docs/BACKUPS.md)."
+  elif [[ ${rc} -eq 0 && "$(cat "${state}" 2>/dev/null)" == "alerted" ]]; then
+    echo ok > "${state}"
+    notify "🟢 Copias de seguridad de AdelIA al día (${out})."
+  fi
+  return 0
+}
+backup_check
+
 # Two probes, because they fail for different reasons: /healthz dies when the
 # API or the database is gone (and 200 there means the DB answered), /es dies
 # when the web container or the tunnel is gone.
