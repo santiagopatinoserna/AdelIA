@@ -33,7 +33,12 @@ from adelia.workers.chunker import ChunkConfig, chunk_hierarchical
 from adelia.workers.embed import embed_texts
 from adelia.workers.extract import extract_entities, locate_quote
 from adelia.workers.ocr import extract_text_from_pdf
-from adelia.workers.summarize import summarize_consultation
+from adelia.workers.summarize import (
+    CUT_LINE,
+    drop_cut_sentence,
+    mark_cut,
+    summarize_consultation,
+)
 from adelia.workers.transcribe import transcribe_audio
 
 logger = logging.getLogger(__name__)
@@ -161,6 +166,16 @@ async def _with_retry(stage: str, make_call):
             )
             await asyncio.sleep(delay)
     raise last_exc
+
+
+def _cut_summary(locale: str | None) -> str:
+    """The summary of a cut visit the summarizer gave nothing for (no key, a refusal,
+    retries spent): the coded cut line alone, in her locale, with no model call. Before,
+    the summary was None and only the transcript said the recording stopped, so she
+    never saw it on the visit (third QA wave 2026-11-13). Same line, same locale fallback
+    as summarize_consultation(interrupted=True)."""
+    code = (locale or "es")[:2].lower()
+    return f"- {CUT_LINE.get(code, CUT_LINE['es'])}"
 
 
 def _text_after_failure(mime_type: str, raw_text: str) -> str:
@@ -377,6 +392,9 @@ async def _process_document_inner(document_id: uuid.UUID, mime_type: str, is_con
         diary_date = meta.get("diary_date") or None
         caption = (meta.get("caption") or "").strip()
         doc_locale = meta.get("locale") or "es"
+        # The recorder uploaded a recording that a reload, a closed tab or the browser
+        # itself cut short (consulta-recorder.tsx sets the flag; she never stopped it).
+        consult_cut = is_consulta and bool(meta.get("interrupted"))
         profile_name: str | None = None
         if diary_date and profile_id is not None:
             profile = await session.get(Profile, profile_id)
@@ -416,25 +434,44 @@ async def _process_document_inner(document_id: uuid.UUID, mime_type: str, is_con
 
             raw_text = render_diary_text(raw_text, diary_date, profile_name, doc_locale)
 
+        # What the entity extractor reads: the whole text, except for a cut visit (below).
+        extract_text = raw_text
         if raw_text and is_consulta:
             # Courtesy stage for recordings: a few strict bullets so the mom
             # gets the takeaway without rereading everything. Best-effort:
             # any failure leaves summary=None and the pipeline continues.
             try:
                 summary = await _with_retry(
-                    "summarize", lambda: summarize_consultation(raw_text)
+                    "summarize",
+                    lambda: summarize_consultation(raw_text, interrupted=True, locale=doc_locale)
+                    if consult_cut else summarize_consultation(raw_text),
                 ) or None
             except Exception:  # noqa: BLE001 — courtesy, never fatal
                 logger.exception("consultation summary failed (continuing)")
                 summary = None
+            if consult_cut and not summary:
+                # A cut visit says so even when the summarizer gave nothing.
+                summary = _cut_summary(doc_locale)
+            if consult_cut:
+                # Entities come only from what was surely said whole: the fragment
+                # ("si sube de 30?", cut inside "treinta y ocho") must never be stored
+                # as a value the home or the agent could cite (third QA wave 2026-11-13).
+                extract_text = drop_cut_sentence(raw_text)
+                # The stored transcript says where it stopped, so the transcript view
+                # and the chat about this visit never read the fragment as finished
+                # (third QA wave 2026-11-13). After the summary, which leaves it out.
+                raw_text = mark_cut(raw_text, doc_locale)
 
         if raw_text:
-            # Stage 2: entity extraction (ids assigned now for entity_ranges)
-            extracted: list[ExtractedEntity] = await _with_retry(
-                "extract",
-                lambda: (extract_entities(raw_text, diary_date=diary_date) if diary_date
-                         else extract_entities(raw_text)),
-            )
+            # Stage 2: entity extraction (ids assigned now for entity_ranges). A cut
+            # visit with only its fragment has nothing whole to extract from.
+            extracted: list[ExtractedEntity] = []
+            if extract_text.strip():
+                extracted = await _with_retry(
+                    "extract",
+                    lambda: (extract_entities(extract_text, diary_date=diary_date)
+                             if diary_date else extract_entities(extract_text)),
+                )
             # Plain-list fakes carry no report; the real extractor always does.
             extraction_report = getattr(extracted, "report", None)
             entity_ranges: dict[str, tuple[int, int]] = {}
@@ -583,6 +620,7 @@ async def upload_document(
     source: Annotated[str, Form()] = "web",
     consent_policy_version: Annotated[str | None, Form()] = None,
     locale: Annotated[str, Form()] = "es",
+    interrupted: Annotated[bool, Form()] = False,
 ):
     content_type = normalize_mime(file.content_type)
     if content_type not in ALLOWED_MIME:
@@ -635,6 +673,12 @@ async def upload_document(
         mime_type=content_type,
         s3_key=s3_key,
         profile_id=profile_id,
+        # A consult recording the recorder recovered after a reload or a closed tab:
+        # the summary must say it was cut and not state its last, partial sentence
+        # (third QA wave 2026-11-13). In the row, so a boot requeue keeps it.
+        document_metadata=(
+            {"interrupted": True, "locale": locale[:8]} if is_consulta and interrupted else None
+        ),
     )
     async with AsyncSessionLocal() as db:
         db.add(doc)

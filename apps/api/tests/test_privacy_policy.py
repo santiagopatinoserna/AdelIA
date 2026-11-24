@@ -112,11 +112,12 @@ def test_the_policy_date_moves_with_the_policy(locale):
     # The Cloudflare declaration changed the policy on 2026-10-14, the
     # Anthropic one on 2026-11-03, and on 2026-11-08 the AI usage counter, the
     # consented visitor journeys with their cookies section and the clicks on
-    # our short links. A policy that changes under an older "last updated"
-    # date is itself a misstatement.
+    # our short links. On 2026-11-24 the recording started to be kept on her
+    # device until it uploads (lib/consulta-draft). A policy that changes under
+    # an older "last updated" date is itself a misstatement.
     updated = _catalog(locale)["privacy"]["updated"]
-    assert re.search(r"\b8\b", updated) and "2026" in updated and UPDATED_MONTH[locale] in updated, (
-        f"privacy.updated ({locale}) does not carry the 2026-11-08 change: {updated}"
+    assert re.search(r"\b24\b", updated) and "2026" in updated and UPDATED_MONTH[locale] in updated, (
+        f"privacy.updated ({locale}) does not carry the 2026-11-24 change: {updated}"
     )
 
 

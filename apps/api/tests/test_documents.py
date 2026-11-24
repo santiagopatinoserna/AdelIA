@@ -1,6 +1,7 @@
 from io import BytesIO
 from uuid import uuid4
 
+import httpx
 import pytest
 from sqlalchemy import select
 
@@ -163,3 +164,167 @@ def test_normalize_strips_codecs_suffix():
 def test_browser_recording_mimes_allowed():
     for mime in ("audio/webm", "audio/mp4", "audio/ogg", "audio/x-m4a", "audio/flac"):
         assert mime in ALLOWED_MIME
+
+
+# --- a cut consult whose summarizer gives nothing (third QA wave 2026-11-13) ---------
+#
+# The recorder flags a visit a reload, a closed tab or the browser itself cut short. The
+# summarizer then leaves the last sentence out and ends with a coded line. Review of the
+# summary package: when the summarizer failed (no key, as in CI; a refusal; retries spent)
+# the summary was None and she never saw that the visit was cut, and the extractor still
+# read the half-said fragment, so "sube de 30" could be stored as an entity.
+
+_CUT_VISIT = (
+    "[Hablante 1] El peso está muy bien, en el percentil 60.\n\n"
+    "[Hablante 2] Vale. La fiebre es normal después de la vacuna. "
+    "¿Y le puedo dar paracetamol esta noche si sube de 30?"
+)
+
+
+async def _seed_consult(meta: dict | None) -> tuple:
+    """A consult Document as the upload leaves it, with processed_at set so no boot
+    requeues it if the test dies (the pipeline sets it again)."""
+    from datetime import datetime, timezone
+
+    from tests.db_helpers import make_user
+
+    user_id = await make_user()
+    async with AsyncSessionLocal() as session:
+        doc = Document(user_id=user_id, source="consulta", mime_type="audio/webm",
+                       s3_key=f"test/{uuid4()}-consulta.webm", document_metadata=meta,
+                       processed_at=datetime.now(timezone.utc))
+        session.add(doc)
+        await session.commit()
+        return user_id, doc.id
+
+
+def _fake_pipeline(monkeypatch, transcript: str) -> list[str]:
+    """Storage, Voxtral, the extractor and the embedder faked; returns what the
+    extractor was asked to read. The summarizer is left to each test."""
+    from adelia.routers import documents as docs_mod
+
+    class _Body:
+        def read(self) -> bytes:
+            return b"fake-consulta-audio"
+
+    async def _get(key: str):
+        return _Body()
+
+    async def _transcribe(body, mime_type, diarize=False):
+        return transcript
+
+    read: list[str] = []
+
+    async def _extract(text: str):
+        read.append(text)
+        return []
+
+    async def _embed(texts: list[str]):
+        return [[0.0] * 1024 for _ in texts]
+
+    monkeypatch.setattr(docs_mod.storage, "get_object", _get)
+    monkeypatch.setattr(docs_mod, "transcribe_audio", _transcribe)
+    monkeypatch.setattr(docs_mod, "extract_entities", _extract)
+    monkeypatch.setattr(docs_mod, "embed_texts", _embed)
+    return read
+
+
+@pytest.mark.skipif(not PG_AVAILABLE, reason="PG required: the pipeline writes a Document row")
+@pytest.mark.parametrize("failure", ["no_key", "retries_spent"])
+async def test_a_cut_consult_says_it_was_cut_when_the_summarizer_fails(monkeypatch, failure):
+    from adelia.config import settings
+    from adelia.routers import documents as docs_mod
+
+    read = _fake_pipeline(monkeypatch, _CUT_VISIT)
+    if failure == "no_key":
+        # The real summarizer, with no key: RuntimeError, not retried (CI has no keys).
+        monkeypatch.setattr(settings, "llm_provider", "mistral")
+        monkeypatch.setattr(settings, "mistral_api_key", "")
+    else:
+        attempts: list[int] = []
+
+        async def _down(text, **kw):
+            attempts.append(1)
+            raise httpx.ConnectError("summarizer down")
+
+        monkeypatch.setattr(docs_mod, "RETRY_DELAYS", (0.0,))
+        monkeypatch.setattr(docs_mod, "summarize_consultation", _down)
+    _, doc_id = await _seed_consult({"interrupted": True, "locale": "en"})
+
+    await docs_mod._process_document_inner(doc_id, "audio/webm", True)
+
+    async with AsyncSessionLocal() as session:
+        doc = await session.get(Document, doc_id)
+    # The coded line in the document's locale, with no model behind it.
+    assert doc.document_metadata["summary"] == "- The recording was cut off: the end of the visit may be missing."
+    assert doc.raw_text.endswith("si sube de 30? (The recording stopped here.)")
+    # The extractor read only what was surely said whole.
+    assert len(read) == 1
+    assert "percentil 60" in read[0]
+    assert "sube de 30" not in read[0]
+    if failure == "retries_spent":
+        assert len(attempts) == 2
+
+
+@pytest.mark.skipif(not PG_AVAILABLE, reason="PG required: the pipeline writes a Document row")
+async def test_a_consult_cut_after_one_sentence_stores_no_entity(monkeypatch):
+    """Nothing in it was surely said whole: no extraction at all, and the summary is the
+    cut line, which needs no model and so no key."""
+    from adelia.config import settings
+    from adelia.routers import documents as docs_mod
+
+    read = _fake_pipeline(monkeypatch, "[Hablante 1] Le doy tres coma")
+    monkeypatch.setattr(settings, "llm_provider", "mistral")
+    monkeypatch.setattr(settings, "mistral_api_key", "")
+    _, doc_id = await _seed_consult({"interrupted": True, "locale": "es"})
+
+    await docs_mod._process_document_inner(doc_id, "audio/webm", True)
+
+    async with AsyncSessionLocal() as session:
+        doc = await session.get(Document, doc_id)
+        entities = (await session.execute(
+            select(Entity).where(Entity.document_id == doc_id)
+        )).scalars().all()
+    assert read == []
+    assert entities == []
+    assert doc.document_metadata["summary"] == (
+        "- La grabación se cortó: puede faltar el final de la consulta."
+    )
+    assert doc.raw_text == "[Hablante 1] Le doy tres coma (La grabación se cortó aquí.)"
+
+
+@pytest.mark.skipif(not PG_AVAILABLE, reason="PG required: the pipeline writes a Document row")
+async def test_a_whole_consult_is_read_whole_and_gets_no_cut_line(monkeypatch):
+    """A visit she stopped herself: the extractor reads all of it, a failed summary stays
+    absent as before, and the consult transcript is never rewritten (route.undictate is
+    for her Spanish dictation only)."""
+    from adelia.config import settings
+    from adelia.routers import documents as docs_mod
+
+    transcript = _CUT_VISIT + "\n\n[Hablante 1] Ha hecho dos cajas de pañales hoy."
+    read = _fake_pipeline(monkeypatch, transcript)
+    monkeypatch.setattr(settings, "llm_provider", "mistral")
+    monkeypatch.setattr(settings, "mistral_api_key", "")
+    _, doc_id = await _seed_consult({"locale": "es"})
+
+    await docs_mod._process_document_inner(doc_id, "audio/webm", True)
+
+    async with AsyncSessionLocal() as session:
+        doc = await session.get(Document, doc_id)
+    assert read == [transcript]
+    assert "summary" not in (doc.document_metadata or {})
+    assert doc.raw_text == transcript
+
+
+@pytest.mark.parametrize("locale", ["es", "en", "fr", "de", "fr-FR", None])
+async def test_the_fallback_cut_line_is_the_summarizers_own(monkeypatch, locale):
+    """The pipeline's fallback and the summarizer's cut line must never drift apart. A
+    one-sentence cut makes the summarizer return its line alone, with no model call."""
+    from adelia.config import settings
+    from adelia.routers.documents import _cut_summary
+    from adelia.workers.summarize import summarize_consultation
+
+    monkeypatch.setattr(settings, "llm_provider", "mistral")
+    monkeypatch.setattr(settings, "mistral_api_key", "")
+    line = await summarize_consultation("[Hablante 1] Buenos", interrupted=True, locale=locale)
+    assert _cut_summary(locale) == line
