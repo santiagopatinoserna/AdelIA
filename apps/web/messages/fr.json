@@ -277,6 +277,8 @@
     "docFailedBody": "La transcription ou la lecture du fichier a peut-être échoué. Le fichier d’origine est toujours conservé, tu peux donc réessayer.",
     "retryDoc": "Réessayer",
     "docOriginal": "Ouvrir le fichier d’origine",
+    "docFailedAudioUntil": "L’audio est gardé jusqu’au {date} : réessaie avant.",
+    "docFailedAudioGone": "Nous n’avons pas pu la transcrire et l’audio a été supprimé, comme le dit la politique de confidentialité. Cette consultation ne peut pas être relancée.",
     "retryDocRunning": "Nouvelle tentative…",
     "retryDocError": "Cela n’a pas fonctionné. Réessaie."
   },

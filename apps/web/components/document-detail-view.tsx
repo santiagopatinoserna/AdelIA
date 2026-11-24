@@ -139,6 +139,9 @@ export function DocumentDetailView({
   }, [processing, doc.id]);
 
   const isConsulta = doc.source === "consulta";
+  // A failed consultation whose audio the retention sweep already deleted:
+  // nothing is left to transcribe, so no retry is offered.
+  const audioGone = failed && isConsulta && !doc.audio_until;
   // "consulta-2026-08-20.webm" is a filename, not a title a mom should read.
   // Telegram diary entries are titled by the day they describe, not by
   // the "diario-2026-08-27.ogg" filename the bot generated.
@@ -262,18 +265,29 @@ export function DocumentDetailView({
         ) : failed ? (
           <div className="text-center">
             <p className="text-sm font-medium text-ink">{t("docFailedTitle")}</p>
+            {/* A consultation's audio is the one thing a retry needs and the
+                DPIA deletes it 7 days after a failed transcription: the page
+                says until when, and says so once it is gone instead of
+                offering a retry that cannot work (the vault promise). */}
             <p className="mx-auto mt-1.5 max-w-md text-sm text-ink-soft">
-              {t("docFailedBody")}
+              {audioGone ? t("docFailedAudioGone") : t("docFailedBody")}
             </p>
-            <button
-              type="button"
-              onClick={onRetry}
-              disabled={retrying}
-              className="ad-btn ad-btn-primary mt-4 min-h-[44px] px-4 py-2 text-sm disabled:opacity-60"
-            >
-              <RotateCcw className="h-3.5 w-3.5" strokeWidth={2} />
-              {retrying ? t("retryDocRunning") : t("retryDoc")}
-            </button>
+            {isConsulta && doc.audio_until && (
+              <p className="mx-auto mt-1.5 max-w-md text-sm font-medium text-ink">
+                {t("docFailedAudioUntil", { date: formatInstant(doc.audio_until, locale, "long") })}
+              </p>
+            )}
+            {!audioGone && (
+              <button
+                type="button"
+                onClick={onRetry}
+                disabled={retrying}
+                className="ad-btn ad-btn-primary mt-4 min-h-[44px] px-4 py-2 text-sm disabled:opacity-60"
+              >
+                <RotateCcw className="h-3.5 w-3.5" strokeWidth={2} />
+                {retrying ? t("retryDocRunning") : t("retryDoc")}
+              </button>
+            )}
             {retryError && (
               <p role="alert" className="mt-3 text-sm text-error-text">
                 {t("retryDocError")}

@@ -64,6 +64,11 @@ class DocumentOut(BaseModel):
     # Whether GET /documents/{id}/file gives her the file she sent. Set by the
     # single-document route only, None in lists (the vault promise, 2026-11-24).
     original: bool | None = None
+    # Until when a consultation's audio stays for a retry (its tombstone). A
+    # failed transcription said "the original is still stored" with no end,
+    # and the DPIA deletes it 7 days later. None once the audio is gone, for
+    # any other document and in lists.
+    audio_until: datetime | None = None
 
     model_config = ConfigDict(from_attributes=True)
 

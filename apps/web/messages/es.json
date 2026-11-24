@@ -277,6 +277,8 @@
     "docFailedBody": "Puede haber fallado la transcripción o la lectura del archivo. El archivo original sigue guardado, así que puedes reintentarlo.",
     "retryDoc": "Reintentar",
     "docOriginal": "Abrir el archivo original",
+    "docFailedAudioUntil": "El audio se guarda hasta el {date}: reinténtalo antes.",
+    "docFailedAudioGone": "No pudimos transcribirla y el audio ya se borró, como dice la política de privacidad. Esta consulta no se puede reintentar.",
     "retryDocRunning": "Reintentando…",
     "retryDocError": "No se pudo reintentar. Inténtalo otra vez."
   },

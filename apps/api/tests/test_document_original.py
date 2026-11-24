@@ -234,3 +234,42 @@ async def test_the_list_does_not_claim_anything_about_originals():
 
     assert listed.status_code == 200
     assert [d["original"] for d in listed.json()] == [None]
+
+
+# The consultation audio is not hers to download, but it is what a retry needs.
+# A failed transcription said "the original is still stored" with no end date
+# while the DPIA deletes it 7 days later: the page now gives that date.
+
+
+async def test_a_failed_consultation_says_until_when_its_audio_waits_for_a_retry():
+    user_id = await make_user()
+    doc_id = await _seed(
+        user_id,
+        name="consulta.webm",
+        mime="audio/webm",
+        body=b"visit-audio",
+        source="consulta",
+        expires_in=timedelta(days=7),
+    )
+
+    async with _client_as(user_id) as client:
+        detail = (await client.get(f"/documents/{doc_id}")).json()
+
+    assert detail["status"] == "failed"
+    left = datetime.fromisoformat(detail["audio_until"]) - datetime.now(timezone.utc)
+    assert timedelta(days=6, hours=23) < left <= timedelta(days=7)
+
+
+async def test_no_date_once_the_audio_is_gone_nor_for_other_documents():
+    user_id = await make_user()
+    gone = await _seed(
+        user_id, name="consulta.webm", mime="audio/webm", source="consulta", stored=False
+    )
+    pdf = await _seed(user_id)
+
+    async with _client_as(user_id) as client:
+        gone_detail = (await client.get(f"/documents/{gone}")).json()
+        pdf_detail = (await client.get(f"/documents/{pdf}")).json()
+
+    assert gone_detail["audio_until"] is None
+    assert pdf_detail["audio_until"] is None

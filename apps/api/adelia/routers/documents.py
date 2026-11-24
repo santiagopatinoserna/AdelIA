@@ -198,6 +198,7 @@ def _doc_to_out(
     entity_count: int = 0,
     chunk_count: int = 0,
     original: bool | None = None,
+    audio_until: datetime | None = None,
 ) -> DocumentOut:
     return DocumentOut(
         id=doc.id,
@@ -215,6 +216,7 @@ def _doc_to_out(
         diary_date=(doc.document_metadata or {}).get("diary_date"),
         extraction=(doc.document_metadata or {}).get("extraction"),
         original=original,
+        audio_until=audio_until,
     )
 
 
@@ -797,11 +799,15 @@ async def get_document(
         sa.select(sa.func.count()).select_from(Chunk).where(Chunk.document_id == doc.id)
     )
 
+    tombstone = await db.get(BlobTombstone, doc.s3_key)
     return _doc_to_out(
         doc,
         entity_count=entity_count or 0,
         chunk_count=chunk_count or 0,
         original=await _original_is_kept(db, doc),
+        audio_until=(
+            tombstone.not_before if doc.source == "consulta" and tombstone is not None else None
+        ),
     )
 
 

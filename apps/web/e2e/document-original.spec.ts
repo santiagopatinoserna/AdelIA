@@ -102,3 +102,46 @@ test("a consultation keeps its text and offers no audio to download", async ({ b
   await expect(page.getByTestId("document-original")).toHaveCount(0);
   await context.close();
 });
+
+// A failed transcription: the audio is what a retry needs, and the DPIA
+// deletes it 7 days later. The page gives the date while it waits, and once
+// it is gone it says so instead of offering a retry that cannot work.
+test("a failed consultation says until when its audio waits, then that it is gone", async ({
+  browser,
+}) => {
+  const { context, page, userId, profileId } = await signedIn(browser, "failed");
+  const db = pgPool();
+  const ids: string[] = [];
+  for (const kept of [true, false]) {
+    const key = `users/${userId}/${Date.now()}-${kept ? "kept" : "gone"}-consulta.webm`;
+    const { rows } = await db.query(
+      `INSERT INTO documents (id, user_id, profile_id, source, mime_type, s3_key, raw_text, processed_at)
+       VALUES (gen_random_uuid(), $1, $2, 'consulta', 'audio/webm', $3, NULL, now())
+       RETURNING id`,
+      [userId, profileId, key],
+    );
+    if (kept) {
+      await db.query(
+        `INSERT INTO blob_tombstones (s3_key, not_before) VALUES ($1, '2030-01-15T10:00:00Z')`,
+        [key],
+      );
+    }
+    ids.push(rows[0].id);
+  }
+  await db.end();
+
+  await page.goto(`/es/dashboard/documents/${ids[0]}`);
+  await expect(page.getByText(es.dashboard.docFailedTitle)).toBeVisible();
+  await expect(page.getByText(/El audio se guarda hasta el 15 de enero de 2030/)).toBeVisible();
+  await expect(page.getByRole("button", { name: es.dashboard.retryDoc })).toBeVisible();
+  const audit = await new AxeBuilder({ page }).analyze();
+  expect(audit.violations).toEqual([]);
+  if (process.env.E2E_SHOTS) {
+    await page.screenshot({ path: `${process.env.E2E_SHOTS}/consulta-failed-kept.png` });
+  }
+
+  await page.goto(`/es/dashboard/documents/${ids[1]}`);
+  await expect(page.getByText(es.dashboard.docFailedAudioGone)).toBeVisible();
+  await expect(page.getByRole("button", { name: es.dashboard.retryDoc })).toHaveCount(0);
+  await context.close();
+});
