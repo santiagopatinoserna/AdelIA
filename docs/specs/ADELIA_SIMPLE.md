@@ -24,6 +24,7 @@ Lo mínimo que promete: lo que entra no se pierde y se puede sacar.
 | Una grabación no se pierde si la pestaña se recarga, se cierra o el móvil la mata | Cada segundo de audio también en el dispositivo (`lib/consulta-draft.ts`) hasta que la subida responde 2xx | `e2e/consulta-record.spec.ts` («interrupted recording») |
 | Una transcripción fallida no se pierde en silencio | La página dice hasta cuándo se guarda el audio (`audio_until`) y, si ya se borró, lo dice | `test_document_original.py`, `e2e/document-original.spec.ts` |
 | Subida a medias no deja nada huérfano; un reinicio no deja nada «procesando» | Compensación del blob y reconciliación al arrancar (ya existían) | `test_documents_upload.py`, `test_document_reconciliation.py` |
+| Lo que anota se ve, no solo se pregunta | Historial lista lo anotado, sus documentos y sus grabaciones por día (`GET /history`) | `test_history.py`, `e2e/historial.spec.ts` |
 
 Límites, a propósito: el audio de la consulta no se descarga nunca; la DPIA lo guarda solo hasta
 tener el texto (48 h; 7 días si falla). De la consulta queda la transcripción y el resumen.
@@ -41,7 +42,7 @@ descifrado, restauración en una base temporal). Falta instalarla en el servidor
 | Anotar desde el panel (`record`, tarjeta de confirmación) | Hecho, en producción |
 | Subir archivos (OCR, extracción) y grabar consulta (Voxtral) | Hecho, cada uno en su página |
 | Preguntar a lo anotado, con tendencia y gráfica (`agent/diary.py`) | Hecho en `claude/simple-core`, sin desplegar |
-| Historial con lo anotado | A medias: `GET /observations/recent` sin commitear en `~/dev/AdelIA` (13-nov) |
+| Historial con lo anotado | Hecho en `claude/historial`: lo anotado, sus documentos y sus grabaciones en una lista por día, del niño elegido, mes a mes hasta el mes en que nació (`GET /history`) |
 | Datos del nacimiento | A medias: anotar con fecha pasada hecho en `claude/from-birth` («al nacer pesó 3,2 kg» queda el día que nació); faltan peso, talla y semanas al nacer en el onboarding, y talla y perímetro como tipos |
 | Curvas OMS 0-24 meses | Hecho en `claude/from-birth`: las tablas de percentiles de la OMS, mes a mes, peso y longitud, niños y niñas (las de antes tenían 6 y 4 meses y algunos bordes eran ±2 DE) |
 | Adjuntar y dictar desde el mismo campo | Falta: el campo solo tiene el micro del navegador |
