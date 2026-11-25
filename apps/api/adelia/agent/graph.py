@@ -58,7 +58,7 @@ import os
 import re
 import time
 from dataclasses import dataclass, field
-from datetime import datetime
+from datetime import date, datetime
 from typing import Any, AsyncIterator, Awaitable, Callable, Protocol, TypedDict
 from zoneinfo import ZoneInfo
 
@@ -312,6 +312,12 @@ def _age(state: AgentState) -> int | None:
     return facts.age_months if facts is not None else None
 
 
+def _born(state: AgentState) -> date | None:
+    """The child's date of birth: the first day her notes may be dated."""
+    facts = state.get("facts")
+    return facts.date_of_birth if facts is not None else None
+
+
 def _emit(event: dict) -> None:
     """Hand an event to a streaming surface (no-op when nobody streams)."""
     get_stream_writer()(event)
@@ -399,7 +405,7 @@ async def write(state: AgentState, runtime: Runtime[GraphDeps]) -> dict:
     name, args = action.get("tool_name"), action.get("tool_args") or {}
     if name == rec.RECORD_TOOL and deps.can_write and deps.record_store is not None:
         now = deps.now()
-        draft = rec.validate_args(args, now=now)
+        draft = rec.validate_args(args, now=now, born=_born(state))
         if draft is None:
             return {"kind": "recorded", "answer": _RECORD_REFUSED[_lang(state)]}
         flag = rec.value_flag(draft, age_months=_age(state))
@@ -721,7 +727,8 @@ async def record(state: AgentState, runtime: Runtime[GraphDeps]) -> dict:
     deps = runtime.context
     now = deps.now()
     draft = await rec.extract_record(
-        state["message"], locale=_locale(state), now=now, complete_json=deps.complete_json
+        state["message"], locale=_locale(state), now=now, complete_json=deps.complete_json,
+        born=_born(state),
     )
     flag = rec.value_flag(draft, age_months=_age(state))
     if flag is not None:

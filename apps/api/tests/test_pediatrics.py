@@ -25,6 +25,29 @@ def test_percentile_out_of_table_returns_none():
     assert growth_percentile(metric="weight", value=5.0, age_months=999, sex="M") is None
 
 
+def test_the_growth_table_is_whos_month_by_month_from_birth_to_two_years():
+    """Until 2026-11-25 the table held six months for boys and four for girls, and
+    several P3/P85/P97 were the ±2 SD and +1 SD values of WHO's z-score tables
+    (boys at birth: 4.4 kg is +2 SD, P97 is 4.3). Most weighings got no percentile
+    and the rest a wrong edge. Now: WHO's percentile tables, every month 0-24
+    (weight tab_wfa_*_p_0_5, length tab_lhfa_*_p_0_2), spot-checked here."""
+    data = json.loads((Path(__file__).parents[1] / "adelia" / "agent" / "data"
+                       / "who_growth.json").read_text(encoding="utf-8"))
+    for metric in ("weight", "height"):
+        for sex in ("M", "F"):
+            rows = data[metric][sex]
+            assert [r["age_months"] for r in rows] == list(range(25)), (metric, sex)
+            assert all(r["p3"] < r["p15"] < r["p50"] < r["p85"] < r["p97"] for r in rows)
+    assert data["weight"]["M"][0] == {
+        "age_months": 0, "p3": 2.5, "p15": 2.9, "p50": 3.3, "p85": 3.9, "p97": 4.3}
+    assert data["weight"]["F"][4] == {
+        "age_months": 4, "p3": 5.1, "p15": 5.6, "p50": 6.4, "p85": 7.3, "p97": 8.1}
+    assert data["height"]["M"][12]["p50"] == 75.7
+    assert data["height"]["F"][24]["p50"] == 86.4  # length lying down, as until 2 years
+    # Every month now has an answer.
+    assert growth_percentile(metric="weight", value=6.4, age_months=4, sex="F") == 50
+
+
 def test_due_vaccines_returns_list():
     v = due_vaccines(age_months=2)
     assert isinstance(v, list) and all("name" in x and "due_month" in x for x in v)

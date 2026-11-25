@@ -9,7 +9,7 @@ from sqlalchemy import (
 )
 from sqlalchemy.dialects.postgresql import UUID, JSONB, TSVECTOR
 from sqlalchemy.orm import Mapped, deferred, mapped_column, relationship
-from sqlalchemy.sql import func
+from sqlalchemy.sql import expression, func
 from pgvector.sqlalchemy import Vector
 
 from adelia.db import Base
@@ -479,6 +479,9 @@ class Observation(Base):
     unit = Column(String(16))
     text = Column(Text, nullable=False)
     observed_at = Column(DateTime(timezone=True), nullable=False)
+    #: False when she named the day and not the hour (stored at midday, read as the
+    #: day alone). Migration 0029. (`text` here is the column above, hence true().)
+    timed = Column(Boolean, nullable=False, server_default=expression.true())
     source = Column(String(16), nullable=False)
     created_at = Column(DateTime(timezone=True), server_default=func.now(), nullable=False)
 

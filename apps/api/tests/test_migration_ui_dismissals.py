@@ -22,12 +22,17 @@ REVISION = "0028_ui_dismissals"
 PREVIOUS = "0027_analytics"
 
 
-def test_this_revision_is_the_only_head_and_follows_the_analytics():
+def test_there_is_one_head_and_this_revision_follows_the_analytics():
+    """One head, and this revision is on the chain that leads to it. It was the
+    head itself until 0029_observation_timed was chained behind it on 2026-11-24;
+    the exact head is pinned by the newest migration's test."""
     heads = _alembic_words("heads")
     chain = _alembic_words("history", "-r", f"{PREVIOUS}:{REVISION}")
 
-    assert heads == [REVISION]
-    assert chain[:2] == [PREVIOUS, REVISION]
+    assert len(heads) == 1
+    assert REVISION in _alembic_words("history", "-r", f"{REVISION}:{heads[0]}")
+    # With a successor, alembic prints "0028_ui_dismissals," in the history line.
+    assert [w.rstrip(",") for w in chain[:2]] == [PREVIOUS, REVISION]
 
 
 async def _shape(database: str) -> dict:

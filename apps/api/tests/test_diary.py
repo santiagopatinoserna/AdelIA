@@ -136,9 +136,10 @@ def test_a_weight_curve_says_the_change_and_its_rate():
     r = summarize("weight", notes, days=None, now=NOW, locale="es", facts=LUCIA)
     assert "- 10/07: 3,2 kg (informe)" in r.text
     assert "Desde el 10/07: +3 kg en 131 días (+23 g al día)." in r.text
-    # The WHO table has no row at 4 months: no percentile is said, and above all
-    # not the one at birth, which would read as today's.
-    assert "Percentil" not in r.text
+    # Each percentile carries its own day, so the one at birth never reads as
+    # today's. (Until 2026-11-25 the WHO table had no row at 4 months and no
+    # percentile was said here at all.)
+    assert "Percentil OMS: 50 el 10/07, 41 el 18/11." in r.text
 
 
 def test_a_percentile_is_said_when_the_last_weighing_has_one():
@@ -148,6 +149,18 @@ def test_a_percentile_is_said_when_the_last_weighing_has_one():
              Note("weight", 5.1, "kg", _at(0, 10), "x")]
     r = summarize("weight", notes, days=None, now=NOW, locale="es", facts=facts)
     assert "Percentil OMS: " in r.text and r.text.rstrip().endswith("hoy.")
+
+
+def test_a_day_she_named_without_an_hour_reads_without_one():
+    """«el 12 tuvo 38,5» (agent/record, 2026-11-24) is kept at midday with timed
+    false: her notes read back say the day, never a 12:00 she did not say."""
+    notes = [Note("temperature", 38.5, "°C", datetime(2026, 11, 12, 12, tzinfo=LOCAL_TZ),
+                  "el 12 tuvo 38,5", timed=False),
+             Note("temperature", 37.9, "°C", _at(0, 7), "x")]
+    r = summarize("temperature", notes, days=30, now=NOW, locale="es")
+    assert "- el 12/11, 38,5 °C" in r.text
+    assert "La más alta: 38,5 °C, el 12/11." in r.text
+    assert "12:00" not in r.text and "- hoy a las 07:00, 37,9 °C" in r.text
 
 
 def test_nothing_noted_says_so_and_offers_the_last_one():

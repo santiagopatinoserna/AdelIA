@@ -139,9 +139,9 @@ def _observation_item(latest: Observation, previous: Observation | None, lang: s
     parts = []
     if previous is not None and previous.unit == latest.unit:
         prev = record.as_draft(previous)
-        parts.append(f"{_day_word(prev.observed_at, now, lang, with_time=same_day)} "
+        parts.append(f"{_day_word(prev.observed_at, now, lang, with_time=same_day and prev.timed)} "
                      f"{record._value_text(prev, lang)}")
-    parts.append(f"{_day_word(last.observed_at, now, lang, with_time=same_day)} "
+    parts.append(f"{_day_word(last.observed_at, now, lang, with_time=same_day and last.timed)} "
                  f"{record._value_text(last, lang)}")
     colon = " : " if lang == "fr" else ": "
     return {"kind": "observation", "tone": "neutral",
