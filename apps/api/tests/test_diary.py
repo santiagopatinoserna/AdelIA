@@ -150,6 +150,18 @@ def test_a_percentile_is_said_when_the_last_weighing_has_one():
     assert "Percentil OMS: " in r.text and r.text.rstrip().endswith("hoy.")
 
 
+def test_a_day_she_named_without_an_hour_reads_without_one():
+    """«el 12 tuvo 38,5» (agent/record, 2026-11-24) is kept at midday with timed
+    false: her notes read back say the day, never a 12:00 she did not say."""
+    notes = [Note("temperature", 38.5, "°C", datetime(2026, 11, 12, 12, tzinfo=LOCAL_TZ),
+                  "el 12 tuvo 38,5", timed=False),
+             Note("temperature", 37.9, "°C", _at(0, 7), "x")]
+    r = summarize("temperature", notes, days=30, now=NOW, locale="es")
+    assert "- el 12/11, 38,5 °C" in r.text
+    assert "La más alta: 38,5 °C, el 12/11." in r.text
+    assert "12:00" not in r.text and "- hoy a las 07:00, 37,9 °C" in r.text
+
+
 def test_nothing_noted_says_so_and_offers_the_last_one():
     earlier = Note("feed", 120, "ml", _at(3, 9), "x")
     assert summarize("feed", [], days=1, now=NOW, locale="es", earlier=earlier).text == (

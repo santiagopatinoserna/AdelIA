@@ -313,6 +313,8 @@ async def build_export(db: AsyncSession, user_id: uuid.UUID) -> dict[str, Any]:
                     "unit": o.unit,
                     "text": o.text,
                     "observed_at": _iso(o.observed_at),
+                    # False: she named the day, not the hour (stored at midday).
+                    "timed": o.timed,
                     "source": o.source,
                     "created_at": _iso(o.created_at),
                 }

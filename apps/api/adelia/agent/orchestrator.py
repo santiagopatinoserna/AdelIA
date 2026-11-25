@@ -283,7 +283,7 @@ class _DbRecordStore:
             await add_observation(
                 session, user_id=self.user_id, profile_id=self.profile_id, kind=draft.kind,
                 value=draft.value, unit=draft.unit, text=draft.text,
-                observed_at=draft.observed_at, source="agent",
+                observed_at=draft.observed_at, source="agent", timed=draft.timed,
             )
             await session.commit()
 

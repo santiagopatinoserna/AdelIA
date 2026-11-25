@@ -184,6 +184,8 @@ class Note:
     text: str
     #: A weight read from one of her reports, not typed by her.
     from_report: bool = False
+    #: False for a day without an hour (a report's date, «al nacer»): read as the day.
+    timed: bool = True
 
 
 @dataclass(frozen=True)
@@ -237,7 +239,8 @@ def reply(readings: list[Reading]) -> str:
 
 
 def _note(row) -> Note:
-    return Note(row.kind, row.value, row.unit, row.observed_at, row.text)
+    return Note(row.kind, row.value, row.unit, row.observed_at, row.text,
+                timed=getattr(row, "timed", True))
 
 
 _WEIGHT_NAME = re.compile(r"^(?:peso|weight|poids)\b")
@@ -280,7 +283,7 @@ async def _report_weights(session, scope: Scope, facts: ProfileFacts, since: dat
         at = datetime.combine(day, time(12, 0), tzinfo=tz)
         if since is not None and at < since:
             continue
-        out.append(Note("weight", kg, "kg", at, name, from_report=True))
+        out.append(Note("weight", kg, "kg", at, name, from_report=True, timed=False))
     return out
 
 
@@ -423,7 +426,8 @@ def _quote(text: str, lang: str) -> str:
 
 
 def _draft(note: Note) -> record.RecordDraft:
-    return record.RecordDraft(note.kind, note.value, note.unit, note.observed_at, note.text)
+    return record.RecordDraft(note.kind, note.value, note.unit, note.observed_at, note.text,
+                              note.timed)
 
 
 def _value(note: Note, lang: str) -> str:
@@ -431,7 +435,7 @@ def _value(note: Note, lang: str) -> str:
 
 
 def _when(note: Note, now: datetime, lang: str) -> str:
-    return record._when_text(note.observed_at, now, lang)
+    return record._when_text(note.observed_at, now, lang, with_time=note.timed)
 
 
 def _last_line(note: Note, now: datetime, lang: str) -> str:

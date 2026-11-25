@@ -21,6 +21,7 @@ from typing import Literal
 
 from pydantic import BaseModel, Field, ValidationError
 
+from adelia.agent.record import dated_reading
 from adelia.clinical.red_flags import age_months_in, normalize, temperature_in
 from adelia.config import settings
 from adelia.enrichment.profile_service import ProfileFacts
@@ -445,7 +446,8 @@ def route_by_rules(
 
     worried = bool(_WORRY.search(n))
     if (
-        ((_PAST_REPORT.search(n) and _MEASUREMENT.search(n)) or _PRESENT_MEASURE.search(n))
+        ((_PAST_REPORT.search(n) and _MEASUREMENT.search(n)) or _PRESENT_MEASURE.search(n)
+         or dated_reading(message))
         and not _asks_something(n)
         and not worried
     ):

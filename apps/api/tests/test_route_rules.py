@@ -57,6 +57,38 @@ def test_a_report_that_asks_a_question_is_not_a_record():
     assert d is not None and d.intent == "plan"
 
 
+@pytest.mark.parametrize("message", [
+    "al nacer pesó 3,2 kg",
+    "a los 2 meses pesaba 5,1 kg",
+    "el 12 de octubre pesó 7,1 kg",
+    "hace 3 semanas pesó 6,8 kg",
+    "anteayer se tomó 150 ml",
+    "at birth she weighed 3.2 kg",
+    "à la naissance il pesait 3,2 kg",
+])
+def test_a_reading_with_its_own_day_is_a_record(message):
+    """Her record from birth (agent/record, 2026-11-24): a past day is told in the
+    preterite («pesó», «tomó»), which the compound-past rule does not read, so
+    these went to the classifier and, with it down, nowhere."""
+    d = route_by_rules(message, locale="es", has_account=True, facts=KNOWN_AGE)
+    assert d is not None and d.intent == "record" and d.via == "rule", message
+
+
+@pytest.mark.parametrize("message, intent", [
+    ("¿es normal que al nacer pesara 3,2 kg?", "question"),
+    ("¿cuánto debería pesar a los 2 meses?", "question"),
+])
+def test_a_day_in_a_question_does_not_make_it_a_record(message, intent):
+    d = route_by_rules(message, locale="es", has_account=True, facts=KNOWN_AGE)
+    assert d is not None and d.intent == intent
+
+
+def test_a_dated_reading_with_a_worry_is_not_a_record():
+    d = route_by_rules("al nacer pesó 2 kg y me preocupa", locale="es", has_account=True,
+                       facts=KNOWN_AGE)
+    assert d is None or d.intent != "record"
+
+
 # --- track: the child's own data, only with an account ----------------------
 
 

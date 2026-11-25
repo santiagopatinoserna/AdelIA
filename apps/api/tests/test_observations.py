@@ -123,3 +123,26 @@ async def test_the_export_carries_the_observations():
     (row,) = payload["adelia"]["observations"]
     assert row["kind"] == "temperature" and row["value"] == 37.8 and row["unit"] == "°C"
     assert row["profile_id"] == str(child.id) and row["text"] == "hoy ha tenido 37,8"
+
+
+async def test_a_day_without_an_hour_is_kept_as_such_and_exported():
+    """«al nacer pesó 3,2 kg» names a day and no hour (agent/record, 2026-11-24):
+    `timed` false travels from the row to the export, the default stays true."""
+    from adelia.services.data_export import build_export
+
+    user_id = await make_user()
+    child = await _child(user_id)
+    birth = datetime(2026, 3, 2, 11, 0, tzinfo=timezone.utc)
+    async with AsyncSessionLocal() as session:
+        row = await add_observation(
+            session, user_id=user_id, profile_id=child.id, kind="weight", value=3.2, unit="kg",
+            text="al nacer pesó 3,2 kg", observed_at=birth, source="agent", timed=False,
+        )
+        await session.commit()
+        obs_id = row.id
+    await _add(user_id, child.id)
+    async with AsyncSessionLocal() as session:
+        assert (await session.get(Observation, obs_id)).timed is False
+        payload = await build_export(session, user_id)
+    exported = {r["text"]: r["timed"] for r in payload["adelia"]["observations"]}
+    assert exported == {"al nacer pesó 3,2 kg": False, "hoy ha tenido 37,8": True}

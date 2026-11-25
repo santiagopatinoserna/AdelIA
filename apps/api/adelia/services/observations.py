@@ -36,11 +36,12 @@ async def add_observation(
     text: str,
     observed_at: datetime,
     source: str,
+    timed: bool = True,
 ) -> Observation:
     """Insert one row and flush it. The caller commits."""
     row = Observation(
         user_id=user_id, profile_id=profile_id, kind=kind, value=value, unit=unit,
-        text=text, observed_at=observed_at, source=source,
+        text=text, observed_at=observed_at, source=source, timed=timed,
     )
     session.add(row)
     await session.flush()
