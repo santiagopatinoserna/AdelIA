@@ -172,9 +172,33 @@ jobs:
       # The admin of e2e/analytics-consent.spec.ts. config.py defaults the list
       # to empty (the repo is public), so without this the admin page is a 404.
       ADMIN_EMAILS: e2e-analytics-admin@adelia.test
+      # Object storage, as in the api job: e2e/document-original.spec.ts uploads a
+      # real file and asks for it back byte for byte (2026-11-24). Without it the
+      # upload is a 500.
+      S3_ENDPOINT_URL: http://localhost:9000
+      S3_ACCESS_KEY: minioadmin
+      S3_SECRET_KEY: minioadmin
+      S3_BUCKET: adelia-ci
       # No MISTRAL_API_KEY: the upload spec self-skips; auth/locale/a11y/GDPR run.
     steps:
       - uses: actions/checkout@v6
+
+      # Same pinned release and checksum as the api job.
+      - name: Start MinIO
+        run: |
+          curl -fL --retry 3 \
+            https://github.com/minio/minio/releases/download/RELEASE.2024-10-13T13-34-11Z/minio.linux-amd64.RELEASE.2024-10-13T13-34-11Z \
+            -o "$RUNNER_TEMP/minio"
+          echo "1126bbb3276321e7fed0167682d92a03572862f73802658f616af43d9a951e6a  $RUNNER_TEMP/minio" | sha256sum --check
+          chmod +x "$RUNNER_TEMP/minio"
+          export MINIO_ROOT_USER="$S3_ACCESS_KEY" MINIO_ROOT_PASSWORD="$S3_SECRET_KEY"
+          nohup "$RUNNER_TEMP/minio" server --address 127.0.0.1:9000 \
+            --console-address 127.0.0.1:9001 "$RUNNER_TEMP/minio-data" \
+            > "$RUNNER_TEMP/minio.log" 2>&1 &
+          for i in $(seq 1 30); do
+            curl -fsS http://localhost:9000/minio/health/live && break || sleep 1
+          done
+          curl -fsS http://localhost:9000/minio/health/live
 
       - uses: astral-sh/setup-uv@v7
         with:
@@ -185,6 +209,21 @@ jobs:
         run: |
           uv sync --frozen
           uv run alembic upgrade head
+
+      - name: Create CI bucket
+        working-directory: apps/api
+        run: |
+          uv run python - <<'PY'
+          import boto3
+          s3 = boto3.client(
+              "s3", endpoint_url="http://localhost:9000",
+              aws_access_key_id="minioadmin", aws_secret_access_key="minioadmin",
+          )
+          try:
+              s3.create_bucket(Bucket="adelia-ci")
+          except s3.exceptions.BucketAlreadyOwnedByYou:
+              pass
+          PY
 
       - name: Start API
         working-directory: apps/api

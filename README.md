@@ -186,7 +186,7 @@ docker compose -f infra/docker-compose.prod.yml exec backup \
   pg_restore --clean --if-exists -d adelia /backups/adelia-YYYYMMDD-HHMMSS.dump
 ```
 
-Document blobs live in the `miniodata` volume — snapshot it at the filesystem level alongside the DB dumps (the dump covers metadata; blobs are the original files).
+Document blobs live in the `miniodata` volume. Both the dumps and that volume sit on the same server, so a second, encrypted copy of the database and the original files goes every day to a private GitHub repository: `scripts/adelia_backup.py`, set up and restored as `docs/BACKUPS.md` says.
 
 ## Deploy (SaaS propio)
 

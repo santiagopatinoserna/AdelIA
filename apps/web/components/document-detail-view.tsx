@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import { useTranslations } from "next-intl";
-import { ArrowLeft, RotateCcw, Trash2 } from "lucide-react";
+import { ArrowLeft, FileText, RotateCcw, Trash2 } from "lucide-react";
 
 import { formatDay, formatInstant } from "@/lib/dates";
 import { Link, useRouter } from "@/lib/navigation";
@@ -139,6 +139,9 @@ export function DocumentDetailView({
   }, [processing, doc.id]);
 
   const isConsulta = doc.source === "consulta";
+  // A failed consultation whose audio the retention sweep already deleted:
+  // nothing is left to transcribe, so no retry is offered.
+  const audioGone = failed && isConsulta && !doc.audio_until;
   // "consulta-2026-08-20.webm" is a filename, not a title a mom should read.
   // Telegram diary entries are titled by the day they describe, not by
   // the "diario-2026-08-27.ogg" filename the bot generated.
@@ -168,6 +171,22 @@ export function DocumentDetailView({
         {formatInstant(doc.created_at, locale)}
         {doc.raw_text ? `  ·  ${t("docReady")}` : ""}
       </p>
+      {/* The file she sent, as she sent it, even when reading it failed (the
+          vault promise, 2026-11-24). A PDF or a photo opens in a tab, anything
+          else downloads: the API sets the disposition. Never the consultation
+          audio, of which only the text is kept (`original` is false). */}
+      {doc.original && (
+        <a
+          href={`/api/backend/documents/${doc.id}/file`}
+          target="_blank"
+          rel="noopener"
+          data-testid="document-original"
+          className="mt-1 inline-flex min-h-[44px] items-center gap-1.5 text-sm text-primary-text transition-colors hover:text-primary-text-hover"
+        >
+          <FileText className="h-4 w-4" strokeWidth={2} aria-hidden />
+          {t("docOriginal")}
+        </a>
+      )}
       {/* Post-recording essence: the takeaway before the full conversation.
           Bullets come as "- " lines from the backend, rendered as a list. */}
       {isConsulta && doc.summary && (
@@ -246,18 +265,29 @@ export function DocumentDetailView({
         ) : failed ? (
           <div className="text-center">
             <p className="text-sm font-medium text-ink">{t("docFailedTitle")}</p>
+            {/* A consultation's audio is the one thing a retry needs and the
+                DPIA deletes it 7 days after a failed transcription: the page
+                says until when, and says so once it is gone instead of
+                offering a retry that cannot work (the vault promise). */}
             <p className="mx-auto mt-1.5 max-w-md text-sm text-ink-soft">
-              {t("docFailedBody")}
+              {audioGone ? t("docFailedAudioGone") : t("docFailedBody")}
             </p>
-            <button
-              type="button"
-              onClick={onRetry}
-              disabled={retrying}
-              className="ad-btn ad-btn-primary mt-4 min-h-[44px] px-4 py-2 text-sm disabled:opacity-60"
-            >
-              <RotateCcw className="h-3.5 w-3.5" strokeWidth={2} />
-              {retrying ? t("retryDocRunning") : t("retryDoc")}
-            </button>
+            {isConsulta && doc.audio_until && (
+              <p className="mx-auto mt-1.5 max-w-md text-sm font-medium text-ink">
+                {t("docFailedAudioUntil", { date: formatInstant(doc.audio_until, locale, "long") })}
+              </p>
+            )}
+            {!audioGone && (
+              <button
+                type="button"
+                onClick={onRetry}
+                disabled={retrying}
+                className="ad-btn ad-btn-primary mt-4 min-h-[44px] px-4 py-2 text-sm disabled:opacity-60"
+              >
+                <RotateCcw className="h-3.5 w-3.5" strokeWidth={2} />
+                {retrying ? t("retryDocRunning") : t("retryDoc")}
+              </button>
+            )}
             {retryError && (
               <p role="alert" className="mt-3 text-sm text-error-text">
                 {t("retryDocError")}

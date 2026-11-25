@@ -1,0 +1,19 @@
+# Offsite backup of AdelIA to a private GitHub repository (docs/BACKUPS.md).
+# Installed by hand on the server, once: docs/BACKUPS.md, "Instalar en el servidor".
+# Runs as santiago (in the docker group) with the settings of /etc/adelia-backup.env.
+[Unit]
+Description=AdelIA: copia de seguridad cifrada a GitHub
+Wants=network-online.target
+After=network-online.target docker.service
+
+[Service]
+Type=oneshot
+User=santiago
+EnvironmentFile=/etc/adelia-backup.env
+WorkingDirectory=/opt/adelia
+ExecStart=/usr/bin/python3 /opt/adelia/scripts/adelia_backup.py backup
+# A backup must never slow the app down for a mother using it at 03:30.
+Nice=10
+IOSchedulingClass=idle
+TimeoutStartSec=6h
+NoNewPrivileges=yes

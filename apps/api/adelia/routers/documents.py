@@ -6,11 +6,12 @@ import re
 import uuid
 from datetime import datetime, timedelta, timezone
 from typing import Annotated
+from urllib.parse import quote
 
 import sqlalchemy as sa
 import httpx
 from botocore.exceptions import ClientError, EndpointConnectionError
-from fastapi import APIRouter, BackgroundTasks, Depends, File, Form, HTTPException, UploadFile, status, Query
+from fastapi import APIRouter, BackgroundTasks, Depends, File, Form, HTTPException, UploadFile, status, Query, Response
 from anthropic import APIError as AnthropicAPIError
 from anthropic import APIStatusError as AnthropicStatusError
 from mistralai.client.errors import MistralError
@@ -32,7 +33,12 @@ from adelia.workers.chunker import ChunkConfig, chunk_hierarchical
 from adelia.workers.embed import embed_texts
 from adelia.workers.extract import extract_entities, locate_quote
 from adelia.workers.ocr import extract_text_from_pdf
-from adelia.workers.summarize import summarize_consultation
+from adelia.workers.summarize import (
+    CUT_LINE,
+    drop_cut_sentence,
+    mark_cut,
+    summarize_consultation,
+)
 from adelia.workers.transcribe import transcribe_audio
 
 logger = logging.getLogger(__name__)
@@ -162,6 +168,16 @@ async def _with_retry(stage: str, make_call):
     raise last_exc
 
 
+def _cut_summary(locale: str | None) -> str:
+    """The summary of a cut visit the summarizer gave nothing for (no key, a refusal,
+    retries spent): the coded cut line alone, in her locale, with no model call. Before,
+    the summary was None and only the transcript said the recording stopped, so she
+    never saw it on the visit (third QA wave 2026-11-13). Same line, same locale fallback
+    as summarize_consultation(interrupted=True)."""
+    code = (locale or "es")[:2].lower()
+    return f"- {CUT_LINE.get(code, CUT_LINE['es'])}"
+
+
 def _text_after_failure(mime_type: str, raw_text: str) -> str:
     """What survives a pipeline failure: a text document (Telegram diary,
     notes) already IS its text, so a failed extract/embed keeps it; for
@@ -176,7 +192,14 @@ def _file_name_from_key(s3_key: str) -> str:
     return leaf[37:] if len(leaf) > 37 and leaf[36] == "-" else leaf
 
 
-def _doc_to_out(doc: Document, *, entity_count: int = 0, chunk_count: int = 0) -> DocumentOut:
+def _doc_to_out(
+    doc: Document,
+    *,
+    entity_count: int = 0,
+    chunk_count: int = 0,
+    original: bool | None = None,
+    audio_until: datetime | None = None,
+) -> DocumentOut:
     return DocumentOut(
         id=doc.id,
         source=doc.source,
@@ -192,6 +215,8 @@ def _doc_to_out(doc: Document, *, entity_count: int = 0, chunk_count: int = 0) -
         summary=(doc.document_metadata or {}).get("summary"),
         diary_date=(doc.document_metadata or {}).get("diary_date"),
         extraction=(doc.document_metadata or {}).get("extraction"),
+        original=original,
+        audio_until=audio_until,
     )
 
 
@@ -369,6 +394,9 @@ async def _process_document_inner(document_id: uuid.UUID, mime_type: str, is_con
         diary_date = meta.get("diary_date") or None
         caption = (meta.get("caption") or "").strip()
         doc_locale = meta.get("locale") or "es"
+        # The recorder uploaded a recording that a reload, a closed tab or the browser
+        # itself cut short (consulta-recorder.tsx sets the flag; she never stopped it).
+        consult_cut = is_consulta and bool(meta.get("interrupted"))
         profile_name: str | None = None
         if diary_date and profile_id is not None:
             profile = await session.get(Profile, profile_id)
@@ -408,25 +436,44 @@ async def _process_document_inner(document_id: uuid.UUID, mime_type: str, is_con
 
             raw_text = render_diary_text(raw_text, diary_date, profile_name, doc_locale)
 
+        # What the entity extractor reads: the whole text, except for a cut visit (below).
+        extract_text = raw_text
         if raw_text and is_consulta:
             # Courtesy stage for recordings: a few strict bullets so the mom
             # gets the takeaway without rereading everything. Best-effort:
             # any failure leaves summary=None and the pipeline continues.
             try:
                 summary = await _with_retry(
-                    "summarize", lambda: summarize_consultation(raw_text)
+                    "summarize",
+                    lambda: summarize_consultation(raw_text, interrupted=True, locale=doc_locale)
+                    if consult_cut else summarize_consultation(raw_text),
                 ) or None
             except Exception:  # noqa: BLE001 — courtesy, never fatal
                 logger.exception("consultation summary failed (continuing)")
                 summary = None
+            if consult_cut and not summary:
+                # A cut visit says so even when the summarizer gave nothing.
+                summary = _cut_summary(doc_locale)
+            if consult_cut:
+                # Entities come only from what was surely said whole: the fragment
+                # ("si sube de 30?", cut inside "treinta y ocho") must never be stored
+                # as a value the home or the agent could cite (third QA wave 2026-11-13).
+                extract_text = drop_cut_sentence(raw_text)
+                # The stored transcript says where it stopped, so the transcript view
+                # and the chat about this visit never read the fragment as finished
+                # (third QA wave 2026-11-13). After the summary, which leaves it out.
+                raw_text = mark_cut(raw_text, doc_locale)
 
         if raw_text:
-            # Stage 2: entity extraction (ids assigned now for entity_ranges)
-            extracted: list[ExtractedEntity] = await _with_retry(
-                "extract",
-                lambda: (extract_entities(raw_text, diary_date=diary_date) if diary_date
-                         else extract_entities(raw_text)),
-            )
+            # Stage 2: entity extraction (ids assigned now for entity_ranges). A cut
+            # visit with only its fragment has nothing whole to extract from.
+            extracted: list[ExtractedEntity] = []
+            if extract_text.strip():
+                extracted = await _with_retry(
+                    "extract",
+                    lambda: (extract_entities(extract_text, diary_date=diary_date)
+                             if diary_date else extract_entities(extract_text)),
+                )
             # Plain-list fakes carry no report; the real extractor always does.
             extraction_report = getattr(extracted, "report", None)
             entity_ranges: dict[str, tuple[int, int]] = {}
@@ -575,6 +622,7 @@ async def upload_document(
     source: Annotated[str, Form()] = "web",
     consent_policy_version: Annotated[str | None, Form()] = None,
     locale: Annotated[str, Form()] = "es",
+    interrupted: Annotated[bool, Form()] = False,
 ):
     content_type = normalize_mime(file.content_type)
     if content_type not in ALLOWED_MIME:
@@ -627,6 +675,12 @@ async def upload_document(
         mime_type=content_type,
         s3_key=s3_key,
         profile_id=profile_id,
+        # A consult recording the recorder recovered after a reload or a closed tab:
+        # the summary must say it was cut and not state its last, partial sentence
+        # (third QA wave 2026-11-13). In the row, so a boot requeue keeps it.
+        document_metadata=(
+            {"interrupted": True, "locale": locale[:8]} if is_consulta and interrupted else None
+        ),
     )
     async with AsyncSessionLocal() as db:
         db.add(doc)
@@ -745,7 +799,89 @@ async def get_document(
         sa.select(sa.func.count()).select_from(Chunk).where(Chunk.document_id == doc.id)
     )
 
-    return _doc_to_out(doc, entity_count=entity_count or 0, chunk_count=chunk_count or 0)
+    tombstone = await db.get(BlobTombstone, doc.s3_key)
+    return _doc_to_out(
+        doc,
+        entity_count=entity_count or 0,
+        chunk_count=chunk_count or 0,
+        original=await _original_is_kept(db, doc),
+        audio_until=(
+            tombstone.not_before if doc.source == "consulta" and tombstone is not None else None
+        ),
+    )
+
+
+# What a browser shows in a tab. Any other type she gets as a download, so a
+# file the Telegram bot accepted is never rendered as a page of this origin.
+_SHOWN_INLINE = frozenset({"application/pdf", "image/png", "image/jpeg"})
+
+
+async def _original_is_kept(db: AsyncSession, doc: Document) -> bool:
+    """Whether the file she sent is still hers to open (the vault promise,
+    docs/specs/ADELIA_SIMPLE.md, 2026-11-24). Until then the blob was written
+    at upload and read by the pipeline only: no route gave the PDF, the photo
+    of the vaccine card or the voice note back, and the export carries text.
+
+    Never the consultation audio, whatever its state: the DPIA keeps it as a
+    means to its transcript (48 h after it, 7 days if it failed), and serving
+    it would turn it into an archive. Nor any blob already on a deletion clock
+    (a Telegram voice note expires the same way): one rule, read from the
+    tombstone the retention code writes, not from a second list of types.
+    """
+    if doc.source == "consulta":
+        return False
+    return await db.get(BlobTombstone, doc.s3_key) is None
+
+
+def _content_disposition(kind: str, name: str) -> str:
+    """RFC 6266 with the UTF-8 name of RFC 5987: the upload keeps accented
+    letters ("análisis.pdf") and a header must be latin-1, so `filename` is an
+    ASCII stand-in for the clients that ignore `filename*`."""
+    plain = "".join(c if c.isascii() and c not in '"\\' else "_" for c in name)
+    return f"{kind}; filename=\"{plain}\"; filename*=UTF-8''{quote(name, safe='')}"
+
+
+@router.get("/{doc_id}/file")
+async def get_document_file(
+    doc_id: uuid.UUID,
+    user_id: Annotated[uuid.UUID, Depends(get_current_user_id)],
+):
+    """The file she sent, byte for byte. Not behind the paywall: access and
+    portability (GDPR art. 15 and 20) are not features one stops paying for.
+
+    Opaque 404 across users, for an erased document, for a recording kept only
+    as its transcript and for a blob storage no longer has. The row is read in
+    a session closed before the blob is fetched, so no pooled connection waits
+    on storage (the pool exhaustion behind the 500s of the upload route).
+    """
+    async with AsyncSessionLocal() as db:
+        doc = await db.get(Document, doc_id)
+        if doc is None or doc.user_id != user_id or doc.deleted_at is not None:
+            raise HTTPException(status_code=404, detail="Not found")
+        if not await _original_is_kept(db, doc):
+            raise HTTPException(status_code=404, detail="Not found")
+        s3_key, mime_type = doc.s3_key, doc.mime_type
+
+    try:
+        stream = await storage.get_object(s3_key)
+        content = await asyncio.to_thread(stream.read)
+    except ClientError as exc:
+        if exc.response.get("Error", {}).get("Code") not in ("NoSuchKey", "404"):
+            raise
+        logger.warning("original missing from storage doc_id=%s", doc_id)
+        raise HTTPException(status_code=404, detail="Not found") from exc
+
+    kind = "inline" if mime_type in _SHOWN_INLINE else "attachment"
+    return Response(
+        content=content,
+        media_type=mime_type,
+        headers={
+            "Content-Disposition": _content_disposition(kind, _file_name_from_key(s3_key)),
+            # Health records: never in a shared cache, never kept by the browser.
+            "Cache-Control": "private, no-store",
+            "X-Content-Type-Options": "nosniff",
+        },
+    )
 
 
 @router.delete("/{doc_id}", status_code=status.HTTP_204_NO_CONTENT)

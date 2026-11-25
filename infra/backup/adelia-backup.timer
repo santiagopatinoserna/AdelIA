@@ -1,0 +1,11 @@
+# Once a day. Persistent: a day the server was off runs as soon as it is back.
+[Unit]
+Description=AdelIA: copia de seguridad diaria
+
+[Timer]
+OnCalendar=*-*-* 03:30:00
+RandomizedDelaySec=15min
+Persistent=true
+
+[Install]
+WantedBy=timers.target
