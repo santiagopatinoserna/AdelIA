@@ -78,6 +78,58 @@ def test_without_an_account_there_is_no_record_to_track_so_it_is_a_question():
     assert d is not None and d.intent == "question"
 
 
+# --- track: what she noted, asked back (2026-11-21) ---------------------------
+#
+# Before, every one of these went to the classifier, and the apiretal one to
+# the guidelines by rule. Her answer is in her notes (agent/diary).
+
+
+@pytest.mark.parametrize("message", [
+    "¿Cuánto ha comido hoy?",
+    "cuantas tomas lleva hoy",
+    "¿Cuántos biberones ha tomado esta semana?",
+    "¿Cómo va su peso?",
+    "¿cuánto pesa?",
+    "¿cuándo fue la última fiebre?",
+    "¿Cuándo le di la última dosis de apiretal?",
+    "¿cuántos ml de apiretal le he dado hoy?",
+    "¿cuánto durmió ayer?",
+    "a qué hora tomó el último biberón",
+    "q he anotado hoy",
+    "how much has she eaten today?",
+    "when was her last feed?",
+    "how is her weight going?",
+    "combien de biberons aujourd'hui ?",
+    "comment évolue son poids ?",
+    "quand a-t-il mangé la dernière fois ?",
+])
+def test_a_question_about_what_she_noted_is_track(message):
+    d = route_by_rules(message, locale="es", has_account=True, facts=KNOWN_AGE)
+    assert d is not None and d.intent == "track" and d.via == "rule"
+
+
+def test_without_an_account_a_question_about_notes_is_a_question():
+    d = route_by_rules("¿cuánto ha comido hoy?", locale="es", has_account=False, facts=None)
+    assert d is not None and d.intent == "question"
+
+
+@pytest.mark.parametrize("message", [
+    # A rule of thumb keeps its sourced answer.
+    "¿cuánto debe comer un bebé de 4 meses?",
+    "¿cuánto pesa un bebé de 6 meses?",
+    "hoy ha comido poco, ¿es normal?",
+    "¿cuántos ml toma un bebé de 2 meses?",
+    "how much should a 3 month old eat?",
+    "combien de biberons doit boire un bébé de 3 mois ?",
+    # A worry keeps the plan.
+    "¿cuántas veces ha vomitado? estoy preocupada",
+    "no ha comido nada desde ayer y está muy decaída, qué hago",
+])
+def test_a_rule_of_thumb_or_a_worry_is_not_her_notes(message):
+    d = route_by_rules(message, locale="es", has_account=True, facts=KNOWN_AGE)
+    assert d is None or d.intent != "track"
+
+
 # --- plan: she wants to know what to do --------------------------------------
 
 

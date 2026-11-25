@@ -9,6 +9,7 @@ import { BriefingCard } from "./briefing-card";
 import { DocumentCard } from "./document-card";
 import { ProfileCard } from "./profile-card";
 import { ClarifyCard } from "./clarify-card";
+import { TrendCard } from "./trend-card";
 
 // A two-question clarify card answers both at once, in the card's order.
 export type ClarifyAnswer = { field: string; value: string };
@@ -28,6 +29,7 @@ export function CardRenderer({ card, onAction }: { card: AgentCard; onAction: Ca
     case "document": return <DocumentCard {...common} />;
     case "profile": return <ProfileCard {...common} />;
     case "clarify": return <ClarifyCard {...common} />;
+    case "trend": return <TrendCard {...common} />;
     default: return null;
   }
 }
