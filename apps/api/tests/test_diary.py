@@ -136,9 +136,10 @@ def test_a_weight_curve_says_the_change_and_its_rate():
     r = summarize("weight", notes, days=None, now=NOW, locale="es", facts=LUCIA)
     assert "- 10/07: 3,2 kg (informe)" in r.text
     assert "Desde el 10/07: +3 kg en 131 días (+23 g al día)." in r.text
-    # The WHO table has no row at 4 months: no percentile is said, and above all
-    # not the one at birth, which would read as today's.
-    assert "Percentil" not in r.text
+    # Each percentile carries its own day, so the one at birth never reads as
+    # today's. (Until 2026-11-25 the WHO table had no row at 4 months and no
+    # percentile was said here at all.)
+    assert "Percentil OMS: 50 el 10/07, 41 el 18/11." in r.text
 
 
 def test_a_percentile_is_said_when_the_last_weighing_has_one():
