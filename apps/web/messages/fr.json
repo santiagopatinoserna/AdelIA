@@ -222,7 +222,7 @@
     "demoLink": "Voir la démo, sans compte"
   },
   "dashboard": {
-    "title": "Mes documents",
+    "title": "Historique",
     "uploadCta": "Importer un fichier",
     "empty": "Rien d'importé pour l'instant",
     "status": {
@@ -237,7 +237,9 @@
     "settingsLink": "Paramètres du compte",
     "navImport": "Importer",
     "navInsights": "Insights",
-    "documentsCount": "{count, plural, =1 {1 document} other {# documents}}",
+    "historyTitle": "Historique de {name}",
+    "monthsLabel": "Mois",
+    "monthEmpty": "Rien d’enregistré ce mois-ci.",
     "welcomeTitle": "Bienvenue sur AdelIA",
     "welcomeSubtitle": "Réunis la santé de ton bébé en un seul endroit et pose tes questions. C'est parti, en 3 étapes.",
     "step1Title": "Ajoute ses documents",

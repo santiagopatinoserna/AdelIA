@@ -72,6 +72,24 @@ export type TodayItem = {
 };
 export type TodayDTO = { name: string | null; items: TodayItem[] };
 
+/** What a row of a document list shows (components/document-card), never its text. */
+export type DocumentRow = Pick<
+  DocumentDTO,
+  "id" | "source" | "mime_type" | "file_name" | "created_at" | "status" | "diary_date"
+>;
+/** A note under its day in Historial: the confirmation card's words, her hour or none. */
+export type HistoryNote = { id: string; kind: string; time: string | null; text: string };
+export type HistoryDay = { day: string; notes: HistoryNote[]; documents: DocumentRow[] };
+/** One child's record for a month (GET /history). `months` names the months that
+ * hold something, newest first, back to the one she was born in. */
+export type HistoryDTO = {
+  profile_id: string | null;
+  name: string | null;
+  month: string | null;
+  months: string[];
+  days: HistoryDay[];
+};
+
 export type Fetcher = (path: string, init?: RequestInit) => Promise<Response>;
 
 /** Whether the baby screen still has to be shown (audit 4.3). */
@@ -176,6 +194,15 @@ export function makeApi(fetcher: Fetcher) {
       if (profileId) q.set("profile_id", profileId);
       const res = await fetcher(`/today?${q}`);
       if (!res.ok) throw new Error(`today: ${res.status}`);
+      return res.json();
+    },
+
+    /** The default child's record for `month` ("2026-07"); omitted, her newest month. */
+    async history(locale: string, month?: string): Promise<HistoryDTO> {
+      const q = new URLSearchParams({ locale });
+      if (month) q.set("month", month);
+      const res = await fetcher(`/history?${q}`);
+      if (!res.ok) throw new Error(`history: ${res.status}`);
       return res.json();
     },
 

@@ -2,11 +2,11 @@ import { useTranslations } from "next-intl";
 
 import { formatDay, formatInstant } from "@/lib/dates";
 import { Link } from "@/lib/navigation";
-import type { DocumentDTO } from "@/lib/api-client";
+import type { DocumentRow } from "@/lib/api-client";
 import { FailedHint, StatusBadge } from "./status-badge";
 import { FileText, Mic } from "lucide-react";
 
-export function DocumentCard({ doc, locale }: { doc: DocumentDTO; locale: string }) {
+export function DocumentCard({ doc, locale }: { doc: DocumentRow; locale: string }) {
   const t = useTranslations("dashboard");
   const isConsulta = doc.source === "consulta";
   // Recordings get a human title ("Consulta del 20 de agosto de 2026"), not

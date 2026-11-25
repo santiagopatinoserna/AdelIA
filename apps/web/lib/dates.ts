@@ -32,6 +32,12 @@ export function formatDay(ymd: string, locale: string, style: Exclude<Style, "da
   );
 }
 
+// A calendar month ("2026-07"), short ("jul 2026"), read in UTC like a day.
+export function formatMonth(ym: string, locale: string): string {
+  return new Intl.DateTimeFormat(locale, { month: "short", year: "numeric", timeZone: "UTC" })
+    .format(new Date(`${ym.slice(0, 7)}-15T12:00:00Z`));
+}
+
 // Today's calendar day in APP_TIME_ZONE, as "YYYY-MM-DD".
 export function todayInAppZone(now: Date = new Date()): string {
   // en-CA prints ISO order (2026-11-06).
