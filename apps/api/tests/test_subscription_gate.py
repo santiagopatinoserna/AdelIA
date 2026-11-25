@@ -110,6 +110,8 @@ FREE_ROUTES = [
     # Her original file back (the vault promise, 2026-11-24). An unknown id is
     # enough: a paywalled route answers 402 before it looks the document up.
     ("documents-original", "GET", "/documents/00000000-0000-0000-0000-000000000000/file"),
+    # Historial: what she noted and filed, month by month (2026-11-25).
+    ("history", "GET", "/history"),
 ]
 
 
