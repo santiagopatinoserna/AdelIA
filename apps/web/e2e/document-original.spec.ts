@@ -3,6 +3,7 @@ import { expect, test, type Browser } from "@playwright/test";
 import { Pool } from "pg";
 
 import es from "../messages/es.json";
+import { waitHydrated } from "./utils/ask";
 import { isoMonthsAgo, seedProfile } from "./utils/seed";
 import { seedUserAndSessionCookie } from "./utils/session";
 
@@ -42,10 +43,14 @@ test("the file she uploaded opens again, byte for byte", async ({ browser }) => 
   const { context, page } = await signedIn(browser, "pdf");
 
   await page.goto("/es/dashboard/upload");
+  // A file set before React hydrates the input fires a change nobody hears: no
+  // upload, and the wait below ran out at 2 minutes in CI (2026-11-25).
+  const input = page.locator('input[type="file"]');
+  await waitHydrated(input);
   const uploaded = page.waitForResponse(
     (r) => r.url().endsWith("/api/backend/documents") && r.request().method() === "POST",
   );
-  await page.setInputFiles('input[type="file"]', {
+  await input.setInputFiles({
     name: "analítica lucía.pdf",
     mimeType: "application/pdf",
     buffer: PDF,
