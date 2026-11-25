@@ -26,6 +26,7 @@ from adelia.routers import (
     funnel,
     guest,
     health,
+    history,
     ingestion,
     ingestion_webhooks,
     clinical,
@@ -390,6 +391,7 @@ app.include_router(clinical.router)
 app.include_router(billing.router)
 app.include_router(agent.router)
 app.include_router(today.router)
+app.include_router(history.router)
 # Public, unauthenticated, and deliberately last so the list reads as
 # "everything above needs a session; these do not" (audit 4.6, 4.8). The
 # analytics reads are admin-only, but its writes are public like the funnel's.

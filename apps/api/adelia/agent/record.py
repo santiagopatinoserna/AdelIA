@@ -574,6 +574,16 @@ def summary(draft: RecordDraft, *, locale: str, now: datetime) -> str:
     return f"{label}{colon}{value}, {when}" if value else f"{label}, {when}"
 
 
+def entry_text(draft: RecordDraft, *, locale: str) -> str:
+    """The entry without its moment, as Historial lists it under its day:
+    "Temperatura: 37,8 °C". With no number, her own words ("Síntoma: tos por la
+    noche"): the label alone ("Síntoma") would keep the note and lose what it says."""
+    lang = _lang(locale)
+    colon = " : " if lang == "fr" else ": "
+    what = _value_text(draft, lang) or " ".join(draft.text.split())
+    return f"{_KIND_LABEL[lang][draft.kind]}{colon}{what}"
+
+
 def draft_args(draft: RecordDraft) -> dict:
     args = {
         "kind": draft.kind, "value": draft.value, "unit": draft.unit,
@@ -642,6 +652,6 @@ def as_draft(row) -> RecordDraft:
 
 __all__ = [
     "RECORD_TOOL", "RecordDraft", "as_draft", "confirm_card", "dated_reading", "draft_args",
-    "extract_by_rules",
+    "entry_text", "extract_by_rules",
     "extract_record", "recorded_reply", "summary", "validate_args", "value_flag",
 ]

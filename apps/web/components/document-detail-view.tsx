@@ -153,8 +153,10 @@ export function DocumentDetailView({
   const turns = isConsulta && doc.raw_text ? parseDiarized(doc.raw_text) : null;
   return (
     <main className="mx-auto max-w-3xl px-6 py-12">
+      {/* Back to Historial, where her documents are listed by day (the label is
+          dashboard.title, "Historial" since 2026-11-25; it went to the home). */}
       <Link
-        href="/dashboard"
+        href="/dashboard/overview"
         className="mb-5 inline-flex items-center gap-1.5 text-sm text-ink-soft transition-colors hover:text-primary-text-hover"
       >
         <ArrowLeft className="h-4 w-4" strokeWidth={2} />

@@ -161,7 +161,7 @@ test("mobile 390: /dashboard and /dashboard/overview never scroll sideways, with
   // The check-in card is in the server HTML (first paint), not inserted later.
   await expect(page.getByRole("button", { name: "Ahora no" })).toBeVisible();
   // The document list is on screen and the tab bar sits flush with the viewport.
-  await expect(page.getByRole("heading", { name: "Mis documentos" })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "Historial" })).toBeVisible();
   const bar = await page.getByRole("navigation", { name: "Inicio" }).boundingBox();
   expect(bar).not.toBeNull();
   expect(bar!.x).toBe(0);

@@ -222,7 +222,7 @@
     "demoLink": "See the demo, no account"
   },
   "dashboard": {
-    "title": "My documents",
+    "title": "History",
     "uploadCta": "Upload file",
     "empty": "Nothing uploaded yet",
     "status": {
@@ -237,7 +237,9 @@
     "settingsLink": "Account settings",
     "navImport": "Import",
     "navInsights": "Insights",
-    "documentsCount": "{count, plural, =1 {1 document} other {# documents}}",
+    "historyTitle": "{name}'s history",
+    "monthsLabel": "Months",
+    "monthEmpty": "Nothing saved this month.",
     "welcomeTitle": "Welcome to AdelIA",
     "welcomeSubtitle": "Bring your baby's health into one place and ask anything. Let's go, in 3 steps.",
     "step1Title": "Upload their records",

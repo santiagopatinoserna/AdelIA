@@ -29,7 +29,7 @@ test("recorrido completo: garantía de éxito en navegador", async ({ browser })
 
   // 1. Overview (the document list; /dashboard itself is the agent canvas)
   await page.goto("/es/dashboard/overview");
-  await expect(page.getByRole("heading", { name: "Mis documentos" })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "Historial" })).toBeVisible();
   await settle(page);
   await page.screenshot({ path: `${SHOTS}/1-dashboard.png`, fullPage: true });
 
