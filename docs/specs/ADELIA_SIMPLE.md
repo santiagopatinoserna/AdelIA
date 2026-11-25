@@ -42,7 +42,7 @@ descifrado, restauración en una base temporal). Falta instalarla en el servidor
 | Subir archivos (OCR, extracción) y grabar consulta (Voxtral) | Hecho, cada uno en su página |
 | Preguntar a lo anotado, con tendencia y gráfica (`agent/diary.py`) | Hecho en `claude/simple-core`, sin desplegar |
 | Historial con lo anotado | A medias: `GET /observations/recent` sin commitear en `~/dev/AdelIA` (13-nov) |
-| Datos del nacimiento | Falta: el perfil guarda fecha y sexo; `record` no admite fechas de más de 7 días |
+| Datos del nacimiento | A medias: anotar con fecha pasada hecho en `claude/from-birth` («al nacer pesó 3,2 kg» queda el día que nació); faltan peso, talla y semanas al nacer en el onboarding, y talla y perímetro como tipos |
 | Curvas OMS 0-24 meses | Falta: la tabla tiene niños 0, 1, 2, 6, 12, 24 meses y niñas 0, 2, 12, 24 |
 | Adjuntar y dictar desde el mismo campo | Falta: el campo solo tiene el micro del navegador |
 | Menos superficie | Falta: genómica, ensayos, fármacos, códigos, cuestionario e importar siguen visibles |

@@ -333,6 +333,12 @@ LangChain.
    para lo que no leen; si falla, nota), guard sobre el valor, tarjeta con la entrada tal
    cual, validación de nuevo al confirmar, y respuesta de una línea con la anterior
    («La anterior: ayer, 37,2 °C»). Borrado y exportación RGPD la incluyen.
+   **2026-11-24**: el día que ella nombra («al nacer», «a los 2 meses», «hace 3 semanas»,
+   «el 12 de octubre», «el 12/10») se lee por reglas, desde la fecha de nacimiento del
+   perfil (sin ella, la semana de antes). Sin hora se guarda a mediodía con `timed` falso
+   (0029) y se muestra solo el día. Un día que no cabe (antes de nacer, futuro) deja sus
+   palabras como nota, sin número. El route manda a `record` por regla una lectura con su
+   día («al nacer pesó 3,2 kg»): el pretérito no lo leía la regla del pretérito perfecto.
 5. `track` migrado al grafo; retirar el bucle antiguo.
    **Hecho**: `run_agent_turn` retirado; `agent/orchestrator.run_turn` ejecuta el grafo y el
    bucle de herramientas es el nodo `track` (3 pasos). El chat (`answer_question_streaming`)
